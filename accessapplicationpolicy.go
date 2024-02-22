@@ -216,7 +216,7 @@ type AccessApplicationPolicyNewResponseApprovalGroup struct {
 	// A list of emails that can approve the access request.
 	EmailAddresses []interface{} `json:"email_addresses"`
 	// The UUID of an re-usable email list.
-	EmailListUuid string                                              `json:"email_list_uuid"`
+	EmailListUUID string                                              `json:"email_list_uuid"`
 	JSON          accessApplicationPolicyNewResponseApprovalGroupJSON `json:"-"`
 }
 
@@ -225,7 +225,7 @@ type AccessApplicationPolicyNewResponseApprovalGroup struct {
 type accessApplicationPolicyNewResponseApprovalGroupJSON struct {
 	ApprovalsNeeded apijson.Field
 	EmailAddresses  apijson.Field
-	EmailListUuid   apijson.Field
+	EmailListUUID   apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -2633,7 +2633,7 @@ type AccessApplicationPolicyUpdateResponseApprovalGroup struct {
 	// A list of emails that can approve the access request.
 	EmailAddresses []interface{} `json:"email_addresses"`
 	// The UUID of an re-usable email list.
-	EmailListUuid string                                                 `json:"email_list_uuid"`
+	EmailListUUID string                                                 `json:"email_list_uuid"`
 	JSON          accessApplicationPolicyUpdateResponseApprovalGroupJSON `json:"-"`
 }
 
@@ -2642,7 +2642,7 @@ type AccessApplicationPolicyUpdateResponseApprovalGroup struct {
 type accessApplicationPolicyUpdateResponseApprovalGroupJSON struct {
 	ApprovalsNeeded apijson.Field
 	EmailAddresses  apijson.Field
-	EmailListUuid   apijson.Field
+	EmailListUUID   apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -5056,7 +5056,7 @@ type AccessApplicationPolicyListResponseApprovalGroup struct {
 	// A list of emails that can approve the access request.
 	EmailAddresses []interface{} `json:"email_addresses"`
 	// The UUID of an re-usable email list.
-	EmailListUuid string                                               `json:"email_list_uuid"`
+	EmailListUUID string                                               `json:"email_list_uuid"`
 	JSON          accessApplicationPolicyListResponseApprovalGroupJSON `json:"-"`
 }
 
@@ -5065,7 +5065,7 @@ type AccessApplicationPolicyListResponseApprovalGroup struct {
 type accessApplicationPolicyListResponseApprovalGroupJSON struct {
 	ApprovalsNeeded apijson.Field
 	EmailAddresses  apijson.Field
-	EmailListUuid   apijson.Field
+	EmailListUUID   apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -7491,7 +7491,7 @@ type AccessApplicationPolicyGetResponseApprovalGroup struct {
 	// A list of emails that can approve the access request.
 	EmailAddresses []interface{} `json:"email_addresses"`
 	// The UUID of an re-usable email list.
-	EmailListUuid string                                              `json:"email_list_uuid"`
+	EmailListUUID string                                              `json:"email_list_uuid"`
 	JSON          accessApplicationPolicyGetResponseApprovalGroupJSON `json:"-"`
 }
 
@@ -7500,7 +7500,7 @@ type AccessApplicationPolicyGetResponseApprovalGroup struct {
 type accessApplicationPolicyGetResponseApprovalGroupJSON struct {
 	ApprovalsNeeded apijson.Field
 	EmailAddresses  apijson.Field
-	EmailListUuid   apijson.Field
+	EmailListUUID   apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -10308,7 +10308,7 @@ type AccessApplicationPolicyNewParamsApprovalGroup struct {
 	// A list of emails that can approve the access request.
 	EmailAddresses param.Field[[]interface{}] `json:"email_addresses"`
 	// The UUID of an re-usable email list.
-	EmailListUuid param.Field[string] `json:"email_list_uuid"`
+	EmailListUUID param.Field[string] `json:"email_list_uuid"`
 }
 
 func (r AccessApplicationPolicyNewParamsApprovalGroup) MarshalJSON() (data []byte, err error) {
@@ -11683,7 +11683,7 @@ type AccessApplicationPolicyUpdateParamsApprovalGroup struct {
 	// A list of emails that can approve the access request.
 	EmailAddresses param.Field[[]interface{}] `json:"email_addresses"`
 	// The UUID of an re-usable email list.
-	EmailListUuid param.Field[string] `json:"email_list_uuid"`
+	EmailListUUID param.Field[string] `json:"email_list_uuid"`
 }
 
 func (r AccessApplicationPolicyUpdateParamsApprovalGroup) MarshalJSON() (data []byte, err error) {

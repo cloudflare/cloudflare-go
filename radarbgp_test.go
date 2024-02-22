@@ -32,7 +32,7 @@ func TestRadarBGPTimeseriesWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.BGP.Timeseries(context.TODO(), cloudflare.RadarBGPTimeseriesParams{
 		AggInterval: cloudflare.F(cloudflare.RadarBGPTimeseriesParamsAggInterval1h),
-		Asn:         cloudflare.F([]string{"string", "string", "string"}),
+		ASN:         cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:   cloudflare.F([]cloudflare.RadarBGPTimeseriesParamsDateRange{cloudflare.RadarBGPTimeseriesParamsDateRange1d, cloudflare.RadarBGPTimeseriesParamsDateRange2d, cloudflare.RadarBGPTimeseriesParamsDateRange7d}),
 		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),

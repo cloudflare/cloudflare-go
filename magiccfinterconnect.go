@@ -119,7 +119,7 @@ type MagicCfInterconnectListResponseInterconnect struct {
 	// An optional description of the interconnect.
 	Description string `json:"description"`
 	// The configuration specific to GRE interconnects.
-	Gre         MagicCfInterconnectListResponseInterconnectsGre         `json:"gre"`
+	GRE         MagicCfInterconnectListResponseInterconnectsGRE         `json:"gre"`
 	HealthCheck MagicCfInterconnectListResponseInterconnectsHealthCheck `json:"health_check"`
 	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
 	// of the tunnel. Select the subnet from the following private IP space:
@@ -142,7 +142,7 @@ type magicCfInterconnectListResponseInterconnectJSON struct {
 	ColoName         apijson.Field
 	CreatedOn        apijson.Field
 	Description      apijson.Field
-	Gre              apijson.Field
+	GRE              apijson.Field
 	HealthCheck      apijson.Field
 	InterfaceAddress apijson.Field
 	ModifiedOn       apijson.Field
@@ -157,22 +157,22 @@ func (r *MagicCfInterconnectListResponseInterconnect) UnmarshalJSON(data []byte)
 }
 
 // The configuration specific to GRE interconnects.
-type MagicCfInterconnectListResponseInterconnectsGre struct {
+type MagicCfInterconnectListResponseInterconnectsGRE struct {
 	// The IP address assigned to the Cloudflare side of the GRE tunnel created as part
 	// of the Interconnect.
 	CloudflareEndpoint string                                              `json:"cloudflare_endpoint"`
-	JSON               magicCfInterconnectListResponseInterconnectsGreJSON `json:"-"`
+	JSON               magicCfInterconnectListResponseInterconnectsGREJSON `json:"-"`
 }
 
-// magicCfInterconnectListResponseInterconnectsGreJSON contains the JSON metadata
-// for the struct [MagicCfInterconnectListResponseInterconnectsGre]
-type magicCfInterconnectListResponseInterconnectsGreJSON struct {
+// magicCfInterconnectListResponseInterconnectsGREJSON contains the JSON metadata
+// for the struct [MagicCfInterconnectListResponseInterconnectsGRE]
+type magicCfInterconnectListResponseInterconnectsGREJSON struct {
 	CloudflareEndpoint apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *MagicCfInterconnectListResponseInterconnectsGre) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicCfInterconnectListResponseInterconnectsGRE) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -244,7 +244,7 @@ type MagicCfInterconnectUpdateParams struct {
 	// An optional description of the interconnect.
 	Description param.Field[string] `json:"description"`
 	// The configuration specific to GRE interconnects.
-	Gre         param.Field[MagicCfInterconnectUpdateParamsGre]         `json:"gre"`
+	GRE         param.Field[MagicCfInterconnectUpdateParamsGRE]         `json:"gre"`
 	HealthCheck param.Field[MagicCfInterconnectUpdateParamsHealthCheck] `json:"health_check"`
 	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
 	// of the tunnel. Select the subnet from the following private IP space:
@@ -260,13 +260,13 @@ func (r MagicCfInterconnectUpdateParams) MarshalJSON() (data []byte, err error) 
 }
 
 // The configuration specific to GRE interconnects.
-type MagicCfInterconnectUpdateParamsGre struct {
+type MagicCfInterconnectUpdateParamsGRE struct {
 	// The IP address assigned to the Cloudflare side of the GRE tunnel created as part
 	// of the Interconnect.
 	CloudflareEndpoint param.Field[string] `json:"cloudflare_endpoint"`
 }
 
-func (r MagicCfInterconnectUpdateParamsGre) MarshalJSON() (data []byte, err error) {
+func (r MagicCfInterconnectUpdateParamsGRE) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

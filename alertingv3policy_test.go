@@ -51,7 +51,7 @@ func TestAlertingV3PolicyNewWithOptionalParams(t *testing.T) {
 			Description: cloudflare.F("Something describing the policy."),
 			Filters: cloudflare.F(cloudflare.AlertingV3PolicyNewParamsFilters{
 				Actions:                      cloudflare.F([]string{"string", "string", "string"}),
-				AffectedAsns:                 cloudflare.F([]string{"string", "string", "string"}),
+				AffectedASNs:                 cloudflare.F([]string{"string", "string", "string"}),
 				AffectedComponents:           cloudflare.F([]string{"string", "string", "string"}),
 				AffectedLocations:            cloudflare.F([]string{"string", "string", "string"}),
 				AirportCode:                  cloudflare.F([]string{"string", "string", "string"}),
@@ -128,7 +128,7 @@ func TestAlertingV3PolicyUpdateWithOptionalParams(t *testing.T) {
 			Enabled:     cloudflare.F(true),
 			Filters: cloudflare.F(cloudflare.AlertingV3PolicyUpdateParamsFilters{
 				Actions:                      cloudflare.F([]string{"string", "string", "string"}),
-				AffectedAsns:                 cloudflare.F([]string{"string", "string", "string"}),
+				AffectedASNs:                 cloudflare.F([]string{"string", "string", "string"}),
 				AffectedComponents:           cloudflare.F([]string{"string", "string", "string"}),
 				AffectedLocations:            cloudflare.F([]string{"string", "string", "string"}),
 				AirportCode:                  cloudflare.F([]string{"string", "string", "string"}),

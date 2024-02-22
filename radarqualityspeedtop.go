@@ -174,7 +174,7 @@ func (r *RadarQualitySpeedTopAsesResponseMetaConfidenceInfoAnnotation) Unmarshal
 type RadarQualitySpeedTopAsesResponseTop0 struct {
 	BandwidthDownload string                                   `json:"bandwidthDownload,required"`
 	BandwidthUpload   string                                   `json:"bandwidthUpload,required"`
-	ClientAsn         float64                                  `json:"clientASN,required"`
+	ClientASN         float64                                  `json:"clientASN,required"`
 	ClientAsName      string                                   `json:"clientASName,required"`
 	JitterIdle        string                                   `json:"jitterIdle,required"`
 	JitterLoaded      string                                   `json:"jitterLoaded,required"`
@@ -190,7 +190,7 @@ type RadarQualitySpeedTopAsesResponseTop0 struct {
 type radarQualitySpeedTopAsesResponseTop0JSON struct {
 	BandwidthDownload apijson.Field
 	BandwidthUpload   apijson.Field
-	ClientAsn         apijson.Field
+	ClientASN         apijson.Field
 	ClientAsName      apijson.Field
 	JitterIdle        apijson.Field
 	JitterLoaded      apijson.Field
@@ -356,7 +356,7 @@ type RadarQualitySpeedTopAsesParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// Format results are returned in.
@@ -427,7 +427,7 @@ type RadarQualitySpeedTopLocationsParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// Format results are returned in.

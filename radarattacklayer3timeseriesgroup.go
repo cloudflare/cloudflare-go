@@ -347,7 +347,7 @@ func (r *RadarAttackLayer3TimeseriesGroupGetResponseMetaConfidenceInfoAnnotation
 }
 
 type RadarAttackLayer3TimeseriesGroupGetResponseSerie0 struct {
-	Gre        []string                                              `json:"gre,required"`
+	GRE        []string                                              `json:"gre,required"`
 	Icmp       []string                                              `json:"icmp,required"`
 	Tcp        []string                                              `json:"tcp,required"`
 	Timestamps []string                                              `json:"timestamps,required"`
@@ -358,7 +358,7 @@ type RadarAttackLayer3TimeseriesGroupGetResponseSerie0 struct {
 // radarAttackLayer3TimeseriesGroupGetResponseSerie0JSON contains the JSON metadata
 // for the struct [RadarAttackLayer3TimeseriesGroupGetResponseSerie0]
 type radarAttackLayer3TimeseriesGroupGetResponseSerie0JSON struct {
-	Gre         apijson.Field
+	GRE         apijson.Field
 	Icmp        apijson.Field
 	Tcp         apijson.Field
 	Timestamps  apijson.Field
@@ -469,7 +469,7 @@ func (r *RadarAttackLayer3TimeseriesGroupProtocolResponse) UnmarshalJSON(data []
 }
 
 type RadarAttackLayer3TimeseriesGroupProtocolResponseSerie0 struct {
-	Gre        []string                                                   `json:"GRE,required"`
+	GRE        []string                                                   `json:"GRE,required"`
 	Icmp       []string                                                   `json:"ICMP,required"`
 	Tcp        []string                                                   `json:"TCP,required"`
 	Timestamps []string                                                   `json:"timestamps,required"`
@@ -480,7 +480,7 @@ type RadarAttackLayer3TimeseriesGroupProtocolResponseSerie0 struct {
 // radarAttackLayer3TimeseriesGroupProtocolResponseSerie0JSON contains the JSON
 // metadata for the struct [RadarAttackLayer3TimeseriesGroupProtocolResponseSerie0]
 type radarAttackLayer3TimeseriesGroupProtocolResponseSerie0JSON struct {
-	Gre         apijson.Field
+	GRE         apijson.Field
 	Icmp        apijson.Field
 	Tcp         apijson.Field
 	Timestamps  apijson.Field
@@ -680,7 +680,7 @@ const (
 	RadarAttackLayer3TimeseriesGroupBitrateParamsProtocolUdp  RadarAttackLayer3TimeseriesGroupBitrateParamsProtocol = "UDP"
 	RadarAttackLayer3TimeseriesGroupBitrateParamsProtocolTcp  RadarAttackLayer3TimeseriesGroupBitrateParamsProtocol = "TCP"
 	RadarAttackLayer3TimeseriesGroupBitrateParamsProtocolIcmp RadarAttackLayer3TimeseriesGroupBitrateParamsProtocol = "ICMP"
-	RadarAttackLayer3TimeseriesGroupBitrateParamsProtocolGre  RadarAttackLayer3TimeseriesGroupBitrateParamsProtocol = "GRE"
+	RadarAttackLayer3TimeseriesGroupBitrateParamsProtocolGRE  RadarAttackLayer3TimeseriesGroupBitrateParamsProtocol = "GRE"
 )
 
 type RadarAttackLayer3TimeseriesGroupBitrateResponseEnvelope struct {
@@ -816,7 +816,7 @@ const (
 	RadarAttackLayer3TimeseriesGroupDurationParamsProtocolUdp  RadarAttackLayer3TimeseriesGroupDurationParamsProtocol = "UDP"
 	RadarAttackLayer3TimeseriesGroupDurationParamsProtocolTcp  RadarAttackLayer3TimeseriesGroupDurationParamsProtocol = "TCP"
 	RadarAttackLayer3TimeseriesGroupDurationParamsProtocolIcmp RadarAttackLayer3TimeseriesGroupDurationParamsProtocol = "ICMP"
-	RadarAttackLayer3TimeseriesGroupDurationParamsProtocolGre  RadarAttackLayer3TimeseriesGroupDurationParamsProtocol = "GRE"
+	RadarAttackLayer3TimeseriesGroupDurationParamsProtocolGRE  RadarAttackLayer3TimeseriesGroupDurationParamsProtocol = "GRE"
 )
 
 type RadarAttackLayer3TimeseriesGroupDurationResponseEnvelope struct {
@@ -847,7 +847,7 @@ type RadarAttackLayer3TimeseriesGroupGetParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
@@ -1166,7 +1166,7 @@ const (
 	RadarAttackLayer3TimeseriesGroupIPVersionParamsProtocolUdp  RadarAttackLayer3TimeseriesGroupIPVersionParamsProtocol = "UDP"
 	RadarAttackLayer3TimeseriesGroupIPVersionParamsProtocolTcp  RadarAttackLayer3TimeseriesGroupIPVersionParamsProtocol = "TCP"
 	RadarAttackLayer3TimeseriesGroupIPVersionParamsProtocolIcmp RadarAttackLayer3TimeseriesGroupIPVersionParamsProtocol = "ICMP"
-	RadarAttackLayer3TimeseriesGroupIPVersionParamsProtocolGre  RadarAttackLayer3TimeseriesGroupIPVersionParamsProtocol = "GRE"
+	RadarAttackLayer3TimeseriesGroupIPVersionParamsProtocolGRE  RadarAttackLayer3TimeseriesGroupIPVersionParamsProtocol = "GRE"
 )
 
 type RadarAttackLayer3TimeseriesGroupIPVersionResponseEnvelope struct {
@@ -1430,7 +1430,7 @@ const (
 	RadarAttackLayer3TimeseriesGroupVectorParamsProtocolUdp  RadarAttackLayer3TimeseriesGroupVectorParamsProtocol = "UDP"
 	RadarAttackLayer3TimeseriesGroupVectorParamsProtocolTcp  RadarAttackLayer3TimeseriesGroupVectorParamsProtocol = "TCP"
 	RadarAttackLayer3TimeseriesGroupVectorParamsProtocolIcmp RadarAttackLayer3TimeseriesGroupVectorParamsProtocol = "ICMP"
-	RadarAttackLayer3TimeseriesGroupVectorParamsProtocolGre  RadarAttackLayer3TimeseriesGroupVectorParamsProtocol = "GRE"
+	RadarAttackLayer3TimeseriesGroupVectorParamsProtocolGRE  RadarAttackLayer3TimeseriesGroupVectorParamsProtocol = "GRE"
 )
 
 type RadarAttackLayer3TimeseriesGroupVectorResponseEnvelope struct {

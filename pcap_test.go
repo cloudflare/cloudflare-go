@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestPcapNewWithOptionalParams(t *testing.T) {
+func TestPCAPNewWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,17 +29,17 @@ func TestPcapNewWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Pcaps.New(
+	_, err := client.PCAPs.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.PcapNewParams{
-			System:          cloudflare.F(cloudflare.PcapNewParamsSystemMagicTransit),
+		cloudflare.PCAPNewParams{
+			System:          cloudflare.F(cloudflare.PCAPNewParamsSystemMagicTransit),
 			TimeLimit:       cloudflare.F(300.000000),
-			Type:            cloudflare.F(cloudflare.PcapNewParamsTypeSimple),
+			Type:            cloudflare.F(cloudflare.PCAPNewParamsTypeSimple),
 			ByteLimit:       cloudflare.F(500000.000000),
 			ColoName:        cloudflare.F("ord02"),
 			DestinationConf: cloudflare.F("s3://pcaps-bucket?region=us-east-1"),
-			FilterV1: cloudflare.F(cloudflare.PcapNewParamsFilterV1{
+			FilterV1: cloudflare.F(cloudflare.PCAPNewParamsFilterV1{
 				DestinationAddress: cloudflare.F("1.2.3.4"),
 				DestinationPort:    cloudflare.F(80.000000),
 				Protocol:           cloudflare.F(6.000000),
@@ -58,7 +58,7 @@ func TestPcapNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestPcapList(t *testing.T) {
+func TestPCAPList(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -74,7 +74,7 @@ func TestPcapList(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Pcaps.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.PCAPs.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -84,7 +84,7 @@ func TestPcapList(t *testing.T) {
 	}
 }
 
-func TestPcapGet(t *testing.T) {
+func TestPCAPGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -100,7 +100,7 @@ func TestPcapGet(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Pcaps.Get(
+	_, err := client.PCAPs.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",

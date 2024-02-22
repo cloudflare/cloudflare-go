@@ -12,7 +12,7 @@ import (
 // directly, and instead use the [NewIntelService] method instead.
 type IntelService struct {
 	Options            []option.RequestOption
-	Asn                *IntelAsnService
+	ASN                *IntelASNService
 	DNS                *IntelDNSService
 	Domains            *IntelDomainService
 	DomainHistories    *IntelDomainHistoryService
@@ -30,7 +30,7 @@ type IntelService struct {
 func NewIntelService(opts ...option.RequestOption) (r *IntelService) {
 	r = &IntelService{}
 	r.Options = opts
-	r.Asn = NewIntelAsnService(opts...)
+	r.ASN = NewIntelASNService(opts...)
 	r.DNS = NewIntelDNSService(opts...)
 	r.Domains = NewIntelDomainService(opts...)
 	r.DomainHistories = NewIntelDomainHistoryService(opts...)

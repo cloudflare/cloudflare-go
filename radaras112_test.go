@@ -32,7 +32,7 @@ func TestRadarAs112TimeseriesWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.As112.Timeseries(context.TODO(), cloudflare.RadarAs112TimeseriesParams{
 		AggInterval: cloudflare.F(cloudflare.RadarAs112TimeseriesParamsAggInterval1h),
-		Asn:         cloudflare.F([]string{"string", "string", "string"}),
+		ASN:         cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:   cloudflare.F([]cloudflare.RadarAs112TimeseriesParamsDateRange{cloudflare.RadarAs112TimeseriesParamsDateRange1d, cloudflare.RadarAs112TimeseriesParamsDateRange2d, cloudflare.RadarAs112TimeseriesParamsDateRange7d}),
 		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),

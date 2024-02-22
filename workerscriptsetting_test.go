@@ -56,12 +56,12 @@ func TestWorkerScriptSettingEditWithOptionalParams(t *testing.T) {
 					Message: cloudflare.F("string"),
 				}}),
 				Result: cloudflare.F(cloudflare.WorkerScriptSettingEditParamsSettingsResult{
-					Bindings: cloudflare.F([]cloudflare.WorkerScriptSettingEditParamsSettingsResultBinding{cloudflare.WorkerScriptSettingEditParamsSettingsResultBindingsWorkersKvNamespaceBinding(cloudflare.WorkerScriptSettingEditParamsSettingsResultBindingsWorkersKvNamespaceBinding{
-						Type: cloudflare.F(cloudflare.WorkerScriptSettingEditParamsSettingsResultBindingsWorkersKvNamespaceBindingTypeKvNamespace),
-					}), cloudflare.WorkerScriptSettingEditParamsSettingsResultBindingsWorkersKvNamespaceBinding(cloudflare.WorkerScriptSettingEditParamsSettingsResultBindingsWorkersKvNamespaceBinding{
-						Type: cloudflare.F(cloudflare.WorkerScriptSettingEditParamsSettingsResultBindingsWorkersKvNamespaceBindingTypeKvNamespace),
-					}), cloudflare.WorkerScriptSettingEditParamsSettingsResultBindingsWorkersKvNamespaceBinding(cloudflare.WorkerScriptSettingEditParamsSettingsResultBindingsWorkersKvNamespaceBinding{
-						Type: cloudflare.F(cloudflare.WorkerScriptSettingEditParamsSettingsResultBindingsWorkersKvNamespaceBindingTypeKvNamespace),
+					Bindings: cloudflare.F([]cloudflare.WorkerScriptSettingEditParamsSettingsResultBinding{cloudflare.WorkerScriptSettingEditParamsSettingsResultBindingsWorkersKVNamespaceBinding(cloudflare.WorkerScriptSettingEditParamsSettingsResultBindingsWorkersKVNamespaceBinding{
+						Type: cloudflare.F(cloudflare.WorkerScriptSettingEditParamsSettingsResultBindingsWorkersKVNamespaceBindingTypeKVNamespace),
+					}), cloudflare.WorkerScriptSettingEditParamsSettingsResultBindingsWorkersKVNamespaceBinding(cloudflare.WorkerScriptSettingEditParamsSettingsResultBindingsWorkersKVNamespaceBinding{
+						Type: cloudflare.F(cloudflare.WorkerScriptSettingEditParamsSettingsResultBindingsWorkersKVNamespaceBindingTypeKVNamespace),
+					}), cloudflare.WorkerScriptSettingEditParamsSettingsResultBindingsWorkersKVNamespaceBinding(cloudflare.WorkerScriptSettingEditParamsSettingsResultBindingsWorkersKVNamespaceBinding{
+						Type: cloudflare.F(cloudflare.WorkerScriptSettingEditParamsSettingsResultBindingsWorkersKVNamespaceBindingTypeKVNamespace),
 					})}),
 					CompatibilityDate:  cloudflare.F("2022-04-05"),
 					CompatibilityFlags: cloudflare.F([]string{"formdata_parser_supports_files", "formdata_parser_supports_files", "formdata_parser_supports_files"}),

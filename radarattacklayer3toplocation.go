@@ -404,7 +404,7 @@ const (
 	RadarAttackLayer3TopLocationOriginParamsProtocolUdp  RadarAttackLayer3TopLocationOriginParamsProtocol = "UDP"
 	RadarAttackLayer3TopLocationOriginParamsProtocolTcp  RadarAttackLayer3TopLocationOriginParamsProtocol = "TCP"
 	RadarAttackLayer3TopLocationOriginParamsProtocolIcmp RadarAttackLayer3TopLocationOriginParamsProtocol = "ICMP"
-	RadarAttackLayer3TopLocationOriginParamsProtocolGre  RadarAttackLayer3TopLocationOriginParamsProtocol = "GRE"
+	RadarAttackLayer3TopLocationOriginParamsProtocolGRE  RadarAttackLayer3TopLocationOriginParamsProtocol = "GRE"
 )
 
 type RadarAttackLayer3TopLocationOriginResponseEnvelope struct {
@@ -501,7 +501,7 @@ const (
 	RadarAttackLayer3TopLocationTargetParamsProtocolUdp  RadarAttackLayer3TopLocationTargetParamsProtocol = "UDP"
 	RadarAttackLayer3TopLocationTargetParamsProtocolTcp  RadarAttackLayer3TopLocationTargetParamsProtocol = "TCP"
 	RadarAttackLayer3TopLocationTargetParamsProtocolIcmp RadarAttackLayer3TopLocationTargetParamsProtocol = "ICMP"
-	RadarAttackLayer3TopLocationTargetParamsProtocolGre  RadarAttackLayer3TopLocationTargetParamsProtocol = "GRE"
+	RadarAttackLayer3TopLocationTargetParamsProtocolGRE  RadarAttackLayer3TopLocationTargetParamsProtocol = "GRE"
 )
 
 type RadarAttackLayer3TopLocationTargetResponseEnvelope struct {

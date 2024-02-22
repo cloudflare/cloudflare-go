@@ -91,7 +91,7 @@ type URLScannerScanNewResponse struct {
 	// Canonical form of submitted URL. Use this if you want to later search by URL.
 	URL string `json:"url,required"`
 	// Scan ID.
-	Uuid string `json:"uuid,required" format:"uuid"`
+	UUID string `json:"uuid,required" format:"uuid"`
 	// Submitted visibility status.
 	Visibility string                        `json:"visibility,required"`
 	JSON       urlScannerScanNewResponseJSON `json:"-"`
@@ -102,7 +102,7 @@ type URLScannerScanNewResponse struct {
 type urlScannerScanNewResponseJSON struct {
 	Time        apijson.Field
 	URL         apijson.Field
-	Uuid        apijson.Field
+	UUID        apijson.Field
 	Visibility  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -138,7 +138,7 @@ type URLScannerScanGetResponseScan struct {
 	Task         URLScannerScanGetResponseScanTask          `json:"task,required"`
 	Verdicts     URLScannerScanGetResponseScanVerdicts      `json:"verdicts,required"`
 	// Dictionary of Autonomous System Numbers where ASN's are the keys
-	Asns    URLScannerScanGetResponseScanAsns    `json:"asns"`
+	ASNs    URLScannerScanGetResponseScanASNs    `json:"asns"`
 	Domains URLScannerScanGetResponseScanDomains `json:"domains"`
 	IPs     URLScannerScanGetResponseScanIPs     `json:"ips"`
 	Links   URLScannerScanGetResponseScanLinks   `json:"links"`
@@ -155,7 +155,7 @@ type urlScannerScanGetResponseScanJSON struct {
 	Performance  apijson.Field
 	Task         apijson.Field
 	Verdicts     apijson.Field
-	Asns         apijson.Field
+	ASNs         apijson.Field
 	Domains      apijson.Field
 	IPs          apijson.Field
 	Links        apijson.Field
@@ -452,8 +452,8 @@ func (r *URLScannerScanGetResponseScanMetaProcessorsTechEvidencePattern) Unmarsh
 }
 
 type URLScannerScanGetResponseScanPage struct {
-	Asn                   string                                               `json:"asn,required"`
-	AsnLocationAlpha2     string                                               `json:"asnLocationAlpha2,required"`
+	ASN                   string                                               `json:"asn,required"`
+	ASNLocationAlpha2     string                                               `json:"asnLocationAlpha2,required"`
 	Asnname               string                                               `json:"asnname,required"`
 	Console               []URLScannerScanGetResponseScanPageConsole           `json:"console,required"`
 	Cookies               []URLScannerScanGetResponseScanPageCooky             `json:"cookies,required"`
@@ -474,8 +474,8 @@ type URLScannerScanGetResponseScanPage struct {
 // urlScannerScanGetResponseScanPageJSON contains the JSON metadata for the struct
 // [URLScannerScanGetResponseScanPage]
 type urlScannerScanGetResponseScanPageJSON struct {
-	Asn                   apijson.Field
-	AsnLocationAlpha2     apijson.Field
+	ASN                   apijson.Field
+	ASNLocationAlpha2     apijson.Field
 	Asnname               apijson.Field
 	Console               apijson.Field
 	Cookies               apijson.Field
@@ -730,7 +730,7 @@ type URLScannerScanGetResponseScanTask struct {
 	// Submitted URL
 	URL string `json:"url,required"`
 	// Scan ID
-	Uuid       string                                      `json:"uuid,required"`
+	UUID       string                                      `json:"uuid,required"`
 	Visibility URLScannerScanGetResponseScanTaskVisibility `json:"visibility,required"`
 	JSON       urlScannerScanGetResponseScanTaskJSON       `json:"-"`
 }
@@ -748,7 +748,7 @@ type urlScannerScanGetResponseScanTaskJSON struct {
 	Time           apijson.Field
 	TimeEnd        apijson.Field
 	URL            apijson.Field
-	Uuid           apijson.Field
+	UUID           apijson.Field
 	Visibility     apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
@@ -882,38 +882,38 @@ func (r *URLScannerScanGetResponseScanVerdictsOverallCategory) UnmarshalJSON(dat
 }
 
 // Dictionary of Autonomous System Numbers where ASN's are the keys
-type URLScannerScanGetResponseScanAsns struct {
+type URLScannerScanGetResponseScanASNs struct {
 	// ASN's contacted
-	Asn  URLScannerScanGetResponseScanAsnsAsn  `json:"asn"`
-	JSON urlScannerScanGetResponseScanAsnsJSON `json:"-"`
+	ASN  URLScannerScanGetResponseScanASNsASN  `json:"asn"`
+	JSON urlScannerScanGetResponseScanASNsJSON `json:"-"`
 }
 
-// urlScannerScanGetResponseScanAsnsJSON contains the JSON metadata for the struct
-// [URLScannerScanGetResponseScanAsns]
-type urlScannerScanGetResponseScanAsnsJSON struct {
-	Asn         apijson.Field
+// urlScannerScanGetResponseScanASNsJSON contains the JSON metadata for the struct
+// [URLScannerScanGetResponseScanASNs]
+type urlScannerScanGetResponseScanASNsJSON struct {
+	ASN         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseScanAsns) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanASNs) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // ASN's contacted
-type URLScannerScanGetResponseScanAsnsAsn struct {
-	Asn            string                                   `json:"asn,required"`
+type URLScannerScanGetResponseScanASNsASN struct {
+	ASN            string                                   `json:"asn,required"`
 	Description    string                                   `json:"description,required"`
 	LocationAlpha2 string                                   `json:"location_alpha2,required"`
 	Name           string                                   `json:"name,required"`
 	OrgName        string                                   `json:"org_name,required"`
-	JSON           urlScannerScanGetResponseScanAsnsAsnJSON `json:"-"`
+	JSON           urlScannerScanGetResponseScanASNsASNJSON `json:"-"`
 }
 
-// urlScannerScanGetResponseScanAsnsAsnJSON contains the JSON metadata for the
-// struct [URLScannerScanGetResponseScanAsnsAsn]
-type urlScannerScanGetResponseScanAsnsAsnJSON struct {
-	Asn            apijson.Field
+// urlScannerScanGetResponseScanASNsASNJSON contains the JSON metadata for the
+// struct [URLScannerScanGetResponseScanASNsASN]
+type urlScannerScanGetResponseScanASNsASNJSON struct {
+	ASN            apijson.Field
 	Description    apijson.Field
 	LocationAlpha2 apijson.Field
 	Name           apijson.Field
@@ -922,7 +922,7 @@ type urlScannerScanGetResponseScanAsnsAsnJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *URLScannerScanGetResponseScanAsnsAsn) UnmarshalJSON(data []byte) (err error) {
+func (r *URLScannerScanGetResponseScanASNsASN) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1164,11 +1164,11 @@ func (r *URLScannerScanGetResponseScanIPs) UnmarshalJSON(data []byte) (err error
 }
 
 type URLScannerScanGetResponseScanIPsIP struct {
-	Asn               string                                 `json:"asn,required"`
-	AsnDescription    string                                 `json:"asnDescription,required"`
-	AsnLocationAlpha2 string                                 `json:"asnLocationAlpha2,required"`
-	AsnName           string                                 `json:"asnName,required"`
-	AsnOrgName        string                                 `json:"asnOrgName,required"`
+	ASN               string                                 `json:"asn,required"`
+	ASNDescription    string                                 `json:"asnDescription,required"`
+	ASNLocationAlpha2 string                                 `json:"asnLocationAlpha2,required"`
+	ASNName           string                                 `json:"asnName,required"`
+	ASNOrgName        string                                 `json:"asnOrgName,required"`
 	Continent         string                                 `json:"continent,required"`
 	GeonameID         string                                 `json:"geonameId,required"`
 	IP                string                                 `json:"ip,required"`
@@ -1185,11 +1185,11 @@ type URLScannerScanGetResponseScanIPsIP struct {
 // urlScannerScanGetResponseScanIPsIPJSON contains the JSON metadata for the struct
 // [URLScannerScanGetResponseScanIPsIP]
 type urlScannerScanGetResponseScanIPsIPJSON struct {
-	Asn               apijson.Field
-	AsnDescription    apijson.Field
-	AsnLocationAlpha2 apijson.Field
-	AsnName           apijson.Field
-	AsnOrgName        apijson.Field
+	ASN               apijson.Field
+	ASNDescription    apijson.Field
+	ASNLocationAlpha2 apijson.Field
+	ASNName           apijson.Field
+	ASNOrgName        apijson.Field
 	Continent         apijson.Field
 	GeonameID         apijson.Field
 	IP                apijson.Field

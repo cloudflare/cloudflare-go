@@ -34,7 +34,7 @@ func TestAccessOrganizationNewWithOptionalParams(t *testing.T) {
 		ZoneID:                   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		AuthDomain:               cloudflare.F("test.cloudflareaccess.com"),
 		Name:                     cloudflare.F("Widget Corps Internal Applications"),
-		AllowAuthenticateViaWarp: cloudflare.F(true),
+		AllowAuthenticateViaWARP: cloudflare.F(true),
 		AutoRedirectToIdentity:   cloudflare.F(true),
 		IsUiReadOnly:             cloudflare.F(true),
 		LoginDesign: cloudflare.F(cloudflare.AccessOrganizationNewParamsLoginDesign{
@@ -47,7 +47,7 @@ func TestAccessOrganizationNewWithOptionalParams(t *testing.T) {
 		SessionDuration:                cloudflare.F("24h"),
 		UiReadOnlyToggleReason:         cloudflare.F("Temporarily turn off the UI read only lock to make a change via the UI"),
 		UserSeatExpirationInactiveTime: cloudflare.F("720h"),
-		WarpAuthSessionDuration:        cloudflare.F("24h"),
+		WARPAuthSessionDuration:        cloudflare.F("24h"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -77,7 +77,7 @@ func TestAccessOrganizationUpdateWithOptionalParams(t *testing.T) {
 	_, err := client.Access.Organizations.Update(context.TODO(), cloudflare.AccessOrganizationUpdateParams{
 		AccountID:                cloudflare.F("string"),
 		ZoneID:                   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		AllowAuthenticateViaWarp: cloudflare.F(true),
+		AllowAuthenticateViaWARP: cloudflare.F(true),
 		AuthDomain:               cloudflare.F("test.cloudflareaccess.com"),
 		AutoRedirectToIdentity:   cloudflare.F(true),
 		CustomPages: cloudflare.F(cloudflare.AccessOrganizationUpdateParamsCustomPages{
@@ -96,7 +96,7 @@ func TestAccessOrganizationUpdateWithOptionalParams(t *testing.T) {
 		SessionDuration:                cloudflare.F("24h"),
 		UiReadOnlyToggleReason:         cloudflare.F("Temporarily turn off the UI read only lock to make a change via the UI"),
 		UserSeatExpirationInactiveTime: cloudflare.F("720h"),
-		WarpAuthSessionDuration:        cloudflare.F("24h"),
+		WARPAuthSessionDuration:        cloudflare.F("24h"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

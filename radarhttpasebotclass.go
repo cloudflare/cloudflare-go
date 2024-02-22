@@ -161,7 +161,7 @@ func (r *RadarHTTPAseBotClassGetResponseMetaConfidenceInfoAnnotation) UnmarshalJ
 }
 
 type RadarHTTPAseBotClassGetResponseTop0 struct {
-	ClientAsn    int64                                   `json:"clientASN,required"`
+	ClientASN    int64                                   `json:"clientASN,required"`
 	ClientAsName string                                  `json:"clientASName,required"`
 	Value        string                                  `json:"value,required"`
 	JSON         radarHTTPAseBotClassGetResponseTop0JSON `json:"-"`
@@ -170,7 +170,7 @@ type RadarHTTPAseBotClassGetResponseTop0 struct {
 // radarHTTPAseBotClassGetResponseTop0JSON contains the JSON metadata for the
 // struct [RadarHTTPAseBotClassGetResponseTop0]
 type radarHTTPAseBotClassGetResponseTop0JSON struct {
-	ClientAsn    apijson.Field
+	ClientASN    apijson.Field
 	ClientAsName apijson.Field
 	Value        apijson.Field
 	raw          string
@@ -185,7 +185,7 @@ type RadarHTTPAseBotClassGetParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
@@ -213,7 +213,7 @@ type RadarHTTPAseBotClassGetParams struct {
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Filter for os name.
-	Os param.Field[[]RadarHTTPAseBotClassGetParamsO] `query:"os"`
+	OS param.Field[[]RadarHTTPAseBotClassGetParamsOS] `query:"os"`
 	// Filter for tls version.
 	TLSVersion param.Field[[]RadarHTTPAseBotClassGetParamsTLSVersion] `query:"tlsVersion"`
 }
@@ -293,16 +293,16 @@ const (
 	RadarHTTPAseBotClassGetParamsIPVersionIPv6 RadarHTTPAseBotClassGetParamsIPVersion = "IPv6"
 )
 
-type RadarHTTPAseBotClassGetParamsO string
+type RadarHTTPAseBotClassGetParamsOS string
 
 const (
-	RadarHTTPAseBotClassGetParamsOWindows  RadarHTTPAseBotClassGetParamsO = "WINDOWS"
-	RadarHTTPAseBotClassGetParamsOMacosx   RadarHTTPAseBotClassGetParamsO = "MACOSX"
-	RadarHTTPAseBotClassGetParamsOIos      RadarHTTPAseBotClassGetParamsO = "IOS"
-	RadarHTTPAseBotClassGetParamsOAndroid  RadarHTTPAseBotClassGetParamsO = "ANDROID"
-	RadarHTTPAseBotClassGetParamsOChromeos RadarHTTPAseBotClassGetParamsO = "CHROMEOS"
-	RadarHTTPAseBotClassGetParamsOLinux    RadarHTTPAseBotClassGetParamsO = "LINUX"
-	RadarHTTPAseBotClassGetParamsOSmartTv  RadarHTTPAseBotClassGetParamsO = "SMART_TV"
+	RadarHTTPAseBotClassGetParamsOSWindows  RadarHTTPAseBotClassGetParamsOS = "WINDOWS"
+	RadarHTTPAseBotClassGetParamsOSMacosx   RadarHTTPAseBotClassGetParamsOS = "MACOSX"
+	RadarHTTPAseBotClassGetParamsOSIos      RadarHTTPAseBotClassGetParamsOS = "IOS"
+	RadarHTTPAseBotClassGetParamsOSAndroid  RadarHTTPAseBotClassGetParamsOS = "ANDROID"
+	RadarHTTPAseBotClassGetParamsOSChromeos RadarHTTPAseBotClassGetParamsOS = "CHROMEOS"
+	RadarHTTPAseBotClassGetParamsOSLinux    RadarHTTPAseBotClassGetParamsOS = "LINUX"
+	RadarHTTPAseBotClassGetParamsOSSmartTv  RadarHTTPAseBotClassGetParamsOS = "SMART_TV"
 )
 
 type RadarHTTPAseBotClassGetParamsTLSVersion string

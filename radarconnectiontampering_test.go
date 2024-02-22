@@ -31,7 +31,7 @@ func TestRadarConnectionTamperingSummaryWithOptionalParams(t *testing.T) {
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.ConnectionTampering.Summary(context.TODO(), cloudflare.RadarConnectionTamperingSummaryParams{
-		Asn:       cloudflare.F([]string{"string", "string", "string"}),
+		ASN:       cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange: cloudflare.F([]cloudflare.RadarConnectionTamperingSummaryParamsDateRange{cloudflare.RadarConnectionTamperingSummaryParamsDateRange1d, cloudflare.RadarConnectionTamperingSummaryParamsDateRange2d, cloudflare.RadarConnectionTamperingSummaryParamsDateRange7d}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -66,7 +66,7 @@ func TestRadarConnectionTamperingTimeseriesGroupsWithOptionalParams(t *testing.T
 	)
 	_, err := client.Radar.ConnectionTampering.TimeseriesGroups(context.TODO(), cloudflare.RadarConnectionTamperingTimeseriesGroupsParams{
 		AggInterval: cloudflare.F(cloudflare.RadarConnectionTamperingTimeseriesGroupsParamsAggInterval1h),
-		Asn:         cloudflare.F([]string{"string", "string", "string"}),
+		ASN:         cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:   cloudflare.F([]cloudflare.RadarConnectionTamperingTimeseriesGroupsParamsDateRange{cloudflare.RadarConnectionTamperingTimeseriesGroupsParamsDateRange1d, cloudflare.RadarConnectionTamperingTimeseriesGroupsParamsDateRange2d, cloudflare.RadarConnectionTamperingTimeseriesGroupsParamsDateRange7d}),
 		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),

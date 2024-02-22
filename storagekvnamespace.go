@@ -18,38 +18,38 @@ import (
 	"github.com/tidwall/gjson"
 )
 
-// StorageKvNamespaceService contains methods and other services that help with
+// StorageKVNamespaceService contains methods and other services that help with
 // interacting with the cloudflare API. Note, unlike clients, this service does not
 // read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewStorageKvNamespaceService] method
+// this service directly, and instead use the [NewStorageKVNamespaceService] method
 // instead.
-type StorageKvNamespaceService struct {
+type StorageKVNamespaceService struct {
 	Options  []option.RequestOption
-	Bulk     *StorageKvNamespaceBulkService
-	Keys     *StorageKvNamespaceKeyService
-	Metadata *StorageKvNamespaceMetadataService
-	Values   *StorageKvNamespaceValueService
+	Bulk     *StorageKVNamespaceBulkService
+	Keys     *StorageKVNamespaceKeyService
+	Metadata *StorageKVNamespaceMetadataService
+	Values   *StorageKVNamespaceValueService
 }
 
-// NewStorageKvNamespaceService generates a new service that applies the given
+// NewStorageKVNamespaceService generates a new service that applies the given
 // options to each request. These options are applied after the parent client's
 // options (if there is one), and before any request-specific options.
-func NewStorageKvNamespaceService(opts ...option.RequestOption) (r *StorageKvNamespaceService) {
-	r = &StorageKvNamespaceService{}
+func NewStorageKVNamespaceService(opts ...option.RequestOption) (r *StorageKVNamespaceService) {
+	r = &StorageKVNamespaceService{}
 	r.Options = opts
-	r.Bulk = NewStorageKvNamespaceBulkService(opts...)
-	r.Keys = NewStorageKvNamespaceKeyService(opts...)
-	r.Metadata = NewStorageKvNamespaceMetadataService(opts...)
-	r.Values = NewStorageKvNamespaceValueService(opts...)
+	r.Bulk = NewStorageKVNamespaceBulkService(opts...)
+	r.Keys = NewStorageKVNamespaceKeyService(opts...)
+	r.Metadata = NewStorageKVNamespaceMetadataService(opts...)
+	r.Values = NewStorageKVNamespaceValueService(opts...)
 	return
 }
 
 // Creates a namespace under the given title. A `400` is returned if the account
 // already owns a namespace with this title. A namespace must be explicitly deleted
 // to be replaced.
-func (r *StorageKvNamespaceService) New(ctx context.Context, accountID string, body StorageKvNamespaceNewParams, opts ...option.RequestOption) (res *StorageKvNamespaceNewResponse, err error) {
+func (r *StorageKVNamespaceService) New(ctx context.Context, accountID string, body StorageKVNamespaceNewParams, opts ...option.RequestOption) (res *StorageKVNamespaceNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env StorageKvNamespaceNewResponseEnvelope
+	var env StorageKVNamespaceNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -60,9 +60,9 @@ func (r *StorageKvNamespaceService) New(ctx context.Context, accountID string, b
 }
 
 // Modifies a namespace's title.
-func (r *StorageKvNamespaceService) Update(ctx context.Context, accountID string, namespaceID string, body StorageKvNamespaceUpdateParams, opts ...option.RequestOption) (res *StorageKvNamespaceUpdateResponse, err error) {
+func (r *StorageKVNamespaceService) Update(ctx context.Context, accountID string, namespaceID string, body StorageKVNamespaceUpdateParams, opts ...option.RequestOption) (res *StorageKVNamespaceUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env StorageKvNamespaceUpdateResponseEnvelope
+	var env StorageKVNamespaceUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s", accountID, namespaceID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -73,7 +73,7 @@ func (r *StorageKvNamespaceService) Update(ctx context.Context, accountID string
 }
 
 // Returns the namespaces owned by an account.
-func (r *StorageKvNamespaceService) List(ctx context.Context, accountID string, query StorageKvNamespaceListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[StorageKvNamespaceListResponse], err error) {
+func (r *StorageKVNamespaceService) List(ctx context.Context, accountID string, query StorageKVNamespaceListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[StorageKVNamespaceListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -91,14 +91,14 @@ func (r *StorageKvNamespaceService) List(ctx context.Context, accountID string, 
 }
 
 // Returns the namespaces owned by an account.
-func (r *StorageKvNamespaceService) ListAutoPaging(ctx context.Context, accountID string, query StorageKvNamespaceListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[StorageKvNamespaceListResponse] {
+func (r *StorageKVNamespaceService) ListAutoPaging(ctx context.Context, accountID string, query StorageKVNamespaceListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[StorageKVNamespaceListResponse] {
 	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, accountID, query, opts...))
 }
 
 // Deletes the namespace corresponding to the given ID.
-func (r *StorageKvNamespaceService) Delete(ctx context.Context, accountID string, namespaceID string, opts ...option.RequestOption) (res *StorageKvNamespaceDeleteResponse, err error) {
+func (r *StorageKVNamespaceService) Delete(ctx context.Context, accountID string, namespaceID string, opts ...option.RequestOption) (res *StorageKVNamespaceDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env StorageKvNamespaceDeleteResponseEnvelope
+	var env StorageKVNamespaceDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s", accountID, namespaceID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -108,7 +108,7 @@ func (r *StorageKvNamespaceService) Delete(ctx context.Context, accountID string
 	return
 }
 
-type StorageKvNamespaceNewResponse struct {
+type StorageKVNamespaceNewResponse struct {
 	// Namespace identifier tag.
 	ID string `json:"id,required"`
 	// A human-readable string name for a Namespace.
@@ -116,12 +116,12 @@ type StorageKvNamespaceNewResponse struct {
 	// True if keys written on the URL will be URL-decoded before storing. For example,
 	// if set to "true", a key written on the URL as "%3F" will be stored as "?".
 	SupportsURLEncoding bool                              `json:"supports_url_encoding"`
-	JSON                storageKvNamespaceNewResponseJSON `json:"-"`
+	JSON                storageKVNamespaceNewResponseJSON `json:"-"`
 }
 
-// storageKvNamespaceNewResponseJSON contains the JSON metadata for the struct
-// [StorageKvNamespaceNewResponse]
-type storageKvNamespaceNewResponseJSON struct {
+// storageKVNamespaceNewResponseJSON contains the JSON metadata for the struct
+// [StorageKVNamespaceNewResponse]
+type storageKVNamespaceNewResponseJSON struct {
 	ID                  apijson.Field
 	Title               apijson.Field
 	SupportsURLEncoding apijson.Field
@@ -129,19 +129,19 @@ type storageKvNamespaceNewResponseJSON struct {
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *StorageKvNamespaceNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *StorageKVNamespaceNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Union satisfied by [StorageKvNamespaceUpdateResponseUnknown] or
+// Union satisfied by [StorageKVNamespaceUpdateResponseUnknown] or
 // [shared.UnionString].
-type StorageKvNamespaceUpdateResponse interface {
-	ImplementsStorageKvNamespaceUpdateResponse()
+type StorageKVNamespaceUpdateResponse interface {
+	ImplementsStorageKVNamespaceUpdateResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*StorageKvNamespaceUpdateResponse)(nil)).Elem(),
+		reflect.TypeOf((*StorageKVNamespaceUpdateResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -150,7 +150,7 @@ func init() {
 	)
 }
 
-type StorageKvNamespaceListResponse struct {
+type StorageKVNamespaceListResponse struct {
 	// Namespace identifier tag.
 	ID string `json:"id,required"`
 	// A human-readable string name for a Namespace.
@@ -158,12 +158,12 @@ type StorageKvNamespaceListResponse struct {
 	// True if keys written on the URL will be URL-decoded before storing. For example,
 	// if set to "true", a key written on the URL as "%3F" will be stored as "?".
 	SupportsURLEncoding bool                               `json:"supports_url_encoding"`
-	JSON                storageKvNamespaceListResponseJSON `json:"-"`
+	JSON                storageKVNamespaceListResponseJSON `json:"-"`
 }
 
-// storageKvNamespaceListResponseJSON contains the JSON metadata for the struct
-// [StorageKvNamespaceListResponse]
-type storageKvNamespaceListResponseJSON struct {
+// storageKVNamespaceListResponseJSON contains the JSON metadata for the struct
+// [StorageKVNamespaceListResponse]
+type storageKVNamespaceListResponseJSON struct {
 	ID                  apijson.Field
 	Title               apijson.Field
 	SupportsURLEncoding apijson.Field
@@ -171,19 +171,19 @@ type storageKvNamespaceListResponseJSON struct {
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *StorageKvNamespaceListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *StorageKVNamespaceListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Union satisfied by [StorageKvNamespaceDeleteResponseUnknown] or
+// Union satisfied by [StorageKVNamespaceDeleteResponseUnknown] or
 // [shared.UnionString].
-type StorageKvNamespaceDeleteResponse interface {
-	ImplementsStorageKvNamespaceDeleteResponse()
+type StorageKVNamespaceDeleteResponse interface {
+	ImplementsStorageKVNamespaceDeleteResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*StorageKvNamespaceDeleteResponse)(nil)).Elem(),
+		reflect.TypeOf((*StorageKVNamespaceDeleteResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -192,27 +192,27 @@ func init() {
 	)
 }
 
-type StorageKvNamespaceNewParams struct {
+type StorageKVNamespaceNewParams struct {
 	// A human-readable string name for a Namespace.
 	Title param.Field[string] `json:"title,required"`
 }
 
-func (r StorageKvNamespaceNewParams) MarshalJSON() (data []byte, err error) {
+func (r StorageKVNamespaceNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type StorageKvNamespaceNewResponseEnvelope struct {
-	Errors   []StorageKvNamespaceNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []StorageKvNamespaceNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   StorageKvNamespaceNewResponse                   `json:"result,required"`
+type StorageKVNamespaceNewResponseEnvelope struct {
+	Errors   []StorageKVNamespaceNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []StorageKVNamespaceNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   StorageKVNamespaceNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success StorageKvNamespaceNewResponseEnvelopeSuccess `json:"success,required"`
-	JSON    storageKvNamespaceNewResponseEnvelopeJSON    `json:"-"`
+	Success StorageKVNamespaceNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    storageKVNamespaceNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// storageKvNamespaceNewResponseEnvelopeJSON contains the JSON metadata for the
-// struct [StorageKvNamespaceNewResponseEnvelope]
-type storageKvNamespaceNewResponseEnvelopeJSON struct {
+// storageKVNamespaceNewResponseEnvelopeJSON contains the JSON metadata for the
+// struct [StorageKVNamespaceNewResponseEnvelope]
+type storageKVNamespaceNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -221,76 +221,76 @@ type storageKvNamespaceNewResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StorageKvNamespaceNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *StorageKVNamespaceNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type StorageKvNamespaceNewResponseEnvelopeErrors struct {
+type StorageKVNamespaceNewResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
-	JSON    storageKvNamespaceNewResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    storageKVNamespaceNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// storageKvNamespaceNewResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [StorageKvNamespaceNewResponseEnvelopeErrors]
-type storageKvNamespaceNewResponseEnvelopeErrorsJSON struct {
+// storageKVNamespaceNewResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [StorageKVNamespaceNewResponseEnvelopeErrors]
+type storageKVNamespaceNewResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StorageKvNamespaceNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *StorageKVNamespaceNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type StorageKvNamespaceNewResponseEnvelopeMessages struct {
+type StorageKVNamespaceNewResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
-	JSON    storageKvNamespaceNewResponseEnvelopeMessagesJSON `json:"-"`
+	JSON    storageKVNamespaceNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// storageKvNamespaceNewResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [StorageKvNamespaceNewResponseEnvelopeMessages]
-type storageKvNamespaceNewResponseEnvelopeMessagesJSON struct {
+// storageKVNamespaceNewResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [StorageKVNamespaceNewResponseEnvelopeMessages]
+type storageKVNamespaceNewResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StorageKvNamespaceNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *StorageKVNamespaceNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type StorageKvNamespaceNewResponseEnvelopeSuccess bool
+type StorageKVNamespaceNewResponseEnvelopeSuccess bool
 
 const (
-	StorageKvNamespaceNewResponseEnvelopeSuccessTrue StorageKvNamespaceNewResponseEnvelopeSuccess = true
+	StorageKVNamespaceNewResponseEnvelopeSuccessTrue StorageKVNamespaceNewResponseEnvelopeSuccess = true
 )
 
-type StorageKvNamespaceUpdateParams struct {
+type StorageKVNamespaceUpdateParams struct {
 	// A human-readable string name for a Namespace.
 	Title param.Field[string] `json:"title,required"`
 }
 
-func (r StorageKvNamespaceUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r StorageKVNamespaceUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type StorageKvNamespaceUpdateResponseEnvelope struct {
-	Errors   []StorageKvNamespaceUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []StorageKvNamespaceUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   StorageKvNamespaceUpdateResponse                   `json:"result,required"`
+type StorageKVNamespaceUpdateResponseEnvelope struct {
+	Errors   []StorageKVNamespaceUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []StorageKVNamespaceUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   StorageKVNamespaceUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success StorageKvNamespaceUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    storageKvNamespaceUpdateResponseEnvelopeJSON    `json:"-"`
+	Success StorageKVNamespaceUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    storageKVNamespaceUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
-// storageKvNamespaceUpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [StorageKvNamespaceUpdateResponseEnvelope]
-type storageKvNamespaceUpdateResponseEnvelopeJSON struct {
+// storageKVNamespaceUpdateResponseEnvelopeJSON contains the JSON metadata for the
+// struct [StorageKVNamespaceUpdateResponseEnvelope]
+type storageKVNamespaceUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -299,69 +299,69 @@ type storageKvNamespaceUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StorageKvNamespaceUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *StorageKVNamespaceUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type StorageKvNamespaceUpdateResponseEnvelopeErrors struct {
+type StorageKVNamespaceUpdateResponseEnvelopeErrors struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
-	JSON    storageKvNamespaceUpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    storageKVNamespaceUpdateResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// storageKvNamespaceUpdateResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [StorageKvNamespaceUpdateResponseEnvelopeErrors]
-type storageKvNamespaceUpdateResponseEnvelopeErrorsJSON struct {
+// storageKVNamespaceUpdateResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [StorageKVNamespaceUpdateResponseEnvelopeErrors]
+type storageKVNamespaceUpdateResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StorageKvNamespaceUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *StorageKVNamespaceUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type StorageKvNamespaceUpdateResponseEnvelopeMessages struct {
+type StorageKVNamespaceUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
-	JSON    storageKvNamespaceUpdateResponseEnvelopeMessagesJSON `json:"-"`
+	JSON    storageKVNamespaceUpdateResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// storageKvNamespaceUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [StorageKvNamespaceUpdateResponseEnvelopeMessages]
-type storageKvNamespaceUpdateResponseEnvelopeMessagesJSON struct {
+// storageKVNamespaceUpdateResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [StorageKVNamespaceUpdateResponseEnvelopeMessages]
+type storageKVNamespaceUpdateResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StorageKvNamespaceUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *StorageKVNamespaceUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type StorageKvNamespaceUpdateResponseEnvelopeSuccess bool
+type StorageKVNamespaceUpdateResponseEnvelopeSuccess bool
 
 const (
-	StorageKvNamespaceUpdateResponseEnvelopeSuccessTrue StorageKvNamespaceUpdateResponseEnvelopeSuccess = true
+	StorageKVNamespaceUpdateResponseEnvelopeSuccessTrue StorageKVNamespaceUpdateResponseEnvelopeSuccess = true
 )
 
-type StorageKvNamespaceListParams struct {
+type StorageKVNamespaceListParams struct {
 	// Direction to order namespaces.
-	Direction param.Field[StorageKvNamespaceListParamsDirection] `query:"direction"`
+	Direction param.Field[StorageKVNamespaceListParamsDirection] `query:"direction"`
 	// Field to order results by.
-	Order param.Field[StorageKvNamespaceListParamsOrder] `query:"order"`
+	Order param.Field[StorageKVNamespaceListParamsOrder] `query:"order"`
 	// Page number of paginated results.
 	Page param.Field[float64] `query:"page"`
 	// Maximum number of results per page.
 	PerPage param.Field[float64] `query:"per_page"`
 }
 
-// URLQuery serializes [StorageKvNamespaceListParams]'s query parameters as
+// URLQuery serializes [StorageKVNamespaceListParams]'s query parameters as
 // `url.Values`.
-func (r StorageKvNamespaceListParams) URLQuery() (v url.Values) {
+func (r StorageKVNamespaceListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
@@ -369,33 +369,33 @@ func (r StorageKvNamespaceListParams) URLQuery() (v url.Values) {
 }
 
 // Direction to order namespaces.
-type StorageKvNamespaceListParamsDirection string
+type StorageKVNamespaceListParamsDirection string
 
 const (
-	StorageKvNamespaceListParamsDirectionAsc  StorageKvNamespaceListParamsDirection = "asc"
-	StorageKvNamespaceListParamsDirectionDesc StorageKvNamespaceListParamsDirection = "desc"
+	StorageKVNamespaceListParamsDirectionAsc  StorageKVNamespaceListParamsDirection = "asc"
+	StorageKVNamespaceListParamsDirectionDesc StorageKVNamespaceListParamsDirection = "desc"
 )
 
 // Field to order results by.
-type StorageKvNamespaceListParamsOrder string
+type StorageKVNamespaceListParamsOrder string
 
 const (
-	StorageKvNamespaceListParamsOrderID    StorageKvNamespaceListParamsOrder = "id"
-	StorageKvNamespaceListParamsOrderTitle StorageKvNamespaceListParamsOrder = "title"
+	StorageKVNamespaceListParamsOrderID    StorageKVNamespaceListParamsOrder = "id"
+	StorageKVNamespaceListParamsOrderTitle StorageKVNamespaceListParamsOrder = "title"
 )
 
-type StorageKvNamespaceDeleteResponseEnvelope struct {
-	Errors   []StorageKvNamespaceDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []StorageKvNamespaceDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   StorageKvNamespaceDeleteResponse                   `json:"result,required"`
+type StorageKVNamespaceDeleteResponseEnvelope struct {
+	Errors   []StorageKVNamespaceDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []StorageKVNamespaceDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   StorageKVNamespaceDeleteResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success StorageKvNamespaceDeleteResponseEnvelopeSuccess `json:"success,required"`
-	JSON    storageKvNamespaceDeleteResponseEnvelopeJSON    `json:"-"`
+	Success StorageKVNamespaceDeleteResponseEnvelopeSuccess `json:"success,required"`
+	JSON    storageKVNamespaceDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
-// storageKvNamespaceDeleteResponseEnvelopeJSON contains the JSON metadata for the
-// struct [StorageKvNamespaceDeleteResponseEnvelope]
-type storageKvNamespaceDeleteResponseEnvelopeJSON struct {
+// storageKVNamespaceDeleteResponseEnvelopeJSON contains the JSON metadata for the
+// struct [StorageKVNamespaceDeleteResponseEnvelope]
+type storageKVNamespaceDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -404,51 +404,51 @@ type storageKvNamespaceDeleteResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StorageKvNamespaceDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *StorageKVNamespaceDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type StorageKvNamespaceDeleteResponseEnvelopeErrors struct {
+type StorageKVNamespaceDeleteResponseEnvelopeErrors struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
-	JSON    storageKvNamespaceDeleteResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    storageKVNamespaceDeleteResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// storageKvNamespaceDeleteResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [StorageKvNamespaceDeleteResponseEnvelopeErrors]
-type storageKvNamespaceDeleteResponseEnvelopeErrorsJSON struct {
+// storageKVNamespaceDeleteResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [StorageKVNamespaceDeleteResponseEnvelopeErrors]
+type storageKVNamespaceDeleteResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StorageKvNamespaceDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *StorageKVNamespaceDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type StorageKvNamespaceDeleteResponseEnvelopeMessages struct {
+type StorageKVNamespaceDeleteResponseEnvelopeMessages struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
-	JSON    storageKvNamespaceDeleteResponseEnvelopeMessagesJSON `json:"-"`
+	JSON    storageKVNamespaceDeleteResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// storageKvNamespaceDeleteResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [StorageKvNamespaceDeleteResponseEnvelopeMessages]
-type storageKvNamespaceDeleteResponseEnvelopeMessagesJSON struct {
+// storageKVNamespaceDeleteResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [StorageKVNamespaceDeleteResponseEnvelopeMessages]
+type storageKVNamespaceDeleteResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StorageKvNamespaceDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *StorageKVNamespaceDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type StorageKvNamespaceDeleteResponseEnvelopeSuccess bool
+type StorageKVNamespaceDeleteResponseEnvelopeSuccess bool
 
 const (
-	StorageKvNamespaceDeleteResponseEnvelopeSuccessTrue StorageKvNamespaceDeleteResponseEnvelopeSuccess = true
+	StorageKVNamespaceDeleteResponseEnvelopeSuccessTrue StorageKVNamespaceDeleteResponseEnvelopeSuccess = true
 )

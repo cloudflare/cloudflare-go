@@ -133,9 +133,9 @@ func (r *RadarHTTPTimeseriesGroupService) IPVersion(ctx context.Context, query R
 
 // Get a time series of the percentage distribution of traffic of the top operating
 // systems.
-func (r *RadarHTTPTimeseriesGroupService) Os(ctx context.Context, query RadarHTTPTimeseriesGroupOsParams, opts ...option.RequestOption) (res *RadarHTTPTimeseriesGroupOsResponse, err error) {
+func (r *RadarHTTPTimeseriesGroupService) OS(ctx context.Context, query RadarHTTPTimeseriesGroupOSParams, opts ...option.RequestOption) (res *RadarHTTPTimeseriesGroupOSResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env RadarHTTPTimeseriesGroupOsResponseEnvelope
+	var env RadarHTTPTimeseriesGroupOSResponseEnvelope
 	path := "radar/http/timeseries_groups/os"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -437,40 +437,40 @@ func (r *RadarHTTPTimeseriesGroupIPVersionResponseSerie0) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarHTTPTimeseriesGroupOsResponse struct {
+type RadarHTTPTimeseriesGroupOSResponse struct {
 	Meta   interface{}                              `json:"meta,required"`
-	Serie0 RadarHTTPTimeseriesGroupOsResponseSerie0 `json:"serie_0,required"`
-	JSON   radarHTTPTimeseriesGroupOsResponseJSON   `json:"-"`
+	Serie0 RadarHTTPTimeseriesGroupOSResponseSerie0 `json:"serie_0,required"`
+	JSON   radarHTTPTimeseriesGroupOSResponseJSON   `json:"-"`
 }
 
-// radarHTTPTimeseriesGroupOsResponseJSON contains the JSON metadata for the struct
-// [RadarHTTPTimeseriesGroupOsResponse]
-type radarHTTPTimeseriesGroupOsResponseJSON struct {
+// radarHTTPTimeseriesGroupOSResponseJSON contains the JSON metadata for the struct
+// [RadarHTTPTimeseriesGroupOSResponse]
+type radarHTTPTimeseriesGroupOSResponseJSON struct {
 	Meta        apijson.Field
 	Serie0      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarHTTPTimeseriesGroupOsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarHTTPTimeseriesGroupOSResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarHTTPTimeseriesGroupOsResponseSerie0 struct {
+type RadarHTTPTimeseriesGroupOSResponseSerie0 struct {
 	Timestamps  []string                                     `json:"timestamps,required"`
 	ExtraFields map[string][]string                          `json:"-,extras"`
-	JSON        radarHTTPTimeseriesGroupOsResponseSerie0JSON `json:"-"`
+	JSON        radarHTTPTimeseriesGroupOSResponseSerie0JSON `json:"-"`
 }
 
-// radarHTTPTimeseriesGroupOsResponseSerie0JSON contains the JSON metadata for the
-// struct [RadarHTTPTimeseriesGroupOsResponseSerie0]
-type radarHTTPTimeseriesGroupOsResponseSerie0JSON struct {
+// radarHTTPTimeseriesGroupOSResponseSerie0JSON contains the JSON metadata for the
+// struct [RadarHTTPTimeseriesGroupOSResponseSerie0]
+type radarHTTPTimeseriesGroupOSResponseSerie0JSON struct {
 	Timestamps  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarHTTPTimeseriesGroupOsResponseSerie0) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarHTTPTimeseriesGroupOSResponseSerie0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -528,7 +528,7 @@ type RadarHTTPTimeseriesGroupBotClassParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
@@ -554,7 +554,7 @@ type RadarHTTPTimeseriesGroupBotClassParams struct {
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Filter for os name.
-	Os param.Field[[]RadarHTTPTimeseriesGroupBotClassParamsO] `query:"os"`
+	OS param.Field[[]RadarHTTPTimeseriesGroupBotClassParamsOS] `query:"os"`
 	// Filter for tls version.
 	TLSVersion param.Field[[]RadarHTTPTimeseriesGroupBotClassParamsTLSVersion] `query:"tlsVersion"`
 }
@@ -638,16 +638,16 @@ const (
 	RadarHTTPTimeseriesGroupBotClassParamsIPVersionIPv6 RadarHTTPTimeseriesGroupBotClassParamsIPVersion = "IPv6"
 )
 
-type RadarHTTPTimeseriesGroupBotClassParamsO string
+type RadarHTTPTimeseriesGroupBotClassParamsOS string
 
 const (
-	RadarHTTPTimeseriesGroupBotClassParamsOWindows  RadarHTTPTimeseriesGroupBotClassParamsO = "WINDOWS"
-	RadarHTTPTimeseriesGroupBotClassParamsOMacosx   RadarHTTPTimeseriesGroupBotClassParamsO = "MACOSX"
-	RadarHTTPTimeseriesGroupBotClassParamsOIos      RadarHTTPTimeseriesGroupBotClassParamsO = "IOS"
-	RadarHTTPTimeseriesGroupBotClassParamsOAndroid  RadarHTTPTimeseriesGroupBotClassParamsO = "ANDROID"
-	RadarHTTPTimeseriesGroupBotClassParamsOChromeos RadarHTTPTimeseriesGroupBotClassParamsO = "CHROMEOS"
-	RadarHTTPTimeseriesGroupBotClassParamsOLinux    RadarHTTPTimeseriesGroupBotClassParamsO = "LINUX"
-	RadarHTTPTimeseriesGroupBotClassParamsOSmartTv  RadarHTTPTimeseriesGroupBotClassParamsO = "SMART_TV"
+	RadarHTTPTimeseriesGroupBotClassParamsOSWindows  RadarHTTPTimeseriesGroupBotClassParamsOS = "WINDOWS"
+	RadarHTTPTimeseriesGroupBotClassParamsOSMacosx   RadarHTTPTimeseriesGroupBotClassParamsOS = "MACOSX"
+	RadarHTTPTimeseriesGroupBotClassParamsOSIos      RadarHTTPTimeseriesGroupBotClassParamsOS = "IOS"
+	RadarHTTPTimeseriesGroupBotClassParamsOSAndroid  RadarHTTPTimeseriesGroupBotClassParamsOS = "ANDROID"
+	RadarHTTPTimeseriesGroupBotClassParamsOSChromeos RadarHTTPTimeseriesGroupBotClassParamsOS = "CHROMEOS"
+	RadarHTTPTimeseriesGroupBotClassParamsOSLinux    RadarHTTPTimeseriesGroupBotClassParamsOS = "LINUX"
+	RadarHTTPTimeseriesGroupBotClassParamsOSSmartTv  RadarHTTPTimeseriesGroupBotClassParamsOS = "SMART_TV"
 )
 
 type RadarHTTPTimeseriesGroupBotClassParamsTLSVersion string
@@ -687,7 +687,7 @@ type RadarHTTPTimeseriesGroupBrowserParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// Filter for bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]RadarHTTPTimeseriesGroupBrowserParamsBotClass] `query:"botClass"`
@@ -719,7 +719,7 @@ type RadarHTTPTimeseriesGroupBrowserParams struct {
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Filter for os name.
-	Os param.Field[[]RadarHTTPTimeseriesGroupBrowserParamsO] `query:"os"`
+	OS param.Field[[]RadarHTTPTimeseriesGroupBrowserParamsOS] `query:"os"`
 	// Filter for tls version.
 	TLSVersion param.Field[[]RadarHTTPTimeseriesGroupBrowserParamsTLSVersion] `query:"tlsVersion"`
 }
@@ -810,16 +810,16 @@ const (
 	RadarHTTPTimeseriesGroupBrowserParamsIPVersionIPv6 RadarHTTPTimeseriesGroupBrowserParamsIPVersion = "IPv6"
 )
 
-type RadarHTTPTimeseriesGroupBrowserParamsO string
+type RadarHTTPTimeseriesGroupBrowserParamsOS string
 
 const (
-	RadarHTTPTimeseriesGroupBrowserParamsOWindows  RadarHTTPTimeseriesGroupBrowserParamsO = "WINDOWS"
-	RadarHTTPTimeseriesGroupBrowserParamsOMacosx   RadarHTTPTimeseriesGroupBrowserParamsO = "MACOSX"
-	RadarHTTPTimeseriesGroupBrowserParamsOIos      RadarHTTPTimeseriesGroupBrowserParamsO = "IOS"
-	RadarHTTPTimeseriesGroupBrowserParamsOAndroid  RadarHTTPTimeseriesGroupBrowserParamsO = "ANDROID"
-	RadarHTTPTimeseriesGroupBrowserParamsOChromeos RadarHTTPTimeseriesGroupBrowserParamsO = "CHROMEOS"
-	RadarHTTPTimeseriesGroupBrowserParamsOLinux    RadarHTTPTimeseriesGroupBrowserParamsO = "LINUX"
-	RadarHTTPTimeseriesGroupBrowserParamsOSmartTv  RadarHTTPTimeseriesGroupBrowserParamsO = "SMART_TV"
+	RadarHTTPTimeseriesGroupBrowserParamsOSWindows  RadarHTTPTimeseriesGroupBrowserParamsOS = "WINDOWS"
+	RadarHTTPTimeseriesGroupBrowserParamsOSMacosx   RadarHTTPTimeseriesGroupBrowserParamsOS = "MACOSX"
+	RadarHTTPTimeseriesGroupBrowserParamsOSIos      RadarHTTPTimeseriesGroupBrowserParamsOS = "IOS"
+	RadarHTTPTimeseriesGroupBrowserParamsOSAndroid  RadarHTTPTimeseriesGroupBrowserParamsOS = "ANDROID"
+	RadarHTTPTimeseriesGroupBrowserParamsOSChromeos RadarHTTPTimeseriesGroupBrowserParamsOS = "CHROMEOS"
+	RadarHTTPTimeseriesGroupBrowserParamsOSLinux    RadarHTTPTimeseriesGroupBrowserParamsOS = "LINUX"
+	RadarHTTPTimeseriesGroupBrowserParamsOSSmartTv  RadarHTTPTimeseriesGroupBrowserParamsOS = "SMART_TV"
 )
 
 type RadarHTTPTimeseriesGroupBrowserParamsTLSVersion string
@@ -859,7 +859,7 @@ type RadarHTTPTimeseriesGroupBrowserFamilyParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// Filter for bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]RadarHTTPTimeseriesGroupBrowserFamilyParamsBotClass] `query:"botClass"`
@@ -888,7 +888,7 @@ type RadarHTTPTimeseriesGroupBrowserFamilyParams struct {
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Filter for os name.
-	Os param.Field[[]RadarHTTPTimeseriesGroupBrowserFamilyParamsO] `query:"os"`
+	OS param.Field[[]RadarHTTPTimeseriesGroupBrowserFamilyParamsOS] `query:"os"`
 	// Filter for tls version.
 	TLSVersion param.Field[[]RadarHTTPTimeseriesGroupBrowserFamilyParamsTLSVersion] `query:"tlsVersion"`
 }
@@ -979,16 +979,16 @@ const (
 	RadarHTTPTimeseriesGroupBrowserFamilyParamsIPVersionIPv6 RadarHTTPTimeseriesGroupBrowserFamilyParamsIPVersion = "IPv6"
 )
 
-type RadarHTTPTimeseriesGroupBrowserFamilyParamsO string
+type RadarHTTPTimeseriesGroupBrowserFamilyParamsOS string
 
 const (
-	RadarHTTPTimeseriesGroupBrowserFamilyParamsOWindows  RadarHTTPTimeseriesGroupBrowserFamilyParamsO = "WINDOWS"
-	RadarHTTPTimeseriesGroupBrowserFamilyParamsOMacosx   RadarHTTPTimeseriesGroupBrowserFamilyParamsO = "MACOSX"
-	RadarHTTPTimeseriesGroupBrowserFamilyParamsOIos      RadarHTTPTimeseriesGroupBrowserFamilyParamsO = "IOS"
-	RadarHTTPTimeseriesGroupBrowserFamilyParamsOAndroid  RadarHTTPTimeseriesGroupBrowserFamilyParamsO = "ANDROID"
-	RadarHTTPTimeseriesGroupBrowserFamilyParamsOChromeos RadarHTTPTimeseriesGroupBrowserFamilyParamsO = "CHROMEOS"
-	RadarHTTPTimeseriesGroupBrowserFamilyParamsOLinux    RadarHTTPTimeseriesGroupBrowserFamilyParamsO = "LINUX"
-	RadarHTTPTimeseriesGroupBrowserFamilyParamsOSmartTv  RadarHTTPTimeseriesGroupBrowserFamilyParamsO = "SMART_TV"
+	RadarHTTPTimeseriesGroupBrowserFamilyParamsOSWindows  RadarHTTPTimeseriesGroupBrowserFamilyParamsOS = "WINDOWS"
+	RadarHTTPTimeseriesGroupBrowserFamilyParamsOSMacosx   RadarHTTPTimeseriesGroupBrowserFamilyParamsOS = "MACOSX"
+	RadarHTTPTimeseriesGroupBrowserFamilyParamsOSIos      RadarHTTPTimeseriesGroupBrowserFamilyParamsOS = "IOS"
+	RadarHTTPTimeseriesGroupBrowserFamilyParamsOSAndroid  RadarHTTPTimeseriesGroupBrowserFamilyParamsOS = "ANDROID"
+	RadarHTTPTimeseriesGroupBrowserFamilyParamsOSChromeos RadarHTTPTimeseriesGroupBrowserFamilyParamsOS = "CHROMEOS"
+	RadarHTTPTimeseriesGroupBrowserFamilyParamsOSLinux    RadarHTTPTimeseriesGroupBrowserFamilyParamsOS = "LINUX"
+	RadarHTTPTimeseriesGroupBrowserFamilyParamsOSSmartTv  RadarHTTPTimeseriesGroupBrowserFamilyParamsOS = "SMART_TV"
 )
 
 type RadarHTTPTimeseriesGroupBrowserFamilyParamsTLSVersion string
@@ -1028,7 +1028,7 @@ type RadarHTTPTimeseriesGroupDeviceTypeParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// Filter for bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]RadarHTTPTimeseriesGroupDeviceTypeParamsBotClass] `query:"botClass"`
@@ -1055,7 +1055,7 @@ type RadarHTTPTimeseriesGroupDeviceTypeParams struct {
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Filter for os name.
-	Os param.Field[[]RadarHTTPTimeseriesGroupDeviceTypeParamsO] `query:"os"`
+	OS param.Field[[]RadarHTTPTimeseriesGroupDeviceTypeParamsOS] `query:"os"`
 	// Filter for tls version.
 	TLSVersion param.Field[[]RadarHTTPTimeseriesGroupDeviceTypeParamsTLSVersion] `query:"tlsVersion"`
 }
@@ -1138,16 +1138,16 @@ const (
 	RadarHTTPTimeseriesGroupDeviceTypeParamsIPVersionIPv6 RadarHTTPTimeseriesGroupDeviceTypeParamsIPVersion = "IPv6"
 )
 
-type RadarHTTPTimeseriesGroupDeviceTypeParamsO string
+type RadarHTTPTimeseriesGroupDeviceTypeParamsOS string
 
 const (
-	RadarHTTPTimeseriesGroupDeviceTypeParamsOWindows  RadarHTTPTimeseriesGroupDeviceTypeParamsO = "WINDOWS"
-	RadarHTTPTimeseriesGroupDeviceTypeParamsOMacosx   RadarHTTPTimeseriesGroupDeviceTypeParamsO = "MACOSX"
-	RadarHTTPTimeseriesGroupDeviceTypeParamsOIos      RadarHTTPTimeseriesGroupDeviceTypeParamsO = "IOS"
-	RadarHTTPTimeseriesGroupDeviceTypeParamsOAndroid  RadarHTTPTimeseriesGroupDeviceTypeParamsO = "ANDROID"
-	RadarHTTPTimeseriesGroupDeviceTypeParamsOChromeos RadarHTTPTimeseriesGroupDeviceTypeParamsO = "CHROMEOS"
-	RadarHTTPTimeseriesGroupDeviceTypeParamsOLinux    RadarHTTPTimeseriesGroupDeviceTypeParamsO = "LINUX"
-	RadarHTTPTimeseriesGroupDeviceTypeParamsOSmartTv  RadarHTTPTimeseriesGroupDeviceTypeParamsO = "SMART_TV"
+	RadarHTTPTimeseriesGroupDeviceTypeParamsOSWindows  RadarHTTPTimeseriesGroupDeviceTypeParamsOS = "WINDOWS"
+	RadarHTTPTimeseriesGroupDeviceTypeParamsOSMacosx   RadarHTTPTimeseriesGroupDeviceTypeParamsOS = "MACOSX"
+	RadarHTTPTimeseriesGroupDeviceTypeParamsOSIos      RadarHTTPTimeseriesGroupDeviceTypeParamsOS = "IOS"
+	RadarHTTPTimeseriesGroupDeviceTypeParamsOSAndroid  RadarHTTPTimeseriesGroupDeviceTypeParamsOS = "ANDROID"
+	RadarHTTPTimeseriesGroupDeviceTypeParamsOSChromeos RadarHTTPTimeseriesGroupDeviceTypeParamsOS = "CHROMEOS"
+	RadarHTTPTimeseriesGroupDeviceTypeParamsOSLinux    RadarHTTPTimeseriesGroupDeviceTypeParamsOS = "LINUX"
+	RadarHTTPTimeseriesGroupDeviceTypeParamsOSSmartTv  RadarHTTPTimeseriesGroupDeviceTypeParamsOS = "SMART_TV"
 )
 
 type RadarHTTPTimeseriesGroupDeviceTypeParamsTLSVersion string
@@ -1187,7 +1187,7 @@ type RadarHTTPTimeseriesGroupHTTPProtocolParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// Filter for bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]RadarHTTPTimeseriesGroupHTTPProtocolParamsBotClass] `query:"botClass"`
@@ -1214,7 +1214,7 @@ type RadarHTTPTimeseriesGroupHTTPProtocolParams struct {
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Filter for os name.
-	Os param.Field[[]RadarHTTPTimeseriesGroupHTTPProtocolParamsO] `query:"os"`
+	OS param.Field[[]RadarHTTPTimeseriesGroupHTTPProtocolParamsOS] `query:"os"`
 	// Filter for tls version.
 	TLSVersion param.Field[[]RadarHTTPTimeseriesGroupHTTPProtocolParamsTLSVersion] `query:"tlsVersion"`
 }
@@ -1298,16 +1298,16 @@ const (
 	RadarHTTPTimeseriesGroupHTTPProtocolParamsIPVersionIPv6 RadarHTTPTimeseriesGroupHTTPProtocolParamsIPVersion = "IPv6"
 )
 
-type RadarHTTPTimeseriesGroupHTTPProtocolParamsO string
+type RadarHTTPTimeseriesGroupHTTPProtocolParamsOS string
 
 const (
-	RadarHTTPTimeseriesGroupHTTPProtocolParamsOWindows  RadarHTTPTimeseriesGroupHTTPProtocolParamsO = "WINDOWS"
-	RadarHTTPTimeseriesGroupHTTPProtocolParamsOMacosx   RadarHTTPTimeseriesGroupHTTPProtocolParamsO = "MACOSX"
-	RadarHTTPTimeseriesGroupHTTPProtocolParamsOIos      RadarHTTPTimeseriesGroupHTTPProtocolParamsO = "IOS"
-	RadarHTTPTimeseriesGroupHTTPProtocolParamsOAndroid  RadarHTTPTimeseriesGroupHTTPProtocolParamsO = "ANDROID"
-	RadarHTTPTimeseriesGroupHTTPProtocolParamsOChromeos RadarHTTPTimeseriesGroupHTTPProtocolParamsO = "CHROMEOS"
-	RadarHTTPTimeseriesGroupHTTPProtocolParamsOLinux    RadarHTTPTimeseriesGroupHTTPProtocolParamsO = "LINUX"
-	RadarHTTPTimeseriesGroupHTTPProtocolParamsOSmartTv  RadarHTTPTimeseriesGroupHTTPProtocolParamsO = "SMART_TV"
+	RadarHTTPTimeseriesGroupHTTPProtocolParamsOSWindows  RadarHTTPTimeseriesGroupHTTPProtocolParamsOS = "WINDOWS"
+	RadarHTTPTimeseriesGroupHTTPProtocolParamsOSMacosx   RadarHTTPTimeseriesGroupHTTPProtocolParamsOS = "MACOSX"
+	RadarHTTPTimeseriesGroupHTTPProtocolParamsOSIos      RadarHTTPTimeseriesGroupHTTPProtocolParamsOS = "IOS"
+	RadarHTTPTimeseriesGroupHTTPProtocolParamsOSAndroid  RadarHTTPTimeseriesGroupHTTPProtocolParamsOS = "ANDROID"
+	RadarHTTPTimeseriesGroupHTTPProtocolParamsOSChromeos RadarHTTPTimeseriesGroupHTTPProtocolParamsOS = "CHROMEOS"
+	RadarHTTPTimeseriesGroupHTTPProtocolParamsOSLinux    RadarHTTPTimeseriesGroupHTTPProtocolParamsOS = "LINUX"
+	RadarHTTPTimeseriesGroupHTTPProtocolParamsOSSmartTv  RadarHTTPTimeseriesGroupHTTPProtocolParamsOS = "SMART_TV"
 )
 
 type RadarHTTPTimeseriesGroupHTTPProtocolParamsTLSVersion string
@@ -1347,7 +1347,7 @@ type RadarHTTPTimeseriesGroupHTTPVersionParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// Filter for bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]RadarHTTPTimeseriesGroupHTTPVersionParamsBotClass] `query:"botClass"`
@@ -1374,7 +1374,7 @@ type RadarHTTPTimeseriesGroupHTTPVersionParams struct {
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Filter for os name.
-	Os param.Field[[]RadarHTTPTimeseriesGroupHTTPVersionParamsO] `query:"os"`
+	OS param.Field[[]RadarHTTPTimeseriesGroupHTTPVersionParamsOS] `query:"os"`
 	// Filter for tls version.
 	TLSVersion param.Field[[]RadarHTTPTimeseriesGroupHTTPVersionParamsTLSVersion] `query:"tlsVersion"`
 }
@@ -1457,16 +1457,16 @@ const (
 	RadarHTTPTimeseriesGroupHTTPVersionParamsIPVersionIPv6 RadarHTTPTimeseriesGroupHTTPVersionParamsIPVersion = "IPv6"
 )
 
-type RadarHTTPTimeseriesGroupHTTPVersionParamsO string
+type RadarHTTPTimeseriesGroupHTTPVersionParamsOS string
 
 const (
-	RadarHTTPTimeseriesGroupHTTPVersionParamsOWindows  RadarHTTPTimeseriesGroupHTTPVersionParamsO = "WINDOWS"
-	RadarHTTPTimeseriesGroupHTTPVersionParamsOMacosx   RadarHTTPTimeseriesGroupHTTPVersionParamsO = "MACOSX"
-	RadarHTTPTimeseriesGroupHTTPVersionParamsOIos      RadarHTTPTimeseriesGroupHTTPVersionParamsO = "IOS"
-	RadarHTTPTimeseriesGroupHTTPVersionParamsOAndroid  RadarHTTPTimeseriesGroupHTTPVersionParamsO = "ANDROID"
-	RadarHTTPTimeseriesGroupHTTPVersionParamsOChromeos RadarHTTPTimeseriesGroupHTTPVersionParamsO = "CHROMEOS"
-	RadarHTTPTimeseriesGroupHTTPVersionParamsOLinux    RadarHTTPTimeseriesGroupHTTPVersionParamsO = "LINUX"
-	RadarHTTPTimeseriesGroupHTTPVersionParamsOSmartTv  RadarHTTPTimeseriesGroupHTTPVersionParamsO = "SMART_TV"
+	RadarHTTPTimeseriesGroupHTTPVersionParamsOSWindows  RadarHTTPTimeseriesGroupHTTPVersionParamsOS = "WINDOWS"
+	RadarHTTPTimeseriesGroupHTTPVersionParamsOSMacosx   RadarHTTPTimeseriesGroupHTTPVersionParamsOS = "MACOSX"
+	RadarHTTPTimeseriesGroupHTTPVersionParamsOSIos      RadarHTTPTimeseriesGroupHTTPVersionParamsOS = "IOS"
+	RadarHTTPTimeseriesGroupHTTPVersionParamsOSAndroid  RadarHTTPTimeseriesGroupHTTPVersionParamsOS = "ANDROID"
+	RadarHTTPTimeseriesGroupHTTPVersionParamsOSChromeos RadarHTTPTimeseriesGroupHTTPVersionParamsOS = "CHROMEOS"
+	RadarHTTPTimeseriesGroupHTTPVersionParamsOSLinux    RadarHTTPTimeseriesGroupHTTPVersionParamsOS = "LINUX"
+	RadarHTTPTimeseriesGroupHTTPVersionParamsOSSmartTv  RadarHTTPTimeseriesGroupHTTPVersionParamsOS = "SMART_TV"
 )
 
 type RadarHTTPTimeseriesGroupHTTPVersionParamsTLSVersion string
@@ -1506,7 +1506,7 @@ type RadarHTTPTimeseriesGroupIPVersionParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// Filter for bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]RadarHTTPTimeseriesGroupIPVersionParamsBotClass] `query:"botClass"`
@@ -1533,7 +1533,7 @@ type RadarHTTPTimeseriesGroupIPVersionParams struct {
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Filter for os name.
-	Os param.Field[[]RadarHTTPTimeseriesGroupIPVersionParamsO] `query:"os"`
+	OS param.Field[[]RadarHTTPTimeseriesGroupIPVersionParamsOS] `query:"os"`
 	// Filter for tls version.
 	TLSVersion param.Field[[]RadarHTTPTimeseriesGroupIPVersionParamsTLSVersion] `query:"tlsVersion"`
 }
@@ -1617,16 +1617,16 @@ const (
 	RadarHTTPTimeseriesGroupIPVersionParamsHTTPVersionHttPv3 RadarHTTPTimeseriesGroupIPVersionParamsHTTPVersion = "HTTPv3"
 )
 
-type RadarHTTPTimeseriesGroupIPVersionParamsO string
+type RadarHTTPTimeseriesGroupIPVersionParamsOS string
 
 const (
-	RadarHTTPTimeseriesGroupIPVersionParamsOWindows  RadarHTTPTimeseriesGroupIPVersionParamsO = "WINDOWS"
-	RadarHTTPTimeseriesGroupIPVersionParamsOMacosx   RadarHTTPTimeseriesGroupIPVersionParamsO = "MACOSX"
-	RadarHTTPTimeseriesGroupIPVersionParamsOIos      RadarHTTPTimeseriesGroupIPVersionParamsO = "IOS"
-	RadarHTTPTimeseriesGroupIPVersionParamsOAndroid  RadarHTTPTimeseriesGroupIPVersionParamsO = "ANDROID"
-	RadarHTTPTimeseriesGroupIPVersionParamsOChromeos RadarHTTPTimeseriesGroupIPVersionParamsO = "CHROMEOS"
-	RadarHTTPTimeseriesGroupIPVersionParamsOLinux    RadarHTTPTimeseriesGroupIPVersionParamsO = "LINUX"
-	RadarHTTPTimeseriesGroupIPVersionParamsOSmartTv  RadarHTTPTimeseriesGroupIPVersionParamsO = "SMART_TV"
+	RadarHTTPTimeseriesGroupIPVersionParamsOSWindows  RadarHTTPTimeseriesGroupIPVersionParamsOS = "WINDOWS"
+	RadarHTTPTimeseriesGroupIPVersionParamsOSMacosx   RadarHTTPTimeseriesGroupIPVersionParamsOS = "MACOSX"
+	RadarHTTPTimeseriesGroupIPVersionParamsOSIos      RadarHTTPTimeseriesGroupIPVersionParamsOS = "IOS"
+	RadarHTTPTimeseriesGroupIPVersionParamsOSAndroid  RadarHTTPTimeseriesGroupIPVersionParamsOS = "ANDROID"
+	RadarHTTPTimeseriesGroupIPVersionParamsOSChromeos RadarHTTPTimeseriesGroupIPVersionParamsOS = "CHROMEOS"
+	RadarHTTPTimeseriesGroupIPVersionParamsOSLinux    RadarHTTPTimeseriesGroupIPVersionParamsOS = "LINUX"
+	RadarHTTPTimeseriesGroupIPVersionParamsOSSmartTv  RadarHTTPTimeseriesGroupIPVersionParamsOS = "SMART_TV"
 )
 
 type RadarHTTPTimeseriesGroupIPVersionParamsTLSVersion string
@@ -1658,36 +1658,36 @@ func (r *RadarHTTPTimeseriesGroupIPVersionResponseEnvelope) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarHTTPTimeseriesGroupOsParams struct {
+type RadarHTTPTimeseriesGroupOSParams struct {
 	// Aggregation interval results should be returned in (for example, in 15 minutes
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval param.Field[RadarHTTPTimeseriesGroupOsParamsAggInterval] `query:"aggInterval"`
+	AggInterval param.Field[RadarHTTPTimeseriesGroupOSParamsAggInterval] `query:"aggInterval"`
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// Filter for bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
-	BotClass param.Field[[]RadarHTTPTimeseriesGroupOsParamsBotClass] `query:"botClass"`
+	BotClass param.Field[[]RadarHTTPTimeseriesGroupOSParamsBotClass] `query:"botClass"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]RadarHTTPTimeseriesGroupOsParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]RadarHTTPTimeseriesGroupOSParamsDateRange] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for device type.
-	DeviceType param.Field[[]RadarHTTPTimeseriesGroupOsParamsDeviceType] `query:"deviceType"`
+	DeviceType param.Field[[]RadarHTTPTimeseriesGroupOSParamsDeviceType] `query:"deviceType"`
 	// Format results are returned in.
-	Format param.Field[RadarHTTPTimeseriesGroupOsParamsFormat] `query:"format"`
+	Format param.Field[RadarHTTPTimeseriesGroupOSParamsFormat] `query:"format"`
 	// Filter for http protocol.
-	HTTPProtocol param.Field[[]RadarHTTPTimeseriesGroupOsParamsHTTPProtocol] `query:"httpProtocol"`
+	HTTPProtocol param.Field[[]RadarHTTPTimeseriesGroupOSParamsHTTPProtocol] `query:"httpProtocol"`
 	// Filter for http version.
-	HTTPVersion param.Field[[]RadarHTTPTimeseriesGroupOsParamsHTTPVersion] `query:"httpVersion"`
+	HTTPVersion param.Field[[]RadarHTTPTimeseriesGroupOSParamsHTTPVersion] `query:"httpVersion"`
 	// Filter for ip version.
-	IPVersion param.Field[[]RadarHTTPTimeseriesGroupOsParamsIPVersion] `query:"ipVersion"`
+	IPVersion param.Field[[]RadarHTTPTimeseriesGroupOSParamsIPVersion] `query:"ipVersion"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
 	// but includes results from PT.
@@ -1695,12 +1695,12 @@ type RadarHTTPTimeseriesGroupOsParams struct {
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Filter for tls version.
-	TLSVersion param.Field[[]RadarHTTPTimeseriesGroupOsParamsTLSVersion] `query:"tlsVersion"`
+	TLSVersion param.Field[[]RadarHTTPTimeseriesGroupOSParamsTLSVersion] `query:"tlsVersion"`
 }
 
-// URLQuery serializes [RadarHTTPTimeseriesGroupOsParams]'s query parameters as
+// URLQuery serializes [RadarHTTPTimeseriesGroupOSParams]'s query parameters as
 // `url.Values`.
-func (r RadarHTTPTimeseriesGroupOsParams) URLQuery() (v url.Values) {
+func (r RadarHTTPTimeseriesGroupOSParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
@@ -1710,106 +1710,106 @@ func (r RadarHTTPTimeseriesGroupOsParams) URLQuery() (v url.Values) {
 // Aggregation interval results should be returned in (for example, in 15 minutes
 // or 1 hour intervals). Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-type RadarHTTPTimeseriesGroupOsParamsAggInterval string
+type RadarHTTPTimeseriesGroupOSParamsAggInterval string
 
 const (
-	RadarHTTPTimeseriesGroupOsParamsAggInterval15m RadarHTTPTimeseriesGroupOsParamsAggInterval = "15m"
-	RadarHTTPTimeseriesGroupOsParamsAggInterval1h  RadarHTTPTimeseriesGroupOsParamsAggInterval = "1h"
-	RadarHTTPTimeseriesGroupOsParamsAggInterval1d  RadarHTTPTimeseriesGroupOsParamsAggInterval = "1d"
-	RadarHTTPTimeseriesGroupOsParamsAggInterval1w  RadarHTTPTimeseriesGroupOsParamsAggInterval = "1w"
+	RadarHTTPTimeseriesGroupOSParamsAggInterval15m RadarHTTPTimeseriesGroupOSParamsAggInterval = "15m"
+	RadarHTTPTimeseriesGroupOSParamsAggInterval1h  RadarHTTPTimeseriesGroupOSParamsAggInterval = "1h"
+	RadarHTTPTimeseriesGroupOSParamsAggInterval1d  RadarHTTPTimeseriesGroupOSParamsAggInterval = "1d"
+	RadarHTTPTimeseriesGroupOSParamsAggInterval1w  RadarHTTPTimeseriesGroupOSParamsAggInterval = "1w"
 )
 
-type RadarHTTPTimeseriesGroupOsParamsBotClass string
+type RadarHTTPTimeseriesGroupOSParamsBotClass string
 
 const (
-	RadarHTTPTimeseriesGroupOsParamsBotClassLikelyAutomated RadarHTTPTimeseriesGroupOsParamsBotClass = "LIKELY_AUTOMATED"
-	RadarHTTPTimeseriesGroupOsParamsBotClassLikelyHuman     RadarHTTPTimeseriesGroupOsParamsBotClass = "LIKELY_HUMAN"
+	RadarHTTPTimeseriesGroupOSParamsBotClassLikelyAutomated RadarHTTPTimeseriesGroupOSParamsBotClass = "LIKELY_AUTOMATED"
+	RadarHTTPTimeseriesGroupOSParamsBotClassLikelyHuman     RadarHTTPTimeseriesGroupOSParamsBotClass = "LIKELY_HUMAN"
 )
 
-type RadarHTTPTimeseriesGroupOsParamsDateRange string
+type RadarHTTPTimeseriesGroupOSParamsDateRange string
 
 const (
-	RadarHTTPTimeseriesGroupOsParamsDateRange1d         RadarHTTPTimeseriesGroupOsParamsDateRange = "1d"
-	RadarHTTPTimeseriesGroupOsParamsDateRange2d         RadarHTTPTimeseriesGroupOsParamsDateRange = "2d"
-	RadarHTTPTimeseriesGroupOsParamsDateRange7d         RadarHTTPTimeseriesGroupOsParamsDateRange = "7d"
-	RadarHTTPTimeseriesGroupOsParamsDateRange14d        RadarHTTPTimeseriesGroupOsParamsDateRange = "14d"
-	RadarHTTPTimeseriesGroupOsParamsDateRange28d        RadarHTTPTimeseriesGroupOsParamsDateRange = "28d"
-	RadarHTTPTimeseriesGroupOsParamsDateRange12w        RadarHTTPTimeseriesGroupOsParamsDateRange = "12w"
-	RadarHTTPTimeseriesGroupOsParamsDateRange24w        RadarHTTPTimeseriesGroupOsParamsDateRange = "24w"
-	RadarHTTPTimeseriesGroupOsParamsDateRange52w        RadarHTTPTimeseriesGroupOsParamsDateRange = "52w"
-	RadarHTTPTimeseriesGroupOsParamsDateRange1dControl  RadarHTTPTimeseriesGroupOsParamsDateRange = "1dControl"
-	RadarHTTPTimeseriesGroupOsParamsDateRange2dControl  RadarHTTPTimeseriesGroupOsParamsDateRange = "2dControl"
-	RadarHTTPTimeseriesGroupOsParamsDateRange7dControl  RadarHTTPTimeseriesGroupOsParamsDateRange = "7dControl"
-	RadarHTTPTimeseriesGroupOsParamsDateRange14dControl RadarHTTPTimeseriesGroupOsParamsDateRange = "14dControl"
-	RadarHTTPTimeseriesGroupOsParamsDateRange28dControl RadarHTTPTimeseriesGroupOsParamsDateRange = "28dControl"
-	RadarHTTPTimeseriesGroupOsParamsDateRange12wControl RadarHTTPTimeseriesGroupOsParamsDateRange = "12wControl"
-	RadarHTTPTimeseriesGroupOsParamsDateRange24wControl RadarHTTPTimeseriesGroupOsParamsDateRange = "24wControl"
+	RadarHTTPTimeseriesGroupOSParamsDateRange1d         RadarHTTPTimeseriesGroupOSParamsDateRange = "1d"
+	RadarHTTPTimeseriesGroupOSParamsDateRange2d         RadarHTTPTimeseriesGroupOSParamsDateRange = "2d"
+	RadarHTTPTimeseriesGroupOSParamsDateRange7d         RadarHTTPTimeseriesGroupOSParamsDateRange = "7d"
+	RadarHTTPTimeseriesGroupOSParamsDateRange14d        RadarHTTPTimeseriesGroupOSParamsDateRange = "14d"
+	RadarHTTPTimeseriesGroupOSParamsDateRange28d        RadarHTTPTimeseriesGroupOSParamsDateRange = "28d"
+	RadarHTTPTimeseriesGroupOSParamsDateRange12w        RadarHTTPTimeseriesGroupOSParamsDateRange = "12w"
+	RadarHTTPTimeseriesGroupOSParamsDateRange24w        RadarHTTPTimeseriesGroupOSParamsDateRange = "24w"
+	RadarHTTPTimeseriesGroupOSParamsDateRange52w        RadarHTTPTimeseriesGroupOSParamsDateRange = "52w"
+	RadarHTTPTimeseriesGroupOSParamsDateRange1dControl  RadarHTTPTimeseriesGroupOSParamsDateRange = "1dControl"
+	RadarHTTPTimeseriesGroupOSParamsDateRange2dControl  RadarHTTPTimeseriesGroupOSParamsDateRange = "2dControl"
+	RadarHTTPTimeseriesGroupOSParamsDateRange7dControl  RadarHTTPTimeseriesGroupOSParamsDateRange = "7dControl"
+	RadarHTTPTimeseriesGroupOSParamsDateRange14dControl RadarHTTPTimeseriesGroupOSParamsDateRange = "14dControl"
+	RadarHTTPTimeseriesGroupOSParamsDateRange28dControl RadarHTTPTimeseriesGroupOSParamsDateRange = "28dControl"
+	RadarHTTPTimeseriesGroupOSParamsDateRange12wControl RadarHTTPTimeseriesGroupOSParamsDateRange = "12wControl"
+	RadarHTTPTimeseriesGroupOSParamsDateRange24wControl RadarHTTPTimeseriesGroupOSParamsDateRange = "24wControl"
 )
 
-type RadarHTTPTimeseriesGroupOsParamsDeviceType string
+type RadarHTTPTimeseriesGroupOSParamsDeviceType string
 
 const (
-	RadarHTTPTimeseriesGroupOsParamsDeviceTypeDesktop RadarHTTPTimeseriesGroupOsParamsDeviceType = "DESKTOP"
-	RadarHTTPTimeseriesGroupOsParamsDeviceTypeMobile  RadarHTTPTimeseriesGroupOsParamsDeviceType = "MOBILE"
-	RadarHTTPTimeseriesGroupOsParamsDeviceTypeOther   RadarHTTPTimeseriesGroupOsParamsDeviceType = "OTHER"
+	RadarHTTPTimeseriesGroupOSParamsDeviceTypeDesktop RadarHTTPTimeseriesGroupOSParamsDeviceType = "DESKTOP"
+	RadarHTTPTimeseriesGroupOSParamsDeviceTypeMobile  RadarHTTPTimeseriesGroupOSParamsDeviceType = "MOBILE"
+	RadarHTTPTimeseriesGroupOSParamsDeviceTypeOther   RadarHTTPTimeseriesGroupOSParamsDeviceType = "OTHER"
 )
 
 // Format results are returned in.
-type RadarHTTPTimeseriesGroupOsParamsFormat string
+type RadarHTTPTimeseriesGroupOSParamsFormat string
 
 const (
-	RadarHTTPTimeseriesGroupOsParamsFormatJson RadarHTTPTimeseriesGroupOsParamsFormat = "JSON"
-	RadarHTTPTimeseriesGroupOsParamsFormatCsv  RadarHTTPTimeseriesGroupOsParamsFormat = "CSV"
+	RadarHTTPTimeseriesGroupOSParamsFormatJson RadarHTTPTimeseriesGroupOSParamsFormat = "JSON"
+	RadarHTTPTimeseriesGroupOSParamsFormatCsv  RadarHTTPTimeseriesGroupOSParamsFormat = "CSV"
 )
 
-type RadarHTTPTimeseriesGroupOsParamsHTTPProtocol string
+type RadarHTTPTimeseriesGroupOSParamsHTTPProtocol string
 
 const (
-	RadarHTTPTimeseriesGroupOsParamsHTTPProtocolHTTP  RadarHTTPTimeseriesGroupOsParamsHTTPProtocol = "HTTP"
-	RadarHTTPTimeseriesGroupOsParamsHTTPProtocolHTTPS RadarHTTPTimeseriesGroupOsParamsHTTPProtocol = "HTTPS"
+	RadarHTTPTimeseriesGroupOSParamsHTTPProtocolHTTP  RadarHTTPTimeseriesGroupOSParamsHTTPProtocol = "HTTP"
+	RadarHTTPTimeseriesGroupOSParamsHTTPProtocolHTTPS RadarHTTPTimeseriesGroupOSParamsHTTPProtocol = "HTTPS"
 )
 
-type RadarHTTPTimeseriesGroupOsParamsHTTPVersion string
+type RadarHTTPTimeseriesGroupOSParamsHTTPVersion string
 
 const (
-	RadarHTTPTimeseriesGroupOsParamsHTTPVersionHttPv1 RadarHTTPTimeseriesGroupOsParamsHTTPVersion = "HTTPv1"
-	RadarHTTPTimeseriesGroupOsParamsHTTPVersionHttPv2 RadarHTTPTimeseriesGroupOsParamsHTTPVersion = "HTTPv2"
-	RadarHTTPTimeseriesGroupOsParamsHTTPVersionHttPv3 RadarHTTPTimeseriesGroupOsParamsHTTPVersion = "HTTPv3"
+	RadarHTTPTimeseriesGroupOSParamsHTTPVersionHttPv1 RadarHTTPTimeseriesGroupOSParamsHTTPVersion = "HTTPv1"
+	RadarHTTPTimeseriesGroupOSParamsHTTPVersionHttPv2 RadarHTTPTimeseriesGroupOSParamsHTTPVersion = "HTTPv2"
+	RadarHTTPTimeseriesGroupOSParamsHTTPVersionHttPv3 RadarHTTPTimeseriesGroupOSParamsHTTPVersion = "HTTPv3"
 )
 
-type RadarHTTPTimeseriesGroupOsParamsIPVersion string
+type RadarHTTPTimeseriesGroupOSParamsIPVersion string
 
 const (
-	RadarHTTPTimeseriesGroupOsParamsIPVersionIPv4 RadarHTTPTimeseriesGroupOsParamsIPVersion = "IPv4"
-	RadarHTTPTimeseriesGroupOsParamsIPVersionIPv6 RadarHTTPTimeseriesGroupOsParamsIPVersion = "IPv6"
+	RadarHTTPTimeseriesGroupOSParamsIPVersionIPv4 RadarHTTPTimeseriesGroupOSParamsIPVersion = "IPv4"
+	RadarHTTPTimeseriesGroupOSParamsIPVersionIPv6 RadarHTTPTimeseriesGroupOSParamsIPVersion = "IPv6"
 )
 
-type RadarHTTPTimeseriesGroupOsParamsTLSVersion string
+type RadarHTTPTimeseriesGroupOSParamsTLSVersion string
 
 const (
-	RadarHTTPTimeseriesGroupOsParamsTLSVersionTlSv1_0  RadarHTTPTimeseriesGroupOsParamsTLSVersion = "TLSv1_0"
-	RadarHTTPTimeseriesGroupOsParamsTLSVersionTlSv1_1  RadarHTTPTimeseriesGroupOsParamsTLSVersion = "TLSv1_1"
-	RadarHTTPTimeseriesGroupOsParamsTLSVersionTlSv1_2  RadarHTTPTimeseriesGroupOsParamsTLSVersion = "TLSv1_2"
-	RadarHTTPTimeseriesGroupOsParamsTLSVersionTlSv1_3  RadarHTTPTimeseriesGroupOsParamsTLSVersion = "TLSv1_3"
-	RadarHTTPTimeseriesGroupOsParamsTLSVersionTlSvQuic RadarHTTPTimeseriesGroupOsParamsTLSVersion = "TLSvQUIC"
+	RadarHTTPTimeseriesGroupOSParamsTLSVersionTlSv1_0  RadarHTTPTimeseriesGroupOSParamsTLSVersion = "TLSv1_0"
+	RadarHTTPTimeseriesGroupOSParamsTLSVersionTlSv1_1  RadarHTTPTimeseriesGroupOSParamsTLSVersion = "TLSv1_1"
+	RadarHTTPTimeseriesGroupOSParamsTLSVersionTlSv1_2  RadarHTTPTimeseriesGroupOSParamsTLSVersion = "TLSv1_2"
+	RadarHTTPTimeseriesGroupOSParamsTLSVersionTlSv1_3  RadarHTTPTimeseriesGroupOSParamsTLSVersion = "TLSv1_3"
+	RadarHTTPTimeseriesGroupOSParamsTLSVersionTlSvQuic RadarHTTPTimeseriesGroupOSParamsTLSVersion = "TLSvQUIC"
 )
 
-type RadarHTTPTimeseriesGroupOsResponseEnvelope struct {
-	Result  RadarHTTPTimeseriesGroupOsResponse             `json:"result,required"`
+type RadarHTTPTimeseriesGroupOSResponseEnvelope struct {
+	Result  RadarHTTPTimeseriesGroupOSResponse             `json:"result,required"`
 	Success bool                                           `json:"success,required"`
-	JSON    radarHTTPTimeseriesGroupOsResponseEnvelopeJSON `json:"-"`
+	JSON    radarHTTPTimeseriesGroupOSResponseEnvelopeJSON `json:"-"`
 }
 
-// radarHTTPTimeseriesGroupOsResponseEnvelopeJSON contains the JSON metadata for
-// the struct [RadarHTTPTimeseriesGroupOsResponseEnvelope]
-type radarHTTPTimeseriesGroupOsResponseEnvelopeJSON struct {
+// radarHTTPTimeseriesGroupOSResponseEnvelopeJSON contains the JSON metadata for
+// the struct [RadarHTTPTimeseriesGroupOSResponseEnvelope]
+type radarHTTPTimeseriesGroupOSResponseEnvelopeJSON struct {
 	Result      apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarHTTPTimeseriesGroupOsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarHTTPTimeseriesGroupOSResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1821,7 +1821,7 @@ type RadarHTTPTimeseriesGroupTLSVersionParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// Filter for bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]RadarHTTPTimeseriesGroupTLSVersionParamsBotClass] `query:"botClass"`
@@ -1850,7 +1850,7 @@ type RadarHTTPTimeseriesGroupTLSVersionParams struct {
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Filter for os name.
-	Os param.Field[[]RadarHTTPTimeseriesGroupTLSVersionParamsO] `query:"os"`
+	OS param.Field[[]RadarHTTPTimeseriesGroupTLSVersionParamsOS] `query:"os"`
 }
 
 // URLQuery serializes [RadarHTTPTimeseriesGroupTLSVersionParams]'s query
@@ -1939,16 +1939,16 @@ const (
 	RadarHTTPTimeseriesGroupTLSVersionParamsIPVersionIPv6 RadarHTTPTimeseriesGroupTLSVersionParamsIPVersion = "IPv6"
 )
 
-type RadarHTTPTimeseriesGroupTLSVersionParamsO string
+type RadarHTTPTimeseriesGroupTLSVersionParamsOS string
 
 const (
-	RadarHTTPTimeseriesGroupTLSVersionParamsOWindows  RadarHTTPTimeseriesGroupTLSVersionParamsO = "WINDOWS"
-	RadarHTTPTimeseriesGroupTLSVersionParamsOMacosx   RadarHTTPTimeseriesGroupTLSVersionParamsO = "MACOSX"
-	RadarHTTPTimeseriesGroupTLSVersionParamsOIos      RadarHTTPTimeseriesGroupTLSVersionParamsO = "IOS"
-	RadarHTTPTimeseriesGroupTLSVersionParamsOAndroid  RadarHTTPTimeseriesGroupTLSVersionParamsO = "ANDROID"
-	RadarHTTPTimeseriesGroupTLSVersionParamsOChromeos RadarHTTPTimeseriesGroupTLSVersionParamsO = "CHROMEOS"
-	RadarHTTPTimeseriesGroupTLSVersionParamsOLinux    RadarHTTPTimeseriesGroupTLSVersionParamsO = "LINUX"
-	RadarHTTPTimeseriesGroupTLSVersionParamsOSmartTv  RadarHTTPTimeseriesGroupTLSVersionParamsO = "SMART_TV"
+	RadarHTTPTimeseriesGroupTLSVersionParamsOSWindows  RadarHTTPTimeseriesGroupTLSVersionParamsOS = "WINDOWS"
+	RadarHTTPTimeseriesGroupTLSVersionParamsOSMacosx   RadarHTTPTimeseriesGroupTLSVersionParamsOS = "MACOSX"
+	RadarHTTPTimeseriesGroupTLSVersionParamsOSIos      RadarHTTPTimeseriesGroupTLSVersionParamsOS = "IOS"
+	RadarHTTPTimeseriesGroupTLSVersionParamsOSAndroid  RadarHTTPTimeseriesGroupTLSVersionParamsOS = "ANDROID"
+	RadarHTTPTimeseriesGroupTLSVersionParamsOSChromeos RadarHTTPTimeseriesGroupTLSVersionParamsOS = "CHROMEOS"
+	RadarHTTPTimeseriesGroupTLSVersionParamsOSLinux    RadarHTTPTimeseriesGroupTLSVersionParamsOS = "LINUX"
+	RadarHTTPTimeseriesGroupTLSVersionParamsOSSmartTv  RadarHTTPTimeseriesGroupTLSVersionParamsOS = "SMART_TV"
 )
 
 type RadarHTTPTimeseriesGroupTLSVersionResponseEnvelope struct {

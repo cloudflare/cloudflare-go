@@ -159,7 +159,7 @@ func (r *RadarEmailSecurityTopAseDKIMGetResponseMetaConfidenceInfoAnnotation) Un
 }
 
 type RadarEmailSecurityTopAseDKIMGetResponseTop0 struct {
-	ClientAsn    int64                                           `json:"clientASN,required"`
+	ClientASN    int64                                           `json:"clientASN,required"`
 	ClientAsName string                                          `json:"clientASName,required"`
 	Value        string                                          `json:"value,required"`
 	JSON         radarEmailSecurityTopAseDKIMGetResponseTop0JSON `json:"-"`
@@ -168,7 +168,7 @@ type RadarEmailSecurityTopAseDKIMGetResponseTop0 struct {
 // radarEmailSecurityTopAseDKIMGetResponseTop0JSON contains the JSON metadata for
 // the struct [RadarEmailSecurityTopAseDKIMGetResponseTop0]
 type radarEmailSecurityTopAseDKIMGetResponseTop0JSON struct {
-	ClientAsn    apijson.Field
+	ClientASN    apijson.Field
 	ClientAsName apijson.Field
 	Value        apijson.Field
 	raw          string
@@ -181,11 +181,11 @@ func (r *RadarEmailSecurityTopAseDKIMGetResponseTop0) UnmarshalJSON(data []byte)
 
 type RadarEmailSecurityTopAseDKIMGetParams struct {
 	// Filter for arc (Authenticated Received Chain).
-	Arc param.Field[[]RadarEmailSecurityTopAseDKIMGetParamsArc] `query:"arc"`
+	ARC param.Field[[]RadarEmailSecurityTopAseDKIMGetParamsARC] `query:"arc"`
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
@@ -195,7 +195,7 @@ type RadarEmailSecurityTopAseDKIMGetParams struct {
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dmarc.
-	Dmarc param.Field[[]RadarEmailSecurityTopAseDKIMGetParamsDmarc] `query:"dmarc"`
+	DMARC param.Field[[]RadarEmailSecurityTopAseDKIMGetParamsDMARC] `query:"dmarc"`
 	// Format results are returned in.
 	Format param.Field[RadarEmailSecurityTopAseDKIMGetParamsFormat] `query:"format"`
 	// Limit the number of objects in the response.
@@ -228,12 +228,12 @@ const (
 	RadarEmailSecurityTopAseDKIMGetParamsDKIMFail RadarEmailSecurityTopAseDKIMGetParamsDKIM = "FAIL"
 )
 
-type RadarEmailSecurityTopAseDKIMGetParamsArc string
+type RadarEmailSecurityTopAseDKIMGetParamsARC string
 
 const (
-	RadarEmailSecurityTopAseDKIMGetParamsArcPass RadarEmailSecurityTopAseDKIMGetParamsArc = "PASS"
-	RadarEmailSecurityTopAseDKIMGetParamsArcNone RadarEmailSecurityTopAseDKIMGetParamsArc = "NONE"
-	RadarEmailSecurityTopAseDKIMGetParamsArcFail RadarEmailSecurityTopAseDKIMGetParamsArc = "FAIL"
+	RadarEmailSecurityTopAseDKIMGetParamsARCPass RadarEmailSecurityTopAseDKIMGetParamsARC = "PASS"
+	RadarEmailSecurityTopAseDKIMGetParamsARCNone RadarEmailSecurityTopAseDKIMGetParamsARC = "NONE"
+	RadarEmailSecurityTopAseDKIMGetParamsARCFail RadarEmailSecurityTopAseDKIMGetParamsARC = "FAIL"
 )
 
 type RadarEmailSecurityTopAseDKIMGetParamsDateRange string
@@ -256,12 +256,12 @@ const (
 	RadarEmailSecurityTopAseDKIMGetParamsDateRange24wControl RadarEmailSecurityTopAseDKIMGetParamsDateRange = "24wControl"
 )
 
-type RadarEmailSecurityTopAseDKIMGetParamsDmarc string
+type RadarEmailSecurityTopAseDKIMGetParamsDMARC string
 
 const (
-	RadarEmailSecurityTopAseDKIMGetParamsDmarcPass RadarEmailSecurityTopAseDKIMGetParamsDmarc = "PASS"
-	RadarEmailSecurityTopAseDKIMGetParamsDmarcNone RadarEmailSecurityTopAseDKIMGetParamsDmarc = "NONE"
-	RadarEmailSecurityTopAseDKIMGetParamsDmarcFail RadarEmailSecurityTopAseDKIMGetParamsDmarc = "FAIL"
+	RadarEmailSecurityTopAseDKIMGetParamsDMARCPass RadarEmailSecurityTopAseDKIMGetParamsDMARC = "PASS"
+	RadarEmailSecurityTopAseDKIMGetParamsDMARCNone RadarEmailSecurityTopAseDKIMGetParamsDMARC = "NONE"
+	RadarEmailSecurityTopAseDKIMGetParamsDMARCFail RadarEmailSecurityTopAseDKIMGetParamsDMARC = "FAIL"
 )
 
 // Format results are returned in.

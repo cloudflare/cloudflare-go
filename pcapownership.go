@@ -13,28 +13,28 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-// PcapOwnershipService contains methods and other services that help with
+// PCAPOwnershipService contains methods and other services that help with
 // interacting with the cloudflare API. Note, unlike clients, this service does not
 // read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewPcapOwnershipService] method
+// this service directly, and instead use the [NewPCAPOwnershipService] method
 // instead.
-type PcapOwnershipService struct {
+type PCAPOwnershipService struct {
 	Options []option.RequestOption
 }
 
-// NewPcapOwnershipService generates a new service that applies the given options
+// NewPCAPOwnershipService generates a new service that applies the given options
 // to each request. These options are applied after the parent client's options (if
 // there is one), and before any request-specific options.
-func NewPcapOwnershipService(opts ...option.RequestOption) (r *PcapOwnershipService) {
-	r = &PcapOwnershipService{}
+func NewPCAPOwnershipService(opts ...option.RequestOption) (r *PCAPOwnershipService) {
+	r = &PCAPOwnershipService{}
 	r.Options = opts
 	return
 }
 
 // Adds an AWS or GCP bucket to use with full packet captures.
-func (r *PcapOwnershipService) New(ctx context.Context, accountIdentifier string, body PcapOwnershipNewParams, opts ...option.RequestOption) (res *PcapOwnershipNewResponse, err error) {
+func (r *PCAPOwnershipService) New(ctx context.Context, accountIdentifier string, body PCAPOwnershipNewParams, opts ...option.RequestOption) (res *PCAPOwnershipNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env PcapOwnershipNewResponseEnvelope
+	var env PCAPOwnershipNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pcaps/ownership", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -45,7 +45,7 @@ func (r *PcapOwnershipService) New(ctx context.Context, accountIdentifier string
 }
 
 // Deletes buckets added to the packet captures API.
-func (r *PcapOwnershipService) Delete(ctx context.Context, accountIdentifier string, identifier string, opts ...option.RequestOption) (err error) {
+func (r *PCAPOwnershipService) Delete(ctx context.Context, accountIdentifier string, identifier string, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
 	path := fmt.Sprintf("accounts/%s/pcaps/ownership/%s", accountIdentifier, identifier)
@@ -54,9 +54,9 @@ func (r *PcapOwnershipService) Delete(ctx context.Context, accountIdentifier str
 }
 
 // List all buckets configured for use with PCAPs API.
-func (r *PcapOwnershipService) Get(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *[]PcapOwnershipGetResponse, err error) {
+func (r *PCAPOwnershipService) Get(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *[]PCAPOwnershipGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env PcapOwnershipGetResponseEnvelope
+	var env PCAPOwnershipGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pcaps/ownership", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -67,9 +67,9 @@ func (r *PcapOwnershipService) Get(ctx context.Context, accountIdentifier string
 }
 
 // Validates buckets added to the packet captures API.
-func (r *PcapOwnershipService) Validate(ctx context.Context, accountIdentifier string, body PcapOwnershipValidateParams, opts ...option.RequestOption) (res *PcapOwnershipValidateResponse, err error) {
+func (r *PCAPOwnershipService) Validate(ctx context.Context, accountIdentifier string, body PCAPOwnershipValidateParams, opts ...option.RequestOption) (res *PCAPOwnershipValidateResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env PcapOwnershipValidateResponseEnvelope
+	var env PCAPOwnershipValidateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pcaps/ownership/validate", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -79,7 +79,7 @@ func (r *PcapOwnershipService) Validate(ctx context.Context, accountIdentifier s
 	return
 }
 
-type PcapOwnershipNewResponse struct {
+type PCAPOwnershipNewResponse struct {
 	// The bucket ID associated with the packet captures API.
 	ID string `json:"id,required"`
 	// The full URI for the bucket. This field only applies to `full` packet captures.
@@ -87,7 +87,7 @@ type PcapOwnershipNewResponse struct {
 	// The ownership challenge filename stored in the bucket.
 	Filename string `json:"filename,required"`
 	// The status of the ownership challenge. Can be pending, success or failed.
-	Status PcapOwnershipNewResponseStatus `json:"status,required"`
+	Status PCAPOwnershipNewResponseStatus `json:"status,required"`
 	// The RFC 3339 timestamp when the bucket was added to packet captures API.
 	Submitted string `json:"submitted,required"`
 	// The RFC 3339 timestamp when the bucket was validated.
@@ -96,7 +96,7 @@ type PcapOwnershipNewResponse struct {
 }
 
 // pcapOwnershipNewResponseJSON contains the JSON metadata for the struct
-// [PcapOwnershipNewResponse]
+// [PCAPOwnershipNewResponse]
 type pcapOwnershipNewResponseJSON struct {
 	ID              apijson.Field
 	DestinationConf apijson.Field
@@ -108,20 +108,20 @@ type pcapOwnershipNewResponseJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *PcapOwnershipNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *PCAPOwnershipNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The status of the ownership challenge. Can be pending, success or failed.
-type PcapOwnershipNewResponseStatus string
+type PCAPOwnershipNewResponseStatus string
 
 const (
-	PcapOwnershipNewResponseStatusPending PcapOwnershipNewResponseStatus = "pending"
-	PcapOwnershipNewResponseStatusSuccess PcapOwnershipNewResponseStatus = "success"
-	PcapOwnershipNewResponseStatusFailed  PcapOwnershipNewResponseStatus = "failed"
+	PCAPOwnershipNewResponseStatusPending PCAPOwnershipNewResponseStatus = "pending"
+	PCAPOwnershipNewResponseStatusSuccess PCAPOwnershipNewResponseStatus = "success"
+	PCAPOwnershipNewResponseStatusFailed  PCAPOwnershipNewResponseStatus = "failed"
 )
 
-type PcapOwnershipGetResponse struct {
+type PCAPOwnershipGetResponse struct {
 	// The bucket ID associated with the packet captures API.
 	ID string `json:"id,required"`
 	// The full URI for the bucket. This field only applies to `full` packet captures.
@@ -129,7 +129,7 @@ type PcapOwnershipGetResponse struct {
 	// The ownership challenge filename stored in the bucket.
 	Filename string `json:"filename,required"`
 	// The status of the ownership challenge. Can be pending, success or failed.
-	Status PcapOwnershipGetResponseStatus `json:"status,required"`
+	Status PCAPOwnershipGetResponseStatus `json:"status,required"`
 	// The RFC 3339 timestamp when the bucket was added to packet captures API.
 	Submitted string `json:"submitted,required"`
 	// The RFC 3339 timestamp when the bucket was validated.
@@ -138,7 +138,7 @@ type PcapOwnershipGetResponse struct {
 }
 
 // pcapOwnershipGetResponseJSON contains the JSON metadata for the struct
-// [PcapOwnershipGetResponse]
+// [PCAPOwnershipGetResponse]
 type pcapOwnershipGetResponseJSON struct {
 	ID              apijson.Field
 	DestinationConf apijson.Field
@@ -150,20 +150,20 @@ type pcapOwnershipGetResponseJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *PcapOwnershipGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *PCAPOwnershipGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The status of the ownership challenge. Can be pending, success or failed.
-type PcapOwnershipGetResponseStatus string
+type PCAPOwnershipGetResponseStatus string
 
 const (
-	PcapOwnershipGetResponseStatusPending PcapOwnershipGetResponseStatus = "pending"
-	PcapOwnershipGetResponseStatusSuccess PcapOwnershipGetResponseStatus = "success"
-	PcapOwnershipGetResponseStatusFailed  PcapOwnershipGetResponseStatus = "failed"
+	PCAPOwnershipGetResponseStatusPending PCAPOwnershipGetResponseStatus = "pending"
+	PCAPOwnershipGetResponseStatusSuccess PCAPOwnershipGetResponseStatus = "success"
+	PCAPOwnershipGetResponseStatusFailed  PCAPOwnershipGetResponseStatus = "failed"
 )
 
-type PcapOwnershipValidateResponse struct {
+type PCAPOwnershipValidateResponse struct {
 	// The bucket ID associated with the packet captures API.
 	ID string `json:"id,required"`
 	// The full URI for the bucket. This field only applies to `full` packet captures.
@@ -171,7 +171,7 @@ type PcapOwnershipValidateResponse struct {
 	// The ownership challenge filename stored in the bucket.
 	Filename string `json:"filename,required"`
 	// The status of the ownership challenge. Can be pending, success or failed.
-	Status PcapOwnershipValidateResponseStatus `json:"status,required"`
+	Status PCAPOwnershipValidateResponseStatus `json:"status,required"`
 	// The RFC 3339 timestamp when the bucket was added to packet captures API.
 	Submitted string `json:"submitted,required"`
 	// The RFC 3339 timestamp when the bucket was validated.
@@ -180,7 +180,7 @@ type PcapOwnershipValidateResponse struct {
 }
 
 // pcapOwnershipValidateResponseJSON contains the JSON metadata for the struct
-// [PcapOwnershipValidateResponse]
+// [PCAPOwnershipValidateResponse]
 type pcapOwnershipValidateResponseJSON struct {
 	ID              apijson.Field
 	DestinationConf apijson.Field
@@ -192,39 +192,39 @@ type pcapOwnershipValidateResponseJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *PcapOwnershipValidateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *PCAPOwnershipValidateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The status of the ownership challenge. Can be pending, success or failed.
-type PcapOwnershipValidateResponseStatus string
+type PCAPOwnershipValidateResponseStatus string
 
 const (
-	PcapOwnershipValidateResponseStatusPending PcapOwnershipValidateResponseStatus = "pending"
-	PcapOwnershipValidateResponseStatusSuccess PcapOwnershipValidateResponseStatus = "success"
-	PcapOwnershipValidateResponseStatusFailed  PcapOwnershipValidateResponseStatus = "failed"
+	PCAPOwnershipValidateResponseStatusPending PCAPOwnershipValidateResponseStatus = "pending"
+	PCAPOwnershipValidateResponseStatusSuccess PCAPOwnershipValidateResponseStatus = "success"
+	PCAPOwnershipValidateResponseStatusFailed  PCAPOwnershipValidateResponseStatus = "failed"
 )
 
-type PcapOwnershipNewParams struct {
+type PCAPOwnershipNewParams struct {
 	// The full URI for the bucket. This field only applies to `full` packet captures.
 	DestinationConf param.Field[string] `json:"destination_conf,required"`
 }
 
-func (r PcapOwnershipNewParams) MarshalJSON() (data []byte, err error) {
+func (r PCAPOwnershipNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type PcapOwnershipNewResponseEnvelope struct {
-	Errors   []PcapOwnershipNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PcapOwnershipNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   PcapOwnershipNewResponse                   `json:"result,required"`
+type PCAPOwnershipNewResponseEnvelope struct {
+	Errors   []PCAPOwnershipNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PCAPOwnershipNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   PCAPOwnershipNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success PcapOwnershipNewResponseEnvelopeSuccess `json:"success,required"`
+	Success PCAPOwnershipNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    pcapOwnershipNewResponseEnvelopeJSON    `json:"-"`
 }
 
 // pcapOwnershipNewResponseEnvelopeJSON contains the JSON metadata for the struct
-// [PcapOwnershipNewResponseEnvelope]
+// [PCAPOwnershipNewResponseEnvelope]
 type pcapOwnershipNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
@@ -234,18 +234,18 @@ type pcapOwnershipNewResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PcapOwnershipNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *PCAPOwnershipNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PcapOwnershipNewResponseEnvelopeErrors struct {
+type PCAPOwnershipNewResponseEnvelopeErrors struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
 	JSON    pcapOwnershipNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
 // pcapOwnershipNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [PcapOwnershipNewResponseEnvelopeErrors]
+// struct [PCAPOwnershipNewResponseEnvelopeErrors]
 type pcapOwnershipNewResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
@@ -253,18 +253,18 @@ type pcapOwnershipNewResponseEnvelopeErrorsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PcapOwnershipNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *PCAPOwnershipNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PcapOwnershipNewResponseEnvelopeMessages struct {
+type PCAPOwnershipNewResponseEnvelopeMessages struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
 	JSON    pcapOwnershipNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
 // pcapOwnershipNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [PcapOwnershipNewResponseEnvelopeMessages]
+// struct [PCAPOwnershipNewResponseEnvelopeMessages]
 type pcapOwnershipNewResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
@@ -272,29 +272,29 @@ type pcapOwnershipNewResponseEnvelopeMessagesJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PcapOwnershipNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *PCAPOwnershipNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type PcapOwnershipNewResponseEnvelopeSuccess bool
+type PCAPOwnershipNewResponseEnvelopeSuccess bool
 
 const (
-	PcapOwnershipNewResponseEnvelopeSuccessTrue PcapOwnershipNewResponseEnvelopeSuccess = true
+	PCAPOwnershipNewResponseEnvelopeSuccessTrue PCAPOwnershipNewResponseEnvelopeSuccess = true
 )
 
-type PcapOwnershipGetResponseEnvelope struct {
-	Errors   []PcapOwnershipGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PcapOwnershipGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []PcapOwnershipGetResponse                 `json:"result,required,nullable"`
+type PCAPOwnershipGetResponseEnvelope struct {
+	Errors   []PCAPOwnershipGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PCAPOwnershipGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   []PCAPOwnershipGetResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success    PcapOwnershipGetResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo PcapOwnershipGetResponseEnvelopeResultInfo `json:"result_info"`
+	Success    PCAPOwnershipGetResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo PCAPOwnershipGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       pcapOwnershipGetResponseEnvelopeJSON       `json:"-"`
 }
 
 // pcapOwnershipGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [PcapOwnershipGetResponseEnvelope]
+// [PCAPOwnershipGetResponseEnvelope]
 type pcapOwnershipGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
@@ -305,18 +305,18 @@ type pcapOwnershipGetResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PcapOwnershipGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *PCAPOwnershipGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PcapOwnershipGetResponseEnvelopeErrors struct {
+type PCAPOwnershipGetResponseEnvelopeErrors struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
 	JSON    pcapOwnershipGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
 // pcapOwnershipGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [PcapOwnershipGetResponseEnvelopeErrors]
+// struct [PCAPOwnershipGetResponseEnvelopeErrors]
 type pcapOwnershipGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
@@ -324,18 +324,18 @@ type pcapOwnershipGetResponseEnvelopeErrorsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PcapOwnershipGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *PCAPOwnershipGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PcapOwnershipGetResponseEnvelopeMessages struct {
+type PCAPOwnershipGetResponseEnvelopeMessages struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
 	JSON    pcapOwnershipGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
 // pcapOwnershipGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [PcapOwnershipGetResponseEnvelopeMessages]
+// struct [PCAPOwnershipGetResponseEnvelopeMessages]
 type pcapOwnershipGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
@@ -343,18 +343,18 @@ type pcapOwnershipGetResponseEnvelopeMessagesJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PcapOwnershipGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *PCAPOwnershipGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type PcapOwnershipGetResponseEnvelopeSuccess bool
+type PCAPOwnershipGetResponseEnvelopeSuccess bool
 
 const (
-	PcapOwnershipGetResponseEnvelopeSuccessTrue PcapOwnershipGetResponseEnvelopeSuccess = true
+	PCAPOwnershipGetResponseEnvelopeSuccessTrue PCAPOwnershipGetResponseEnvelopeSuccess = true
 )
 
-type PcapOwnershipGetResponseEnvelopeResultInfo struct {
+type PCAPOwnershipGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -367,7 +367,7 @@ type PcapOwnershipGetResponseEnvelopeResultInfo struct {
 }
 
 // pcapOwnershipGetResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [PcapOwnershipGetResponseEnvelopeResultInfo]
+// the struct [PCAPOwnershipGetResponseEnvelopeResultInfo]
 type pcapOwnershipGetResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
@@ -377,32 +377,32 @@ type pcapOwnershipGetResponseEnvelopeResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PcapOwnershipGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *PCAPOwnershipGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PcapOwnershipValidateParams struct {
+type PCAPOwnershipValidateParams struct {
 	// The full URI for the bucket. This field only applies to `full` packet captures.
 	DestinationConf param.Field[string] `json:"destination_conf,required"`
 	// The ownership challenge filename stored in the bucket.
 	OwnershipChallenge param.Field[string] `json:"ownership_challenge,required"`
 }
 
-func (r PcapOwnershipValidateParams) MarshalJSON() (data []byte, err error) {
+func (r PCAPOwnershipValidateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type PcapOwnershipValidateResponseEnvelope struct {
-	Errors   []PcapOwnershipValidateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []PcapOwnershipValidateResponseEnvelopeMessages `json:"messages,required"`
-	Result   PcapOwnershipValidateResponse                   `json:"result,required"`
+type PCAPOwnershipValidateResponseEnvelope struct {
+	Errors   []PCAPOwnershipValidateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PCAPOwnershipValidateResponseEnvelopeMessages `json:"messages,required"`
+	Result   PCAPOwnershipValidateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success PcapOwnershipValidateResponseEnvelopeSuccess `json:"success,required"`
+	Success PCAPOwnershipValidateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    pcapOwnershipValidateResponseEnvelopeJSON    `json:"-"`
 }
 
 // pcapOwnershipValidateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [PcapOwnershipValidateResponseEnvelope]
+// struct [PCAPOwnershipValidateResponseEnvelope]
 type pcapOwnershipValidateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
@@ -412,18 +412,18 @@ type pcapOwnershipValidateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PcapOwnershipValidateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *PCAPOwnershipValidateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PcapOwnershipValidateResponseEnvelopeErrors struct {
+type PCAPOwnershipValidateResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
 	JSON    pcapOwnershipValidateResponseEnvelopeErrorsJSON `json:"-"`
 }
 
 // pcapOwnershipValidateResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [PcapOwnershipValidateResponseEnvelopeErrors]
+// the struct [PCAPOwnershipValidateResponseEnvelopeErrors]
 type pcapOwnershipValidateResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
@@ -431,18 +431,18 @@ type pcapOwnershipValidateResponseEnvelopeErrorsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PcapOwnershipValidateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *PCAPOwnershipValidateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PcapOwnershipValidateResponseEnvelopeMessages struct {
+type PCAPOwnershipValidateResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
 	JSON    pcapOwnershipValidateResponseEnvelopeMessagesJSON `json:"-"`
 }
 
 // pcapOwnershipValidateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [PcapOwnershipValidateResponseEnvelopeMessages]
+// the struct [PCAPOwnershipValidateResponseEnvelopeMessages]
 type pcapOwnershipValidateResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
@@ -450,13 +450,13 @@ type pcapOwnershipValidateResponseEnvelopeMessagesJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PcapOwnershipValidateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *PCAPOwnershipValidateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type PcapOwnershipValidateResponseEnvelopeSuccess bool
+type PCAPOwnershipValidateResponseEnvelopeSuccess bool
 
 const (
-	PcapOwnershipValidateResponseEnvelopeSuccessTrue PcapOwnershipValidateResponseEnvelopeSuccess = true
+	PCAPOwnershipValidateResponseEnvelopeSuccessTrue PCAPOwnershipValidateResponseEnvelopeSuccess = true
 )

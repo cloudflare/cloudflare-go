@@ -44,7 +44,7 @@ func (r *WorkerScriptBindingService) List(ctx context.Context, zoneID string, op
 	return
 }
 
-// Union satisfied by [WorkerScriptBindingListResponseWorkersKvNamespaceBinding] or
+// Union satisfied by [WorkerScriptBindingListResponseWorkersKVNamespaceBinding] or
 // [WorkerScriptBindingListResponseWorkersWasmModuleBinding].
 type WorkerScriptBindingListResponse interface {
 	implementsWorkerScriptBindingListResponse()
@@ -54,20 +54,20 @@ func init() {
 	apijson.RegisterUnion(reflect.TypeOf((*WorkerScriptBindingListResponse)(nil)).Elem(), "")
 }
 
-type WorkerScriptBindingListResponseWorkersKvNamespaceBinding struct {
+type WorkerScriptBindingListResponseWorkersKVNamespaceBinding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// Namespace identifier tag.
 	NamespaceID string `json:"namespace_id,required"`
 	// The class of resource that the binding provides.
-	Type WorkerScriptBindingListResponseWorkersKvNamespaceBindingType `json:"type,required"`
-	JSON workerScriptBindingListResponseWorkersKvNamespaceBindingJSON `json:"-"`
+	Type WorkerScriptBindingListResponseWorkersKVNamespaceBindingType `json:"type,required"`
+	JSON workerScriptBindingListResponseWorkersKVNamespaceBindingJSON `json:"-"`
 }
 
-// workerScriptBindingListResponseWorkersKvNamespaceBindingJSON contains the JSON
+// workerScriptBindingListResponseWorkersKVNamespaceBindingJSON contains the JSON
 // metadata for the struct
-// [WorkerScriptBindingListResponseWorkersKvNamespaceBinding]
-type workerScriptBindingListResponseWorkersKvNamespaceBindingJSON struct {
+// [WorkerScriptBindingListResponseWorkersKVNamespaceBinding]
+type workerScriptBindingListResponseWorkersKVNamespaceBindingJSON struct {
 	Name        apijson.Field
 	NamespaceID apijson.Field
 	Type        apijson.Field
@@ -75,18 +75,18 @@ type workerScriptBindingListResponseWorkersKvNamespaceBindingJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerScriptBindingListResponseWorkersKvNamespaceBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerScriptBindingListResponseWorkersKVNamespaceBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r WorkerScriptBindingListResponseWorkersKvNamespaceBinding) implementsWorkerScriptBindingListResponse() {
+func (r WorkerScriptBindingListResponseWorkersKVNamespaceBinding) implementsWorkerScriptBindingListResponse() {
 }
 
 // The class of resource that the binding provides.
-type WorkerScriptBindingListResponseWorkersKvNamespaceBindingType string
+type WorkerScriptBindingListResponseWorkersKVNamespaceBindingType string
 
 const (
-	WorkerScriptBindingListResponseWorkersKvNamespaceBindingTypeKvNamespace WorkerScriptBindingListResponseWorkersKvNamespaceBindingType = "kv_namespace"
+	WorkerScriptBindingListResponseWorkersKVNamespaceBindingTypeKVNamespace WorkerScriptBindingListResponseWorkersKVNamespaceBindingType = "kv_namespace"
 )
 
 type WorkerScriptBindingListResponseWorkersWasmModuleBinding struct {

@@ -120,7 +120,7 @@ type TunnelConnectionListResponseConn struct {
 	// The public IP address of the host running cloudflared.
 	OriginIP string `json:"origin_ip"`
 	// UUID of the Cloudflare Tunnel connection.
-	Uuid string                               `json:"uuid"`
+	UUID string                               `json:"uuid"`
 	JSON tunnelConnectionListResponseConnJSON `json:"-"`
 }
 
@@ -134,7 +134,7 @@ type tunnelConnectionListResponseConnJSON struct {
 	IsPendingReconnect apijson.Field
 	OpenedAt           apijson.Field
 	OriginIP           apijson.Field
-	Uuid               apijson.Field
+	UUID               apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }

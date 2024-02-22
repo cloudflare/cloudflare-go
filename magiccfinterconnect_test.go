@@ -35,7 +35,7 @@ func TestMagicCfInterconnectUpdateWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.MagicCfInterconnectUpdateParams{
 			Description: cloudflare.F("Tunnel for Interconnect to ORD"),
-			Gre: cloudflare.F(cloudflare.MagicCfInterconnectUpdateParamsGre{
+			GRE: cloudflare.F(cloudflare.MagicCfInterconnectUpdateParamsGRE{
 				CloudflareEndpoint: cloudflare.F("203.0.113.1"),
 			}),
 			HealthCheck: cloudflare.F(cloudflare.MagicCfInterconnectUpdateParamsHealthCheck{

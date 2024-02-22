@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestMagicIpsecTunnelNewWithOptionalParams(t *testing.T) {
+func TestMagicIPSECTunnelNewWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,23 +29,23 @@ func TestMagicIpsecTunnelNewWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Magics.IpsecTunnels.New(
+	_, err := client.Magics.IPSECTunnels.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.MagicIpsecTunnelNewParams{
+		cloudflare.MagicIPSECTunnelNewParams{
 			CloudflareEndpoint: cloudflare.F("203.0.113.1"),
 			InterfaceAddress:   cloudflare.F("192.0.2.0/31"),
 			Name:               cloudflare.F("IPsec_1"),
 			CustomerEndpoint:   cloudflare.F("203.0.113.1"),
 			Description:        cloudflare.F("Tunnel for ISP X"),
-			HealthCheck: cloudflare.F(cloudflare.MagicIpsecTunnelNewParamsHealthCheck{
-				Direction: cloudflare.F(cloudflare.MagicIpsecTunnelNewParamsHealthCheckDirectionBidirectional),
+			HealthCheck: cloudflare.F(cloudflare.MagicIPSECTunnelNewParamsHealthCheck{
+				Direction: cloudflare.F(cloudflare.MagicIPSECTunnelNewParamsHealthCheckDirectionBidirectional),
 				Enabled:   cloudflare.F(true),
-				Rate:      cloudflare.F(cloudflare.MagicIpsecTunnelNewParamsHealthCheckRateLow),
+				Rate:      cloudflare.F(cloudflare.MagicIPSECTunnelNewParamsHealthCheckRateLow),
 				Target:    cloudflare.F("203.0.113.1"),
-				Type:      cloudflare.F(cloudflare.MagicIpsecTunnelNewParamsHealthCheckTypeRequest),
+				Type:      cloudflare.F(cloudflare.MagicIPSECTunnelNewParamsHealthCheckTypeRequest),
 			}),
-			Psk:              cloudflare.F("O3bwKSjnaoCxDoUxjcq4Rk8ZKkezQUiy"),
+			PSK:              cloudflare.F("O3bwKSjnaoCxDoUxjcq4Rk8ZKkezQUiy"),
 			ReplayProtection: cloudflare.F(false),
 		},
 	)
@@ -58,7 +58,7 @@ func TestMagicIpsecTunnelNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestMagicIpsecTunnelUpdateWithOptionalParams(t *testing.T) {
+func TestMagicIPSECTunnelUpdateWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -74,24 +74,24 @@ func TestMagicIpsecTunnelUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Magics.IpsecTunnels.Update(
+	_, err := client.Magics.IPSECTunnels.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.MagicIpsecTunnelUpdateParams{
+		cloudflare.MagicIPSECTunnelUpdateParams{
 			CloudflareEndpoint: cloudflare.F("203.0.113.1"),
 			InterfaceAddress:   cloudflare.F("192.0.2.0/31"),
 			Name:               cloudflare.F("IPsec_1"),
 			CustomerEndpoint:   cloudflare.F("203.0.113.1"),
 			Description:        cloudflare.F("Tunnel for ISP X"),
-			HealthCheck: cloudflare.F(cloudflare.MagicIpsecTunnelUpdateParamsHealthCheck{
-				Direction: cloudflare.F(cloudflare.MagicIpsecTunnelUpdateParamsHealthCheckDirectionBidirectional),
+			HealthCheck: cloudflare.F(cloudflare.MagicIPSECTunnelUpdateParamsHealthCheck{
+				Direction: cloudflare.F(cloudflare.MagicIPSECTunnelUpdateParamsHealthCheckDirectionBidirectional),
 				Enabled:   cloudflare.F(true),
-				Rate:      cloudflare.F(cloudflare.MagicIpsecTunnelUpdateParamsHealthCheckRateLow),
+				Rate:      cloudflare.F(cloudflare.MagicIPSECTunnelUpdateParamsHealthCheckRateLow),
 				Target:    cloudflare.F("203.0.113.1"),
-				Type:      cloudflare.F(cloudflare.MagicIpsecTunnelUpdateParamsHealthCheckTypeRequest),
+				Type:      cloudflare.F(cloudflare.MagicIPSECTunnelUpdateParamsHealthCheckTypeRequest),
 			}),
-			Psk:              cloudflare.F("O3bwKSjnaoCxDoUxjcq4Rk8ZKkezQUiy"),
+			PSK:              cloudflare.F("O3bwKSjnaoCxDoUxjcq4Rk8ZKkezQUiy"),
 			ReplayProtection: cloudflare.F(false),
 		},
 	)
@@ -104,7 +104,7 @@ func TestMagicIpsecTunnelUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestMagicIpsecTunnelList(t *testing.T) {
+func TestMagicIPSECTunnelList(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -120,7 +120,7 @@ func TestMagicIpsecTunnelList(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Magics.IpsecTunnels.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Magics.IPSECTunnels.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -130,7 +130,7 @@ func TestMagicIpsecTunnelList(t *testing.T) {
 	}
 }
 
-func TestMagicIpsecTunnelDelete(t *testing.T) {
+func TestMagicIPSECTunnelDelete(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -146,7 +146,7 @@ func TestMagicIpsecTunnelDelete(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Magics.IpsecTunnels.Delete(
+	_, err := client.Magics.IPSECTunnels.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
@@ -160,7 +160,7 @@ func TestMagicIpsecTunnelDelete(t *testing.T) {
 	}
 }
 
-func TestMagicIpsecTunnelGet(t *testing.T) {
+func TestMagicIPSECTunnelGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -176,7 +176,7 @@ func TestMagicIpsecTunnelGet(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Magics.IpsecTunnels.Get(
+	_, err := client.Magics.IPSECTunnels.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",

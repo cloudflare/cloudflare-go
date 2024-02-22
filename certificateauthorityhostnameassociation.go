@@ -65,7 +65,7 @@ type CertificateAuthorityHostnameAssociationUpdateResponse struct {
 	// The UUID for a certificate that was uploaded to the mTLS Certificate Management
 	// endpoint. If no mtls_certificate_id is given, the hostnames will be associated
 	// to your active Cloudflare Managed CA.
-	MtlsCertificateID string                                                    `json:"mtls_certificate_id"`
+	MTLSCertificateID string                                                    `json:"mtls_certificate_id"`
 	JSON              certificateAuthorityHostnameAssociationUpdateResponseJSON `json:"-"`
 }
 
@@ -73,7 +73,7 @@ type CertificateAuthorityHostnameAssociationUpdateResponse struct {
 // metadata for the struct [CertificateAuthorityHostnameAssociationUpdateResponse]
 type certificateAuthorityHostnameAssociationUpdateResponseJSON struct {
 	Hostnames         apijson.Field
-	MtlsCertificateID apijson.Field
+	MTLSCertificateID apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
 }
@@ -87,7 +87,7 @@ type CertificateAuthorityHostnameAssociationListResponse struct {
 	// The UUID for a certificate that was uploaded to the mTLS Certificate Management
 	// endpoint. If no mtls_certificate_id is given, the hostnames will be associated
 	// to your active Cloudflare Managed CA.
-	MtlsCertificateID string                                                  `json:"mtls_certificate_id"`
+	MTLSCertificateID string                                                  `json:"mtls_certificate_id"`
 	JSON              certificateAuthorityHostnameAssociationListResponseJSON `json:"-"`
 }
 
@@ -95,7 +95,7 @@ type CertificateAuthorityHostnameAssociationListResponse struct {
 // metadata for the struct [CertificateAuthorityHostnameAssociationListResponse]
 type certificateAuthorityHostnameAssociationListResponseJSON struct {
 	Hostnames         apijson.Field
-	MtlsCertificateID apijson.Field
+	MTLSCertificateID apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
 }
@@ -109,7 +109,7 @@ type CertificateAuthorityHostnameAssociationUpdateParams struct {
 	// The UUID for a certificate that was uploaded to the mTLS Certificate Management
 	// endpoint. If no mtls_certificate_id is given, the hostnames will be associated
 	// to your active Cloudflare Managed CA.
-	MtlsCertificateID param.Field[string] `json:"mtls_certificate_id"`
+	MTLSCertificateID param.Field[string] `json:"mtls_certificate_id"`
 }
 
 func (r CertificateAuthorityHostnameAssociationUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -192,7 +192,7 @@ type CertificateAuthorityHostnameAssociationListParams struct {
 	// The UUID to match against for a certificate that was uploaded to the mTLS
 	// Certificate Management endpoint. If no mtls_certificate_id is given, the results
 	// will be the hostnames associated to your active Cloudflare Managed CA.
-	MtlsCertificateID param.Field[string] `query:"mtls_certificate_id"`
+	MTLSCertificateID param.Field[string] `query:"mtls_certificate_id"`
 }
 
 // URLQuery serializes [CertificateAuthorityHostnameAssociationListParams]'s query

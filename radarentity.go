@@ -21,7 +21,7 @@ import (
 // instead.
 type RadarEntityService struct {
 	Options   []option.RequestOption
-	Asns      *RadarEntityAsnService
+	ASNs      *RadarEntityASNService
 	Locations *RadarEntityLocationService
 }
 
@@ -31,7 +31,7 @@ type RadarEntityService struct {
 func NewRadarEntityService(opts ...option.RequestOption) (r *RadarEntityService) {
 	r = &RadarEntityService{}
 	r.Options = opts
-	r.Asns = NewRadarEntityAsnService(opts...)
+	r.ASNs = NewRadarEntityASNService(opts...)
 	r.Locations = NewRadarEntityLocationService(opts...)
 	return
 }
@@ -67,10 +67,10 @@ func (r *RadarEntityGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type RadarEntityGetResponseIP struct {
-	Asn          string                       `json:"asn,required"`
-	AsnLocation  string                       `json:"asnLocation,required"`
-	AsnName      string                       `json:"asnName,required"`
-	AsnOrgName   string                       `json:"asnOrgName,required"`
+	ASN          string                       `json:"asn,required"`
+	ASNLocation  string                       `json:"asnLocation,required"`
+	ASNName      string                       `json:"asnName,required"`
+	ASNOrgName   string                       `json:"asnOrgName,required"`
 	IP           string                       `json:"ip,required"`
 	IPVersion    string                       `json:"ipVersion,required"`
 	Location     string                       `json:"location,required"`
@@ -81,10 +81,10 @@ type RadarEntityGetResponseIP struct {
 // radarEntityGetResponseIPJSON contains the JSON metadata for the struct
 // [RadarEntityGetResponseIP]
 type radarEntityGetResponseIPJSON struct {
-	Asn          apijson.Field
-	AsnLocation  apijson.Field
-	AsnName      apijson.Field
-	AsnOrgName   apijson.Field
+	ASN          apijson.Field
+	ASNLocation  apijson.Field
+	ASNName      apijson.Field
+	ASNOrgName   apijson.Field
 	IP           apijson.Field
 	IPVersion    apijson.Field
 	Location     apijson.Field

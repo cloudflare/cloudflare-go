@@ -22,9 +22,9 @@ import (
 // [NewRadarEmailSecurityTopAseService] method instead.
 type RadarEmailSecurityTopAseService struct {
 	Options   []option.RequestOption
-	Arc       *RadarEmailSecurityTopAseArcService
+	ARC       *RadarEmailSecurityTopAseARCService
 	DKIM      *RadarEmailSecurityTopAseDKIMService
-	Dmarc     *RadarEmailSecurityTopAseDmarcService
+	DMARC     *RadarEmailSecurityTopAseDMARCService
 	Malicious *RadarEmailSecurityTopAseMaliciousService
 	Spam      *RadarEmailSecurityTopAseSpamService
 	SPF       *RadarEmailSecurityTopAseSPFService
@@ -36,9 +36,9 @@ type RadarEmailSecurityTopAseService struct {
 func NewRadarEmailSecurityTopAseService(opts ...option.RequestOption) (r *RadarEmailSecurityTopAseService) {
 	r = &RadarEmailSecurityTopAseService{}
 	r.Options = opts
-	r.Arc = NewRadarEmailSecurityTopAseArcService(opts...)
+	r.ARC = NewRadarEmailSecurityTopAseARCService(opts...)
 	r.DKIM = NewRadarEmailSecurityTopAseDKIMService(opts...)
-	r.Dmarc = NewRadarEmailSecurityTopAseDmarcService(opts...)
+	r.DMARC = NewRadarEmailSecurityTopAseDMARCService(opts...)
 	r.Malicious = NewRadarEmailSecurityTopAseMaliciousService(opts...)
 	r.Spam = NewRadarEmailSecurityTopAseSpamService(opts...)
 	r.SPF = NewRadarEmailSecurityTopAseSPFService(opts...)
@@ -170,7 +170,7 @@ func (r *RadarEmailSecurityTopAseGetResponseMetaConfidenceInfoAnnotation) Unmars
 }
 
 type RadarEmailSecurityTopAseGetResponseTop0 struct {
-	ClientAsn    int64                                       `json:"clientASN,required"`
+	ClientASN    int64                                       `json:"clientASN,required"`
 	ClientAsName string                                      `json:"clientASName,required"`
 	Value        string                                      `json:"value,required"`
 	JSON         radarEmailSecurityTopAseGetResponseTop0JSON `json:"-"`
@@ -179,7 +179,7 @@ type RadarEmailSecurityTopAseGetResponseTop0 struct {
 // radarEmailSecurityTopAseGetResponseTop0JSON contains the JSON metadata for the
 // struct [RadarEmailSecurityTopAseGetResponseTop0]
 type radarEmailSecurityTopAseGetResponseTop0JSON struct {
-	ClientAsn    apijson.Field
+	ClientASN    apijson.Field
 	ClientAsName apijson.Field
 	Value        apijson.Field
 	raw          string
@@ -192,11 +192,11 @@ func (r *RadarEmailSecurityTopAseGetResponseTop0) UnmarshalJSON(data []byte) (er
 
 type RadarEmailSecurityTopAseGetParams struct {
 	// Filter for arc (Authenticated Received Chain).
-	Arc param.Field[[]RadarEmailSecurityTopAseGetParamsArc] `query:"arc"`
+	ARC param.Field[[]RadarEmailSecurityTopAseGetParamsARC] `query:"arc"`
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
@@ -208,7 +208,7 @@ type RadarEmailSecurityTopAseGetParams struct {
 	// Filter for dkim.
 	DKIM param.Field[[]RadarEmailSecurityTopAseGetParamsDKIM] `query:"dkim"`
 	// Filter for dmarc.
-	Dmarc param.Field[[]RadarEmailSecurityTopAseGetParamsDmarc] `query:"dmarc"`
+	DMARC param.Field[[]RadarEmailSecurityTopAseGetParamsDMARC] `query:"dmarc"`
 	// Format results are returned in.
 	Format param.Field[RadarEmailSecurityTopAseGetParamsFormat] `query:"format"`
 	// Limit the number of objects in the response.
@@ -232,12 +232,12 @@ func (r RadarEmailSecurityTopAseGetParams) URLQuery() (v url.Values) {
 	})
 }
 
-type RadarEmailSecurityTopAseGetParamsArc string
+type RadarEmailSecurityTopAseGetParamsARC string
 
 const (
-	RadarEmailSecurityTopAseGetParamsArcPass RadarEmailSecurityTopAseGetParamsArc = "PASS"
-	RadarEmailSecurityTopAseGetParamsArcNone RadarEmailSecurityTopAseGetParamsArc = "NONE"
-	RadarEmailSecurityTopAseGetParamsArcFail RadarEmailSecurityTopAseGetParamsArc = "FAIL"
+	RadarEmailSecurityTopAseGetParamsARCPass RadarEmailSecurityTopAseGetParamsARC = "PASS"
+	RadarEmailSecurityTopAseGetParamsARCNone RadarEmailSecurityTopAseGetParamsARC = "NONE"
+	RadarEmailSecurityTopAseGetParamsARCFail RadarEmailSecurityTopAseGetParamsARC = "FAIL"
 )
 
 type RadarEmailSecurityTopAseGetParamsDateRange string
@@ -268,12 +268,12 @@ const (
 	RadarEmailSecurityTopAseGetParamsDKIMFail RadarEmailSecurityTopAseGetParamsDKIM = "FAIL"
 )
 
-type RadarEmailSecurityTopAseGetParamsDmarc string
+type RadarEmailSecurityTopAseGetParamsDMARC string
 
 const (
-	RadarEmailSecurityTopAseGetParamsDmarcPass RadarEmailSecurityTopAseGetParamsDmarc = "PASS"
-	RadarEmailSecurityTopAseGetParamsDmarcNone RadarEmailSecurityTopAseGetParamsDmarc = "NONE"
-	RadarEmailSecurityTopAseGetParamsDmarcFail RadarEmailSecurityTopAseGetParamsDmarc = "FAIL"
+	RadarEmailSecurityTopAseGetParamsDMARCPass RadarEmailSecurityTopAseGetParamsDMARC = "PASS"
+	RadarEmailSecurityTopAseGetParamsDMARCNone RadarEmailSecurityTopAseGetParamsDMARC = "NONE"
+	RadarEmailSecurityTopAseGetParamsDMARCFail RadarEmailSecurityTopAseGetParamsDMARC = "FAIL"
 )
 
 // Format results are returned in.

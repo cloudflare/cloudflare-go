@@ -12,29 +12,29 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-// IntelAsnService contains methods and other services that help with interacting
+// IntelASNService contains methods and other services that help with interacting
 // with the cloudflare API. Note, unlike clients, this service does not read
 // variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewIntelAsnService] method instead.
-type IntelAsnService struct {
+// service directly, and instead use the [NewIntelASNService] method instead.
+type IntelASNService struct {
 	Options []option.RequestOption
-	Subnets *IntelAsnSubnetService
+	Subnets *IntelASNSubnetService
 }
 
-// NewIntelAsnService generates a new service that applies the given options to
+// NewIntelASNService generates a new service that applies the given options to
 // each request. These options are applied after the parent client's options (if
 // there is one), and before any request-specific options.
-func NewIntelAsnService(opts ...option.RequestOption) (r *IntelAsnService) {
-	r = &IntelAsnService{}
+func NewIntelASNService(opts ...option.RequestOption) (r *IntelASNService) {
+	r = &IntelASNService{}
 	r.Options = opts
-	r.Subnets = NewIntelAsnSubnetService(opts...)
+	r.Subnets = NewIntelASNSubnetService(opts...)
 	return
 }
 
 // Get ASN Overview
-func (r *IntelAsnService) Get(ctx context.Context, accountID string, asn int64, opts ...option.RequestOption) (res *int64, err error) {
+func (r *IntelASNService) Get(ctx context.Context, accountID string, asn int64, opts ...option.RequestOption) (res *int64, err error) {
 	opts = append(r.Options[:], opts...)
-	var env IntelAsnGetResponseEnvelope
+	var env IntelASNGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/asn/%v", accountID, asn)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -44,18 +44,18 @@ func (r *IntelAsnService) Get(ctx context.Context, accountID string, asn int64, 
 	return
 }
 
-type IntelAsnGetResponseEnvelope struct {
-	Errors   []IntelAsnGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IntelAsnGetResponseEnvelopeMessages `json:"messages,required"`
+type IntelASNGetResponseEnvelope struct {
+	Errors   []IntelASNGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []IntelASNGetResponseEnvelopeMessages `json:"messages,required"`
 	Result   int64                                 `json:"result,required"`
 	// Whether the API call was successful
-	Success IntelAsnGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    intelAsnGetResponseEnvelopeJSON    `json:"-"`
+	Success IntelASNGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    intelASNGetResponseEnvelopeJSON    `json:"-"`
 }
 
-// intelAsnGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [IntelAsnGetResponseEnvelope]
-type intelAsnGetResponseEnvelopeJSON struct {
+// intelASNGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [IntelASNGetResponseEnvelope]
+type intelASNGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -64,51 +64,51 @@ type intelAsnGetResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelAsnGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelASNGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type IntelAsnGetResponseEnvelopeErrors struct {
+type IntelASNGetResponseEnvelopeErrors struct {
 	Code    int64                                 `json:"code,required"`
 	Message string                                `json:"message,required"`
-	JSON    intelAsnGetResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    intelASNGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// intelAsnGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [IntelAsnGetResponseEnvelopeErrors]
-type intelAsnGetResponseEnvelopeErrorsJSON struct {
+// intelASNGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [IntelASNGetResponseEnvelopeErrors]
+type intelASNGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelAsnGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelASNGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type IntelAsnGetResponseEnvelopeMessages struct {
+type IntelASNGetResponseEnvelopeMessages struct {
 	Code    int64                                   `json:"code,required"`
 	Message string                                  `json:"message,required"`
-	JSON    intelAsnGetResponseEnvelopeMessagesJSON `json:"-"`
+	JSON    intelASNGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// intelAsnGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [IntelAsnGetResponseEnvelopeMessages]
-type intelAsnGetResponseEnvelopeMessagesJSON struct {
+// intelASNGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [IntelASNGetResponseEnvelopeMessages]
+type intelASNGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelAsnGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelASNGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type IntelAsnGetResponseEnvelopeSuccess bool
+type IntelASNGetResponseEnvelopeSuccess bool
 
 const (
-	IntelAsnGetResponseEnvelopeSuccessTrue IntelAsnGetResponseEnvelopeSuccess = true
+	IntelASNGetResponseEnvelopeSuccessTrue IntelASNGetResponseEnvelopeSuccess = true
 )

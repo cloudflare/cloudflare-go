@@ -199,7 +199,7 @@ type AccessApplicationNewResponseSelfHostedApplication struct {
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
-	AllowAuthenticateViaWarp bool `json:"allow_authenticate_via_warp"`
+	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdps []string `json:"allowed_idps"`
@@ -262,7 +262,7 @@ type accessApplicationNewResponseSelfHostedApplicationJSON struct {
 	Domain                   apijson.Field
 	Type                     apijson.Field
 	ID                       apijson.Field
-	AllowAuthenticateViaWarp apijson.Field
+	AllowAuthenticateViaWARP apijson.Field
 	AllowedIdps              apijson.Field
 	AppLauncherVisible       apijson.Field
 	Aud                      apijson.Field
@@ -633,7 +633,7 @@ type AccessApplicationNewResponseBrowserSSHApplication struct {
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
-	AllowAuthenticateViaWarp bool `json:"allow_authenticate_via_warp"`
+	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdps []string `json:"allowed_idps"`
@@ -696,7 +696,7 @@ type accessApplicationNewResponseBrowserSSHApplicationJSON struct {
 	Domain                   apijson.Field
 	Type                     apijson.Field
 	ID                       apijson.Field
-	AllowAuthenticateViaWarp apijson.Field
+	AllowAuthenticateViaWARP apijson.Field
 	AllowedIdps              apijson.Field
 	AppLauncherVisible       apijson.Field
 	Aud                      apijson.Field
@@ -796,7 +796,7 @@ type AccessApplicationNewResponseBrowserVncApplication struct {
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
-	AllowAuthenticateViaWarp bool `json:"allow_authenticate_via_warp"`
+	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdps []string `json:"allowed_idps"`
@@ -859,7 +859,7 @@ type accessApplicationNewResponseBrowserVncApplicationJSON struct {
 	Domain                   apijson.Field
 	Type                     apijson.Field
 	ID                       apijson.Field
-	AllowAuthenticateViaWarp apijson.Field
+	AllowAuthenticateViaWARP apijson.Field
 	AllowedIdps              apijson.Field
 	AppLauncherVisible       apijson.Field
 	Aud                      apijson.Field
@@ -1007,7 +1007,7 @@ const (
 	AccessApplicationNewResponseAppLauncherApplicationTypeSSH         AccessApplicationNewResponseAppLauncherApplicationType = "ssh"
 	AccessApplicationNewResponseAppLauncherApplicationTypeVnc         AccessApplicationNewResponseAppLauncherApplicationType = "vnc"
 	AccessApplicationNewResponseAppLauncherApplicationTypeAppLauncher AccessApplicationNewResponseAppLauncherApplicationType = "app_launcher"
-	AccessApplicationNewResponseAppLauncherApplicationTypeWarp        AccessApplicationNewResponseAppLauncherApplicationType = "warp"
+	AccessApplicationNewResponseAppLauncherApplicationTypeWARP        AccessApplicationNewResponseAppLauncherApplicationType = "warp"
 	AccessApplicationNewResponseAppLauncherApplicationTypeBiso        AccessApplicationNewResponseAppLauncherApplicationType = "biso"
 	AccessApplicationNewResponseAppLauncherApplicationTypeBookmark    AccessApplicationNewResponseAppLauncherApplicationType = "bookmark"
 	AccessApplicationNewResponseAppLauncherApplicationTypeDashSSO     AccessApplicationNewResponseAppLauncherApplicationType = "dash_sso"
@@ -1074,7 +1074,7 @@ const (
 	AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationTypeSSH         AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationType = "ssh"
 	AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationTypeVnc         AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationType = "vnc"
 	AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationTypeAppLauncher AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationType = "app_launcher"
-	AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationTypeWarp        AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationType = "warp"
+	AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationTypeWARP        AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationType = "warp"
 	AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationTypeBiso        AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationType = "biso"
 	AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationTypeBookmark    AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationType = "bookmark"
 	AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationTypeDashSSO     AccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationType = "dash_sso"
@@ -1141,7 +1141,7 @@ const (
 	AccessApplicationNewResponseBrowserIsolationPermissionsApplicationTypeSSH         AccessApplicationNewResponseBrowserIsolationPermissionsApplicationType = "ssh"
 	AccessApplicationNewResponseBrowserIsolationPermissionsApplicationTypeVnc         AccessApplicationNewResponseBrowserIsolationPermissionsApplicationType = "vnc"
 	AccessApplicationNewResponseBrowserIsolationPermissionsApplicationTypeAppLauncher AccessApplicationNewResponseBrowserIsolationPermissionsApplicationType = "app_launcher"
-	AccessApplicationNewResponseBrowserIsolationPermissionsApplicationTypeWarp        AccessApplicationNewResponseBrowserIsolationPermissionsApplicationType = "warp"
+	AccessApplicationNewResponseBrowserIsolationPermissionsApplicationTypeWARP        AccessApplicationNewResponseBrowserIsolationPermissionsApplicationType = "warp"
 	AccessApplicationNewResponseBrowserIsolationPermissionsApplicationTypeBiso        AccessApplicationNewResponseBrowserIsolationPermissionsApplicationType = "biso"
 	AccessApplicationNewResponseBrowserIsolationPermissionsApplicationTypeBookmark    AccessApplicationNewResponseBrowserIsolationPermissionsApplicationType = "bookmark"
 	AccessApplicationNewResponseBrowserIsolationPermissionsApplicationTypeDashSSO     AccessApplicationNewResponseBrowserIsolationPermissionsApplicationType = "dash_sso"
@@ -1220,7 +1220,7 @@ type AccessApplicationUpdateResponseSelfHostedApplication struct {
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
-	AllowAuthenticateViaWarp bool `json:"allow_authenticate_via_warp"`
+	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdps []string `json:"allowed_idps"`
@@ -1283,7 +1283,7 @@ type accessApplicationUpdateResponseSelfHostedApplicationJSON struct {
 	Domain                   apijson.Field
 	Type                     apijson.Field
 	ID                       apijson.Field
-	AllowAuthenticateViaWarp apijson.Field
+	AllowAuthenticateViaWARP apijson.Field
 	AllowedIdps              apijson.Field
 	AppLauncherVisible       apijson.Field
 	Aud                      apijson.Field
@@ -1655,7 +1655,7 @@ type AccessApplicationUpdateResponseBrowserSSHApplication struct {
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
-	AllowAuthenticateViaWarp bool `json:"allow_authenticate_via_warp"`
+	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdps []string `json:"allowed_idps"`
@@ -1718,7 +1718,7 @@ type accessApplicationUpdateResponseBrowserSSHApplicationJSON struct {
 	Domain                   apijson.Field
 	Type                     apijson.Field
 	ID                       apijson.Field
-	AllowAuthenticateViaWarp apijson.Field
+	AllowAuthenticateViaWARP apijson.Field
 	AllowedIdps              apijson.Field
 	AppLauncherVisible       apijson.Field
 	Aud                      apijson.Field
@@ -1819,7 +1819,7 @@ type AccessApplicationUpdateResponseBrowserVncApplication struct {
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
-	AllowAuthenticateViaWarp bool `json:"allow_authenticate_via_warp"`
+	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdps []string `json:"allowed_idps"`
@@ -1882,7 +1882,7 @@ type accessApplicationUpdateResponseBrowserVncApplicationJSON struct {
 	Domain                   apijson.Field
 	Type                     apijson.Field
 	ID                       apijson.Field
-	AllowAuthenticateViaWarp apijson.Field
+	AllowAuthenticateViaWARP apijson.Field
 	AllowedIdps              apijson.Field
 	AppLauncherVisible       apijson.Field
 	Aud                      apijson.Field
@@ -2031,7 +2031,7 @@ const (
 	AccessApplicationUpdateResponseAppLauncherApplicationTypeSSH         AccessApplicationUpdateResponseAppLauncherApplicationType = "ssh"
 	AccessApplicationUpdateResponseAppLauncherApplicationTypeVnc         AccessApplicationUpdateResponseAppLauncherApplicationType = "vnc"
 	AccessApplicationUpdateResponseAppLauncherApplicationTypeAppLauncher AccessApplicationUpdateResponseAppLauncherApplicationType = "app_launcher"
-	AccessApplicationUpdateResponseAppLauncherApplicationTypeWarp        AccessApplicationUpdateResponseAppLauncherApplicationType = "warp"
+	AccessApplicationUpdateResponseAppLauncherApplicationTypeWARP        AccessApplicationUpdateResponseAppLauncherApplicationType = "warp"
 	AccessApplicationUpdateResponseAppLauncherApplicationTypeBiso        AccessApplicationUpdateResponseAppLauncherApplicationType = "biso"
 	AccessApplicationUpdateResponseAppLauncherApplicationTypeBookmark    AccessApplicationUpdateResponseAppLauncherApplicationType = "bookmark"
 	AccessApplicationUpdateResponseAppLauncherApplicationTypeDashSSO     AccessApplicationUpdateResponseAppLauncherApplicationType = "dash_sso"
@@ -2098,7 +2098,7 @@ const (
 	AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationTypeSSH         AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationType = "ssh"
 	AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationTypeVnc         AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationType = "vnc"
 	AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationTypeAppLauncher AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationType = "app_launcher"
-	AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationTypeWarp        AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationType = "warp"
+	AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationTypeWARP        AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationType = "warp"
 	AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationTypeBiso        AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationType = "biso"
 	AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationTypeBookmark    AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationType = "bookmark"
 	AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationTypeDashSSO     AccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationType = "dash_sso"
@@ -2165,7 +2165,7 @@ const (
 	AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationTypeSSH         AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationType = "ssh"
 	AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationTypeVnc         AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationType = "vnc"
 	AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationTypeAppLauncher AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationType = "app_launcher"
-	AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationTypeWarp        AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationType = "warp"
+	AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationTypeWARP        AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationType = "warp"
 	AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationTypeBiso        AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationType = "biso"
 	AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationTypeBookmark    AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationType = "bookmark"
 	AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationTypeDashSSO     AccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationType = "dash_sso"
@@ -2245,7 +2245,7 @@ type AccessApplicationListResponseSelfHostedApplication struct {
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
-	AllowAuthenticateViaWarp bool `json:"allow_authenticate_via_warp"`
+	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdps []string `json:"allowed_idps"`
@@ -2308,7 +2308,7 @@ type accessApplicationListResponseSelfHostedApplicationJSON struct {
 	Domain                   apijson.Field
 	Type                     apijson.Field
 	ID                       apijson.Field
-	AllowAuthenticateViaWarp apijson.Field
+	AllowAuthenticateViaWARP apijson.Field
 	AllowedIdps              apijson.Field
 	AppLauncherVisible       apijson.Field
 	Aud                      apijson.Field
@@ -2680,7 +2680,7 @@ type AccessApplicationListResponseBrowserSSHApplication struct {
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
-	AllowAuthenticateViaWarp bool `json:"allow_authenticate_via_warp"`
+	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdps []string `json:"allowed_idps"`
@@ -2743,7 +2743,7 @@ type accessApplicationListResponseBrowserSSHApplicationJSON struct {
 	Domain                   apijson.Field
 	Type                     apijson.Field
 	ID                       apijson.Field
-	AllowAuthenticateViaWarp apijson.Field
+	AllowAuthenticateViaWARP apijson.Field
 	AllowedIdps              apijson.Field
 	AppLauncherVisible       apijson.Field
 	Aud                      apijson.Field
@@ -2844,7 +2844,7 @@ type AccessApplicationListResponseBrowserVncApplication struct {
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
-	AllowAuthenticateViaWarp bool `json:"allow_authenticate_via_warp"`
+	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdps []string `json:"allowed_idps"`
@@ -2907,7 +2907,7 @@ type accessApplicationListResponseBrowserVncApplicationJSON struct {
 	Domain                   apijson.Field
 	Type                     apijson.Field
 	ID                       apijson.Field
-	AllowAuthenticateViaWarp apijson.Field
+	AllowAuthenticateViaWARP apijson.Field
 	AllowedIdps              apijson.Field
 	AppLauncherVisible       apijson.Field
 	Aud                      apijson.Field
@@ -3056,7 +3056,7 @@ const (
 	AccessApplicationListResponseAppLauncherApplicationTypeSSH         AccessApplicationListResponseAppLauncherApplicationType = "ssh"
 	AccessApplicationListResponseAppLauncherApplicationTypeVnc         AccessApplicationListResponseAppLauncherApplicationType = "vnc"
 	AccessApplicationListResponseAppLauncherApplicationTypeAppLauncher AccessApplicationListResponseAppLauncherApplicationType = "app_launcher"
-	AccessApplicationListResponseAppLauncherApplicationTypeWarp        AccessApplicationListResponseAppLauncherApplicationType = "warp"
+	AccessApplicationListResponseAppLauncherApplicationTypeWARP        AccessApplicationListResponseAppLauncherApplicationType = "warp"
 	AccessApplicationListResponseAppLauncherApplicationTypeBiso        AccessApplicationListResponseAppLauncherApplicationType = "biso"
 	AccessApplicationListResponseAppLauncherApplicationTypeBookmark    AccessApplicationListResponseAppLauncherApplicationType = "bookmark"
 	AccessApplicationListResponseAppLauncherApplicationTypeDashSSO     AccessApplicationListResponseAppLauncherApplicationType = "dash_sso"
@@ -3123,7 +3123,7 @@ const (
 	AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationTypeSSH         AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationType = "ssh"
 	AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationTypeVnc         AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationType = "vnc"
 	AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationTypeAppLauncher AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationType = "app_launcher"
-	AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationTypeWarp        AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationType = "warp"
+	AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationTypeWARP        AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationType = "warp"
 	AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationTypeBiso        AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationType = "biso"
 	AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationTypeBookmark    AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationType = "bookmark"
 	AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationTypeDashSSO     AccessApplicationListResponseDeviceEnrollmentPermissionsApplicationType = "dash_sso"
@@ -3190,7 +3190,7 @@ const (
 	AccessApplicationListResponseBrowserIsolationPermissionsApplicationTypeSSH         AccessApplicationListResponseBrowserIsolationPermissionsApplicationType = "ssh"
 	AccessApplicationListResponseBrowserIsolationPermissionsApplicationTypeVnc         AccessApplicationListResponseBrowserIsolationPermissionsApplicationType = "vnc"
 	AccessApplicationListResponseBrowserIsolationPermissionsApplicationTypeAppLauncher AccessApplicationListResponseBrowserIsolationPermissionsApplicationType = "app_launcher"
-	AccessApplicationListResponseBrowserIsolationPermissionsApplicationTypeWarp        AccessApplicationListResponseBrowserIsolationPermissionsApplicationType = "warp"
+	AccessApplicationListResponseBrowserIsolationPermissionsApplicationTypeWARP        AccessApplicationListResponseBrowserIsolationPermissionsApplicationType = "warp"
 	AccessApplicationListResponseBrowserIsolationPermissionsApplicationTypeBiso        AccessApplicationListResponseBrowserIsolationPermissionsApplicationType = "biso"
 	AccessApplicationListResponseBrowserIsolationPermissionsApplicationTypeBookmark    AccessApplicationListResponseBrowserIsolationPermissionsApplicationType = "bookmark"
 	AccessApplicationListResponseBrowserIsolationPermissionsApplicationTypeDashSSO     AccessApplicationListResponseBrowserIsolationPermissionsApplicationType = "dash_sso"
@@ -3287,7 +3287,7 @@ type AccessApplicationGetResponseSelfHostedApplication struct {
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
-	AllowAuthenticateViaWarp bool `json:"allow_authenticate_via_warp"`
+	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdps []string `json:"allowed_idps"`
@@ -3350,7 +3350,7 @@ type accessApplicationGetResponseSelfHostedApplicationJSON struct {
 	Domain                   apijson.Field
 	Type                     apijson.Field
 	ID                       apijson.Field
-	AllowAuthenticateViaWarp apijson.Field
+	AllowAuthenticateViaWARP apijson.Field
 	AllowedIdps              apijson.Field
 	AppLauncherVisible       apijson.Field
 	Aud                      apijson.Field
@@ -3721,7 +3721,7 @@ type AccessApplicationGetResponseBrowserSSHApplication struct {
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
-	AllowAuthenticateViaWarp bool `json:"allow_authenticate_via_warp"`
+	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdps []string `json:"allowed_idps"`
@@ -3784,7 +3784,7 @@ type accessApplicationGetResponseBrowserSSHApplicationJSON struct {
 	Domain                   apijson.Field
 	Type                     apijson.Field
 	ID                       apijson.Field
-	AllowAuthenticateViaWarp apijson.Field
+	AllowAuthenticateViaWARP apijson.Field
 	AllowedIdps              apijson.Field
 	AppLauncherVisible       apijson.Field
 	Aud                      apijson.Field
@@ -3884,7 +3884,7 @@ type AccessApplicationGetResponseBrowserVncApplication struct {
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
-	AllowAuthenticateViaWarp bool `json:"allow_authenticate_via_warp"`
+	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdps []string `json:"allowed_idps"`
@@ -3947,7 +3947,7 @@ type accessApplicationGetResponseBrowserVncApplicationJSON struct {
 	Domain                   apijson.Field
 	Type                     apijson.Field
 	ID                       apijson.Field
-	AllowAuthenticateViaWarp apijson.Field
+	AllowAuthenticateViaWARP apijson.Field
 	AllowedIdps              apijson.Field
 	AppLauncherVisible       apijson.Field
 	Aud                      apijson.Field
@@ -4095,7 +4095,7 @@ const (
 	AccessApplicationGetResponseAppLauncherApplicationTypeSSH         AccessApplicationGetResponseAppLauncherApplicationType = "ssh"
 	AccessApplicationGetResponseAppLauncherApplicationTypeVnc         AccessApplicationGetResponseAppLauncherApplicationType = "vnc"
 	AccessApplicationGetResponseAppLauncherApplicationTypeAppLauncher AccessApplicationGetResponseAppLauncherApplicationType = "app_launcher"
-	AccessApplicationGetResponseAppLauncherApplicationTypeWarp        AccessApplicationGetResponseAppLauncherApplicationType = "warp"
+	AccessApplicationGetResponseAppLauncherApplicationTypeWARP        AccessApplicationGetResponseAppLauncherApplicationType = "warp"
 	AccessApplicationGetResponseAppLauncherApplicationTypeBiso        AccessApplicationGetResponseAppLauncherApplicationType = "biso"
 	AccessApplicationGetResponseAppLauncherApplicationTypeBookmark    AccessApplicationGetResponseAppLauncherApplicationType = "bookmark"
 	AccessApplicationGetResponseAppLauncherApplicationTypeDashSSO     AccessApplicationGetResponseAppLauncherApplicationType = "dash_sso"
@@ -4162,7 +4162,7 @@ const (
 	AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationTypeSSH         AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationType = "ssh"
 	AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationTypeVnc         AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationType = "vnc"
 	AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationTypeAppLauncher AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationType = "app_launcher"
-	AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationTypeWarp        AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationType = "warp"
+	AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationTypeWARP        AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationType = "warp"
 	AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationTypeBiso        AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationType = "biso"
 	AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationTypeBookmark    AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationType = "bookmark"
 	AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationTypeDashSSO     AccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationType = "dash_sso"
@@ -4229,7 +4229,7 @@ const (
 	AccessApplicationGetResponseBrowserIsolationPermissionsApplicationTypeSSH         AccessApplicationGetResponseBrowserIsolationPermissionsApplicationType = "ssh"
 	AccessApplicationGetResponseBrowserIsolationPermissionsApplicationTypeVnc         AccessApplicationGetResponseBrowserIsolationPermissionsApplicationType = "vnc"
 	AccessApplicationGetResponseBrowserIsolationPermissionsApplicationTypeAppLauncher AccessApplicationGetResponseBrowserIsolationPermissionsApplicationType = "app_launcher"
-	AccessApplicationGetResponseBrowserIsolationPermissionsApplicationTypeWarp        AccessApplicationGetResponseBrowserIsolationPermissionsApplicationType = "warp"
+	AccessApplicationGetResponseBrowserIsolationPermissionsApplicationTypeWARP        AccessApplicationGetResponseBrowserIsolationPermissionsApplicationType = "warp"
 	AccessApplicationGetResponseBrowserIsolationPermissionsApplicationTypeBiso        AccessApplicationGetResponseBrowserIsolationPermissionsApplicationType = "biso"
 	AccessApplicationGetResponseBrowserIsolationPermissionsApplicationTypeBookmark    AccessApplicationGetResponseBrowserIsolationPermissionsApplicationType = "bookmark"
 	AccessApplicationGetResponseBrowserIsolationPermissionsApplicationTypeDashSSO     AccessApplicationGetResponseBrowserIsolationPermissionsApplicationType = "dash_sso"
@@ -4291,7 +4291,7 @@ type AccessApplicationNewParams struct {
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
-	AllowAuthenticateViaWarp param.Field[bool] `json:"allow_authenticate_via_warp"`
+	AllowAuthenticateViaWARP param.Field[bool] `json:"allow_authenticate_via_warp"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdps        param.Field[[]string]    `json:"allowed_idps"`
@@ -4610,7 +4610,7 @@ type AccessApplicationUpdateParams struct {
 	// session. When set to false this application will always require direct IdP
 	// authentication. This setting always overrides the organization setting for WARP
 	// authentication.
-	AllowAuthenticateViaWarp param.Field[bool] `json:"allow_authenticate_via_warp"`
+	AllowAuthenticateViaWARP param.Field[bool] `json:"allow_authenticate_via_warp"`
 	// The identity providers your users can select when connecting to this
 	// application. Defaults to all IdPs configured in your account.
 	AllowedIdps        param.Field[[]string]    `json:"allowed_idps"`

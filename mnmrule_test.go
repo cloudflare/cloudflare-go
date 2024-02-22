@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestMnmRuleNew(t *testing.T) {
+func TestMNMRuleNew(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,7 +29,7 @@ func TestMnmRuleNew(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Mnms.Rules.New(context.TODO(), "6f91088a406011ed95aed352566e8d4c")
+	_, err := client.MNMs.Rules.New(context.TODO(), "6f91088a406011ed95aed352566e8d4c")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -39,7 +39,7 @@ func TestMnmRuleNew(t *testing.T) {
 	}
 }
 
-func TestMnmRuleUpdate(t *testing.T) {
+func TestMNMRuleUpdate(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -55,7 +55,7 @@ func TestMnmRuleUpdate(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Mnms.Rules.Update(context.TODO(), "6f91088a406011ed95aed352566e8d4c")
+	_, err := client.MNMs.Rules.Update(context.TODO(), "6f91088a406011ed95aed352566e8d4c")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -65,7 +65,7 @@ func TestMnmRuleUpdate(t *testing.T) {
 	}
 }
 
-func TestMnmRuleList(t *testing.T) {
+func TestMNMRuleList(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -81,7 +81,7 @@ func TestMnmRuleList(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Mnms.Rules.List(context.TODO(), "6f91088a406011ed95aed352566e8d4c")
+	_, err := client.MNMs.Rules.List(context.TODO(), "6f91088a406011ed95aed352566e8d4c")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -91,7 +91,7 @@ func TestMnmRuleList(t *testing.T) {
 	}
 }
 
-func TestMnmRuleDelete(t *testing.T) {
+func TestMNMRuleDelete(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -107,7 +107,7 @@ func TestMnmRuleDelete(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Mnms.Rules.Delete(
+	_, err := client.MNMs.Rules.Delete(
 		context.TODO(),
 		"6f91088a406011ed95aed352566e8d4c",
 		"2890e6fa406311ed9b5a23f70f6fb8cf",
@@ -121,7 +121,7 @@ func TestMnmRuleDelete(t *testing.T) {
 	}
 }
 
-func TestMnmRuleEdit(t *testing.T) {
+func TestMNMRuleEdit(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -137,7 +137,7 @@ func TestMnmRuleEdit(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Mnms.Rules.Edit(
+	_, err := client.MNMs.Rules.Edit(
 		context.TODO(),
 		"6f91088a406011ed95aed352566e8d4c",
 		"2890e6fa406311ed9b5a23f70f6fb8cf",
@@ -151,7 +151,7 @@ func TestMnmRuleEdit(t *testing.T) {
 	}
 }
 
-func TestMnmRuleGet(t *testing.T) {
+func TestMNMRuleGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -167,7 +167,7 @@ func TestMnmRuleGet(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Mnms.Rules.Get(
+	_, err := client.MNMs.Rules.Get(
 		context.TODO(),
 		"6f91088a406011ed95aed352566e8d4c",
 		"2890e6fa406311ed9b5a23f70f6fb8cf",

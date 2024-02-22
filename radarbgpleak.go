@@ -47,7 +47,7 @@ func (r *RadarBGPLeakService) Events(ctx context.Context, query RadarBGPLeakEven
 }
 
 type RadarBGPLeakEventsResponse struct {
-	AsnInfo []RadarBGPLeakEventsResponseAsnInfo `json:"asn_info,required"`
+	ASNInfo []RadarBGPLeakEventsResponseASNInfo `json:"asn_info,required"`
 	Events  []RadarBGPLeakEventsResponseEvent   `json:"events,required"`
 	JSON    radarBGPLeakEventsResponseJSON      `json:"-"`
 }
@@ -55,7 +55,7 @@ type RadarBGPLeakEventsResponse struct {
 // radarBGPLeakEventsResponseJSON contains the JSON metadata for the struct
 // [RadarBGPLeakEventsResponse]
 type radarBGPLeakEventsResponseJSON struct {
-	AsnInfo     apijson.Field
+	ASNInfo     apijson.Field
 	Events      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -65,24 +65,24 @@ func (r *RadarBGPLeakEventsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarBGPLeakEventsResponseAsnInfo struct {
-	Asn         int64                                 `json:"asn,required"`
+type RadarBGPLeakEventsResponseASNInfo struct {
+	ASN         int64                                 `json:"asn,required"`
 	CountryCode string                                `json:"country_code,required"`
 	OrgName     string                                `json:"org_name,required"`
-	JSON        radarBGPLeakEventsResponseAsnInfoJSON `json:"-"`
+	JSON        radarBGPLeakEventsResponseASNInfoJSON `json:"-"`
 }
 
-// radarBGPLeakEventsResponseAsnInfoJSON contains the JSON metadata for the struct
-// [RadarBGPLeakEventsResponseAsnInfo]
-type radarBGPLeakEventsResponseAsnInfoJSON struct {
-	Asn         apijson.Field
+// radarBGPLeakEventsResponseASNInfoJSON contains the JSON metadata for the struct
+// [RadarBGPLeakEventsResponseASNInfo]
+type radarBGPLeakEventsResponseASNInfoJSON struct {
+	ASN         apijson.Field
 	CountryCode apijson.Field
 	OrgName     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarBGPLeakEventsResponseAsnInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarBGPLeakEventsResponseASNInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -91,7 +91,7 @@ type RadarBGPLeakEventsResponseEvent struct {
 	Countries   []string                            `json:"countries,required"`
 	DetectedTs  string                              `json:"detected_ts,required"`
 	Finished    bool                                `json:"finished,required"`
-	LeakAsn     int64                               `json:"leak_asn,required"`
+	LeakASN     int64                               `json:"leak_asn,required"`
 	LeakCount   int64                               `json:"leak_count,required"`
 	LeakSeg     []int64                             `json:"leak_seg,required"`
 	LeakType    int64                               `json:"leak_type,required"`
@@ -110,7 +110,7 @@ type radarBGPLeakEventsResponseEventJSON struct {
 	Countries   apijson.Field
 	DetectedTs  apijson.Field
 	Finished    apijson.Field
-	LeakAsn     apijson.Field
+	LeakASN     apijson.Field
 	LeakCount   apijson.Field
 	LeakSeg     apijson.Field
 	LeakType    apijson.Field
@@ -140,11 +140,11 @@ type RadarBGPLeakEventsParams struct {
 	// Format results are returned in.
 	Format param.Field[RadarBGPLeakEventsParamsFormat] `query:"format"`
 	// ASN that is causing or affected by a route leak event
-	InvolvedAsn param.Field[int64] `query:"involvedAsn"`
+	InvolvedASN param.Field[int64] `query:"involvedAsn"`
 	// Country code of a involved ASN in a route leak event
 	InvolvedCountry param.Field[string] `query:"involvedCountry"`
 	// The leaking AS of a route leak event
-	LeakAsn param.Field[int64] `query:"leakAsn"`
+	LeakASN param.Field[int64] `query:"leakAsn"`
 	// Current page number, starting from 1
 	Page param.Field[int64] `query:"page"`
 	// Number of entries per page

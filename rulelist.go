@@ -151,7 +151,7 @@ const (
 	RuleListListResponseKindIP       RuleListListResponseKind = "ip"
 	RuleListListResponseKindRedirect RuleListListResponseKind = "redirect"
 	RuleListListResponseKindHostname RuleListListResponseKind = "hostname"
-	RuleListListResponseKindAsn      RuleListListResponseKind = "asn"
+	RuleListListResponseKindASN      RuleListListResponseKind = "asn"
 )
 
 type RuleListDeleteResponse struct {
@@ -196,7 +196,7 @@ const (
 	RuleListNewParamsKindIP       RuleListNewParamsKind = "ip"
 	RuleListNewParamsKindRedirect RuleListNewParamsKind = "redirect"
 	RuleListNewParamsKindHostname RuleListNewParamsKind = "hostname"
-	RuleListNewParamsKindAsn      RuleListNewParamsKind = "asn"
+	RuleListNewParamsKindASN      RuleListNewParamsKind = "asn"
 )
 
 type RuleListNewResponseEnvelope struct {

@@ -219,7 +219,7 @@ const (
 	AlertingV3PolicyListResponseAlertTypeLogoMatchAlert                                AlertingV3PolicyListResponseAlertType = "logo_match_alert"
 	AlertingV3PolicyListResponseAlertTypeMagicTunnelHealthCheckEvent                   AlertingV3PolicyListResponseAlertType = "magic_tunnel_health_check_event"
 	AlertingV3PolicyListResponseAlertTypeMaintenanceEventNotification                  AlertingV3PolicyListResponseAlertType = "maintenance_event_notification"
-	AlertingV3PolicyListResponseAlertTypeMtlsCertificateStoreCertificateExpirationType AlertingV3PolicyListResponseAlertType = "mtls_certificate_store_certificate_expiration_type"
+	AlertingV3PolicyListResponseAlertTypeMTLSCertificateStoreCertificateExpirationType AlertingV3PolicyListResponseAlertType = "mtls_certificate_store_certificate_expiration_type"
 	AlertingV3PolicyListResponseAlertTypePagesEventAlert                               AlertingV3PolicyListResponseAlertType = "pages_event_alert"
 	AlertingV3PolicyListResponseAlertTypeRadarNotification                             AlertingV3PolicyListResponseAlertType = "radar_notification"
 	AlertingV3PolicyListResponseAlertTypeRealOriginMonitoring                          AlertingV3PolicyListResponseAlertType = "real_origin_monitoring"
@@ -250,7 +250,7 @@ type AlertingV3PolicyListResponseFilters struct {
 	// Usage depends on specific alert type
 	Actions []string `json:"actions"`
 	// Used for configuring radar_notification
-	AffectedAsns []string `json:"affected_asns"`
+	AffectedASNs []string `json:"affected_asns"`
 	// Used for configuring incident_alert
 	AffectedComponents []string `json:"affected_components"`
 	// Used for configuring radar_notification
@@ -334,7 +334,7 @@ type AlertingV3PolicyListResponseFilters struct {
 // struct [AlertingV3PolicyListResponseFilters]
 type alertingV3PolicyListResponseFiltersJSON struct {
 	Actions                      apijson.Field
-	AffectedAsns                 apijson.Field
+	AffectedASNs                 apijson.Field
 	AffectedComponents           apijson.Field
 	AffectedLocations            apijson.Field
 	AirportCode                  apijson.Field
@@ -548,7 +548,7 @@ const (
 	AlertingV3PolicyGetResponseAlertTypeLogoMatchAlert                                AlertingV3PolicyGetResponseAlertType = "logo_match_alert"
 	AlertingV3PolicyGetResponseAlertTypeMagicTunnelHealthCheckEvent                   AlertingV3PolicyGetResponseAlertType = "magic_tunnel_health_check_event"
 	AlertingV3PolicyGetResponseAlertTypeMaintenanceEventNotification                  AlertingV3PolicyGetResponseAlertType = "maintenance_event_notification"
-	AlertingV3PolicyGetResponseAlertTypeMtlsCertificateStoreCertificateExpirationType AlertingV3PolicyGetResponseAlertType = "mtls_certificate_store_certificate_expiration_type"
+	AlertingV3PolicyGetResponseAlertTypeMTLSCertificateStoreCertificateExpirationType AlertingV3PolicyGetResponseAlertType = "mtls_certificate_store_certificate_expiration_type"
 	AlertingV3PolicyGetResponseAlertTypePagesEventAlert                               AlertingV3PolicyGetResponseAlertType = "pages_event_alert"
 	AlertingV3PolicyGetResponseAlertTypeRadarNotification                             AlertingV3PolicyGetResponseAlertType = "radar_notification"
 	AlertingV3PolicyGetResponseAlertTypeRealOriginMonitoring                          AlertingV3PolicyGetResponseAlertType = "real_origin_monitoring"
@@ -579,7 +579,7 @@ type AlertingV3PolicyGetResponseFilters struct {
 	// Usage depends on specific alert type
 	Actions []string `json:"actions"`
 	// Used for configuring radar_notification
-	AffectedAsns []string `json:"affected_asns"`
+	AffectedASNs []string `json:"affected_asns"`
 	// Used for configuring incident_alert
 	AffectedComponents []string `json:"affected_components"`
 	// Used for configuring radar_notification
@@ -663,7 +663,7 @@ type AlertingV3PolicyGetResponseFilters struct {
 // [AlertingV3PolicyGetResponseFilters]
 type alertingV3PolicyGetResponseFiltersJSON struct {
 	Actions                      apijson.Field
-	AffectedAsns                 apijson.Field
+	AffectedASNs                 apijson.Field
 	AffectedComponents           apijson.Field
 	AffectedLocations            apijson.Field
 	AirportCode                  apijson.Field
@@ -835,7 +835,7 @@ const (
 	AlertingV3PolicyNewParamsAlertTypeLogoMatchAlert                                AlertingV3PolicyNewParamsAlertType = "logo_match_alert"
 	AlertingV3PolicyNewParamsAlertTypeMagicTunnelHealthCheckEvent                   AlertingV3PolicyNewParamsAlertType = "magic_tunnel_health_check_event"
 	AlertingV3PolicyNewParamsAlertTypeMaintenanceEventNotification                  AlertingV3PolicyNewParamsAlertType = "maintenance_event_notification"
-	AlertingV3PolicyNewParamsAlertTypeMtlsCertificateStoreCertificateExpirationType AlertingV3PolicyNewParamsAlertType = "mtls_certificate_store_certificate_expiration_type"
+	AlertingV3PolicyNewParamsAlertTypeMTLSCertificateStoreCertificateExpirationType AlertingV3PolicyNewParamsAlertType = "mtls_certificate_store_certificate_expiration_type"
 	AlertingV3PolicyNewParamsAlertTypePagesEventAlert                               AlertingV3PolicyNewParamsAlertType = "pages_event_alert"
 	AlertingV3PolicyNewParamsAlertTypeRadarNotification                             AlertingV3PolicyNewParamsAlertType = "radar_notification"
 	AlertingV3PolicyNewParamsAlertTypeRealOriginMonitoring                          AlertingV3PolicyNewParamsAlertType = "real_origin_monitoring"
@@ -882,7 +882,7 @@ type AlertingV3PolicyNewParamsFilters struct {
 	// Usage depends on specific alert type
 	Actions param.Field[[]string] `json:"actions"`
 	// Used for configuring radar_notification
-	AffectedAsns param.Field[[]string] `json:"affected_asns"`
+	AffectedASNs param.Field[[]string] `json:"affected_asns"`
 	// Used for configuring incident_alert
 	AffectedComponents param.Field[[]string] `json:"affected_components"`
 	// Used for configuring radar_notification
@@ -1119,7 +1119,7 @@ const (
 	AlertingV3PolicyUpdateParamsAlertTypeLogoMatchAlert                                AlertingV3PolicyUpdateParamsAlertType = "logo_match_alert"
 	AlertingV3PolicyUpdateParamsAlertTypeMagicTunnelHealthCheckEvent                   AlertingV3PolicyUpdateParamsAlertType = "magic_tunnel_health_check_event"
 	AlertingV3PolicyUpdateParamsAlertTypeMaintenanceEventNotification                  AlertingV3PolicyUpdateParamsAlertType = "maintenance_event_notification"
-	AlertingV3PolicyUpdateParamsAlertTypeMtlsCertificateStoreCertificateExpirationType AlertingV3PolicyUpdateParamsAlertType = "mtls_certificate_store_certificate_expiration_type"
+	AlertingV3PolicyUpdateParamsAlertTypeMTLSCertificateStoreCertificateExpirationType AlertingV3PolicyUpdateParamsAlertType = "mtls_certificate_store_certificate_expiration_type"
 	AlertingV3PolicyUpdateParamsAlertTypePagesEventAlert                               AlertingV3PolicyUpdateParamsAlertType = "pages_event_alert"
 	AlertingV3PolicyUpdateParamsAlertTypeRadarNotification                             AlertingV3PolicyUpdateParamsAlertType = "radar_notification"
 	AlertingV3PolicyUpdateParamsAlertTypeRealOriginMonitoring                          AlertingV3PolicyUpdateParamsAlertType = "real_origin_monitoring"
@@ -1150,7 +1150,7 @@ type AlertingV3PolicyUpdateParamsFilters struct {
 	// Usage depends on specific alert type
 	Actions param.Field[[]string] `json:"actions"`
 	// Used for configuring radar_notification
-	AffectedAsns param.Field[[]string] `json:"affected_asns"`
+	AffectedASNs param.Field[[]string] `json:"affected_asns"`
 	// Used for configuring incident_alert
 	AffectedComponents param.Field[[]string] `json:"affected_components"`
 	// Used for configuring radar_notification

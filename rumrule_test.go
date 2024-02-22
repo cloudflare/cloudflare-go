@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestRumRuleNewWithOptionalParams(t *testing.T) {
+func TestRUMRuleNewWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,11 +29,11 @@ func TestRumRuleNewWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Rum.Rules.New(
+	_, err := client.RUM.Rules.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-		cloudflare.RumRuleNewParams{
+		cloudflare.RUMRuleNewParams{
 			Host:      cloudflare.F("example.com"),
 			Inclusive: cloudflare.F(true),
 			IsPaused:  cloudflare.F(false),
@@ -49,7 +49,7 @@ func TestRumRuleNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestRumRuleUpdateWithOptionalParams(t *testing.T) {
+func TestRUMRuleUpdateWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -65,12 +65,12 @@ func TestRumRuleUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Rum.Rules.Update(
+	_, err := client.RUM.Rules.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-		cloudflare.RumRuleUpdateParams{
+		cloudflare.RUMRuleUpdateParams{
 			Host:      cloudflare.F("example.com"),
 			Inclusive: cloudflare.F(true),
 			IsPaused:  cloudflare.F(false),
@@ -86,7 +86,7 @@ func TestRumRuleUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestRumRuleList(t *testing.T) {
+func TestRUMRuleList(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -102,7 +102,7 @@ func TestRumRuleList(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Rum.Rules.List(
+	_, err := client.RUM.Rules.List(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
@@ -116,7 +116,7 @@ func TestRumRuleList(t *testing.T) {
 	}
 }
 
-func TestRumRuleDelete(t *testing.T) {
+func TestRUMRuleDelete(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -132,7 +132,7 @@ func TestRumRuleDelete(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Rum.Rules.Delete(
+	_, err := client.RUM.Rules.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",

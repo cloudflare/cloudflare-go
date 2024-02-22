@@ -153,7 +153,7 @@ func (r *DiagnosticTracerouteNewResponseColosHop) UnmarshalJSON(data []byte) (er
 
 type DiagnosticTracerouteNewResponseColosHopsNode struct {
 	// AS number associated with the node object.
-	Asn string `json:"asn"`
+	ASN string `json:"asn"`
 	// IP address of the node.
 	IP string `json:"ip"`
 	// Field appears if there is an additional annotation printed when the probe
@@ -178,7 +178,7 @@ type DiagnosticTracerouteNewResponseColosHopsNode struct {
 // diagnosticTracerouteNewResponseColosHopsNodeJSON contains the JSON metadata for
 // the struct [DiagnosticTracerouteNewResponseColosHopsNode]
 type diagnosticTracerouteNewResponseColosHopsNodeJSON struct {
-	Asn         apijson.Field
+	ASN         apijson.Field
 	IP          apijson.Field
 	Labels      apijson.Field
 	MaxRTTMs    apijson.Field
@@ -233,8 +233,8 @@ const (
 	DiagnosticTracerouteNewParamsOptionsPacketTypeIcmp    DiagnosticTracerouteNewParamsOptionsPacketType = "icmp"
 	DiagnosticTracerouteNewParamsOptionsPacketTypeTcp     DiagnosticTracerouteNewParamsOptionsPacketType = "tcp"
 	DiagnosticTracerouteNewParamsOptionsPacketTypeUdp     DiagnosticTracerouteNewParamsOptionsPacketType = "udp"
-	DiagnosticTracerouteNewParamsOptionsPacketTypeGre     DiagnosticTracerouteNewParamsOptionsPacketType = "gre"
-	DiagnosticTracerouteNewParamsOptionsPacketTypeGreIcmp DiagnosticTracerouteNewParamsOptionsPacketType = "gre+icmp"
+	DiagnosticTracerouteNewParamsOptionsPacketTypeGRE     DiagnosticTracerouteNewParamsOptionsPacketType = "gre"
+	DiagnosticTracerouteNewParamsOptionsPacketTypeGREIcmp DiagnosticTracerouteNewParamsOptionsPacketType = "gre+icmp"
 )
 
 type DiagnosticTracerouteNewResponseEnvelope struct {

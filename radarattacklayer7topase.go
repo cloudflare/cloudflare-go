@@ -160,8 +160,8 @@ func (r *RadarAttackLayer7TopAseOriginResponseMetaConfidenceInfoAnnotation) Unma
 }
 
 type RadarAttackLayer7TopAseOriginResponseTop0 struct {
-	OriginAsn     string                                        `json:"originAsn,required"`
-	OriginAsnName string                                        `json:"originAsnName,required"`
+	OriginASN     string                                        `json:"originAsn,required"`
+	OriginASNName string                                        `json:"originAsnName,required"`
 	Rank          float64                                       `json:"rank,required"`
 	Value         string                                        `json:"value,required"`
 	JSON          radarAttackLayer7TopAseOriginResponseTop0JSON `json:"-"`
@@ -170,8 +170,8 @@ type RadarAttackLayer7TopAseOriginResponseTop0 struct {
 // radarAttackLayer7TopAseOriginResponseTop0JSON contains the JSON metadata for the
 // struct [RadarAttackLayer7TopAseOriginResponseTop0]
 type radarAttackLayer7TopAseOriginResponseTop0JSON struct {
-	OriginAsn     apijson.Field
-	OriginAsnName apijson.Field
+	OriginASN     apijson.Field
+	OriginASNName apijson.Field
 	Rank          apijson.Field
 	Value         apijson.Field
 	raw           string

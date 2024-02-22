@@ -159,7 +159,7 @@ func (r *RadarEmailSecurityTopAseSPFGetResponseMetaConfidenceInfoAnnotation) Unm
 }
 
 type RadarEmailSecurityTopAseSPFGetResponseTop0 struct {
-	ClientAsn    int64                                          `json:"clientASN,required"`
+	ClientASN    int64                                          `json:"clientASN,required"`
 	ClientAsName string                                         `json:"clientASName,required"`
 	Value        string                                         `json:"value,required"`
 	JSON         radarEmailSecurityTopAseSPFGetResponseTop0JSON `json:"-"`
@@ -168,7 +168,7 @@ type RadarEmailSecurityTopAseSPFGetResponseTop0 struct {
 // radarEmailSecurityTopAseSPFGetResponseTop0JSON contains the JSON metadata for
 // the struct [RadarEmailSecurityTopAseSPFGetResponseTop0]
 type radarEmailSecurityTopAseSPFGetResponseTop0JSON struct {
-	ClientAsn    apijson.Field
+	ClientASN    apijson.Field
 	ClientAsName apijson.Field
 	Value        apijson.Field
 	raw          string
@@ -181,11 +181,11 @@ func (r *RadarEmailSecurityTopAseSPFGetResponseTop0) UnmarshalJSON(data []byte) 
 
 type RadarEmailSecurityTopAseSPFGetParams struct {
 	// Filter for arc (Authenticated Received Chain).
-	Arc param.Field[[]RadarEmailSecurityTopAseSPFGetParamsArc] `query:"arc"`
+	ARC param.Field[[]RadarEmailSecurityTopAseSPFGetParamsARC] `query:"arc"`
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
@@ -197,7 +197,7 @@ type RadarEmailSecurityTopAseSPFGetParams struct {
 	// Filter for dkim.
 	DKIM param.Field[[]RadarEmailSecurityTopAseSPFGetParamsDKIM] `query:"dkim"`
 	// Filter for dmarc.
-	Dmarc param.Field[[]RadarEmailSecurityTopAseSPFGetParamsDmarc] `query:"dmarc"`
+	DMARC param.Field[[]RadarEmailSecurityTopAseSPFGetParamsDMARC] `query:"dmarc"`
 	// Format results are returned in.
 	Format param.Field[RadarEmailSecurityTopAseSPFGetParamsFormat] `query:"format"`
 	// Limit the number of objects in the response.
@@ -228,12 +228,12 @@ const (
 	RadarEmailSecurityTopAseSPFGetParamsSPFFail RadarEmailSecurityTopAseSPFGetParamsSPF = "FAIL"
 )
 
-type RadarEmailSecurityTopAseSPFGetParamsArc string
+type RadarEmailSecurityTopAseSPFGetParamsARC string
 
 const (
-	RadarEmailSecurityTopAseSPFGetParamsArcPass RadarEmailSecurityTopAseSPFGetParamsArc = "PASS"
-	RadarEmailSecurityTopAseSPFGetParamsArcNone RadarEmailSecurityTopAseSPFGetParamsArc = "NONE"
-	RadarEmailSecurityTopAseSPFGetParamsArcFail RadarEmailSecurityTopAseSPFGetParamsArc = "FAIL"
+	RadarEmailSecurityTopAseSPFGetParamsARCPass RadarEmailSecurityTopAseSPFGetParamsARC = "PASS"
+	RadarEmailSecurityTopAseSPFGetParamsARCNone RadarEmailSecurityTopAseSPFGetParamsARC = "NONE"
+	RadarEmailSecurityTopAseSPFGetParamsARCFail RadarEmailSecurityTopAseSPFGetParamsARC = "FAIL"
 )
 
 type RadarEmailSecurityTopAseSPFGetParamsDateRange string
@@ -264,12 +264,12 @@ const (
 	RadarEmailSecurityTopAseSPFGetParamsDKIMFail RadarEmailSecurityTopAseSPFGetParamsDKIM = "FAIL"
 )
 
-type RadarEmailSecurityTopAseSPFGetParamsDmarc string
+type RadarEmailSecurityTopAseSPFGetParamsDMARC string
 
 const (
-	RadarEmailSecurityTopAseSPFGetParamsDmarcPass RadarEmailSecurityTopAseSPFGetParamsDmarc = "PASS"
-	RadarEmailSecurityTopAseSPFGetParamsDmarcNone RadarEmailSecurityTopAseSPFGetParamsDmarc = "NONE"
-	RadarEmailSecurityTopAseSPFGetParamsDmarcFail RadarEmailSecurityTopAseSPFGetParamsDmarc = "FAIL"
+	RadarEmailSecurityTopAseSPFGetParamsDMARCPass RadarEmailSecurityTopAseSPFGetParamsDMARC = "PASS"
+	RadarEmailSecurityTopAseSPFGetParamsDMARCNone RadarEmailSecurityTopAseSPFGetParamsDMARC = "NONE"
+	RadarEmailSecurityTopAseSPFGetParamsDMARCFail RadarEmailSecurityTopAseSPFGetParamsDMARC = "FAIL"
 )
 
 // Format results are returned in.

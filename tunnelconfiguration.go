@@ -118,7 +118,7 @@ type TunnelConfigurationUpdateParamsConfig struct {
 	// Configuration parameters of connection between cloudflared and origin server.
 	OriginRequest param.Field[TunnelConfigurationUpdateParamsConfigOriginRequest] `json:"originRequest"`
 	// Enable private network access from WARP users to private network routes
-	WarpRouting param.Field[TunnelConfigurationUpdateParamsConfigWarpRouting] `json:"warp-routing"`
+	WARPRouting param.Field[TunnelConfigurationUpdateParamsConfigWARPRouting] `json:"warp-routing"`
 }
 
 func (r TunnelConfigurationUpdateParamsConfig) MarshalJSON() (data []byte, err error) {
@@ -270,11 +270,11 @@ func (r TunnelConfigurationUpdateParamsConfigOriginRequestAccess) MarshalJSON() 
 }
 
 // Enable private network access from WARP users to private network routes
-type TunnelConfigurationUpdateParamsConfigWarpRouting struct {
+type TunnelConfigurationUpdateParamsConfigWARPRouting struct {
 	Enabled param.Field[bool] `json:"enabled"`
 }
 
-func (r TunnelConfigurationUpdateParamsConfigWarpRouting) MarshalJSON() (data []byte, err error) {
+func (r TunnelConfigurationUpdateParamsConfigWARPRouting) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

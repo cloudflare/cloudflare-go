@@ -71,8 +71,8 @@ type RadarTrafficAnomalyGetResponseTrafficAnomaly struct {
 	StartDate            string                                                        `json:"startDate,required"`
 	Status               string                                                        `json:"status,required"`
 	Type                 string                                                        `json:"type,required"`
-	Uuid                 string                                                        `json:"uuid,required"`
-	AsnDetails           RadarTrafficAnomalyGetResponseTrafficAnomaliesAsnDetails      `json:"asnDetails"`
+	UUID                 string                                                        `json:"uuid,required"`
+	ASNDetails           RadarTrafficAnomalyGetResponseTrafficAnomaliesASNDetails      `json:"asnDetails"`
 	EndDate              string                                                        `json:"endDate"`
 	LocationDetails      RadarTrafficAnomalyGetResponseTrafficAnomaliesLocationDetails `json:"locationDetails"`
 	VisibleInDataSources []string                                                      `json:"visibleInDataSources"`
@@ -85,8 +85,8 @@ type radarTrafficAnomalyGetResponseTrafficAnomalyJSON struct {
 	StartDate            apijson.Field
 	Status               apijson.Field
 	Type                 apijson.Field
-	Uuid                 apijson.Field
-	AsnDetails           apijson.Field
+	UUID                 apijson.Field
+	ASNDetails           apijson.Field
 	EndDate              apijson.Field
 	LocationDetails      apijson.Field
 	VisibleInDataSources apijson.Field
@@ -98,45 +98,45 @@ func (r *RadarTrafficAnomalyGetResponseTrafficAnomaly) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarTrafficAnomalyGetResponseTrafficAnomaliesAsnDetails struct {
-	Asn       string                                                            `json:"asn,required"`
+type RadarTrafficAnomalyGetResponseTrafficAnomaliesASNDetails struct {
+	ASN       string                                                            `json:"asn,required"`
 	Name      string                                                            `json:"name,required"`
-	Locations RadarTrafficAnomalyGetResponseTrafficAnomaliesAsnDetailsLocations `json:"locations"`
-	JSON      radarTrafficAnomalyGetResponseTrafficAnomaliesAsnDetailsJSON      `json:"-"`
+	Locations RadarTrafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocations `json:"locations"`
+	JSON      radarTrafficAnomalyGetResponseTrafficAnomaliesASNDetailsJSON      `json:"-"`
 }
 
-// radarTrafficAnomalyGetResponseTrafficAnomaliesAsnDetailsJSON contains the JSON
+// radarTrafficAnomalyGetResponseTrafficAnomaliesASNDetailsJSON contains the JSON
 // metadata for the struct
-// [RadarTrafficAnomalyGetResponseTrafficAnomaliesAsnDetails]
-type radarTrafficAnomalyGetResponseTrafficAnomaliesAsnDetailsJSON struct {
-	Asn         apijson.Field
+// [RadarTrafficAnomalyGetResponseTrafficAnomaliesASNDetails]
+type radarTrafficAnomalyGetResponseTrafficAnomaliesASNDetailsJSON struct {
+	ASN         apijson.Field
 	Name        apijson.Field
 	Locations   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarTrafficAnomalyGetResponseTrafficAnomaliesAsnDetails) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarTrafficAnomalyGetResponseTrafficAnomaliesASNDetails) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarTrafficAnomalyGetResponseTrafficAnomaliesAsnDetailsLocations struct {
+type RadarTrafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocations struct {
 	Code string                                                                `json:"code,required"`
 	Name string                                                                `json:"name,required"`
-	JSON radarTrafficAnomalyGetResponseTrafficAnomaliesAsnDetailsLocationsJSON `json:"-"`
+	JSON radarTrafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocationsJSON `json:"-"`
 }
 
-// radarTrafficAnomalyGetResponseTrafficAnomaliesAsnDetailsLocationsJSON contains
+// radarTrafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocationsJSON contains
 // the JSON metadata for the struct
-// [RadarTrafficAnomalyGetResponseTrafficAnomaliesAsnDetailsLocations]
-type radarTrafficAnomalyGetResponseTrafficAnomaliesAsnDetailsLocationsJSON struct {
+// [RadarTrafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocations]
+type radarTrafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocationsJSON struct {
 	Code        apijson.Field
 	Name        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarTrafficAnomalyGetResponseTrafficAnomaliesAsnDetailsLocations) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarTrafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocations) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -162,7 +162,7 @@ func (r *RadarTrafficAnomalyGetResponseTrafficAnomaliesLocationDetails) Unmarsha
 
 type RadarTrafficAnomalyGetParams struct {
 	// Single ASN as integer.
-	Asn param.Field[int64] `query:"asn"`
+	ASN param.Field[int64] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[time.Time] `query:"dateEnd" format:"date-time"`
 	// Shorthand date ranges for the last X days - use when you don't need specific

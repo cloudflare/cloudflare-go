@@ -108,10 +108,10 @@ type AccessApplicationUserPolicyCheckListResponseUserIdentity struct {
 	Geo            AccessApplicationUserPolicyCheckListResponseUserIdentityGeo `json:"geo"`
 	Iat            int64                                                       `json:"iat"`
 	IsGateway      bool                                                        `json:"is_gateway"`
-	IsWarp         bool                                                        `json:"is_warp"`
+	IsWARP         bool                                                        `json:"is_warp"`
 	Name           string                                                      `json:"name"`
 	// UUID
-	UserUuid string                                                       `json:"user_uuid"`
+	UserUUID string                                                       `json:"user_uuid"`
 	Version  int64                                                        `json:"version"`
 	JSON     accessApplicationUserPolicyCheckListResponseUserIdentityJSON `json:"-"`
 }
@@ -127,9 +127,9 @@ type accessApplicationUserPolicyCheckListResponseUserIdentityJSON struct {
 	Geo            apijson.Field
 	Iat            apijson.Field
 	IsGateway      apijson.Field
-	IsWarp         apijson.Field
+	IsWARP         apijson.Field
 	Name           apijson.Field
-	UserUuid       apijson.Field
+	UserUUID       apijson.Field
 	Version        apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field

@@ -33,9 +33,9 @@ func TestAddressPrefixNew(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.AddressPrefixNewParams{
-			Asn:           cloudflare.F(int64(209242)),
+			ASN:           cloudflare.F(int64(209242)),
 			Cidr:          cloudflare.F("192.0.2.0/24"),
-			LoaDocumentID: cloudflare.F("d933b1530bc56c9953cf8ce166da8004"),
+			LOADocumentID: cloudflare.F("d933b1530bc56c9953cf8ce166da8004"),
 		},
 	)
 	if err != nil {

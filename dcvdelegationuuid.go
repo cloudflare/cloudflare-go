@@ -12,29 +12,29 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-// DcvDelegationUuidService contains methods and other services that help with
+// DcvDelegationUUIDService contains methods and other services that help with
 // interacting with the cloudflare API. Note, unlike clients, this service does not
 // read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewDcvDelegationUuidService] method
+// this service directly, and instead use the [NewDcvDelegationUUIDService] method
 // instead.
-type DcvDelegationUuidService struct {
+type DcvDelegationUUIDService struct {
 	Options []option.RequestOption
 }
 
-// NewDcvDelegationUuidService generates a new service that applies the given
+// NewDcvDelegationUUIDService generates a new service that applies the given
 // options to each request. These options are applied after the parent client's
 // options (if there is one), and before any request-specific options.
-func NewDcvDelegationUuidService(opts ...option.RequestOption) (r *DcvDelegationUuidService) {
-	r = &DcvDelegationUuidService{}
+func NewDcvDelegationUUIDService(opts ...option.RequestOption) (r *DcvDelegationUUIDService) {
+	r = &DcvDelegationUUIDService{}
 	r.Options = opts
 	return
 }
 
 // Retrieve the account and zone specific unique identifier used as part of the
 // CNAME target for DCV Delegation.
-func (r *DcvDelegationUuidService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *DcvDelegationUuidGetResponse, err error) {
+func (r *DcvDelegationUUIDService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *DcvDelegationUUIDGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env DcvDelegationUuidGetResponseEnvelope
+	var env DcvDelegationUUIDGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/dcv_delegation/uuid", zoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -44,36 +44,36 @@ func (r *DcvDelegationUuidService) Get(ctx context.Context, zoneID string, opts 
 	return
 }
 
-type DcvDelegationUuidGetResponse struct {
+type DcvDelegationUUIDGetResponse struct {
 	// The DCV Delegation unique identifier.
-	Uuid string                           `json:"uuid"`
-	JSON dcvDelegationUuidGetResponseJSON `json:"-"`
+	UUID string                           `json:"uuid"`
+	JSON dcvDelegationUUIDGetResponseJSON `json:"-"`
 }
 
-// dcvDelegationUuidGetResponseJSON contains the JSON metadata for the struct
-// [DcvDelegationUuidGetResponse]
-type dcvDelegationUuidGetResponseJSON struct {
-	Uuid        apijson.Field
+// dcvDelegationUUIDGetResponseJSON contains the JSON metadata for the struct
+// [DcvDelegationUUIDGetResponse]
+type dcvDelegationUUIDGetResponseJSON struct {
+	UUID        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DcvDelegationUuidGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DcvDelegationUUIDGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DcvDelegationUuidGetResponseEnvelope struct {
-	Errors   []DcvDelegationUuidGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DcvDelegationUuidGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DcvDelegationUuidGetResponse                   `json:"result,required"`
+type DcvDelegationUUIDGetResponseEnvelope struct {
+	Errors   []DcvDelegationUUIDGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DcvDelegationUUIDGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   DcvDelegationUUIDGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success DcvDelegationUuidGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    dcvDelegationUuidGetResponseEnvelopeJSON    `json:"-"`
+	Success DcvDelegationUUIDGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    dcvDelegationUUIDGetResponseEnvelopeJSON    `json:"-"`
 }
 
-// dcvDelegationUuidGetResponseEnvelopeJSON contains the JSON metadata for the
-// struct [DcvDelegationUuidGetResponseEnvelope]
-type dcvDelegationUuidGetResponseEnvelopeJSON struct {
+// dcvDelegationUUIDGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [DcvDelegationUUIDGetResponseEnvelope]
+type dcvDelegationUUIDGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -82,51 +82,51 @@ type dcvDelegationUuidGetResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DcvDelegationUuidGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *DcvDelegationUUIDGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DcvDelegationUuidGetResponseEnvelopeErrors struct {
+type DcvDelegationUUIDGetResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
-	JSON    dcvDelegationUuidGetResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    dcvDelegationUUIDGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// dcvDelegationUuidGetResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [DcvDelegationUuidGetResponseEnvelopeErrors]
-type dcvDelegationUuidGetResponseEnvelopeErrorsJSON struct {
+// dcvDelegationUUIDGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [DcvDelegationUUIDGetResponseEnvelopeErrors]
+type dcvDelegationUUIDGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DcvDelegationUuidGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *DcvDelegationUUIDGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DcvDelegationUuidGetResponseEnvelopeMessages struct {
+type DcvDelegationUUIDGetResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
-	JSON    dcvDelegationUuidGetResponseEnvelopeMessagesJSON `json:"-"`
+	JSON    dcvDelegationUUIDGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// dcvDelegationUuidGetResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [DcvDelegationUuidGetResponseEnvelopeMessages]
-type dcvDelegationUuidGetResponseEnvelopeMessagesJSON struct {
+// dcvDelegationUUIDGetResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [DcvDelegationUUIDGetResponseEnvelopeMessages]
+type dcvDelegationUUIDGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DcvDelegationUuidGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *DcvDelegationUUIDGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type DcvDelegationUuidGetResponseEnvelopeSuccess bool
+type DcvDelegationUUIDGetResponseEnvelopeSuccess bool
 
 const (
-	DcvDelegationUuidGetResponseEnvelopeSuccessTrue DcvDelegationUuidGetResponseEnvelopeSuccess = true
+	DcvDelegationUUIDGetResponseEnvelopeSuccessTrue DcvDelegationUUIDGetResponseEnvelopeSuccess = true
 )

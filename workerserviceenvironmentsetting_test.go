@@ -56,12 +56,12 @@ func TestWorkerServiceEnvironmentSettingEditWithOptionalParams(t *testing.T) {
 				Message: cloudflare.F("string"),
 			}}),
 			Result: cloudflare.F(cloudflare.WorkerServiceEnvironmentSettingEditParamsResult{
-				Bindings: cloudflare.F([]cloudflare.WorkerServiceEnvironmentSettingEditParamsResultBinding{cloudflare.WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersKvNamespaceBinding(cloudflare.WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersKvNamespaceBinding{
-					Type: cloudflare.F(cloudflare.WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersKvNamespaceBindingTypeKvNamespace),
-				}), cloudflare.WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersKvNamespaceBinding(cloudflare.WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersKvNamespaceBinding{
-					Type: cloudflare.F(cloudflare.WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersKvNamespaceBindingTypeKvNamespace),
-				}), cloudflare.WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersKvNamespaceBinding(cloudflare.WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersKvNamespaceBinding{
-					Type: cloudflare.F(cloudflare.WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersKvNamespaceBindingTypeKvNamespace),
+				Bindings: cloudflare.F([]cloudflare.WorkerServiceEnvironmentSettingEditParamsResultBinding{cloudflare.WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersKVNamespaceBinding(cloudflare.WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersKVNamespaceBinding{
+					Type: cloudflare.F(cloudflare.WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersKVNamespaceBindingTypeKVNamespace),
+				}), cloudflare.WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersKVNamespaceBinding(cloudflare.WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersKVNamespaceBinding{
+					Type: cloudflare.F(cloudflare.WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersKVNamespaceBindingTypeKVNamespace),
+				}), cloudflare.WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersKVNamespaceBinding(cloudflare.WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersKVNamespaceBinding{
+					Type: cloudflare.F(cloudflare.WorkerServiceEnvironmentSettingEditParamsResultBindingsWorkersKVNamespaceBindingTypeKVNamespace),
 				})}),
 				CompatibilityDate:  cloudflare.F("2022-04-05"),
 				CompatibilityFlags: cloudflare.F([]string{"formdata_parser_supports_files", "formdata_parser_supports_files", "formdata_parser_supports_files"}),

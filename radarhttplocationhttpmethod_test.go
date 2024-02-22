@@ -34,7 +34,7 @@ func TestRadarHTTPLocationHTTPMethodGetWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		cloudflare.RadarHTTPLocationHTTPMethodGetParamsHTTPVersionHttPv1,
 		cloudflare.RadarHTTPLocationHTTPMethodGetParams{
-			Asn:          cloudflare.F([]string{"string", "string", "string"}),
+			ASN:          cloudflare.F([]string{"string", "string", "string"}),
 			BotClass:     cloudflare.F([]cloudflare.RadarHTTPLocationHTTPMethodGetParamsBotClass{cloudflare.RadarHTTPLocationHTTPMethodGetParamsBotClassLikelyAutomated, cloudflare.RadarHTTPLocationHTTPMethodGetParamsBotClassLikelyHuman}),
 			DateEnd:      cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 			DateRange:    cloudflare.F([]cloudflare.RadarHTTPLocationHTTPMethodGetParamsDateRange{cloudflare.RadarHTTPLocationHTTPMethodGetParamsDateRange1d, cloudflare.RadarHTTPLocationHTTPMethodGetParamsDateRange2d, cloudflare.RadarHTTPLocationHTTPMethodGetParamsDateRange7d}),
@@ -46,7 +46,7 @@ func TestRadarHTTPLocationHTTPMethodGetWithOptionalParams(t *testing.T) {
 			Limit:        cloudflare.F(int64(5)),
 			Location:     cloudflare.F([]string{"string", "string", "string"}),
 			Name:         cloudflare.F([]string{"string", "string", "string"}),
-			Os:           cloudflare.F([]cloudflare.RadarHTTPLocationHTTPMethodGetParamsO{cloudflare.RadarHTTPLocationHTTPMethodGetParamsOWindows, cloudflare.RadarHTTPLocationHTTPMethodGetParamsOMacosx, cloudflare.RadarHTTPLocationHTTPMethodGetParamsOIos}),
+			OS:           cloudflare.F([]cloudflare.RadarHTTPLocationHTTPMethodGetParamsOS{cloudflare.RadarHTTPLocationHTTPMethodGetParamsOSWindows, cloudflare.RadarHTTPLocationHTTPMethodGetParamsOSMacosx, cloudflare.RadarHTTPLocationHTTPMethodGetParamsOSIos}),
 			TLSVersion:   cloudflare.F([]cloudflare.RadarHTTPLocationHTTPMethodGetParamsTLSVersion{cloudflare.RadarHTTPLocationHTTPMethodGetParamsTLSVersionTlSv1_0, cloudflare.RadarHTTPLocationHTTPMethodGetParamsTLSVersionTlSv1_1, cloudflare.RadarHTTPLocationHTTPMethodGetParamsTLSVersionTlSv1_2}),
 		},
 	)

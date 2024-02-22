@@ -323,7 +323,7 @@ type RadarHTTPTopBrowserFamiliesParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// Filter for bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]RadarHTTPTopBrowserFamiliesParamsBotClass] `query:"botClass"`
@@ -354,7 +354,7 @@ type RadarHTTPTopBrowserFamiliesParams struct {
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Filter for os name.
-	Os param.Field[[]RadarHTTPTopBrowserFamiliesParamsO] `query:"os"`
+	OS param.Field[[]RadarHTTPTopBrowserFamiliesParamsOS] `query:"os"`
 	// Filter for tls version.
 	TLSVersion param.Field[[]RadarHTTPTopBrowserFamiliesParamsTLSVersion] `query:"tlsVersion"`
 }
@@ -433,16 +433,16 @@ const (
 	RadarHTTPTopBrowserFamiliesParamsIPVersionIPv6 RadarHTTPTopBrowserFamiliesParamsIPVersion = "IPv6"
 )
 
-type RadarHTTPTopBrowserFamiliesParamsO string
+type RadarHTTPTopBrowserFamiliesParamsOS string
 
 const (
-	RadarHTTPTopBrowserFamiliesParamsOWindows  RadarHTTPTopBrowserFamiliesParamsO = "WINDOWS"
-	RadarHTTPTopBrowserFamiliesParamsOMacosx   RadarHTTPTopBrowserFamiliesParamsO = "MACOSX"
-	RadarHTTPTopBrowserFamiliesParamsOIos      RadarHTTPTopBrowserFamiliesParamsO = "IOS"
-	RadarHTTPTopBrowserFamiliesParamsOAndroid  RadarHTTPTopBrowserFamiliesParamsO = "ANDROID"
-	RadarHTTPTopBrowserFamiliesParamsOChromeos RadarHTTPTopBrowserFamiliesParamsO = "CHROMEOS"
-	RadarHTTPTopBrowserFamiliesParamsOLinux    RadarHTTPTopBrowserFamiliesParamsO = "LINUX"
-	RadarHTTPTopBrowserFamiliesParamsOSmartTv  RadarHTTPTopBrowserFamiliesParamsO = "SMART_TV"
+	RadarHTTPTopBrowserFamiliesParamsOSWindows  RadarHTTPTopBrowserFamiliesParamsOS = "WINDOWS"
+	RadarHTTPTopBrowserFamiliesParamsOSMacosx   RadarHTTPTopBrowserFamiliesParamsOS = "MACOSX"
+	RadarHTTPTopBrowserFamiliesParamsOSIos      RadarHTTPTopBrowserFamiliesParamsOS = "IOS"
+	RadarHTTPTopBrowserFamiliesParamsOSAndroid  RadarHTTPTopBrowserFamiliesParamsOS = "ANDROID"
+	RadarHTTPTopBrowserFamiliesParamsOSChromeos RadarHTTPTopBrowserFamiliesParamsOS = "CHROMEOS"
+	RadarHTTPTopBrowserFamiliesParamsOSLinux    RadarHTTPTopBrowserFamiliesParamsOS = "LINUX"
+	RadarHTTPTopBrowserFamiliesParamsOSSmartTv  RadarHTTPTopBrowserFamiliesParamsOS = "SMART_TV"
 )
 
 type RadarHTTPTopBrowserFamiliesParamsTLSVersion string
@@ -478,7 +478,7 @@ type RadarHTTPTopBrowsersParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// Filter for bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]RadarHTTPTopBrowsersParamsBotClass] `query:"botClass"`
@@ -509,7 +509,7 @@ type RadarHTTPTopBrowsersParams struct {
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Filter for os name.
-	Os param.Field[[]RadarHTTPTopBrowsersParamsO] `query:"os"`
+	OS param.Field[[]RadarHTTPTopBrowsersParamsOS] `query:"os"`
 	// Filter for tls version.
 	TLSVersion param.Field[[]RadarHTTPTopBrowsersParamsTLSVersion] `query:"tlsVersion"`
 }
@@ -588,16 +588,16 @@ const (
 	RadarHTTPTopBrowsersParamsIPVersionIPv6 RadarHTTPTopBrowsersParamsIPVersion = "IPv6"
 )
 
-type RadarHTTPTopBrowsersParamsO string
+type RadarHTTPTopBrowsersParamsOS string
 
 const (
-	RadarHTTPTopBrowsersParamsOWindows  RadarHTTPTopBrowsersParamsO = "WINDOWS"
-	RadarHTTPTopBrowsersParamsOMacosx   RadarHTTPTopBrowsersParamsO = "MACOSX"
-	RadarHTTPTopBrowsersParamsOIos      RadarHTTPTopBrowsersParamsO = "IOS"
-	RadarHTTPTopBrowsersParamsOAndroid  RadarHTTPTopBrowsersParamsO = "ANDROID"
-	RadarHTTPTopBrowsersParamsOChromeos RadarHTTPTopBrowsersParamsO = "CHROMEOS"
-	RadarHTTPTopBrowsersParamsOLinux    RadarHTTPTopBrowsersParamsO = "LINUX"
-	RadarHTTPTopBrowsersParamsOSmartTv  RadarHTTPTopBrowsersParamsO = "SMART_TV"
+	RadarHTTPTopBrowsersParamsOSWindows  RadarHTTPTopBrowsersParamsOS = "WINDOWS"
+	RadarHTTPTopBrowsersParamsOSMacosx   RadarHTTPTopBrowsersParamsOS = "MACOSX"
+	RadarHTTPTopBrowsersParamsOSIos      RadarHTTPTopBrowsersParamsOS = "IOS"
+	RadarHTTPTopBrowsersParamsOSAndroid  RadarHTTPTopBrowsersParamsOS = "ANDROID"
+	RadarHTTPTopBrowsersParamsOSChromeos RadarHTTPTopBrowsersParamsOS = "CHROMEOS"
+	RadarHTTPTopBrowsersParamsOSLinux    RadarHTTPTopBrowsersParamsOS = "LINUX"
+	RadarHTTPTopBrowsersParamsOSSmartTv  RadarHTTPTopBrowsersParamsOS = "SMART_TV"
 )
 
 type RadarHTTPTopBrowsersParamsTLSVersion string

@@ -15,28 +15,28 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-// StorageKvNamespaceKeyService contains methods and other services that help with
+// StorageKVNamespaceKeyService contains methods and other services that help with
 // interacting with the cloudflare API. Note, unlike clients, this service does not
 // read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewStorageKvNamespaceKeyService]
+// this service directly, and instead use the [NewStorageKVNamespaceKeyService]
 // method instead.
-type StorageKvNamespaceKeyService struct {
+type StorageKVNamespaceKeyService struct {
 	Options []option.RequestOption
 }
 
-// NewStorageKvNamespaceKeyService generates a new service that applies the given
+// NewStorageKVNamespaceKeyService generates a new service that applies the given
 // options to each request. These options are applied after the parent client's
 // options (if there is one), and before any request-specific options.
-func NewStorageKvNamespaceKeyService(opts ...option.RequestOption) (r *StorageKvNamespaceKeyService) {
-	r = &StorageKvNamespaceKeyService{}
+func NewStorageKVNamespaceKeyService(opts ...option.RequestOption) (r *StorageKVNamespaceKeyService) {
+	r = &StorageKVNamespaceKeyService{}
 	r.Options = opts
 	return
 }
 
 // Lists a namespace's keys.
-func (r *StorageKvNamespaceKeyService) List(ctx context.Context, accountID string, namespaceID string, query StorageKvNamespaceKeyListParams, opts ...option.RequestOption) (res *[]StorageKvNamespaceKeyListResponse, err error) {
+func (r *StorageKVNamespaceKeyService) List(ctx context.Context, accountID string, namespaceID string, query StorageKVNamespaceKeyListParams, opts ...option.RequestOption) (res *[]StorageKVNamespaceKeyListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env StorageKvNamespaceKeyListResponseEnvelope
+	var env StorageKVNamespaceKeyListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/keys", accountID, namespaceID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -48,7 +48,7 @@ func (r *StorageKvNamespaceKeyService) List(ctx context.Context, accountID strin
 
 // A name for a value. A value stored under a given key may be retrieved via the
 // same key.
-type StorageKvNamespaceKeyListResponse struct {
+type StorageKVNamespaceKeyListResponse struct {
 	// A key's name. The name may be at most 512 bytes. All printable, non-whitespace
 	// characters are valid. Use percent-encoding to define key names as part of a URL.
 	Name string `json:"name,required"`
@@ -57,12 +57,12 @@ type StorageKvNamespaceKeyListResponse struct {
 	Expiration float64 `json:"expiration"`
 	// Arbitrary JSON that is associated with a key.
 	Metadata interface{}                           `json:"metadata"`
-	JSON     storageKvNamespaceKeyListResponseJSON `json:"-"`
+	JSON     storageKVNamespaceKeyListResponseJSON `json:"-"`
 }
 
-// storageKvNamespaceKeyListResponseJSON contains the JSON metadata for the struct
-// [StorageKvNamespaceKeyListResponse]
-type storageKvNamespaceKeyListResponseJSON struct {
+// storageKVNamespaceKeyListResponseJSON contains the JSON metadata for the struct
+// [StorageKVNamespaceKeyListResponse]
+type storageKVNamespaceKeyListResponseJSON struct {
 	Name        apijson.Field
 	Expiration  apijson.Field
 	Metadata    apijson.Field
@@ -70,11 +70,11 @@ type storageKvNamespaceKeyListResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StorageKvNamespaceKeyListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *StorageKVNamespaceKeyListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type StorageKvNamespaceKeyListParams struct {
+type StorageKVNamespaceKeyListParams struct {
 	// Opaque token indicating the position from which to continue when requesting the
 	// next set of records if the amount of list results was limited by the limit
 	// parameter. A valid value for the cursor can be obtained from the `cursors`
@@ -88,28 +88,28 @@ type StorageKvNamespaceKeyListParams struct {
 	Prefix param.Field[string] `query:"prefix"`
 }
 
-// URLQuery serializes [StorageKvNamespaceKeyListParams]'s query parameters as
+// URLQuery serializes [StorageKVNamespaceKeyListParams]'s query parameters as
 // `url.Values`.
-func (r StorageKvNamespaceKeyListParams) URLQuery() (v url.Values) {
+func (r StorageKVNamespaceKeyListParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
 
-type StorageKvNamespaceKeyListResponseEnvelope struct {
-	Errors   []StorageKvNamespaceKeyListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []StorageKvNamespaceKeyListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []StorageKvNamespaceKeyListResponse                 `json:"result,required"`
+type StorageKVNamespaceKeyListResponseEnvelope struct {
+	Errors   []StorageKVNamespaceKeyListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []StorageKVNamespaceKeyListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []StorageKVNamespaceKeyListResponse                 `json:"result,required"`
 	// Whether the API call was successful
-	Success    StorageKvNamespaceKeyListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo StorageKvNamespaceKeyListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       storageKvNamespaceKeyListResponseEnvelopeJSON       `json:"-"`
+	Success    StorageKVNamespaceKeyListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo StorageKVNamespaceKeyListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       storageKVNamespaceKeyListResponseEnvelopeJSON       `json:"-"`
 }
 
-// storageKvNamespaceKeyListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [StorageKvNamespaceKeyListResponseEnvelope]
-type storageKvNamespaceKeyListResponseEnvelopeJSON struct {
+// storageKVNamespaceKeyListResponseEnvelopeJSON contains the JSON metadata for the
+// struct [StorageKVNamespaceKeyListResponseEnvelope]
+type storageKVNamespaceKeyListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -119,56 +119,56 @@ type storageKvNamespaceKeyListResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StorageKvNamespaceKeyListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *StorageKVNamespaceKeyListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type StorageKvNamespaceKeyListResponseEnvelopeErrors struct {
+type StorageKVNamespaceKeyListResponseEnvelopeErrors struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
-	JSON    storageKvNamespaceKeyListResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    storageKVNamespaceKeyListResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// storageKvNamespaceKeyListResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [StorageKvNamespaceKeyListResponseEnvelopeErrors]
-type storageKvNamespaceKeyListResponseEnvelopeErrorsJSON struct {
+// storageKVNamespaceKeyListResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [StorageKVNamespaceKeyListResponseEnvelopeErrors]
+type storageKVNamespaceKeyListResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StorageKvNamespaceKeyListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *StorageKVNamespaceKeyListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type StorageKvNamespaceKeyListResponseEnvelopeMessages struct {
+type StorageKVNamespaceKeyListResponseEnvelopeMessages struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
-	JSON    storageKvNamespaceKeyListResponseEnvelopeMessagesJSON `json:"-"`
+	JSON    storageKVNamespaceKeyListResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// storageKvNamespaceKeyListResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [StorageKvNamespaceKeyListResponseEnvelopeMessages]
-type storageKvNamespaceKeyListResponseEnvelopeMessagesJSON struct {
+// storageKVNamespaceKeyListResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [StorageKVNamespaceKeyListResponseEnvelopeMessages]
+type storageKVNamespaceKeyListResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StorageKvNamespaceKeyListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *StorageKVNamespaceKeyListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type StorageKvNamespaceKeyListResponseEnvelopeSuccess bool
+type StorageKVNamespaceKeyListResponseEnvelopeSuccess bool
 
 const (
-	StorageKvNamespaceKeyListResponseEnvelopeSuccessTrue StorageKvNamespaceKeyListResponseEnvelopeSuccess = true
+	StorageKVNamespaceKeyListResponseEnvelopeSuccessTrue StorageKVNamespaceKeyListResponseEnvelopeSuccess = true
 )
 
-type StorageKvNamespaceKeyListResponseEnvelopeResultInfo struct {
+type StorageKVNamespaceKeyListResponseEnvelopeResultInfo struct {
 	// Total results returned based on your list parameters.
 	Count float64 `json:"count"`
 	// Opaque token indicating the position from which to continue when requesting the
@@ -176,18 +176,18 @@ type StorageKvNamespaceKeyListResponseEnvelopeResultInfo struct {
 	// parameter. A valid value for the cursor can be obtained from the cursors object
 	// in the result_info structure.
 	Cursor string                                                  `json:"cursor"`
-	JSON   storageKvNamespaceKeyListResponseEnvelopeResultInfoJSON `json:"-"`
+	JSON   storageKVNamespaceKeyListResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
-// storageKvNamespaceKeyListResponseEnvelopeResultInfoJSON contains the JSON
-// metadata for the struct [StorageKvNamespaceKeyListResponseEnvelopeResultInfo]
-type storageKvNamespaceKeyListResponseEnvelopeResultInfoJSON struct {
+// storageKVNamespaceKeyListResponseEnvelopeResultInfoJSON contains the JSON
+// metadata for the struct [StorageKVNamespaceKeyListResponseEnvelopeResultInfo]
+type storageKVNamespaceKeyListResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	Cursor      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StorageKvNamespaceKeyListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *StorageKVNamespaceKeyListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

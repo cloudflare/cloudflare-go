@@ -159,7 +159,7 @@ func (r *RadarEmailSecurityTopAseSpamGetResponseMetaConfidenceInfoAnnotation) Un
 }
 
 type RadarEmailSecurityTopAseSpamGetResponseTop0 struct {
-	ClientAsn    int64                                           `json:"clientASN,required"`
+	ClientASN    int64                                           `json:"clientASN,required"`
 	ClientAsName string                                          `json:"clientASName,required"`
 	Value        string                                          `json:"value,required"`
 	JSON         radarEmailSecurityTopAseSpamGetResponseTop0JSON `json:"-"`
@@ -168,7 +168,7 @@ type RadarEmailSecurityTopAseSpamGetResponseTop0 struct {
 // radarEmailSecurityTopAseSpamGetResponseTop0JSON contains the JSON metadata for
 // the struct [RadarEmailSecurityTopAseSpamGetResponseTop0]
 type radarEmailSecurityTopAseSpamGetResponseTop0JSON struct {
-	ClientAsn    apijson.Field
+	ClientASN    apijson.Field
 	ClientAsName apijson.Field
 	Value        apijson.Field
 	raw          string
@@ -181,11 +181,11 @@ func (r *RadarEmailSecurityTopAseSpamGetResponseTop0) UnmarshalJSON(data []byte)
 
 type RadarEmailSecurityTopAseSpamGetParams struct {
 	// Filter for arc (Authenticated Received Chain).
-	Arc param.Field[[]RadarEmailSecurityTopAseSpamGetParamsArc] `query:"arc"`
+	ARC param.Field[[]RadarEmailSecurityTopAseSpamGetParamsARC] `query:"arc"`
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
@@ -197,7 +197,7 @@ type RadarEmailSecurityTopAseSpamGetParams struct {
 	// Filter for dkim.
 	DKIM param.Field[[]RadarEmailSecurityTopAseSpamGetParamsDKIM] `query:"dkim"`
 	// Filter for dmarc.
-	Dmarc param.Field[[]RadarEmailSecurityTopAseSpamGetParamsDmarc] `query:"dmarc"`
+	DMARC param.Field[[]RadarEmailSecurityTopAseSpamGetParamsDMARC] `query:"dmarc"`
 	// Format results are returned in.
 	Format param.Field[RadarEmailSecurityTopAseSpamGetParamsFormat] `query:"format"`
 	// Limit the number of objects in the response.
@@ -229,12 +229,12 @@ const (
 	RadarEmailSecurityTopAseSpamGetParamsSpamNotSpam RadarEmailSecurityTopAseSpamGetParamsSpam = "NOT_SPAM"
 )
 
-type RadarEmailSecurityTopAseSpamGetParamsArc string
+type RadarEmailSecurityTopAseSpamGetParamsARC string
 
 const (
-	RadarEmailSecurityTopAseSpamGetParamsArcPass RadarEmailSecurityTopAseSpamGetParamsArc = "PASS"
-	RadarEmailSecurityTopAseSpamGetParamsArcNone RadarEmailSecurityTopAseSpamGetParamsArc = "NONE"
-	RadarEmailSecurityTopAseSpamGetParamsArcFail RadarEmailSecurityTopAseSpamGetParamsArc = "FAIL"
+	RadarEmailSecurityTopAseSpamGetParamsARCPass RadarEmailSecurityTopAseSpamGetParamsARC = "PASS"
+	RadarEmailSecurityTopAseSpamGetParamsARCNone RadarEmailSecurityTopAseSpamGetParamsARC = "NONE"
+	RadarEmailSecurityTopAseSpamGetParamsARCFail RadarEmailSecurityTopAseSpamGetParamsARC = "FAIL"
 )
 
 type RadarEmailSecurityTopAseSpamGetParamsDateRange string
@@ -265,12 +265,12 @@ const (
 	RadarEmailSecurityTopAseSpamGetParamsDKIMFail RadarEmailSecurityTopAseSpamGetParamsDKIM = "FAIL"
 )
 
-type RadarEmailSecurityTopAseSpamGetParamsDmarc string
+type RadarEmailSecurityTopAseSpamGetParamsDMARC string
 
 const (
-	RadarEmailSecurityTopAseSpamGetParamsDmarcPass RadarEmailSecurityTopAseSpamGetParamsDmarc = "PASS"
-	RadarEmailSecurityTopAseSpamGetParamsDmarcNone RadarEmailSecurityTopAseSpamGetParamsDmarc = "NONE"
-	RadarEmailSecurityTopAseSpamGetParamsDmarcFail RadarEmailSecurityTopAseSpamGetParamsDmarc = "FAIL"
+	RadarEmailSecurityTopAseSpamGetParamsDMARCPass RadarEmailSecurityTopAseSpamGetParamsDMARC = "PASS"
+	RadarEmailSecurityTopAseSpamGetParamsDMARCNone RadarEmailSecurityTopAseSpamGetParamsDMARC = "NONE"
+	RadarEmailSecurityTopAseSpamGetParamsDMARCFail RadarEmailSecurityTopAseSpamGetParamsDMARC = "FAIL"
 )
 
 // Format results are returned in.

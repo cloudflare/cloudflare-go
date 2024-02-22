@@ -70,10 +70,10 @@ type Client struct {
 	Intel                       *IntelService
 	Magics                      *MagicService
 	AccountMembers              *AccountMemberService
-	Mnms                        *MnmService
-	MtlsCertificates            *MtlsCertificateService
+	MNMs                        *MNMService
+	MTLSCertificates            *MTLSCertificateService
 	Pages                       *PageService
-	Pcaps                       *PcapService
+	PCAPs                       *PCAPService
 	Registrar                   *RegistrarService
 	RequestTracers              *RequestTracerService
 	Roles                       *RoleService
@@ -88,7 +88,7 @@ type Client struct {
 	DEX                         *DEXService
 	R2                          *R2Service
 	Teamnet                     *TeamnetService
-	WarpConnector               *WarpConnectorService
+	WARPConnector               *WARPConnectorService
 	Dispatchers                 *DispatcherService
 	WorkersForPlatforms         *WorkersForPlatformService
 	WorkerDomains               *WorkerDomainService
@@ -97,7 +97,7 @@ type Client struct {
 	Addressing                  *AddressingService
 	Challenges                  *ChallengeService
 	Hyperdrive                  *HyperdriveService
-	Rum                         *RumService
+	RUM                         *RUMService
 	Vectorize                   *VectorizeService
 	URLScanner                  *URLScannerService
 	Radar                       *RadarService
@@ -192,10 +192,10 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Intel = NewIntelService(opts...)
 	r.Magics = NewMagicService(opts...)
 	r.AccountMembers = NewAccountMemberService(opts...)
-	r.Mnms = NewMnmService(opts...)
-	r.MtlsCertificates = NewMtlsCertificateService(opts...)
+	r.MNMs = NewMNMService(opts...)
+	r.MTLSCertificates = NewMTLSCertificateService(opts...)
 	r.Pages = NewPageService(opts...)
-	r.Pcaps = NewPcapService(opts...)
+	r.PCAPs = NewPCAPService(opts...)
 	r.Registrar = NewRegistrarService(opts...)
 	r.RequestTracers = NewRequestTracerService(opts...)
 	r.Roles = NewRoleService(opts...)
@@ -210,7 +210,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.DEX = NewDEXService(opts...)
 	r.R2 = NewR2Service(opts...)
 	r.Teamnet = NewTeamnetService(opts...)
-	r.WarpConnector = NewWarpConnectorService(opts...)
+	r.WARPConnector = NewWARPConnectorService(opts...)
 	r.Dispatchers = NewDispatcherService(opts...)
 	r.WorkersForPlatforms = NewWorkersForPlatformService(opts...)
 	r.WorkerDomains = NewWorkerDomainService(opts...)
@@ -219,7 +219,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Addressing = NewAddressingService(opts...)
 	r.Challenges = NewChallengeService(opts...)
 	r.Hyperdrive = NewHyperdriveService(opts...)
-	r.Rum = NewRumService(opts...)
+	r.RUM = NewRUMService(opts...)
 	r.Vectorize = NewVectorizeService(opts...)
 	r.URLScanner = NewURLScannerService(opts...)
 	r.Radar = NewRadarService(opts...)

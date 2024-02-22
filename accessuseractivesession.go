@@ -138,12 +138,12 @@ type AccessUserActiveSessionGetResponse struct {
 	Idp                AccessUserActiveSessionGetResponseIdp                      `json:"idp"`
 	IP                 string                                                     `json:"ip"`
 	IsGateway          bool                                                       `json:"is_gateway"`
-	IsWarp             bool                                                       `json:"is_warp"`
+	IsWARP             bool                                                       `json:"is_warp"`
 	IsActive           bool                                                       `json:"isActive"`
-	MtlsAuth           AccessUserActiveSessionGetResponseMtlsAuth                 `json:"mtls_auth"`
+	MTLSAuth           AccessUserActiveSessionGetResponseMTLSAuth                 `json:"mtls_auth"`
 	ServiceTokenID     string                                                     `json:"service_token_id"`
 	ServiceTokenStatus bool                                                       `json:"service_token_status"`
-	UserUuid           string                                                     `json:"user_uuid"`
+	UserUUID           string                                                     `json:"user_uuid"`
 	Version            float64                                                    `json:"version"`
 	JSON               accessUserActiveSessionGetResponseJSON                     `json:"-"`
 }
@@ -163,12 +163,12 @@ type accessUserActiveSessionGetResponseJSON struct {
 	Idp                apijson.Field
 	IP                 apijson.Field
 	IsGateway          apijson.Field
-	IsWarp             apijson.Field
+	IsWARP             apijson.Field
 	IsActive           apijson.Field
-	MtlsAuth           apijson.Field
+	MTLSAuth           apijson.Field
 	ServiceTokenID     apijson.Field
 	ServiceTokenStatus apijson.Field
-	UserUuid           apijson.Field
+	UserUUID           apijson.Field
 	Version            apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
@@ -283,18 +283,18 @@ func (r *AccessUserActiveSessionGetResponseIdp) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessUserActiveSessionGetResponseMtlsAuth struct {
+type AccessUserActiveSessionGetResponseMTLSAuth struct {
 	AuthStatus    string                                         `json:"auth_status"`
 	CertIssuerDn  string                                         `json:"cert_issuer_dn"`
 	CertIssuerSki string                                         `json:"cert_issuer_ski"`
 	CertPresented bool                                           `json:"cert_presented"`
 	CertSerial    string                                         `json:"cert_serial"`
-	JSON          accessUserActiveSessionGetResponseMtlsAuthJSON `json:"-"`
+	JSON          accessUserActiveSessionGetResponseMTLSAuthJSON `json:"-"`
 }
 
-// accessUserActiveSessionGetResponseMtlsAuthJSON contains the JSON metadata for
-// the struct [AccessUserActiveSessionGetResponseMtlsAuth]
-type accessUserActiveSessionGetResponseMtlsAuthJSON struct {
+// accessUserActiveSessionGetResponseMTLSAuthJSON contains the JSON metadata for
+// the struct [AccessUserActiveSessionGetResponseMTLSAuth]
+type accessUserActiveSessionGetResponseMTLSAuthJSON struct {
 	AuthStatus    apijson.Field
 	CertIssuerDn  apijson.Field
 	CertIssuerSki apijson.Field
@@ -304,7 +304,7 @@ type accessUserActiveSessionGetResponseMtlsAuthJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *AccessUserActiveSessionGetResponseMtlsAuth) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessUserActiveSessionGetResponseMTLSAuth) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

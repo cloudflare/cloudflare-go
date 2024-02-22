@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestWeb3HostnameIpfsUniversalPathContentListEntryNewWithOptionalParams(t *testing.T) {
+func TestWeb3HostnameIPFSUniversalPathContentListEntryNewWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,13 +29,13 @@ func TestWeb3HostnameIpfsUniversalPathContentListEntryNewWithOptionalParams(t *t
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Web3.Hostnames.IpfsUniversalPaths.ContentLists.Entries.New(
+	_, err := client.Web3.Hostnames.IPFSUniversalPaths.ContentLists.Entries.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.Web3HostnameIpfsUniversalPathContentListEntryNewParams{
+		cloudflare.Web3HostnameIPFSUniversalPathContentListEntryNewParams{
 			Content:     cloudflare.F("QmPZ9gcCEpqKTo6aq61g2nXGUhM4iCL3ewB6LDXZCtioEB"),
-			Type:        cloudflare.F(cloudflare.Web3HostnameIpfsUniversalPathContentListEntryNewParamsTypeCid),
+			Type:        cloudflare.F(cloudflare.Web3HostnameIPFSUniversalPathContentListEntryNewParamsTypeCid),
 			Description: cloudflare.F("this is my content list entry"),
 		},
 	)
@@ -48,7 +48,7 @@ func TestWeb3HostnameIpfsUniversalPathContentListEntryNewWithOptionalParams(t *t
 	}
 }
 
-func TestWeb3HostnameIpfsUniversalPathContentListEntryUpdateWithOptionalParams(t *testing.T) {
+func TestWeb3HostnameIPFSUniversalPathContentListEntryUpdateWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -64,14 +64,14 @@ func TestWeb3HostnameIpfsUniversalPathContentListEntryUpdateWithOptionalParams(t
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Web3.Hostnames.IpfsUniversalPaths.ContentLists.Entries.Update(
+	_, err := client.Web3.Hostnames.IPFSUniversalPaths.ContentLists.Entries.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.Web3HostnameIpfsUniversalPathContentListEntryUpdateParams{
+		cloudflare.Web3HostnameIPFSUniversalPathContentListEntryUpdateParams{
 			Content:     cloudflare.F("QmPZ9gcCEpqKTo6aq61g2nXGUhM4iCL3ewB6LDXZCtioEB"),
-			Type:        cloudflare.F(cloudflare.Web3HostnameIpfsUniversalPathContentListEntryUpdateParamsTypeCid),
+			Type:        cloudflare.F(cloudflare.Web3HostnameIPFSUniversalPathContentListEntryUpdateParamsTypeCid),
 			Description: cloudflare.F("this is my content list entry"),
 		},
 	)
@@ -84,7 +84,7 @@ func TestWeb3HostnameIpfsUniversalPathContentListEntryUpdateWithOptionalParams(t
 	}
 }
 
-func TestWeb3HostnameIpfsUniversalPathContentListEntryList(t *testing.T) {
+func TestWeb3HostnameIPFSUniversalPathContentListEntryList(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -100,7 +100,7 @@ func TestWeb3HostnameIpfsUniversalPathContentListEntryList(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Web3.Hostnames.IpfsUniversalPaths.ContentLists.Entries.List(
+	_, err := client.Web3.Hostnames.IPFSUniversalPaths.ContentLists.Entries.List(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
@@ -114,7 +114,7 @@ func TestWeb3HostnameIpfsUniversalPathContentListEntryList(t *testing.T) {
 	}
 }
 
-func TestWeb3HostnameIpfsUniversalPathContentListEntryDelete(t *testing.T) {
+func TestWeb3HostnameIPFSUniversalPathContentListEntryDelete(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -130,7 +130,7 @@ func TestWeb3HostnameIpfsUniversalPathContentListEntryDelete(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Web3.Hostnames.IpfsUniversalPaths.ContentLists.Entries.Delete(
+	_, err := client.Web3.Hostnames.IPFSUniversalPaths.ContentLists.Entries.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
@@ -145,7 +145,7 @@ func TestWeb3HostnameIpfsUniversalPathContentListEntryDelete(t *testing.T) {
 	}
 }
 
-func TestWeb3HostnameIpfsUniversalPathContentListEntryGet(t *testing.T) {
+func TestWeb3HostnameIPFSUniversalPathContentListEntryGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -161,7 +161,7 @@ func TestWeb3HostnameIpfsUniversalPathContentListEntryGet(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Web3.Hostnames.IpfsUniversalPaths.ContentLists.Entries.Get(
+	_, err := client.Web3.Hostnames.IPFSUniversalPaths.ContentLists.Entries.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",

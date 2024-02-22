@@ -79,7 +79,7 @@ type AddressingPrefixBGPPrefixListResponse struct {
 	// Identifier
 	ID string `json:"id"`
 	// Autonomous System Number (ASN) the prefix will be advertised under.
-	Asn           int64                                              `json:"asn,nullable"`
+	ASN           int64                                              `json:"asn,nullable"`
 	BGPSignalOpts AddressingPrefixBGPPrefixListResponseBGPSignalOpts `json:"bgp_signal_opts"`
 	// IP Prefix in Classless Inter-Domain Routing format.
 	Cidr       string                                        `json:"cidr"`
@@ -93,7 +93,7 @@ type AddressingPrefixBGPPrefixListResponse struct {
 // struct [AddressingPrefixBGPPrefixListResponse]
 type addressingPrefixBGPPrefixListResponseJSON struct {
 	ID            apijson.Field
-	Asn           apijson.Field
+	ASN           apijson.Field
 	BGPSignalOpts apijson.Field
 	Cidr          apijson.Field
 	CreatedAt     apijson.Field
@@ -165,7 +165,7 @@ type AddressingPrefixBGPPrefixEditResponse struct {
 	// Identifier
 	ID string `json:"id"`
 	// Autonomous System Number (ASN) the prefix will be advertised under.
-	Asn           int64                                              `json:"asn,nullable"`
+	ASN           int64                                              `json:"asn,nullable"`
 	BGPSignalOpts AddressingPrefixBGPPrefixEditResponseBGPSignalOpts `json:"bgp_signal_opts"`
 	// IP Prefix in Classless Inter-Domain Routing format.
 	Cidr       string                                        `json:"cidr"`
@@ -179,7 +179,7 @@ type AddressingPrefixBGPPrefixEditResponse struct {
 // struct [AddressingPrefixBGPPrefixEditResponse]
 type addressingPrefixBGPPrefixEditResponseJSON struct {
 	ID            apijson.Field
-	Asn           apijson.Field
+	ASN           apijson.Field
 	BGPSignalOpts apijson.Field
 	Cidr          apijson.Field
 	CreatedAt     apijson.Field
@@ -251,7 +251,7 @@ type AddressingPrefixBGPPrefixGetResponse struct {
 	// Identifier
 	ID string `json:"id"`
 	// Autonomous System Number (ASN) the prefix will be advertised under.
-	Asn           int64                                             `json:"asn,nullable"`
+	ASN           int64                                             `json:"asn,nullable"`
 	BGPSignalOpts AddressingPrefixBGPPrefixGetResponseBGPSignalOpts `json:"bgp_signal_opts"`
 	// IP Prefix in Classless Inter-Domain Routing format.
 	Cidr       string                                       `json:"cidr"`
@@ -265,7 +265,7 @@ type AddressingPrefixBGPPrefixGetResponse struct {
 // struct [AddressingPrefixBGPPrefixGetResponse]
 type addressingPrefixBGPPrefixGetResponseJSON struct {
 	ID            apijson.Field
-	Asn           apijson.Field
+	ASN           apijson.Field
 	BGPSignalOpts apijson.Field
 	Cidr          apijson.Field
 	CreatedAt     apijson.Field

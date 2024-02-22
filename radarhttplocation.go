@@ -27,7 +27,7 @@ type RadarHTTPLocationService struct {
 	HTTPProtocol *RadarHTTPLocationHTTPProtocolService
 	HTTPMethod   *RadarHTTPLocationHTTPMethodService
 	IPVersion    *RadarHTTPLocationIPVersionService
-	Os           *RadarHTTPLocationOService
+	OS           *RadarHTTPLocationOSService
 	TLSVersion   *RadarHTTPLocationTLSVersionService
 }
 
@@ -42,7 +42,7 @@ func NewRadarHTTPLocationService(opts ...option.RequestOption) (r *RadarHTTPLoca
 	r.HTTPProtocol = NewRadarHTTPLocationHTTPProtocolService(opts...)
 	r.HTTPMethod = NewRadarHTTPLocationHTTPMethodService(opts...)
 	r.IPVersion = NewRadarHTTPLocationIPVersionService(opts...)
-	r.Os = NewRadarHTTPLocationOService(opts...)
+	r.OS = NewRadarHTTPLocationOSService(opts...)
 	r.TLSVersion = NewRadarHTTPLocationTLSVersionService(opts...)
 	return
 }
@@ -196,7 +196,7 @@ type RadarHTTPLocationGetParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// Filter for bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]RadarHTTPLocationGetParamsBotClass] `query:"botClass"`
@@ -227,7 +227,7 @@ type RadarHTTPLocationGetParams struct {
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Filter for os name.
-	Os param.Field[[]RadarHTTPLocationGetParamsO] `query:"os"`
+	OS param.Field[[]RadarHTTPLocationGetParamsOS] `query:"os"`
 	// Filter for tls version.
 	TLSVersion param.Field[[]RadarHTTPLocationGetParamsTLSVersion] `query:"tlsVersion"`
 }
@@ -306,16 +306,16 @@ const (
 	RadarHTTPLocationGetParamsIPVersionIPv6 RadarHTTPLocationGetParamsIPVersion = "IPv6"
 )
 
-type RadarHTTPLocationGetParamsO string
+type RadarHTTPLocationGetParamsOS string
 
 const (
-	RadarHTTPLocationGetParamsOWindows  RadarHTTPLocationGetParamsO = "WINDOWS"
-	RadarHTTPLocationGetParamsOMacosx   RadarHTTPLocationGetParamsO = "MACOSX"
-	RadarHTTPLocationGetParamsOIos      RadarHTTPLocationGetParamsO = "IOS"
-	RadarHTTPLocationGetParamsOAndroid  RadarHTTPLocationGetParamsO = "ANDROID"
-	RadarHTTPLocationGetParamsOChromeos RadarHTTPLocationGetParamsO = "CHROMEOS"
-	RadarHTTPLocationGetParamsOLinux    RadarHTTPLocationGetParamsO = "LINUX"
-	RadarHTTPLocationGetParamsOSmartTv  RadarHTTPLocationGetParamsO = "SMART_TV"
+	RadarHTTPLocationGetParamsOSWindows  RadarHTTPLocationGetParamsOS = "WINDOWS"
+	RadarHTTPLocationGetParamsOSMacosx   RadarHTTPLocationGetParamsOS = "MACOSX"
+	RadarHTTPLocationGetParamsOSIos      RadarHTTPLocationGetParamsOS = "IOS"
+	RadarHTTPLocationGetParamsOSAndroid  RadarHTTPLocationGetParamsOS = "ANDROID"
+	RadarHTTPLocationGetParamsOSChromeos RadarHTTPLocationGetParamsOS = "CHROMEOS"
+	RadarHTTPLocationGetParamsOSLinux    RadarHTTPLocationGetParamsOS = "LINUX"
+	RadarHTTPLocationGetParamsOSSmartTv  RadarHTTPLocationGetParamsOS = "SMART_TV"
 )
 
 type RadarHTTPLocationGetParamsTLSVersion string

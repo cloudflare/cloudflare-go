@@ -13,8 +13,8 @@ import (
 type MagicService struct {
 	Options         []option.RequestOption
 	CfInterconnects *MagicCfInterconnectService
-	GreTunnels      *MagicGreTunnelService
-	IpsecTunnels    *MagicIpsecTunnelService
+	GRETunnels      *MagicGRETunnelService
+	IPSECTunnels    *MagicIPSECTunnelService
 	Routes          *MagicRouteService
 }
 
@@ -25,8 +25,8 @@ func NewMagicService(opts ...option.RequestOption) (r *MagicService) {
 	r = &MagicService{}
 	r.Options = opts
 	r.CfInterconnects = NewMagicCfInterconnectService(opts...)
-	r.GreTunnels = NewMagicGreTunnelService(opts...)
-	r.IpsecTunnels = NewMagicIpsecTunnelService(opts...)
+	r.GRETunnels = NewMagicGRETunnelService(opts...)
+	r.IPSECTunnels = NewMagicIPSECTunnelService(opts...)
 	r.Routes = NewMagicRouteService(opts...)
 	return
 }

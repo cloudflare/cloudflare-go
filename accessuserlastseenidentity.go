@@ -56,11 +56,11 @@ type AccessUserLastSeenIdentityListResponse struct {
 	Idp                AccessUserLastSeenIdentityListResponseIdp                      `json:"idp"`
 	IP                 string                                                         `json:"ip"`
 	IsGateway          bool                                                           `json:"is_gateway"`
-	IsWarp             bool                                                           `json:"is_warp"`
-	MtlsAuth           AccessUserLastSeenIdentityListResponseMtlsAuth                 `json:"mtls_auth"`
+	IsWARP             bool                                                           `json:"is_warp"`
+	MTLSAuth           AccessUserLastSeenIdentityListResponseMTLSAuth                 `json:"mtls_auth"`
 	ServiceTokenID     string                                                         `json:"service_token_id"`
 	ServiceTokenStatus bool                                                           `json:"service_token_status"`
-	UserUuid           string                                                         `json:"user_uuid"`
+	UserUUID           string                                                         `json:"user_uuid"`
 	Version            float64                                                        `json:"version"`
 	JSON               accessUserLastSeenIdentityListResponseJSON                     `json:"-"`
 }
@@ -80,11 +80,11 @@ type accessUserLastSeenIdentityListResponseJSON struct {
 	Idp                apijson.Field
 	IP                 apijson.Field
 	IsGateway          apijson.Field
-	IsWarp             apijson.Field
-	MtlsAuth           apijson.Field
+	IsWARP             apijson.Field
+	MTLSAuth           apijson.Field
 	ServiceTokenID     apijson.Field
 	ServiceTokenStatus apijson.Field
-	UserUuid           apijson.Field
+	UserUUID           apijson.Field
 	Version            apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
@@ -200,18 +200,18 @@ func (r *AccessUserLastSeenIdentityListResponseIdp) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessUserLastSeenIdentityListResponseMtlsAuth struct {
+type AccessUserLastSeenIdentityListResponseMTLSAuth struct {
 	AuthStatus    string                                             `json:"auth_status"`
 	CertIssuerDn  string                                             `json:"cert_issuer_dn"`
 	CertIssuerSki string                                             `json:"cert_issuer_ski"`
 	CertPresented bool                                               `json:"cert_presented"`
 	CertSerial    string                                             `json:"cert_serial"`
-	JSON          accessUserLastSeenIdentityListResponseMtlsAuthJSON `json:"-"`
+	JSON          accessUserLastSeenIdentityListResponseMTLSAuthJSON `json:"-"`
 }
 
-// accessUserLastSeenIdentityListResponseMtlsAuthJSON contains the JSON metadata
-// for the struct [AccessUserLastSeenIdentityListResponseMtlsAuth]
-type accessUserLastSeenIdentityListResponseMtlsAuthJSON struct {
+// accessUserLastSeenIdentityListResponseMTLSAuthJSON contains the JSON metadata
+// for the struct [AccessUserLastSeenIdentityListResponseMTLSAuth]
+type accessUserLastSeenIdentityListResponseMTLSAuthJSON struct {
 	AuthStatus    apijson.Field
 	CertIssuerDn  apijson.Field
 	CertIssuerSki apijson.Field
@@ -221,7 +221,7 @@ type accessUserLastSeenIdentityListResponseMtlsAuthJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *AccessUserLastSeenIdentityListResponseMtlsAuth) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessUserLastSeenIdentityListResponseMTLSAuth) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

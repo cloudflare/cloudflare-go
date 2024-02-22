@@ -499,7 +499,7 @@ func (r *RadarAttackLayer3SummaryGetResponseMetaConfidenceInfoAnnotation) Unmars
 }
 
 type RadarAttackLayer3SummaryGetResponseSummary0 struct {
-	Gre  string                                          `json:"gre,required"`
+	GRE  string                                          `json:"gre,required"`
 	Icmp string                                          `json:"icmp,required"`
 	Tcp  string                                          `json:"tcp,required"`
 	Udp  string                                          `json:"udp,required"`
@@ -509,7 +509,7 @@ type RadarAttackLayer3SummaryGetResponseSummary0 struct {
 // radarAttackLayer3SummaryGetResponseSummary0JSON contains the JSON metadata for
 // the struct [RadarAttackLayer3SummaryGetResponseSummary0]
 type radarAttackLayer3SummaryGetResponseSummary0JSON struct {
-	Gre         apijson.Field
+	GRE         apijson.Field
 	Icmp        apijson.Field
 	Tcp         apijson.Field
 	Udp         apijson.Field
@@ -767,7 +767,7 @@ func (r *RadarAttackLayer3SummaryProtocolResponseMetaConfidenceInfoAnnotation) U
 }
 
 type RadarAttackLayer3SummaryProtocolResponseSummary0 struct {
-	Gre  string                                               `json:"GRE,required"`
+	GRE  string                                               `json:"GRE,required"`
 	Icmp string                                               `json:"ICMP,required"`
 	Tcp  string                                               `json:"TCP,required"`
 	Udp  string                                               `json:"UDP,required"`
@@ -777,7 +777,7 @@ type RadarAttackLayer3SummaryProtocolResponseSummary0 struct {
 // radarAttackLayer3SummaryProtocolResponseSummary0JSON contains the JSON metadata
 // for the struct [RadarAttackLayer3SummaryProtocolResponseSummary0]
 type radarAttackLayer3SummaryProtocolResponseSummary0JSON struct {
-	Gre         apijson.Field
+	GRE         apijson.Field
 	Icmp        apijson.Field
 	Tcp         apijson.Field
 	Udp         apijson.Field
@@ -987,7 +987,7 @@ const (
 	RadarAttackLayer3SummaryBitrateParamsProtocolUdp  RadarAttackLayer3SummaryBitrateParamsProtocol = "UDP"
 	RadarAttackLayer3SummaryBitrateParamsProtocolTcp  RadarAttackLayer3SummaryBitrateParamsProtocol = "TCP"
 	RadarAttackLayer3SummaryBitrateParamsProtocolIcmp RadarAttackLayer3SummaryBitrateParamsProtocol = "ICMP"
-	RadarAttackLayer3SummaryBitrateParamsProtocolGre  RadarAttackLayer3SummaryBitrateParamsProtocol = "GRE"
+	RadarAttackLayer3SummaryBitrateParamsProtocolGRE  RadarAttackLayer3SummaryBitrateParamsProtocol = "GRE"
 )
 
 type RadarAttackLayer3SummaryBitrateResponseEnvelope struct {
@@ -1094,7 +1094,7 @@ const (
 	RadarAttackLayer3SummaryDurationParamsProtocolUdp  RadarAttackLayer3SummaryDurationParamsProtocol = "UDP"
 	RadarAttackLayer3SummaryDurationParamsProtocolTcp  RadarAttackLayer3SummaryDurationParamsProtocol = "TCP"
 	RadarAttackLayer3SummaryDurationParamsProtocolIcmp RadarAttackLayer3SummaryDurationParamsProtocol = "ICMP"
-	RadarAttackLayer3SummaryDurationParamsProtocolGre  RadarAttackLayer3SummaryDurationParamsProtocol = "GRE"
+	RadarAttackLayer3SummaryDurationParamsProtocolGRE  RadarAttackLayer3SummaryDurationParamsProtocol = "GRE"
 )
 
 type RadarAttackLayer3SummaryDurationResponseEnvelope struct {
@@ -1120,7 +1120,7 @@ type RadarAttackLayer3SummaryGetParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
@@ -1271,7 +1271,7 @@ const (
 	RadarAttackLayer3SummaryIPVersionParamsProtocolUdp  RadarAttackLayer3SummaryIPVersionParamsProtocol = "UDP"
 	RadarAttackLayer3SummaryIPVersionParamsProtocolTcp  RadarAttackLayer3SummaryIPVersionParamsProtocol = "TCP"
 	RadarAttackLayer3SummaryIPVersionParamsProtocolIcmp RadarAttackLayer3SummaryIPVersionParamsProtocol = "ICMP"
-	RadarAttackLayer3SummaryIPVersionParamsProtocolGre  RadarAttackLayer3SummaryIPVersionParamsProtocol = "GRE"
+	RadarAttackLayer3SummaryIPVersionParamsProtocolGRE  RadarAttackLayer3SummaryIPVersionParamsProtocol = "GRE"
 )
 
 type RadarAttackLayer3SummaryIPVersionResponseEnvelope struct {
@@ -1474,7 +1474,7 @@ const (
 	RadarAttackLayer3SummaryVectorParamsProtocolUdp  RadarAttackLayer3SummaryVectorParamsProtocol = "UDP"
 	RadarAttackLayer3SummaryVectorParamsProtocolTcp  RadarAttackLayer3SummaryVectorParamsProtocol = "TCP"
 	RadarAttackLayer3SummaryVectorParamsProtocolIcmp RadarAttackLayer3SummaryVectorParamsProtocol = "ICMP"
-	RadarAttackLayer3SummaryVectorParamsProtocolGre  RadarAttackLayer3SummaryVectorParamsProtocol = "GRE"
+	RadarAttackLayer3SummaryVectorParamsProtocolGRE  RadarAttackLayer3SummaryVectorParamsProtocol = "GRE"
 )
 
 type RadarAttackLayer3SummaryVectorResponseEnvelope struct {

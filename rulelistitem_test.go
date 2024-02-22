@@ -35,7 +35,7 @@ func TestRuleListItemNew(t *testing.T) {
 		"2c0fc9fa937b11eaa1b71c4d701ab86e",
 		cloudflare.RuleListItemNewParams{
 			Body: cloudflare.F([]cloudflare.RuleListItemNewParamsBody{{
-				Asn:     cloudflare.F(int64(5567)),
+				ASN:     cloudflare.F(int64(5567)),
 				Comment: cloudflare.F("Private IP address"),
 				Hostname: cloudflare.F(cloudflare.RuleListItemNewParamsBodyHostname{
 					URLHostname: cloudflare.F("example.com"),
@@ -51,7 +51,7 @@ func TestRuleListItemNew(t *testing.T) {
 					TargetURL:           cloudflare.F("https://archlinux.org/"),
 				}),
 			}, {
-				Asn:     cloudflare.F(int64(5567)),
+				ASN:     cloudflare.F(int64(5567)),
 				Comment: cloudflare.F("Private IP address"),
 				Hostname: cloudflare.F(cloudflare.RuleListItemNewParamsBodyHostname{
 					URLHostname: cloudflare.F("example.com"),
@@ -67,7 +67,7 @@ func TestRuleListItemNew(t *testing.T) {
 					TargetURL:           cloudflare.F("https://archlinux.org/"),
 				}),
 			}, {
-				Asn:     cloudflare.F(int64(5567)),
+				ASN:     cloudflare.F(int64(5567)),
 				Comment: cloudflare.F("Private IP address"),
 				Hostname: cloudflare.F(cloudflare.RuleListItemNewParamsBodyHostname{
 					URLHostname: cloudflare.F("example.com"),
@@ -116,7 +116,7 @@ func TestRuleListItemUpdate(t *testing.T) {
 		"2c0fc9fa937b11eaa1b71c4d701ab86e",
 		cloudflare.RuleListItemUpdateParams{
 			Body: cloudflare.F([]cloudflare.RuleListItemUpdateParamsBody{{
-				Asn:     cloudflare.F(int64(5567)),
+				ASN:     cloudflare.F(int64(5567)),
 				Comment: cloudflare.F("Private IP address"),
 				Hostname: cloudflare.F(cloudflare.RuleListItemUpdateParamsBodyHostname{
 					URLHostname: cloudflare.F("example.com"),
@@ -132,7 +132,7 @@ func TestRuleListItemUpdate(t *testing.T) {
 					TargetURL:           cloudflare.F("https://archlinux.org/"),
 				}),
 			}, {
-				Asn:     cloudflare.F(int64(5567)),
+				ASN:     cloudflare.F(int64(5567)),
 				Comment: cloudflare.F("Private IP address"),
 				Hostname: cloudflare.F(cloudflare.RuleListItemUpdateParamsBodyHostname{
 					URLHostname: cloudflare.F("example.com"),
@@ -148,7 +148,7 @@ func TestRuleListItemUpdate(t *testing.T) {
 					TargetURL:           cloudflare.F("https://archlinux.org/"),
 				}),
 			}, {
-				Asn:     cloudflare.F(int64(5567)),
+				ASN:     cloudflare.F(int64(5567)),
 				Comment: cloudflare.F("Private IP address"),
 				Hostname: cloudflare.F(cloudflare.RuleListItemUpdateParamsBodyHostname{
 					URLHostname: cloudflare.F("example.com"),

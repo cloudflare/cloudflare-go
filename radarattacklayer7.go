@@ -192,7 +192,7 @@ type RadarAttackLayer7TimeseriesParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// Array of L7 attack types.
 	Attack param.Field[[]RadarAttackLayer7TimeseriesParamsAttack] `query:"attack"`
 	// End of the date range (inclusive).

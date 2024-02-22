@@ -61,7 +61,7 @@ type ZerotrustConnectivitySettingEditResponse struct {
 	// A flag to enable the ICMP proxy for the account network.
 	IcmpProxyEnabled bool `json:"icmp_proxy_enabled"`
 	// A flag to enable WARP to WARP traffic.
-	OfframpWarpEnabled bool                                         `json:"offramp_warp_enabled"`
+	OfframpWARPEnabled bool                                         `json:"offramp_warp_enabled"`
 	JSON               zerotrustConnectivitySettingEditResponseJSON `json:"-"`
 }
 
@@ -69,7 +69,7 @@ type ZerotrustConnectivitySettingEditResponse struct {
 // struct [ZerotrustConnectivitySettingEditResponse]
 type zerotrustConnectivitySettingEditResponseJSON struct {
 	IcmpProxyEnabled   apijson.Field
-	OfframpWarpEnabled apijson.Field
+	OfframpWARPEnabled apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
@@ -82,7 +82,7 @@ type ZerotrustConnectivitySettingGetResponse struct {
 	// A flag to enable the ICMP proxy for the account network.
 	IcmpProxyEnabled bool `json:"icmp_proxy_enabled"`
 	// A flag to enable WARP to WARP traffic.
-	OfframpWarpEnabled bool                                        `json:"offramp_warp_enabled"`
+	OfframpWARPEnabled bool                                        `json:"offramp_warp_enabled"`
 	JSON               zerotrustConnectivitySettingGetResponseJSON `json:"-"`
 }
 
@@ -90,7 +90,7 @@ type ZerotrustConnectivitySettingGetResponse struct {
 // struct [ZerotrustConnectivitySettingGetResponse]
 type zerotrustConnectivitySettingGetResponseJSON struct {
 	IcmpProxyEnabled   apijson.Field
-	OfframpWarpEnabled apijson.Field
+	OfframpWARPEnabled apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
@@ -103,7 +103,7 @@ type ZerotrustConnectivitySettingEditParams struct {
 	// A flag to enable the ICMP proxy for the account network.
 	IcmpProxyEnabled param.Field[bool] `json:"icmp_proxy_enabled"`
 	// A flag to enable WARP to WARP traffic.
-	OfframpWarpEnabled param.Field[bool] `json:"offramp_warp_enabled"`
+	OfframpWARPEnabled param.Field[bool] `json:"offramp_warp_enabled"`
 }
 
 func (r ZerotrustConnectivitySettingEditParams) MarshalJSON() (data []byte, err error) {

@@ -31,7 +31,7 @@ func TestRadarHTTPTopBrowserFamiliesWithOptionalParams(t *testing.T) {
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.HTTP.Top.BrowserFamilies(context.TODO(), cloudflare.RadarHTTPTopBrowserFamiliesParams{
-		Asn:          cloudflare.F([]string{"string", "string", "string"}),
+		ASN:          cloudflare.F([]string{"string", "string", "string"}),
 		BotClass:     cloudflare.F([]cloudflare.RadarHTTPTopBrowserFamiliesParamsBotClass{cloudflare.RadarHTTPTopBrowserFamiliesParamsBotClassLikelyAutomated, cloudflare.RadarHTTPTopBrowserFamiliesParamsBotClassLikelyHuman}),
 		DateEnd:      cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:    cloudflare.F([]cloudflare.RadarHTTPTopBrowserFamiliesParamsDateRange{cloudflare.RadarHTTPTopBrowserFamiliesParamsDateRange1d, cloudflare.RadarHTTPTopBrowserFamiliesParamsDateRange2d, cloudflare.RadarHTTPTopBrowserFamiliesParamsDateRange7d}),
@@ -44,7 +44,7 @@ func TestRadarHTTPTopBrowserFamiliesWithOptionalParams(t *testing.T) {
 		Limit:        cloudflare.F(int64(5)),
 		Location:     cloudflare.F([]string{"string", "string", "string"}),
 		Name:         cloudflare.F([]string{"string", "string", "string"}),
-		Os:           cloudflare.F([]cloudflare.RadarHTTPTopBrowserFamiliesParamsO{cloudflare.RadarHTTPTopBrowserFamiliesParamsOWindows, cloudflare.RadarHTTPTopBrowserFamiliesParamsOMacosx, cloudflare.RadarHTTPTopBrowserFamiliesParamsOIos}),
+		OS:           cloudflare.F([]cloudflare.RadarHTTPTopBrowserFamiliesParamsOS{cloudflare.RadarHTTPTopBrowserFamiliesParamsOSWindows, cloudflare.RadarHTTPTopBrowserFamiliesParamsOSMacosx, cloudflare.RadarHTTPTopBrowserFamiliesParamsOSIos}),
 		TLSVersion:   cloudflare.F([]cloudflare.RadarHTTPTopBrowserFamiliesParamsTLSVersion{cloudflare.RadarHTTPTopBrowserFamiliesParamsTLSVersionTlSv1_0, cloudflare.RadarHTTPTopBrowserFamiliesParamsTLSVersionTlSv1_1, cloudflare.RadarHTTPTopBrowserFamiliesParamsTLSVersionTlSv1_2}),
 	})
 	if err != nil {
@@ -73,7 +73,7 @@ func TestRadarHTTPTopBrowsersWithOptionalParams(t *testing.T) {
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.HTTP.Top.Browsers(context.TODO(), cloudflare.RadarHTTPTopBrowsersParams{
-		Asn:          cloudflare.F([]string{"string", "string", "string"}),
+		ASN:          cloudflare.F([]string{"string", "string", "string"}),
 		BotClass:     cloudflare.F([]cloudflare.RadarHTTPTopBrowsersParamsBotClass{cloudflare.RadarHTTPTopBrowsersParamsBotClassLikelyAutomated, cloudflare.RadarHTTPTopBrowsersParamsBotClassLikelyHuman}),
 		DateEnd:      cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:    cloudflare.F([]cloudflare.RadarHTTPTopBrowsersParamsDateRange{cloudflare.RadarHTTPTopBrowsersParamsDateRange1d, cloudflare.RadarHTTPTopBrowsersParamsDateRange2d, cloudflare.RadarHTTPTopBrowsersParamsDateRange7d}),
@@ -86,7 +86,7 @@ func TestRadarHTTPTopBrowsersWithOptionalParams(t *testing.T) {
 		Limit:        cloudflare.F(int64(5)),
 		Location:     cloudflare.F([]string{"string", "string", "string"}),
 		Name:         cloudflare.F([]string{"string", "string", "string"}),
-		Os:           cloudflare.F([]cloudflare.RadarHTTPTopBrowsersParamsO{cloudflare.RadarHTTPTopBrowsersParamsOWindows, cloudflare.RadarHTTPTopBrowsersParamsOMacosx, cloudflare.RadarHTTPTopBrowsersParamsOIos}),
+		OS:           cloudflare.F([]cloudflare.RadarHTTPTopBrowsersParamsOS{cloudflare.RadarHTTPTopBrowsersParamsOSWindows, cloudflare.RadarHTTPTopBrowsersParamsOSMacosx, cloudflare.RadarHTTPTopBrowsersParamsOSIos}),
 		TLSVersion:   cloudflare.F([]cloudflare.RadarHTTPTopBrowsersParamsTLSVersion{cloudflare.RadarHTTPTopBrowsersParamsTLSVersionTlSv1_0, cloudflare.RadarHTTPTopBrowsersParamsTLSVersionTlSv1_1, cloudflare.RadarHTTPTopBrowsersParamsTLSVersionTlSv1_2}),
 	})
 	if err != nil {

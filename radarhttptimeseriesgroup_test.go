@@ -32,7 +32,7 @@ func TestRadarHTTPTimeseriesGroupBotClassWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.HTTP.TimeseriesGroups.BotClass(context.TODO(), cloudflare.RadarHTTPTimeseriesGroupBotClassParams{
 		AggInterval:  cloudflare.F(cloudflare.RadarHTTPTimeseriesGroupBotClassParamsAggInterval1h),
-		Asn:          cloudflare.F([]string{"string", "string", "string"}),
+		ASN:          cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:      cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:    cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupBotClassParamsDateRange{cloudflare.RadarHTTPTimeseriesGroupBotClassParamsDateRange1d, cloudflare.RadarHTTPTimeseriesGroupBotClassParamsDateRange2d, cloudflare.RadarHTTPTimeseriesGroupBotClassParamsDateRange7d}),
 		DateStart:    cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -43,7 +43,7 @@ func TestRadarHTTPTimeseriesGroupBotClassWithOptionalParams(t *testing.T) {
 		IPVersion:    cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupBotClassParamsIPVersion{cloudflare.RadarHTTPTimeseriesGroupBotClassParamsIPVersionIPv4, cloudflare.RadarHTTPTimeseriesGroupBotClassParamsIPVersionIPv6}),
 		Location:     cloudflare.F([]string{"string", "string", "string"}),
 		Name:         cloudflare.F([]string{"string", "string", "string"}),
-		Os:           cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupBotClassParamsO{cloudflare.RadarHTTPTimeseriesGroupBotClassParamsOWindows, cloudflare.RadarHTTPTimeseriesGroupBotClassParamsOMacosx, cloudflare.RadarHTTPTimeseriesGroupBotClassParamsOIos}),
+		OS:           cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupBotClassParamsOS{cloudflare.RadarHTTPTimeseriesGroupBotClassParamsOSWindows, cloudflare.RadarHTTPTimeseriesGroupBotClassParamsOSMacosx, cloudflare.RadarHTTPTimeseriesGroupBotClassParamsOSIos}),
 		TLSVersion:   cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupBotClassParamsTLSVersion{cloudflare.RadarHTTPTimeseriesGroupBotClassParamsTLSVersionTlSv1_0, cloudflare.RadarHTTPTimeseriesGroupBotClassParamsTLSVersionTlSv1_1, cloudflare.RadarHTTPTimeseriesGroupBotClassParamsTLSVersionTlSv1_2}),
 	})
 	if err != nil {
@@ -73,7 +73,7 @@ func TestRadarHTTPTimeseriesGroupBrowserWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.HTTP.TimeseriesGroups.Browser(context.TODO(), cloudflare.RadarHTTPTimeseriesGroupBrowserParams{
 		AggInterval:   cloudflare.F(cloudflare.RadarHTTPTimeseriesGroupBrowserParamsAggInterval1h),
-		Asn:           cloudflare.F([]string{"string", "string", "string"}),
+		ASN:           cloudflare.F([]string{"string", "string", "string"}),
 		BotClass:      cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupBrowserParamsBotClass{cloudflare.RadarHTTPTimeseriesGroupBrowserParamsBotClassLikelyAutomated, cloudflare.RadarHTTPTimeseriesGroupBrowserParamsBotClassLikelyHuman}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:     cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupBrowserParamsDateRange{cloudflare.RadarHTTPTimeseriesGroupBrowserParamsDateRange1d, cloudflare.RadarHTTPTimeseriesGroupBrowserParamsDateRange2d, cloudflare.RadarHTTPTimeseriesGroupBrowserParamsDateRange7d}),
@@ -86,7 +86,7 @@ func TestRadarHTTPTimeseriesGroupBrowserWithOptionalParams(t *testing.T) {
 		LimitPerGroup: cloudflare.F(int64(4)),
 		Location:      cloudflare.F([]string{"string", "string", "string"}),
 		Name:          cloudflare.F([]string{"string", "string", "string"}),
-		Os:            cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupBrowserParamsO{cloudflare.RadarHTTPTimeseriesGroupBrowserParamsOWindows, cloudflare.RadarHTTPTimeseriesGroupBrowserParamsOMacosx, cloudflare.RadarHTTPTimeseriesGroupBrowserParamsOIos}),
+		OS:            cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupBrowserParamsOS{cloudflare.RadarHTTPTimeseriesGroupBrowserParamsOSWindows, cloudflare.RadarHTTPTimeseriesGroupBrowserParamsOSMacosx, cloudflare.RadarHTTPTimeseriesGroupBrowserParamsOSIos}),
 		TLSVersion:    cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupBrowserParamsTLSVersion{cloudflare.RadarHTTPTimeseriesGroupBrowserParamsTLSVersionTlSv1_0, cloudflare.RadarHTTPTimeseriesGroupBrowserParamsTLSVersionTlSv1_1, cloudflare.RadarHTTPTimeseriesGroupBrowserParamsTLSVersionTlSv1_2}),
 	})
 	if err != nil {
@@ -116,7 +116,7 @@ func TestRadarHTTPTimeseriesGroupBrowserFamilyWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.HTTP.TimeseriesGroups.BrowserFamily(context.TODO(), cloudflare.RadarHTTPTimeseriesGroupBrowserFamilyParams{
 		AggInterval:  cloudflare.F(cloudflare.RadarHTTPTimeseriesGroupBrowserFamilyParamsAggInterval1h),
-		Asn:          cloudflare.F([]string{"string", "string", "string"}),
+		ASN:          cloudflare.F([]string{"string", "string", "string"}),
 		BotClass:     cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupBrowserFamilyParamsBotClass{cloudflare.RadarHTTPTimeseriesGroupBrowserFamilyParamsBotClassLikelyAutomated, cloudflare.RadarHTTPTimeseriesGroupBrowserFamilyParamsBotClassLikelyHuman}),
 		DateEnd:      cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:    cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupBrowserFamilyParamsDateRange{cloudflare.RadarHTTPTimeseriesGroupBrowserFamilyParamsDateRange1d, cloudflare.RadarHTTPTimeseriesGroupBrowserFamilyParamsDateRange2d, cloudflare.RadarHTTPTimeseriesGroupBrowserFamilyParamsDateRange7d}),
@@ -128,7 +128,7 @@ func TestRadarHTTPTimeseriesGroupBrowserFamilyWithOptionalParams(t *testing.T) {
 		IPVersion:    cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupBrowserFamilyParamsIPVersion{cloudflare.RadarHTTPTimeseriesGroupBrowserFamilyParamsIPVersionIPv4, cloudflare.RadarHTTPTimeseriesGroupBrowserFamilyParamsIPVersionIPv6}),
 		Location:     cloudflare.F([]string{"string", "string", "string"}),
 		Name:         cloudflare.F([]string{"string", "string", "string"}),
-		Os:           cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupBrowserFamilyParamsO{cloudflare.RadarHTTPTimeseriesGroupBrowserFamilyParamsOWindows, cloudflare.RadarHTTPTimeseriesGroupBrowserFamilyParamsOMacosx, cloudflare.RadarHTTPTimeseriesGroupBrowserFamilyParamsOIos}),
+		OS:           cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupBrowserFamilyParamsOS{cloudflare.RadarHTTPTimeseriesGroupBrowserFamilyParamsOSWindows, cloudflare.RadarHTTPTimeseriesGroupBrowserFamilyParamsOSMacosx, cloudflare.RadarHTTPTimeseriesGroupBrowserFamilyParamsOSIos}),
 		TLSVersion:   cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupBrowserFamilyParamsTLSVersion{cloudflare.RadarHTTPTimeseriesGroupBrowserFamilyParamsTLSVersionTlSv1_0, cloudflare.RadarHTTPTimeseriesGroupBrowserFamilyParamsTLSVersionTlSv1_1, cloudflare.RadarHTTPTimeseriesGroupBrowserFamilyParamsTLSVersionTlSv1_2}),
 	})
 	if err != nil {
@@ -158,7 +158,7 @@ func TestRadarHTTPTimeseriesGroupDeviceTypeWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.HTTP.TimeseriesGroups.DeviceType(context.TODO(), cloudflare.RadarHTTPTimeseriesGroupDeviceTypeParams{
 		AggInterval:  cloudflare.F(cloudflare.RadarHTTPTimeseriesGroupDeviceTypeParamsAggInterval1h),
-		Asn:          cloudflare.F([]string{"string", "string", "string"}),
+		ASN:          cloudflare.F([]string{"string", "string", "string"}),
 		BotClass:     cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupDeviceTypeParamsBotClass{cloudflare.RadarHTTPTimeseriesGroupDeviceTypeParamsBotClassLikelyAutomated, cloudflare.RadarHTTPTimeseriesGroupDeviceTypeParamsBotClassLikelyHuman}),
 		DateEnd:      cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:    cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupDeviceTypeParamsDateRange{cloudflare.RadarHTTPTimeseriesGroupDeviceTypeParamsDateRange1d, cloudflare.RadarHTTPTimeseriesGroupDeviceTypeParamsDateRange2d, cloudflare.RadarHTTPTimeseriesGroupDeviceTypeParamsDateRange7d}),
@@ -169,7 +169,7 @@ func TestRadarHTTPTimeseriesGroupDeviceTypeWithOptionalParams(t *testing.T) {
 		IPVersion:    cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupDeviceTypeParamsIPVersion{cloudflare.RadarHTTPTimeseriesGroupDeviceTypeParamsIPVersionIPv4, cloudflare.RadarHTTPTimeseriesGroupDeviceTypeParamsIPVersionIPv6}),
 		Location:     cloudflare.F([]string{"string", "string", "string"}),
 		Name:         cloudflare.F([]string{"string", "string", "string"}),
-		Os:           cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupDeviceTypeParamsO{cloudflare.RadarHTTPTimeseriesGroupDeviceTypeParamsOWindows, cloudflare.RadarHTTPTimeseriesGroupDeviceTypeParamsOMacosx, cloudflare.RadarHTTPTimeseriesGroupDeviceTypeParamsOIos}),
+		OS:           cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupDeviceTypeParamsOS{cloudflare.RadarHTTPTimeseriesGroupDeviceTypeParamsOSWindows, cloudflare.RadarHTTPTimeseriesGroupDeviceTypeParamsOSMacosx, cloudflare.RadarHTTPTimeseriesGroupDeviceTypeParamsOSIos}),
 		TLSVersion:   cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupDeviceTypeParamsTLSVersion{cloudflare.RadarHTTPTimeseriesGroupDeviceTypeParamsTLSVersionTlSv1_0, cloudflare.RadarHTTPTimeseriesGroupDeviceTypeParamsTLSVersionTlSv1_1, cloudflare.RadarHTTPTimeseriesGroupDeviceTypeParamsTLSVersionTlSv1_2}),
 	})
 	if err != nil {
@@ -199,7 +199,7 @@ func TestRadarHTTPTimeseriesGroupHTTPProtocolWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.HTTP.TimeseriesGroups.HTTPProtocol(context.TODO(), cloudflare.RadarHTTPTimeseriesGroupHTTPProtocolParams{
 		AggInterval: cloudflare.F(cloudflare.RadarHTTPTimeseriesGroupHTTPProtocolParamsAggInterval1h),
-		Asn:         cloudflare.F([]string{"string", "string", "string"}),
+		ASN:         cloudflare.F([]string{"string", "string", "string"}),
 		BotClass:    cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupHTTPProtocolParamsBotClass{cloudflare.RadarHTTPTimeseriesGroupHTTPProtocolParamsBotClassLikelyAutomated, cloudflare.RadarHTTPTimeseriesGroupHTTPProtocolParamsBotClassLikelyHuman}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:   cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupHTTPProtocolParamsDateRange{cloudflare.RadarHTTPTimeseriesGroupHTTPProtocolParamsDateRange1d, cloudflare.RadarHTTPTimeseriesGroupHTTPProtocolParamsDateRange2d, cloudflare.RadarHTTPTimeseriesGroupHTTPProtocolParamsDateRange7d}),
@@ -210,7 +210,7 @@ func TestRadarHTTPTimeseriesGroupHTTPProtocolWithOptionalParams(t *testing.T) {
 		IPVersion:   cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupHTTPProtocolParamsIPVersion{cloudflare.RadarHTTPTimeseriesGroupHTTPProtocolParamsIPVersionIPv4, cloudflare.RadarHTTPTimeseriesGroupHTTPProtocolParamsIPVersionIPv6}),
 		Location:    cloudflare.F([]string{"string", "string", "string"}),
 		Name:        cloudflare.F([]string{"string", "string", "string"}),
-		Os:          cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupHTTPProtocolParamsO{cloudflare.RadarHTTPTimeseriesGroupHTTPProtocolParamsOWindows, cloudflare.RadarHTTPTimeseriesGroupHTTPProtocolParamsOMacosx, cloudflare.RadarHTTPTimeseriesGroupHTTPProtocolParamsOIos}),
+		OS:          cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupHTTPProtocolParamsOS{cloudflare.RadarHTTPTimeseriesGroupHTTPProtocolParamsOSWindows, cloudflare.RadarHTTPTimeseriesGroupHTTPProtocolParamsOSMacosx, cloudflare.RadarHTTPTimeseriesGroupHTTPProtocolParamsOSIos}),
 		TLSVersion:  cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupHTTPProtocolParamsTLSVersion{cloudflare.RadarHTTPTimeseriesGroupHTTPProtocolParamsTLSVersionTlSv1_0, cloudflare.RadarHTTPTimeseriesGroupHTTPProtocolParamsTLSVersionTlSv1_1, cloudflare.RadarHTTPTimeseriesGroupHTTPProtocolParamsTLSVersionTlSv1_2}),
 	})
 	if err != nil {
@@ -240,7 +240,7 @@ func TestRadarHTTPTimeseriesGroupHTTPVersionWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.HTTP.TimeseriesGroups.HTTPVersion(context.TODO(), cloudflare.RadarHTTPTimeseriesGroupHTTPVersionParams{
 		AggInterval:  cloudflare.F(cloudflare.RadarHTTPTimeseriesGroupHTTPVersionParamsAggInterval1h),
-		Asn:          cloudflare.F([]string{"string", "string", "string"}),
+		ASN:          cloudflare.F([]string{"string", "string", "string"}),
 		BotClass:     cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupHTTPVersionParamsBotClass{cloudflare.RadarHTTPTimeseriesGroupHTTPVersionParamsBotClassLikelyAutomated, cloudflare.RadarHTTPTimeseriesGroupHTTPVersionParamsBotClassLikelyHuman}),
 		DateEnd:      cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:    cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupHTTPVersionParamsDateRange{cloudflare.RadarHTTPTimeseriesGroupHTTPVersionParamsDateRange1d, cloudflare.RadarHTTPTimeseriesGroupHTTPVersionParamsDateRange2d, cloudflare.RadarHTTPTimeseriesGroupHTTPVersionParamsDateRange7d}),
@@ -251,7 +251,7 @@ func TestRadarHTTPTimeseriesGroupHTTPVersionWithOptionalParams(t *testing.T) {
 		IPVersion:    cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupHTTPVersionParamsIPVersion{cloudflare.RadarHTTPTimeseriesGroupHTTPVersionParamsIPVersionIPv4, cloudflare.RadarHTTPTimeseriesGroupHTTPVersionParamsIPVersionIPv6}),
 		Location:     cloudflare.F([]string{"string", "string", "string"}),
 		Name:         cloudflare.F([]string{"string", "string", "string"}),
-		Os:           cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupHTTPVersionParamsO{cloudflare.RadarHTTPTimeseriesGroupHTTPVersionParamsOWindows, cloudflare.RadarHTTPTimeseriesGroupHTTPVersionParamsOMacosx, cloudflare.RadarHTTPTimeseriesGroupHTTPVersionParamsOIos}),
+		OS:           cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupHTTPVersionParamsOS{cloudflare.RadarHTTPTimeseriesGroupHTTPVersionParamsOSWindows, cloudflare.RadarHTTPTimeseriesGroupHTTPVersionParamsOSMacosx, cloudflare.RadarHTTPTimeseriesGroupHTTPVersionParamsOSIos}),
 		TLSVersion:   cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupHTTPVersionParamsTLSVersion{cloudflare.RadarHTTPTimeseriesGroupHTTPVersionParamsTLSVersionTlSv1_0, cloudflare.RadarHTTPTimeseriesGroupHTTPVersionParamsTLSVersionTlSv1_1, cloudflare.RadarHTTPTimeseriesGroupHTTPVersionParamsTLSVersionTlSv1_2}),
 	})
 	if err != nil {
@@ -281,7 +281,7 @@ func TestRadarHTTPTimeseriesGroupIPVersionWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.HTTP.TimeseriesGroups.IPVersion(context.TODO(), cloudflare.RadarHTTPTimeseriesGroupIPVersionParams{
 		AggInterval:  cloudflare.F(cloudflare.RadarHTTPTimeseriesGroupIPVersionParamsAggInterval1h),
-		Asn:          cloudflare.F([]string{"string", "string", "string"}),
+		ASN:          cloudflare.F([]string{"string", "string", "string"}),
 		BotClass:     cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupIPVersionParamsBotClass{cloudflare.RadarHTTPTimeseriesGroupIPVersionParamsBotClassLikelyAutomated, cloudflare.RadarHTTPTimeseriesGroupIPVersionParamsBotClassLikelyHuman}),
 		DateEnd:      cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:    cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupIPVersionParamsDateRange{cloudflare.RadarHTTPTimeseriesGroupIPVersionParamsDateRange1d, cloudflare.RadarHTTPTimeseriesGroupIPVersionParamsDateRange2d, cloudflare.RadarHTTPTimeseriesGroupIPVersionParamsDateRange7d}),
@@ -292,7 +292,7 @@ func TestRadarHTTPTimeseriesGroupIPVersionWithOptionalParams(t *testing.T) {
 		HTTPVersion:  cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupIPVersionParamsHTTPVersion{cloudflare.RadarHTTPTimeseriesGroupIPVersionParamsHTTPVersionHttPv1, cloudflare.RadarHTTPTimeseriesGroupIPVersionParamsHTTPVersionHttPv2, cloudflare.RadarHTTPTimeseriesGroupIPVersionParamsHTTPVersionHttPv3}),
 		Location:     cloudflare.F([]string{"string", "string", "string"}),
 		Name:         cloudflare.F([]string{"string", "string", "string"}),
-		Os:           cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupIPVersionParamsO{cloudflare.RadarHTTPTimeseriesGroupIPVersionParamsOWindows, cloudflare.RadarHTTPTimeseriesGroupIPVersionParamsOMacosx, cloudflare.RadarHTTPTimeseriesGroupIPVersionParamsOIos}),
+		OS:           cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupIPVersionParamsOS{cloudflare.RadarHTTPTimeseriesGroupIPVersionParamsOSWindows, cloudflare.RadarHTTPTimeseriesGroupIPVersionParamsOSMacosx, cloudflare.RadarHTTPTimeseriesGroupIPVersionParamsOSIos}),
 		TLSVersion:   cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupIPVersionParamsTLSVersion{cloudflare.RadarHTTPTimeseriesGroupIPVersionParamsTLSVersionTlSv1_0, cloudflare.RadarHTTPTimeseriesGroupIPVersionParamsTLSVersionTlSv1_1, cloudflare.RadarHTTPTimeseriesGroupIPVersionParamsTLSVersionTlSv1_2}),
 	})
 	if err != nil {
@@ -304,7 +304,7 @@ func TestRadarHTTPTimeseriesGroupIPVersionWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestRadarHTTPTimeseriesGroupOsWithOptionalParams(t *testing.T) {
+func TestRadarHTTPTimeseriesGroupOSWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -320,21 +320,21 @@ func TestRadarHTTPTimeseriesGroupOsWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Radar.HTTP.TimeseriesGroups.Os(context.TODO(), cloudflare.RadarHTTPTimeseriesGroupOsParams{
-		AggInterval:  cloudflare.F(cloudflare.RadarHTTPTimeseriesGroupOsParamsAggInterval1h),
-		Asn:          cloudflare.F([]string{"string", "string", "string"}),
-		BotClass:     cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupOsParamsBotClass{cloudflare.RadarHTTPTimeseriesGroupOsParamsBotClassLikelyAutomated, cloudflare.RadarHTTPTimeseriesGroupOsParamsBotClassLikelyHuman}),
+	_, err := client.Radar.HTTP.TimeseriesGroups.OS(context.TODO(), cloudflare.RadarHTTPTimeseriesGroupOSParams{
+		AggInterval:  cloudflare.F(cloudflare.RadarHTTPTimeseriesGroupOSParamsAggInterval1h),
+		ASN:          cloudflare.F([]string{"string", "string", "string"}),
+		BotClass:     cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupOSParamsBotClass{cloudflare.RadarHTTPTimeseriesGroupOSParamsBotClassLikelyAutomated, cloudflare.RadarHTTPTimeseriesGroupOSParamsBotClassLikelyHuman}),
 		DateEnd:      cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:    cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupOsParamsDateRange{cloudflare.RadarHTTPTimeseriesGroupOsParamsDateRange1d, cloudflare.RadarHTTPTimeseriesGroupOsParamsDateRange2d, cloudflare.RadarHTTPTimeseriesGroupOsParamsDateRange7d}),
+		DateRange:    cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupOSParamsDateRange{cloudflare.RadarHTTPTimeseriesGroupOSParamsDateRange1d, cloudflare.RadarHTTPTimeseriesGroupOSParamsDateRange2d, cloudflare.RadarHTTPTimeseriesGroupOSParamsDateRange7d}),
 		DateStart:    cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DeviceType:   cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupOsParamsDeviceType{cloudflare.RadarHTTPTimeseriesGroupOsParamsDeviceTypeDesktop, cloudflare.RadarHTTPTimeseriesGroupOsParamsDeviceTypeMobile, cloudflare.RadarHTTPTimeseriesGroupOsParamsDeviceTypeOther}),
-		Format:       cloudflare.F(cloudflare.RadarHTTPTimeseriesGroupOsParamsFormatJson),
-		HTTPProtocol: cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupOsParamsHTTPProtocol{cloudflare.RadarHTTPTimeseriesGroupOsParamsHTTPProtocolHTTP, cloudflare.RadarHTTPTimeseriesGroupOsParamsHTTPProtocolHTTPS}),
-		HTTPVersion:  cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupOsParamsHTTPVersion{cloudflare.RadarHTTPTimeseriesGroupOsParamsHTTPVersionHttPv1, cloudflare.RadarHTTPTimeseriesGroupOsParamsHTTPVersionHttPv2, cloudflare.RadarHTTPTimeseriesGroupOsParamsHTTPVersionHttPv3}),
-		IPVersion:    cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupOsParamsIPVersion{cloudflare.RadarHTTPTimeseriesGroupOsParamsIPVersionIPv4, cloudflare.RadarHTTPTimeseriesGroupOsParamsIPVersionIPv6}),
+		DeviceType:   cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupOSParamsDeviceType{cloudflare.RadarHTTPTimeseriesGroupOSParamsDeviceTypeDesktop, cloudflare.RadarHTTPTimeseriesGroupOSParamsDeviceTypeMobile, cloudflare.RadarHTTPTimeseriesGroupOSParamsDeviceTypeOther}),
+		Format:       cloudflare.F(cloudflare.RadarHTTPTimeseriesGroupOSParamsFormatJson),
+		HTTPProtocol: cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupOSParamsHTTPProtocol{cloudflare.RadarHTTPTimeseriesGroupOSParamsHTTPProtocolHTTP, cloudflare.RadarHTTPTimeseriesGroupOSParamsHTTPProtocolHTTPS}),
+		HTTPVersion:  cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupOSParamsHTTPVersion{cloudflare.RadarHTTPTimeseriesGroupOSParamsHTTPVersionHttPv1, cloudflare.RadarHTTPTimeseriesGroupOSParamsHTTPVersionHttPv2, cloudflare.RadarHTTPTimeseriesGroupOSParamsHTTPVersionHttPv3}),
+		IPVersion:    cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupOSParamsIPVersion{cloudflare.RadarHTTPTimeseriesGroupOSParamsIPVersionIPv4, cloudflare.RadarHTTPTimeseriesGroupOSParamsIPVersionIPv6}),
 		Location:     cloudflare.F([]string{"string", "string", "string"}),
 		Name:         cloudflare.F([]string{"string", "string", "string"}),
-		TLSVersion:   cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupOsParamsTLSVersion{cloudflare.RadarHTTPTimeseriesGroupOsParamsTLSVersionTlSv1_0, cloudflare.RadarHTTPTimeseriesGroupOsParamsTLSVersionTlSv1_1, cloudflare.RadarHTTPTimeseriesGroupOsParamsTLSVersionTlSv1_2}),
+		TLSVersion:   cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupOSParamsTLSVersion{cloudflare.RadarHTTPTimeseriesGroupOSParamsTLSVersionTlSv1_0, cloudflare.RadarHTTPTimeseriesGroupOSParamsTLSVersionTlSv1_1, cloudflare.RadarHTTPTimeseriesGroupOSParamsTLSVersionTlSv1_2}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -363,7 +363,7 @@ func TestRadarHTTPTimeseriesGroupTLSVersionWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.HTTP.TimeseriesGroups.TLSVersion(context.TODO(), cloudflare.RadarHTTPTimeseriesGroupTLSVersionParams{
 		AggInterval:  cloudflare.F(cloudflare.RadarHTTPTimeseriesGroupTLSVersionParamsAggInterval1h),
-		Asn:          cloudflare.F([]string{"string", "string", "string"}),
+		ASN:          cloudflare.F([]string{"string", "string", "string"}),
 		BotClass:     cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupTLSVersionParamsBotClass{cloudflare.RadarHTTPTimeseriesGroupTLSVersionParamsBotClassLikelyAutomated, cloudflare.RadarHTTPTimeseriesGroupTLSVersionParamsBotClassLikelyHuman}),
 		DateEnd:      cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:    cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupTLSVersionParamsDateRange{cloudflare.RadarHTTPTimeseriesGroupTLSVersionParamsDateRange1d, cloudflare.RadarHTTPTimeseriesGroupTLSVersionParamsDateRange2d, cloudflare.RadarHTTPTimeseriesGroupTLSVersionParamsDateRange7d}),
@@ -375,7 +375,7 @@ func TestRadarHTTPTimeseriesGroupTLSVersionWithOptionalParams(t *testing.T) {
 		IPVersion:    cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupTLSVersionParamsIPVersion{cloudflare.RadarHTTPTimeseriesGroupTLSVersionParamsIPVersionIPv4, cloudflare.RadarHTTPTimeseriesGroupTLSVersionParamsIPVersionIPv6}),
 		Location:     cloudflare.F([]string{"string", "string", "string"}),
 		Name:         cloudflare.F([]string{"string", "string", "string"}),
-		Os:           cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupTLSVersionParamsO{cloudflare.RadarHTTPTimeseriesGroupTLSVersionParamsOWindows, cloudflare.RadarHTTPTimeseriesGroupTLSVersionParamsOMacosx, cloudflare.RadarHTTPTimeseriesGroupTLSVersionParamsOIos}),
+		OS:           cloudflare.F([]cloudflare.RadarHTTPTimeseriesGroupTLSVersionParamsOS{cloudflare.RadarHTTPTimeseriesGroupTLSVersionParamsOSWindows, cloudflare.RadarHTTPTimeseriesGroupTLSVersionParamsOSMacosx, cloudflare.RadarHTTPTimeseriesGroupTLSVersionParamsOSIos}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -182,11 +182,11 @@ func (r *RadarEmailSecurityTopLocationSPFGetResponseTop0) UnmarshalJSON(data []b
 
 type RadarEmailSecurityTopLocationSPFGetParams struct {
 	// Filter for arc (Authenticated Received Chain).
-	Arc param.Field[[]RadarEmailSecurityTopLocationSPFGetParamsArc] `query:"arc"`
+	ARC param.Field[[]RadarEmailSecurityTopLocationSPFGetParamsARC] `query:"arc"`
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
@@ -198,7 +198,7 @@ type RadarEmailSecurityTopLocationSPFGetParams struct {
 	// Filter for dkim.
 	DKIM param.Field[[]RadarEmailSecurityTopLocationSPFGetParamsDKIM] `query:"dkim"`
 	// Filter for dmarc.
-	Dmarc param.Field[[]RadarEmailSecurityTopLocationSPFGetParamsDmarc] `query:"dmarc"`
+	DMARC param.Field[[]RadarEmailSecurityTopLocationSPFGetParamsDMARC] `query:"dmarc"`
 	// Format results are returned in.
 	Format param.Field[RadarEmailSecurityTopLocationSPFGetParamsFormat] `query:"format"`
 	// Limit the number of objects in the response.
@@ -229,12 +229,12 @@ const (
 	RadarEmailSecurityTopLocationSPFGetParamsSPFFail RadarEmailSecurityTopLocationSPFGetParamsSPF = "FAIL"
 )
 
-type RadarEmailSecurityTopLocationSPFGetParamsArc string
+type RadarEmailSecurityTopLocationSPFGetParamsARC string
 
 const (
-	RadarEmailSecurityTopLocationSPFGetParamsArcPass RadarEmailSecurityTopLocationSPFGetParamsArc = "PASS"
-	RadarEmailSecurityTopLocationSPFGetParamsArcNone RadarEmailSecurityTopLocationSPFGetParamsArc = "NONE"
-	RadarEmailSecurityTopLocationSPFGetParamsArcFail RadarEmailSecurityTopLocationSPFGetParamsArc = "FAIL"
+	RadarEmailSecurityTopLocationSPFGetParamsARCPass RadarEmailSecurityTopLocationSPFGetParamsARC = "PASS"
+	RadarEmailSecurityTopLocationSPFGetParamsARCNone RadarEmailSecurityTopLocationSPFGetParamsARC = "NONE"
+	RadarEmailSecurityTopLocationSPFGetParamsARCFail RadarEmailSecurityTopLocationSPFGetParamsARC = "FAIL"
 )
 
 type RadarEmailSecurityTopLocationSPFGetParamsDateRange string
@@ -265,12 +265,12 @@ const (
 	RadarEmailSecurityTopLocationSPFGetParamsDKIMFail RadarEmailSecurityTopLocationSPFGetParamsDKIM = "FAIL"
 )
 
-type RadarEmailSecurityTopLocationSPFGetParamsDmarc string
+type RadarEmailSecurityTopLocationSPFGetParamsDMARC string
 
 const (
-	RadarEmailSecurityTopLocationSPFGetParamsDmarcPass RadarEmailSecurityTopLocationSPFGetParamsDmarc = "PASS"
-	RadarEmailSecurityTopLocationSPFGetParamsDmarcNone RadarEmailSecurityTopLocationSPFGetParamsDmarc = "NONE"
-	RadarEmailSecurityTopLocationSPFGetParamsDmarcFail RadarEmailSecurityTopLocationSPFGetParamsDmarc = "FAIL"
+	RadarEmailSecurityTopLocationSPFGetParamsDMARCPass RadarEmailSecurityTopLocationSPFGetParamsDMARC = "PASS"
+	RadarEmailSecurityTopLocationSPFGetParamsDMARCNone RadarEmailSecurityTopLocationSPFGetParamsDMARC = "NONE"
+	RadarEmailSecurityTopLocationSPFGetParamsDMARCFail RadarEmailSecurityTopLocationSPFGetParamsDMARC = "FAIL"
 )
 
 // Format results are returned in.

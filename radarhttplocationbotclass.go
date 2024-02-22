@@ -185,7 +185,7 @@ type RadarHTTPLocationBotClassGetParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
@@ -213,7 +213,7 @@ type RadarHTTPLocationBotClassGetParams struct {
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Filter for os name.
-	Os param.Field[[]RadarHTTPLocationBotClassGetParamsO] `query:"os"`
+	OS param.Field[[]RadarHTTPLocationBotClassGetParamsOS] `query:"os"`
 	// Filter for tls version.
 	TLSVersion param.Field[[]RadarHTTPLocationBotClassGetParamsTLSVersion] `query:"tlsVersion"`
 }
@@ -293,16 +293,16 @@ const (
 	RadarHTTPLocationBotClassGetParamsIPVersionIPv6 RadarHTTPLocationBotClassGetParamsIPVersion = "IPv6"
 )
 
-type RadarHTTPLocationBotClassGetParamsO string
+type RadarHTTPLocationBotClassGetParamsOS string
 
 const (
-	RadarHTTPLocationBotClassGetParamsOWindows  RadarHTTPLocationBotClassGetParamsO = "WINDOWS"
-	RadarHTTPLocationBotClassGetParamsOMacosx   RadarHTTPLocationBotClassGetParamsO = "MACOSX"
-	RadarHTTPLocationBotClassGetParamsOIos      RadarHTTPLocationBotClassGetParamsO = "IOS"
-	RadarHTTPLocationBotClassGetParamsOAndroid  RadarHTTPLocationBotClassGetParamsO = "ANDROID"
-	RadarHTTPLocationBotClassGetParamsOChromeos RadarHTTPLocationBotClassGetParamsO = "CHROMEOS"
-	RadarHTTPLocationBotClassGetParamsOLinux    RadarHTTPLocationBotClassGetParamsO = "LINUX"
-	RadarHTTPLocationBotClassGetParamsOSmartTv  RadarHTTPLocationBotClassGetParamsO = "SMART_TV"
+	RadarHTTPLocationBotClassGetParamsOSWindows  RadarHTTPLocationBotClassGetParamsOS = "WINDOWS"
+	RadarHTTPLocationBotClassGetParamsOSMacosx   RadarHTTPLocationBotClassGetParamsOS = "MACOSX"
+	RadarHTTPLocationBotClassGetParamsOSIos      RadarHTTPLocationBotClassGetParamsOS = "IOS"
+	RadarHTTPLocationBotClassGetParamsOSAndroid  RadarHTTPLocationBotClassGetParamsOS = "ANDROID"
+	RadarHTTPLocationBotClassGetParamsOSChromeos RadarHTTPLocationBotClassGetParamsOS = "CHROMEOS"
+	RadarHTTPLocationBotClassGetParamsOSLinux    RadarHTTPLocationBotClassGetParamsOS = "LINUX"
+	RadarHTTPLocationBotClassGetParamsOSSmartTv  RadarHTTPLocationBotClassGetParamsOS = "SMART_TV"
 )
 
 type RadarHTTPLocationBotClassGetParamsTLSVersion string

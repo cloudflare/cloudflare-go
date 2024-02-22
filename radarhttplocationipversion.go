@@ -184,7 +184,7 @@ type RadarHTTPLocationIPVersionGetParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// Filter for bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]RadarHTTPLocationIPVersionGetParamsBotClass] `query:"botClass"`
@@ -213,7 +213,7 @@ type RadarHTTPLocationIPVersionGetParams struct {
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Filter for os name.
-	Os param.Field[[]RadarHTTPLocationIPVersionGetParamsO] `query:"os"`
+	OS param.Field[[]RadarHTTPLocationIPVersionGetParamsOS] `query:"os"`
 	// Filter for tls version.
 	TLSVersion param.Field[[]RadarHTTPLocationIPVersionGetParamsTLSVersion] `query:"tlsVersion"`
 }
@@ -293,16 +293,16 @@ const (
 	RadarHTTPLocationIPVersionGetParamsHTTPVersionHttPv3 RadarHTTPLocationIPVersionGetParamsHTTPVersion = "HTTPv3"
 )
 
-type RadarHTTPLocationIPVersionGetParamsO string
+type RadarHTTPLocationIPVersionGetParamsOS string
 
 const (
-	RadarHTTPLocationIPVersionGetParamsOWindows  RadarHTTPLocationIPVersionGetParamsO = "WINDOWS"
-	RadarHTTPLocationIPVersionGetParamsOMacosx   RadarHTTPLocationIPVersionGetParamsO = "MACOSX"
-	RadarHTTPLocationIPVersionGetParamsOIos      RadarHTTPLocationIPVersionGetParamsO = "IOS"
-	RadarHTTPLocationIPVersionGetParamsOAndroid  RadarHTTPLocationIPVersionGetParamsO = "ANDROID"
-	RadarHTTPLocationIPVersionGetParamsOChromeos RadarHTTPLocationIPVersionGetParamsO = "CHROMEOS"
-	RadarHTTPLocationIPVersionGetParamsOLinux    RadarHTTPLocationIPVersionGetParamsO = "LINUX"
-	RadarHTTPLocationIPVersionGetParamsOSmartTv  RadarHTTPLocationIPVersionGetParamsO = "SMART_TV"
+	RadarHTTPLocationIPVersionGetParamsOSWindows  RadarHTTPLocationIPVersionGetParamsOS = "WINDOWS"
+	RadarHTTPLocationIPVersionGetParamsOSMacosx   RadarHTTPLocationIPVersionGetParamsOS = "MACOSX"
+	RadarHTTPLocationIPVersionGetParamsOSIos      RadarHTTPLocationIPVersionGetParamsOS = "IOS"
+	RadarHTTPLocationIPVersionGetParamsOSAndroid  RadarHTTPLocationIPVersionGetParamsOS = "ANDROID"
+	RadarHTTPLocationIPVersionGetParamsOSChromeos RadarHTTPLocationIPVersionGetParamsOS = "CHROMEOS"
+	RadarHTTPLocationIPVersionGetParamsOSLinux    RadarHTTPLocationIPVersionGetParamsOS = "LINUX"
+	RadarHTTPLocationIPVersionGetParamsOSSmartTv  RadarHTTPLocationIPVersionGetParamsOS = "SMART_TV"
 )
 
 type RadarHTTPLocationIPVersionGetParamsTLSVersion string

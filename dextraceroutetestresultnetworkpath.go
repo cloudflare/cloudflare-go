@@ -80,7 +80,7 @@ func (r *DEXTracerouteTestResultNetworkPathListResponse) UnmarshalJSON(data []by
 
 type DEXTracerouteTestResultNetworkPathListResponseHop struct {
 	TTL           int64                                                      `json:"ttl,required"`
-	Asn           int64                                                      `json:"asn,nullable"`
+	ASN           int64                                                      `json:"asn,nullable"`
 	Aso           string                                                     `json:"aso,nullable"`
 	IPAddress     string                                                     `json:"ipAddress,nullable"`
 	Location      DEXTracerouteTestResultNetworkPathListResponseHopsLocation `json:"location,nullable"`
@@ -95,7 +95,7 @@ type DEXTracerouteTestResultNetworkPathListResponseHop struct {
 // for the struct [DEXTracerouteTestResultNetworkPathListResponseHop]
 type dexTracerouteTestResultNetworkPathListResponseHopJSON struct {
 	TTL           apijson.Field
-	Asn           apijson.Field
+	ASN           apijson.Field
 	Aso           apijson.Field
 	IPAddress     apijson.Field
 	Location      apijson.Field

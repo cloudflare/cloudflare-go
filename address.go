@@ -13,7 +13,7 @@ import (
 type AddressService struct {
 	Options      []option.RequestOption
 	AddressMaps  *AddressAddressMapService
-	LoaDocuments *AddressLoaDocumentService
+	LOADocuments *AddressLOADocumentService
 	Prefixes     *AddressPrefixService
 }
 
@@ -24,7 +24,7 @@ func NewAddressService(opts ...option.RequestOption) (r *AddressService) {
 	r = &AddressService{}
 	r.Options = opts
 	r.AddressMaps = NewAddressAddressMapService(opts...)
-	r.LoaDocuments = NewAddressLoaDocumentService(opts...)
+	r.LOADocuments = NewAddressLOADocumentService(opts...)
 	r.Prefixes = NewAddressPrefixService(opts...)
 	return
 }

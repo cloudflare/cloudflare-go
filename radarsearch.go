@@ -113,7 +113,7 @@ const (
 	RadarSearchGlobalParamsExcludeSpecialEvents RadarSearchGlobalParamsExclude = "SPECIAL_EVENTS"
 	RadarSearchGlobalParamsExcludeNotebooks     RadarSearchGlobalParamsExclude = "NOTEBOOKS"
 	RadarSearchGlobalParamsExcludeLocations     RadarSearchGlobalParamsExclude = "LOCATIONS"
-	RadarSearchGlobalParamsExcludeAsns          RadarSearchGlobalParamsExclude = "ASNS"
+	RadarSearchGlobalParamsExcludeASNs          RadarSearchGlobalParamsExclude = "ASNS"
 )
 
 // Format results are returned in.
@@ -130,7 +130,7 @@ const (
 	RadarSearchGlobalParamsIncludeSpecialEvents RadarSearchGlobalParamsInclude = "SPECIAL_EVENTS"
 	RadarSearchGlobalParamsIncludeNotebooks     RadarSearchGlobalParamsInclude = "NOTEBOOKS"
 	RadarSearchGlobalParamsIncludeLocations     RadarSearchGlobalParamsInclude = "LOCATIONS"
-	RadarSearchGlobalParamsIncludeAsns          RadarSearchGlobalParamsInclude = "ASNS"
+	RadarSearchGlobalParamsIncludeASNs          RadarSearchGlobalParamsInclude = "ASNS"
 )
 
 type RadarSearchGlobalResponseEnvelope struct {

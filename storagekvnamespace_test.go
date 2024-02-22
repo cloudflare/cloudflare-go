@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestStorageKvNamespaceNew(t *testing.T) {
+func TestStorageKVNamespaceNew(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,10 +29,10 @@ func TestStorageKvNamespaceNew(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Storage.Kv.Namespaces.New(
+	_, err := client.Storage.KV.Namespaces.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.StorageKvNamespaceNewParams{
+		cloudflare.StorageKVNamespaceNewParams{
 			Title: cloudflare.F("My Own Namespace"),
 		},
 	)
@@ -45,7 +45,7 @@ func TestStorageKvNamespaceNew(t *testing.T) {
 	}
 }
 
-func TestStorageKvNamespaceUpdate(t *testing.T) {
+func TestStorageKVNamespaceUpdate(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -61,11 +61,11 @@ func TestStorageKvNamespaceUpdate(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Storage.Kv.Namespaces.Update(
+	_, err := client.Storage.KV.Namespaces.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"0f2ac74b498b48028cb68387c421e279",
-		cloudflare.StorageKvNamespaceUpdateParams{
+		cloudflare.StorageKVNamespaceUpdateParams{
 			Title: cloudflare.F("My Own Namespace"),
 		},
 	)
@@ -78,7 +78,7 @@ func TestStorageKvNamespaceUpdate(t *testing.T) {
 	}
 }
 
-func TestStorageKvNamespaceListWithOptionalParams(t *testing.T) {
+func TestStorageKVNamespaceListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -94,12 +94,12 @@ func TestStorageKvNamespaceListWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Storage.Kv.Namespaces.List(
+	_, err := client.Storage.KV.Namespaces.List(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.StorageKvNamespaceListParams{
-			Direction: cloudflare.F(cloudflare.StorageKvNamespaceListParamsDirectionAsc),
-			Order:     cloudflare.F(cloudflare.StorageKvNamespaceListParamsOrderID),
+		cloudflare.StorageKVNamespaceListParams{
+			Direction: cloudflare.F(cloudflare.StorageKVNamespaceListParamsDirectionAsc),
+			Order:     cloudflare.F(cloudflare.StorageKVNamespaceListParamsOrderID),
 			Page:      cloudflare.F(1.000000),
 			PerPage:   cloudflare.F(5.000000),
 		},
@@ -113,7 +113,7 @@ func TestStorageKvNamespaceListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestStorageKvNamespaceDelete(t *testing.T) {
+func TestStorageKVNamespaceDelete(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -129,7 +129,7 @@ func TestStorageKvNamespaceDelete(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Storage.Kv.Namespaces.Delete(
+	_, err := client.Storage.KV.Namespaces.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"0f2ac74b498b48028cb68387c421e279",

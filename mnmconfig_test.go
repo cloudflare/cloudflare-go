@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestMnmConfigNew(t *testing.T) {
+func TestMNMConfigNew(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,7 +29,7 @@ func TestMnmConfigNew(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Mnms.Configs.New(context.TODO(), "6f91088a406011ed95aed352566e8d4c")
+	_, err := client.MNMs.Configs.New(context.TODO(), "6f91088a406011ed95aed352566e8d4c")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -39,7 +39,7 @@ func TestMnmConfigNew(t *testing.T) {
 	}
 }
 
-func TestMnmConfigUpdate(t *testing.T) {
+func TestMNMConfigUpdate(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -55,7 +55,7 @@ func TestMnmConfigUpdate(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Mnms.Configs.Update(context.TODO(), "6f91088a406011ed95aed352566e8d4c")
+	_, err := client.MNMs.Configs.Update(context.TODO(), "6f91088a406011ed95aed352566e8d4c")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -65,7 +65,7 @@ func TestMnmConfigUpdate(t *testing.T) {
 	}
 }
 
-func TestMnmConfigList(t *testing.T) {
+func TestMNMConfigList(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -81,7 +81,7 @@ func TestMnmConfigList(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Mnms.Configs.List(context.TODO(), "6f91088a406011ed95aed352566e8d4c")
+	_, err := client.MNMs.Configs.List(context.TODO(), "6f91088a406011ed95aed352566e8d4c")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -91,7 +91,7 @@ func TestMnmConfigList(t *testing.T) {
 	}
 }
 
-func TestMnmConfigDelete(t *testing.T) {
+func TestMNMConfigDelete(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -107,7 +107,7 @@ func TestMnmConfigDelete(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Mnms.Configs.Delete(context.TODO(), "6f91088a406011ed95aed352566e8d4c")
+	_, err := client.MNMs.Configs.Delete(context.TODO(), "6f91088a406011ed95aed352566e8d4c")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -117,7 +117,7 @@ func TestMnmConfigDelete(t *testing.T) {
 	}
 }
 
-func TestMnmConfigEdit(t *testing.T) {
+func TestMNMConfigEdit(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -133,7 +133,7 @@ func TestMnmConfigEdit(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Mnms.Configs.Edit(context.TODO(), "6f91088a406011ed95aed352566e8d4c")
+	_, err := client.MNMs.Configs.Edit(context.TODO(), "6f91088a406011ed95aed352566e8d4c")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

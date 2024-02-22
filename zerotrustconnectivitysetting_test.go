@@ -34,7 +34,7 @@ func TestZerotrustConnectivitySettingEditWithOptionalParams(t *testing.T) {
 		"699d98642c564d2e855e9661899b7252",
 		cloudflare.ZerotrustConnectivitySettingEditParams{
 			IcmpProxyEnabled:   cloudflare.F(true),
-			OfframpWarpEnabled: cloudflare.F(true),
+			OfframpWARPEnabled: cloudflare.F(true),
 		},
 	)
 	if err != nil {

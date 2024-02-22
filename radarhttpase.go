@@ -27,7 +27,7 @@ type RadarHTTPAseService struct {
 	HTTPProtocol *RadarHTTPAseHTTPProtocolService
 	HTTPMethod   *RadarHTTPAseHTTPMethodService
 	IPVersion    *RadarHTTPAseIPVersionService
-	Os           *RadarHTTPAseOService
+	OS           *RadarHTTPAseOSService
 	TLSVersion   *RadarHTTPAseTLSVersionService
 }
 
@@ -42,7 +42,7 @@ func NewRadarHTTPAseService(opts ...option.RequestOption) (r *RadarHTTPAseServic
 	r.HTTPProtocol = NewRadarHTTPAseHTTPProtocolService(opts...)
 	r.HTTPMethod = NewRadarHTTPAseHTTPMethodService(opts...)
 	r.IPVersion = NewRadarHTTPAseIPVersionService(opts...)
-	r.Os = NewRadarHTTPAseOService(opts...)
+	r.OS = NewRadarHTTPAseOSService(opts...)
 	r.TLSVersion = NewRadarHTTPAseTLSVersionService(opts...)
 	return
 }
@@ -171,7 +171,7 @@ func (r *RadarHTTPAseGetResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data
 }
 
 type RadarHTTPAseGetResponseTop0 struct {
-	ClientAsn    int64                           `json:"clientASN,required"`
+	ClientASN    int64                           `json:"clientASN,required"`
 	ClientAsName string                          `json:"clientASName,required"`
 	Value        string                          `json:"value,required"`
 	JSON         radarHTTPAseGetResponseTop0JSON `json:"-"`
@@ -180,7 +180,7 @@ type RadarHTTPAseGetResponseTop0 struct {
 // radarHTTPAseGetResponseTop0JSON contains the JSON metadata for the struct
 // [RadarHTTPAseGetResponseTop0]
 type radarHTTPAseGetResponseTop0JSON struct {
-	ClientAsn    apijson.Field
+	ClientASN    apijson.Field
 	ClientAsName apijson.Field
 	Value        apijson.Field
 	raw          string
@@ -195,7 +195,7 @@ type RadarHTTPAseGetParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// Filter for bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]RadarHTTPAseGetParamsBotClass] `query:"botClass"`
@@ -226,7 +226,7 @@ type RadarHTTPAseGetParams struct {
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Filter for os name.
-	Os param.Field[[]RadarHTTPAseGetParamsO] `query:"os"`
+	OS param.Field[[]RadarHTTPAseGetParamsOS] `query:"os"`
 	// Filter for tls version.
 	TLSVersion param.Field[[]RadarHTTPAseGetParamsTLSVersion] `query:"tlsVersion"`
 }
@@ -304,16 +304,16 @@ const (
 	RadarHTTPAseGetParamsIPVersionIPv6 RadarHTTPAseGetParamsIPVersion = "IPv6"
 )
 
-type RadarHTTPAseGetParamsO string
+type RadarHTTPAseGetParamsOS string
 
 const (
-	RadarHTTPAseGetParamsOWindows  RadarHTTPAseGetParamsO = "WINDOWS"
-	RadarHTTPAseGetParamsOMacosx   RadarHTTPAseGetParamsO = "MACOSX"
-	RadarHTTPAseGetParamsOIos      RadarHTTPAseGetParamsO = "IOS"
-	RadarHTTPAseGetParamsOAndroid  RadarHTTPAseGetParamsO = "ANDROID"
-	RadarHTTPAseGetParamsOChromeos RadarHTTPAseGetParamsO = "CHROMEOS"
-	RadarHTTPAseGetParamsOLinux    RadarHTTPAseGetParamsO = "LINUX"
-	RadarHTTPAseGetParamsOSmartTv  RadarHTTPAseGetParamsO = "SMART_TV"
+	RadarHTTPAseGetParamsOSWindows  RadarHTTPAseGetParamsOS = "WINDOWS"
+	RadarHTTPAseGetParamsOSMacosx   RadarHTTPAseGetParamsOS = "MACOSX"
+	RadarHTTPAseGetParamsOSIos      RadarHTTPAseGetParamsOS = "IOS"
+	RadarHTTPAseGetParamsOSAndroid  RadarHTTPAseGetParamsOS = "ANDROID"
+	RadarHTTPAseGetParamsOSChromeos RadarHTTPAseGetParamsOS = "CHROMEOS"
+	RadarHTTPAseGetParamsOSLinux    RadarHTTPAseGetParamsOS = "LINUX"
+	RadarHTTPAseGetParamsOSSmartTv  RadarHTTPAseGetParamsOS = "SMART_TV"
 )
 
 type RadarHTTPAseGetParamsTLSVersion string

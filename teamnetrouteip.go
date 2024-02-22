@@ -100,9 +100,9 @@ type TeamnetRouteIPGetResponseTunType string
 
 const (
 	TeamnetRouteIPGetResponseTunTypeCfdTunnel     TeamnetRouteIPGetResponseTunType = "cfd_tunnel"
-	TeamnetRouteIPGetResponseTunTypeWarpConnector TeamnetRouteIPGetResponseTunType = "warp_connector"
+	TeamnetRouteIPGetResponseTunTypeWARPConnector TeamnetRouteIPGetResponseTunType = "warp_connector"
 	TeamnetRouteIPGetResponseTunTypeIPSec         TeamnetRouteIPGetResponseTunType = "ip_sec"
-	TeamnetRouteIPGetResponseTunTypeGre           TeamnetRouteIPGetResponseTunType = "gre"
+	TeamnetRouteIPGetResponseTunTypeGRE           TeamnetRouteIPGetResponseTunType = "gre"
 	TeamnetRouteIPGetResponseTunTypeCni           TeamnetRouteIPGetResponseTunType = "cni"
 )
 

@@ -108,7 +108,7 @@ func TestRadarAttackLayer3TimeseriesGroupGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Attacks.Layer3.TimeseriesGroups.Get(context.TODO(), cloudflare.RadarAttackLayer3TimeseriesGroupGetParams{
 		AggInterval: cloudflare.F(cloudflare.RadarAttackLayer3TimeseriesGroupGetParamsAggInterval1h),
-		Asn:         cloudflare.F([]string{"string", "string", "string"}),
+		ASN:         cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:   cloudflare.F([]cloudflare.RadarAttackLayer3TimeseriesGroupGetParamsDateRange{cloudflare.RadarAttackLayer3TimeseriesGroupGetParamsDateRange1d, cloudflare.RadarAttackLayer3TimeseriesGroupGetParamsDateRange2d, cloudflare.RadarAttackLayer3TimeseriesGroupGetParamsDateRange7d}),
 		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),

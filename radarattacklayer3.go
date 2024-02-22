@@ -98,7 +98,7 @@ type RadarAttackLayer3TimeseriesParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
@@ -217,7 +217,7 @@ const (
 	RadarAttackLayer3TimeseriesParamsProtocolUdp  RadarAttackLayer3TimeseriesParamsProtocol = "UDP"
 	RadarAttackLayer3TimeseriesParamsProtocolTcp  RadarAttackLayer3TimeseriesParamsProtocol = "TCP"
 	RadarAttackLayer3TimeseriesParamsProtocolIcmp RadarAttackLayer3TimeseriesParamsProtocol = "ICMP"
-	RadarAttackLayer3TimeseriesParamsProtocolGre  RadarAttackLayer3TimeseriesParamsProtocol = "GRE"
+	RadarAttackLayer3TimeseriesParamsProtocolGRE  RadarAttackLayer3TimeseriesParamsProtocol = "GRE"
 )
 
 type RadarAttackLayer3TimeseriesResponseEnvelope struct {

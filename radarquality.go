@@ -13,7 +13,7 @@ import (
 // instead.
 type RadarQualityService struct {
 	Options []option.RequestOption
-	Iqi     *RadarQualityIqiService
+	IQI     *RadarQualityIQIService
 	Speed   *RadarQualitySpeedService
 }
 
@@ -23,7 +23,7 @@ type RadarQualityService struct {
 func NewRadarQualityService(opts ...option.RequestOption) (r *RadarQualityService) {
 	r = &RadarQualityService{}
 	r.Options = opts
-	r.Iqi = NewRadarQualityIqiService(opts...)
+	r.IQI = NewRadarQualityIQIService(opts...)
 	r.Speed = NewRadarQualitySpeedService(opts...)
 	return
 }

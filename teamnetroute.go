@@ -115,9 +115,9 @@ type TeamnetRouteListResponseTunType string
 
 const (
 	TeamnetRouteListResponseTunTypeCfdTunnel     TeamnetRouteListResponseTunType = "cfd_tunnel"
-	TeamnetRouteListResponseTunTypeWarpConnector TeamnetRouteListResponseTunType = "warp_connector"
+	TeamnetRouteListResponseTunTypeWARPConnector TeamnetRouteListResponseTunType = "warp_connector"
 	TeamnetRouteListResponseTunTypeIPSec         TeamnetRouteListResponseTunType = "ip_sec"
-	TeamnetRouteListResponseTunTypeGre           TeamnetRouteListResponseTunType = "gre"
+	TeamnetRouteListResponseTunTypeGRE           TeamnetRouteListResponseTunType = "gre"
 	TeamnetRouteListResponseTunTypeCni           TeamnetRouteListResponseTunType = "cni"
 )
 

@@ -73,7 +73,7 @@ type D1DatabaseNewResponse struct {
 	// Specifies the timestamp the resource was created as an ISO8601 string.
 	CreatedAt interface{}               `json:"created_at"`
 	Name      string                    `json:"name"`
-	Uuid      string                    `json:"uuid"`
+	UUID      string                    `json:"uuid"`
 	Version   string                    `json:"version"`
 	JSON      d1DatabaseNewResponseJSON `json:"-"`
 }
@@ -83,7 +83,7 @@ type D1DatabaseNewResponse struct {
 type d1DatabaseNewResponseJSON struct {
 	CreatedAt   apijson.Field
 	Name        apijson.Field
-	Uuid        apijson.Field
+	UUID        apijson.Field
 	Version     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -97,7 +97,7 @@ type D1DatabaseListResponse struct {
 	// Specifies the timestamp the resource was created as an ISO8601 string.
 	CreatedAt interface{}                `json:"created_at"`
 	Name      string                     `json:"name"`
-	Uuid      string                     `json:"uuid"`
+	UUID      string                     `json:"uuid"`
 	Version   string                     `json:"version"`
 	JSON      d1DatabaseListResponseJSON `json:"-"`
 }
@@ -107,7 +107,7 @@ type D1DatabaseListResponse struct {
 type d1DatabaseListResponseJSON struct {
 	CreatedAt   apijson.Field
 	Name        apijson.Field
-	Uuid        apijson.Field
+	UUID        apijson.Field
 	Version     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field

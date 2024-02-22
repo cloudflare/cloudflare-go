@@ -32,7 +32,7 @@ func TestRadarNetflowTimeseriesWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Netflows.Timeseries(context.TODO(), cloudflare.RadarNetflowTimeseriesParams{
 		AggInterval:   cloudflare.F(cloudflare.RadarNetflowTimeseriesParamsAggInterval1h),
-		Asn:           cloudflare.F([]string{"string", "string", "string"}),
+		ASN:           cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:     cloudflare.F([]cloudflare.RadarNetflowTimeseriesParamsDateRange{cloudflare.RadarNetflowTimeseriesParamsDateRange1d, cloudflare.RadarNetflowTimeseriesParamsDateRange2d, cloudflare.RadarNetflowTimeseriesParamsDateRange7d}),
 		DateStart:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),

@@ -79,7 +79,7 @@ func (r *RadarNetflowTopAsesResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type RadarNetflowTopAsesResponseTop0 struct {
-	ClientAsn    float64                             `json:"clientASN,required"`
+	ClientASN    float64                             `json:"clientASN,required"`
 	ClientAsName string                              `json:"clientASName,required"`
 	Value        string                              `json:"value,required"`
 	JSON         radarNetflowTopAsesResponseTop0JSON `json:"-"`
@@ -88,7 +88,7 @@ type RadarNetflowTopAsesResponseTop0 struct {
 // radarNetflowTopAsesResponseTop0JSON contains the JSON metadata for the struct
 // [RadarNetflowTopAsesResponseTop0]
 type radarNetflowTopAsesResponseTop0JSON struct {
-	ClientAsn    apijson.Field
+	ClientASN    apijson.Field
 	ClientAsName apijson.Field
 	Value        apijson.Field
 	raw          string
@@ -141,7 +141,7 @@ type RadarNetflowTopAsesParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
@@ -222,7 +222,7 @@ type RadarNetflowTopLocationsParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous

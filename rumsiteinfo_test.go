@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestRumSiteInfoNewWithOptionalParams(t *testing.T) {
+func TestRUMSiteInfoNewWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,10 +29,10 @@ func TestRumSiteInfoNewWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Rum.SiteInfos.New(
+	_, err := client.RUM.SiteInfos.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.RumSiteInfoNewParams{
+		cloudflare.RUMSiteInfoNewParams{
 			AutoInstall: cloudflare.F(true),
 			Host:        cloudflare.F("example.com"),
 			ZoneTag:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -47,7 +47,7 @@ func TestRumSiteInfoNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestRumSiteInfoUpdateWithOptionalParams(t *testing.T) {
+func TestRUMSiteInfoUpdateWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -63,11 +63,11 @@ func TestRumSiteInfoUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Rum.SiteInfos.Update(
+	_, err := client.RUM.SiteInfos.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.RumSiteInfoUpdateParams{
+		cloudflare.RUMSiteInfoUpdateParams{
 			AutoInstall: cloudflare.F(true),
 			Host:        cloudflare.F("example.com"),
 			ZoneTag:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -82,7 +82,7 @@ func TestRumSiteInfoUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestRumSiteInfoListWithOptionalParams(t *testing.T) {
+func TestRUMSiteInfoListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -98,11 +98,11 @@ func TestRumSiteInfoListWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Rum.SiteInfos.List(
+	_, err := client.RUM.SiteInfos.List(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.RumSiteInfoListParams{
-			OrderBy: cloudflare.F(cloudflare.RumSiteInfoListParamsOrderByHost),
+		cloudflare.RUMSiteInfoListParams{
+			OrderBy: cloudflare.F(cloudflare.RUMSiteInfoListParamsOrderByHost),
 			Page:    cloudflare.F(1.000000),
 			PerPage: cloudflare.F(10.000000),
 		},
@@ -116,7 +116,7 @@ func TestRumSiteInfoListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestRumSiteInfoDelete(t *testing.T) {
+func TestRUMSiteInfoDelete(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -132,7 +132,7 @@ func TestRumSiteInfoDelete(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Rum.SiteInfos.Delete(
+	_, err := client.RUM.SiteInfos.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
@@ -146,7 +146,7 @@ func TestRumSiteInfoDelete(t *testing.T) {
 	}
 }
 
-func TestRumSiteInfoGet(t *testing.T) {
+func TestRUMSiteInfoGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -162,7 +162,7 @@ func TestRumSiteInfoGet(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Rum.SiteInfos.Get(
+	_, err := client.RUM.SiteInfos.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",

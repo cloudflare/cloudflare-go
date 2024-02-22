@@ -34,9 +34,9 @@ func NewRadarEmailSecurityTimeseriesGroupService(opts ...option.RequestOption) (
 }
 
 // Percentage distribution of emails classified per Arc validation over time.
-func (r *RadarEmailSecurityTimeseriesGroupService) Arc(ctx context.Context, query RadarEmailSecurityTimeseriesGroupArcParams, opts ...option.RequestOption) (res *RadarEmailSecurityTimeseriesGroupArcResponse, err error) {
+func (r *RadarEmailSecurityTimeseriesGroupService) ARC(ctx context.Context, query RadarEmailSecurityTimeseriesGroupARCParams, opts ...option.RequestOption) (res *RadarEmailSecurityTimeseriesGroupARCResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env RadarEmailSecurityTimeseriesGroupArcResponseEnvelope
+	var env RadarEmailSecurityTimeseriesGroupARCResponseEnvelope
 	path := "radar/email/security/timeseries_groups/arc"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -59,35 +59,35 @@ func (r *RadarEmailSecurityTimeseriesGroupService) DKIM(ctx context.Context, que
 	return
 }
 
-type RadarEmailSecurityTimeseriesGroupArcResponse struct {
+type RadarEmailSecurityTimeseriesGroupARCResponse struct {
 	Meta   interface{}                                        `json:"meta,required"`
-	Serie0 RadarEmailSecurityTimeseriesGroupArcResponseSerie0 `json:"serie_0,required"`
-	JSON   radarEmailSecurityTimeseriesGroupArcResponseJSON   `json:"-"`
+	Serie0 RadarEmailSecurityTimeseriesGroupARCResponseSerie0 `json:"serie_0,required"`
+	JSON   radarEmailSecurityTimeseriesGroupARCResponseJSON   `json:"-"`
 }
 
-// radarEmailSecurityTimeseriesGroupArcResponseJSON contains the JSON metadata for
-// the struct [RadarEmailSecurityTimeseriesGroupArcResponse]
-type radarEmailSecurityTimeseriesGroupArcResponseJSON struct {
+// radarEmailSecurityTimeseriesGroupARCResponseJSON contains the JSON metadata for
+// the struct [RadarEmailSecurityTimeseriesGroupARCResponse]
+type radarEmailSecurityTimeseriesGroupARCResponseJSON struct {
 	Meta        apijson.Field
 	Serie0      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarEmailSecurityTimeseriesGroupArcResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarEmailSecurityTimeseriesGroupARCResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarEmailSecurityTimeseriesGroupArcResponseSerie0 struct {
+type RadarEmailSecurityTimeseriesGroupARCResponseSerie0 struct {
 	Fail []string                                               `json:"FAIL,required"`
 	None []string                                               `json:"NONE,required"`
 	Pass []string                                               `json:"PASS,required"`
-	JSON radarEmailSecurityTimeseriesGroupArcResponseSerie0JSON `json:"-"`
+	JSON radarEmailSecurityTimeseriesGroupARCResponseSerie0JSON `json:"-"`
 }
 
-// radarEmailSecurityTimeseriesGroupArcResponseSerie0JSON contains the JSON
-// metadata for the struct [RadarEmailSecurityTimeseriesGroupArcResponseSerie0]
-type radarEmailSecurityTimeseriesGroupArcResponseSerie0JSON struct {
+// radarEmailSecurityTimeseriesGroupARCResponseSerie0JSON contains the JSON
+// metadata for the struct [RadarEmailSecurityTimeseriesGroupARCResponseSerie0]
+type radarEmailSecurityTimeseriesGroupARCResponseSerie0JSON struct {
 	Fail        apijson.Field
 	None        apijson.Field
 	Pass        apijson.Field
@@ -95,7 +95,7 @@ type radarEmailSecurityTimeseriesGroupArcResponseSerie0JSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarEmailSecurityTimeseriesGroupArcResponseSerie0) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarEmailSecurityTimeseriesGroupARCResponseSerie0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -139,29 +139,29 @@ func (r *RadarEmailSecurityTimeseriesGroupDKIMResponseSerie0) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarEmailSecurityTimeseriesGroupArcParams struct {
+type RadarEmailSecurityTimeseriesGroupARCParams struct {
 	// Aggregation interval results should be returned in (for example, in 15 minutes
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval param.Field[RadarEmailSecurityTimeseriesGroupArcParamsAggInterval] `query:"aggInterval"`
+	AggInterval param.Field[RadarEmailSecurityTimeseriesGroupARCParamsAggInterval] `query:"aggInterval"`
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]RadarEmailSecurityTimeseriesGroupArcParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]RadarEmailSecurityTimeseriesGroupARCParamsDateRange] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dkim.
-	DKIM param.Field[[]RadarEmailSecurityTimeseriesGroupArcParamsDKIM] `query:"dkim"`
+	DKIM param.Field[[]RadarEmailSecurityTimeseriesGroupARCParamsDKIM] `query:"dkim"`
 	// Filter for dmarc.
-	Dmarc param.Field[[]RadarEmailSecurityTimeseriesGroupArcParamsDmarc] `query:"dmarc"`
+	DMARC param.Field[[]RadarEmailSecurityTimeseriesGroupARCParamsDMARC] `query:"dmarc"`
 	// Format results are returned in.
-	Format param.Field[RadarEmailSecurityTimeseriesGroupArcParamsFormat] `query:"format"`
+	Format param.Field[RadarEmailSecurityTimeseriesGroupARCParamsFormat] `query:"format"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
 	// but includes results from PT.
@@ -169,12 +169,12 @@ type RadarEmailSecurityTimeseriesGroupArcParams struct {
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Filter for spf.
-	SPF param.Field[[]RadarEmailSecurityTimeseriesGroupArcParamsSPF] `query:"spf"`
+	SPF param.Field[[]RadarEmailSecurityTimeseriesGroupARCParamsSPF] `query:"spf"`
 }
 
-// URLQuery serializes [RadarEmailSecurityTimeseriesGroupArcParams]'s query
+// URLQuery serializes [RadarEmailSecurityTimeseriesGroupARCParams]'s query
 // parameters as `url.Values`.
-func (r RadarEmailSecurityTimeseriesGroupArcParams) URLQuery() (v url.Values) {
+func (r RadarEmailSecurityTimeseriesGroupARCParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
@@ -184,83 +184,83 @@ func (r RadarEmailSecurityTimeseriesGroupArcParams) URLQuery() (v url.Values) {
 // Aggregation interval results should be returned in (for example, in 15 minutes
 // or 1 hour intervals). Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-type RadarEmailSecurityTimeseriesGroupArcParamsAggInterval string
+type RadarEmailSecurityTimeseriesGroupARCParamsAggInterval string
 
 const (
-	RadarEmailSecurityTimeseriesGroupArcParamsAggInterval15m RadarEmailSecurityTimeseriesGroupArcParamsAggInterval = "15m"
-	RadarEmailSecurityTimeseriesGroupArcParamsAggInterval1h  RadarEmailSecurityTimeseriesGroupArcParamsAggInterval = "1h"
-	RadarEmailSecurityTimeseriesGroupArcParamsAggInterval1d  RadarEmailSecurityTimeseriesGroupArcParamsAggInterval = "1d"
-	RadarEmailSecurityTimeseriesGroupArcParamsAggInterval1w  RadarEmailSecurityTimeseriesGroupArcParamsAggInterval = "1w"
+	RadarEmailSecurityTimeseriesGroupARCParamsAggInterval15m RadarEmailSecurityTimeseriesGroupARCParamsAggInterval = "15m"
+	RadarEmailSecurityTimeseriesGroupARCParamsAggInterval1h  RadarEmailSecurityTimeseriesGroupARCParamsAggInterval = "1h"
+	RadarEmailSecurityTimeseriesGroupARCParamsAggInterval1d  RadarEmailSecurityTimeseriesGroupARCParamsAggInterval = "1d"
+	RadarEmailSecurityTimeseriesGroupARCParamsAggInterval1w  RadarEmailSecurityTimeseriesGroupARCParamsAggInterval = "1w"
 )
 
-type RadarEmailSecurityTimeseriesGroupArcParamsDateRange string
+type RadarEmailSecurityTimeseriesGroupARCParamsDateRange string
 
 const (
-	RadarEmailSecurityTimeseriesGroupArcParamsDateRange1d         RadarEmailSecurityTimeseriesGroupArcParamsDateRange = "1d"
-	RadarEmailSecurityTimeseriesGroupArcParamsDateRange2d         RadarEmailSecurityTimeseriesGroupArcParamsDateRange = "2d"
-	RadarEmailSecurityTimeseriesGroupArcParamsDateRange7d         RadarEmailSecurityTimeseriesGroupArcParamsDateRange = "7d"
-	RadarEmailSecurityTimeseriesGroupArcParamsDateRange14d        RadarEmailSecurityTimeseriesGroupArcParamsDateRange = "14d"
-	RadarEmailSecurityTimeseriesGroupArcParamsDateRange28d        RadarEmailSecurityTimeseriesGroupArcParamsDateRange = "28d"
-	RadarEmailSecurityTimeseriesGroupArcParamsDateRange12w        RadarEmailSecurityTimeseriesGroupArcParamsDateRange = "12w"
-	RadarEmailSecurityTimeseriesGroupArcParamsDateRange24w        RadarEmailSecurityTimeseriesGroupArcParamsDateRange = "24w"
-	RadarEmailSecurityTimeseriesGroupArcParamsDateRange52w        RadarEmailSecurityTimeseriesGroupArcParamsDateRange = "52w"
-	RadarEmailSecurityTimeseriesGroupArcParamsDateRange1dControl  RadarEmailSecurityTimeseriesGroupArcParamsDateRange = "1dControl"
-	RadarEmailSecurityTimeseriesGroupArcParamsDateRange2dControl  RadarEmailSecurityTimeseriesGroupArcParamsDateRange = "2dControl"
-	RadarEmailSecurityTimeseriesGroupArcParamsDateRange7dControl  RadarEmailSecurityTimeseriesGroupArcParamsDateRange = "7dControl"
-	RadarEmailSecurityTimeseriesGroupArcParamsDateRange14dControl RadarEmailSecurityTimeseriesGroupArcParamsDateRange = "14dControl"
-	RadarEmailSecurityTimeseriesGroupArcParamsDateRange28dControl RadarEmailSecurityTimeseriesGroupArcParamsDateRange = "28dControl"
-	RadarEmailSecurityTimeseriesGroupArcParamsDateRange12wControl RadarEmailSecurityTimeseriesGroupArcParamsDateRange = "12wControl"
-	RadarEmailSecurityTimeseriesGroupArcParamsDateRange24wControl RadarEmailSecurityTimeseriesGroupArcParamsDateRange = "24wControl"
+	RadarEmailSecurityTimeseriesGroupARCParamsDateRange1d         RadarEmailSecurityTimeseriesGroupARCParamsDateRange = "1d"
+	RadarEmailSecurityTimeseriesGroupARCParamsDateRange2d         RadarEmailSecurityTimeseriesGroupARCParamsDateRange = "2d"
+	RadarEmailSecurityTimeseriesGroupARCParamsDateRange7d         RadarEmailSecurityTimeseriesGroupARCParamsDateRange = "7d"
+	RadarEmailSecurityTimeseriesGroupARCParamsDateRange14d        RadarEmailSecurityTimeseriesGroupARCParamsDateRange = "14d"
+	RadarEmailSecurityTimeseriesGroupARCParamsDateRange28d        RadarEmailSecurityTimeseriesGroupARCParamsDateRange = "28d"
+	RadarEmailSecurityTimeseriesGroupARCParamsDateRange12w        RadarEmailSecurityTimeseriesGroupARCParamsDateRange = "12w"
+	RadarEmailSecurityTimeseriesGroupARCParamsDateRange24w        RadarEmailSecurityTimeseriesGroupARCParamsDateRange = "24w"
+	RadarEmailSecurityTimeseriesGroupARCParamsDateRange52w        RadarEmailSecurityTimeseriesGroupARCParamsDateRange = "52w"
+	RadarEmailSecurityTimeseriesGroupARCParamsDateRange1dControl  RadarEmailSecurityTimeseriesGroupARCParamsDateRange = "1dControl"
+	RadarEmailSecurityTimeseriesGroupARCParamsDateRange2dControl  RadarEmailSecurityTimeseriesGroupARCParamsDateRange = "2dControl"
+	RadarEmailSecurityTimeseriesGroupARCParamsDateRange7dControl  RadarEmailSecurityTimeseriesGroupARCParamsDateRange = "7dControl"
+	RadarEmailSecurityTimeseriesGroupARCParamsDateRange14dControl RadarEmailSecurityTimeseriesGroupARCParamsDateRange = "14dControl"
+	RadarEmailSecurityTimeseriesGroupARCParamsDateRange28dControl RadarEmailSecurityTimeseriesGroupARCParamsDateRange = "28dControl"
+	RadarEmailSecurityTimeseriesGroupARCParamsDateRange12wControl RadarEmailSecurityTimeseriesGroupARCParamsDateRange = "12wControl"
+	RadarEmailSecurityTimeseriesGroupARCParamsDateRange24wControl RadarEmailSecurityTimeseriesGroupARCParamsDateRange = "24wControl"
 )
 
-type RadarEmailSecurityTimeseriesGroupArcParamsDKIM string
+type RadarEmailSecurityTimeseriesGroupARCParamsDKIM string
 
 const (
-	RadarEmailSecurityTimeseriesGroupArcParamsDKIMPass RadarEmailSecurityTimeseriesGroupArcParamsDKIM = "PASS"
-	RadarEmailSecurityTimeseriesGroupArcParamsDKIMNone RadarEmailSecurityTimeseriesGroupArcParamsDKIM = "NONE"
-	RadarEmailSecurityTimeseriesGroupArcParamsDKIMFail RadarEmailSecurityTimeseriesGroupArcParamsDKIM = "FAIL"
+	RadarEmailSecurityTimeseriesGroupARCParamsDKIMPass RadarEmailSecurityTimeseriesGroupARCParamsDKIM = "PASS"
+	RadarEmailSecurityTimeseriesGroupARCParamsDKIMNone RadarEmailSecurityTimeseriesGroupARCParamsDKIM = "NONE"
+	RadarEmailSecurityTimeseriesGroupARCParamsDKIMFail RadarEmailSecurityTimeseriesGroupARCParamsDKIM = "FAIL"
 )
 
-type RadarEmailSecurityTimeseriesGroupArcParamsDmarc string
+type RadarEmailSecurityTimeseriesGroupARCParamsDMARC string
 
 const (
-	RadarEmailSecurityTimeseriesGroupArcParamsDmarcPass RadarEmailSecurityTimeseriesGroupArcParamsDmarc = "PASS"
-	RadarEmailSecurityTimeseriesGroupArcParamsDmarcNone RadarEmailSecurityTimeseriesGroupArcParamsDmarc = "NONE"
-	RadarEmailSecurityTimeseriesGroupArcParamsDmarcFail RadarEmailSecurityTimeseriesGroupArcParamsDmarc = "FAIL"
+	RadarEmailSecurityTimeseriesGroupARCParamsDMARCPass RadarEmailSecurityTimeseriesGroupARCParamsDMARC = "PASS"
+	RadarEmailSecurityTimeseriesGroupARCParamsDMARCNone RadarEmailSecurityTimeseriesGroupARCParamsDMARC = "NONE"
+	RadarEmailSecurityTimeseriesGroupARCParamsDMARCFail RadarEmailSecurityTimeseriesGroupARCParamsDMARC = "FAIL"
 )
 
 // Format results are returned in.
-type RadarEmailSecurityTimeseriesGroupArcParamsFormat string
+type RadarEmailSecurityTimeseriesGroupARCParamsFormat string
 
 const (
-	RadarEmailSecurityTimeseriesGroupArcParamsFormatJson RadarEmailSecurityTimeseriesGroupArcParamsFormat = "JSON"
-	RadarEmailSecurityTimeseriesGroupArcParamsFormatCsv  RadarEmailSecurityTimeseriesGroupArcParamsFormat = "CSV"
+	RadarEmailSecurityTimeseriesGroupARCParamsFormatJson RadarEmailSecurityTimeseriesGroupARCParamsFormat = "JSON"
+	RadarEmailSecurityTimeseriesGroupARCParamsFormatCsv  RadarEmailSecurityTimeseriesGroupARCParamsFormat = "CSV"
 )
 
-type RadarEmailSecurityTimeseriesGroupArcParamsSPF string
+type RadarEmailSecurityTimeseriesGroupARCParamsSPF string
 
 const (
-	RadarEmailSecurityTimeseriesGroupArcParamsSPFPass RadarEmailSecurityTimeseriesGroupArcParamsSPF = "PASS"
-	RadarEmailSecurityTimeseriesGroupArcParamsSPFNone RadarEmailSecurityTimeseriesGroupArcParamsSPF = "NONE"
-	RadarEmailSecurityTimeseriesGroupArcParamsSPFFail RadarEmailSecurityTimeseriesGroupArcParamsSPF = "FAIL"
+	RadarEmailSecurityTimeseriesGroupARCParamsSPFPass RadarEmailSecurityTimeseriesGroupARCParamsSPF = "PASS"
+	RadarEmailSecurityTimeseriesGroupARCParamsSPFNone RadarEmailSecurityTimeseriesGroupARCParamsSPF = "NONE"
+	RadarEmailSecurityTimeseriesGroupARCParamsSPFFail RadarEmailSecurityTimeseriesGroupARCParamsSPF = "FAIL"
 )
 
-type RadarEmailSecurityTimeseriesGroupArcResponseEnvelope struct {
-	Result  RadarEmailSecurityTimeseriesGroupArcResponse             `json:"result,required"`
+type RadarEmailSecurityTimeseriesGroupARCResponseEnvelope struct {
+	Result  RadarEmailSecurityTimeseriesGroupARCResponse             `json:"result,required"`
 	Success bool                                                     `json:"success,required"`
-	JSON    radarEmailSecurityTimeseriesGroupArcResponseEnvelopeJSON `json:"-"`
+	JSON    radarEmailSecurityTimeseriesGroupARCResponseEnvelopeJSON `json:"-"`
 }
 
-// radarEmailSecurityTimeseriesGroupArcResponseEnvelopeJSON contains the JSON
-// metadata for the struct [RadarEmailSecurityTimeseriesGroupArcResponseEnvelope]
-type radarEmailSecurityTimeseriesGroupArcResponseEnvelopeJSON struct {
+// radarEmailSecurityTimeseriesGroupARCResponseEnvelopeJSON contains the JSON
+// metadata for the struct [RadarEmailSecurityTimeseriesGroupARCResponseEnvelope]
+type radarEmailSecurityTimeseriesGroupARCResponseEnvelopeJSON struct {
 	Result      apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarEmailSecurityTimeseriesGroupArcResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarEmailSecurityTimeseriesGroupARCResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -270,11 +270,11 @@ type RadarEmailSecurityTimeseriesGroupDKIMParams struct {
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[RadarEmailSecurityTimeseriesGroupDKIMParamsAggInterval] `query:"aggInterval"`
 	// Filter for arc (Authenticated Received Chain).
-	Arc param.Field[[]RadarEmailSecurityTimeseriesGroupDKIMParamsArc] `query:"arc"`
+	ARC param.Field[[]RadarEmailSecurityTimeseriesGroupDKIMParamsARC] `query:"arc"`
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
@@ -284,7 +284,7 @@ type RadarEmailSecurityTimeseriesGroupDKIMParams struct {
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Filter for dmarc.
-	Dmarc param.Field[[]RadarEmailSecurityTimeseriesGroupDKIMParamsDmarc] `query:"dmarc"`
+	DMARC param.Field[[]RadarEmailSecurityTimeseriesGroupDKIMParamsDMARC] `query:"dmarc"`
 	// Format results are returned in.
 	Format param.Field[RadarEmailSecurityTimeseriesGroupDKIMParamsFormat] `query:"format"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
@@ -318,12 +318,12 @@ const (
 	RadarEmailSecurityTimeseriesGroupDKIMParamsAggInterval1w  RadarEmailSecurityTimeseriesGroupDKIMParamsAggInterval = "1w"
 )
 
-type RadarEmailSecurityTimeseriesGroupDKIMParamsArc string
+type RadarEmailSecurityTimeseriesGroupDKIMParamsARC string
 
 const (
-	RadarEmailSecurityTimeseriesGroupDKIMParamsArcPass RadarEmailSecurityTimeseriesGroupDKIMParamsArc = "PASS"
-	RadarEmailSecurityTimeseriesGroupDKIMParamsArcNone RadarEmailSecurityTimeseriesGroupDKIMParamsArc = "NONE"
-	RadarEmailSecurityTimeseriesGroupDKIMParamsArcFail RadarEmailSecurityTimeseriesGroupDKIMParamsArc = "FAIL"
+	RadarEmailSecurityTimeseriesGroupDKIMParamsARCPass RadarEmailSecurityTimeseriesGroupDKIMParamsARC = "PASS"
+	RadarEmailSecurityTimeseriesGroupDKIMParamsARCNone RadarEmailSecurityTimeseriesGroupDKIMParamsARC = "NONE"
+	RadarEmailSecurityTimeseriesGroupDKIMParamsARCFail RadarEmailSecurityTimeseriesGroupDKIMParamsARC = "FAIL"
 )
 
 type RadarEmailSecurityTimeseriesGroupDKIMParamsDateRange string
@@ -346,12 +346,12 @@ const (
 	RadarEmailSecurityTimeseriesGroupDKIMParamsDateRange24wControl RadarEmailSecurityTimeseriesGroupDKIMParamsDateRange = "24wControl"
 )
 
-type RadarEmailSecurityTimeseriesGroupDKIMParamsDmarc string
+type RadarEmailSecurityTimeseriesGroupDKIMParamsDMARC string
 
 const (
-	RadarEmailSecurityTimeseriesGroupDKIMParamsDmarcPass RadarEmailSecurityTimeseriesGroupDKIMParamsDmarc = "PASS"
-	RadarEmailSecurityTimeseriesGroupDKIMParamsDmarcNone RadarEmailSecurityTimeseriesGroupDKIMParamsDmarc = "NONE"
-	RadarEmailSecurityTimeseriesGroupDKIMParamsDmarcFail RadarEmailSecurityTimeseriesGroupDKIMParamsDmarc = "FAIL"
+	RadarEmailSecurityTimeseriesGroupDKIMParamsDMARCPass RadarEmailSecurityTimeseriesGroupDKIMParamsDMARC = "PASS"
+	RadarEmailSecurityTimeseriesGroupDKIMParamsDMARCNone RadarEmailSecurityTimeseriesGroupDKIMParamsDMARC = "NONE"
+	RadarEmailSecurityTimeseriesGroupDKIMParamsDMARCFail RadarEmailSecurityTimeseriesGroupDKIMParamsDMARC = "FAIL"
 )
 
 // Format results are returned in.

@@ -159,7 +159,7 @@ func (r *RadarHTTPAseHTTPProtocolGetResponseMetaConfidenceInfoAnnotation) Unmars
 }
 
 type RadarHTTPAseHTTPProtocolGetResponseTop0 struct {
-	ClientAsn    int64                                       `json:"clientASN,required"`
+	ClientASN    int64                                       `json:"clientASN,required"`
 	ClientAsName string                                      `json:"clientASName,required"`
 	Value        string                                      `json:"value,required"`
 	JSON         radarHTTPAseHTTPProtocolGetResponseTop0JSON `json:"-"`
@@ -168,7 +168,7 @@ type RadarHTTPAseHTTPProtocolGetResponseTop0 struct {
 // radarHTTPAseHTTPProtocolGetResponseTop0JSON contains the JSON metadata for the
 // struct [RadarHTTPAseHTTPProtocolGetResponseTop0]
 type radarHTTPAseHTTPProtocolGetResponseTop0JSON struct {
-	ClientAsn    apijson.Field
+	ClientASN    apijson.Field
 	ClientAsName apijson.Field
 	Value        apijson.Field
 	raw          string
@@ -183,7 +183,7 @@ type RadarHTTPAseHTTPProtocolGetParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// Filter for bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]RadarHTTPAseHTTPProtocolGetParamsBotClass] `query:"botClass"`
@@ -212,7 +212,7 @@ type RadarHTTPAseHTTPProtocolGetParams struct {
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Filter for os name.
-	Os param.Field[[]RadarHTTPAseHTTPProtocolGetParamsO] `query:"os"`
+	OS param.Field[[]RadarHTTPAseHTTPProtocolGetParamsOS] `query:"os"`
 	// Filter for tls version.
 	TLSVersion param.Field[[]RadarHTTPAseHTTPProtocolGetParamsTLSVersion] `query:"tlsVersion"`
 }
@@ -284,16 +284,16 @@ const (
 	RadarHTTPAseHTTPProtocolGetParamsIPVersionIPv6 RadarHTTPAseHTTPProtocolGetParamsIPVersion = "IPv6"
 )
 
-type RadarHTTPAseHTTPProtocolGetParamsO string
+type RadarHTTPAseHTTPProtocolGetParamsOS string
 
 const (
-	RadarHTTPAseHTTPProtocolGetParamsOWindows  RadarHTTPAseHTTPProtocolGetParamsO = "WINDOWS"
-	RadarHTTPAseHTTPProtocolGetParamsOMacosx   RadarHTTPAseHTTPProtocolGetParamsO = "MACOSX"
-	RadarHTTPAseHTTPProtocolGetParamsOIos      RadarHTTPAseHTTPProtocolGetParamsO = "IOS"
-	RadarHTTPAseHTTPProtocolGetParamsOAndroid  RadarHTTPAseHTTPProtocolGetParamsO = "ANDROID"
-	RadarHTTPAseHTTPProtocolGetParamsOChromeos RadarHTTPAseHTTPProtocolGetParamsO = "CHROMEOS"
-	RadarHTTPAseHTTPProtocolGetParamsOLinux    RadarHTTPAseHTTPProtocolGetParamsO = "LINUX"
-	RadarHTTPAseHTTPProtocolGetParamsOSmartTv  RadarHTTPAseHTTPProtocolGetParamsO = "SMART_TV"
+	RadarHTTPAseHTTPProtocolGetParamsOSWindows  RadarHTTPAseHTTPProtocolGetParamsOS = "WINDOWS"
+	RadarHTTPAseHTTPProtocolGetParamsOSMacosx   RadarHTTPAseHTTPProtocolGetParamsOS = "MACOSX"
+	RadarHTTPAseHTTPProtocolGetParamsOSIos      RadarHTTPAseHTTPProtocolGetParamsOS = "IOS"
+	RadarHTTPAseHTTPProtocolGetParamsOSAndroid  RadarHTTPAseHTTPProtocolGetParamsOS = "ANDROID"
+	RadarHTTPAseHTTPProtocolGetParamsOSChromeos RadarHTTPAseHTTPProtocolGetParamsOS = "CHROMEOS"
+	RadarHTTPAseHTTPProtocolGetParamsOSLinux    RadarHTTPAseHTTPProtocolGetParamsOS = "LINUX"
+	RadarHTTPAseHTTPProtocolGetParamsOSSmartTv  RadarHTTPAseHTTPProtocolGetParamsOS = "SMART_TV"
 )
 
 type RadarHTTPAseHTTPProtocolGetParamsTLSVersion string

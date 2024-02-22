@@ -159,7 +159,7 @@ const (
 // [UserFirewallAccessRuleRuleNewResponseConfigurationLegacyJhsIPConfiguration],
 // [UserFirewallAccessRuleRuleNewResponseConfigurationLegacyJhsIPV6Configuration],
 // [UserFirewallAccessRuleRuleNewResponseConfigurationLegacyJhsCidrConfiguration],
-// [UserFirewallAccessRuleRuleNewResponseConfigurationLegacyJhsAsnConfiguration] or
+// [UserFirewallAccessRuleRuleNewResponseConfigurationLegacyJhsASNConfiguration] or
 // [UserFirewallAccessRuleRuleNewResponseConfigurationLegacyJhsCountryConfiguration].
 type UserFirewallAccessRuleRuleNewResponseConfiguration interface {
 	implementsUserFirewallAccessRuleRuleNewResponseConfiguration()
@@ -273,38 +273,38 @@ const (
 	UserFirewallAccessRuleRuleNewResponseConfigurationLegacyJhsCidrConfigurationTargetIPRange UserFirewallAccessRuleRuleNewResponseConfigurationLegacyJhsCidrConfigurationTarget = "ip_range"
 )
 
-type UserFirewallAccessRuleRuleNewResponseConfigurationLegacyJhsAsnConfiguration struct {
+type UserFirewallAccessRuleRuleNewResponseConfigurationLegacyJhsASNConfiguration struct {
 	// The configuration target. You must set the target to `asn` when specifying an
 	// Autonomous System Number (ASN) in the rule.
-	Target UserFirewallAccessRuleRuleNewResponseConfigurationLegacyJhsAsnConfigurationTarget `json:"target"`
+	Target UserFirewallAccessRuleRuleNewResponseConfigurationLegacyJhsASNConfigurationTarget `json:"target"`
 	// The AS number to match.
 	Value string                                                                          `json:"value"`
-	JSON  userFirewallAccessRuleRuleNewResponseConfigurationLegacyJhsAsnConfigurationJSON `json:"-"`
+	JSON  userFirewallAccessRuleRuleNewResponseConfigurationLegacyJhsASNConfigurationJSON `json:"-"`
 }
 
-// userFirewallAccessRuleRuleNewResponseConfigurationLegacyJhsAsnConfigurationJSON
+// userFirewallAccessRuleRuleNewResponseConfigurationLegacyJhsASNConfigurationJSON
 // contains the JSON metadata for the struct
-// [UserFirewallAccessRuleRuleNewResponseConfigurationLegacyJhsAsnConfiguration]
-type userFirewallAccessRuleRuleNewResponseConfigurationLegacyJhsAsnConfigurationJSON struct {
+// [UserFirewallAccessRuleRuleNewResponseConfigurationLegacyJhsASNConfiguration]
+type userFirewallAccessRuleRuleNewResponseConfigurationLegacyJhsASNConfigurationJSON struct {
 	Target      apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UserFirewallAccessRuleRuleNewResponseConfigurationLegacyJhsAsnConfiguration) UnmarshalJSON(data []byte) (err error) {
+func (r *UserFirewallAccessRuleRuleNewResponseConfigurationLegacyJhsASNConfiguration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r UserFirewallAccessRuleRuleNewResponseConfigurationLegacyJhsAsnConfiguration) implementsUserFirewallAccessRuleRuleNewResponseConfiguration() {
+func (r UserFirewallAccessRuleRuleNewResponseConfigurationLegacyJhsASNConfiguration) implementsUserFirewallAccessRuleRuleNewResponseConfiguration() {
 }
 
 // The configuration target. You must set the target to `asn` when specifying an
 // Autonomous System Number (ASN) in the rule.
-type UserFirewallAccessRuleRuleNewResponseConfigurationLegacyJhsAsnConfigurationTarget string
+type UserFirewallAccessRuleRuleNewResponseConfigurationLegacyJhsASNConfigurationTarget string
 
 const (
-	UserFirewallAccessRuleRuleNewResponseConfigurationLegacyJhsAsnConfigurationTargetAsn UserFirewallAccessRuleRuleNewResponseConfigurationLegacyJhsAsnConfigurationTarget = "asn"
+	UserFirewallAccessRuleRuleNewResponseConfigurationLegacyJhsASNConfigurationTargetASN UserFirewallAccessRuleRuleNewResponseConfigurationLegacyJhsASNConfigurationTarget = "asn"
 )
 
 type UserFirewallAccessRuleRuleNewResponseConfigurationLegacyJhsCountryConfiguration struct {
@@ -406,7 +406,7 @@ const (
 // [UserFirewallAccessRuleRuleListResponseConfigurationLegacyJhsIPConfiguration],
 // [UserFirewallAccessRuleRuleListResponseConfigurationLegacyJhsIPV6Configuration],
 // [UserFirewallAccessRuleRuleListResponseConfigurationLegacyJhsCidrConfiguration],
-// [UserFirewallAccessRuleRuleListResponseConfigurationLegacyJhsAsnConfiguration]
+// [UserFirewallAccessRuleRuleListResponseConfigurationLegacyJhsASNConfiguration]
 // or
 // [UserFirewallAccessRuleRuleListResponseConfigurationLegacyJhsCountryConfiguration].
 type UserFirewallAccessRuleRuleListResponseConfiguration interface {
@@ -521,38 +521,38 @@ const (
 	UserFirewallAccessRuleRuleListResponseConfigurationLegacyJhsCidrConfigurationTargetIPRange UserFirewallAccessRuleRuleListResponseConfigurationLegacyJhsCidrConfigurationTarget = "ip_range"
 )
 
-type UserFirewallAccessRuleRuleListResponseConfigurationLegacyJhsAsnConfiguration struct {
+type UserFirewallAccessRuleRuleListResponseConfigurationLegacyJhsASNConfiguration struct {
 	// The configuration target. You must set the target to `asn` when specifying an
 	// Autonomous System Number (ASN) in the rule.
-	Target UserFirewallAccessRuleRuleListResponseConfigurationLegacyJhsAsnConfigurationTarget `json:"target"`
+	Target UserFirewallAccessRuleRuleListResponseConfigurationLegacyJhsASNConfigurationTarget `json:"target"`
 	// The AS number to match.
 	Value string                                                                           `json:"value"`
-	JSON  userFirewallAccessRuleRuleListResponseConfigurationLegacyJhsAsnConfigurationJSON `json:"-"`
+	JSON  userFirewallAccessRuleRuleListResponseConfigurationLegacyJhsASNConfigurationJSON `json:"-"`
 }
 
-// userFirewallAccessRuleRuleListResponseConfigurationLegacyJhsAsnConfigurationJSON
+// userFirewallAccessRuleRuleListResponseConfigurationLegacyJhsASNConfigurationJSON
 // contains the JSON metadata for the struct
-// [UserFirewallAccessRuleRuleListResponseConfigurationLegacyJhsAsnConfiguration]
-type userFirewallAccessRuleRuleListResponseConfigurationLegacyJhsAsnConfigurationJSON struct {
+// [UserFirewallAccessRuleRuleListResponseConfigurationLegacyJhsASNConfiguration]
+type userFirewallAccessRuleRuleListResponseConfigurationLegacyJhsASNConfigurationJSON struct {
 	Target      apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UserFirewallAccessRuleRuleListResponseConfigurationLegacyJhsAsnConfiguration) UnmarshalJSON(data []byte) (err error) {
+func (r *UserFirewallAccessRuleRuleListResponseConfigurationLegacyJhsASNConfiguration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r UserFirewallAccessRuleRuleListResponseConfigurationLegacyJhsAsnConfiguration) implementsUserFirewallAccessRuleRuleListResponseConfiguration() {
+func (r UserFirewallAccessRuleRuleListResponseConfigurationLegacyJhsASNConfiguration) implementsUserFirewallAccessRuleRuleListResponseConfiguration() {
 }
 
 // The configuration target. You must set the target to `asn` when specifying an
 // Autonomous System Number (ASN) in the rule.
-type UserFirewallAccessRuleRuleListResponseConfigurationLegacyJhsAsnConfigurationTarget string
+type UserFirewallAccessRuleRuleListResponseConfigurationLegacyJhsASNConfigurationTarget string
 
 const (
-	UserFirewallAccessRuleRuleListResponseConfigurationLegacyJhsAsnConfigurationTargetAsn UserFirewallAccessRuleRuleListResponseConfigurationLegacyJhsAsnConfigurationTarget = "asn"
+	UserFirewallAccessRuleRuleListResponseConfigurationLegacyJhsASNConfigurationTargetASN UserFirewallAccessRuleRuleListResponseConfigurationLegacyJhsASNConfigurationTarget = "asn"
 )
 
 type UserFirewallAccessRuleRuleListResponseConfigurationLegacyJhsCountryConfiguration struct {
@@ -672,7 +672,7 @@ const (
 // [UserFirewallAccessRuleRuleEditResponseConfigurationLegacyJhsIPConfiguration],
 // [UserFirewallAccessRuleRuleEditResponseConfigurationLegacyJhsIPV6Configuration],
 // [UserFirewallAccessRuleRuleEditResponseConfigurationLegacyJhsCidrConfiguration],
-// [UserFirewallAccessRuleRuleEditResponseConfigurationLegacyJhsAsnConfiguration]
+// [UserFirewallAccessRuleRuleEditResponseConfigurationLegacyJhsASNConfiguration]
 // or
 // [UserFirewallAccessRuleRuleEditResponseConfigurationLegacyJhsCountryConfiguration].
 type UserFirewallAccessRuleRuleEditResponseConfiguration interface {
@@ -787,38 +787,38 @@ const (
 	UserFirewallAccessRuleRuleEditResponseConfigurationLegacyJhsCidrConfigurationTargetIPRange UserFirewallAccessRuleRuleEditResponseConfigurationLegacyJhsCidrConfigurationTarget = "ip_range"
 )
 
-type UserFirewallAccessRuleRuleEditResponseConfigurationLegacyJhsAsnConfiguration struct {
+type UserFirewallAccessRuleRuleEditResponseConfigurationLegacyJhsASNConfiguration struct {
 	// The configuration target. You must set the target to `asn` when specifying an
 	// Autonomous System Number (ASN) in the rule.
-	Target UserFirewallAccessRuleRuleEditResponseConfigurationLegacyJhsAsnConfigurationTarget `json:"target"`
+	Target UserFirewallAccessRuleRuleEditResponseConfigurationLegacyJhsASNConfigurationTarget `json:"target"`
 	// The AS number to match.
 	Value string                                                                           `json:"value"`
-	JSON  userFirewallAccessRuleRuleEditResponseConfigurationLegacyJhsAsnConfigurationJSON `json:"-"`
+	JSON  userFirewallAccessRuleRuleEditResponseConfigurationLegacyJhsASNConfigurationJSON `json:"-"`
 }
 
-// userFirewallAccessRuleRuleEditResponseConfigurationLegacyJhsAsnConfigurationJSON
+// userFirewallAccessRuleRuleEditResponseConfigurationLegacyJhsASNConfigurationJSON
 // contains the JSON metadata for the struct
-// [UserFirewallAccessRuleRuleEditResponseConfigurationLegacyJhsAsnConfiguration]
-type userFirewallAccessRuleRuleEditResponseConfigurationLegacyJhsAsnConfigurationJSON struct {
+// [UserFirewallAccessRuleRuleEditResponseConfigurationLegacyJhsASNConfiguration]
+type userFirewallAccessRuleRuleEditResponseConfigurationLegacyJhsASNConfigurationJSON struct {
 	Target      apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UserFirewallAccessRuleRuleEditResponseConfigurationLegacyJhsAsnConfiguration) UnmarshalJSON(data []byte) (err error) {
+func (r *UserFirewallAccessRuleRuleEditResponseConfigurationLegacyJhsASNConfiguration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r UserFirewallAccessRuleRuleEditResponseConfigurationLegacyJhsAsnConfiguration) implementsUserFirewallAccessRuleRuleEditResponseConfiguration() {
+func (r UserFirewallAccessRuleRuleEditResponseConfigurationLegacyJhsASNConfiguration) implementsUserFirewallAccessRuleRuleEditResponseConfiguration() {
 }
 
 // The configuration target. You must set the target to `asn` when specifying an
 // Autonomous System Number (ASN) in the rule.
-type UserFirewallAccessRuleRuleEditResponseConfigurationLegacyJhsAsnConfigurationTarget string
+type UserFirewallAccessRuleRuleEditResponseConfigurationLegacyJhsASNConfigurationTarget string
 
 const (
-	UserFirewallAccessRuleRuleEditResponseConfigurationLegacyJhsAsnConfigurationTargetAsn UserFirewallAccessRuleRuleEditResponseConfigurationLegacyJhsAsnConfigurationTarget = "asn"
+	UserFirewallAccessRuleRuleEditResponseConfigurationLegacyJhsASNConfigurationTargetASN UserFirewallAccessRuleRuleEditResponseConfigurationLegacyJhsASNConfigurationTarget = "asn"
 )
 
 type UserFirewallAccessRuleRuleEditResponseConfigurationLegacyJhsCountryConfiguration struct {
@@ -886,7 +886,7 @@ func (r UserFirewallAccessRuleRuleNewParams) MarshalJSON() (data []byte, err err
 // [UserFirewallAccessRuleRuleNewParamsConfigurationLegacyJhsIPConfiguration],
 // [UserFirewallAccessRuleRuleNewParamsConfigurationLegacyJhsIPV6Configuration],
 // [UserFirewallAccessRuleRuleNewParamsConfigurationLegacyJhsCidrConfiguration],
-// [UserFirewallAccessRuleRuleNewParamsConfigurationLegacyJhsAsnConfiguration],
+// [UserFirewallAccessRuleRuleNewParamsConfigurationLegacyJhsASNConfiguration],
 // [UserFirewallAccessRuleRuleNewParamsConfigurationLegacyJhsCountryConfiguration].
 type UserFirewallAccessRuleRuleNewParamsConfiguration interface {
 	implementsUserFirewallAccessRuleRuleNewParamsConfiguration()
@@ -963,27 +963,27 @@ const (
 	UserFirewallAccessRuleRuleNewParamsConfigurationLegacyJhsCidrConfigurationTargetIPRange UserFirewallAccessRuleRuleNewParamsConfigurationLegacyJhsCidrConfigurationTarget = "ip_range"
 )
 
-type UserFirewallAccessRuleRuleNewParamsConfigurationLegacyJhsAsnConfiguration struct {
+type UserFirewallAccessRuleRuleNewParamsConfigurationLegacyJhsASNConfiguration struct {
 	// The configuration target. You must set the target to `asn` when specifying an
 	// Autonomous System Number (ASN) in the rule.
-	Target param.Field[UserFirewallAccessRuleRuleNewParamsConfigurationLegacyJhsAsnConfigurationTarget] `json:"target"`
+	Target param.Field[UserFirewallAccessRuleRuleNewParamsConfigurationLegacyJhsASNConfigurationTarget] `json:"target"`
 	// The AS number to match.
 	Value param.Field[string] `json:"value"`
 }
 
-func (r UserFirewallAccessRuleRuleNewParamsConfigurationLegacyJhsAsnConfiguration) MarshalJSON() (data []byte, err error) {
+func (r UserFirewallAccessRuleRuleNewParamsConfigurationLegacyJhsASNConfiguration) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r UserFirewallAccessRuleRuleNewParamsConfigurationLegacyJhsAsnConfiguration) implementsUserFirewallAccessRuleRuleNewParamsConfiguration() {
+func (r UserFirewallAccessRuleRuleNewParamsConfigurationLegacyJhsASNConfiguration) implementsUserFirewallAccessRuleRuleNewParamsConfiguration() {
 }
 
 // The configuration target. You must set the target to `asn` when specifying an
 // Autonomous System Number (ASN) in the rule.
-type UserFirewallAccessRuleRuleNewParamsConfigurationLegacyJhsAsnConfigurationTarget string
+type UserFirewallAccessRuleRuleNewParamsConfigurationLegacyJhsASNConfigurationTarget string
 
 const (
-	UserFirewallAccessRuleRuleNewParamsConfigurationLegacyJhsAsnConfigurationTargetAsn UserFirewallAccessRuleRuleNewParamsConfigurationLegacyJhsAsnConfigurationTarget = "asn"
+	UserFirewallAccessRuleRuleNewParamsConfigurationLegacyJhsASNConfigurationTargetASN UserFirewallAccessRuleRuleNewParamsConfigurationLegacyJhsASNConfigurationTarget = "asn"
 )
 
 type UserFirewallAccessRuleRuleNewParamsConfigurationLegacyJhsCountryConfiguration struct {
@@ -1184,7 +1184,7 @@ type UserFirewallAccessRuleRuleListParamsFiltersConfigurationTarget string
 const (
 	UserFirewallAccessRuleRuleListParamsFiltersConfigurationTargetIP      UserFirewallAccessRuleRuleListParamsFiltersConfigurationTarget = "ip"
 	UserFirewallAccessRuleRuleListParamsFiltersConfigurationTargetIPRange UserFirewallAccessRuleRuleListParamsFiltersConfigurationTarget = "ip_range"
-	UserFirewallAccessRuleRuleListParamsFiltersConfigurationTargetAsn     UserFirewallAccessRuleRuleListParamsFiltersConfigurationTarget = "asn"
+	UserFirewallAccessRuleRuleListParamsFiltersConfigurationTargetASN     UserFirewallAccessRuleRuleListParamsFiltersConfigurationTarget = "asn"
 	UserFirewallAccessRuleRuleListParamsFiltersConfigurationTargetCountry UserFirewallAccessRuleRuleListParamsFiltersConfigurationTarget = "country"
 )
 

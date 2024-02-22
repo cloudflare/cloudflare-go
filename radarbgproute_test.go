@@ -92,7 +92,7 @@ func TestRadarBGPRouteStatsWithOptionalParams(t *testing.T) {
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.BGP.Routes.Stats(context.TODO(), cloudflare.RadarBGPRouteStatsParams{
-		Asn:      cloudflare.F(int64(0)),
+		ASN:      cloudflare.F(int64(0)),
 		Format:   cloudflare.F(cloudflare.RadarBGPRouteStatsParamsFormatJson),
 		Location: cloudflare.F("US"),
 	})

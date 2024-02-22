@@ -98,13 +98,13 @@ type DeviceDevicesListDevicesResponse struct {
 	// The device name.
 	Name string `json:"name"`
 	// The Linux distro name.
-	OsDistroName string `json:"os_distro_name"`
+	OSDistroName string `json:"os_distro_name"`
 	// The Linux distro revision.
-	OsDistroRevision string `json:"os_distro_revision"`
+	OSDistroRevision string `json:"os_distro_revision"`
 	// The operating system version.
-	OsVersion string `json:"os_version"`
+	OSVersion string `json:"os_version"`
 	// The operating system version extra parameter.
-	OsVersionExtra string `json:"os_version_extra"`
+	OSVersionExtra string `json:"os_version_extra"`
 	// When the device was revoked.
 	RevokedAt time.Time `json:"revoked_at" format:"date-time"`
 	// The device serial number.
@@ -131,10 +131,10 @@ type deviceDevicesListDevicesResponseJSON struct {
 	Manufacturer     apijson.Field
 	Model            apijson.Field
 	Name             apijson.Field
-	OsDistroName     apijson.Field
-	OsDistroRevision apijson.Field
-	OsVersion        apijson.Field
-	OsVersionExtra   apijson.Field
+	OSDistroName     apijson.Field
+	OSDistroRevision apijson.Field
+	OSVersion        apijson.Field
+	OSVersionExtra   apijson.Field
 	RevokedAt        apijson.Field
 	SerialNumber     apijson.Field
 	Updated          apijson.Field

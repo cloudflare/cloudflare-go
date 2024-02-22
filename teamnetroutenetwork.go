@@ -246,9 +246,9 @@ type TeamnetRouteNetworkDeleteParamsTunType string
 
 const (
 	TeamnetRouteNetworkDeleteParamsTunTypeCfdTunnel     TeamnetRouteNetworkDeleteParamsTunType = "cfd_tunnel"
-	TeamnetRouteNetworkDeleteParamsTunTypeWarpConnector TeamnetRouteNetworkDeleteParamsTunType = "warp_connector"
+	TeamnetRouteNetworkDeleteParamsTunTypeWARPConnector TeamnetRouteNetworkDeleteParamsTunType = "warp_connector"
 	TeamnetRouteNetworkDeleteParamsTunTypeIPSec         TeamnetRouteNetworkDeleteParamsTunType = "ip_sec"
-	TeamnetRouteNetworkDeleteParamsTunTypeGre           TeamnetRouteNetworkDeleteParamsTunType = "gre"
+	TeamnetRouteNetworkDeleteParamsTunTypeGRE           TeamnetRouteNetworkDeleteParamsTunType = "gre"
 	TeamnetRouteNetworkDeleteParamsTunTypeCni           TeamnetRouteNetworkDeleteParamsTunType = "cni"
 )
 

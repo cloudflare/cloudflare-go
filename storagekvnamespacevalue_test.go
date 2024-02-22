@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestStorageKvNamespaceValueUpdate(t *testing.T) {
+func TestStorageKVNamespaceValueUpdate(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,12 +29,12 @@ func TestStorageKvNamespaceValueUpdate(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Storage.Kv.Namespaces.Values.Update(
+	_, err := client.Storage.KV.Namespaces.Values.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"0f2ac74b498b48028cb68387c421e279",
 		"My-Key",
-		cloudflare.StorageKvNamespaceValueUpdateParams{
+		cloudflare.StorageKVNamespaceValueUpdateParams{
 			Metadata: cloudflare.F("{\"someMetadataKey\": \"someMetadataValue\"}"),
 			Value:    cloudflare.F("Some Value"),
 		},
@@ -48,7 +48,7 @@ func TestStorageKvNamespaceValueUpdate(t *testing.T) {
 	}
 }
 
-func TestStorageKvNamespaceValueDelete(t *testing.T) {
+func TestStorageKVNamespaceValueDelete(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -64,7 +64,7 @@ func TestStorageKvNamespaceValueDelete(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Storage.Kv.Namespaces.Values.Delete(
+	_, err := client.Storage.KV.Namespaces.Values.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"0f2ac74b498b48028cb68387c421e279",
@@ -79,7 +79,7 @@ func TestStorageKvNamespaceValueDelete(t *testing.T) {
 	}
 }
 
-func TestStorageKvNamespaceValueGet(t *testing.T) {
+func TestStorageKVNamespaceValueGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -95,7 +95,7 @@ func TestStorageKvNamespaceValueGet(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Storage.Kv.Namespaces.Values.Get(
+	_, err := client.Storage.KV.Namespaces.Values.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"0f2ac74b498b48028cb68387c421e279",

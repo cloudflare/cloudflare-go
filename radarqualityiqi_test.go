@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestRadarQualityIqiSummaryWithOptionalParams(t *testing.T) {
+func TestRadarQualityIQISummaryWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -30,14 +30,14 @@ func TestRadarQualityIqiSummaryWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Radar.Quality.Iqi.Summary(context.TODO(), cloudflare.RadarQualityIqiSummaryParams{
-		Metric:    cloudflare.F(cloudflare.RadarQualityIqiSummaryParamsMetricBandwidth),
-		Asn:       cloudflare.F([]string{"string", "string", "string"}),
+	_, err := client.Radar.Quality.IQI.Summary(context.TODO(), cloudflare.RadarQualityIQISummaryParams{
+		Metric:    cloudflare.F(cloudflare.RadarQualityIQISummaryParamsMetricBandwidth),
+		ASN:       cloudflare.F([]string{"string", "string", "string"}),
 		Continent: cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange: cloudflare.F([]cloudflare.RadarQualityIqiSummaryParamsDateRange{cloudflare.RadarQualityIqiSummaryParamsDateRange1d, cloudflare.RadarQualityIqiSummaryParamsDateRange2d, cloudflare.RadarQualityIqiSummaryParamsDateRange7d}),
+		DateRange: cloudflare.F([]cloudflare.RadarQualityIQISummaryParamsDateRange{cloudflare.RadarQualityIQISummaryParamsDateRange1d, cloudflare.RadarQualityIQISummaryParamsDateRange2d, cloudflare.RadarQualityIQISummaryParamsDateRange7d}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		Format:    cloudflare.F(cloudflare.RadarQualityIqiSummaryParamsFormatJson),
+		Format:    cloudflare.F(cloudflare.RadarQualityIQISummaryParamsFormatJson),
 		Location:  cloudflare.F([]string{"string", "string", "string"}),
 		Name:      cloudflare.F([]string{"string", "string", "string"}),
 	})
@@ -50,7 +50,7 @@ func TestRadarQualityIqiSummaryWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestRadarQualityIqiTimeseriesGroupsWithOptionalParams(t *testing.T) {
+func TestRadarQualityIQITimeseriesGroupsWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -66,15 +66,15 @@ func TestRadarQualityIqiTimeseriesGroupsWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Radar.Quality.Iqi.TimeseriesGroups(context.TODO(), cloudflare.RadarQualityIqiTimeseriesGroupsParams{
-		Metric:        cloudflare.F(cloudflare.RadarQualityIqiTimeseriesGroupsParamsMetricBandwidth),
-		AggInterval:   cloudflare.F(cloudflare.RadarQualityIqiTimeseriesGroupsParamsAggInterval1h),
-		Asn:           cloudflare.F([]string{"string", "string", "string"}),
+	_, err := client.Radar.Quality.IQI.TimeseriesGroups(context.TODO(), cloudflare.RadarQualityIQITimeseriesGroupsParams{
+		Metric:        cloudflare.F(cloudflare.RadarQualityIQITimeseriesGroupsParamsMetricBandwidth),
+		AggInterval:   cloudflare.F(cloudflare.RadarQualityIQITimeseriesGroupsParamsAggInterval1h),
+		ASN:           cloudflare.F([]string{"string", "string", "string"}),
 		Continent:     cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:     cloudflare.F([]cloudflare.RadarQualityIqiTimeseriesGroupsParamsDateRange{cloudflare.RadarQualityIqiTimeseriesGroupsParamsDateRange1d, cloudflare.RadarQualityIqiTimeseriesGroupsParamsDateRange2d, cloudflare.RadarQualityIqiTimeseriesGroupsParamsDateRange7d}),
+		DateRange:     cloudflare.F([]cloudflare.RadarQualityIQITimeseriesGroupsParamsDateRange{cloudflare.RadarQualityIQITimeseriesGroupsParamsDateRange1d, cloudflare.RadarQualityIQITimeseriesGroupsParamsDateRange2d, cloudflare.RadarQualityIQITimeseriesGroupsParamsDateRange7d}),
 		DateStart:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		Format:        cloudflare.F(cloudflare.RadarQualityIqiTimeseriesGroupsParamsFormatJson),
+		Format:        cloudflare.F(cloudflare.RadarQualityIQITimeseriesGroupsParamsFormatJson),
 		Interpolation: cloudflare.F(true),
 		Location:      cloudflare.F([]string{"string", "string", "string"}),
 		Name:          cloudflare.F([]string{"string", "string", "string"}),

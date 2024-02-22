@@ -6,21 +6,21 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-// StorageKvService contains methods and other services that help with interacting
+// StorageKVService contains methods and other services that help with interacting
 // with the cloudflare API. Note, unlike clients, this service does not read
 // variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewStorageKvService] method instead.
-type StorageKvService struct {
+// service directly, and instead use the [NewStorageKVService] method instead.
+type StorageKVService struct {
 	Options    []option.RequestOption
-	Namespaces *StorageKvNamespaceService
+	Namespaces *StorageKVNamespaceService
 }
 
-// NewStorageKvService generates a new service that applies the given options to
+// NewStorageKVService generates a new service that applies the given options to
 // each request. These options are applied after the parent client's options (if
 // there is one), and before any request-specific options.
-func NewStorageKvService(opts ...option.RequestOption) (r *StorageKvService) {
-	r = &StorageKvService{}
+func NewStorageKVService(opts ...option.RequestOption) (r *StorageKVService) {
+	r = &StorageKVService{}
 	r.Options = opts
-	r.Namespaces = NewStorageKvNamespaceService(opts...)
+	r.Namespaces = NewStorageKVNamespaceService(opts...)
 	return
 }

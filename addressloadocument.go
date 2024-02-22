@@ -13,30 +13,30 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-// AddressLoaDocumentService contains methods and other services that help with
+// AddressLOADocumentService contains methods and other services that help with
 // interacting with the cloudflare API. Note, unlike clients, this service does not
 // read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewAddressLoaDocumentService] method
+// this service directly, and instead use the [NewAddressLOADocumentService] method
 // instead.
-type AddressLoaDocumentService struct {
+type AddressLOADocumentService struct {
 	Options   []option.RequestOption
-	Downloads *AddressLoaDocumentDownloadService
+	Downloads *AddressLOADocumentDownloadService
 }
 
-// NewAddressLoaDocumentService generates a new service that applies the given
+// NewAddressLOADocumentService generates a new service that applies the given
 // options to each request. These options are applied after the parent client's
 // options (if there is one), and before any request-specific options.
-func NewAddressLoaDocumentService(opts ...option.RequestOption) (r *AddressLoaDocumentService) {
-	r = &AddressLoaDocumentService{}
+func NewAddressLOADocumentService(opts ...option.RequestOption) (r *AddressLOADocumentService) {
+	r = &AddressLOADocumentService{}
 	r.Options = opts
-	r.Downloads = NewAddressLoaDocumentDownloadService(opts...)
+	r.Downloads = NewAddressLOADocumentDownloadService(opts...)
 	return
 }
 
 // Submit LOA document (pdf format) under the account.
-func (r *AddressLoaDocumentService) New(ctx context.Context, accountID string, body AddressLoaDocumentNewParams, opts ...option.RequestOption) (res *AddressLoaDocumentNewResponse, err error) {
+func (r *AddressLOADocumentService) New(ctx context.Context, accountID string, body AddressLOADocumentNewParams, opts ...option.RequestOption) (res *AddressLOADocumentNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env AddressLoaDocumentNewResponseEnvelope
+	var env AddressLOADocumentNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/loa_documents", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -46,45 +46,45 @@ func (r *AddressLoaDocumentService) New(ctx context.Context, accountID string, b
 	return
 }
 
-type AddressLoaDocumentNewResponse struct {
+type AddressLOADocumentNewResponse struct {
 	// Name of LOA document.
 	Filename string                            `json:"filename"`
-	JSON     addressLoaDocumentNewResponseJSON `json:"-"`
+	JSON     addressLOADocumentNewResponseJSON `json:"-"`
 }
 
-// addressLoaDocumentNewResponseJSON contains the JSON metadata for the struct
-// [AddressLoaDocumentNewResponse]
-type addressLoaDocumentNewResponseJSON struct {
+// addressLOADocumentNewResponseJSON contains the JSON metadata for the struct
+// [AddressLOADocumentNewResponse]
+type addressLOADocumentNewResponseJSON struct {
 	Filename    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AddressLoaDocumentNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressLOADocumentNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AddressLoaDocumentNewParams struct {
+type AddressLOADocumentNewParams struct {
 	// LOA document to upload.
-	LoaDocument param.Field[string] `json:"loa_document,required"`
+	LOADocument param.Field[string] `json:"loa_document,required"`
 }
 
-func (r AddressLoaDocumentNewParams) MarshalJSON() (data []byte, err error) {
+func (r AddressLOADocumentNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type AddressLoaDocumentNewResponseEnvelope struct {
-	Errors   []AddressLoaDocumentNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AddressLoaDocumentNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   AddressLoaDocumentNewResponse                   `json:"result,required"`
+type AddressLOADocumentNewResponseEnvelope struct {
+	Errors   []AddressLOADocumentNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AddressLOADocumentNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   AddressLOADocumentNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success AddressLoaDocumentNewResponseEnvelopeSuccess `json:"success,required"`
-	JSON    addressLoaDocumentNewResponseEnvelopeJSON    `json:"-"`
+	Success AddressLOADocumentNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    addressLOADocumentNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// addressLoaDocumentNewResponseEnvelopeJSON contains the JSON metadata for the
-// struct [AddressLoaDocumentNewResponseEnvelope]
-type addressLoaDocumentNewResponseEnvelopeJSON struct {
+// addressLOADocumentNewResponseEnvelopeJSON contains the JSON metadata for the
+// struct [AddressLOADocumentNewResponseEnvelope]
+type addressLOADocumentNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -93,51 +93,51 @@ type addressLoaDocumentNewResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AddressLoaDocumentNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressLOADocumentNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AddressLoaDocumentNewResponseEnvelopeErrors struct {
+type AddressLOADocumentNewResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
-	JSON    addressLoaDocumentNewResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    addressLOADocumentNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// addressLoaDocumentNewResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [AddressLoaDocumentNewResponseEnvelopeErrors]
-type addressLoaDocumentNewResponseEnvelopeErrorsJSON struct {
+// addressLOADocumentNewResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [AddressLOADocumentNewResponseEnvelopeErrors]
+type addressLOADocumentNewResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AddressLoaDocumentNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressLOADocumentNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AddressLoaDocumentNewResponseEnvelopeMessages struct {
+type AddressLOADocumentNewResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
-	JSON    addressLoaDocumentNewResponseEnvelopeMessagesJSON `json:"-"`
+	JSON    addressLOADocumentNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// addressLoaDocumentNewResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [AddressLoaDocumentNewResponseEnvelopeMessages]
-type addressLoaDocumentNewResponseEnvelopeMessagesJSON struct {
+// addressLOADocumentNewResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [AddressLOADocumentNewResponseEnvelopeMessages]
+type addressLOADocumentNewResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AddressLoaDocumentNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressLOADocumentNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type AddressLoaDocumentNewResponseEnvelopeSuccess bool
+type AddressLOADocumentNewResponseEnvelopeSuccess bool
 
 const (
-	AddressLoaDocumentNewResponseEnvelopeSuccessTrue AddressLoaDocumentNewResponseEnvelopeSuccess = true
+	AddressLOADocumentNewResponseEnvelopeSuccessTrue AddressLOADocumentNewResponseEnvelopeSuccess = true
 )

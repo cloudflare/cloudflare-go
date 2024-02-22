@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestWeb3HostnameIpfsUniversalPathContentListUpdate(t *testing.T) {
+func TestWeb3HostnameIPFSUniversalPathContentListUpdate(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,24 +29,24 @@ func TestWeb3HostnameIpfsUniversalPathContentListUpdate(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Web3.Hostnames.IpfsUniversalPaths.ContentLists.Update(
+	_, err := client.Web3.Hostnames.IPFSUniversalPaths.ContentLists.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.Web3HostnameIpfsUniversalPathContentListUpdateParams{
-			Action: cloudflare.F(cloudflare.Web3HostnameIpfsUniversalPathContentListUpdateParamsActionBlock),
-			Entries: cloudflare.F([]cloudflare.Web3HostnameIpfsUniversalPathContentListUpdateParamsEntry{{
+		cloudflare.Web3HostnameIPFSUniversalPathContentListUpdateParams{
+			Action: cloudflare.F(cloudflare.Web3HostnameIPFSUniversalPathContentListUpdateParamsActionBlock),
+			Entries: cloudflare.F([]cloudflare.Web3HostnameIPFSUniversalPathContentListUpdateParamsEntry{{
 				Content:     cloudflare.F("QmPZ9gcCEpqKTo6aq61g2nXGUhM4iCL3ewB6LDXZCtioEB"),
 				Description: cloudflare.F("this is my content list entry"),
-				Type:        cloudflare.F(cloudflare.Web3HostnameIpfsUniversalPathContentListUpdateParamsEntriesTypeCid),
+				Type:        cloudflare.F(cloudflare.Web3HostnameIPFSUniversalPathContentListUpdateParamsEntriesTypeCid),
 			}, {
 				Content:     cloudflare.F("QmPZ9gcCEpqKTo6aq61g2nXGUhM4iCL3ewB6LDXZCtioEB"),
 				Description: cloudflare.F("this is my content list entry"),
-				Type:        cloudflare.F(cloudflare.Web3HostnameIpfsUniversalPathContentListUpdateParamsEntriesTypeCid),
+				Type:        cloudflare.F(cloudflare.Web3HostnameIPFSUniversalPathContentListUpdateParamsEntriesTypeCid),
 			}, {
 				Content:     cloudflare.F("QmPZ9gcCEpqKTo6aq61g2nXGUhM4iCL3ewB6LDXZCtioEB"),
 				Description: cloudflare.F("this is my content list entry"),
-				Type:        cloudflare.F(cloudflare.Web3HostnameIpfsUniversalPathContentListUpdateParamsEntriesTypeCid),
+				Type:        cloudflare.F(cloudflare.Web3HostnameIPFSUniversalPathContentListUpdateParamsEntriesTypeCid),
 			}}),
 		},
 	)
@@ -59,7 +59,7 @@ func TestWeb3HostnameIpfsUniversalPathContentListUpdate(t *testing.T) {
 	}
 }
 
-func TestWeb3HostnameIpfsUniversalPathContentListList(t *testing.T) {
+func TestWeb3HostnameIPFSUniversalPathContentListList(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -75,7 +75,7 @@ func TestWeb3HostnameIpfsUniversalPathContentListList(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Web3.Hostnames.IpfsUniversalPaths.ContentLists.List(
+	_, err := client.Web3.Hostnames.IPFSUniversalPaths.ContentLists.List(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",

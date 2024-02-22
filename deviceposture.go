@@ -145,7 +145,7 @@ func (r *DevicePostureNewResponse) UnmarshalJSON(data []byte) (err error) {
 // Union satisfied by [DevicePostureNewResponseInputTeamsDevicesFileInputRequest],
 // [DevicePostureNewResponseInputTeamsDevicesUniqueClientIDInputRequest],
 // [DevicePostureNewResponseInputTeamsDevicesDomainJoinedInputRequest],
-// [DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequest],
+// [DevicePostureNewResponseInputTeamsDevicesOSVersionInputRequest],
 // [DevicePostureNewResponseInputTeamsDevicesFirewallInputRequest],
 // [DevicePostureNewResponseInputTeamsDevicesSentineloneInputRequest],
 // [DevicePostureNewResponseInputTeamsDevicesCarbonblackInputRequest],
@@ -275,60 +275,60 @@ const (
 	DevicePostureNewResponseInputTeamsDevicesDomainJoinedInputRequestOperatingSystemWindows DevicePostureNewResponseInputTeamsDevicesDomainJoinedInputRequestOperatingSystem = "windows"
 )
 
-type DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequest struct {
+type DevicePostureNewResponseInputTeamsDevicesOSVersionInputRequest struct {
 	// Operating System
-	OperatingSystem DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequestOperatingSystem `json:"operating_system,required"`
+	OperatingSystem DevicePostureNewResponseInputTeamsDevicesOSVersionInputRequestOperatingSystem `json:"operating_system,required"`
 	// Operator
-	Operator DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequestOperator `json:"operator,required"`
+	Operator DevicePostureNewResponseInputTeamsDevicesOSVersionInputRequestOperator `json:"operator,required"`
 	// Version of OS
 	Version string `json:"version,required"`
 	// Operating System Distribution Name (linux only)
-	OsDistroName string `json:"os_distro_name"`
+	OSDistroName string `json:"os_distro_name"`
 	// Version of OS Distribution (linux only)
-	OsDistroRevision string `json:"os_distro_revision"`
+	OSDistroRevision string `json:"os_distro_revision"`
 	// Additional version data. For Mac or iOS, the Product Verison Extra. For Linux,
 	// the kernel release version. (Mac, iOS, and Linux only)
-	OsVersionExtra string                                                             `json:"os_version_extra"`
-	JSON           devicePostureNewResponseInputTeamsDevicesOsVersionInputRequestJSON `json:"-"`
+	OSVersionExtra string                                                             `json:"os_version_extra"`
+	JSON           devicePostureNewResponseInputTeamsDevicesOSVersionInputRequestJSON `json:"-"`
 }
 
-// devicePostureNewResponseInputTeamsDevicesOsVersionInputRequestJSON contains the
+// devicePostureNewResponseInputTeamsDevicesOSVersionInputRequestJSON contains the
 // JSON metadata for the struct
-// [DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequest]
-type devicePostureNewResponseInputTeamsDevicesOsVersionInputRequestJSON struct {
+// [DevicePostureNewResponseInputTeamsDevicesOSVersionInputRequest]
+type devicePostureNewResponseInputTeamsDevicesOSVersionInputRequestJSON struct {
 	OperatingSystem  apijson.Field
 	Operator         apijson.Field
 	Version          apijson.Field
-	OsDistroName     apijson.Field
-	OsDistroRevision apijson.Field
-	OsVersionExtra   apijson.Field
+	OSDistroName     apijson.Field
+	OSDistroRevision apijson.Field
+	OSVersionExtra   apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequest) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePostureNewResponseInputTeamsDevicesOSVersionInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequest) implementsDevicePostureNewResponseInput() {
+func (r DevicePostureNewResponseInputTeamsDevicesOSVersionInputRequest) implementsDevicePostureNewResponseInput() {
 }
 
 // Operating System
-type DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequestOperatingSystem string
+type DevicePostureNewResponseInputTeamsDevicesOSVersionInputRequestOperatingSystem string
 
 const (
-	DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequestOperatingSystemWindows DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequestOperatingSystem = "windows"
+	DevicePostureNewResponseInputTeamsDevicesOSVersionInputRequestOperatingSystemWindows DevicePostureNewResponseInputTeamsDevicesOSVersionInputRequestOperatingSystem = "windows"
 )
 
 // Operator
-type DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequestOperator string
+type DevicePostureNewResponseInputTeamsDevicesOSVersionInputRequestOperator string
 
 const (
-	DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown5 DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequestOperator = "<"
-	DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown6 DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequestOperator = "<="
-	DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown7 DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequestOperator = ">"
-	DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown8 DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequestOperator = ">="
-	DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown9 DevicePostureNewResponseInputTeamsDevicesOsVersionInputRequestOperator = "=="
+	DevicePostureNewResponseInputTeamsDevicesOSVersionInputRequestOperatorUnknown5 DevicePostureNewResponseInputTeamsDevicesOSVersionInputRequestOperator = "<"
+	DevicePostureNewResponseInputTeamsDevicesOSVersionInputRequestOperatorUnknown6 DevicePostureNewResponseInputTeamsDevicesOSVersionInputRequestOperator = "<="
+	DevicePostureNewResponseInputTeamsDevicesOSVersionInputRequestOperatorUnknown7 DevicePostureNewResponseInputTeamsDevicesOSVersionInputRequestOperator = ">"
+	DevicePostureNewResponseInputTeamsDevicesOSVersionInputRequestOperatorUnknown8 DevicePostureNewResponseInputTeamsDevicesOSVersionInputRequestOperator = ">="
+	DevicePostureNewResponseInputTeamsDevicesOSVersionInputRequestOperatorUnknown9 DevicePostureNewResponseInputTeamsDevicesOSVersionInputRequestOperator = "=="
 )
 
 type DevicePostureNewResponseInputTeamsDevicesFirewallInputRequest struct {
@@ -574,7 +574,7 @@ type DevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequest struct {
 	// Operator
 	Operator DevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequestOperator `json:"operator"`
 	// Os Version
-	Os string `json:"os"`
+	OS string `json:"os"`
 	// overall
 	Overall string `json:"overall"`
 	// SensorConfig
@@ -592,7 +592,7 @@ type DevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequest struct {
 type devicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequestJSON struct {
 	ConnectionID    apijson.Field
 	Operator        apijson.Field
-	Os              apijson.Field
+	OS              apijson.Field
 	Overall         apijson.Field
 	SensorConfig    apijson.Field
 	Version         apijson.Field
@@ -868,12 +868,12 @@ const (
 	DevicePostureNewResponseTypeApplication       DevicePostureNewResponseType = "application"
 	DevicePostureNewResponseTypeTanium            DevicePostureNewResponseType = "tanium"
 	DevicePostureNewResponseTypeGateway           DevicePostureNewResponseType = "gateway"
-	DevicePostureNewResponseTypeWarp              DevicePostureNewResponseType = "warp"
+	DevicePostureNewResponseTypeWARP              DevicePostureNewResponseType = "warp"
 	DevicePostureNewResponseTypeDiskEncryption    DevicePostureNewResponseType = "disk_encryption"
 	DevicePostureNewResponseTypeSentinelone       DevicePostureNewResponseType = "sentinelone"
 	DevicePostureNewResponseTypeCarbonblack       DevicePostureNewResponseType = "carbonblack"
 	DevicePostureNewResponseTypeFirewall          DevicePostureNewResponseType = "firewall"
-	DevicePostureNewResponseTypeOsVersion         DevicePostureNewResponseType = "os_version"
+	DevicePostureNewResponseTypeOSVersion         DevicePostureNewResponseType = "os_version"
 	DevicePostureNewResponseTypeDomainJoined      DevicePostureNewResponseType = "domain_joined"
 	DevicePostureNewResponseTypeClientCertificate DevicePostureNewResponseType = "client_certificate"
 	DevicePostureNewResponseTypeUniqueClientID    DevicePostureNewResponseType = "unique_client_id"
@@ -932,7 +932,7 @@ func (r *DevicePostureUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 // [DevicePostureUpdateResponseInputTeamsDevicesFileInputRequest],
 // [DevicePostureUpdateResponseInputTeamsDevicesUniqueClientIDInputRequest],
 // [DevicePostureUpdateResponseInputTeamsDevicesDomainJoinedInputRequest],
-// [DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequest],
+// [DevicePostureUpdateResponseInputTeamsDevicesOSVersionInputRequest],
 // [DevicePostureUpdateResponseInputTeamsDevicesFirewallInputRequest],
 // [DevicePostureUpdateResponseInputTeamsDevicesSentineloneInputRequest],
 // [DevicePostureUpdateResponseInputTeamsDevicesCarbonblackInputRequest],
@@ -1062,60 +1062,60 @@ const (
 	DevicePostureUpdateResponseInputTeamsDevicesDomainJoinedInputRequestOperatingSystemWindows DevicePostureUpdateResponseInputTeamsDevicesDomainJoinedInputRequestOperatingSystem = "windows"
 )
 
-type DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequest struct {
+type DevicePostureUpdateResponseInputTeamsDevicesOSVersionInputRequest struct {
 	// Operating System
-	OperatingSystem DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestOperatingSystem `json:"operating_system,required"`
+	OperatingSystem DevicePostureUpdateResponseInputTeamsDevicesOSVersionInputRequestOperatingSystem `json:"operating_system,required"`
 	// Operator
-	Operator DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestOperator `json:"operator,required"`
+	Operator DevicePostureUpdateResponseInputTeamsDevicesOSVersionInputRequestOperator `json:"operator,required"`
 	// Version of OS
 	Version string `json:"version,required"`
 	// Operating System Distribution Name (linux only)
-	OsDistroName string `json:"os_distro_name"`
+	OSDistroName string `json:"os_distro_name"`
 	// Version of OS Distribution (linux only)
-	OsDistroRevision string `json:"os_distro_revision"`
+	OSDistroRevision string `json:"os_distro_revision"`
 	// Additional version data. For Mac or iOS, the Product Verison Extra. For Linux,
 	// the kernel release version. (Mac, iOS, and Linux only)
-	OsVersionExtra string                                                                `json:"os_version_extra"`
-	JSON           devicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestJSON `json:"-"`
+	OSVersionExtra string                                                                `json:"os_version_extra"`
+	JSON           devicePostureUpdateResponseInputTeamsDevicesOSVersionInputRequestJSON `json:"-"`
 }
 
-// devicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestJSON contains
+// devicePostureUpdateResponseInputTeamsDevicesOSVersionInputRequestJSON contains
 // the JSON metadata for the struct
-// [DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequest]
-type devicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestJSON struct {
+// [DevicePostureUpdateResponseInputTeamsDevicesOSVersionInputRequest]
+type devicePostureUpdateResponseInputTeamsDevicesOSVersionInputRequestJSON struct {
 	OperatingSystem  apijson.Field
 	Operator         apijson.Field
 	Version          apijson.Field
-	OsDistroName     apijson.Field
-	OsDistroRevision apijson.Field
-	OsVersionExtra   apijson.Field
+	OSDistroName     apijson.Field
+	OSDistroRevision apijson.Field
+	OSVersionExtra   apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequest) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePostureUpdateResponseInputTeamsDevicesOSVersionInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequest) implementsDevicePostureUpdateResponseInput() {
+func (r DevicePostureUpdateResponseInputTeamsDevicesOSVersionInputRequest) implementsDevicePostureUpdateResponseInput() {
 }
 
 // Operating System
-type DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestOperatingSystem string
+type DevicePostureUpdateResponseInputTeamsDevicesOSVersionInputRequestOperatingSystem string
 
 const (
-	DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestOperatingSystemWindows DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestOperatingSystem = "windows"
+	DevicePostureUpdateResponseInputTeamsDevicesOSVersionInputRequestOperatingSystemWindows DevicePostureUpdateResponseInputTeamsDevicesOSVersionInputRequestOperatingSystem = "windows"
 )
 
 // Operator
-type DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestOperator string
+type DevicePostureUpdateResponseInputTeamsDevicesOSVersionInputRequestOperator string
 
 const (
-	DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown75 DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestOperator = "<"
-	DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown76 DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestOperator = "<="
-	DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown77 DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestOperator = ">"
-	DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown78 DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestOperator = ">="
-	DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown79 DevicePostureUpdateResponseInputTeamsDevicesOsVersionInputRequestOperator = "=="
+	DevicePostureUpdateResponseInputTeamsDevicesOSVersionInputRequestOperatorUnknown75 DevicePostureUpdateResponseInputTeamsDevicesOSVersionInputRequestOperator = "<"
+	DevicePostureUpdateResponseInputTeamsDevicesOSVersionInputRequestOperatorUnknown76 DevicePostureUpdateResponseInputTeamsDevicesOSVersionInputRequestOperator = "<="
+	DevicePostureUpdateResponseInputTeamsDevicesOSVersionInputRequestOperatorUnknown77 DevicePostureUpdateResponseInputTeamsDevicesOSVersionInputRequestOperator = ">"
+	DevicePostureUpdateResponseInputTeamsDevicesOSVersionInputRequestOperatorUnknown78 DevicePostureUpdateResponseInputTeamsDevicesOSVersionInputRequestOperator = ">="
+	DevicePostureUpdateResponseInputTeamsDevicesOSVersionInputRequestOperatorUnknown79 DevicePostureUpdateResponseInputTeamsDevicesOSVersionInputRequestOperator = "=="
 )
 
 type DevicePostureUpdateResponseInputTeamsDevicesFirewallInputRequest struct {
@@ -1361,7 +1361,7 @@ type DevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequest struct 
 	// Operator
 	Operator DevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequestOperator `json:"operator"`
 	// Os Version
-	Os string `json:"os"`
+	OS string `json:"os"`
 	// overall
 	Overall string `json:"overall"`
 	// SensorConfig
@@ -1379,7 +1379,7 @@ type DevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequest struct 
 type devicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequestJSON struct {
 	ConnectionID    apijson.Field
 	Operator        apijson.Field
-	Os              apijson.Field
+	OS              apijson.Field
 	Overall         apijson.Field
 	SensorConfig    apijson.Field
 	Version         apijson.Field
@@ -1655,12 +1655,12 @@ const (
 	DevicePostureUpdateResponseTypeApplication       DevicePostureUpdateResponseType = "application"
 	DevicePostureUpdateResponseTypeTanium            DevicePostureUpdateResponseType = "tanium"
 	DevicePostureUpdateResponseTypeGateway           DevicePostureUpdateResponseType = "gateway"
-	DevicePostureUpdateResponseTypeWarp              DevicePostureUpdateResponseType = "warp"
+	DevicePostureUpdateResponseTypeWARP              DevicePostureUpdateResponseType = "warp"
 	DevicePostureUpdateResponseTypeDiskEncryption    DevicePostureUpdateResponseType = "disk_encryption"
 	DevicePostureUpdateResponseTypeSentinelone       DevicePostureUpdateResponseType = "sentinelone"
 	DevicePostureUpdateResponseTypeCarbonblack       DevicePostureUpdateResponseType = "carbonblack"
 	DevicePostureUpdateResponseTypeFirewall          DevicePostureUpdateResponseType = "firewall"
-	DevicePostureUpdateResponseTypeOsVersion         DevicePostureUpdateResponseType = "os_version"
+	DevicePostureUpdateResponseTypeOSVersion         DevicePostureUpdateResponseType = "os_version"
 	DevicePostureUpdateResponseTypeDomainJoined      DevicePostureUpdateResponseType = "domain_joined"
 	DevicePostureUpdateResponseTypeClientCertificate DevicePostureUpdateResponseType = "client_certificate"
 	DevicePostureUpdateResponseTypeUniqueClientID    DevicePostureUpdateResponseType = "unique_client_id"
@@ -1718,7 +1718,7 @@ func (r *DevicePostureListResponse) UnmarshalJSON(data []byte) (err error) {
 // Union satisfied by [DevicePostureListResponseInputTeamsDevicesFileInputRequest],
 // [DevicePostureListResponseInputTeamsDevicesUniqueClientIDInputRequest],
 // [DevicePostureListResponseInputTeamsDevicesDomainJoinedInputRequest],
-// [DevicePostureListResponseInputTeamsDevicesOsVersionInputRequest],
+// [DevicePostureListResponseInputTeamsDevicesOSVersionInputRequest],
 // [DevicePostureListResponseInputTeamsDevicesFirewallInputRequest],
 // [DevicePostureListResponseInputTeamsDevicesSentineloneInputRequest],
 // [DevicePostureListResponseInputTeamsDevicesCarbonblackInputRequest],
@@ -1848,60 +1848,60 @@ const (
 	DevicePostureListResponseInputTeamsDevicesDomainJoinedInputRequestOperatingSystemWindows DevicePostureListResponseInputTeamsDevicesDomainJoinedInputRequestOperatingSystem = "windows"
 )
 
-type DevicePostureListResponseInputTeamsDevicesOsVersionInputRequest struct {
+type DevicePostureListResponseInputTeamsDevicesOSVersionInputRequest struct {
 	// Operating System
-	OperatingSystem DevicePostureListResponseInputTeamsDevicesOsVersionInputRequestOperatingSystem `json:"operating_system,required"`
+	OperatingSystem DevicePostureListResponseInputTeamsDevicesOSVersionInputRequestOperatingSystem `json:"operating_system,required"`
 	// Operator
-	Operator DevicePostureListResponseInputTeamsDevicesOsVersionInputRequestOperator `json:"operator,required"`
+	Operator DevicePostureListResponseInputTeamsDevicesOSVersionInputRequestOperator `json:"operator,required"`
 	// Version of OS
 	Version string `json:"version,required"`
 	// Operating System Distribution Name (linux only)
-	OsDistroName string `json:"os_distro_name"`
+	OSDistroName string `json:"os_distro_name"`
 	// Version of OS Distribution (linux only)
-	OsDistroRevision string `json:"os_distro_revision"`
+	OSDistroRevision string `json:"os_distro_revision"`
 	// Additional version data. For Mac or iOS, the Product Verison Extra. For Linux,
 	// the kernel release version. (Mac, iOS, and Linux only)
-	OsVersionExtra string                                                              `json:"os_version_extra"`
-	JSON           devicePostureListResponseInputTeamsDevicesOsVersionInputRequestJSON `json:"-"`
+	OSVersionExtra string                                                              `json:"os_version_extra"`
+	JSON           devicePostureListResponseInputTeamsDevicesOSVersionInputRequestJSON `json:"-"`
 }
 
-// devicePostureListResponseInputTeamsDevicesOsVersionInputRequestJSON contains the
+// devicePostureListResponseInputTeamsDevicesOSVersionInputRequestJSON contains the
 // JSON metadata for the struct
-// [DevicePostureListResponseInputTeamsDevicesOsVersionInputRequest]
-type devicePostureListResponseInputTeamsDevicesOsVersionInputRequestJSON struct {
+// [DevicePostureListResponseInputTeamsDevicesOSVersionInputRequest]
+type devicePostureListResponseInputTeamsDevicesOSVersionInputRequestJSON struct {
 	OperatingSystem  apijson.Field
 	Operator         apijson.Field
 	Version          apijson.Field
-	OsDistroName     apijson.Field
-	OsDistroRevision apijson.Field
-	OsVersionExtra   apijson.Field
+	OSDistroName     apijson.Field
+	OSDistroRevision apijson.Field
+	OSVersionExtra   apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *DevicePostureListResponseInputTeamsDevicesOsVersionInputRequest) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePostureListResponseInputTeamsDevicesOSVersionInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DevicePostureListResponseInputTeamsDevicesOsVersionInputRequest) implementsDevicePostureListResponseInput() {
+func (r DevicePostureListResponseInputTeamsDevicesOSVersionInputRequest) implementsDevicePostureListResponseInput() {
 }
 
 // Operating System
-type DevicePostureListResponseInputTeamsDevicesOsVersionInputRequestOperatingSystem string
+type DevicePostureListResponseInputTeamsDevicesOSVersionInputRequestOperatingSystem string
 
 const (
-	DevicePostureListResponseInputTeamsDevicesOsVersionInputRequestOperatingSystemWindows DevicePostureListResponseInputTeamsDevicesOsVersionInputRequestOperatingSystem = "windows"
+	DevicePostureListResponseInputTeamsDevicesOSVersionInputRequestOperatingSystemWindows DevicePostureListResponseInputTeamsDevicesOSVersionInputRequestOperatingSystem = "windows"
 )
 
 // Operator
-type DevicePostureListResponseInputTeamsDevicesOsVersionInputRequestOperator string
+type DevicePostureListResponseInputTeamsDevicesOSVersionInputRequestOperator string
 
 const (
-	DevicePostureListResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown145 DevicePostureListResponseInputTeamsDevicesOsVersionInputRequestOperator = "<"
-	DevicePostureListResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown146 DevicePostureListResponseInputTeamsDevicesOsVersionInputRequestOperator = "<="
-	DevicePostureListResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown147 DevicePostureListResponseInputTeamsDevicesOsVersionInputRequestOperator = ">"
-	DevicePostureListResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown148 DevicePostureListResponseInputTeamsDevicesOsVersionInputRequestOperator = ">="
-	DevicePostureListResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown149 DevicePostureListResponseInputTeamsDevicesOsVersionInputRequestOperator = "=="
+	DevicePostureListResponseInputTeamsDevicesOSVersionInputRequestOperatorUnknown145 DevicePostureListResponseInputTeamsDevicesOSVersionInputRequestOperator = "<"
+	DevicePostureListResponseInputTeamsDevicesOSVersionInputRequestOperatorUnknown146 DevicePostureListResponseInputTeamsDevicesOSVersionInputRequestOperator = "<="
+	DevicePostureListResponseInputTeamsDevicesOSVersionInputRequestOperatorUnknown147 DevicePostureListResponseInputTeamsDevicesOSVersionInputRequestOperator = ">"
+	DevicePostureListResponseInputTeamsDevicesOSVersionInputRequestOperatorUnknown148 DevicePostureListResponseInputTeamsDevicesOSVersionInputRequestOperator = ">="
+	DevicePostureListResponseInputTeamsDevicesOSVersionInputRequestOperatorUnknown149 DevicePostureListResponseInputTeamsDevicesOSVersionInputRequestOperator = "=="
 )
 
 type DevicePostureListResponseInputTeamsDevicesFirewallInputRequest struct {
@@ -2147,7 +2147,7 @@ type DevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequest struct {
 	// Operator
 	Operator DevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequestOperator `json:"operator"`
 	// Os Version
-	Os string `json:"os"`
+	OS string `json:"os"`
 	// overall
 	Overall string `json:"overall"`
 	// SensorConfig
@@ -2165,7 +2165,7 @@ type DevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequest struct {
 type devicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequestJSON struct {
 	ConnectionID    apijson.Field
 	Operator        apijson.Field
-	Os              apijson.Field
+	OS              apijson.Field
 	Overall         apijson.Field
 	SensorConfig    apijson.Field
 	Version         apijson.Field
@@ -2441,12 +2441,12 @@ const (
 	DevicePostureListResponseTypeApplication       DevicePostureListResponseType = "application"
 	DevicePostureListResponseTypeTanium            DevicePostureListResponseType = "tanium"
 	DevicePostureListResponseTypeGateway           DevicePostureListResponseType = "gateway"
-	DevicePostureListResponseTypeWarp              DevicePostureListResponseType = "warp"
+	DevicePostureListResponseTypeWARP              DevicePostureListResponseType = "warp"
 	DevicePostureListResponseTypeDiskEncryption    DevicePostureListResponseType = "disk_encryption"
 	DevicePostureListResponseTypeSentinelone       DevicePostureListResponseType = "sentinelone"
 	DevicePostureListResponseTypeCarbonblack       DevicePostureListResponseType = "carbonblack"
 	DevicePostureListResponseTypeFirewall          DevicePostureListResponseType = "firewall"
-	DevicePostureListResponseTypeOsVersion         DevicePostureListResponseType = "os_version"
+	DevicePostureListResponseTypeOSVersion         DevicePostureListResponseType = "os_version"
 	DevicePostureListResponseTypeDomainJoined      DevicePostureListResponseType = "domain_joined"
 	DevicePostureListResponseTypeClientCertificate DevicePostureListResponseType = "client_certificate"
 	DevicePostureListResponseTypeUniqueClientID    DevicePostureListResponseType = "unique_client_id"
@@ -2522,7 +2522,7 @@ func (r *DevicePostureGetResponse) UnmarshalJSON(data []byte) (err error) {
 // Union satisfied by [DevicePostureGetResponseInputTeamsDevicesFileInputRequest],
 // [DevicePostureGetResponseInputTeamsDevicesUniqueClientIDInputRequest],
 // [DevicePostureGetResponseInputTeamsDevicesDomainJoinedInputRequest],
-// [DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequest],
+// [DevicePostureGetResponseInputTeamsDevicesOSVersionInputRequest],
 // [DevicePostureGetResponseInputTeamsDevicesFirewallInputRequest],
 // [DevicePostureGetResponseInputTeamsDevicesSentineloneInputRequest],
 // [DevicePostureGetResponseInputTeamsDevicesCarbonblackInputRequest],
@@ -2652,60 +2652,60 @@ const (
 	DevicePostureGetResponseInputTeamsDevicesDomainJoinedInputRequestOperatingSystemWindows DevicePostureGetResponseInputTeamsDevicesDomainJoinedInputRequestOperatingSystem = "windows"
 )
 
-type DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequest struct {
+type DevicePostureGetResponseInputTeamsDevicesOSVersionInputRequest struct {
 	// Operating System
-	OperatingSystem DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperatingSystem `json:"operating_system,required"`
+	OperatingSystem DevicePostureGetResponseInputTeamsDevicesOSVersionInputRequestOperatingSystem `json:"operating_system,required"`
 	// Operator
-	Operator DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperator `json:"operator,required"`
+	Operator DevicePostureGetResponseInputTeamsDevicesOSVersionInputRequestOperator `json:"operator,required"`
 	// Version of OS
 	Version string `json:"version,required"`
 	// Operating System Distribution Name (linux only)
-	OsDistroName string `json:"os_distro_name"`
+	OSDistroName string `json:"os_distro_name"`
 	// Version of OS Distribution (linux only)
-	OsDistroRevision string `json:"os_distro_revision"`
+	OSDistroRevision string `json:"os_distro_revision"`
 	// Additional version data. For Mac or iOS, the Product Verison Extra. For Linux,
 	// the kernel release version. (Mac, iOS, and Linux only)
-	OsVersionExtra string                                                             `json:"os_version_extra"`
-	JSON           devicePostureGetResponseInputTeamsDevicesOsVersionInputRequestJSON `json:"-"`
+	OSVersionExtra string                                                             `json:"os_version_extra"`
+	JSON           devicePostureGetResponseInputTeamsDevicesOSVersionInputRequestJSON `json:"-"`
 }
 
-// devicePostureGetResponseInputTeamsDevicesOsVersionInputRequestJSON contains the
+// devicePostureGetResponseInputTeamsDevicesOSVersionInputRequestJSON contains the
 // JSON metadata for the struct
-// [DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequest]
-type devicePostureGetResponseInputTeamsDevicesOsVersionInputRequestJSON struct {
+// [DevicePostureGetResponseInputTeamsDevicesOSVersionInputRequest]
+type devicePostureGetResponseInputTeamsDevicesOSVersionInputRequestJSON struct {
 	OperatingSystem  apijson.Field
 	Operator         apijson.Field
 	Version          apijson.Field
-	OsDistroName     apijson.Field
-	OsDistroRevision apijson.Field
-	OsVersionExtra   apijson.Field
+	OSDistroName     apijson.Field
+	OSDistroRevision apijson.Field
+	OSVersionExtra   apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequest) UnmarshalJSON(data []byte) (err error) {
+func (r *DevicePostureGetResponseInputTeamsDevicesOSVersionInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequest) implementsDevicePostureGetResponseInput() {
+func (r DevicePostureGetResponseInputTeamsDevicesOSVersionInputRequest) implementsDevicePostureGetResponseInput() {
 }
 
 // Operating System
-type DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperatingSystem string
+type DevicePostureGetResponseInputTeamsDevicesOSVersionInputRequestOperatingSystem string
 
 const (
-	DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperatingSystemWindows DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperatingSystem = "windows"
+	DevicePostureGetResponseInputTeamsDevicesOSVersionInputRequestOperatingSystemWindows DevicePostureGetResponseInputTeamsDevicesOSVersionInputRequestOperatingSystem = "windows"
 )
 
 // Operator
-type DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperator string
+type DevicePostureGetResponseInputTeamsDevicesOSVersionInputRequestOperator string
 
 const (
-	DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown215 DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperator = "<"
-	DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown216 DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperator = "<="
-	DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown217 DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperator = ">"
-	DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown218 DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperator = ">="
-	DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperatorUnknown219 DevicePostureGetResponseInputTeamsDevicesOsVersionInputRequestOperator = "=="
+	DevicePostureGetResponseInputTeamsDevicesOSVersionInputRequestOperatorUnknown215 DevicePostureGetResponseInputTeamsDevicesOSVersionInputRequestOperator = "<"
+	DevicePostureGetResponseInputTeamsDevicesOSVersionInputRequestOperatorUnknown216 DevicePostureGetResponseInputTeamsDevicesOSVersionInputRequestOperator = "<="
+	DevicePostureGetResponseInputTeamsDevicesOSVersionInputRequestOperatorUnknown217 DevicePostureGetResponseInputTeamsDevicesOSVersionInputRequestOperator = ">"
+	DevicePostureGetResponseInputTeamsDevicesOSVersionInputRequestOperatorUnknown218 DevicePostureGetResponseInputTeamsDevicesOSVersionInputRequestOperator = ">="
+	DevicePostureGetResponseInputTeamsDevicesOSVersionInputRequestOperatorUnknown219 DevicePostureGetResponseInputTeamsDevicesOSVersionInputRequestOperator = "=="
 )
 
 type DevicePostureGetResponseInputTeamsDevicesFirewallInputRequest struct {
@@ -2951,7 +2951,7 @@ type DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequest struct {
 	// Operator
 	Operator DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestOperator `json:"operator"`
 	// Os Version
-	Os string `json:"os"`
+	OS string `json:"os"`
 	// overall
 	Overall string `json:"overall"`
 	// SensorConfig
@@ -2969,7 +2969,7 @@ type DevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequest struct {
 type devicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestJSON struct {
 	ConnectionID    apijson.Field
 	Operator        apijson.Field
-	Os              apijson.Field
+	OS              apijson.Field
 	Overall         apijson.Field
 	SensorConfig    apijson.Field
 	Version         apijson.Field
@@ -3245,12 +3245,12 @@ const (
 	DevicePostureGetResponseTypeApplication       DevicePostureGetResponseType = "application"
 	DevicePostureGetResponseTypeTanium            DevicePostureGetResponseType = "tanium"
 	DevicePostureGetResponseTypeGateway           DevicePostureGetResponseType = "gateway"
-	DevicePostureGetResponseTypeWarp              DevicePostureGetResponseType = "warp"
+	DevicePostureGetResponseTypeWARP              DevicePostureGetResponseType = "warp"
 	DevicePostureGetResponseTypeDiskEncryption    DevicePostureGetResponseType = "disk_encryption"
 	DevicePostureGetResponseTypeSentinelone       DevicePostureGetResponseType = "sentinelone"
 	DevicePostureGetResponseTypeCarbonblack       DevicePostureGetResponseType = "carbonblack"
 	DevicePostureGetResponseTypeFirewall          DevicePostureGetResponseType = "firewall"
-	DevicePostureGetResponseTypeOsVersion         DevicePostureGetResponseType = "os_version"
+	DevicePostureGetResponseTypeOSVersion         DevicePostureGetResponseType = "os_version"
 	DevicePostureGetResponseTypeDomainJoined      DevicePostureGetResponseType = "domain_joined"
 	DevicePostureGetResponseTypeClientCertificate DevicePostureGetResponseType = "client_certificate"
 	DevicePostureGetResponseTypeUniqueClientID    DevicePostureGetResponseType = "unique_client_id"
@@ -3293,12 +3293,12 @@ const (
 	DevicePostureNewParamsTypeApplication       DevicePostureNewParamsType = "application"
 	DevicePostureNewParamsTypeTanium            DevicePostureNewParamsType = "tanium"
 	DevicePostureNewParamsTypeGateway           DevicePostureNewParamsType = "gateway"
-	DevicePostureNewParamsTypeWarp              DevicePostureNewParamsType = "warp"
+	DevicePostureNewParamsTypeWARP              DevicePostureNewParamsType = "warp"
 	DevicePostureNewParamsTypeDiskEncryption    DevicePostureNewParamsType = "disk_encryption"
 	DevicePostureNewParamsTypeSentinelone       DevicePostureNewParamsType = "sentinelone"
 	DevicePostureNewParamsTypeCarbonblack       DevicePostureNewParamsType = "carbonblack"
 	DevicePostureNewParamsTypeFirewall          DevicePostureNewParamsType = "firewall"
-	DevicePostureNewParamsTypeOsVersion         DevicePostureNewParamsType = "os_version"
+	DevicePostureNewParamsTypeOSVersion         DevicePostureNewParamsType = "os_version"
 	DevicePostureNewParamsTypeDomainJoined      DevicePostureNewParamsType = "domain_joined"
 	DevicePostureNewParamsTypeClientCertificate DevicePostureNewParamsType = "client_certificate"
 	DevicePostureNewParamsTypeUniqueClientID    DevicePostureNewParamsType = "unique_client_id"
@@ -3315,7 +3315,7 @@ const (
 // Satisfied by [DevicePostureNewParamsInputTeamsDevicesFileInputRequest],
 // [DevicePostureNewParamsInputTeamsDevicesUniqueClientIDInputRequest],
 // [DevicePostureNewParamsInputTeamsDevicesDomainJoinedInputRequest],
-// [DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequest],
+// [DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequest],
 // [DevicePostureNewParamsInputTeamsDevicesFirewallInputRequest],
 // [DevicePostureNewParamsInputTeamsDevicesSentineloneInputRequest],
 // [DevicePostureNewParamsInputTeamsDevicesCarbonblackInputRequest],
@@ -3405,45 +3405,45 @@ const (
 	DevicePostureNewParamsInputTeamsDevicesDomainJoinedInputRequestOperatingSystemWindows DevicePostureNewParamsInputTeamsDevicesDomainJoinedInputRequestOperatingSystem = "windows"
 )
 
-type DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequest struct {
+type DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequest struct {
 	// Operating System
-	OperatingSystem param.Field[DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequestOperatingSystem] `json:"operating_system,required"`
+	OperatingSystem param.Field[DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperatingSystem] `json:"operating_system,required"`
 	// Operator
-	Operator param.Field[DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequestOperator] `json:"operator,required"`
+	Operator param.Field[DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperator] `json:"operator,required"`
 	// Version of OS
 	Version param.Field[string] `json:"version,required"`
 	// Operating System Distribution Name (linux only)
-	OsDistroName param.Field[string] `json:"os_distro_name"`
+	OSDistroName param.Field[string] `json:"os_distro_name"`
 	// Version of OS Distribution (linux only)
-	OsDistroRevision param.Field[string] `json:"os_distro_revision"`
+	OSDistroRevision param.Field[string] `json:"os_distro_revision"`
 	// Additional version data. For Mac or iOS, the Product Verison Extra. For Linux,
 	// the kernel release version. (Mac, iOS, and Linux only)
-	OsVersionExtra param.Field[string] `json:"os_version_extra"`
+	OSVersionExtra param.Field[string] `json:"os_version_extra"`
 }
 
-func (r DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequest) MarshalJSON() (data []byte, err error) {
+func (r DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequest) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequest) implementsDevicePostureNewParamsInput() {
+func (r DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequest) implementsDevicePostureNewParamsInput() {
 }
 
 // Operating System
-type DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequestOperatingSystem string
+type DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperatingSystem string
 
 const (
-	DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequestOperatingSystemWindows DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequestOperatingSystem = "windows"
+	DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperatingSystemWindows DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperatingSystem = "windows"
 )
 
 // Operator
-type DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequestOperator string
+type DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperator string
 
 const (
-	DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequestOperatorUnknown285 DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequestOperator = "<"
-	DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequestOperatorUnknown286 DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequestOperator = "<="
-	DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequestOperatorUnknown287 DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequestOperator = ">"
-	DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequestOperatorUnknown288 DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequestOperator = ">="
-	DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequestOperatorUnknown289 DevicePostureNewParamsInputTeamsDevicesOsVersionInputRequestOperator = "=="
+	DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperatorUnknown285 DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperator = "<"
+	DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperatorUnknown286 DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperator = "<="
+	DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperatorUnknown287 DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperator = ">"
+	DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperatorUnknown288 DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperator = ">="
+	DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperatorUnknown289 DevicePostureNewParamsInputTeamsDevicesOSVersionInputRequestOperator = "=="
 )
 
 type DevicePostureNewParamsInputTeamsDevicesFirewallInputRequest struct {
@@ -3606,7 +3606,7 @@ type DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequest struct {
 	// Operator
 	Operator param.Field[DevicePostureNewParamsInputTeamsDevicesCrowdstrikeInputRequestOperator] `json:"operator"`
 	// Os Version
-	Os param.Field[string] `json:"os"`
+	OS param.Field[string] `json:"os"`
 	// overall
 	Overall param.Field[string] `json:"overall"`
 	// SensorConfig
@@ -3914,12 +3914,12 @@ const (
 	DevicePostureUpdateParamsTypeApplication       DevicePostureUpdateParamsType = "application"
 	DevicePostureUpdateParamsTypeTanium            DevicePostureUpdateParamsType = "tanium"
 	DevicePostureUpdateParamsTypeGateway           DevicePostureUpdateParamsType = "gateway"
-	DevicePostureUpdateParamsTypeWarp              DevicePostureUpdateParamsType = "warp"
+	DevicePostureUpdateParamsTypeWARP              DevicePostureUpdateParamsType = "warp"
 	DevicePostureUpdateParamsTypeDiskEncryption    DevicePostureUpdateParamsType = "disk_encryption"
 	DevicePostureUpdateParamsTypeSentinelone       DevicePostureUpdateParamsType = "sentinelone"
 	DevicePostureUpdateParamsTypeCarbonblack       DevicePostureUpdateParamsType = "carbonblack"
 	DevicePostureUpdateParamsTypeFirewall          DevicePostureUpdateParamsType = "firewall"
-	DevicePostureUpdateParamsTypeOsVersion         DevicePostureUpdateParamsType = "os_version"
+	DevicePostureUpdateParamsTypeOSVersion         DevicePostureUpdateParamsType = "os_version"
 	DevicePostureUpdateParamsTypeDomainJoined      DevicePostureUpdateParamsType = "domain_joined"
 	DevicePostureUpdateParamsTypeClientCertificate DevicePostureUpdateParamsType = "client_certificate"
 	DevicePostureUpdateParamsTypeUniqueClientID    DevicePostureUpdateParamsType = "unique_client_id"
@@ -3936,7 +3936,7 @@ const (
 // Satisfied by [DevicePostureUpdateParamsInputTeamsDevicesFileInputRequest],
 // [DevicePostureUpdateParamsInputTeamsDevicesUniqueClientIDInputRequest],
 // [DevicePostureUpdateParamsInputTeamsDevicesDomainJoinedInputRequest],
-// [DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequest],
+// [DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequest],
 // [DevicePostureUpdateParamsInputTeamsDevicesFirewallInputRequest],
 // [DevicePostureUpdateParamsInputTeamsDevicesSentineloneInputRequest],
 // [DevicePostureUpdateParamsInputTeamsDevicesCarbonblackInputRequest],
@@ -4026,45 +4026,45 @@ const (
 	DevicePostureUpdateParamsInputTeamsDevicesDomainJoinedInputRequestOperatingSystemWindows DevicePostureUpdateParamsInputTeamsDevicesDomainJoinedInputRequestOperatingSystem = "windows"
 )
 
-type DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequest struct {
+type DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequest struct {
 	// Operating System
-	OperatingSystem param.Field[DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequestOperatingSystem] `json:"operating_system,required"`
+	OperatingSystem param.Field[DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperatingSystem] `json:"operating_system,required"`
 	// Operator
-	Operator param.Field[DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequestOperator] `json:"operator,required"`
+	Operator param.Field[DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperator] `json:"operator,required"`
 	// Version of OS
 	Version param.Field[string] `json:"version,required"`
 	// Operating System Distribution Name (linux only)
-	OsDistroName param.Field[string] `json:"os_distro_name"`
+	OSDistroName param.Field[string] `json:"os_distro_name"`
 	// Version of OS Distribution (linux only)
-	OsDistroRevision param.Field[string] `json:"os_distro_revision"`
+	OSDistroRevision param.Field[string] `json:"os_distro_revision"`
 	// Additional version data. For Mac or iOS, the Product Verison Extra. For Linux,
 	// the kernel release version. (Mac, iOS, and Linux only)
-	OsVersionExtra param.Field[string] `json:"os_version_extra"`
+	OSVersionExtra param.Field[string] `json:"os_version_extra"`
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequest) MarshalJSON() (data []byte, err error) {
+func (r DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequest) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequest) implementsDevicePostureUpdateParamsInput() {
+func (r DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequest) implementsDevicePostureUpdateParamsInput() {
 }
 
 // Operating System
-type DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequestOperatingSystem string
+type DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperatingSystem string
 
 const (
-	DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequestOperatingSystemWindows DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequestOperatingSystem = "windows"
+	DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperatingSystemWindows DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperatingSystem = "windows"
 )
 
 // Operator
-type DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequestOperator string
+type DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperator string
 
 const (
-	DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequestOperatorUnknown355 DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequestOperator = "<"
-	DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequestOperatorUnknown356 DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequestOperator = "<="
-	DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequestOperatorUnknown357 DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequestOperator = ">"
-	DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequestOperatorUnknown358 DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequestOperator = ">="
-	DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequestOperatorUnknown359 DevicePostureUpdateParamsInputTeamsDevicesOsVersionInputRequestOperator = "=="
+	DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperatorUnknown355 DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperator = "<"
+	DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperatorUnknown356 DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperator = "<="
+	DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperatorUnknown357 DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperator = ">"
+	DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperatorUnknown358 DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperator = ">="
+	DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperatorUnknown359 DevicePostureUpdateParamsInputTeamsDevicesOSVersionInputRequestOperator = "=="
 )
 
 type DevicePostureUpdateParamsInputTeamsDevicesFirewallInputRequest struct {
@@ -4227,7 +4227,7 @@ type DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequest struct {
 	// Operator
 	Operator param.Field[DevicePostureUpdateParamsInputTeamsDevicesCrowdstrikeInputRequestOperator] `json:"operator"`
 	// Os Version
-	Os param.Field[string] `json:"os"`
+	OS param.Field[string] `json:"os"`
 	// overall
 	Overall param.Field[string] `json:"overall"`
 	// SensorConfig

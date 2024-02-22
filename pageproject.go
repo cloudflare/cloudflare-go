@@ -542,7 +542,7 @@ type PageProjectGetResponseDeploymentConfigsPreview struct {
 	// Environment variables for build configs.
 	EnvVars PageProjectGetResponseDeploymentConfigsPreviewEnvVars `json:"env_vars,nullable"`
 	// KV namespaces used for Pages Functions.
-	KvNamespaces PageProjectGetResponseDeploymentConfigsPreviewKvNamespaces `json:"kv_namespaces"`
+	KVNamespaces PageProjectGetResponseDeploymentConfigsPreviewKVNamespaces `json:"kv_namespaces"`
 	// Placement setting used for Pages Functions.
 	Placement PageProjectGetResponseDeploymentConfigsPreviewPlacement `json:"placement,nullable"`
 	// Queue Producer bindings used for Pages Functions.
@@ -564,7 +564,7 @@ type pageProjectGetResponseDeploymentConfigsPreviewJSON struct {
 	D1Databases             apijson.Field
 	DurableObjectNamespaces apijson.Field
 	EnvVars                 apijson.Field
-	KvNamespaces            apijson.Field
+	KVNamespaces            apijson.Field
 	Placement               apijson.Field
 	QueueProducers          apijson.Field
 	R2Buckets               apijson.Field
@@ -787,42 +787,42 @@ const (
 )
 
 // KV namespaces used for Pages Functions.
-type PageProjectGetResponseDeploymentConfigsPreviewKvNamespaces struct {
+type PageProjectGetResponseDeploymentConfigsPreviewKVNamespaces struct {
 	// KV binding.
-	KvBinding PageProjectGetResponseDeploymentConfigsPreviewKvNamespacesKvBinding `json:"KV_BINDING"`
-	JSON      pageProjectGetResponseDeploymentConfigsPreviewKvNamespacesJSON      `json:"-"`
+	KVBinding PageProjectGetResponseDeploymentConfigsPreviewKVNamespacesKVBinding `json:"KV_BINDING"`
+	JSON      pageProjectGetResponseDeploymentConfigsPreviewKVNamespacesJSON      `json:"-"`
 }
 
-// pageProjectGetResponseDeploymentConfigsPreviewKvNamespacesJSON contains the JSON
+// pageProjectGetResponseDeploymentConfigsPreviewKVNamespacesJSON contains the JSON
 // metadata for the struct
-// [PageProjectGetResponseDeploymentConfigsPreviewKvNamespaces]
-type pageProjectGetResponseDeploymentConfigsPreviewKvNamespacesJSON struct {
-	KvBinding   apijson.Field
+// [PageProjectGetResponseDeploymentConfigsPreviewKVNamespaces]
+type pageProjectGetResponseDeploymentConfigsPreviewKVNamespacesJSON struct {
+	KVBinding   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PageProjectGetResponseDeploymentConfigsPreviewKvNamespaces) UnmarshalJSON(data []byte) (err error) {
+func (r *PageProjectGetResponseDeploymentConfigsPreviewKVNamespaces) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // KV binding.
-type PageProjectGetResponseDeploymentConfigsPreviewKvNamespacesKvBinding struct {
+type PageProjectGetResponseDeploymentConfigsPreviewKVNamespacesKVBinding struct {
 	// ID of the KV namespace.
 	NamespaceID string                                                                  `json:"namespace_id"`
-	JSON        pageProjectGetResponseDeploymentConfigsPreviewKvNamespacesKvBindingJSON `json:"-"`
+	JSON        pageProjectGetResponseDeploymentConfigsPreviewKVNamespacesKVBindingJSON `json:"-"`
 }
 
-// pageProjectGetResponseDeploymentConfigsPreviewKvNamespacesKvBindingJSON contains
+// pageProjectGetResponseDeploymentConfigsPreviewKVNamespacesKVBindingJSON contains
 // the JSON metadata for the struct
-// [PageProjectGetResponseDeploymentConfigsPreviewKvNamespacesKvBinding]
-type pageProjectGetResponseDeploymentConfigsPreviewKvNamespacesKvBindingJSON struct {
+// [PageProjectGetResponseDeploymentConfigsPreviewKVNamespacesKVBinding]
+type pageProjectGetResponseDeploymentConfigsPreviewKVNamespacesKVBindingJSON struct {
 	NamespaceID apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PageProjectGetResponseDeploymentConfigsPreviewKvNamespacesKvBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *PageProjectGetResponseDeploymentConfigsPreviewKVNamespacesKVBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -986,7 +986,7 @@ type PageProjectGetResponseDeploymentConfigsProduction struct {
 	// Environment variables for build configs.
 	EnvVars PageProjectGetResponseDeploymentConfigsProductionEnvVars `json:"env_vars,nullable"`
 	// KV namespaces used for Pages Functions.
-	KvNamespaces PageProjectGetResponseDeploymentConfigsProductionKvNamespaces `json:"kv_namespaces"`
+	KVNamespaces PageProjectGetResponseDeploymentConfigsProductionKVNamespaces `json:"kv_namespaces"`
 	// Placement setting used for Pages Functions.
 	Placement PageProjectGetResponseDeploymentConfigsProductionPlacement `json:"placement,nullable"`
 	// Queue Producer bindings used for Pages Functions.
@@ -1008,7 +1008,7 @@ type pageProjectGetResponseDeploymentConfigsProductionJSON struct {
 	D1Databases             apijson.Field
 	DurableObjectNamespaces apijson.Field
 	EnvVars                 apijson.Field
-	KvNamespaces            apijson.Field
+	KVNamespaces            apijson.Field
 	Placement               apijson.Field
 	QueueProducers          apijson.Field
 	R2Buckets               apijson.Field
@@ -1232,42 +1232,42 @@ const (
 )
 
 // KV namespaces used for Pages Functions.
-type PageProjectGetResponseDeploymentConfigsProductionKvNamespaces struct {
+type PageProjectGetResponseDeploymentConfigsProductionKVNamespaces struct {
 	// KV binding.
-	KvBinding PageProjectGetResponseDeploymentConfigsProductionKvNamespacesKvBinding `json:"KV_BINDING"`
-	JSON      pageProjectGetResponseDeploymentConfigsProductionKvNamespacesJSON      `json:"-"`
+	KVBinding PageProjectGetResponseDeploymentConfigsProductionKVNamespacesKVBinding `json:"KV_BINDING"`
+	JSON      pageProjectGetResponseDeploymentConfigsProductionKVNamespacesJSON      `json:"-"`
 }
 
-// pageProjectGetResponseDeploymentConfigsProductionKvNamespacesJSON contains the
+// pageProjectGetResponseDeploymentConfigsProductionKVNamespacesJSON contains the
 // JSON metadata for the struct
-// [PageProjectGetResponseDeploymentConfigsProductionKvNamespaces]
-type pageProjectGetResponseDeploymentConfigsProductionKvNamespacesJSON struct {
-	KvBinding   apijson.Field
+// [PageProjectGetResponseDeploymentConfigsProductionKVNamespaces]
+type pageProjectGetResponseDeploymentConfigsProductionKVNamespacesJSON struct {
+	KVBinding   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PageProjectGetResponseDeploymentConfigsProductionKvNamespaces) UnmarshalJSON(data []byte) (err error) {
+func (r *PageProjectGetResponseDeploymentConfigsProductionKVNamespaces) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // KV binding.
-type PageProjectGetResponseDeploymentConfigsProductionKvNamespacesKvBinding struct {
+type PageProjectGetResponseDeploymentConfigsProductionKVNamespacesKVBinding struct {
 	// ID of the KV namespace.
 	NamespaceID string                                                                     `json:"namespace_id"`
-	JSON        pageProjectGetResponseDeploymentConfigsProductionKvNamespacesKvBindingJSON `json:"-"`
+	JSON        pageProjectGetResponseDeploymentConfigsProductionKVNamespacesKVBindingJSON `json:"-"`
 }
 
-// pageProjectGetResponseDeploymentConfigsProductionKvNamespacesKvBindingJSON
+// pageProjectGetResponseDeploymentConfigsProductionKVNamespacesKVBindingJSON
 // contains the JSON metadata for the struct
-// [PageProjectGetResponseDeploymentConfigsProductionKvNamespacesKvBinding]
-type pageProjectGetResponseDeploymentConfigsProductionKvNamespacesKvBindingJSON struct {
+// [PageProjectGetResponseDeploymentConfigsProductionKVNamespacesKVBinding]
+type pageProjectGetResponseDeploymentConfigsProductionKVNamespacesKVBindingJSON struct {
 	NamespaceID apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PageProjectGetResponseDeploymentConfigsProductionKvNamespacesKvBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *PageProjectGetResponseDeploymentConfigsProductionKVNamespacesKVBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1654,7 +1654,7 @@ type PageProjectNewParamsDeploymentConfigsPreview struct {
 	// Environment variables for build configs.
 	EnvVars param.Field[PageProjectNewParamsDeploymentConfigsPreviewEnvVars] `json:"env_vars"`
 	// KV namespaces used for Pages Functions.
-	KvNamespaces param.Field[PageProjectNewParamsDeploymentConfigsPreviewKvNamespaces] `json:"kv_namespaces"`
+	KVNamespaces param.Field[PageProjectNewParamsDeploymentConfigsPreviewKVNamespaces] `json:"kv_namespaces"`
 	// Placement setting used for Pages Functions.
 	Placement param.Field[PageProjectNewParamsDeploymentConfigsPreviewPlacement] `json:"placement"`
 	// Queue Producer bindings used for Pages Functions.
@@ -1779,22 +1779,22 @@ const (
 )
 
 // KV namespaces used for Pages Functions.
-type PageProjectNewParamsDeploymentConfigsPreviewKvNamespaces struct {
+type PageProjectNewParamsDeploymentConfigsPreviewKVNamespaces struct {
 	// KV binding.
-	KvBinding param.Field[PageProjectNewParamsDeploymentConfigsPreviewKvNamespacesKvBinding] `json:"KV_BINDING"`
+	KVBinding param.Field[PageProjectNewParamsDeploymentConfigsPreviewKVNamespacesKVBinding] `json:"KV_BINDING"`
 }
 
-func (r PageProjectNewParamsDeploymentConfigsPreviewKvNamespaces) MarshalJSON() (data []byte, err error) {
+func (r PageProjectNewParamsDeploymentConfigsPreviewKVNamespaces) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // KV binding.
-type PageProjectNewParamsDeploymentConfigsPreviewKvNamespacesKvBinding struct {
+type PageProjectNewParamsDeploymentConfigsPreviewKVNamespacesKVBinding struct {
 	// ID of the KV namespace.
 	NamespaceID param.Field[string] `json:"namespace_id"`
 }
 
-func (r PageProjectNewParamsDeploymentConfigsPreviewKvNamespacesKvBinding) MarshalJSON() (data []byte, err error) {
+func (r PageProjectNewParamsDeploymentConfigsPreviewKVNamespacesKVBinding) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -1887,7 +1887,7 @@ type PageProjectNewParamsDeploymentConfigsProduction struct {
 	// Environment variables for build configs.
 	EnvVars param.Field[PageProjectNewParamsDeploymentConfigsProductionEnvVars] `json:"env_vars"`
 	// KV namespaces used for Pages Functions.
-	KvNamespaces param.Field[PageProjectNewParamsDeploymentConfigsProductionKvNamespaces] `json:"kv_namespaces"`
+	KVNamespaces param.Field[PageProjectNewParamsDeploymentConfigsProductionKVNamespaces] `json:"kv_namespaces"`
 	// Placement setting used for Pages Functions.
 	Placement param.Field[PageProjectNewParamsDeploymentConfigsProductionPlacement] `json:"placement"`
 	// Queue Producer bindings used for Pages Functions.
@@ -2012,22 +2012,22 @@ const (
 )
 
 // KV namespaces used for Pages Functions.
-type PageProjectNewParamsDeploymentConfigsProductionKvNamespaces struct {
+type PageProjectNewParamsDeploymentConfigsProductionKVNamespaces struct {
 	// KV binding.
-	KvBinding param.Field[PageProjectNewParamsDeploymentConfigsProductionKvNamespacesKvBinding] `json:"KV_BINDING"`
+	KVBinding param.Field[PageProjectNewParamsDeploymentConfigsProductionKVNamespacesKVBinding] `json:"KV_BINDING"`
 }
 
-func (r PageProjectNewParamsDeploymentConfigsProductionKvNamespaces) MarshalJSON() (data []byte, err error) {
+func (r PageProjectNewParamsDeploymentConfigsProductionKVNamespaces) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 // KV binding.
-type PageProjectNewParamsDeploymentConfigsProductionKvNamespacesKvBinding struct {
+type PageProjectNewParamsDeploymentConfigsProductionKVNamespacesKVBinding struct {
 	// ID of the KV namespace.
 	NamespaceID param.Field[string] `json:"namespace_id"`
 }
 
-func (r PageProjectNewParamsDeploymentConfigsProductionKvNamespacesKvBinding) MarshalJSON() (data []byte, err error) {
+func (r PageProjectNewParamsDeploymentConfigsProductionKVNamespacesKVBinding) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 

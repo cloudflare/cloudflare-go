@@ -72,8 +72,8 @@ func TestPageProjectNewWithOptionalParams(t *testing.T) {
 							Value: cloudflare.F("hello world"),
 						}),
 					}),
-					KvNamespaces: cloudflare.F(cloudflare.PageProjectNewParamsDeploymentConfigsPreviewKvNamespaces{
-						KvBinding: cloudflare.F(cloudflare.PageProjectNewParamsDeploymentConfigsPreviewKvNamespacesKvBinding{
+					KVNamespaces: cloudflare.F(cloudflare.PageProjectNewParamsDeploymentConfigsPreviewKVNamespaces{
+						KVBinding: cloudflare.F(cloudflare.PageProjectNewParamsDeploymentConfigsPreviewKVNamespacesKVBinding{
 							NamespaceID: cloudflare.F("5eb63bbbe01eeed093cb22bb8f5acdc3"),
 						}),
 					}),
@@ -126,8 +126,8 @@ func TestPageProjectNewWithOptionalParams(t *testing.T) {
 							Value: cloudflare.F("hello world"),
 						}),
 					}),
-					KvNamespaces: cloudflare.F(cloudflare.PageProjectNewParamsDeploymentConfigsProductionKvNamespaces{
-						KvBinding: cloudflare.F(cloudflare.PageProjectNewParamsDeploymentConfigsProductionKvNamespacesKvBinding{
+					KVNamespaces: cloudflare.F(cloudflare.PageProjectNewParamsDeploymentConfigsProductionKVNamespaces{
+						KVBinding: cloudflare.F(cloudflare.PageProjectNewParamsDeploymentConfigsProductionKVNamespacesKVBinding{
 							NamespaceID: cloudflare.F("5eb63bbbe01eeed093cb22bb8f5acdc3"),
 						}),
 					}),

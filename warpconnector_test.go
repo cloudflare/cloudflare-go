@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestWarpConnectorNew(t *testing.T) {
+func TestWARPConnectorNew(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -30,10 +30,10 @@ func TestWarpConnectorNew(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.WarpConnector.New(
+	_, err := client.WARPConnector.New(
 		context.TODO(),
 		"699d98642c564d2e855e9661899b7252",
-		cloudflare.WarpConnectorNewParams{
+		cloudflare.WARPConnectorNewParams{
 			Name: cloudflare.F("blog"),
 		},
 	)
@@ -46,7 +46,7 @@ func TestWarpConnectorNew(t *testing.T) {
 	}
 }
 
-func TestWarpConnectorListWithOptionalParams(t *testing.T) {
+func TestWARPConnectorListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -62,10 +62,10 @@ func TestWarpConnectorListWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.WarpConnector.List(
+	_, err := client.WARPConnector.List(
 		context.TODO(),
 		"699d98642c564d2e855e9661899b7252",
-		cloudflare.WarpConnectorListParams{
+		cloudflare.WARPConnectorListParams{
 			ExcludePrefix: cloudflare.F("vpc1-"),
 			ExistedAt:     cloudflare.F(time.Now()),
 			IncludePrefix: cloudflare.F("vpc1-"),
@@ -86,7 +86,7 @@ func TestWarpConnectorListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestWarpConnectorDelete(t *testing.T) {
+func TestWARPConnectorDelete(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -102,11 +102,11 @@ func TestWarpConnectorDelete(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.WarpConnector.Delete(
+	_, err := client.WARPConnector.Delete(
 		context.TODO(),
 		"699d98642c564d2e855e9661899b7252",
 		"f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
-		cloudflare.WarpConnectorDeleteParams{
+		cloudflare.WARPConnectorDeleteParams{
 			Body: cloudflare.F[any](map[string]interface{}{}),
 		},
 	)
@@ -119,7 +119,7 @@ func TestWarpConnectorDelete(t *testing.T) {
 	}
 }
 
-func TestWarpConnectorEditWithOptionalParams(t *testing.T) {
+func TestWARPConnectorEditWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -135,11 +135,11 @@ func TestWarpConnectorEditWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.WarpConnector.Edit(
+	_, err := client.WARPConnector.Edit(
 		context.TODO(),
 		"699d98642c564d2e855e9661899b7252",
 		"f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
-		cloudflare.WarpConnectorEditParams{
+		cloudflare.WARPConnectorEditParams{
 			Name:         cloudflare.F("blog"),
 			TunnelSecret: cloudflare.F("AQIDBAUGBwgBAgMEBQYHCAECAwQFBgcIAQIDBAUGBwg="),
 		},
@@ -153,7 +153,7 @@ func TestWarpConnectorEditWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestWarpConnectorGet(t *testing.T) {
+func TestWARPConnectorGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -169,7 +169,7 @@ func TestWarpConnectorGet(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.WarpConnector.Get(
+	_, err := client.WARPConnector.Get(
 		context.TODO(),
 		"699d98642c564d2e855e9661899b7252",
 		"f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",

@@ -410,7 +410,7 @@ func (r *RadarBGPRoutePfx2asResponseEnvelope) UnmarshalJSON(data []byte) (err er
 
 type RadarBGPRouteStatsParams struct {
 	// Single ASN as integer.
-	Asn param.Field[int64] `query:"asn"`
+	ASN param.Field[int64] `query:"asn"`
 	// Format results are returned in.
 	Format param.Field[RadarBGPRouteStatsParamsFormat] `query:"format"`
 	// Location Alpha2 code.

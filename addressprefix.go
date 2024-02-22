@@ -118,14 +118,14 @@ type AddressPrefixNewResponse struct {
 	// Approval state of the prefix (P = pending, V = active).
 	Approved string `json:"approved"`
 	// Autonomous System Number (ASN) the prefix will be advertised under.
-	Asn int64 `json:"asn,nullable"`
+	ASN int64 `json:"asn,nullable"`
 	// IP Prefix in Classless Inter-Domain Routing format.
 	Cidr      string    `json:"cidr"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Description of the prefix.
 	Description string `json:"description"`
 	// Identifier for the uploaded LOA document.
-	LoaDocumentID string    `json:"loa_document_id,nullable"`
+	LOADocumentID string    `json:"loa_document_id,nullable"`
 	ModifiedAt    time.Time `json:"modified_at" format:"date-time"`
 	// Whether advertisement of the prefix to the Internet may be dynamically enabled
 	// or disabled.
@@ -144,11 +144,11 @@ type addressPrefixNewResponseJSON struct {
 	Advertised           apijson.Field
 	AdvertisedModifiedAt apijson.Field
 	Approved             apijson.Field
-	Asn                  apijson.Field
+	ASN                  apijson.Field
 	Cidr                 apijson.Field
 	CreatedAt            apijson.Field
 	Description          apijson.Field
-	LoaDocumentID        apijson.Field
+	LOADocumentID        apijson.Field
 	ModifiedAt           apijson.Field
 	OnDemandEnabled      apijson.Field
 	OnDemandLocked       apijson.Field
@@ -174,14 +174,14 @@ type AddressPrefixListResponse struct {
 	// Approval state of the prefix (P = pending, V = active).
 	Approved string `json:"approved"`
 	// Autonomous System Number (ASN) the prefix will be advertised under.
-	Asn int64 `json:"asn,nullable"`
+	ASN int64 `json:"asn,nullable"`
 	// IP Prefix in Classless Inter-Domain Routing format.
 	Cidr      string    `json:"cidr"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Description of the prefix.
 	Description string `json:"description"`
 	// Identifier for the uploaded LOA document.
-	LoaDocumentID string    `json:"loa_document_id,nullable"`
+	LOADocumentID string    `json:"loa_document_id,nullable"`
 	ModifiedAt    time.Time `json:"modified_at" format:"date-time"`
 	// Whether advertisement of the prefix to the Internet may be dynamically enabled
 	// or disabled.
@@ -200,11 +200,11 @@ type addressPrefixListResponseJSON struct {
 	Advertised           apijson.Field
 	AdvertisedModifiedAt apijson.Field
 	Approved             apijson.Field
-	Asn                  apijson.Field
+	ASN                  apijson.Field
 	Cidr                 apijson.Field
 	CreatedAt            apijson.Field
 	Description          apijson.Field
-	LoaDocumentID        apijson.Field
+	LOADocumentID        apijson.Field
 	ModifiedAt           apijson.Field
 	OnDemandEnabled      apijson.Field
 	OnDemandLocked       apijson.Field
@@ -251,14 +251,14 @@ type AddressPrefixEditResponse struct {
 	// Approval state of the prefix (P = pending, V = active).
 	Approved string `json:"approved"`
 	// Autonomous System Number (ASN) the prefix will be advertised under.
-	Asn int64 `json:"asn,nullable"`
+	ASN int64 `json:"asn,nullable"`
 	// IP Prefix in Classless Inter-Domain Routing format.
 	Cidr      string    `json:"cidr"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Description of the prefix.
 	Description string `json:"description"`
 	// Identifier for the uploaded LOA document.
-	LoaDocumentID string    `json:"loa_document_id,nullable"`
+	LOADocumentID string    `json:"loa_document_id,nullable"`
 	ModifiedAt    time.Time `json:"modified_at" format:"date-time"`
 	// Whether advertisement of the prefix to the Internet may be dynamically enabled
 	// or disabled.
@@ -277,11 +277,11 @@ type addressPrefixEditResponseJSON struct {
 	Advertised           apijson.Field
 	AdvertisedModifiedAt apijson.Field
 	Approved             apijson.Field
-	Asn                  apijson.Field
+	ASN                  apijson.Field
 	Cidr                 apijson.Field
 	CreatedAt            apijson.Field
 	Description          apijson.Field
-	LoaDocumentID        apijson.Field
+	LOADocumentID        apijson.Field
 	ModifiedAt           apijson.Field
 	OnDemandEnabled      apijson.Field
 	OnDemandLocked       apijson.Field
@@ -307,14 +307,14 @@ type AddressPrefixGetResponse struct {
 	// Approval state of the prefix (P = pending, V = active).
 	Approved string `json:"approved"`
 	// Autonomous System Number (ASN) the prefix will be advertised under.
-	Asn int64 `json:"asn,nullable"`
+	ASN int64 `json:"asn,nullable"`
 	// IP Prefix in Classless Inter-Domain Routing format.
 	Cidr      string    `json:"cidr"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Description of the prefix.
 	Description string `json:"description"`
 	// Identifier for the uploaded LOA document.
-	LoaDocumentID string    `json:"loa_document_id,nullable"`
+	LOADocumentID string    `json:"loa_document_id,nullable"`
 	ModifiedAt    time.Time `json:"modified_at" format:"date-time"`
 	// Whether advertisement of the prefix to the Internet may be dynamically enabled
 	// or disabled.
@@ -333,11 +333,11 @@ type addressPrefixGetResponseJSON struct {
 	Advertised           apijson.Field
 	AdvertisedModifiedAt apijson.Field
 	Approved             apijson.Field
-	Asn                  apijson.Field
+	ASN                  apijson.Field
 	Cidr                 apijson.Field
 	CreatedAt            apijson.Field
 	Description          apijson.Field
-	LoaDocumentID        apijson.Field
+	LOADocumentID        apijson.Field
 	ModifiedAt           apijson.Field
 	OnDemandEnabled      apijson.Field
 	OnDemandLocked       apijson.Field
@@ -351,11 +351,11 @@ func (r *AddressPrefixGetResponse) UnmarshalJSON(data []byte) (err error) {
 
 type AddressPrefixNewParams struct {
 	// Autonomous System Number (ASN) the prefix will be advertised under.
-	Asn param.Field[int64] `json:"asn,required"`
+	ASN param.Field[int64] `json:"asn,required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
 	Cidr param.Field[string] `json:"cidr,required"`
 	// Identifier for the uploaded LOA document.
-	LoaDocumentID param.Field[string] `json:"loa_document_id,required"`
+	LOADocumentID param.Field[string] `json:"loa_document_id,required"`
 }
 
 func (r AddressPrefixNewParams) MarshalJSON() (data []byte, err error) {

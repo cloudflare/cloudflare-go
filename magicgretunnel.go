@@ -14,29 +14,29 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-// MagicGreTunnelService contains methods and other services that help with
+// MagicGRETunnelService contains methods and other services that help with
 // interacting with the cloudflare API. Note, unlike clients, this service does not
 // read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewMagicGreTunnelService] method
+// this service directly, and instead use the [NewMagicGRETunnelService] method
 // instead.
-type MagicGreTunnelService struct {
+type MagicGRETunnelService struct {
 	Options []option.RequestOption
 }
 
-// NewMagicGreTunnelService generates a new service that applies the given options
+// NewMagicGRETunnelService generates a new service that applies the given options
 // to each request. These options are applied after the parent client's options (if
 // there is one), and before any request-specific options.
-func NewMagicGreTunnelService(opts ...option.RequestOption) (r *MagicGreTunnelService) {
-	r = &MagicGreTunnelService{}
+func NewMagicGRETunnelService(opts ...option.RequestOption) (r *MagicGRETunnelService) {
+	r = &MagicGRETunnelService{}
 	r.Options = opts
 	return
 }
 
 // Creates new GRE tunnels. Use `?validate_only=true` as an optional query
 // parameter to only run validation without persisting changes.
-func (r *MagicGreTunnelService) New(ctx context.Context, accountIdentifier string, body MagicGreTunnelNewParams, opts ...option.RequestOption) (res *MagicGreTunnelNewResponse, err error) {
+func (r *MagicGRETunnelService) New(ctx context.Context, accountIdentifier string, body MagicGRETunnelNewParams, opts ...option.RequestOption) (res *MagicGRETunnelNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env MagicGreTunnelNewResponseEnvelope
+	var env MagicGRETunnelNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -48,9 +48,9 @@ func (r *MagicGreTunnelService) New(ctx context.Context, accountIdentifier strin
 
 // Updates a specific GRE tunnel. Use `?validate_only=true` as an optional query
 // parameter to only run validation without persisting changes.
-func (r *MagicGreTunnelService) Update(ctx context.Context, accountIdentifier string, tunnelIdentifier string, body MagicGreTunnelUpdateParams, opts ...option.RequestOption) (res *MagicGreTunnelUpdateResponse, err error) {
+func (r *MagicGRETunnelService) Update(ctx context.Context, accountIdentifier string, tunnelIdentifier string, body MagicGRETunnelUpdateParams, opts ...option.RequestOption) (res *MagicGRETunnelUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env MagicGreTunnelUpdateResponseEnvelope
+	var env MagicGRETunnelUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels/%s", accountIdentifier, tunnelIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
@@ -61,9 +61,9 @@ func (r *MagicGreTunnelService) Update(ctx context.Context, accountIdentifier st
 }
 
 // Lists GRE tunnels associated with an account.
-func (r *MagicGreTunnelService) List(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *MagicGreTunnelListResponse, err error) {
+func (r *MagicGRETunnelService) List(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *MagicGRETunnelListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env MagicGreTunnelListResponseEnvelope
+	var env MagicGRETunnelListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -75,9 +75,9 @@ func (r *MagicGreTunnelService) List(ctx context.Context, accountIdentifier stri
 
 // Disables and removes a specific static GRE tunnel. Use `?validate_only=true` as
 // an optional query parameter to only run validation without persisting changes.
-func (r *MagicGreTunnelService) Delete(ctx context.Context, accountIdentifier string, tunnelIdentifier string, opts ...option.RequestOption) (res *MagicGreTunnelDeleteResponse, err error) {
+func (r *MagicGRETunnelService) Delete(ctx context.Context, accountIdentifier string, tunnelIdentifier string, opts ...option.RequestOption) (res *MagicGRETunnelDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env MagicGreTunnelDeleteResponseEnvelope
+	var env MagicGRETunnelDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels/%s", accountIdentifier, tunnelIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
@@ -88,9 +88,9 @@ func (r *MagicGreTunnelService) Delete(ctx context.Context, accountIdentifier st
 }
 
 // Lists informtion for a specific GRE tunnel.
-func (r *MagicGreTunnelService) Get(ctx context.Context, accountIdentifier string, tunnelIdentifier string, opts ...option.RequestOption) (res *MagicGreTunnelGetResponse, err error) {
+func (r *MagicGRETunnelService) Get(ctx context.Context, accountIdentifier string, tunnelIdentifier string, opts ...option.RequestOption) (res *MagicGRETunnelGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env MagicGreTunnelGetResponseEnvelope
+	var env MagicGRETunnelGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/magic/gre_tunnels/%s", accountIdentifier, tunnelIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -100,28 +100,28 @@ func (r *MagicGreTunnelService) Get(ctx context.Context, accountIdentifier strin
 	return
 }
 
-type MagicGreTunnelNewResponse struct {
-	GreTunnels []MagicGreTunnelNewResponseGreTunnel `json:"gre_tunnels"`
-	JSON       magicGreTunnelNewResponseJSON        `json:"-"`
+type MagicGRETunnelNewResponse struct {
+	GRETunnels []MagicGRETunnelNewResponseGRETunnel `json:"gre_tunnels"`
+	JSON       magicGRETunnelNewResponseJSON        `json:"-"`
 }
 
-// magicGreTunnelNewResponseJSON contains the JSON metadata for the struct
-// [MagicGreTunnelNewResponse]
-type magicGreTunnelNewResponseJSON struct {
-	GreTunnels  apijson.Field
+// magicGRETunnelNewResponseJSON contains the JSON metadata for the struct
+// [MagicGRETunnelNewResponse]
+type magicGRETunnelNewResponseJSON struct {
+	GRETunnels  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MagicGreTunnelNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicGRETunnelNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MagicGreTunnelNewResponseGreTunnel struct {
+type MagicGRETunnelNewResponseGRETunnel struct {
 	// The IP address assigned to the Cloudflare side of the GRE tunnel.
-	CloudflareGreEndpoint string `json:"cloudflare_gre_endpoint,required"`
+	CloudflareGREEndpoint string `json:"cloudflare_gre_endpoint,required"`
 	// The IP address assigned to the customer side of the GRE tunnel.
-	CustomerGreEndpoint string `json:"customer_gre_endpoint,required"`
+	CustomerGREEndpoint string `json:"customer_gre_endpoint,required"`
 	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
 	// of the tunnel. Select the subnet from the following private IP space:
 	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
@@ -135,7 +135,7 @@ type MagicGreTunnelNewResponseGreTunnel struct {
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional description of the GRE tunnel.
 	Description string                                         `json:"description"`
-	HealthCheck MagicGreTunnelNewResponseGreTunnelsHealthCheck `json:"health_check"`
+	HealthCheck MagicGRETunnelNewResponseGRETunnelsHealthCheck `json:"health_check"`
 	// The date and time the tunnel was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Maximum Transmission Unit (MTU) in bytes for the GRE tunnel. The minimum value
@@ -143,14 +143,14 @@ type MagicGreTunnelNewResponseGreTunnel struct {
 	Mtu int64 `json:"mtu"`
 	// Time To Live (TTL) in number of hops of the GRE tunnel.
 	TTL  int64                                  `json:"ttl"`
-	JSON magicGreTunnelNewResponseGreTunnelJSON `json:"-"`
+	JSON magicGRETunnelNewResponseGRETunnelJSON `json:"-"`
 }
 
-// magicGreTunnelNewResponseGreTunnelJSON contains the JSON metadata for the struct
-// [MagicGreTunnelNewResponseGreTunnel]
-type magicGreTunnelNewResponseGreTunnelJSON struct {
-	CloudflareGreEndpoint apijson.Field
-	CustomerGreEndpoint   apijson.Field
+// magicGRETunnelNewResponseGRETunnelJSON contains the JSON metadata for the struct
+// [MagicGRETunnelNewResponseGRETunnel]
+type magicGRETunnelNewResponseGRETunnelJSON struct {
+	CloudflareGREEndpoint apijson.Field
+	CustomerGREEndpoint   apijson.Field
 	InterfaceAddress      apijson.Field
 	Name                  apijson.Field
 	ID                    apijson.Field
@@ -164,22 +164,22 @@ type magicGreTunnelNewResponseGreTunnelJSON struct {
 	ExtraFields           map[string]apijson.Field
 }
 
-func (r *MagicGreTunnelNewResponseGreTunnel) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicGRETunnelNewResponseGRETunnel) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MagicGreTunnelNewResponseGreTunnelsHealthCheck struct {
+type MagicGRETunnelNewResponseGRETunnelsHealthCheck struct {
 	// The direction of the flow of the healthcheck. Either unidirectional, where the
 	// probe comes to you via the tunnel and the result comes back to Cloudflare via
 	// the open Internet, or bidirectional where both the probe and result come and go
 	// via the tunnel. Note in the case of bidirecitonal healthchecks, the target field
 	// in health_check is ignored as the interface_address is used to send traffic into
 	// the tunnel.
-	Direction MagicGreTunnelNewResponseGreTunnelsHealthCheckDirection `json:"direction"`
+	Direction MagicGRETunnelNewResponseGRETunnelsHealthCheckDirection `json:"direction"`
 	// Determines whether to run healthchecks for a tunnel.
 	Enabled bool `json:"enabled"`
 	// How frequent the health check is run. The default value is `mid`.
-	Rate MagicGreTunnelNewResponseGreTunnelsHealthCheckRate `json:"rate"`
+	Rate MagicGRETunnelNewResponseGRETunnelsHealthCheckRate `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`. This
@@ -187,13 +187,13 @@ type MagicGreTunnelNewResponseGreTunnelsHealthCheck struct {
 	// assigned to the Cloudflare side of the tunnel) is used as the target.
 	Target string `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type MagicGreTunnelNewResponseGreTunnelsHealthCheckType `json:"type"`
-	JSON magicGreTunnelNewResponseGreTunnelsHealthCheckJSON `json:"-"`
+	Type MagicGRETunnelNewResponseGRETunnelsHealthCheckType `json:"type"`
+	JSON magicGRETunnelNewResponseGRETunnelsHealthCheckJSON `json:"-"`
 }
 
-// magicGreTunnelNewResponseGreTunnelsHealthCheckJSON contains the JSON metadata
-// for the struct [MagicGreTunnelNewResponseGreTunnelsHealthCheck]
-type magicGreTunnelNewResponseGreTunnelsHealthCheckJSON struct {
+// magicGRETunnelNewResponseGRETunnelsHealthCheckJSON contains the JSON metadata
+// for the struct [MagicGRETunnelNewResponseGRETunnelsHealthCheck]
+type magicGRETunnelNewResponseGRETunnelsHealthCheckJSON struct {
 	Direction   apijson.Field
 	Enabled     apijson.Field
 	Rate        apijson.Field
@@ -203,7 +203,7 @@ type magicGreTunnelNewResponseGreTunnelsHealthCheckJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MagicGreTunnelNewResponseGreTunnelsHealthCheck) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicGRETunnelNewResponseGRETunnelsHealthCheck) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -213,71 +213,71 @@ func (r *MagicGreTunnelNewResponseGreTunnelsHealthCheck) UnmarshalJSON(data []by
 // via the tunnel. Note in the case of bidirecitonal healthchecks, the target field
 // in health_check is ignored as the interface_address is used to send traffic into
 // the tunnel.
-type MagicGreTunnelNewResponseGreTunnelsHealthCheckDirection string
+type MagicGRETunnelNewResponseGRETunnelsHealthCheckDirection string
 
 const (
-	MagicGreTunnelNewResponseGreTunnelsHealthCheckDirectionUnidirectional MagicGreTunnelNewResponseGreTunnelsHealthCheckDirection = "unidirectional"
-	MagicGreTunnelNewResponseGreTunnelsHealthCheckDirectionBidirectional  MagicGreTunnelNewResponseGreTunnelsHealthCheckDirection = "bidirectional"
+	MagicGRETunnelNewResponseGRETunnelsHealthCheckDirectionUnidirectional MagicGRETunnelNewResponseGRETunnelsHealthCheckDirection = "unidirectional"
+	MagicGRETunnelNewResponseGRETunnelsHealthCheckDirectionBidirectional  MagicGRETunnelNewResponseGRETunnelsHealthCheckDirection = "bidirectional"
 )
 
 // How frequent the health check is run. The default value is `mid`.
-type MagicGreTunnelNewResponseGreTunnelsHealthCheckRate string
+type MagicGRETunnelNewResponseGRETunnelsHealthCheckRate string
 
 const (
-	MagicGreTunnelNewResponseGreTunnelsHealthCheckRateLow  MagicGreTunnelNewResponseGreTunnelsHealthCheckRate = "low"
-	MagicGreTunnelNewResponseGreTunnelsHealthCheckRateMid  MagicGreTunnelNewResponseGreTunnelsHealthCheckRate = "mid"
-	MagicGreTunnelNewResponseGreTunnelsHealthCheckRateHigh MagicGreTunnelNewResponseGreTunnelsHealthCheckRate = "high"
+	MagicGRETunnelNewResponseGRETunnelsHealthCheckRateLow  MagicGRETunnelNewResponseGRETunnelsHealthCheckRate = "low"
+	MagicGRETunnelNewResponseGRETunnelsHealthCheckRateMid  MagicGRETunnelNewResponseGRETunnelsHealthCheckRate = "mid"
+	MagicGRETunnelNewResponseGRETunnelsHealthCheckRateHigh MagicGRETunnelNewResponseGRETunnelsHealthCheckRate = "high"
 )
 
 // The type of healthcheck to run, reply or request. The default value is `reply`.
-type MagicGreTunnelNewResponseGreTunnelsHealthCheckType string
+type MagicGRETunnelNewResponseGRETunnelsHealthCheckType string
 
 const (
-	MagicGreTunnelNewResponseGreTunnelsHealthCheckTypeReply   MagicGreTunnelNewResponseGreTunnelsHealthCheckType = "reply"
-	MagicGreTunnelNewResponseGreTunnelsHealthCheckTypeRequest MagicGreTunnelNewResponseGreTunnelsHealthCheckType = "request"
+	MagicGRETunnelNewResponseGRETunnelsHealthCheckTypeReply   MagicGRETunnelNewResponseGRETunnelsHealthCheckType = "reply"
+	MagicGRETunnelNewResponseGRETunnelsHealthCheckTypeRequest MagicGRETunnelNewResponseGRETunnelsHealthCheckType = "request"
 )
 
-type MagicGreTunnelUpdateResponse struct {
+type MagicGRETunnelUpdateResponse struct {
 	Modified          bool                             `json:"modified"`
-	ModifiedGreTunnel interface{}                      `json:"modified_gre_tunnel"`
-	JSON              magicGreTunnelUpdateResponseJSON `json:"-"`
+	ModifiedGRETunnel interface{}                      `json:"modified_gre_tunnel"`
+	JSON              magicGRETunnelUpdateResponseJSON `json:"-"`
 }
 
-// magicGreTunnelUpdateResponseJSON contains the JSON metadata for the struct
-// [MagicGreTunnelUpdateResponse]
-type magicGreTunnelUpdateResponseJSON struct {
+// magicGRETunnelUpdateResponseJSON contains the JSON metadata for the struct
+// [MagicGRETunnelUpdateResponse]
+type magicGRETunnelUpdateResponseJSON struct {
 	Modified          apijson.Field
-	ModifiedGreTunnel apijson.Field
+	ModifiedGRETunnel apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *MagicGreTunnelUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicGRETunnelUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MagicGreTunnelListResponse struct {
-	GreTunnels []MagicGreTunnelListResponseGreTunnel `json:"gre_tunnels"`
-	JSON       magicGreTunnelListResponseJSON        `json:"-"`
+type MagicGRETunnelListResponse struct {
+	GRETunnels []MagicGRETunnelListResponseGRETunnel `json:"gre_tunnels"`
+	JSON       magicGRETunnelListResponseJSON        `json:"-"`
 }
 
-// magicGreTunnelListResponseJSON contains the JSON metadata for the struct
-// [MagicGreTunnelListResponse]
-type magicGreTunnelListResponseJSON struct {
-	GreTunnels  apijson.Field
+// magicGRETunnelListResponseJSON contains the JSON metadata for the struct
+// [MagicGRETunnelListResponse]
+type magicGRETunnelListResponseJSON struct {
+	GRETunnels  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MagicGreTunnelListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicGRETunnelListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MagicGreTunnelListResponseGreTunnel struct {
+type MagicGRETunnelListResponseGRETunnel struct {
 	// The IP address assigned to the Cloudflare side of the GRE tunnel.
-	CloudflareGreEndpoint string `json:"cloudflare_gre_endpoint,required"`
+	CloudflareGREEndpoint string `json:"cloudflare_gre_endpoint,required"`
 	// The IP address assigned to the customer side of the GRE tunnel.
-	CustomerGreEndpoint string `json:"customer_gre_endpoint,required"`
+	CustomerGREEndpoint string `json:"customer_gre_endpoint,required"`
 	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
 	// of the tunnel. Select the subnet from the following private IP space:
 	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
@@ -291,7 +291,7 @@ type MagicGreTunnelListResponseGreTunnel struct {
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// An optional description of the GRE tunnel.
 	Description string                                          `json:"description"`
-	HealthCheck MagicGreTunnelListResponseGreTunnelsHealthCheck `json:"health_check"`
+	HealthCheck MagicGRETunnelListResponseGRETunnelsHealthCheck `json:"health_check"`
 	// The date and time the tunnel was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Maximum Transmission Unit (MTU) in bytes for the GRE tunnel. The minimum value
@@ -299,14 +299,14 @@ type MagicGreTunnelListResponseGreTunnel struct {
 	Mtu int64 `json:"mtu"`
 	// Time To Live (TTL) in number of hops of the GRE tunnel.
 	TTL  int64                                   `json:"ttl"`
-	JSON magicGreTunnelListResponseGreTunnelJSON `json:"-"`
+	JSON magicGRETunnelListResponseGRETunnelJSON `json:"-"`
 }
 
-// magicGreTunnelListResponseGreTunnelJSON contains the JSON metadata for the
-// struct [MagicGreTunnelListResponseGreTunnel]
-type magicGreTunnelListResponseGreTunnelJSON struct {
-	CloudflareGreEndpoint apijson.Field
-	CustomerGreEndpoint   apijson.Field
+// magicGRETunnelListResponseGRETunnelJSON contains the JSON metadata for the
+// struct [MagicGRETunnelListResponseGRETunnel]
+type magicGRETunnelListResponseGRETunnelJSON struct {
+	CloudflareGREEndpoint apijson.Field
+	CustomerGREEndpoint   apijson.Field
 	InterfaceAddress      apijson.Field
 	Name                  apijson.Field
 	ID                    apijson.Field
@@ -320,22 +320,22 @@ type magicGreTunnelListResponseGreTunnelJSON struct {
 	ExtraFields           map[string]apijson.Field
 }
 
-func (r *MagicGreTunnelListResponseGreTunnel) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicGRETunnelListResponseGRETunnel) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MagicGreTunnelListResponseGreTunnelsHealthCheck struct {
+type MagicGRETunnelListResponseGRETunnelsHealthCheck struct {
 	// The direction of the flow of the healthcheck. Either unidirectional, where the
 	// probe comes to you via the tunnel and the result comes back to Cloudflare via
 	// the open Internet, or bidirectional where both the probe and result come and go
 	// via the tunnel. Note in the case of bidirecitonal healthchecks, the target field
 	// in health_check is ignored as the interface_address is used to send traffic into
 	// the tunnel.
-	Direction MagicGreTunnelListResponseGreTunnelsHealthCheckDirection `json:"direction"`
+	Direction MagicGRETunnelListResponseGRETunnelsHealthCheckDirection `json:"direction"`
 	// Determines whether to run healthchecks for a tunnel.
 	Enabled bool `json:"enabled"`
 	// How frequent the health check is run. The default value is `mid`.
-	Rate MagicGreTunnelListResponseGreTunnelsHealthCheckRate `json:"rate"`
+	Rate MagicGRETunnelListResponseGRETunnelsHealthCheckRate `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`. This
@@ -343,13 +343,13 @@ type MagicGreTunnelListResponseGreTunnelsHealthCheck struct {
 	// assigned to the Cloudflare side of the tunnel) is used as the target.
 	Target string `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type MagicGreTunnelListResponseGreTunnelsHealthCheckType `json:"type"`
-	JSON magicGreTunnelListResponseGreTunnelsHealthCheckJSON `json:"-"`
+	Type MagicGRETunnelListResponseGRETunnelsHealthCheckType `json:"type"`
+	JSON magicGRETunnelListResponseGRETunnelsHealthCheckJSON `json:"-"`
 }
 
-// magicGreTunnelListResponseGreTunnelsHealthCheckJSON contains the JSON metadata
-// for the struct [MagicGreTunnelListResponseGreTunnelsHealthCheck]
-type magicGreTunnelListResponseGreTunnelsHealthCheckJSON struct {
+// magicGRETunnelListResponseGRETunnelsHealthCheckJSON contains the JSON metadata
+// for the struct [MagicGRETunnelListResponseGRETunnelsHealthCheck]
+type magicGRETunnelListResponseGRETunnelsHealthCheckJSON struct {
 	Direction   apijson.Field
 	Enabled     apijson.Field
 	Rate        apijson.Field
@@ -359,7 +359,7 @@ type magicGreTunnelListResponseGreTunnelsHealthCheckJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MagicGreTunnelListResponseGreTunnelsHealthCheck) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicGRETunnelListResponseGRETunnelsHealthCheck) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -369,86 +369,86 @@ func (r *MagicGreTunnelListResponseGreTunnelsHealthCheck) UnmarshalJSON(data []b
 // via the tunnel. Note in the case of bidirecitonal healthchecks, the target field
 // in health_check is ignored as the interface_address is used to send traffic into
 // the tunnel.
-type MagicGreTunnelListResponseGreTunnelsHealthCheckDirection string
+type MagicGRETunnelListResponseGRETunnelsHealthCheckDirection string
 
 const (
-	MagicGreTunnelListResponseGreTunnelsHealthCheckDirectionUnidirectional MagicGreTunnelListResponseGreTunnelsHealthCheckDirection = "unidirectional"
-	MagicGreTunnelListResponseGreTunnelsHealthCheckDirectionBidirectional  MagicGreTunnelListResponseGreTunnelsHealthCheckDirection = "bidirectional"
+	MagicGRETunnelListResponseGRETunnelsHealthCheckDirectionUnidirectional MagicGRETunnelListResponseGRETunnelsHealthCheckDirection = "unidirectional"
+	MagicGRETunnelListResponseGRETunnelsHealthCheckDirectionBidirectional  MagicGRETunnelListResponseGRETunnelsHealthCheckDirection = "bidirectional"
 )
 
 // How frequent the health check is run. The default value is `mid`.
-type MagicGreTunnelListResponseGreTunnelsHealthCheckRate string
+type MagicGRETunnelListResponseGRETunnelsHealthCheckRate string
 
 const (
-	MagicGreTunnelListResponseGreTunnelsHealthCheckRateLow  MagicGreTunnelListResponseGreTunnelsHealthCheckRate = "low"
-	MagicGreTunnelListResponseGreTunnelsHealthCheckRateMid  MagicGreTunnelListResponseGreTunnelsHealthCheckRate = "mid"
-	MagicGreTunnelListResponseGreTunnelsHealthCheckRateHigh MagicGreTunnelListResponseGreTunnelsHealthCheckRate = "high"
+	MagicGRETunnelListResponseGRETunnelsHealthCheckRateLow  MagicGRETunnelListResponseGRETunnelsHealthCheckRate = "low"
+	MagicGRETunnelListResponseGRETunnelsHealthCheckRateMid  MagicGRETunnelListResponseGRETunnelsHealthCheckRate = "mid"
+	MagicGRETunnelListResponseGRETunnelsHealthCheckRateHigh MagicGRETunnelListResponseGRETunnelsHealthCheckRate = "high"
 )
 
 // The type of healthcheck to run, reply or request. The default value is `reply`.
-type MagicGreTunnelListResponseGreTunnelsHealthCheckType string
+type MagicGRETunnelListResponseGRETunnelsHealthCheckType string
 
 const (
-	MagicGreTunnelListResponseGreTunnelsHealthCheckTypeReply   MagicGreTunnelListResponseGreTunnelsHealthCheckType = "reply"
-	MagicGreTunnelListResponseGreTunnelsHealthCheckTypeRequest MagicGreTunnelListResponseGreTunnelsHealthCheckType = "request"
+	MagicGRETunnelListResponseGRETunnelsHealthCheckTypeReply   MagicGRETunnelListResponseGRETunnelsHealthCheckType = "reply"
+	MagicGRETunnelListResponseGRETunnelsHealthCheckTypeRequest MagicGRETunnelListResponseGRETunnelsHealthCheckType = "request"
 )
 
-type MagicGreTunnelDeleteResponse struct {
+type MagicGRETunnelDeleteResponse struct {
 	Deleted          bool                             `json:"deleted"`
-	DeletedGreTunnel interface{}                      `json:"deleted_gre_tunnel"`
-	JSON             magicGreTunnelDeleteResponseJSON `json:"-"`
+	DeletedGRETunnel interface{}                      `json:"deleted_gre_tunnel"`
+	JSON             magicGRETunnelDeleteResponseJSON `json:"-"`
 }
 
-// magicGreTunnelDeleteResponseJSON contains the JSON metadata for the struct
-// [MagicGreTunnelDeleteResponse]
-type magicGreTunnelDeleteResponseJSON struct {
+// magicGRETunnelDeleteResponseJSON contains the JSON metadata for the struct
+// [MagicGRETunnelDeleteResponse]
+type magicGRETunnelDeleteResponseJSON struct {
 	Deleted          apijson.Field
-	DeletedGreTunnel apijson.Field
+	DeletedGRETunnel apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *MagicGreTunnelDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicGRETunnelDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MagicGreTunnelGetResponse struct {
-	GreTunnel interface{}                   `json:"gre_tunnel"`
-	JSON      magicGreTunnelGetResponseJSON `json:"-"`
+type MagicGRETunnelGetResponse struct {
+	GRETunnel interface{}                   `json:"gre_tunnel"`
+	JSON      magicGRETunnelGetResponseJSON `json:"-"`
 }
 
-// magicGreTunnelGetResponseJSON contains the JSON metadata for the struct
-// [MagicGreTunnelGetResponse]
-type magicGreTunnelGetResponseJSON struct {
-	GreTunnel   apijson.Field
+// magicGRETunnelGetResponseJSON contains the JSON metadata for the struct
+// [MagicGRETunnelGetResponse]
+type magicGRETunnelGetResponseJSON struct {
+	GRETunnel   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MagicGreTunnelGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicGRETunnelGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MagicGreTunnelNewParams struct {
+type MagicGRETunnelNewParams struct {
 	Body param.Field[interface{}] `json:"body,required"`
 }
 
-func (r MagicGreTunnelNewParams) MarshalJSON() (data []byte, err error) {
+func (r MagicGRETunnelNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r.Body)
 }
 
-type MagicGreTunnelNewResponseEnvelope struct {
-	Errors   []MagicGreTunnelNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MagicGreTunnelNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   MagicGreTunnelNewResponse                   `json:"result,required"`
+type MagicGRETunnelNewResponseEnvelope struct {
+	Errors   []MagicGRETunnelNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []MagicGRETunnelNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   MagicGRETunnelNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success MagicGreTunnelNewResponseEnvelopeSuccess `json:"success,required"`
-	JSON    magicGreTunnelNewResponseEnvelopeJSON    `json:"-"`
+	Success MagicGRETunnelNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    magicGRETunnelNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// magicGreTunnelNewResponseEnvelopeJSON contains the JSON metadata for the struct
-// [MagicGreTunnelNewResponseEnvelope]
-type magicGreTunnelNewResponseEnvelopeJSON struct {
+// magicGRETunnelNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [MagicGRETunnelNewResponseEnvelope]
+type magicGRETunnelNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -457,60 +457,60 @@ type magicGreTunnelNewResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MagicGreTunnelNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicGRETunnelNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MagicGreTunnelNewResponseEnvelopeErrors struct {
+type MagicGRETunnelNewResponseEnvelopeErrors struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
-	JSON    magicGreTunnelNewResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    magicGRETunnelNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// magicGreTunnelNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [MagicGreTunnelNewResponseEnvelopeErrors]
-type magicGreTunnelNewResponseEnvelopeErrorsJSON struct {
+// magicGRETunnelNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [MagicGRETunnelNewResponseEnvelopeErrors]
+type magicGRETunnelNewResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MagicGreTunnelNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicGRETunnelNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MagicGreTunnelNewResponseEnvelopeMessages struct {
+type MagicGRETunnelNewResponseEnvelopeMessages struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
-	JSON    magicGreTunnelNewResponseEnvelopeMessagesJSON `json:"-"`
+	JSON    magicGRETunnelNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// magicGreTunnelNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [MagicGreTunnelNewResponseEnvelopeMessages]
-type magicGreTunnelNewResponseEnvelopeMessagesJSON struct {
+// magicGRETunnelNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [MagicGRETunnelNewResponseEnvelopeMessages]
+type magicGRETunnelNewResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MagicGreTunnelNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicGRETunnelNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type MagicGreTunnelNewResponseEnvelopeSuccess bool
+type MagicGRETunnelNewResponseEnvelopeSuccess bool
 
 const (
-	MagicGreTunnelNewResponseEnvelopeSuccessTrue MagicGreTunnelNewResponseEnvelopeSuccess = true
+	MagicGRETunnelNewResponseEnvelopeSuccessTrue MagicGRETunnelNewResponseEnvelopeSuccess = true
 )
 
-type MagicGreTunnelUpdateParams struct {
+type MagicGRETunnelUpdateParams struct {
 	// The IP address assigned to the Cloudflare side of the GRE tunnel.
-	CloudflareGreEndpoint param.Field[string] `json:"cloudflare_gre_endpoint,required"`
+	CloudflareGREEndpoint param.Field[string] `json:"cloudflare_gre_endpoint,required"`
 	// The IP address assigned to the customer side of the GRE tunnel.
-	CustomerGreEndpoint param.Field[string] `json:"customer_gre_endpoint,required"`
+	CustomerGREEndpoint param.Field[string] `json:"customer_gre_endpoint,required"`
 	// A 31-bit prefix (/31 in CIDR notation) supporting two hosts, one for each side
 	// of the tunnel. Select the subnet from the following private IP space:
 	// 10.0.0.0–10.255.255.255, 172.16.0.0–172.31.255.255, 192.168.0.0–192.168.255.255.
@@ -520,7 +520,7 @@ type MagicGreTunnelUpdateParams struct {
 	Name param.Field[string] `json:"name,required"`
 	// An optional description of the GRE tunnel.
 	Description param.Field[string]                                `json:"description"`
-	HealthCheck param.Field[MagicGreTunnelUpdateParamsHealthCheck] `json:"health_check"`
+	HealthCheck param.Field[MagicGRETunnelUpdateParamsHealthCheck] `json:"health_check"`
 	// Maximum Transmission Unit (MTU) in bytes for the GRE tunnel. The minimum value
 	// is 576.
 	Mtu param.Field[int64] `json:"mtu"`
@@ -528,22 +528,22 @@ type MagicGreTunnelUpdateParams struct {
 	TTL param.Field[int64] `json:"ttl"`
 }
 
-func (r MagicGreTunnelUpdateParams) MarshalJSON() (data []byte, err error) {
+func (r MagicGRETunnelUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-type MagicGreTunnelUpdateParamsHealthCheck struct {
+type MagicGRETunnelUpdateParamsHealthCheck struct {
 	// The direction of the flow of the healthcheck. Either unidirectional, where the
 	// probe comes to you via the tunnel and the result comes back to Cloudflare via
 	// the open Internet, or bidirectional where both the probe and result come and go
 	// via the tunnel. Note in the case of bidirecitonal healthchecks, the target field
 	// in health_check is ignored as the interface_address is used to send traffic into
 	// the tunnel.
-	Direction param.Field[MagicGreTunnelUpdateParamsHealthCheckDirection] `json:"direction"`
+	Direction param.Field[MagicGRETunnelUpdateParamsHealthCheckDirection] `json:"direction"`
 	// Determines whether to run healthchecks for a tunnel.
 	Enabled param.Field[bool] `json:"enabled"`
 	// How frequent the health check is run. The default value is `mid`.
-	Rate param.Field[MagicGreTunnelUpdateParamsHealthCheckRate] `json:"rate"`
+	Rate param.Field[MagicGRETunnelUpdateParamsHealthCheckRate] `json:"rate"`
 	// The destination address in a request type health check. After the healthcheck is
 	// decapsulated at the customer end of the tunnel, the ICMP echo will be forwarded
 	// to this address. This field defaults to `customer_gre_endpoint address`. This
@@ -551,10 +551,10 @@ type MagicGreTunnelUpdateParamsHealthCheck struct {
 	// assigned to the Cloudflare side of the tunnel) is used as the target.
 	Target param.Field[string] `json:"target"`
 	// The type of healthcheck to run, reply or request. The default value is `reply`.
-	Type param.Field[MagicGreTunnelUpdateParamsHealthCheckType] `json:"type"`
+	Type param.Field[MagicGRETunnelUpdateParamsHealthCheckType] `json:"type"`
 }
 
-func (r MagicGreTunnelUpdateParamsHealthCheck) MarshalJSON() (data []byte, err error) {
+func (r MagicGRETunnelUpdateParamsHealthCheck) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -564,42 +564,42 @@ func (r MagicGreTunnelUpdateParamsHealthCheck) MarshalJSON() (data []byte, err e
 // via the tunnel. Note in the case of bidirecitonal healthchecks, the target field
 // in health_check is ignored as the interface_address is used to send traffic into
 // the tunnel.
-type MagicGreTunnelUpdateParamsHealthCheckDirection string
+type MagicGRETunnelUpdateParamsHealthCheckDirection string
 
 const (
-	MagicGreTunnelUpdateParamsHealthCheckDirectionUnidirectional MagicGreTunnelUpdateParamsHealthCheckDirection = "unidirectional"
-	MagicGreTunnelUpdateParamsHealthCheckDirectionBidirectional  MagicGreTunnelUpdateParamsHealthCheckDirection = "bidirectional"
+	MagicGRETunnelUpdateParamsHealthCheckDirectionUnidirectional MagicGRETunnelUpdateParamsHealthCheckDirection = "unidirectional"
+	MagicGRETunnelUpdateParamsHealthCheckDirectionBidirectional  MagicGRETunnelUpdateParamsHealthCheckDirection = "bidirectional"
 )
 
 // How frequent the health check is run. The default value is `mid`.
-type MagicGreTunnelUpdateParamsHealthCheckRate string
+type MagicGRETunnelUpdateParamsHealthCheckRate string
 
 const (
-	MagicGreTunnelUpdateParamsHealthCheckRateLow  MagicGreTunnelUpdateParamsHealthCheckRate = "low"
-	MagicGreTunnelUpdateParamsHealthCheckRateMid  MagicGreTunnelUpdateParamsHealthCheckRate = "mid"
-	MagicGreTunnelUpdateParamsHealthCheckRateHigh MagicGreTunnelUpdateParamsHealthCheckRate = "high"
+	MagicGRETunnelUpdateParamsHealthCheckRateLow  MagicGRETunnelUpdateParamsHealthCheckRate = "low"
+	MagicGRETunnelUpdateParamsHealthCheckRateMid  MagicGRETunnelUpdateParamsHealthCheckRate = "mid"
+	MagicGRETunnelUpdateParamsHealthCheckRateHigh MagicGRETunnelUpdateParamsHealthCheckRate = "high"
 )
 
 // The type of healthcheck to run, reply or request. The default value is `reply`.
-type MagicGreTunnelUpdateParamsHealthCheckType string
+type MagicGRETunnelUpdateParamsHealthCheckType string
 
 const (
-	MagicGreTunnelUpdateParamsHealthCheckTypeReply   MagicGreTunnelUpdateParamsHealthCheckType = "reply"
-	MagicGreTunnelUpdateParamsHealthCheckTypeRequest MagicGreTunnelUpdateParamsHealthCheckType = "request"
+	MagicGRETunnelUpdateParamsHealthCheckTypeReply   MagicGRETunnelUpdateParamsHealthCheckType = "reply"
+	MagicGRETunnelUpdateParamsHealthCheckTypeRequest MagicGRETunnelUpdateParamsHealthCheckType = "request"
 )
 
-type MagicGreTunnelUpdateResponseEnvelope struct {
-	Errors   []MagicGreTunnelUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MagicGreTunnelUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   MagicGreTunnelUpdateResponse                   `json:"result,required"`
+type MagicGRETunnelUpdateResponseEnvelope struct {
+	Errors   []MagicGRETunnelUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []MagicGRETunnelUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   MagicGRETunnelUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success MagicGreTunnelUpdateResponseEnvelopeSuccess `json:"success,required"`
-	JSON    magicGreTunnelUpdateResponseEnvelopeJSON    `json:"-"`
+	Success MagicGRETunnelUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    magicGRETunnelUpdateResponseEnvelopeJSON    `json:"-"`
 }
 
-// magicGreTunnelUpdateResponseEnvelopeJSON contains the JSON metadata for the
-// struct [MagicGreTunnelUpdateResponseEnvelope]
-type magicGreTunnelUpdateResponseEnvelopeJSON struct {
+// magicGRETunnelUpdateResponseEnvelopeJSON contains the JSON metadata for the
+// struct [MagicGRETunnelUpdateResponseEnvelope]
+type magicGRETunnelUpdateResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -608,67 +608,67 @@ type magicGreTunnelUpdateResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MagicGreTunnelUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicGRETunnelUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MagicGreTunnelUpdateResponseEnvelopeErrors struct {
+type MagicGRETunnelUpdateResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
-	JSON    magicGreTunnelUpdateResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    magicGRETunnelUpdateResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// magicGreTunnelUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [MagicGreTunnelUpdateResponseEnvelopeErrors]
-type magicGreTunnelUpdateResponseEnvelopeErrorsJSON struct {
+// magicGRETunnelUpdateResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [MagicGRETunnelUpdateResponseEnvelopeErrors]
+type magicGRETunnelUpdateResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MagicGreTunnelUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicGRETunnelUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MagicGreTunnelUpdateResponseEnvelopeMessages struct {
+type MagicGRETunnelUpdateResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
-	JSON    magicGreTunnelUpdateResponseEnvelopeMessagesJSON `json:"-"`
+	JSON    magicGRETunnelUpdateResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// magicGreTunnelUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [MagicGreTunnelUpdateResponseEnvelopeMessages]
-type magicGreTunnelUpdateResponseEnvelopeMessagesJSON struct {
+// magicGRETunnelUpdateResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [MagicGRETunnelUpdateResponseEnvelopeMessages]
+type magicGRETunnelUpdateResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MagicGreTunnelUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicGRETunnelUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type MagicGreTunnelUpdateResponseEnvelopeSuccess bool
+type MagicGRETunnelUpdateResponseEnvelopeSuccess bool
 
 const (
-	MagicGreTunnelUpdateResponseEnvelopeSuccessTrue MagicGreTunnelUpdateResponseEnvelopeSuccess = true
+	MagicGRETunnelUpdateResponseEnvelopeSuccessTrue MagicGRETunnelUpdateResponseEnvelopeSuccess = true
 )
 
-type MagicGreTunnelListResponseEnvelope struct {
-	Errors   []MagicGreTunnelListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MagicGreTunnelListResponseEnvelopeMessages `json:"messages,required"`
-	Result   MagicGreTunnelListResponse                   `json:"result,required"`
+type MagicGRETunnelListResponseEnvelope struct {
+	Errors   []MagicGRETunnelListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []MagicGRETunnelListResponseEnvelopeMessages `json:"messages,required"`
+	Result   MagicGRETunnelListResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success MagicGreTunnelListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    magicGreTunnelListResponseEnvelopeJSON    `json:"-"`
+	Success MagicGRETunnelListResponseEnvelopeSuccess `json:"success,required"`
+	JSON    magicGRETunnelListResponseEnvelopeJSON    `json:"-"`
 }
 
-// magicGreTunnelListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [MagicGreTunnelListResponseEnvelope]
-type magicGreTunnelListResponseEnvelopeJSON struct {
+// magicGRETunnelListResponseEnvelopeJSON contains the JSON metadata for the struct
+// [MagicGRETunnelListResponseEnvelope]
+type magicGRETunnelListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -677,67 +677,67 @@ type magicGreTunnelListResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MagicGreTunnelListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicGRETunnelListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MagicGreTunnelListResponseEnvelopeErrors struct {
+type MagicGRETunnelListResponseEnvelopeErrors struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
-	JSON    magicGreTunnelListResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    magicGRETunnelListResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// magicGreTunnelListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [MagicGreTunnelListResponseEnvelopeErrors]
-type magicGreTunnelListResponseEnvelopeErrorsJSON struct {
+// magicGRETunnelListResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [MagicGRETunnelListResponseEnvelopeErrors]
+type magicGRETunnelListResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MagicGreTunnelListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicGRETunnelListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MagicGreTunnelListResponseEnvelopeMessages struct {
+type MagicGRETunnelListResponseEnvelopeMessages struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
-	JSON    magicGreTunnelListResponseEnvelopeMessagesJSON `json:"-"`
+	JSON    magicGRETunnelListResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// magicGreTunnelListResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [MagicGreTunnelListResponseEnvelopeMessages]
-type magicGreTunnelListResponseEnvelopeMessagesJSON struct {
+// magicGRETunnelListResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [MagicGRETunnelListResponseEnvelopeMessages]
+type magicGRETunnelListResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MagicGreTunnelListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicGRETunnelListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type MagicGreTunnelListResponseEnvelopeSuccess bool
+type MagicGRETunnelListResponseEnvelopeSuccess bool
 
 const (
-	MagicGreTunnelListResponseEnvelopeSuccessTrue MagicGreTunnelListResponseEnvelopeSuccess = true
+	MagicGRETunnelListResponseEnvelopeSuccessTrue MagicGRETunnelListResponseEnvelopeSuccess = true
 )
 
-type MagicGreTunnelDeleteResponseEnvelope struct {
-	Errors   []MagicGreTunnelDeleteResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MagicGreTunnelDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   MagicGreTunnelDeleteResponse                   `json:"result,required"`
+type MagicGRETunnelDeleteResponseEnvelope struct {
+	Errors   []MagicGRETunnelDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []MagicGRETunnelDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   MagicGRETunnelDeleteResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success MagicGreTunnelDeleteResponseEnvelopeSuccess `json:"success,required"`
-	JSON    magicGreTunnelDeleteResponseEnvelopeJSON    `json:"-"`
+	Success MagicGRETunnelDeleteResponseEnvelopeSuccess `json:"success,required"`
+	JSON    magicGRETunnelDeleteResponseEnvelopeJSON    `json:"-"`
 }
 
-// magicGreTunnelDeleteResponseEnvelopeJSON contains the JSON metadata for the
-// struct [MagicGreTunnelDeleteResponseEnvelope]
-type magicGreTunnelDeleteResponseEnvelopeJSON struct {
+// magicGRETunnelDeleteResponseEnvelopeJSON contains the JSON metadata for the
+// struct [MagicGRETunnelDeleteResponseEnvelope]
+type magicGRETunnelDeleteResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -746,67 +746,67 @@ type magicGreTunnelDeleteResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MagicGreTunnelDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicGRETunnelDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MagicGreTunnelDeleteResponseEnvelopeErrors struct {
+type MagicGRETunnelDeleteResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
-	JSON    magicGreTunnelDeleteResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    magicGRETunnelDeleteResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// magicGreTunnelDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [MagicGreTunnelDeleteResponseEnvelopeErrors]
-type magicGreTunnelDeleteResponseEnvelopeErrorsJSON struct {
+// magicGRETunnelDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [MagicGRETunnelDeleteResponseEnvelopeErrors]
+type magicGRETunnelDeleteResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MagicGreTunnelDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicGRETunnelDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MagicGreTunnelDeleteResponseEnvelopeMessages struct {
+type MagicGRETunnelDeleteResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
-	JSON    magicGreTunnelDeleteResponseEnvelopeMessagesJSON `json:"-"`
+	JSON    magicGRETunnelDeleteResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// magicGreTunnelDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [MagicGreTunnelDeleteResponseEnvelopeMessages]
-type magicGreTunnelDeleteResponseEnvelopeMessagesJSON struct {
+// magicGRETunnelDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [MagicGRETunnelDeleteResponseEnvelopeMessages]
+type magicGRETunnelDeleteResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MagicGreTunnelDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicGRETunnelDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type MagicGreTunnelDeleteResponseEnvelopeSuccess bool
+type MagicGRETunnelDeleteResponseEnvelopeSuccess bool
 
 const (
-	MagicGreTunnelDeleteResponseEnvelopeSuccessTrue MagicGreTunnelDeleteResponseEnvelopeSuccess = true
+	MagicGRETunnelDeleteResponseEnvelopeSuccessTrue MagicGRETunnelDeleteResponseEnvelopeSuccess = true
 )
 
-type MagicGreTunnelGetResponseEnvelope struct {
-	Errors   []MagicGreTunnelGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MagicGreTunnelGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   MagicGreTunnelGetResponse                   `json:"result,required"`
+type MagicGRETunnelGetResponseEnvelope struct {
+	Errors   []MagicGRETunnelGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []MagicGRETunnelGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   MagicGRETunnelGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success MagicGreTunnelGetResponseEnvelopeSuccess `json:"success,required"`
-	JSON    magicGreTunnelGetResponseEnvelopeJSON    `json:"-"`
+	Success MagicGRETunnelGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    magicGRETunnelGetResponseEnvelopeJSON    `json:"-"`
 }
 
-// magicGreTunnelGetResponseEnvelopeJSON contains the JSON metadata for the struct
-// [MagicGreTunnelGetResponseEnvelope]
-type magicGreTunnelGetResponseEnvelopeJSON struct {
+// magicGRETunnelGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [MagicGRETunnelGetResponseEnvelope]
+type magicGRETunnelGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -815,51 +815,51 @@ type magicGreTunnelGetResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MagicGreTunnelGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicGRETunnelGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MagicGreTunnelGetResponseEnvelopeErrors struct {
+type MagicGRETunnelGetResponseEnvelopeErrors struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
-	JSON    magicGreTunnelGetResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    magicGRETunnelGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// magicGreTunnelGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [MagicGreTunnelGetResponseEnvelopeErrors]
-type magicGreTunnelGetResponseEnvelopeErrorsJSON struct {
+// magicGRETunnelGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [MagicGRETunnelGetResponseEnvelopeErrors]
+type magicGRETunnelGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MagicGreTunnelGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicGRETunnelGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MagicGreTunnelGetResponseEnvelopeMessages struct {
+type MagicGRETunnelGetResponseEnvelopeMessages struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
-	JSON    magicGreTunnelGetResponseEnvelopeMessagesJSON `json:"-"`
+	JSON    magicGRETunnelGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// magicGreTunnelGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [MagicGreTunnelGetResponseEnvelopeMessages]
-type magicGreTunnelGetResponseEnvelopeMessagesJSON struct {
+// magicGRETunnelGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [MagicGRETunnelGetResponseEnvelopeMessages]
+type magicGRETunnelGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MagicGreTunnelGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicGRETunnelGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type MagicGreTunnelGetResponseEnvelopeSuccess bool
+type MagicGRETunnelGetResponseEnvelopeSuccess bool
 
 const (
-	MagicGreTunnelGetResponseEnvelopeSuccessTrue MagicGreTunnelGetResponseEnvelopeSuccess = true
+	MagicGRETunnelGetResponseEnvelopeSuccessTrue MagicGRETunnelGetResponseEnvelopeSuccess = true
 )

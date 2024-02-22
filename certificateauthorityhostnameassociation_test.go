@@ -34,7 +34,7 @@ func TestCertificateAuthorityHostnameAssociationUpdateWithOptionalParams(t *test
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.CertificateAuthorityHostnameAssociationUpdateParams{
 			Hostnames:         cloudflare.F([]string{"api.example.com", "api.example.com", "api.example.com"}),
-			MtlsCertificateID: cloudflare.F("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
+			MTLSCertificateID: cloudflare.F("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
 		},
 	)
 	if err != nil {
@@ -66,7 +66,7 @@ func TestCertificateAuthorityHostnameAssociationListWithOptionalParams(t *testin
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.CertificateAuthorityHostnameAssociationListParams{
-			MtlsCertificateID: cloudflare.F("b2134436-2555-4acf-be5b-26c48136575e"),
+			MTLSCertificateID: cloudflare.F("b2134436-2555-4acf-be5b-26c48136575e"),
 		},
 	)
 	if err != nil {

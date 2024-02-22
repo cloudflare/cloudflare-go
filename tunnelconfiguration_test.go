@@ -128,7 +128,7 @@ func TestTunnelConfigurationUpdateWithOptionalParams(t *testing.T) {
 					TcpKeepAlive:           cloudflare.F(int64(0)),
 					TLSTimeout:             cloudflare.F(int64(0)),
 				}),
-				WarpRouting: cloudflare.F(cloudflare.TunnelConfigurationUpdateParamsConfigWarpRouting{
+				WARPRouting: cloudflare.F(cloudflare.TunnelConfigurationUpdateParamsConfigWARPRouting{
 					Enabled: cloudflare.F(true),
 				}),
 			}),

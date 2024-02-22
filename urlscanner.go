@@ -78,7 +78,7 @@ type URLScannerScanResponseTask struct {
 	// Scan url (after redirects)
 	URL string `json:"url,required"`
 	// Scan id
-	Uuid string                         `json:"uuid,required" format:"uuid"`
+	UUID string                         `json:"uuid,required" format:"uuid"`
 	JSON urlScannerScanResponseTaskJSON `json:"-"`
 }
 
@@ -88,7 +88,7 @@ type urlScannerScanResponseTaskJSON struct {
 	Success     apijson.Field
 	Time        apijson.Field
 	URL         apijson.Field
-	Uuid        apijson.Field
+	UUID        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

@@ -182,11 +182,11 @@ func (r *RadarEmailSecurityTopLocationSpamGetResponseTop0) UnmarshalJSON(data []
 
 type RadarEmailSecurityTopLocationSpamGetParams struct {
 	// Filter for arc (Authenticated Received Chain).
-	Arc param.Field[[]RadarEmailSecurityTopLocationSpamGetParamsArc] `query:"arc"`
+	ARC param.Field[[]RadarEmailSecurityTopLocationSpamGetParamsARC] `query:"arc"`
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
@@ -198,7 +198,7 @@ type RadarEmailSecurityTopLocationSpamGetParams struct {
 	// Filter for dkim.
 	DKIM param.Field[[]RadarEmailSecurityTopLocationSpamGetParamsDKIM] `query:"dkim"`
 	// Filter for dmarc.
-	Dmarc param.Field[[]RadarEmailSecurityTopLocationSpamGetParamsDmarc] `query:"dmarc"`
+	DMARC param.Field[[]RadarEmailSecurityTopLocationSpamGetParamsDMARC] `query:"dmarc"`
 	// Format results are returned in.
 	Format param.Field[RadarEmailSecurityTopLocationSpamGetParamsFormat] `query:"format"`
 	// Limit the number of objects in the response.
@@ -230,12 +230,12 @@ const (
 	RadarEmailSecurityTopLocationSpamGetParamsSpamNotSpam RadarEmailSecurityTopLocationSpamGetParamsSpam = "NOT_SPAM"
 )
 
-type RadarEmailSecurityTopLocationSpamGetParamsArc string
+type RadarEmailSecurityTopLocationSpamGetParamsARC string
 
 const (
-	RadarEmailSecurityTopLocationSpamGetParamsArcPass RadarEmailSecurityTopLocationSpamGetParamsArc = "PASS"
-	RadarEmailSecurityTopLocationSpamGetParamsArcNone RadarEmailSecurityTopLocationSpamGetParamsArc = "NONE"
-	RadarEmailSecurityTopLocationSpamGetParamsArcFail RadarEmailSecurityTopLocationSpamGetParamsArc = "FAIL"
+	RadarEmailSecurityTopLocationSpamGetParamsARCPass RadarEmailSecurityTopLocationSpamGetParamsARC = "PASS"
+	RadarEmailSecurityTopLocationSpamGetParamsARCNone RadarEmailSecurityTopLocationSpamGetParamsARC = "NONE"
+	RadarEmailSecurityTopLocationSpamGetParamsARCFail RadarEmailSecurityTopLocationSpamGetParamsARC = "FAIL"
 )
 
 type RadarEmailSecurityTopLocationSpamGetParamsDateRange string
@@ -266,12 +266,12 @@ const (
 	RadarEmailSecurityTopLocationSpamGetParamsDKIMFail RadarEmailSecurityTopLocationSpamGetParamsDKIM = "FAIL"
 )
 
-type RadarEmailSecurityTopLocationSpamGetParamsDmarc string
+type RadarEmailSecurityTopLocationSpamGetParamsDMARC string
 
 const (
-	RadarEmailSecurityTopLocationSpamGetParamsDmarcPass RadarEmailSecurityTopLocationSpamGetParamsDmarc = "PASS"
-	RadarEmailSecurityTopLocationSpamGetParamsDmarcNone RadarEmailSecurityTopLocationSpamGetParamsDmarc = "NONE"
-	RadarEmailSecurityTopLocationSpamGetParamsDmarcFail RadarEmailSecurityTopLocationSpamGetParamsDmarc = "FAIL"
+	RadarEmailSecurityTopLocationSpamGetParamsDMARCPass RadarEmailSecurityTopLocationSpamGetParamsDMARC = "PASS"
+	RadarEmailSecurityTopLocationSpamGetParamsDMARCNone RadarEmailSecurityTopLocationSpamGetParamsDMARC = "NONE"
+	RadarEmailSecurityTopLocationSpamGetParamsDMARCFail RadarEmailSecurityTopLocationSpamGetParamsDMARC = "FAIL"
 )
 
 // Format results are returned in.

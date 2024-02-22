@@ -120,7 +120,7 @@ func (r *RadarBGPTopAseGetResponseMetaDateRange) UnmarshalJSON(data []byte) (err
 }
 
 type RadarBGPTopAseGetResponseTop0 struct {
-	Asn    int64  `json:"asn,required"`
+	ASN    int64  `json:"asn,required"`
 	AsName string `json:"ASName,required"`
 	// Percentage of updates by this AS out of the total updates by all autonomous
 	// systems.
@@ -131,7 +131,7 @@ type RadarBGPTopAseGetResponseTop0 struct {
 // radarBGPTopAseGetResponseTop0JSON contains the JSON metadata for the struct
 // [RadarBGPTopAseGetResponseTop0]
 type radarBGPTopAseGetResponseTop0JSON struct {
-	Asn         apijson.Field
+	ASN         apijson.Field
 	AsName      apijson.Field
 	Value       apijson.Field
 	raw         string
@@ -143,7 +143,7 @@ func (r *RadarBGPTopAseGetResponseTop0) UnmarshalJSON(data []byte) (err error) {
 }
 
 type RadarBGPTopAsePrefixesResponse struct {
-	Asns []RadarBGPTopAsePrefixesResponseAsn `json:"asns,required"`
+	ASNs []RadarBGPTopAsePrefixesResponseASN `json:"asns,required"`
 	Meta RadarBGPTopAsePrefixesResponseMeta  `json:"meta,required"`
 	JSON radarBGPTopAsePrefixesResponseJSON  `json:"-"`
 }
@@ -151,7 +151,7 @@ type RadarBGPTopAsePrefixesResponse struct {
 // radarBGPTopAsePrefixesResponseJSON contains the JSON metadata for the struct
 // [RadarBGPTopAsePrefixesResponse]
 type radarBGPTopAsePrefixesResponseJSON struct {
-	Asns        apijson.Field
+	ASNs        apijson.Field
 	Meta        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
@@ -161,18 +161,18 @@ func (r *RadarBGPTopAsePrefixesResponse) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarBGPTopAsePrefixesResponseAsn struct {
-	Asn       int64                                 `json:"asn,required"`
+type RadarBGPTopAsePrefixesResponseASN struct {
+	ASN       int64                                 `json:"asn,required"`
 	Country   string                                `json:"country,required"`
 	Name      string                                `json:"name,required"`
 	PfxsCount int64                                 `json:"pfxs_count,required"`
-	JSON      radarBGPTopAsePrefixesResponseAsnJSON `json:"-"`
+	JSON      radarBGPTopAsePrefixesResponseASNJSON `json:"-"`
 }
 
-// radarBGPTopAsePrefixesResponseAsnJSON contains the JSON metadata for the struct
-// [RadarBGPTopAsePrefixesResponseAsn]
-type radarBGPTopAsePrefixesResponseAsnJSON struct {
-	Asn         apijson.Field
+// radarBGPTopAsePrefixesResponseASNJSON contains the JSON metadata for the struct
+// [RadarBGPTopAsePrefixesResponseASN]
+type radarBGPTopAsePrefixesResponseASNJSON struct {
+	ASN         apijson.Field
 	Country     apijson.Field
 	Name        apijson.Field
 	PfxsCount   apijson.Field
@@ -180,7 +180,7 @@ type radarBGPTopAsePrefixesResponseAsnJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarBGPTopAsePrefixesResponseAsn) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarBGPTopAsePrefixesResponseASN) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -209,7 +209,7 @@ type RadarBGPTopAseGetParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous

@@ -34,7 +34,7 @@ func TestRadarHTTPLocationHTTPProtocolGetWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		cloudflare.RadarHTTPLocationHTTPProtocolGetParamsHTTPProtocolHTTP,
 		cloudflare.RadarHTTPLocationHTTPProtocolGetParams{
-			Asn:          cloudflare.F([]string{"string", "string", "string"}),
+			ASN:          cloudflare.F([]string{"string", "string", "string"}),
 			BotClass:     cloudflare.F([]cloudflare.RadarHTTPLocationHTTPProtocolGetParamsBotClass{cloudflare.RadarHTTPLocationHTTPProtocolGetParamsBotClassLikelyAutomated, cloudflare.RadarHTTPLocationHTTPProtocolGetParamsBotClassLikelyHuman}),
 			DateEnd:      cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 			DateRange:    cloudflare.F([]cloudflare.RadarHTTPLocationHTTPProtocolGetParamsDateRange{cloudflare.RadarHTTPLocationHTTPProtocolGetParamsDateRange1d, cloudflare.RadarHTTPLocationHTTPProtocolGetParamsDateRange2d, cloudflare.RadarHTTPLocationHTTPProtocolGetParamsDateRange7d}),
@@ -46,7 +46,7 @@ func TestRadarHTTPLocationHTTPProtocolGetWithOptionalParams(t *testing.T) {
 			Limit:        cloudflare.F(int64(5)),
 			Location:     cloudflare.F([]string{"string", "string", "string"}),
 			Name:         cloudflare.F([]string{"string", "string", "string"}),
-			Os:           cloudflare.F([]cloudflare.RadarHTTPLocationHTTPProtocolGetParamsO{cloudflare.RadarHTTPLocationHTTPProtocolGetParamsOWindows, cloudflare.RadarHTTPLocationHTTPProtocolGetParamsOMacosx, cloudflare.RadarHTTPLocationHTTPProtocolGetParamsOIos}),
+			OS:           cloudflare.F([]cloudflare.RadarHTTPLocationHTTPProtocolGetParamsOS{cloudflare.RadarHTTPLocationHTTPProtocolGetParamsOSWindows, cloudflare.RadarHTTPLocationHTTPProtocolGetParamsOSMacosx, cloudflare.RadarHTTPLocationHTTPProtocolGetParamsOSIos}),
 			TLSVersion:   cloudflare.F([]cloudflare.RadarHTTPLocationHTTPProtocolGetParamsTLSVersion{cloudflare.RadarHTTPLocationHTTPProtocolGetParamsTLSVersionTlSv1_0, cloudflare.RadarHTTPLocationHTTPProtocolGetParamsTLSVersionTlSv1_1, cloudflare.RadarHTTPLocationHTTPProtocolGetParamsTLSVersionTlSv1_2}),
 		},
 	)

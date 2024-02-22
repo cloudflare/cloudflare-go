@@ -33,7 +33,7 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 	_, err := client.Access.Applications.New(context.TODO(), cloudflare.AccessApplicationNewParams{
 		AccountID:                cloudflare.F("string"),
 		ZoneID:                   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		AllowAuthenticateViaWarp: cloudflare.F(true),
+		AllowAuthenticateViaWARP: cloudflare.F(true),
 		AllowedIdps:              cloudflare.F([]string{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
 		AppLauncherVisible:       cloudflare.F[any](map[string]interface{}{}),
 		AutoRedirectToIdentity:   cloudflare.F(true),
@@ -114,7 +114,7 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 		cloudflare.AccessApplicationUpdateParams{
 			AccountID:                cloudflare.F("string"),
 			ZoneID:                   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			AllowAuthenticateViaWarp: cloudflare.F(true),
+			AllowAuthenticateViaWARP: cloudflare.F(true),
 			AllowedIdps:              cloudflare.F([]string{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
 			AppLauncherVisible:       cloudflare.F[any](map[string]interface{}{}),
 			AutoRedirectToIdentity:   cloudflare.F(true),

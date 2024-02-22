@@ -47,7 +47,7 @@ func (r *RadarBGPHijackService) Events(ctx context.Context, query RadarBGPHijack
 }
 
 type RadarBGPHijackEventsResponse struct {
-	AsnInfo       []RadarBGPHijackEventsResponseAsnInfo `json:"asn_info,required"`
+	ASNInfo       []RadarBGPHijackEventsResponseASNInfo `json:"asn_info,required"`
 	Events        []RadarBGPHijackEventsResponseEvent   `json:"events,required"`
 	TotalMonitors int64                                 `json:"total_monitors,required"`
 	JSON          radarBGPHijackEventsResponseJSON      `json:"-"`
@@ -56,7 +56,7 @@ type RadarBGPHijackEventsResponse struct {
 // radarBGPHijackEventsResponseJSON contains the JSON metadata for the struct
 // [RadarBGPHijackEventsResponse]
 type radarBGPHijackEventsResponseJSON struct {
-	AsnInfo       apijson.Field
+	ASNInfo       apijson.Field
 	Events        apijson.Field
 	TotalMonitors apijson.Field
 	raw           string
@@ -67,24 +67,24 @@ func (r *RadarBGPHijackEventsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarBGPHijackEventsResponseAsnInfo struct {
-	Asn         int64                                   `json:"asn,required"`
+type RadarBGPHijackEventsResponseASNInfo struct {
+	ASN         int64                                   `json:"asn,required"`
 	CountryCode string                                  `json:"country_code,required"`
 	OrgName     string                                  `json:"org_name,required"`
-	JSON        radarBGPHijackEventsResponseAsnInfoJSON `json:"-"`
+	JSON        radarBGPHijackEventsResponseASNInfoJSON `json:"-"`
 }
 
-// radarBGPHijackEventsResponseAsnInfoJSON contains the JSON metadata for the
-// struct [RadarBGPHijackEventsResponseAsnInfo]
-type radarBGPHijackEventsResponseAsnInfoJSON struct {
-	Asn         apijson.Field
+// radarBGPHijackEventsResponseASNInfoJSON contains the JSON metadata for the
+// struct [RadarBGPHijackEventsResponseASNInfo]
+type radarBGPHijackEventsResponseASNInfoJSON struct {
+	ASN         apijson.Field
 	CountryCode apijson.Field
 	OrgName     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarBGPHijackEventsResponseAsnInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarBGPHijackEventsResponseASNInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -94,18 +94,18 @@ type RadarBGPHijackEventsResponseEvent struct {
 	Duration        int64                                   `json:"duration,required"`
 	EventType       int64                                   `json:"event_type,required"`
 	HijackMsgsCount int64                                   `json:"hijack_msgs_count,required"`
-	HijackerAsn     int64                                   `json:"hijacker_asn,required"`
+	HijackerASN     int64                                   `json:"hijacker_asn,required"`
 	HijackerCountry string                                  `json:"hijacker_country,required"`
 	IsStale         bool                                    `json:"is_stale,required"`
 	MaxHijackTs     string                                  `json:"max_hijack_ts,required"`
 	MaxMsgTs        string                                  `json:"max_msg_ts,required"`
 	MinHijackTs     string                                  `json:"min_hijack_ts,required"`
 	OnGoingCount    int64                                   `json:"on_going_count,required"`
-	PeerAsns        []int64                                 `json:"peer_asns,required"`
+	PeerASNs        []int64                                 `json:"peer_asns,required"`
 	PeerIPCount     int64                                   `json:"peer_ip_count,required"`
 	Prefixes        []string                                `json:"prefixes,required"`
 	Tags            []RadarBGPHijackEventsResponseEventsTag `json:"tags,required"`
-	VictimAsns      []int64                                 `json:"victim_asns,required"`
+	VictimASNs      []int64                                 `json:"victim_asns,required"`
 	VictimCountries []string                                `json:"victim_countries,required"`
 	JSON            radarBGPHijackEventsResponseEventJSON   `json:"-"`
 }
@@ -118,18 +118,18 @@ type radarBGPHijackEventsResponseEventJSON struct {
 	Duration        apijson.Field
 	EventType       apijson.Field
 	HijackMsgsCount apijson.Field
-	HijackerAsn     apijson.Field
+	HijackerASN     apijson.Field
 	HijackerCountry apijson.Field
 	IsStale         apijson.Field
 	MaxHijackTs     apijson.Field
 	MaxMsgTs        apijson.Field
 	MinHijackTs     apijson.Field
 	OnGoingCount    apijson.Field
-	PeerAsns        apijson.Field
+	PeerASNs        apijson.Field
 	PeerIPCount     apijson.Field
 	Prefixes        apijson.Field
 	Tags            apijson.Field
-	VictimAsns      apijson.Field
+	VictimASNs      apijson.Field
 	VictimCountries apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
@@ -171,9 +171,9 @@ type RadarBGPHijackEventsParams struct {
 	// Format results are returned in.
 	Format param.Field[RadarBGPHijackEventsParamsFormat] `query:"format"`
 	// The potential hijacker AS of a BGP hijack event
-	HijackerAsn param.Field[int64] `query:"hijackerAsn"`
+	HijackerASN param.Field[int64] `query:"hijackerAsn"`
 	// The potential hijacker or victim AS of a BGP hijack event
-	InvolvedAsn param.Field[int64] `query:"involvedAsn"`
+	InvolvedASN param.Field[int64] `query:"involvedAsn"`
 	// The country code of the potential hijacker or victim AS of a BGP hijack event
 	InvolvedCountry param.Field[string] `query:"involvedCountry"`
 	// The maximum confidence score to filter events (1-4 low, 5-7 mid, 8+ high)
@@ -191,7 +191,7 @@ type RadarBGPHijackEventsParams struct {
 	// Sort order
 	SortOrder param.Field[RadarBGPHijackEventsParamsSortOrder] `query:"sortOrder"`
 	// The potential victim AS of a BGP hijack event
-	VictimAsn param.Field[int64] `query:"victimAsn"`
+	VictimASN param.Field[int64] `query:"victimAsn"`
 }
 
 // URLQuery serializes [RadarBGPHijackEventsParams]'s query parameters as

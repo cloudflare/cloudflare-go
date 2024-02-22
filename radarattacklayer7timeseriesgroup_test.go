@@ -32,7 +32,7 @@ func TestRadarAttackLayer7TimeseriesGroupGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Attacks.Layer7.TimeseriesGroups.Get(context.TODO(), cloudflare.RadarAttackLayer7TimeseriesGroupGetParams{
 		AggInterval: cloudflare.F(cloudflare.RadarAttackLayer7TimeseriesGroupGetParamsAggInterval1h),
-		Asn:         cloudflare.F([]string{"string", "string", "string"}),
+		ASN:         cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:   cloudflare.F([]cloudflare.RadarAttackLayer7TimeseriesGroupGetParamsDateRange{cloudflare.RadarAttackLayer7TimeseriesGroupGetParamsDateRange1d, cloudflare.RadarAttackLayer7TimeseriesGroupGetParamsDateRange2d, cloudflare.RadarAttackLayer7TimeseriesGroupGetParamsDateRange7d}),
 		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -67,7 +67,7 @@ func TestRadarAttackLayer7TimeseriesGroupHTTPMethodWithOptionalParams(t *testing
 	)
 	_, err := client.Radar.Attacks.Layer7.TimeseriesGroups.HTTPMethod(context.TODO(), cloudflare.RadarAttackLayer7TimeseriesGroupHTTPMethodParams{
 		AggInterval:       cloudflare.F(cloudflare.RadarAttackLayer7TimeseriesGroupHTTPMethodParamsAggInterval1h),
-		Asn:               cloudflare.F([]string{"string", "string", "string"}),
+		ASN:               cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:           cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:         cloudflare.F([]cloudflare.RadarAttackLayer7TimeseriesGroupHTTPMethodParamsDateRange{cloudflare.RadarAttackLayer7TimeseriesGroupHTTPMethodParamsDateRange1d, cloudflare.RadarAttackLayer7TimeseriesGroupHTTPMethodParamsDateRange2d, cloudflare.RadarAttackLayer7TimeseriesGroupHTTPMethodParamsDateRange7d}),
 		DateStart:         cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -106,7 +106,7 @@ func TestRadarAttackLayer7TimeseriesGroupHTTPVersionWithOptionalParams(t *testin
 	)
 	_, err := client.Radar.Attacks.Layer7.TimeseriesGroups.HTTPVersion(context.TODO(), cloudflare.RadarAttackLayer7TimeseriesGroupHTTPVersionParams{
 		AggInterval:       cloudflare.F(cloudflare.RadarAttackLayer7TimeseriesGroupHTTPVersionParamsAggInterval1h),
-		Asn:               cloudflare.F([]string{"string", "string", "string"}),
+		ASN:               cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:           cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:         cloudflare.F([]cloudflare.RadarAttackLayer7TimeseriesGroupHTTPVersionParamsDateRange{cloudflare.RadarAttackLayer7TimeseriesGroupHTTPVersionParamsDateRange1d, cloudflare.RadarAttackLayer7TimeseriesGroupHTTPVersionParamsDateRange2d, cloudflare.RadarAttackLayer7TimeseriesGroupHTTPVersionParamsDateRange7d}),
 		DateStart:         cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -145,7 +145,7 @@ func TestRadarAttackLayer7TimeseriesGroupIndustryWithOptionalParams(t *testing.T
 	)
 	_, err := client.Radar.Attacks.Layer7.TimeseriesGroups.Industry(context.TODO(), cloudflare.RadarAttackLayer7TimeseriesGroupIndustryParams{
 		AggInterval:       cloudflare.F(cloudflare.RadarAttackLayer7TimeseriesGroupIndustryParamsAggInterval1h),
-		Asn:               cloudflare.F([]string{"string", "string", "string"}),
+		ASN:               cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:           cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:         cloudflare.F([]cloudflare.RadarAttackLayer7TimeseriesGroupIndustryParamsDateRange{cloudflare.RadarAttackLayer7TimeseriesGroupIndustryParamsDateRange1d, cloudflare.RadarAttackLayer7TimeseriesGroupIndustryParamsDateRange2d, cloudflare.RadarAttackLayer7TimeseriesGroupIndustryParamsDateRange7d}),
 		DateStart:         cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -186,7 +186,7 @@ func TestRadarAttackLayer7TimeseriesGroupIPVersionWithOptionalParams(t *testing.
 	)
 	_, err := client.Radar.Attacks.Layer7.TimeseriesGroups.IPVersion(context.TODO(), cloudflare.RadarAttackLayer7TimeseriesGroupIPVersionParams{
 		AggInterval:       cloudflare.F(cloudflare.RadarAttackLayer7TimeseriesGroupIPVersionParamsAggInterval1h),
-		Asn:               cloudflare.F([]string{"string", "string", "string"}),
+		ASN:               cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:           cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:         cloudflare.F([]cloudflare.RadarAttackLayer7TimeseriesGroupIPVersionParamsDateRange{cloudflare.RadarAttackLayer7TimeseriesGroupIPVersionParamsDateRange1d, cloudflare.RadarAttackLayer7TimeseriesGroupIPVersionParamsDateRange2d, cloudflare.RadarAttackLayer7TimeseriesGroupIPVersionParamsDateRange7d}),
 		DateStart:         cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -225,7 +225,7 @@ func TestRadarAttackLayer7TimeseriesGroupManagedRulesWithOptionalParams(t *testi
 	)
 	_, err := client.Radar.Attacks.Layer7.TimeseriesGroups.ManagedRules(context.TODO(), cloudflare.RadarAttackLayer7TimeseriesGroupManagedRulesParams{
 		AggInterval:       cloudflare.F(cloudflare.RadarAttackLayer7TimeseriesGroupManagedRulesParamsAggInterval1h),
-		Asn:               cloudflare.F([]string{"string", "string", "string"}),
+		ASN:               cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:           cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:         cloudflare.F([]cloudflare.RadarAttackLayer7TimeseriesGroupManagedRulesParamsDateRange{cloudflare.RadarAttackLayer7TimeseriesGroupManagedRulesParamsDateRange1d, cloudflare.RadarAttackLayer7TimeseriesGroupManagedRulesParamsDateRange2d, cloudflare.RadarAttackLayer7TimeseriesGroupManagedRulesParamsDateRange7d}),
 		DateStart:         cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -265,7 +265,7 @@ func TestRadarAttackLayer7TimeseriesGroupMitigationProductWithOptionalParams(t *
 	)
 	_, err := client.Radar.Attacks.Layer7.TimeseriesGroups.MitigationProduct(context.TODO(), cloudflare.RadarAttackLayer7TimeseriesGroupMitigationProductParams{
 		AggInterval:   cloudflare.F(cloudflare.RadarAttackLayer7TimeseriesGroupMitigationProductParamsAggInterval1h),
-		Asn:           cloudflare.F([]string{"string", "string", "string"}),
+		ASN:           cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:     cloudflare.F([]cloudflare.RadarAttackLayer7TimeseriesGroupMitigationProductParamsDateRange{cloudflare.RadarAttackLayer7TimeseriesGroupMitigationProductParamsDateRange1d, cloudflare.RadarAttackLayer7TimeseriesGroupMitigationProductParamsDateRange2d, cloudflare.RadarAttackLayer7TimeseriesGroupMitigationProductParamsDateRange7d}),
 		DateStart:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -304,7 +304,7 @@ func TestRadarAttackLayer7TimeseriesGroupVerticalWithOptionalParams(t *testing.T
 	)
 	_, err := client.Radar.Attacks.Layer7.TimeseriesGroups.Vertical(context.TODO(), cloudflare.RadarAttackLayer7TimeseriesGroupVerticalParams{
 		AggInterval:       cloudflare.F(cloudflare.RadarAttackLayer7TimeseriesGroupVerticalParamsAggInterval1h),
-		Asn:               cloudflare.F([]string{"string", "string", "string"}),
+		ASN:               cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:           cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:         cloudflare.F([]cloudflare.RadarAttackLayer7TimeseriesGroupVerticalParamsDateRange{cloudflare.RadarAttackLayer7TimeseriesGroupVerticalParamsDateRange1d, cloudflare.RadarAttackLayer7TimeseriesGroupVerticalParamsDateRange2d, cloudflare.RadarAttackLayer7TimeseriesGroupVerticalParamsDateRange7d}),
 		DateStart:         cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),

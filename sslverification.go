@@ -68,7 +68,7 @@ type SSLVerificationListResponse struct {
 	// Certificate Authority is manually reviewing the order.
 	BrandCheck bool `json:"brand_check"`
 	// Certificate Pack UUID.
-	CertPackUuid string `json:"cert_pack_uuid"`
+	CertPackUUID string `json:"cert_pack_uuid"`
 	// Certificate's signature algorithm.
 	Signature SSLVerificationListResponseSignature `json:"signature"`
 	// Validation method in use for a certificate pack order.
@@ -88,7 +88,7 @@ type SSLVerificationListResponse struct {
 type sslVerificationListResponseJSON struct {
 	CertificateStatus  apijson.Field
 	BrandCheck         apijson.Field
-	CertPackUuid       apijson.Field
+	CertPackUUID       apijson.Field
 	Signature          apijson.Field
 	ValidationMethod   apijson.Field
 	VerificationInfo   apijson.Field

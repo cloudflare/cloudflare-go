@@ -243,7 +243,7 @@ func (r FirewallAccessRuleNewParams) MarshalJSON() (data []byte, err error) {
 // Satisfied by [FirewallAccessRuleNewParamsConfigurationLegacyJhsIPConfiguration],
 // [FirewallAccessRuleNewParamsConfigurationLegacyJhsIPV6Configuration],
 // [FirewallAccessRuleNewParamsConfigurationLegacyJhsCidrConfiguration],
-// [FirewallAccessRuleNewParamsConfigurationLegacyJhsAsnConfiguration],
+// [FirewallAccessRuleNewParamsConfigurationLegacyJhsASNConfiguration],
 // [FirewallAccessRuleNewParamsConfigurationLegacyJhsCountryConfiguration].
 type FirewallAccessRuleNewParamsConfiguration interface {
 	implementsFirewallAccessRuleNewParamsConfiguration()
@@ -320,27 +320,27 @@ const (
 	FirewallAccessRuleNewParamsConfigurationLegacyJhsCidrConfigurationTargetIPRange FirewallAccessRuleNewParamsConfigurationLegacyJhsCidrConfigurationTarget = "ip_range"
 )
 
-type FirewallAccessRuleNewParamsConfigurationLegacyJhsAsnConfiguration struct {
+type FirewallAccessRuleNewParamsConfigurationLegacyJhsASNConfiguration struct {
 	// The configuration target. You must set the target to `asn` when specifying an
 	// Autonomous System Number (ASN) in the rule.
-	Target param.Field[FirewallAccessRuleNewParamsConfigurationLegacyJhsAsnConfigurationTarget] `json:"target"`
+	Target param.Field[FirewallAccessRuleNewParamsConfigurationLegacyJhsASNConfigurationTarget] `json:"target"`
 	// The AS number to match.
 	Value param.Field[string] `json:"value"`
 }
 
-func (r FirewallAccessRuleNewParamsConfigurationLegacyJhsAsnConfiguration) MarshalJSON() (data []byte, err error) {
+func (r FirewallAccessRuleNewParamsConfigurationLegacyJhsASNConfiguration) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r FirewallAccessRuleNewParamsConfigurationLegacyJhsAsnConfiguration) implementsFirewallAccessRuleNewParamsConfiguration() {
+func (r FirewallAccessRuleNewParamsConfigurationLegacyJhsASNConfiguration) implementsFirewallAccessRuleNewParamsConfiguration() {
 }
 
 // The configuration target. You must set the target to `asn` when specifying an
 // Autonomous System Number (ASN) in the rule.
-type FirewallAccessRuleNewParamsConfigurationLegacyJhsAsnConfigurationTarget string
+type FirewallAccessRuleNewParamsConfigurationLegacyJhsASNConfigurationTarget string
 
 const (
-	FirewallAccessRuleNewParamsConfigurationLegacyJhsAsnConfigurationTargetAsn FirewallAccessRuleNewParamsConfigurationLegacyJhsAsnConfigurationTarget = "asn"
+	FirewallAccessRuleNewParamsConfigurationLegacyJhsASNConfigurationTargetASN FirewallAccessRuleNewParamsConfigurationLegacyJhsASNConfigurationTarget = "asn"
 )
 
 type FirewallAccessRuleNewParamsConfigurationLegacyJhsCountryConfiguration struct {
@@ -545,7 +545,7 @@ type FirewallAccessRuleListParamsFiltersConfigurationTarget string
 const (
 	FirewallAccessRuleListParamsFiltersConfigurationTargetIP      FirewallAccessRuleListParamsFiltersConfigurationTarget = "ip"
 	FirewallAccessRuleListParamsFiltersConfigurationTargetIPRange FirewallAccessRuleListParamsFiltersConfigurationTarget = "ip_range"
-	FirewallAccessRuleListParamsFiltersConfigurationTargetAsn     FirewallAccessRuleListParamsFiltersConfigurationTarget = "asn"
+	FirewallAccessRuleListParamsFiltersConfigurationTargetASN     FirewallAccessRuleListParamsFiltersConfigurationTarget = "asn"
 	FirewallAccessRuleListParamsFiltersConfigurationTargetCountry FirewallAccessRuleListParamsFiltersConfigurationTarget = "country"
 )
 
@@ -674,7 +674,7 @@ func (r FirewallAccessRuleEditParams) MarshalJSON() (data []byte, err error) {
 // [FirewallAccessRuleEditParamsConfigurationLegacyJhsIPConfiguration],
 // [FirewallAccessRuleEditParamsConfigurationLegacyJhsIPV6Configuration],
 // [FirewallAccessRuleEditParamsConfigurationLegacyJhsCidrConfiguration],
-// [FirewallAccessRuleEditParamsConfigurationLegacyJhsAsnConfiguration],
+// [FirewallAccessRuleEditParamsConfigurationLegacyJhsASNConfiguration],
 // [FirewallAccessRuleEditParamsConfigurationLegacyJhsCountryConfiguration].
 type FirewallAccessRuleEditParamsConfiguration interface {
 	implementsFirewallAccessRuleEditParamsConfiguration()
@@ -751,27 +751,27 @@ const (
 	FirewallAccessRuleEditParamsConfigurationLegacyJhsCidrConfigurationTargetIPRange FirewallAccessRuleEditParamsConfigurationLegacyJhsCidrConfigurationTarget = "ip_range"
 )
 
-type FirewallAccessRuleEditParamsConfigurationLegacyJhsAsnConfiguration struct {
+type FirewallAccessRuleEditParamsConfigurationLegacyJhsASNConfiguration struct {
 	// The configuration target. You must set the target to `asn` when specifying an
 	// Autonomous System Number (ASN) in the rule.
-	Target param.Field[FirewallAccessRuleEditParamsConfigurationLegacyJhsAsnConfigurationTarget] `json:"target"`
+	Target param.Field[FirewallAccessRuleEditParamsConfigurationLegacyJhsASNConfigurationTarget] `json:"target"`
 	// The AS number to match.
 	Value param.Field[string] `json:"value"`
 }
 
-func (r FirewallAccessRuleEditParamsConfigurationLegacyJhsAsnConfiguration) MarshalJSON() (data []byte, err error) {
+func (r FirewallAccessRuleEditParamsConfigurationLegacyJhsASNConfiguration) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r FirewallAccessRuleEditParamsConfigurationLegacyJhsAsnConfiguration) implementsFirewallAccessRuleEditParamsConfiguration() {
+func (r FirewallAccessRuleEditParamsConfigurationLegacyJhsASNConfiguration) implementsFirewallAccessRuleEditParamsConfiguration() {
 }
 
 // The configuration target. You must set the target to `asn` when specifying an
 // Autonomous System Number (ASN) in the rule.
-type FirewallAccessRuleEditParamsConfigurationLegacyJhsAsnConfigurationTarget string
+type FirewallAccessRuleEditParamsConfigurationLegacyJhsASNConfigurationTarget string
 
 const (
-	FirewallAccessRuleEditParamsConfigurationLegacyJhsAsnConfigurationTargetAsn FirewallAccessRuleEditParamsConfigurationLegacyJhsAsnConfigurationTarget = "asn"
+	FirewallAccessRuleEditParamsConfigurationLegacyJhsASNConfigurationTargetASN FirewallAccessRuleEditParamsConfigurationLegacyJhsASNConfigurationTarget = "asn"
 )
 
 type FirewallAccessRuleEditParamsConfigurationLegacyJhsCountryConfiguration struct {

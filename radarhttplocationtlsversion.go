@@ -184,7 +184,7 @@ type RadarHTTPLocationTLSVersionGetParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// Filter for bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]RadarHTTPLocationTLSVersionGetParamsBotClass] `query:"botClass"`
@@ -215,7 +215,7 @@ type RadarHTTPLocationTLSVersionGetParams struct {
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Filter for os name.
-	Os param.Field[[]RadarHTTPLocationTLSVersionGetParamsO] `query:"os"`
+	OS param.Field[[]RadarHTTPLocationTLSVersionGetParamsOS] `query:"os"`
 }
 
 // URLQuery serializes [RadarHTTPLocationTLSVersionGetParams]'s query parameters as
@@ -303,16 +303,16 @@ const (
 	RadarHTTPLocationTLSVersionGetParamsIPVersionIPv6 RadarHTTPLocationTLSVersionGetParamsIPVersion = "IPv6"
 )
 
-type RadarHTTPLocationTLSVersionGetParamsO string
+type RadarHTTPLocationTLSVersionGetParamsOS string
 
 const (
-	RadarHTTPLocationTLSVersionGetParamsOWindows  RadarHTTPLocationTLSVersionGetParamsO = "WINDOWS"
-	RadarHTTPLocationTLSVersionGetParamsOMacosx   RadarHTTPLocationTLSVersionGetParamsO = "MACOSX"
-	RadarHTTPLocationTLSVersionGetParamsOIos      RadarHTTPLocationTLSVersionGetParamsO = "IOS"
-	RadarHTTPLocationTLSVersionGetParamsOAndroid  RadarHTTPLocationTLSVersionGetParamsO = "ANDROID"
-	RadarHTTPLocationTLSVersionGetParamsOChromeos RadarHTTPLocationTLSVersionGetParamsO = "CHROMEOS"
-	RadarHTTPLocationTLSVersionGetParamsOLinux    RadarHTTPLocationTLSVersionGetParamsO = "LINUX"
-	RadarHTTPLocationTLSVersionGetParamsOSmartTv  RadarHTTPLocationTLSVersionGetParamsO = "SMART_TV"
+	RadarHTTPLocationTLSVersionGetParamsOSWindows  RadarHTTPLocationTLSVersionGetParamsOS = "WINDOWS"
+	RadarHTTPLocationTLSVersionGetParamsOSMacosx   RadarHTTPLocationTLSVersionGetParamsOS = "MACOSX"
+	RadarHTTPLocationTLSVersionGetParamsOSIos      RadarHTTPLocationTLSVersionGetParamsOS = "IOS"
+	RadarHTTPLocationTLSVersionGetParamsOSAndroid  RadarHTTPLocationTLSVersionGetParamsOS = "ANDROID"
+	RadarHTTPLocationTLSVersionGetParamsOSChromeos RadarHTTPLocationTLSVersionGetParamsOS = "CHROMEOS"
+	RadarHTTPLocationTLSVersionGetParamsOSLinux    RadarHTTPLocationTLSVersionGetParamsOS = "LINUX"
+	RadarHTTPLocationTLSVersionGetParamsOSSmartTv  RadarHTTPLocationTLSVersionGetParamsOS = "SMART_TV"
 )
 
 type RadarHTTPLocationTLSVersionGetResponseEnvelope struct {

@@ -78,8 +78,8 @@ func (r *RadarAnnotationOutageGetResponse) UnmarshalJSON(data []byte) (err error
 
 type RadarAnnotationOutageGetResponseAnnotation struct {
 	ID               string                                                       `json:"id,required"`
-	Asns             []int64                                                      `json:"asns,required"`
-	AsnsDetails      []RadarAnnotationOutageGetResponseAnnotationsAsnsDetail      `json:"asnsDetails,required"`
+	ASNs             []int64                                                      `json:"asns,required"`
+	ASNsDetails      []RadarAnnotationOutageGetResponseAnnotationsASNsDetail      `json:"asnsDetails,required"`
 	DataSource       string                                                       `json:"dataSource,required"`
 	EventType        string                                                       `json:"eventType,required"`
 	Locations        []string                                                     `json:"locations,required"`
@@ -97,8 +97,8 @@ type RadarAnnotationOutageGetResponseAnnotation struct {
 // the struct [RadarAnnotationOutageGetResponseAnnotation]
 type radarAnnotationOutageGetResponseAnnotationJSON struct {
 	ID               apijson.Field
-	Asns             apijson.Field
-	AsnsDetails      apijson.Field
+	ASNs             apijson.Field
+	ASNsDetails      apijson.Field
 	DataSource       apijson.Field
 	EventType        apijson.Field
 	Locations        apijson.Field
@@ -117,44 +117,44 @@ func (r *RadarAnnotationOutageGetResponseAnnotation) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAnnotationOutageGetResponseAnnotationsAsnsDetail struct {
-	Asn       string                                                          `json:"asn,required"`
+type RadarAnnotationOutageGetResponseAnnotationsASNsDetail struct {
+	ASN       string                                                          `json:"asn,required"`
 	Name      string                                                          `json:"name,required"`
-	Locations RadarAnnotationOutageGetResponseAnnotationsAsnsDetailsLocations `json:"locations"`
-	JSON      radarAnnotationOutageGetResponseAnnotationsAsnsDetailJSON       `json:"-"`
+	Locations RadarAnnotationOutageGetResponseAnnotationsASNsDetailsLocations `json:"locations"`
+	JSON      radarAnnotationOutageGetResponseAnnotationsASNsDetailJSON       `json:"-"`
 }
 
-// radarAnnotationOutageGetResponseAnnotationsAsnsDetailJSON contains the JSON
-// metadata for the struct [RadarAnnotationOutageGetResponseAnnotationsAsnsDetail]
-type radarAnnotationOutageGetResponseAnnotationsAsnsDetailJSON struct {
-	Asn         apijson.Field
+// radarAnnotationOutageGetResponseAnnotationsASNsDetailJSON contains the JSON
+// metadata for the struct [RadarAnnotationOutageGetResponseAnnotationsASNsDetail]
+type radarAnnotationOutageGetResponseAnnotationsASNsDetailJSON struct {
+	ASN         apijson.Field
 	Name        apijson.Field
 	Locations   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAnnotationOutageGetResponseAnnotationsAsnsDetail) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAnnotationOutageGetResponseAnnotationsASNsDetail) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAnnotationOutageGetResponseAnnotationsAsnsDetailsLocations struct {
+type RadarAnnotationOutageGetResponseAnnotationsASNsDetailsLocations struct {
 	Code string                                                              `json:"code,required"`
 	Name string                                                              `json:"name,required"`
-	JSON radarAnnotationOutageGetResponseAnnotationsAsnsDetailsLocationsJSON `json:"-"`
+	JSON radarAnnotationOutageGetResponseAnnotationsASNsDetailsLocationsJSON `json:"-"`
 }
 
-// radarAnnotationOutageGetResponseAnnotationsAsnsDetailsLocationsJSON contains the
+// radarAnnotationOutageGetResponseAnnotationsASNsDetailsLocationsJSON contains the
 // JSON metadata for the struct
-// [RadarAnnotationOutageGetResponseAnnotationsAsnsDetailsLocations]
-type radarAnnotationOutageGetResponseAnnotationsAsnsDetailsLocationsJSON struct {
+// [RadarAnnotationOutageGetResponseAnnotationsASNsDetailsLocations]
+type radarAnnotationOutageGetResponseAnnotationsASNsDetailsLocationsJSON struct {
 	Code        apijson.Field
 	Name        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAnnotationOutageGetResponseAnnotationsAsnsDetailsLocations) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAnnotationOutageGetResponseAnnotationsASNsDetailsLocations) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -237,7 +237,7 @@ func (r *RadarAnnotationOutageLocationsResponseAnnotation) UnmarshalJSON(data []
 
 type RadarAnnotationOutageGetParams struct {
 	// Single ASN as integer.
-	Asn param.Field[int64] `query:"asn"`
+	ASN param.Field[int64] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[time.Time] `query:"dateEnd" format:"date-time"`
 	// Shorthand date ranges for the last X days - use when you don't need specific

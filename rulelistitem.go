@@ -267,7 +267,7 @@ func (r RuleListItemNewParams) MarshalJSON() (data []byte, err error) {
 
 type RuleListItemNewParamsBody struct {
 	// A non-negative 32 bit integer
-	Asn param.Field[int64] `json:"asn"`
+	ASN param.Field[int64] `json:"asn"`
 	// An informative summary of the list item.
 	Comment param.Field[string] `json:"comment"`
 	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from
@@ -397,7 +397,7 @@ func (r RuleListItemUpdateParams) MarshalJSON() (data []byte, err error) {
 
 type RuleListItemUpdateParamsBody struct {
 	// A non-negative 32 bit integer
-	Asn param.Field[int64] `json:"asn"`
+	ASN param.Field[int64] `json:"asn"`
 	// An informative summary of the list item.
 	Comment param.Field[string] `json:"comment"`
 	// Valid characters for hostnames are ASCII(7) letters from a to z, the digits from

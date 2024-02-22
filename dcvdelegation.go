@@ -13,7 +13,7 @@ import (
 // instead.
 type DcvDelegationService struct {
 	Options []option.RequestOption
-	Uuid    *DcvDelegationUuidService
+	UUID    *DcvDelegationUUIDService
 }
 
 // NewDcvDelegationService generates a new service that applies the given options
@@ -22,6 +22,6 @@ type DcvDelegationService struct {
 func NewDcvDelegationService(opts ...option.RequestOption) (r *DcvDelegationService) {
 	r = &DcvDelegationService{}
 	r.Options = opts
-	r.Uuid = NewDcvDelegationUuidService(opts...)
+	r.UUID = NewDcvDelegationUUIDService(opts...)
 	return
 }

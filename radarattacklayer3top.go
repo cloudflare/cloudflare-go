@@ -558,7 +558,7 @@ const (
 	RadarAttackLayer3TopAttacksParamsProtocolUdp  RadarAttackLayer3TopAttacksParamsProtocol = "UDP"
 	RadarAttackLayer3TopAttacksParamsProtocolTcp  RadarAttackLayer3TopAttacksParamsProtocol = "TCP"
 	RadarAttackLayer3TopAttacksParamsProtocolIcmp RadarAttackLayer3TopAttacksParamsProtocol = "ICMP"
-	RadarAttackLayer3TopAttacksParamsProtocolGre  RadarAttackLayer3TopAttacksParamsProtocol = "GRE"
+	RadarAttackLayer3TopAttacksParamsProtocolGRE  RadarAttackLayer3TopAttacksParamsProtocol = "GRE"
 )
 
 type RadarAttackLayer3TopAttacksResponseEnvelope struct {
@@ -655,7 +655,7 @@ const (
 	RadarAttackLayer3TopIndustryParamsProtocolUdp  RadarAttackLayer3TopIndustryParamsProtocol = "UDP"
 	RadarAttackLayer3TopIndustryParamsProtocolTcp  RadarAttackLayer3TopIndustryParamsProtocol = "TCP"
 	RadarAttackLayer3TopIndustryParamsProtocolIcmp RadarAttackLayer3TopIndustryParamsProtocol = "ICMP"
-	RadarAttackLayer3TopIndustryParamsProtocolGre  RadarAttackLayer3TopIndustryParamsProtocol = "GRE"
+	RadarAttackLayer3TopIndustryParamsProtocolGRE  RadarAttackLayer3TopIndustryParamsProtocol = "GRE"
 )
 
 type RadarAttackLayer3TopIndustryResponseEnvelope struct {
@@ -752,7 +752,7 @@ const (
 	RadarAttackLayer3TopVerticalParamsProtocolUdp  RadarAttackLayer3TopVerticalParamsProtocol = "UDP"
 	RadarAttackLayer3TopVerticalParamsProtocolTcp  RadarAttackLayer3TopVerticalParamsProtocol = "TCP"
 	RadarAttackLayer3TopVerticalParamsProtocolIcmp RadarAttackLayer3TopVerticalParamsProtocol = "ICMP"
-	RadarAttackLayer3TopVerticalParamsProtocolGre  RadarAttackLayer3TopVerticalParamsProtocol = "GRE"
+	RadarAttackLayer3TopVerticalParamsProtocolGRE  RadarAttackLayer3TopVerticalParamsProtocol = "GRE"
 )
 
 type RadarAttackLayer3TopVerticalResponseEnvelope struct {

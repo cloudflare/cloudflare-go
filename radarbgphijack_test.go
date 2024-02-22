@@ -36,8 +36,8 @@ func TestRadarBGPHijackEventsWithOptionalParams(t *testing.T) {
 		DateStart:       cloudflare.F(time.Now()),
 		EventID:         cloudflare.F(int64(0)),
 		Format:          cloudflare.F(cloudflare.RadarBGPHijackEventsParamsFormatJson),
-		HijackerAsn:     cloudflare.F(int64(0)),
-		InvolvedAsn:     cloudflare.F(int64(0)),
+		HijackerASN:     cloudflare.F(int64(0)),
+		InvolvedASN:     cloudflare.F(int64(0)),
 		InvolvedCountry: cloudflare.F("string"),
 		MaxConfidence:   cloudflare.F(int64(0)),
 		MinConfidence:   cloudflare.F(int64(0)),
@@ -46,7 +46,7 @@ func TestRadarBGPHijackEventsWithOptionalParams(t *testing.T) {
 		Prefix:          cloudflare.F("string"),
 		SortBy:          cloudflare.F(cloudflare.RadarBGPHijackEventsParamsSortByTime),
 		SortOrder:       cloudflare.F(cloudflare.RadarBGPHijackEventsParamsSortOrderDesc),
-		VictimAsn:       cloudflare.F(int64(0)),
+		VictimASN:       cloudflare.F(int64(0)),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

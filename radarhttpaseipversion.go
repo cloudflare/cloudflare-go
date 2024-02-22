@@ -159,7 +159,7 @@ func (r *RadarHTTPAseIPVersionGetResponseMetaConfidenceInfoAnnotation) Unmarshal
 }
 
 type RadarHTTPAseIPVersionGetResponseTop0 struct {
-	ClientAsn    int64                                    `json:"clientASN,required"`
+	ClientASN    int64                                    `json:"clientASN,required"`
 	ClientAsName string                                   `json:"clientASName,required"`
 	Value        string                                   `json:"value,required"`
 	JSON         radarHTTPAseIPVersionGetResponseTop0JSON `json:"-"`
@@ -168,7 +168,7 @@ type RadarHTTPAseIPVersionGetResponseTop0 struct {
 // radarHTTPAseIPVersionGetResponseTop0JSON contains the JSON metadata for the
 // struct [RadarHTTPAseIPVersionGetResponseTop0]
 type radarHTTPAseIPVersionGetResponseTop0JSON struct {
-	ClientAsn    apijson.Field
+	ClientASN    apijson.Field
 	ClientAsName apijson.Field
 	Value        apijson.Field
 	raw          string
@@ -183,7 +183,7 @@ type RadarHTTPAseIPVersionGetParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// Filter for bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]RadarHTTPAseIPVersionGetParamsBotClass] `query:"botClass"`
@@ -212,7 +212,7 @@ type RadarHTTPAseIPVersionGetParams struct {
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Filter for os name.
-	Os param.Field[[]RadarHTTPAseIPVersionGetParamsO] `query:"os"`
+	OS param.Field[[]RadarHTTPAseIPVersionGetParamsOS] `query:"os"`
 	// Filter for tls version.
 	TLSVersion param.Field[[]RadarHTTPAseIPVersionGetParamsTLSVersion] `query:"tlsVersion"`
 }
@@ -292,16 +292,16 @@ const (
 	RadarHTTPAseIPVersionGetParamsHTTPVersionHttPv3 RadarHTTPAseIPVersionGetParamsHTTPVersion = "HTTPv3"
 )
 
-type RadarHTTPAseIPVersionGetParamsO string
+type RadarHTTPAseIPVersionGetParamsOS string
 
 const (
-	RadarHTTPAseIPVersionGetParamsOWindows  RadarHTTPAseIPVersionGetParamsO = "WINDOWS"
-	RadarHTTPAseIPVersionGetParamsOMacosx   RadarHTTPAseIPVersionGetParamsO = "MACOSX"
-	RadarHTTPAseIPVersionGetParamsOIos      RadarHTTPAseIPVersionGetParamsO = "IOS"
-	RadarHTTPAseIPVersionGetParamsOAndroid  RadarHTTPAseIPVersionGetParamsO = "ANDROID"
-	RadarHTTPAseIPVersionGetParamsOChromeos RadarHTTPAseIPVersionGetParamsO = "CHROMEOS"
-	RadarHTTPAseIPVersionGetParamsOLinux    RadarHTTPAseIPVersionGetParamsO = "LINUX"
-	RadarHTTPAseIPVersionGetParamsOSmartTv  RadarHTTPAseIPVersionGetParamsO = "SMART_TV"
+	RadarHTTPAseIPVersionGetParamsOSWindows  RadarHTTPAseIPVersionGetParamsOS = "WINDOWS"
+	RadarHTTPAseIPVersionGetParamsOSMacosx   RadarHTTPAseIPVersionGetParamsOS = "MACOSX"
+	RadarHTTPAseIPVersionGetParamsOSIos      RadarHTTPAseIPVersionGetParamsOS = "IOS"
+	RadarHTTPAseIPVersionGetParamsOSAndroid  RadarHTTPAseIPVersionGetParamsOS = "ANDROID"
+	RadarHTTPAseIPVersionGetParamsOSChromeos RadarHTTPAseIPVersionGetParamsOS = "CHROMEOS"
+	RadarHTTPAseIPVersionGetParamsOSLinux    RadarHTTPAseIPVersionGetParamsOS = "LINUX"
+	RadarHTTPAseIPVersionGetParamsOSSmartTv  RadarHTTPAseIPVersionGetParamsOS = "SMART_TV"
 )
 
 type RadarHTTPAseIPVersionGetParamsTLSVersion string

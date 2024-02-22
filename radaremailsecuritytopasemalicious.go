@@ -160,7 +160,7 @@ func (r *RadarEmailSecurityTopAseMaliciousGetResponseMetaConfidenceInfoAnnotatio
 }
 
 type RadarEmailSecurityTopAseMaliciousGetResponseTop0 struct {
-	ClientAsn    int64                                                `json:"clientASN,required"`
+	ClientASN    int64                                                `json:"clientASN,required"`
 	ClientAsName string                                               `json:"clientASName,required"`
 	Value        string                                               `json:"value,required"`
 	JSON         radarEmailSecurityTopAseMaliciousGetResponseTop0JSON `json:"-"`
@@ -169,7 +169,7 @@ type RadarEmailSecurityTopAseMaliciousGetResponseTop0 struct {
 // radarEmailSecurityTopAseMaliciousGetResponseTop0JSON contains the JSON metadata
 // for the struct [RadarEmailSecurityTopAseMaliciousGetResponseTop0]
 type radarEmailSecurityTopAseMaliciousGetResponseTop0JSON struct {
-	ClientAsn    apijson.Field
+	ClientASN    apijson.Field
 	ClientAsName apijson.Field
 	Value        apijson.Field
 	raw          string
@@ -182,11 +182,11 @@ func (r *RadarEmailSecurityTopAseMaliciousGetResponseTop0) UnmarshalJSON(data []
 
 type RadarEmailSecurityTopAseMaliciousGetParams struct {
 	// Filter for arc (Authenticated Received Chain).
-	Arc param.Field[[]RadarEmailSecurityTopAseMaliciousGetParamsArc] `query:"arc"`
+	ARC param.Field[[]RadarEmailSecurityTopAseMaliciousGetParamsARC] `query:"arc"`
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
@@ -198,7 +198,7 @@ type RadarEmailSecurityTopAseMaliciousGetParams struct {
 	// Filter for dkim.
 	DKIM param.Field[[]RadarEmailSecurityTopAseMaliciousGetParamsDKIM] `query:"dkim"`
 	// Filter for dmarc.
-	Dmarc param.Field[[]RadarEmailSecurityTopAseMaliciousGetParamsDmarc] `query:"dmarc"`
+	DMARC param.Field[[]RadarEmailSecurityTopAseMaliciousGetParamsDMARC] `query:"dmarc"`
 	// Format results are returned in.
 	Format param.Field[RadarEmailSecurityTopAseMaliciousGetParamsFormat] `query:"format"`
 	// Limit the number of objects in the response.
@@ -230,12 +230,12 @@ const (
 	RadarEmailSecurityTopAseMaliciousGetParamsMaliciousNotMalicious RadarEmailSecurityTopAseMaliciousGetParamsMalicious = "NOT_MALICIOUS"
 )
 
-type RadarEmailSecurityTopAseMaliciousGetParamsArc string
+type RadarEmailSecurityTopAseMaliciousGetParamsARC string
 
 const (
-	RadarEmailSecurityTopAseMaliciousGetParamsArcPass RadarEmailSecurityTopAseMaliciousGetParamsArc = "PASS"
-	RadarEmailSecurityTopAseMaliciousGetParamsArcNone RadarEmailSecurityTopAseMaliciousGetParamsArc = "NONE"
-	RadarEmailSecurityTopAseMaliciousGetParamsArcFail RadarEmailSecurityTopAseMaliciousGetParamsArc = "FAIL"
+	RadarEmailSecurityTopAseMaliciousGetParamsARCPass RadarEmailSecurityTopAseMaliciousGetParamsARC = "PASS"
+	RadarEmailSecurityTopAseMaliciousGetParamsARCNone RadarEmailSecurityTopAseMaliciousGetParamsARC = "NONE"
+	RadarEmailSecurityTopAseMaliciousGetParamsARCFail RadarEmailSecurityTopAseMaliciousGetParamsARC = "FAIL"
 )
 
 type RadarEmailSecurityTopAseMaliciousGetParamsDateRange string
@@ -266,12 +266,12 @@ const (
 	RadarEmailSecurityTopAseMaliciousGetParamsDKIMFail RadarEmailSecurityTopAseMaliciousGetParamsDKIM = "FAIL"
 )
 
-type RadarEmailSecurityTopAseMaliciousGetParamsDmarc string
+type RadarEmailSecurityTopAseMaliciousGetParamsDMARC string
 
 const (
-	RadarEmailSecurityTopAseMaliciousGetParamsDmarcPass RadarEmailSecurityTopAseMaliciousGetParamsDmarc = "PASS"
-	RadarEmailSecurityTopAseMaliciousGetParamsDmarcNone RadarEmailSecurityTopAseMaliciousGetParamsDmarc = "NONE"
-	RadarEmailSecurityTopAseMaliciousGetParamsDmarcFail RadarEmailSecurityTopAseMaliciousGetParamsDmarc = "FAIL"
+	RadarEmailSecurityTopAseMaliciousGetParamsDMARCPass RadarEmailSecurityTopAseMaliciousGetParamsDMARC = "PASS"
+	RadarEmailSecurityTopAseMaliciousGetParamsDMARCNone RadarEmailSecurityTopAseMaliciousGetParamsDMARC = "NONE"
+	RadarEmailSecurityTopAseMaliciousGetParamsDMARCFail RadarEmailSecurityTopAseMaliciousGetParamsDMARC = "FAIL"
 )
 
 // Format results are returned in.

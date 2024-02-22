@@ -21,7 +21,7 @@ import (
 // instead.
 type Web3HostnameService struct {
 	Options            []option.RequestOption
-	IpfsUniversalPaths *Web3HostnameIpfsUniversalPathService
+	IPFSUniversalPaths *Web3HostnameIPFSUniversalPathService
 }
 
 // NewWeb3HostnameService generates a new service that applies the given options to
@@ -30,7 +30,7 @@ type Web3HostnameService struct {
 func NewWeb3HostnameService(opts ...option.RequestOption) (r *Web3HostnameService) {
 	r = &Web3HostnameService{}
 	r.Options = opts
-	r.IpfsUniversalPaths = NewWeb3HostnameIpfsUniversalPathService(opts...)
+	r.IPFSUniversalPaths = NewWeb3HostnameIPFSUniversalPathService(opts...)
 	return
 }
 
@@ -151,8 +151,8 @@ type Web3HostnameNewResponseTarget string
 
 const (
 	Web3HostnameNewResponseTargetEthereum          Web3HostnameNewResponseTarget = "ethereum"
-	Web3HostnameNewResponseTargetIpfs              Web3HostnameNewResponseTarget = "ipfs"
-	Web3HostnameNewResponseTargetIpfsUniversalPath Web3HostnameNewResponseTarget = "ipfs_universal_path"
+	Web3HostnameNewResponseTargetIPFS              Web3HostnameNewResponseTarget = "ipfs"
+	Web3HostnameNewResponseTargetIPFSUniversalPath Web3HostnameNewResponseTarget = "ipfs_universal_path"
 )
 
 type Web3HostnameListResponse struct {
@@ -207,8 +207,8 @@ type Web3HostnameListResponseTarget string
 
 const (
 	Web3HostnameListResponseTargetEthereum          Web3HostnameListResponseTarget = "ethereum"
-	Web3HostnameListResponseTargetIpfs              Web3HostnameListResponseTarget = "ipfs"
-	Web3HostnameListResponseTargetIpfsUniversalPath Web3HostnameListResponseTarget = "ipfs_universal_path"
+	Web3HostnameListResponseTargetIPFS              Web3HostnameListResponseTarget = "ipfs"
+	Web3HostnameListResponseTargetIPFSUniversalPath Web3HostnameListResponseTarget = "ipfs_universal_path"
 )
 
 type Web3HostnameDeleteResponse struct {
@@ -281,8 +281,8 @@ type Web3HostnameEditResponseTarget string
 
 const (
 	Web3HostnameEditResponseTargetEthereum          Web3HostnameEditResponseTarget = "ethereum"
-	Web3HostnameEditResponseTargetIpfs              Web3HostnameEditResponseTarget = "ipfs"
-	Web3HostnameEditResponseTargetIpfsUniversalPath Web3HostnameEditResponseTarget = "ipfs_universal_path"
+	Web3HostnameEditResponseTargetIPFS              Web3HostnameEditResponseTarget = "ipfs"
+	Web3HostnameEditResponseTargetIPFSUniversalPath Web3HostnameEditResponseTarget = "ipfs_universal_path"
 )
 
 type Web3HostnameGetResponse struct {
@@ -337,8 +337,8 @@ type Web3HostnameGetResponseTarget string
 
 const (
 	Web3HostnameGetResponseTargetEthereum          Web3HostnameGetResponseTarget = "ethereum"
-	Web3HostnameGetResponseTargetIpfs              Web3HostnameGetResponseTarget = "ipfs"
-	Web3HostnameGetResponseTargetIpfsUniversalPath Web3HostnameGetResponseTarget = "ipfs_universal_path"
+	Web3HostnameGetResponseTargetIPFS              Web3HostnameGetResponseTarget = "ipfs"
+	Web3HostnameGetResponseTargetIPFSUniversalPath Web3HostnameGetResponseTarget = "ipfs_universal_path"
 )
 
 type Web3HostnameNewParams struct {
@@ -359,8 +359,8 @@ type Web3HostnameNewParamsTarget string
 
 const (
 	Web3HostnameNewParamsTargetEthereum          Web3HostnameNewParamsTarget = "ethereum"
-	Web3HostnameNewParamsTargetIpfs              Web3HostnameNewParamsTarget = "ipfs"
-	Web3HostnameNewParamsTargetIpfsUniversalPath Web3HostnameNewParamsTarget = "ipfs_universal_path"
+	Web3HostnameNewParamsTargetIPFS              Web3HostnameNewParamsTarget = "ipfs"
+	Web3HostnameNewParamsTargetIPFSUniversalPath Web3HostnameNewParamsTarget = "ipfs_universal_path"
 )
 
 type Web3HostnameNewResponseEnvelope struct {

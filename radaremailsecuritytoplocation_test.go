@@ -31,13 +31,13 @@ func TestRadarEmailSecurityTopLocationGetWithOptionalParams(t *testing.T) {
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.Email.Security.Top.Locations.Get(context.TODO(), cloudflare.RadarEmailSecurityTopLocationGetParams{
-		Arc:       cloudflare.F([]cloudflare.RadarEmailSecurityTopLocationGetParamsArc{cloudflare.RadarEmailSecurityTopLocationGetParamsArcPass, cloudflare.RadarEmailSecurityTopLocationGetParamsArcNone, cloudflare.RadarEmailSecurityTopLocationGetParamsArcFail}),
-		Asn:       cloudflare.F([]string{"string", "string", "string"}),
+		ARC:       cloudflare.F([]cloudflare.RadarEmailSecurityTopLocationGetParamsARC{cloudflare.RadarEmailSecurityTopLocationGetParamsARCPass, cloudflare.RadarEmailSecurityTopLocationGetParamsARCNone, cloudflare.RadarEmailSecurityTopLocationGetParamsARCFail}),
+		ASN:       cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange: cloudflare.F([]cloudflare.RadarEmailSecurityTopLocationGetParamsDateRange{cloudflare.RadarEmailSecurityTopLocationGetParamsDateRange1d, cloudflare.RadarEmailSecurityTopLocationGetParamsDateRange2d, cloudflare.RadarEmailSecurityTopLocationGetParamsDateRange7d}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DKIM:      cloudflare.F([]cloudflare.RadarEmailSecurityTopLocationGetParamsDKIM{cloudflare.RadarEmailSecurityTopLocationGetParamsDKIMPass, cloudflare.RadarEmailSecurityTopLocationGetParamsDKIMNone, cloudflare.RadarEmailSecurityTopLocationGetParamsDKIMFail}),
-		Dmarc:     cloudflare.F([]cloudflare.RadarEmailSecurityTopLocationGetParamsDmarc{cloudflare.RadarEmailSecurityTopLocationGetParamsDmarcPass, cloudflare.RadarEmailSecurityTopLocationGetParamsDmarcNone, cloudflare.RadarEmailSecurityTopLocationGetParamsDmarcFail}),
+		DMARC:     cloudflare.F([]cloudflare.RadarEmailSecurityTopLocationGetParamsDMARC{cloudflare.RadarEmailSecurityTopLocationGetParamsDMARCPass, cloudflare.RadarEmailSecurityTopLocationGetParamsDMARCNone, cloudflare.RadarEmailSecurityTopLocationGetParamsDMARCFail}),
 		Format:    cloudflare.F(cloudflare.RadarEmailSecurityTopLocationGetParamsFormatJson),
 		Limit:     cloudflare.F(int64(5)),
 		Location:  cloudflare.F([]string{"string", "string", "string"}),

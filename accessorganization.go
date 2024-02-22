@@ -123,7 +123,7 @@ func (r *AccessOrganizationService) RevokeUsers(ctx context.Context, params Acce
 type AccessOrganizationNewResponse struct {
 	// When set to true, users can authenticate via WARP for any application in your
 	// organization. Application settings will take precedence over this value.
-	AllowAuthenticateViaWarp bool `json:"allow_authenticate_via_warp"`
+	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
 	// The unique subdomain assigned to your Zero Trust organization.
 	AuthDomain string `json:"auth_domain"`
 	// When set to `true`, users skip the identity provider selection step during
@@ -151,14 +151,14 @@ type AccessOrganizationNewResponse struct {
 	UserSeatExpirationInactiveTime string `json:"user_seat_expiration_inactive_time"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
 	// the format `30m` or `2h45m`. Valid time units are: m, h.
-	WarpAuthSessionDuration string                            `json:"warp_auth_session_duration"`
+	WARPAuthSessionDuration string                            `json:"warp_auth_session_duration"`
 	JSON                    accessOrganizationNewResponseJSON `json:"-"`
 }
 
 // accessOrganizationNewResponseJSON contains the JSON metadata for the struct
 // [AccessOrganizationNewResponse]
 type accessOrganizationNewResponseJSON struct {
-	AllowAuthenticateViaWarp       apijson.Field
+	AllowAuthenticateViaWARP       apijson.Field
 	AuthDomain                     apijson.Field
 	AutoRedirectToIdentity         apijson.Field
 	CreatedAt                      apijson.Field
@@ -170,7 +170,7 @@ type accessOrganizationNewResponseJSON struct {
 	UiReadOnlyToggleReason         apijson.Field
 	UpdatedAt                      apijson.Field
 	UserSeatExpirationInactiveTime apijson.Field
-	WarpAuthSessionDuration        apijson.Field
+	WARPAuthSessionDuration        apijson.Field
 	raw                            string
 	ExtraFields                    map[string]apijson.Field
 }
@@ -234,7 +234,7 @@ func (r *AccessOrganizationNewResponseLoginDesign) UnmarshalJSON(data []byte) (e
 type AccessOrganizationUpdateResponse struct {
 	// When set to true, users can authenticate via WARP for any application in your
 	// organization. Application settings will take precedence over this value.
-	AllowAuthenticateViaWarp bool `json:"allow_authenticate_via_warp"`
+	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
 	// The unique subdomain assigned to your Zero Trust organization.
 	AuthDomain string `json:"auth_domain"`
 	// When set to `true`, users skip the identity provider selection step during
@@ -262,14 +262,14 @@ type AccessOrganizationUpdateResponse struct {
 	UserSeatExpirationInactiveTime string `json:"user_seat_expiration_inactive_time"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
 	// the format `30m` or `2h45m`. Valid time units are: m, h.
-	WarpAuthSessionDuration string                               `json:"warp_auth_session_duration"`
+	WARPAuthSessionDuration string                               `json:"warp_auth_session_duration"`
 	JSON                    accessOrganizationUpdateResponseJSON `json:"-"`
 }
 
 // accessOrganizationUpdateResponseJSON contains the JSON metadata for the struct
 // [AccessOrganizationUpdateResponse]
 type accessOrganizationUpdateResponseJSON struct {
-	AllowAuthenticateViaWarp       apijson.Field
+	AllowAuthenticateViaWARP       apijson.Field
 	AuthDomain                     apijson.Field
 	AutoRedirectToIdentity         apijson.Field
 	CreatedAt                      apijson.Field
@@ -281,7 +281,7 @@ type accessOrganizationUpdateResponseJSON struct {
 	UiReadOnlyToggleReason         apijson.Field
 	UpdatedAt                      apijson.Field
 	UserSeatExpirationInactiveTime apijson.Field
-	WarpAuthSessionDuration        apijson.Field
+	WARPAuthSessionDuration        apijson.Field
 	raw                            string
 	ExtraFields                    map[string]apijson.Field
 }
@@ -345,7 +345,7 @@ func (r *AccessOrganizationUpdateResponseLoginDesign) UnmarshalJSON(data []byte)
 type AccessOrganizationListResponse struct {
 	// When set to true, users can authenticate via WARP for any application in your
 	// organization. Application settings will take precedence over this value.
-	AllowAuthenticateViaWarp bool `json:"allow_authenticate_via_warp"`
+	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
 	// The unique subdomain assigned to your Zero Trust organization.
 	AuthDomain string `json:"auth_domain"`
 	// When set to `true`, users skip the identity provider selection step during
@@ -373,14 +373,14 @@ type AccessOrganizationListResponse struct {
 	UserSeatExpirationInactiveTime string `json:"user_seat_expiration_inactive_time"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
 	// the format `30m` or `2h45m`. Valid time units are: m, h.
-	WarpAuthSessionDuration string                             `json:"warp_auth_session_duration"`
+	WARPAuthSessionDuration string                             `json:"warp_auth_session_duration"`
 	JSON                    accessOrganizationListResponseJSON `json:"-"`
 }
 
 // accessOrganizationListResponseJSON contains the JSON metadata for the struct
 // [AccessOrganizationListResponse]
 type accessOrganizationListResponseJSON struct {
-	AllowAuthenticateViaWarp       apijson.Field
+	AllowAuthenticateViaWARP       apijson.Field
 	AuthDomain                     apijson.Field
 	AutoRedirectToIdentity         apijson.Field
 	CreatedAt                      apijson.Field
@@ -392,7 +392,7 @@ type accessOrganizationListResponseJSON struct {
 	UiReadOnlyToggleReason         apijson.Field
 	UpdatedAt                      apijson.Field
 	UserSeatExpirationInactiveTime apijson.Field
-	WarpAuthSessionDuration        apijson.Field
+	WARPAuthSessionDuration        apijson.Field
 	raw                            string
 	ExtraFields                    map[string]apijson.Field
 }
@@ -471,7 +471,7 @@ type AccessOrganizationNewParams struct {
 	Name param.Field[string] `json:"name,required"`
 	// When set to true, users can authenticate via WARP for any application in your
 	// organization. Application settings will take precedence over this value.
-	AllowAuthenticateViaWarp param.Field[bool] `json:"allow_authenticate_via_warp"`
+	AllowAuthenticateViaWARP param.Field[bool] `json:"allow_authenticate_via_warp"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login.
 	AutoRedirectToIdentity param.Field[bool] `json:"auto_redirect_to_identity"`
@@ -492,7 +492,7 @@ type AccessOrganizationNewParams struct {
 	UserSeatExpirationInactiveTime param.Field[string] `json:"user_seat_expiration_inactive_time"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
 	// the format `30m` or `2h45m`. Valid time units are: m, h.
-	WarpAuthSessionDuration param.Field[string] `json:"warp_auth_session_duration"`
+	WARPAuthSessionDuration param.Field[string] `json:"warp_auth_session_duration"`
 }
 
 func (r AccessOrganizationNewParams) MarshalJSON() (data []byte, err error) {
@@ -592,7 +592,7 @@ type AccessOrganizationUpdateParams struct {
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// When set to true, users can authenticate via WARP for any application in your
 	// organization. Application settings will take precedence over this value.
-	AllowAuthenticateViaWarp param.Field[bool] `json:"allow_authenticate_via_warp"`
+	AllowAuthenticateViaWARP param.Field[bool] `json:"allow_authenticate_via_warp"`
 	// The unique subdomain assigned to your Zero Trust organization.
 	AuthDomain param.Field[string] `json:"auth_domain"`
 	// When set to `true`, users skip the identity provider selection step during
@@ -618,7 +618,7 @@ type AccessOrganizationUpdateParams struct {
 	UserSeatExpirationInactiveTime param.Field[string] `json:"user_seat_expiration_inactive_time"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
 	// the format `30m` or `2h45m`. Valid time units are: m, h.
-	WarpAuthSessionDuration param.Field[string] `json:"warp_auth_session_duration"`
+	WARPAuthSessionDuration param.Field[string] `json:"warp_auth_session_duration"`
 }
 
 func (r AccessOrganizationUpdateParams) MarshalJSON() (data []byte, err error) {

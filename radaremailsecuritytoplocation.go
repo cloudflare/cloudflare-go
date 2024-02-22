@@ -22,9 +22,9 @@ import (
 // [NewRadarEmailSecurityTopLocationService] method instead.
 type RadarEmailSecurityTopLocationService struct {
 	Options   []option.RequestOption
-	Arc       *RadarEmailSecurityTopLocationArcService
+	ARC       *RadarEmailSecurityTopLocationARCService
 	DKIM      *RadarEmailSecurityTopLocationDKIMService
-	Dmarc     *RadarEmailSecurityTopLocationDmarcService
+	DMARC     *RadarEmailSecurityTopLocationDMARCService
 	Malicious *RadarEmailSecurityTopLocationMaliciousService
 	Spam      *RadarEmailSecurityTopLocationSpamService
 	SPF       *RadarEmailSecurityTopLocationSPFService
@@ -36,9 +36,9 @@ type RadarEmailSecurityTopLocationService struct {
 func NewRadarEmailSecurityTopLocationService(opts ...option.RequestOption) (r *RadarEmailSecurityTopLocationService) {
 	r = &RadarEmailSecurityTopLocationService{}
 	r.Options = opts
-	r.Arc = NewRadarEmailSecurityTopLocationArcService(opts...)
+	r.ARC = NewRadarEmailSecurityTopLocationARCService(opts...)
 	r.DKIM = NewRadarEmailSecurityTopLocationDKIMService(opts...)
-	r.Dmarc = NewRadarEmailSecurityTopLocationDmarcService(opts...)
+	r.DMARC = NewRadarEmailSecurityTopLocationDMARCService(opts...)
 	r.Malicious = NewRadarEmailSecurityTopLocationMaliciousService(opts...)
 	r.Spam = NewRadarEmailSecurityTopLocationSpamService(opts...)
 	r.SPF = NewRadarEmailSecurityTopLocationSPFService(opts...)
@@ -193,11 +193,11 @@ func (r *RadarEmailSecurityTopLocationGetResponseTop0) UnmarshalJSON(data []byte
 
 type RadarEmailSecurityTopLocationGetParams struct {
 	// Filter for arc (Authenticated Received Chain).
-	Arc param.Field[[]RadarEmailSecurityTopLocationGetParamsArc] `query:"arc"`
+	ARC param.Field[[]RadarEmailSecurityTopLocationGetParamsARC] `query:"arc"`
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
-	Asn param.Field[[]string] `query:"asn"`
+	ASN param.Field[[]string] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
@@ -209,7 +209,7 @@ type RadarEmailSecurityTopLocationGetParams struct {
 	// Filter for dkim.
 	DKIM param.Field[[]RadarEmailSecurityTopLocationGetParamsDKIM] `query:"dkim"`
 	// Filter for dmarc.
-	Dmarc param.Field[[]RadarEmailSecurityTopLocationGetParamsDmarc] `query:"dmarc"`
+	DMARC param.Field[[]RadarEmailSecurityTopLocationGetParamsDMARC] `query:"dmarc"`
 	// Format results are returned in.
 	Format param.Field[RadarEmailSecurityTopLocationGetParamsFormat] `query:"format"`
 	// Limit the number of objects in the response.
@@ -233,12 +233,12 @@ func (r RadarEmailSecurityTopLocationGetParams) URLQuery() (v url.Values) {
 	})
 }
 
-type RadarEmailSecurityTopLocationGetParamsArc string
+type RadarEmailSecurityTopLocationGetParamsARC string
 
 const (
-	RadarEmailSecurityTopLocationGetParamsArcPass RadarEmailSecurityTopLocationGetParamsArc = "PASS"
-	RadarEmailSecurityTopLocationGetParamsArcNone RadarEmailSecurityTopLocationGetParamsArc = "NONE"
-	RadarEmailSecurityTopLocationGetParamsArcFail RadarEmailSecurityTopLocationGetParamsArc = "FAIL"
+	RadarEmailSecurityTopLocationGetParamsARCPass RadarEmailSecurityTopLocationGetParamsARC = "PASS"
+	RadarEmailSecurityTopLocationGetParamsARCNone RadarEmailSecurityTopLocationGetParamsARC = "NONE"
+	RadarEmailSecurityTopLocationGetParamsARCFail RadarEmailSecurityTopLocationGetParamsARC = "FAIL"
 )
 
 type RadarEmailSecurityTopLocationGetParamsDateRange string
@@ -269,12 +269,12 @@ const (
 	RadarEmailSecurityTopLocationGetParamsDKIMFail RadarEmailSecurityTopLocationGetParamsDKIM = "FAIL"
 )
 
-type RadarEmailSecurityTopLocationGetParamsDmarc string
+type RadarEmailSecurityTopLocationGetParamsDMARC string
 
 const (
-	RadarEmailSecurityTopLocationGetParamsDmarcPass RadarEmailSecurityTopLocationGetParamsDmarc = "PASS"
-	RadarEmailSecurityTopLocationGetParamsDmarcNone RadarEmailSecurityTopLocationGetParamsDmarc = "NONE"
-	RadarEmailSecurityTopLocationGetParamsDmarcFail RadarEmailSecurityTopLocationGetParamsDmarc = "FAIL"
+	RadarEmailSecurityTopLocationGetParamsDMARCPass RadarEmailSecurityTopLocationGetParamsDMARC = "PASS"
+	RadarEmailSecurityTopLocationGetParamsDMARCNone RadarEmailSecurityTopLocationGetParamsDMARC = "NONE"
+	RadarEmailSecurityTopLocationGetParamsDMARCFail RadarEmailSecurityTopLocationGetParamsDMARC = "FAIL"
 )
 
 // Format results are returned in.

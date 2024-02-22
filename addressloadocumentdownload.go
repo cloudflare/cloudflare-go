@@ -11,30 +11,30 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-// AddressLoaDocumentDownloadService contains methods and other services that help
+// AddressLOADocumentDownloadService contains methods and other services that help
 // with interacting with the cloudflare API. Note, unlike clients, this service
 // does not read variables from the environment automatically. You should not
 // instantiate this service directly, and instead use the
-// [NewAddressLoaDocumentDownloadService] method instead.
-type AddressLoaDocumentDownloadService struct {
+// [NewAddressLOADocumentDownloadService] method instead.
+type AddressLOADocumentDownloadService struct {
 	Options []option.RequestOption
 }
 
-// NewAddressLoaDocumentDownloadService generates a new service that applies the
+// NewAddressLOADocumentDownloadService generates a new service that applies the
 // given options to each request. These options are applied after the parent
 // client's options (if there is one), and before any request-specific options.
-func NewAddressLoaDocumentDownloadService(opts ...option.RequestOption) (r *AddressLoaDocumentDownloadService) {
-	r = &AddressLoaDocumentDownloadService{}
+func NewAddressLOADocumentDownloadService(opts ...option.RequestOption) (r *AddressLOADocumentDownloadService) {
+	r = &AddressLOADocumentDownloadService{}
 	r.Options = opts
 	return
 }
 
 // Download specified LOA document under the account.
-func (r *AddressLoaDocumentDownloadService) List(ctx context.Context, accountID string, loaDocumentID string, opts ...option.RequestOption) (res *AddressLoaDocumentDownloadListResponse, err error) {
+func (r *AddressLOADocumentDownloadService) List(ctx context.Context, accountID string, loaDocumentID string, opts ...option.RequestOption) (res *AddressLOADocumentDownloadListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/addressing/loa_documents/%s/download", accountID, loaDocumentID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type AddressLoaDocumentDownloadListResponse = interface{}
+type AddressLOADocumentDownloadListResponse = interface{}

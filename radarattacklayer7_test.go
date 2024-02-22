@@ -32,7 +32,7 @@ func TestRadarAttackLayer7TimeseriesWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Attacks.Layer7.Timeseries(context.TODO(), cloudflare.RadarAttackLayer7TimeseriesParams{
 		AggInterval:   cloudflare.F(cloudflare.RadarAttackLayer7TimeseriesParamsAggInterval1h),
-		Asn:           cloudflare.F([]string{"string", "string", "string"}),
+		ASN:           cloudflare.F([]string{"string", "string", "string"}),
 		Attack:        cloudflare.F([]cloudflare.RadarAttackLayer7TimeseriesParamsAttack{cloudflare.RadarAttackLayer7TimeseriesParamsAttackDDOS, cloudflare.RadarAttackLayer7TimeseriesParamsAttackWAF, cloudflare.RadarAttackLayer7TimeseriesParamsAttackBotManagement}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:     cloudflare.F([]cloudflare.RadarAttackLayer7TimeseriesParamsDateRange{cloudflare.RadarAttackLayer7TimeseriesParamsDateRange1d, cloudflare.RadarAttackLayer7TimeseriesParamsDateRange2d, cloudflare.RadarAttackLayer7TimeseriesParamsDateRange7d}),

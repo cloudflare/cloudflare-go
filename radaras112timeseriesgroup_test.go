@@ -32,7 +32,7 @@ func TestRadarAs112TimeseriesGroupDNSSECWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.As112.TimeseriesGroups.DNSSEC(context.TODO(), cloudflare.RadarAs112TimeseriesGroupDNSSECParams{
 		AggInterval: cloudflare.F(cloudflare.RadarAs112TimeseriesGroupDNSSECParamsAggInterval1h),
-		Asn:         cloudflare.F([]string{"string", "string", "string"}),
+		ASN:         cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:   cloudflare.F([]cloudflare.RadarAs112TimeseriesGroupDNSSECParamsDateRange{cloudflare.RadarAs112TimeseriesGroupDNSSECParamsDateRange1d, cloudflare.RadarAs112TimeseriesGroupDNSSECParamsDateRange2d, cloudflare.RadarAs112TimeseriesGroupDNSSECParamsDateRange7d}),
 		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -67,7 +67,7 @@ func TestRadarAs112TimeseriesGroupEdnsWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.As112.TimeseriesGroups.Edns(context.TODO(), cloudflare.RadarAs112TimeseriesGroupEdnsParams{
 		AggInterval: cloudflare.F(cloudflare.RadarAs112TimeseriesGroupEdnsParamsAggInterval1h),
-		Asn:         cloudflare.F([]string{"string", "string", "string"}),
+		ASN:         cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:   cloudflare.F([]cloudflare.RadarAs112TimeseriesGroupEdnsParamsDateRange{cloudflare.RadarAs112TimeseriesGroupEdnsParamsDateRange1d, cloudflare.RadarAs112TimeseriesGroupEdnsParamsDateRange2d, cloudflare.RadarAs112TimeseriesGroupEdnsParamsDateRange7d}),
 		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -102,7 +102,7 @@ func TestRadarAs112TimeseriesGroupIPVersionWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.As112.TimeseriesGroups.IPVersion(context.TODO(), cloudflare.RadarAs112TimeseriesGroupIPVersionParams{
 		AggInterval: cloudflare.F(cloudflare.RadarAs112TimeseriesGroupIPVersionParamsAggInterval1h),
-		Asn:         cloudflare.F([]string{"string", "string", "string"}),
+		ASN:         cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:   cloudflare.F([]cloudflare.RadarAs112TimeseriesGroupIPVersionParamsDateRange{cloudflare.RadarAs112TimeseriesGroupIPVersionParamsDateRange1d, cloudflare.RadarAs112TimeseriesGroupIPVersionParamsDateRange2d, cloudflare.RadarAs112TimeseriesGroupIPVersionParamsDateRange7d}),
 		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -137,7 +137,7 @@ func TestRadarAs112TimeseriesGroupProtocolWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.As112.TimeseriesGroups.Protocol(context.TODO(), cloudflare.RadarAs112TimeseriesGroupProtocolParams{
 		AggInterval: cloudflare.F(cloudflare.RadarAs112TimeseriesGroupProtocolParamsAggInterval1h),
-		Asn:         cloudflare.F([]string{"string", "string", "string"}),
+		ASN:         cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:   cloudflare.F([]cloudflare.RadarAs112TimeseriesGroupProtocolParamsDateRange{cloudflare.RadarAs112TimeseriesGroupProtocolParamsDateRange1d, cloudflare.RadarAs112TimeseriesGroupProtocolParamsDateRange2d, cloudflare.RadarAs112TimeseriesGroupProtocolParamsDateRange7d}),
 		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -172,7 +172,7 @@ func TestRadarAs112TimeseriesGroupQueryTypeWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.As112.TimeseriesGroups.QueryType(context.TODO(), cloudflare.RadarAs112TimeseriesGroupQueryTypeParams{
 		AggInterval: cloudflare.F(cloudflare.RadarAs112TimeseriesGroupQueryTypeParamsAggInterval1h),
-		Asn:         cloudflare.F([]string{"string", "string", "string"}),
+		ASN:         cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:   cloudflare.F([]cloudflare.RadarAs112TimeseriesGroupQueryTypeParamsDateRange{cloudflare.RadarAs112TimeseriesGroupQueryTypeParamsDateRange1d, cloudflare.RadarAs112TimeseriesGroupQueryTypeParamsDateRange2d, cloudflare.RadarAs112TimeseriesGroupQueryTypeParamsDateRange7d}),
 		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -207,7 +207,7 @@ func TestRadarAs112TimeseriesGroupResponseCodesWithOptionalParams(t *testing.T) 
 	)
 	_, err := client.Radar.As112.TimeseriesGroups.ResponseCodes(context.TODO(), cloudflare.RadarAs112TimeseriesGroupResponseCodesParams{
 		AggInterval: cloudflare.F(cloudflare.RadarAs112TimeseriesGroupResponseCodesParamsAggInterval1h),
-		Asn:         cloudflare.F([]string{"string", "string", "string"}),
+		ASN:         cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:   cloudflare.F([]cloudflare.RadarAs112TimeseriesGroupResponseCodesParamsDateRange{cloudflare.RadarAs112TimeseriesGroupResponseCodesParamsDateRange1d, cloudflare.RadarAs112TimeseriesGroupResponseCodesParamsDateRange2d, cloudflare.RadarAs112TimeseriesGroupResponseCodesParamsDateRange7d}),
 		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),

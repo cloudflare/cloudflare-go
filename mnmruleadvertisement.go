@@ -12,28 +12,28 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-// MnmRuleAdvertisementService contains methods and other services that help with
+// MNMRuleAdvertisementService contains methods and other services that help with
 // interacting with the cloudflare API. Note, unlike clients, this service does not
 // read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewMnmRuleAdvertisementService]
+// this service directly, and instead use the [NewMNMRuleAdvertisementService]
 // method instead.
-type MnmRuleAdvertisementService struct {
+type MNMRuleAdvertisementService struct {
 	Options []option.RequestOption
 }
 
-// NewMnmRuleAdvertisementService generates a new service that applies the given
+// NewMNMRuleAdvertisementService generates a new service that applies the given
 // options to each request. These options are applied after the parent client's
 // options (if there is one), and before any request-specific options.
-func NewMnmRuleAdvertisementService(opts ...option.RequestOption) (r *MnmRuleAdvertisementService) {
-	r = &MnmRuleAdvertisementService{}
+func NewMNMRuleAdvertisementService(opts ...option.RequestOption) (r *MNMRuleAdvertisementService) {
+	r = &MNMRuleAdvertisementService{}
 	r.Options = opts
 	return
 }
 
 // Update advertisement for rule.
-func (r *MnmRuleAdvertisementService) Edit(ctx context.Context, accountIdentifier interface{}, ruleIdentifier interface{}, opts ...option.RequestOption) (res *MnmRuleAdvertisementEditResponse, err error) {
+func (r *MNMRuleAdvertisementService) Edit(ctx context.Context, accountIdentifier interface{}, ruleIdentifier interface{}, opts ...option.RequestOption) (res *MNMRuleAdvertisementEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env MnmRuleAdvertisementEditResponseEnvelope
+	var env MNMRuleAdvertisementEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/mnm/rules/%v/advertisement", accountIdentifier, ruleIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
 	if err != nil {
@@ -43,7 +43,7 @@ func (r *MnmRuleAdvertisementService) Edit(ctx context.Context, accountIdentifie
 	return
 }
 
-type MnmRuleAdvertisementEditResponse struct {
+type MNMRuleAdvertisementEditResponse struct {
 	// Toggle on if you would like Cloudflare to automatically advertise the IP
 	// Prefixes within the rule via Magic Transit when the rule is triggered. Only
 	// available for users of Magic Transit.
@@ -52,28 +52,28 @@ type MnmRuleAdvertisementEditResponse struct {
 }
 
 // mnmRuleAdvertisementEditResponseJSON contains the JSON metadata for the struct
-// [MnmRuleAdvertisementEditResponse]
+// [MNMRuleAdvertisementEditResponse]
 type mnmRuleAdvertisementEditResponseJSON struct {
 	AutomaticAdvertisement apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field
 }
 
-func (r *MnmRuleAdvertisementEditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *MNMRuleAdvertisementEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MnmRuleAdvertisementEditResponseEnvelope struct {
-	Errors   []MnmRuleAdvertisementEditResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MnmRuleAdvertisementEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   MnmRuleAdvertisementEditResponse                   `json:"result,required,nullable"`
+type MNMRuleAdvertisementEditResponseEnvelope struct {
+	Errors   []MNMRuleAdvertisementEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []MNMRuleAdvertisementEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   MNMRuleAdvertisementEditResponse                   `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success MnmRuleAdvertisementEditResponseEnvelopeSuccess `json:"success,required"`
+	Success MNMRuleAdvertisementEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    mnmRuleAdvertisementEditResponseEnvelopeJSON    `json:"-"`
 }
 
 // mnmRuleAdvertisementEditResponseEnvelopeJSON contains the JSON metadata for the
-// struct [MnmRuleAdvertisementEditResponseEnvelope]
+// struct [MNMRuleAdvertisementEditResponseEnvelope]
 type mnmRuleAdvertisementEditResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
@@ -83,18 +83,18 @@ type mnmRuleAdvertisementEditResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MnmRuleAdvertisementEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *MNMRuleAdvertisementEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MnmRuleAdvertisementEditResponseEnvelopeErrors struct {
+type MNMRuleAdvertisementEditResponseEnvelopeErrors struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
 	JSON    mnmRuleAdvertisementEditResponseEnvelopeErrorsJSON `json:"-"`
 }
 
 // mnmRuleAdvertisementEditResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [MnmRuleAdvertisementEditResponseEnvelopeErrors]
+// for the struct [MNMRuleAdvertisementEditResponseEnvelopeErrors]
 type mnmRuleAdvertisementEditResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
@@ -102,18 +102,18 @@ type mnmRuleAdvertisementEditResponseEnvelopeErrorsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MnmRuleAdvertisementEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *MNMRuleAdvertisementEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MnmRuleAdvertisementEditResponseEnvelopeMessages struct {
+type MNMRuleAdvertisementEditResponseEnvelopeMessages struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
 	JSON    mnmRuleAdvertisementEditResponseEnvelopeMessagesJSON `json:"-"`
 }
 
 // mnmRuleAdvertisementEditResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [MnmRuleAdvertisementEditResponseEnvelopeMessages]
+// for the struct [MNMRuleAdvertisementEditResponseEnvelopeMessages]
 type mnmRuleAdvertisementEditResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
@@ -121,13 +121,13 @@ type mnmRuleAdvertisementEditResponseEnvelopeMessagesJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MnmRuleAdvertisementEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *MNMRuleAdvertisementEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type MnmRuleAdvertisementEditResponseEnvelopeSuccess bool
+type MNMRuleAdvertisementEditResponseEnvelopeSuccess bool
 
 const (
-	MnmRuleAdvertisementEditResponseEnvelopeSuccessTrue MnmRuleAdvertisementEditResponseEnvelopeSuccess = true
+	MNMRuleAdvertisementEditResponseEnvelopeSuccessTrue MNMRuleAdvertisementEditResponseEnvelopeSuccess = true
 )
