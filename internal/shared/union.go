@@ -175,10 +175,6 @@ func (UnionString) ImplementsAlertingV3PolicyDeleteResponse()                   
 func (UnionString) ImplementsAlertingV3PolicyGetResponseMechanismsID()                            {}
 func (UnionString) ImplementsAlertingV3PolicyNewParamsMechanismsID()                              {}
 func (UnionString) ImplementsAlertingV3PolicyUpdateParamsMechanismsID()                           {}
-func (UnionString) ImplementsDeviceGetResponse()                                                  {}
-func (UnionString) ImplementsDevicePostureIntegrationDeleteResponse()                             {}
-func (UnionString) ImplementsDeviceRevokeNewResponse()                                            {}
-func (UnionString) ImplementsDeviceUnrevokeNewResponse()                                          {}
 func (UnionString) ImplementsD1DatabaseDeleteResponse()                                           {}
 func (UnionString) ImplementsAddressingPrefixBindingDeleteResponse()                              {}
 func (UnionString) ImplementsHyperdriveConfigDeleteResponse()                                     {}
