@@ -22,7 +22,7 @@ import (
 type UserService struct {
 	Options                []option.RequestOption
 	AuditLogs              *UserAuditLogService
-	Billings               *UserBillingService
+	Billing                *UserBillingService
 	Firewall               *UserFirewallService
 	Invites                *UserInviteService
 	LoadBalancers          *UserLoadBalancerService
@@ -39,7 +39,7 @@ func NewUserService(opts ...option.RequestOption) (r *UserService) {
 	r = &UserService{}
 	r.Options = opts
 	r.AuditLogs = NewUserAuditLogService(opts...)
-	r.Billings = NewUserBillingService(opts...)
+	r.Billing = NewUserBillingService(opts...)
 	r.Firewall = NewUserFirewallService(opts...)
 	r.Invites = NewUserInviteService(opts...)
 	r.LoadBalancers = NewUserLoadBalancerService(opts...)

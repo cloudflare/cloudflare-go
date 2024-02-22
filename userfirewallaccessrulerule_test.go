@@ -29,7 +29,7 @@ func TestUserFirewallAccessRuleRuleNewWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Users.Firewall.AccessRules.Rules.New(context.TODO(), cloudflare.UserFirewallAccessRuleRuleNewParams{
+	_, err := client.User.Firewall.AccessRules.Rules.New(context.TODO(), cloudflare.UserFirewallAccessRuleRuleNewParams{
 		Configuration: cloudflare.F[cloudflare.UserFirewallAccessRuleRuleNewParamsConfiguration](cloudflare.UserFirewallAccessRuleRuleNewParamsConfigurationLegacyJhsIPConfiguration(cloudflare.UserFirewallAccessRuleRuleNewParamsConfigurationLegacyJhsIPConfiguration{
 			Target: cloudflare.F(cloudflare.UserFirewallAccessRuleRuleNewParamsConfigurationLegacyJhsIPConfigurationTargetIP),
 			Value:  cloudflare.F("198.51.100.4"),
@@ -62,7 +62,7 @@ func TestUserFirewallAccessRuleRuleListWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Users.Firewall.AccessRules.Rules.List(context.TODO(), cloudflare.UserFirewallAccessRuleRuleListParams{
+	_, err := client.User.Firewall.AccessRules.Rules.List(context.TODO(), cloudflare.UserFirewallAccessRuleRuleListParams{
 		Direction: cloudflare.F(cloudflare.UserFirewallAccessRuleRuleListParamsDirectionDesc),
 		EgsPagination: cloudflare.F(cloudflare.UserFirewallAccessRuleRuleListParamsEgsPagination{
 			Json: cloudflare.F(cloudflare.UserFirewallAccessRuleRuleListParamsEgsPaginationJson{
@@ -106,7 +106,7 @@ func TestUserFirewallAccessRuleRuleDelete(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Users.Firewall.AccessRules.Rules.Delete(context.TODO(), "92f17202ed8bd63d69a66b86a49a8f6b")
+	_, err := client.User.Firewall.AccessRules.Rules.Delete(context.TODO(), "92f17202ed8bd63d69a66b86a49a8f6b")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -132,7 +132,7 @@ func TestUserFirewallAccessRuleRuleEditWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Users.Firewall.AccessRules.Rules.Edit(
+	_, err := client.User.Firewall.AccessRules.Rules.Edit(
 		context.TODO(),
 		"92f17202ed8bd63d69a66b86a49a8f6b",
 		cloudflare.UserFirewallAccessRuleRuleEditParams{

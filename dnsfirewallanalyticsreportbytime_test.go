@@ -7,13 +7,14 @@ import (
 	"errors"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/testutil"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestUserLoadBalancerPoolReferenceList(t *testing.T) {
+func TestDNSFirewallAnalyticsReportBytimeListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,7 +30,21 @@ func TestUserLoadBalancerPoolReferenceList(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Users.LoadBalancers.Pools.References.List(context.TODO(), "17b5962d775c646f3f9725cbc7a53df4")
+	_, err := client.DNS.Firewall.Analytics.Reports.Bytimes.List(
+		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.DNSFirewallAnalyticsReportBytimeListParams{
+			Dimensions: cloudflare.F("queryType"),
+			Filters:    cloudflare.F("responseCode==NOERROR,queryType==A"),
+			Limit:      cloudflare.F(int64(100)),
+			Metrics:    cloudflare.F("queryCount,uncachedCount"),
+			Since:      cloudflare.F(time.Now()),
+			Sort:       cloudflare.F("+responseCode,-queryName"),
+			TimeDelta:  cloudflare.F(cloudflare.DNSFirewallAnalyticsReportBytimeListParamsTimeDeltaHour),
+			Until:      cloudflare.F(time.Now()),
+		},
+	)
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

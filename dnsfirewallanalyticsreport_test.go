@@ -7,13 +7,14 @@ import (
 	"errors"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/testutil"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestUserLoadBalancerPoolPreviewNewWithOptionalParams(t *testing.T) {
+func TestDNSFirewallAnalyticsReportListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,33 +30,18 @@ func TestUserLoadBalancerPoolPreviewNewWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Users.LoadBalancers.Pools.Previews.New(
+	_, err := client.DNS.Firewall.Analytics.Reports.List(
 		context.TODO(),
-		"17b5962d775c646f3f9725cbc7a53df4",
-		cloudflare.UserLoadBalancerPoolPreviewNewParams{
-			ExpectedCodes:   cloudflare.F("2xx"),
-			AllowInsecure:   cloudflare.F(true),
-			ConsecutiveDown: cloudflare.F(int64(0)),
-			ConsecutiveUp:   cloudflare.F(int64(0)),
-			Description:     cloudflare.F("Login page monitor"),
-			ExpectedBody:    cloudflare.F("alive"),
-			FollowRedirects: cloudflare.F(true),
-			Header: cloudflare.F[any](map[string]interface{}{
-				"Host": map[string]interface{}{
-					"0": "example.com",
-				},
-				"X-App-ID": map[string]interface{}{
-					"0": "abc123",
-				},
-			}),
-			Interval:  cloudflare.F(int64(0)),
-			Method:    cloudflare.F("GET"),
-			Path:      cloudflare.F("/health"),
-			Port:      cloudflare.F(int64(0)),
-			ProbeZone: cloudflare.F("example.com"),
-			Retries:   cloudflare.F(int64(0)),
-			Timeout:   cloudflare.F(int64(0)),
-			Type:      cloudflare.F(cloudflare.UserLoadBalancerPoolPreviewNewParamsTypeHTTPS),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.DNSFirewallAnalyticsReportListParams{
+			Dimensions: cloudflare.F("queryType"),
+			Filters:    cloudflare.F("responseCode==NOERROR,queryType==A"),
+			Limit:      cloudflare.F(int64(100)),
+			Metrics:    cloudflare.F("queryCount,uncachedCount"),
+			Since:      cloudflare.F(time.Now()),
+			Sort:       cloudflare.F("+responseCode,-queryName"),
+			Until:      cloudflare.F(time.Now()),
 		},
 	)
 	if err != nil {

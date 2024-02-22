@@ -30,7 +30,7 @@ func TestUserTokenNewWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Users.Tokens.New(context.TODO(), cloudflare.UserTokenNewParams{
+	_, err := client.User.Tokens.New(context.TODO(), cloudflare.UserTokenNewParams{
 		Name: cloudflare.F("readonly token"),
 		Policies: cloudflare.F([]cloudflare.UserTokenNewParamsPolicy{{
 			Effect:           cloudflare.F(cloudflare.UserTokenNewParamsPoliciesEffectAllow),
@@ -88,7 +88,7 @@ func TestUserTokenUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Users.Tokens.Update(
+	_, err := client.User.Tokens.Update(
 		context.TODO(),
 		map[string]interface{}{},
 		cloudflare.UserTokenUpdateParams{
@@ -151,7 +151,7 @@ func TestUserTokenListWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Users.Tokens.List(context.TODO(), cloudflare.UserTokenListParams{
+	_, err := client.User.Tokens.List(context.TODO(), cloudflare.UserTokenListParams{
 		Direction: cloudflare.F(cloudflare.UserTokenListParamsDirectionDesc),
 		Page:      cloudflare.F(1.000000),
 		PerPage:   cloudflare.F(5.000000),
@@ -181,7 +181,7 @@ func TestUserTokenDelete(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Users.Tokens.Delete(context.TODO(), map[string]interface{}{})
+	_, err := client.User.Tokens.Delete(context.TODO(), map[string]interface{}{})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -207,7 +207,7 @@ func TestUserTokenGet(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Users.Tokens.Get(context.TODO(), map[string]interface{}{})
+	_, err := client.User.Tokens.Get(context.TODO(), map[string]interface{}{})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -233,7 +233,7 @@ func TestUserTokenVerify(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Users.Tokens.Verify(context.TODO())
+	_, err := client.User.Tokens.Verify(context.TODO())
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

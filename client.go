@@ -17,7 +17,7 @@ type Client struct {
 	Certificates                *CertificateService
 	IPs                         *IPService
 	Memberships                 *MembershipService
-	Users                       *UserService
+	User                        *UserService
 	Zones                       *ZoneService
 	AI                          *AIService
 	LoadBalancers               *LoadBalancerService
@@ -35,7 +35,7 @@ type Client struct {
 	CustomCertificates          *CustomCertificateService
 	CustomHostnames             *CustomHostnameService
 	CustomNameservers           *CustomNameserverService
-	DNSRecords                  *DNSRecordService
+	DNS                         *DNSService
 	DNSSEC                      *DNSSECService
 	Emails                      *EmailService
 	Filters                     *FilterService
@@ -60,12 +60,11 @@ type Client struct {
 	Spectrum                    *SpectrumService
 	Addresses                   *AddressService
 	AuditLogs                   *AuditLogService
-	Billings                    *BillingService
+	Billing                     *BillingService
 	BrandProtection             *BrandProtectionService
 	Tunnels                     *TunnelService
 	Diagnostics                 *DiagnosticService
 	DLP                         *DLPService
-	DNSFirewall                 *DNSFirewallService
 	Images                      *ImageService
 	Intel                       *IntelService
 	Magics                      *MagicService
@@ -139,7 +138,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Certificates = NewCertificateService(opts...)
 	r.IPs = NewIPService(opts...)
 	r.Memberships = NewMembershipService(opts...)
-	r.Users = NewUserService(opts...)
+	r.User = NewUserService(opts...)
 	r.Zones = NewZoneService(opts...)
 	r.AI = NewAIService(opts...)
 	r.LoadBalancers = NewLoadBalancerService(opts...)
@@ -157,7 +156,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.CustomCertificates = NewCustomCertificateService(opts...)
 	r.CustomHostnames = NewCustomHostnameService(opts...)
 	r.CustomNameservers = NewCustomNameserverService(opts...)
-	r.DNSRecords = NewDNSRecordService(opts...)
+	r.DNS = NewDNSService(opts...)
 	r.DNSSEC = NewDNSSECService(opts...)
 	r.Emails = NewEmailService(opts...)
 	r.Filters = NewFilterService(opts...)
@@ -182,12 +181,11 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Spectrum = NewSpectrumService(opts...)
 	r.Addresses = NewAddressService(opts...)
 	r.AuditLogs = NewAuditLogService(opts...)
-	r.Billings = NewBillingService(opts...)
+	r.Billing = NewBillingService(opts...)
 	r.BrandProtection = NewBrandProtectionService(opts...)
 	r.Tunnels = NewTunnelService(opts...)
 	r.Diagnostics = NewDiagnosticService(opts...)
 	r.DLP = NewDLPService(opts...)
-	r.DNSFirewall = NewDNSFirewallService(opts...)
 	r.Images = NewImageService(opts...)
 	r.Intel = NewIntelService(opts...)
 	r.Magics = NewMagicService(opts...)

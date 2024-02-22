@@ -25,8 +25,8 @@ import (
 // this service directly, and instead use the [NewDNSFirewallService] method
 // instead.
 type DNSFirewallService struct {
-	Options      []option.RequestOption
-	DNSAnalytics *DNSFirewallDNSAnalyticService
+	Options   []option.RequestOption
+	Analytics *DNSFirewallAnalyticsService
 }
 
 // NewDNSFirewallService generates a new service that applies the given options to
@@ -35,7 +35,7 @@ type DNSFirewallService struct {
 func NewDNSFirewallService(opts ...option.RequestOption) (r *DNSFirewallService) {
 	r = &DNSFirewallService{}
 	r.Options = opts
-	r.DNSAnalytics = NewDNSFirewallDNSAnalyticService(opts...)
+	r.Analytics = NewDNSFirewallAnalyticsService(opts...)
 	return
 }
 

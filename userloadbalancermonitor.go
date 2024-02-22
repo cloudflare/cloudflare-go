@@ -20,9 +20,7 @@ import (
 // instantiate this service directly, and instead use the
 // [NewUserLoadBalancerMonitorService] method instead.
 type UserLoadBalancerMonitorService struct {
-	Options    []option.RequestOption
-	Previews   *UserLoadBalancerMonitorPreviewService
-	References *UserLoadBalancerMonitorReferenceService
+	Options []option.RequestOption
 }
 
 // NewUserLoadBalancerMonitorService generates a new service that applies the given
@@ -31,8 +29,6 @@ type UserLoadBalancerMonitorService struct {
 func NewUserLoadBalancerMonitorService(opts ...option.RequestOption) (r *UserLoadBalancerMonitorService) {
 	r = &UserLoadBalancerMonitorService{}
 	r.Options = opts
-	r.Previews = NewUserLoadBalancerMonitorPreviewService(opts...)
-	r.References = NewUserLoadBalancerMonitorReferenceService(opts...)
 	return
 }
 
@@ -93,6 +89,33 @@ func (r *UserLoadBalancerMonitorService) Get(ctx context.Context, monitorID stri
 	opts = append(r.Options[:], opts...)
 	var env UserLoadBalancerMonitorGetResponseEnvelope
 	path := fmt.Sprintf("user/load_balancers/monitors/%s", monitorID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Preview pools using the specified monitor with provided monitor details. The
+// returned preview_id can be used in the preview endpoint to retrieve the results.
+func (r *UserLoadBalancerMonitorService) Preview(ctx context.Context, monitorID string, body UserLoadBalancerMonitorPreviewParams, opts ...option.RequestOption) (res *UserLoadBalancerMonitorPreviewResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env UserLoadBalancerMonitorPreviewResponseEnvelope
+	path := fmt.Sprintf("user/load_balancers/monitors/%s/preview", monitorID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Get the list of resources that reference the provided monitor.
+func (r *UserLoadBalancerMonitorService) References(ctx context.Context, monitorID string, opts ...option.RequestOption) (res *[]UserLoadBalancerMonitorReferencesResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env UserLoadBalancerMonitorReferencesResponseEnvelope
+	path := fmt.Sprintf("user/load_balancers/monitors/%s/references", monitorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -512,6 +535,57 @@ const (
 	UserLoadBalancerMonitorGetResponseTypeUdpIcmp  UserLoadBalancerMonitorGetResponseType = "udp_icmp"
 	UserLoadBalancerMonitorGetResponseTypeIcmpPing UserLoadBalancerMonitorGetResponseType = "icmp_ping"
 	UserLoadBalancerMonitorGetResponseTypeSmtp     UserLoadBalancerMonitorGetResponseType = "smtp"
+)
+
+type UserLoadBalancerMonitorPreviewResponse struct {
+	// Monitored pool IDs mapped to their respective names.
+	Pools     map[string]string                          `json:"pools"`
+	PreviewID string                                     `json:"preview_id"`
+	JSON      userLoadBalancerMonitorPreviewResponseJSON `json:"-"`
+}
+
+// userLoadBalancerMonitorPreviewResponseJSON contains the JSON metadata for the
+// struct [UserLoadBalancerMonitorPreviewResponse]
+type userLoadBalancerMonitorPreviewResponseJSON struct {
+	Pools       apijson.Field
+	PreviewID   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserLoadBalancerMonitorPreviewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type UserLoadBalancerMonitorReferencesResponse struct {
+	ReferenceType UserLoadBalancerMonitorReferencesResponseReferenceType `json:"reference_type"`
+	ResourceID    string                                                 `json:"resource_id"`
+	ResourceName  string                                                 `json:"resource_name"`
+	ResourceType  string                                                 `json:"resource_type"`
+	JSON          userLoadBalancerMonitorReferencesResponseJSON          `json:"-"`
+}
+
+// userLoadBalancerMonitorReferencesResponseJSON contains the JSON metadata for the
+// struct [UserLoadBalancerMonitorReferencesResponse]
+type userLoadBalancerMonitorReferencesResponseJSON struct {
+	ReferenceType apijson.Field
+	ResourceID    apijson.Field
+	ResourceName  apijson.Field
+	ResourceType  apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *UserLoadBalancerMonitorReferencesResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type UserLoadBalancerMonitorReferencesResponseReferenceType string
+
+const (
+	UserLoadBalancerMonitorReferencesResponseReferenceTypeStar     UserLoadBalancerMonitorReferencesResponseReferenceType = "*"
+	UserLoadBalancerMonitorReferencesResponseReferenceTypeReferral UserLoadBalancerMonitorReferencesResponseReferenceType = "referral"
+	UserLoadBalancerMonitorReferencesResponseReferenceTypeReferrer UserLoadBalancerMonitorReferencesResponseReferenceType = "referrer"
 )
 
 type UserLoadBalancerMonitorNewParams struct {
@@ -1025,3 +1099,243 @@ type UserLoadBalancerMonitorGetResponseEnvelopeSuccess bool
 const (
 	UserLoadBalancerMonitorGetResponseEnvelopeSuccessTrue UserLoadBalancerMonitorGetResponseEnvelopeSuccess = true
 )
+
+type UserLoadBalancerMonitorPreviewParams struct {
+	// The expected HTTP response code or code range of the health check. This
+	// parameter is only valid for HTTP and HTTPS monitors.
+	ExpectedCodes param.Field[string] `json:"expected_codes,required"`
+	// Do not validate the certificate when monitor use HTTPS. This parameter is
+	// currently only valid for HTTP and HTTPS monitors.
+	AllowInsecure param.Field[bool] `json:"allow_insecure"`
+	// To be marked unhealthy the monitored origin must fail this healthcheck N
+	// consecutive times.
+	ConsecutiveDown param.Field[int64] `json:"consecutive_down"`
+	// To be marked healthy the monitored origin must pass this healthcheck N
+	// consecutive times.
+	ConsecutiveUp param.Field[int64] `json:"consecutive_up"`
+	// Object description.
+	Description param.Field[string] `json:"description"`
+	// A case-insensitive sub-string to look for in the response body. If this string
+	// is not found, the origin will be marked as unhealthy. This parameter is only
+	// valid for HTTP and HTTPS monitors.
+	ExpectedBody param.Field[string] `json:"expected_body"`
+	// Follow redirects if returned by the origin. This parameter is only valid for
+	// HTTP and HTTPS monitors.
+	FollowRedirects param.Field[bool] `json:"follow_redirects"`
+	// The HTTP request headers to send in the health check. It is recommended you set
+	// a Host header by default. The User-Agent header cannot be overridden. This
+	// parameter is only valid for HTTP and HTTPS monitors.
+	Header param.Field[interface{}] `json:"header"`
+	// The interval between each health check. Shorter intervals may improve failover
+	// time, but will increase load on the origins as we check from multiple locations.
+	Interval param.Field[int64] `json:"interval"`
+	// The method to use for the health check. This defaults to 'GET' for HTTP/HTTPS
+	// based checks and 'connection_established' for TCP based health checks.
+	Method param.Field[string] `json:"method"`
+	// The endpoint path you want to conduct a health check against. This parameter is
+	// only valid for HTTP and HTTPS monitors.
+	Path param.Field[string] `json:"path"`
+	// The port number to connect to for the health check. Required for TCP, UDP, and
+	// SMTP checks. HTTP and HTTPS checks should only define the port when using a
+	// non-standard port (HTTP: default 80, HTTPS: default 443).
+	Port param.Field[int64] `json:"port"`
+	// Assign this monitor to emulate the specified zone while probing. This parameter
+	// is only valid for HTTP and HTTPS monitors.
+	ProbeZone param.Field[string] `json:"probe_zone"`
+	// The number of retries to attempt in case of a timeout before marking the origin
+	// as unhealthy. Retries are attempted immediately.
+	Retries param.Field[int64] `json:"retries"`
+	// The timeout (in seconds) before marking the health check as failed.
+	Timeout param.Field[int64] `json:"timeout"`
+	// The protocol to use for the health check. Currently supported protocols are
+	// 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
+	Type param.Field[UserLoadBalancerMonitorPreviewParamsType] `json:"type"`
+}
+
+func (r UserLoadBalancerMonitorPreviewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The protocol to use for the health check. Currently supported protocols are
+// 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
+type UserLoadBalancerMonitorPreviewParamsType string
+
+const (
+	UserLoadBalancerMonitorPreviewParamsTypeHTTP     UserLoadBalancerMonitorPreviewParamsType = "http"
+	UserLoadBalancerMonitorPreviewParamsTypeHTTPS    UserLoadBalancerMonitorPreviewParamsType = "https"
+	UserLoadBalancerMonitorPreviewParamsTypeTcp      UserLoadBalancerMonitorPreviewParamsType = "tcp"
+	UserLoadBalancerMonitorPreviewParamsTypeUdpIcmp  UserLoadBalancerMonitorPreviewParamsType = "udp_icmp"
+	UserLoadBalancerMonitorPreviewParamsTypeIcmpPing UserLoadBalancerMonitorPreviewParamsType = "icmp_ping"
+	UserLoadBalancerMonitorPreviewParamsTypeSmtp     UserLoadBalancerMonitorPreviewParamsType = "smtp"
+)
+
+type UserLoadBalancerMonitorPreviewResponseEnvelope struct {
+	Errors   []UserLoadBalancerMonitorPreviewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []UserLoadBalancerMonitorPreviewResponseEnvelopeMessages `json:"messages,required"`
+	Result   UserLoadBalancerMonitorPreviewResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success UserLoadBalancerMonitorPreviewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    userLoadBalancerMonitorPreviewResponseEnvelopeJSON    `json:"-"`
+}
+
+// userLoadBalancerMonitorPreviewResponseEnvelopeJSON contains the JSON metadata
+// for the struct [UserLoadBalancerMonitorPreviewResponseEnvelope]
+type userLoadBalancerMonitorPreviewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserLoadBalancerMonitorPreviewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type UserLoadBalancerMonitorPreviewResponseEnvelopeErrors struct {
+	Code    int64                                                    `json:"code,required"`
+	Message string                                                   `json:"message,required"`
+	JSON    userLoadBalancerMonitorPreviewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// userLoadBalancerMonitorPreviewResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [UserLoadBalancerMonitorPreviewResponseEnvelopeErrors]
+type userLoadBalancerMonitorPreviewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserLoadBalancerMonitorPreviewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type UserLoadBalancerMonitorPreviewResponseEnvelopeMessages struct {
+	Code    int64                                                      `json:"code,required"`
+	Message string                                                     `json:"message,required"`
+	JSON    userLoadBalancerMonitorPreviewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// userLoadBalancerMonitorPreviewResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [UserLoadBalancerMonitorPreviewResponseEnvelopeMessages]
+type userLoadBalancerMonitorPreviewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserLoadBalancerMonitorPreviewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type UserLoadBalancerMonitorPreviewResponseEnvelopeSuccess bool
+
+const (
+	UserLoadBalancerMonitorPreviewResponseEnvelopeSuccessTrue UserLoadBalancerMonitorPreviewResponseEnvelopeSuccess = true
+)
+
+type UserLoadBalancerMonitorReferencesResponseEnvelope struct {
+	Errors   []UserLoadBalancerMonitorReferencesResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []UserLoadBalancerMonitorReferencesResponseEnvelopeMessages `json:"messages,required"`
+	// List of resources that reference a given monitor.
+	Result []UserLoadBalancerMonitorReferencesResponse `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success    UserLoadBalancerMonitorReferencesResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo UserLoadBalancerMonitorReferencesResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       userLoadBalancerMonitorReferencesResponseEnvelopeJSON       `json:"-"`
+}
+
+// userLoadBalancerMonitorReferencesResponseEnvelopeJSON contains the JSON metadata
+// for the struct [UserLoadBalancerMonitorReferencesResponseEnvelope]
+type userLoadBalancerMonitorReferencesResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserLoadBalancerMonitorReferencesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type UserLoadBalancerMonitorReferencesResponseEnvelopeErrors struct {
+	Code    int64                                                       `json:"code,required"`
+	Message string                                                      `json:"message,required"`
+	JSON    userLoadBalancerMonitorReferencesResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// userLoadBalancerMonitorReferencesResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct
+// [UserLoadBalancerMonitorReferencesResponseEnvelopeErrors]
+type userLoadBalancerMonitorReferencesResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserLoadBalancerMonitorReferencesResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type UserLoadBalancerMonitorReferencesResponseEnvelopeMessages struct {
+	Code    int64                                                         `json:"code,required"`
+	Message string                                                        `json:"message,required"`
+	JSON    userLoadBalancerMonitorReferencesResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// userLoadBalancerMonitorReferencesResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct
+// [UserLoadBalancerMonitorReferencesResponseEnvelopeMessages]
+type userLoadBalancerMonitorReferencesResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserLoadBalancerMonitorReferencesResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type UserLoadBalancerMonitorReferencesResponseEnvelopeSuccess bool
+
+const (
+	UserLoadBalancerMonitorReferencesResponseEnvelopeSuccessTrue UserLoadBalancerMonitorReferencesResponseEnvelopeSuccess = true
+)
+
+type UserLoadBalancerMonitorReferencesResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                                         `json:"total_count"`
+	JSON       userLoadBalancerMonitorReferencesResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// userLoadBalancerMonitorReferencesResponseEnvelopeResultInfoJSON contains the
+// JSON metadata for the struct
+// [UserLoadBalancerMonitorReferencesResponseEnvelopeResultInfo]
+type userLoadBalancerMonitorReferencesResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserLoadBalancerMonitorReferencesResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}

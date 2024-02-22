@@ -15,7 +15,7 @@ type UserLoadBalancerService struct {
 	Options  []option.RequestOption
 	Monitors *UserLoadBalancerMonitorService
 	Pools    *UserLoadBalancerPoolService
-	Previews *UserLoadBalancerPreviewService
+	Preview  *UserLoadBalancerPreviewService
 }
 
 // NewUserLoadBalancerService generates a new service that applies the given
@@ -26,6 +26,6 @@ func NewUserLoadBalancerService(opts ...option.RequestOption) (r *UserLoadBalanc
 	r.Options = opts
 	r.Monitors = NewUserLoadBalancerMonitorService(opts...)
 	r.Pools = NewUserLoadBalancerPoolService(opts...)
-	r.Previews = NewUserLoadBalancerPreviewService(opts...)
+	r.Preview = NewUserLoadBalancerPreviewService(opts...)
 	return
 }
