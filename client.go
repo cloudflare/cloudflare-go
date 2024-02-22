@@ -26,7 +26,7 @@ type Client struct {
 	Cache                       *CacheService
 	SSL                         *SSLService
 	Subscriptions               *SubscriptionService
-	Acm                         *AcmService
+	ACM                         *ACMService
 	Argo                        *ArgoService
 	AvailablePlans              *AvailablePlanService
 	AvailableRatePlans          *AvailableRatePlanService
@@ -148,7 +148,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Cache = NewCacheService(opts...)
 	r.SSL = NewSSLService(opts...)
 	r.Subscriptions = NewSubscriptionService(opts...)
-	r.Acm = NewAcmService(opts...)
+	r.ACM = NewACMService(opts...)
 	r.Argo = NewArgoService(opts...)
 	r.AvailablePlans = NewAvailablePlanService(opts...)
 	r.AvailableRatePlans = NewAvailableRatePlanService(opts...)
