@@ -172,7 +172,7 @@ func (r *ZarazDefaultGetResponseSettingsContextEnricher) UnmarshalJSON(data []by
 }
 
 // Union satisfied by [ZarazDefaultGetResponseToolsZarazManagedComponent] or
-// [ZarazDefaultGetResponseToolsZarazCustomManagedComponent].
+// [ZarazDefaultGetResponseToolsZarazWorkerVariable].
 type ZarazDefaultGetResponseTool interface {
 	implementsZarazDefaultGetResponseTool()
 }
@@ -341,13 +341,13 @@ func (r *ZarazDefaultGetResponseToolsZarazManagedComponentNeoEvent) UnmarshalJSO
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZarazDefaultGetResponseToolsZarazCustomManagedComponent struct {
+type ZarazDefaultGetResponseToolsZarazWorkerVariable struct {
 	// List of blocking trigger IDs
 	BlockingTriggers []string `json:"blockingTriggers,required"`
 	// Tool's internal name
 	Component string `json:"component,required"`
 	// Default fields for tool's actions
-	DefaultFields map[string]ZarazDefaultGetResponseToolsZarazCustomManagedComponentDefaultField `json:"defaultFields,required"`
+	DefaultFields map[string]ZarazDefaultGetResponseToolsZarazWorkerVariableDefaultField `json:"defaultFields,required"`
 	// Whether tool is enabled
 	Enabled bool `json:"enabled,required"`
 	// Tool's name defined by the user
@@ -355,24 +355,23 @@ type ZarazDefaultGetResponseToolsZarazCustomManagedComponent struct {
 	// List of permissions granted to the component
 	Permissions []string `json:"permissions,required"`
 	// Tool's settings
-	Settings map[string]ZarazDefaultGetResponseToolsZarazCustomManagedComponentSetting `json:"settings,required"`
-	Type     ZarazDefaultGetResponseToolsZarazCustomManagedComponentType               `json:"type,required"`
+	Settings map[string]ZarazDefaultGetResponseToolsZarazWorkerVariableSetting `json:"settings,required"`
+	Type     ZarazDefaultGetResponseToolsZarazWorkerVariableType               `json:"type,required"`
 	// Cloudflare worker that acts as a managed component
-	Worker ZarazDefaultGetResponseToolsZarazCustomManagedComponentWorker `json:"worker,required"`
+	Worker ZarazDefaultGetResponseToolsZarazWorkerVariableWorker `json:"worker,required"`
 	// Actions configured on a tool. Either this or neoEvents field is required.
-	Actions map[string]ZarazDefaultGetResponseToolsZarazCustomManagedComponentAction `json:"actions"`
+	Actions map[string]ZarazDefaultGetResponseToolsZarazWorkerVariableAction `json:"actions"`
 	// Default consent purpose ID
 	DefaultPurpose string `json:"defaultPurpose"`
 	// DEPRECATED - List of actions configured on a tool. Either this or actions field
 	// is required. If both are present, actions field will take precedence.
-	NeoEvents []ZarazDefaultGetResponseToolsZarazCustomManagedComponentNeoEvent `json:"neoEvents"`
-	JSON      zarazDefaultGetResponseToolsZarazCustomManagedComponentJSON       `json:"-"`
+	NeoEvents []ZarazDefaultGetResponseToolsZarazWorkerVariableNeoEvent `json:"neoEvents"`
+	JSON      zarazDefaultGetResponseToolsZarazWorkerVariableJSON       `json:"-"`
 }
 
-// zarazDefaultGetResponseToolsZarazCustomManagedComponentJSON contains the JSON
-// metadata for the struct
-// [ZarazDefaultGetResponseToolsZarazCustomManagedComponent]
-type zarazDefaultGetResponseToolsZarazCustomManagedComponentJSON struct {
+// zarazDefaultGetResponseToolsZarazWorkerVariableJSON contains the JSON metadata
+// for the struct [ZarazDefaultGetResponseToolsZarazWorkerVariable]
+type zarazDefaultGetResponseToolsZarazWorkerVariableJSON struct {
 	BlockingTriggers apijson.Field
 	Component        apijson.Field
 	DefaultFields    apijson.Field
@@ -389,21 +388,20 @@ type zarazDefaultGetResponseToolsZarazCustomManagedComponentJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *ZarazDefaultGetResponseToolsZarazCustomManagedComponent) UnmarshalJSON(data []byte) (err error) {
+func (r *ZarazDefaultGetResponseToolsZarazWorkerVariable) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ZarazDefaultGetResponseToolsZarazCustomManagedComponent) implementsZarazDefaultGetResponseTool() {
-}
+func (r ZarazDefaultGetResponseToolsZarazWorkerVariable) implementsZarazDefaultGetResponseTool() {}
 
 // Union satisfied by [shared.UnionString] or [shared.UnionBool].
-type ZarazDefaultGetResponseToolsZarazCustomManagedComponentDefaultField interface {
-	ImplementsZarazDefaultGetResponseToolsZarazCustomManagedComponentDefaultField()
+type ZarazDefaultGetResponseToolsZarazWorkerVariableDefaultField interface {
+	ImplementsZarazDefaultGetResponseToolsZarazWorkerVariableDefaultField()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ZarazDefaultGetResponseToolsZarazCustomManagedComponentDefaultField)(nil)).Elem(),
+		reflect.TypeOf((*ZarazDefaultGetResponseToolsZarazWorkerVariableDefaultField)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -421,13 +419,13 @@ func init() {
 }
 
 // Union satisfied by [shared.UnionString] or [shared.UnionBool].
-type ZarazDefaultGetResponseToolsZarazCustomManagedComponentSetting interface {
-	ImplementsZarazDefaultGetResponseToolsZarazCustomManagedComponentSetting()
+type ZarazDefaultGetResponseToolsZarazWorkerVariableSetting interface {
+	ImplementsZarazDefaultGetResponseToolsZarazWorkerVariableSetting()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ZarazDefaultGetResponseToolsZarazCustomManagedComponentSetting)(nil)).Elem(),
+		reflect.TypeOf((*ZarazDefaultGetResponseToolsZarazWorkerVariableSetting)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -444,34 +442,33 @@ func init() {
 	)
 }
 
-type ZarazDefaultGetResponseToolsZarazCustomManagedComponentType string
+type ZarazDefaultGetResponseToolsZarazWorkerVariableType string
 
 const (
-	ZarazDefaultGetResponseToolsZarazCustomManagedComponentTypeCustomMc ZarazDefaultGetResponseToolsZarazCustomManagedComponentType = "custom-mc"
+	ZarazDefaultGetResponseToolsZarazWorkerVariableTypeCustomMc ZarazDefaultGetResponseToolsZarazWorkerVariableType = "custom-mc"
 )
 
 // Cloudflare worker that acts as a managed component
-type ZarazDefaultGetResponseToolsZarazCustomManagedComponentWorker struct {
-	EscapedWorkerName string                                                            `json:"escapedWorkerName,required"`
-	WorkerTag         string                                                            `json:"workerTag,required"`
-	JSON              zarazDefaultGetResponseToolsZarazCustomManagedComponentWorkerJSON `json:"-"`
+type ZarazDefaultGetResponseToolsZarazWorkerVariableWorker struct {
+	EscapedWorkerName string                                                    `json:"escapedWorkerName,required"`
+	WorkerTag         string                                                    `json:"workerTag,required"`
+	JSON              zarazDefaultGetResponseToolsZarazWorkerVariableWorkerJSON `json:"-"`
 }
 
-// zarazDefaultGetResponseToolsZarazCustomManagedComponentWorkerJSON contains the
-// JSON metadata for the struct
-// [ZarazDefaultGetResponseToolsZarazCustomManagedComponentWorker]
-type zarazDefaultGetResponseToolsZarazCustomManagedComponentWorkerJSON struct {
+// zarazDefaultGetResponseToolsZarazWorkerVariableWorkerJSON contains the JSON
+// metadata for the struct [ZarazDefaultGetResponseToolsZarazWorkerVariableWorker]
+type zarazDefaultGetResponseToolsZarazWorkerVariableWorkerJSON struct {
 	EscapedWorkerName apijson.Field
 	WorkerTag         apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *ZarazDefaultGetResponseToolsZarazCustomManagedComponentWorker) UnmarshalJSON(data []byte) (err error) {
+func (r *ZarazDefaultGetResponseToolsZarazWorkerVariableWorker) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZarazDefaultGetResponseToolsZarazCustomManagedComponentAction struct {
+type ZarazDefaultGetResponseToolsZarazWorkerVariableAction struct {
 	// Tool event type
 	ActionType string `json:"actionType,required"`
 	// List of blocking triggers IDs
@@ -479,14 +476,13 @@ type ZarazDefaultGetResponseToolsZarazCustomManagedComponentAction struct {
 	// Event payload
 	Data interface{} `json:"data,required"`
 	// List of firing triggers IDs
-	FiringTriggers []string                                                          `json:"firingTriggers,required"`
-	JSON           zarazDefaultGetResponseToolsZarazCustomManagedComponentActionJSON `json:"-"`
+	FiringTriggers []string                                                  `json:"firingTriggers,required"`
+	JSON           zarazDefaultGetResponseToolsZarazWorkerVariableActionJSON `json:"-"`
 }
 
-// zarazDefaultGetResponseToolsZarazCustomManagedComponentActionJSON contains the
-// JSON metadata for the struct
-// [ZarazDefaultGetResponseToolsZarazCustomManagedComponentAction]
-type zarazDefaultGetResponseToolsZarazCustomManagedComponentActionJSON struct {
+// zarazDefaultGetResponseToolsZarazWorkerVariableActionJSON contains the JSON
+// metadata for the struct [ZarazDefaultGetResponseToolsZarazWorkerVariableAction]
+type zarazDefaultGetResponseToolsZarazWorkerVariableActionJSON struct {
 	ActionType       apijson.Field
 	BlockingTriggers apijson.Field
 	Data             apijson.Field
@@ -495,11 +491,11 @@ type zarazDefaultGetResponseToolsZarazCustomManagedComponentActionJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *ZarazDefaultGetResponseToolsZarazCustomManagedComponentAction) UnmarshalJSON(data []byte) (err error) {
+func (r *ZarazDefaultGetResponseToolsZarazWorkerVariableAction) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZarazDefaultGetResponseToolsZarazCustomManagedComponentNeoEvent struct {
+type ZarazDefaultGetResponseToolsZarazWorkerVariableNeoEvent struct {
 	// Tool event type
 	ActionType string `json:"actionType,required"`
 	// List of blocking triggers IDs
@@ -507,14 +503,14 @@ type ZarazDefaultGetResponseToolsZarazCustomManagedComponentNeoEvent struct {
 	// Event payload
 	Data interface{} `json:"data,required"`
 	// List of firing triggers IDs
-	FiringTriggers []string                                                            `json:"firingTriggers,required"`
-	JSON           zarazDefaultGetResponseToolsZarazCustomManagedComponentNeoEventJSON `json:"-"`
+	FiringTriggers []string                                                    `json:"firingTriggers,required"`
+	JSON           zarazDefaultGetResponseToolsZarazWorkerVariableNeoEventJSON `json:"-"`
 }
 
-// zarazDefaultGetResponseToolsZarazCustomManagedComponentNeoEventJSON contains the
-// JSON metadata for the struct
-// [ZarazDefaultGetResponseToolsZarazCustomManagedComponentNeoEvent]
-type zarazDefaultGetResponseToolsZarazCustomManagedComponentNeoEventJSON struct {
+// zarazDefaultGetResponseToolsZarazWorkerVariableNeoEventJSON contains the JSON
+// metadata for the struct
+// [ZarazDefaultGetResponseToolsZarazWorkerVariableNeoEvent]
+type zarazDefaultGetResponseToolsZarazWorkerVariableNeoEventJSON struct {
 	ActionType       apijson.Field
 	BlockingTriggers apijson.Field
 	Data             apijson.Field
@@ -523,7 +519,7 @@ type zarazDefaultGetResponseToolsZarazCustomManagedComponentNeoEventJSON struct 
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *ZarazDefaultGetResponseToolsZarazCustomManagedComponentNeoEvent) UnmarshalJSON(data []byte) (err error) {
+func (r *ZarazDefaultGetResponseToolsZarazWorkerVariableNeoEvent) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
