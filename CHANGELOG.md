@@ -4,6 +4,10 @@ NOTES:
 
 * zaraz: replace deprecated neoEvents with Actions on Zaraz Config tools schema ([#1490](https://github.com/cloudflare/cloudflare-go/issues/1490))
 
+ENHANCEMENTS:
+
+* magic-transit: Adds IPsec tunnel healthcheck direction & rate parameters ([#1503](https://github.com/cloudflare/cloudflare-go/issues/1503))
+
 BUG FIXES:
 
 * registrar: Fix request method to call domain list endpoint from POST to GET ([#1506](https://github.com/cloudflare/cloudflare-go/issues/1506))
