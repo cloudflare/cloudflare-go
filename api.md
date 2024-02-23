@@ -298,16 +298,6 @@ Methods:
 - <code title="delete /zones/{zone_id}/hold">client.Zones.Holds.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#ZoneHoldService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#ZoneHoldDeleteParams">ZoneHoldDeleteParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#ZoneHoldDeleteResponse">ZoneHoldDeleteResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /zones/{zone_id}/hold">client.Zones.Holds.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#ZoneHoldService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneID <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#ZoneHoldGetResponse">ZoneHoldGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
-# AI
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIRunResponse">AIRunResponse</a>
-
-Methods:
-
-- <code title="post /accounts/{account_id}/ai/run/{model_name}">client.AI.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIService.Run">Run</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID <a href="https://pkg.go.dev/builtin#string">string</a>, modelName <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIRunParams">AIRunParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AIRunResponse">AIRunResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 # LoadBalancers
 
 Response Types:
@@ -2577,6 +2567,16 @@ Methods:
 - <code title="get /zones/{zone_identifier}/web3/hostnames/{identifier}/ipfs_universal_path/content_list/entries/{content_list_entry_identifier}">client.Web3.Hostnames.IPFSUniversalPaths.ContentLists.Entries.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#Web3HostnameIPFSUniversalPathContentListEntryService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, identifier <a href="https://pkg.go.dev/builtin#string">string</a>, contentListEntryIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#Web3HostnameIPFSUniversalPathContentListEntryGetResponse">Web3HostnameIPFSUniversalPathContentListEntryGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # Workers
+
+## AI
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#WorkerAIRunResponse">WorkerAIRunResponse</a>
+
+Methods:
+
+- <code title="post /accounts/{account_id}/ai/run/{model_name}">client.Workers.AI.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#WorkerAIService.Run">Run</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID <a href="https://pkg.go.dev/builtin#string">string</a>, modelName <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#WorkerAIRunParams">WorkerAIRunParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#WorkerAIRunResponse">WorkerAIRunResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Scripts
 

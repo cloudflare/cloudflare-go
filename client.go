@@ -19,7 +19,6 @@ type Client struct {
 	Memberships                 *MembershipService
 	User                        *UserService
 	Zones                       *ZoneService
-	AI                          *AIService
 	LoadBalancers               *LoadBalancerService
 	Access                      *AccessService
 	DNSAnalytics                *DNSAnalyticService
@@ -138,7 +137,6 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Memberships = NewMembershipService(opts...)
 	r.User = NewUserService(opts...)
 	r.Zones = NewZoneService(opts...)
-	r.AI = NewAIService(opts...)
 	r.LoadBalancers = NewLoadBalancerService(opts...)
 	r.Access = NewAccessService(opts...)
 	r.DNSAnalytics = NewDNSAnalyticService(opts...)
