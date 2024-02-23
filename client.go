@@ -103,7 +103,6 @@ type Client struct {
 	BotManagement               *BotManagementService
 	OriginPostQuantumEncryption *OriginPostQuantumEncryptionService
 	Firewall                    *FirewallService
-	Zaraz                       *ZarazService
 	Speed                       *SpeedService
 	DcvDelegation               *DcvDelegationService
 	Hostnames                   *HostnameService
@@ -224,7 +223,6 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.BotManagement = NewBotManagementService(opts...)
 	r.OriginPostQuantumEncryption = NewOriginPostQuantumEncryptionService(opts...)
 	r.Firewall = NewFirewallService(opts...)
-	r.Zaraz = NewZarazService(opts...)
 	r.Speed = NewSpeedService(opts...)
 	r.DcvDelegation = NewDcvDelegationService(opts...)
 	r.Hostnames = NewHostnameService(opts...)

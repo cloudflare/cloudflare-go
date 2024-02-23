@@ -186,75 +186,10 @@ func (UnionString) ImplementsVectorizeIndexDeleteResponse()                     
 func (UnionString) ImplementsRadarRankingTimeseriesGroupsResponseSerie0()                         {}
 func (UnionString) ImplementsOriginPostQuantumEncryptionUpdateResponse()                          {}
 func (UnionString) ImplementsOriginPostQuantumEncryptionGetResponse()                             {}
-func (UnionString) ImplementsZarazConfigUpdateResponseToolsZarazManagedComponentDefaultField()    {}
-func (UnionString) ImplementsZarazConfigUpdateResponseToolsZarazManagedComponentSetting()         {}
-func (UnionString) ImplementsZarazConfigUpdateResponseToolsZarazWorkerVariableDefaultField()      {}
-func (UnionString) ImplementsZarazConfigUpdateResponseToolsZarazWorkerVariableSetting()           {}
-func (UnionString) ImplementsZarazConfigGetResponseToolsZarazManagedComponentDefaultField()       {}
-func (UnionString) ImplementsZarazConfigGetResponseToolsZarazManagedComponentSetting()            {}
-func (UnionString) ImplementsZarazConfigGetResponseToolsZarazWorkerVariableDefaultField()         {}
-func (UnionString) ImplementsZarazConfigGetResponseToolsZarazWorkerVariableSetting()              {}
-func (UnionString) ImplementsZarazConfigUpdateParamsToolsZarazLegacyToolDefaultFields()           {}
-func (UnionString) ImplementsZarazConfigUpdateParamsToolsZarazManagedComponentDefaultFields()     {}
-func (UnionString) ImplementsZarazConfigUpdateParamsToolsZarazManagedComponentSettings()          {}
-func (UnionString) ImplementsZarazConfigUpdateParamsToolsZarazWorkerVariableDefaultFields()       {}
-func (UnionString) ImplementsZarazConfigUpdateParamsToolsZarazWorkerVariableSettings()            {}
-func (UnionString) ImplementsZarazDefaultGetResponseToolsZarazManagedComponentDefaultField()      {}
-func (UnionString) ImplementsZarazDefaultGetResponseToolsZarazManagedComponentSetting()           {}
-func (UnionString) ImplementsZarazDefaultGetResponseToolsZarazWorkerVariableDefaultField()        {}
-func (UnionString) ImplementsZarazDefaultGetResponseToolsZarazWorkerVariableSetting()             {}
-func (UnionString) ImplementsZarazExportGetResponseToolsZarazManagedComponentDefaultField()       {}
-func (UnionString) ImplementsZarazExportGetResponseToolsZarazManagedComponentSetting()            {}
-func (UnionString) ImplementsZarazExportGetResponseToolsZarazWorkerVariableDefaultField()         {}
-func (UnionString) ImplementsZarazExportGetResponseToolsZarazWorkerVariableSetting()              {}
-func (UnionString) ImplementsZarazHistoryUpdateResponseToolsZarazManagedComponentDefaultField()   {}
-func (UnionString) ImplementsZarazHistoryUpdateResponseToolsZarazManagedComponentSetting()        {}
-func (UnionString) ImplementsZarazHistoryUpdateResponseToolsZarazWorkerVariableDefaultField()     {}
-func (UnionString) ImplementsZarazHistoryUpdateResponseToolsZarazWorkerVariableSetting()          {}
-func (UnionString) ImplementsZarazHistoryConfigGetResponseConfigToolsZarazManagedComponentDefaultField() {
-}
-func (UnionString) ImplementsZarazHistoryConfigGetResponseConfigToolsZarazManagedComponentSetting() {}
-func (UnionString) ImplementsZarazHistoryConfigGetResponseConfigToolsZarazWorkerVariableDefaultField() {
-}
-func (UnionString) ImplementsZarazHistoryConfigGetResponseConfigToolsZarazWorkerVariableSetting() {}
 func (UnionString) ImplementsHostnameSettingTLSUpdateResponseValue()                              {}
 func (UnionString) ImplementsHostnameSettingTLSGetResponseValue()                                 {}
 func (UnionString) ImplementsHostnameSettingTLSUpdateParamsValue()                                {}
 func (UnionString) ImplementsSnippetDeleteResponse()                                              {}
-
-type UnionBool bool
-
-func (UnionBool) ImplementsZarazConfigUpdateResponseToolsZarazManagedComponentDefaultField()  {}
-func (UnionBool) ImplementsZarazConfigUpdateResponseToolsZarazManagedComponentSetting()       {}
-func (UnionBool) ImplementsZarazConfigUpdateResponseToolsZarazWorkerVariableDefaultField()    {}
-func (UnionBool) ImplementsZarazConfigUpdateResponseToolsZarazWorkerVariableSetting()         {}
-func (UnionBool) ImplementsZarazConfigGetResponseToolsZarazManagedComponentDefaultField()     {}
-func (UnionBool) ImplementsZarazConfigGetResponseToolsZarazManagedComponentSetting()          {}
-func (UnionBool) ImplementsZarazConfigGetResponseToolsZarazWorkerVariableDefaultField()       {}
-func (UnionBool) ImplementsZarazConfigGetResponseToolsZarazWorkerVariableSetting()            {}
-func (UnionBool) ImplementsZarazConfigUpdateParamsToolsZarazLegacyToolDefaultFields()         {}
-func (UnionBool) ImplementsZarazConfigUpdateParamsToolsZarazManagedComponentDefaultFields()   {}
-func (UnionBool) ImplementsZarazConfigUpdateParamsToolsZarazManagedComponentSettings()        {}
-func (UnionBool) ImplementsZarazConfigUpdateParamsToolsZarazWorkerVariableDefaultFields()     {}
-func (UnionBool) ImplementsZarazConfigUpdateParamsToolsZarazWorkerVariableSettings()          {}
-func (UnionBool) ImplementsZarazDefaultGetResponseToolsZarazManagedComponentDefaultField()    {}
-func (UnionBool) ImplementsZarazDefaultGetResponseToolsZarazManagedComponentSetting()         {}
-func (UnionBool) ImplementsZarazDefaultGetResponseToolsZarazWorkerVariableDefaultField()      {}
-func (UnionBool) ImplementsZarazDefaultGetResponseToolsZarazWorkerVariableSetting()           {}
-func (UnionBool) ImplementsZarazExportGetResponseToolsZarazManagedComponentDefaultField()     {}
-func (UnionBool) ImplementsZarazExportGetResponseToolsZarazManagedComponentSetting()          {}
-func (UnionBool) ImplementsZarazExportGetResponseToolsZarazWorkerVariableDefaultField()       {}
-func (UnionBool) ImplementsZarazExportGetResponseToolsZarazWorkerVariableSetting()            {}
-func (UnionBool) ImplementsZarazHistoryUpdateResponseToolsZarazManagedComponentDefaultField() {}
-func (UnionBool) ImplementsZarazHistoryUpdateResponseToolsZarazManagedComponentSetting()      {}
-func (UnionBool) ImplementsZarazHistoryUpdateResponseToolsZarazWorkerVariableDefaultField()   {}
-func (UnionBool) ImplementsZarazHistoryUpdateResponseToolsZarazWorkerVariableSetting()        {}
-func (UnionBool) ImplementsZarazHistoryConfigGetResponseConfigToolsZarazManagedComponentDefaultField() {
-}
-func (UnionBool) ImplementsZarazHistoryConfigGetResponseConfigToolsZarazManagedComponentSetting() {}
-func (UnionBool) ImplementsZarazHistoryConfigGetResponseConfigToolsZarazWorkerVariableDefaultField() {
-}
-func (UnionBool) ImplementsZarazHistoryConfigGetResponseConfigToolsZarazWorkerVariableSetting() {}
 
 type UnionInt int64
 
