@@ -72,7 +72,6 @@ type Client struct {
 	MNMs                        *MNMService
 	MTLSCertificates            *MTLSCertificateService
 	Pages                       *PageService
-	PCAPs                       *PCAPService
 	Registrar                   *RegistrarService
 	RequestTracers              *RequestTracerService
 	Roles                       *RoleService
@@ -192,7 +191,6 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.MNMs = NewMNMService(opts...)
 	r.MTLSCertificates = NewMTLSCertificateService(opts...)
 	r.Pages = NewPageService(opts...)
-	r.PCAPs = NewPCAPService(opts...)
 	r.Registrar = NewRegistrarService(opts...)
 	r.RequestTracers = NewRequestTracerService(opts...)
 	r.Roles = NewRoleService(opts...)
