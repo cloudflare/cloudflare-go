@@ -107,6 +107,7 @@ type Client struct {
 	Hostnames                   *HostnameService
 	Snippets                    *SnippetService
 	Calls                       *CallService
+	CloudforceOne               *CloudforceOneService
 }
 
 // NewClient generates a new client with the default option read from the
@@ -226,6 +227,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Hostnames = NewHostnameService(opts...)
 	r.Snippets = NewSnippetService(opts...)
 	r.Calls = NewCallService(opts...)
+	r.CloudforceOne = NewCloudforceOneService(opts...)
 
 	return
 }

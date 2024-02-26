@@ -43,7 +43,7 @@ func NewImageV2Service(opts ...option.RequestOption) (r *ImageV2Service) {
 // images are present.
 func (r *ImageV2Service) List(ctx context.Context, accountID string, query ImageV2ListParams, opts ...option.RequestOption) (res *ImageV2ListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env ImagesImagesListResponseV2
+	var env ImageV2ListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/images/v2", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -52,158 +52,6 @@ func (r *ImageV2Service) List(ctx context.Context, accountID string, query Image
 	res = &env.Result
 	return
 }
-
-type ImagesImagesListResponseV2 struct {
-	Errors   []ImagesImagesListResponseV2Error   `json:"errors,required"`
-	Messages []ImagesImagesListResponseV2Message `json:"messages,required"`
-	Result   ImagesImagesListResponseV2Result    `json:"result,required"`
-	// Whether the API call was successful
-	Success ImagesImagesListResponseV2Success `json:"success,required"`
-	JSON    imagesImagesListResponseV2JSON    `json:"-"`
-}
-
-// imagesImagesListResponseV2JSON contains the JSON metadata for the struct
-// [ImagesImagesListResponseV2]
-type imagesImagesListResponseV2JSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ImagesImagesListResponseV2) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ImagesImagesListResponseV2Error struct {
-	Code    int64                               `json:"code,required"`
-	Message string                              `json:"message,required"`
-	JSON    imagesImagesListResponseV2ErrorJSON `json:"-"`
-}
-
-// imagesImagesListResponseV2ErrorJSON contains the JSON metadata for the struct
-// [ImagesImagesListResponseV2Error]
-type imagesImagesListResponseV2ErrorJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ImagesImagesListResponseV2Error) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ImagesImagesListResponseV2Message struct {
-	Code    int64                                 `json:"code,required"`
-	Message string                                `json:"message,required"`
-	JSON    imagesImagesListResponseV2MessageJSON `json:"-"`
-}
-
-// imagesImagesListResponseV2MessageJSON contains the JSON metadata for the struct
-// [ImagesImagesListResponseV2Message]
-type imagesImagesListResponseV2MessageJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ImagesImagesListResponseV2Message) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ImagesImagesListResponseV2Result struct {
-	// Continuation token to fetch next page. Passed as a query param when requesting
-	// List V2 api endpoint.
-	ContinuationToken string                                  `json:"continuation_token,nullable"`
-	Images            []ImagesImagesListResponseV2ResultImage `json:"images"`
-	JSON              imagesImagesListResponseV2ResultJSON    `json:"-"`
-}
-
-// imagesImagesListResponseV2ResultJSON contains the JSON metadata for the struct
-// [ImagesImagesListResponseV2Result]
-type imagesImagesListResponseV2ResultJSON struct {
-	ContinuationToken apijson.Field
-	Images            apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *ImagesImagesListResponseV2Result) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ImagesImagesListResponseV2ResultImage struct {
-	// Image unique identifier.
-	ID string `json:"id"`
-	// Image file name.
-	Filename string `json:"filename"`
-	// User modifiable key-value store. Can be used for keeping references to another
-	// system of record for managing images. Metadata must not exceed 1024 bytes.
-	Meta interface{} `json:"meta"`
-	// Indicates whether the image can be a accessed only using it's UID. If set to
-	// true, a signed token needs to be generated with a signing key to view the image.
-	RequireSignedURLs bool `json:"requireSignedURLs"`
-	// When the media item was uploaded.
-	Uploaded time.Time `json:"uploaded" format:"date-time"`
-	// Object specifying available variants for an image.
-	Variants []ImagesImagesListResponseV2ResultImagesVariant `json:"variants" format:"uri"`
-	JSON     imagesImagesListResponseV2ResultImageJSON       `json:"-"`
-}
-
-// imagesImagesListResponseV2ResultImageJSON contains the JSON metadata for the
-// struct [ImagesImagesListResponseV2ResultImage]
-type imagesImagesListResponseV2ResultImageJSON struct {
-	ID                apijson.Field
-	Filename          apijson.Field
-	Meta              apijson.Field
-	RequireSignedURLs apijson.Field
-	Uploaded          apijson.Field
-	Variants          apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *ImagesImagesListResponseV2ResultImage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// URI to thumbnail variant for an image.
-//
-// Union satisfied by [shared.UnionString], [shared.UnionString] or
-// [shared.UnionString].
-type ImagesImagesListResponseV2ResultImagesVariant interface {
-	ImplementsImagesImagesListResponseV2ResultImagesVariant()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*ImagesImagesListResponseV2ResultImagesVariant)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-// Whether the API call was successful
-type ImagesImagesListResponseV2Success bool
-
-const (
-	ImagesImagesListResponseV2SuccessTrue ImagesImagesListResponseV2Success = true
-)
 
 type ImageV2ListResponse struct {
 	// Continuation token to fetch next page. Passed as a query param when requesting
@@ -311,4 +159,73 @@ type ImageV2ListParamsSortOrder string
 const (
 	ImageV2ListParamsSortOrderAsc  ImageV2ListParamsSortOrder = "asc"
 	ImageV2ListParamsSortOrderDesc ImageV2ListParamsSortOrder = "desc"
+)
+
+type ImageV2ListResponseEnvelope struct {
+	Errors   []ImageV2ListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ImageV2ListResponseEnvelopeMessages `json:"messages,required"`
+	Result   ImageV2ListResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success ImageV2ListResponseEnvelopeSuccess `json:"success,required"`
+	JSON    imageV2ListResponseEnvelopeJSON    `json:"-"`
+}
+
+// imageV2ListResponseEnvelopeJSON contains the JSON metadata for the struct
+// [ImageV2ListResponseEnvelope]
+type imageV2ListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ImageV2ListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ImageV2ListResponseEnvelopeErrors struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    imageV2ListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// imageV2ListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [ImageV2ListResponseEnvelopeErrors]
+type imageV2ListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ImageV2ListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ImageV2ListResponseEnvelopeMessages struct {
+	Code    int64                                   `json:"code,required"`
+	Message string                                  `json:"message,required"`
+	JSON    imageV2ListResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// imageV2ListResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [ImageV2ListResponseEnvelopeMessages]
+type imageV2ListResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ImageV2ListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type ImageV2ListResponseEnvelopeSuccess bool
+
+const (
+	ImageV2ListResponseEnvelopeSuccessTrue ImageV2ListResponseEnvelopeSuccess = true
 )

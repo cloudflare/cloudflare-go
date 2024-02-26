@@ -19,8 +19,11 @@ func (UnionString) ImplementsUserInviteGetResponse()                            
 func (UnionString) ImplementsUserLoadBalancerPoolHealthResponse()                                 {}
 func (UnionString) ImplementsUserOrganizationGetResponse()                                        {}
 func (UnionString) ImplementsUserSubscriptionUpdateResponse()                                     {}
+func (UnionString) ImplementsUserSubscriptionEditResponse()                                       {}
 func (UnionString) ImplementsUserTokenUpdateResponse()                                            {}
 func (UnionString) ImplementsUserTokenGetResponse()                                               {}
+func (UnionString) ImplementsZoneCustomNameserverUpdateResponse()                                 {}
+func (UnionString) ImplementsZoneCustomNameserverGetResponse()                                    {}
 func (UnionString) ImplementsLoadBalancerPoolHealthGetResponse()                                  {}
 func (UnionString) ImplementsLoadBalancerRegionListResponse()                                     {}
 func (UnionString) ImplementsLoadBalancerRegionGetResponse()                                      {}
@@ -88,6 +91,7 @@ func (UnionString) ImplementsOriginTLSClientAuthDeleteResponse()                
 func (UnionString) ImplementsOriginTLSClientAuthGetResponse()                                     {}
 func (UnionString) ImplementsPageruleNewResponse()                                                {}
 func (UnionString) ImplementsPageruleUpdateResponse()                                             {}
+func (UnionString) ImplementsPageruleEditResponse()                                               {}
 func (UnionString) ImplementsPageruleGetResponse()                                                {}
 func (UnionString) ImplementsRateLimitNewResponse()                                               {}
 func (UnionString) ImplementsRateLimitEditResponse()                                              {}
@@ -97,6 +101,7 @@ func (UnionString) ImplementsWorkerRouteNewResponse()                           
 func (UnionString) ImplementsWorkerRouteDeleteResponse()                                          {}
 func (UnionString) ImplementsWorkerQueueDeleteResponse()                                          {}
 func (UnionString) ImplementsWorkerQueueConsumerDeleteResponse()                                  {}
+func (UnionString) ImplementsWorkerScriptUpdateResponse()                                         {}
 func (UnionString) ImplementsSpectrumAnalyticsEventBytimeGetResponse()                            {}
 func (UnionString) ImplementsSpectrumAnalyticsEventSummaryGetResponse()                           {}
 func (UnionString) ImplementsSpectrumAppNewResponseOriginPort()                                   {}
@@ -126,7 +131,6 @@ func (UnionString) ImplementsImageV1DeleteResponse()                            
 func (UnionString) ImplementsImageV1EditResponseVariant()                                         {}
 func (UnionString) ImplementsImageV1GetResponseVariant()                                          {}
 func (UnionString) ImplementsImageV1VariantDeleteResponse()                                       {}
-func (UnionString) ImplementsImagesImagesListResponseV2ResultImagesVariant()                      {}
 func (UnionString) ImplementsImageV2ListResponseImagesVariant()                                   {}
 func (UnionString) ImplementsIntelIPGetResponseIP()                                               {}
 func (UnionString) ImplementsIntelMiscategorizationNewResponse()                                  {}
@@ -180,6 +184,7 @@ func (UnionString) ImplementsDevicePostureIntegrationDeleteResponse()           
 func (UnionString) ImplementsDeviceRevokeNewResponse()                                            {}
 func (UnionString) ImplementsDeviceUnrevokeNewResponse()                                          {}
 func (UnionString) ImplementsD1DatabaseDeleteResponse()                                           {}
+func (UnionString) ImplementsWARPConnectorTokenResponse()                                         {}
 func (UnionString) ImplementsAddressingPrefixBindingDeleteResponse()                              {}
 func (UnionString) ImplementsHyperdriveConfigDeleteResponse()                                     {}
 func (UnionString) ImplementsVectorizeIndexDeleteResponse()                                       {}
@@ -190,6 +195,9 @@ func (UnionString) ImplementsHostnameSettingTLSUpdateResponseValue()            
 func (UnionString) ImplementsHostnameSettingTLSGetResponseValue()                                 {}
 func (UnionString) ImplementsHostnameSettingTLSUpdateParamsValue()                                {}
 func (UnionString) ImplementsSnippetDeleteResponse()                                              {}
+func (UnionString) ImplementsCloudforceOneRequestDeleteResponse()                                 {}
+func (UnionString) ImplementsCloudforceOneRequestMessageDeleteResponse()                          {}
+func (UnionString) ImplementsCloudforceOneRequestPriorityDeleteResponse()                         {}
 
 type UnionInt int64
 
@@ -263,6 +271,26 @@ func (UnionFloat) ImplementsDNSRecordListResponseDNSRecordsSvcbRecordTTL()     {
 func (UnionFloat) ImplementsDNSRecordListResponseDNSRecordsTlsaRecordTTL()     {}
 func (UnionFloat) ImplementsDNSRecordListResponseDNSRecordsTxtRecordTTL()      {}
 func (UnionFloat) ImplementsDNSRecordListResponseDNSRecordsUriRecordTTL()      {}
+func (UnionFloat) ImplementsDNSRecordEditResponseDNSRecordsARecordTTL()        {}
+func (UnionFloat) ImplementsDNSRecordEditResponseDNSRecordsAaaaRecordTTL()     {}
+func (UnionFloat) ImplementsDNSRecordEditResponseDNSRecordsCaaRecordTTL()      {}
+func (UnionFloat) ImplementsDNSRecordEditResponseDNSRecordsCertRecordTTL()     {}
+func (UnionFloat) ImplementsDNSRecordEditResponseDNSRecordsCnameRecordTTL()    {}
+func (UnionFloat) ImplementsDNSRecordEditResponseDNSRecordsDnskeyRecordTTL()   {}
+func (UnionFloat) ImplementsDNSRecordEditResponseDNSRecordsDsRecordTTL()       {}
+func (UnionFloat) ImplementsDNSRecordEditResponseDNSRecordsHTTPSRecordTTL()    {}
+func (UnionFloat) ImplementsDNSRecordEditResponseDNSRecordsLocRecordTTL()      {}
+func (UnionFloat) ImplementsDNSRecordEditResponseDNSRecordsMxRecordTTL()       {}
+func (UnionFloat) ImplementsDNSRecordEditResponseDNSRecordsNaptrRecordTTL()    {}
+func (UnionFloat) ImplementsDNSRecordEditResponseDNSRecordsNsRecordTTL()       {}
+func (UnionFloat) ImplementsDNSRecordEditResponseDNSRecordsPtrRecordTTL()      {}
+func (UnionFloat) ImplementsDNSRecordEditResponseDNSRecordsSmimeaRecordTTL()   {}
+func (UnionFloat) ImplementsDNSRecordEditResponseDNSRecordsSrvRecordTTL()      {}
+func (UnionFloat) ImplementsDNSRecordEditResponseDNSRecordsSshfpRecordTTL()    {}
+func (UnionFloat) ImplementsDNSRecordEditResponseDNSRecordsSvcbRecordTTL()     {}
+func (UnionFloat) ImplementsDNSRecordEditResponseDNSRecordsTlsaRecordTTL()     {}
+func (UnionFloat) ImplementsDNSRecordEditResponseDNSRecordsTxtRecordTTL()      {}
+func (UnionFloat) ImplementsDNSRecordEditResponseDNSRecordsUriRecordTTL()      {}
 func (UnionFloat) ImplementsDNSRecordGetResponseDNSRecordsARecordTTL()         {}
 func (UnionFloat) ImplementsDNSRecordGetResponseDNSRecordsAaaaRecordTTL()      {}
 func (UnionFloat) ImplementsDNSRecordGetResponseDNSRecordsCaaRecordTTL()       {}
@@ -285,6 +313,7 @@ func (UnionFloat) ImplementsDNSRecordGetResponseDNSRecordsTxtRecordTTL()       {
 func (UnionFloat) ImplementsDNSRecordGetResponseDNSRecordsUriRecordTTL()       {}
 func (UnionFloat) ImplementsDNSRecordNewParamsTTL()                            {}
 func (UnionFloat) ImplementsDNSRecordUpdateParamsTTL()                         {}
+func (UnionFloat) ImplementsDNSRecordEditParamsTTL()                           {}
 func (UnionFloat) ImplementsEmailRoutingDNSGetResponseTTL()                    {}
 func (UnionFloat) ImplementsRadarRankingTimeseriesGroupsResponseSerie0()       {}
 func (UnionFloat) ImplementsHostnameSettingTLSUpdateResponseValue()            {}

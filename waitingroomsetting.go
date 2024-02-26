@@ -31,10 +31,23 @@ func NewWaitingRoomSettingService(opts ...option.RequestOption) (r *WaitingRoomS
 	return
 }
 
+// Update zone-level Waiting Room settings
+func (r *WaitingRoomSettingService) Update(ctx context.Context, zoneIdentifier string, body WaitingRoomSettingUpdateParams, opts ...option.RequestOption) (res *WaitingRoomSettingUpdateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env WaitingRoomSettingUpdateResponseEnvelope
+	path := fmt.Sprintf("zones/%s/waiting_rooms/settings", zoneIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Patch zone-level Waiting Room settings
 func (r *WaitingRoomSettingService) Edit(ctx context.Context, zoneIdentifier string, body WaitingRoomSettingEditParams, opts ...option.RequestOption) (res *WaitingRoomSettingEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env WaitingroomZoneSettingsResponse
+	var env WaitingRoomSettingEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/waiting_rooms/settings", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
@@ -47,7 +60,7 @@ func (r *WaitingRoomSettingService) Edit(ctx context.Context, zoneIdentifier str
 // Get zone-level Waiting Room settings
 func (r *WaitingRoomSettingService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *WaitingRoomSettingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env WaitingroomZoneSettingsResponse
+	var env WaitingRoomSettingGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/waiting_rooms/settings", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -57,40 +70,23 @@ func (r *WaitingRoomSettingService) Get(ctx context.Context, zoneIdentifier stri
 	return
 }
 
-type WaitingroomZoneSettingsResponse struct {
-	Result WaitingroomZoneSettingsResponseResult `json:"result,required"`
-	JSON   waitingroomZoneSettingsResponseJSON   `json:"-"`
-}
-
-// waitingroomZoneSettingsResponseJSON contains the JSON metadata for the struct
-// [WaitingroomZoneSettingsResponse]
-type waitingroomZoneSettingsResponseJSON struct {
-	Result      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WaitingroomZoneSettingsResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WaitingroomZoneSettingsResponseResult struct {
+type WaitingRoomSettingUpdateResponse struct {
 	// Whether to allow verified search engine crawlers to bypass all waiting rooms on
 	// this zone. Verified search engine crawlers will not be tracked or counted by the
 	// waiting room system, and will not appear in waiting room analytics.
-	SearchEngineCrawlerBypass bool                                      `json:"search_engine_crawler_bypass,required"`
-	JSON                      waitingroomZoneSettingsResponseResultJSON `json:"-"`
+	SearchEngineCrawlerBypass bool                                 `json:"search_engine_crawler_bypass,required"`
+	JSON                      waitingRoomSettingUpdateResponseJSON `json:"-"`
 }
 
-// waitingroomZoneSettingsResponseResultJSON contains the JSON metadata for the
-// struct [WaitingroomZoneSettingsResponseResult]
-type waitingroomZoneSettingsResponseResultJSON struct {
+// waitingRoomSettingUpdateResponseJSON contains the JSON metadata for the struct
+// [WaitingRoomSettingUpdateResponse]
+type waitingRoomSettingUpdateResponseJSON struct {
 	SearchEngineCrawlerBypass apijson.Field
 	raw                       string
 	ExtraFields               map[string]apijson.Field
 }
 
-func (r *WaitingroomZoneSettingsResponseResult) UnmarshalJSON(data []byte) (err error) {
+func (r *WaitingRoomSettingUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -134,6 +130,34 @@ func (r *WaitingRoomSettingGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type WaitingRoomSettingUpdateParams struct {
+	// Whether to allow verified search engine crawlers to bypass all waiting rooms on
+	// this zone. Verified search engine crawlers will not be tracked or counted by the
+	// waiting room system, and will not appear in waiting room analytics.
+	SearchEngineCrawlerBypass param.Field[bool] `json:"search_engine_crawler_bypass"`
+}
+
+func (r WaitingRoomSettingUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type WaitingRoomSettingUpdateResponseEnvelope struct {
+	Result WaitingRoomSettingUpdateResponse             `json:"result,required"`
+	JSON   waitingRoomSettingUpdateResponseEnvelopeJSON `json:"-"`
+}
+
+// waitingRoomSettingUpdateResponseEnvelopeJSON contains the JSON metadata for the
+// struct [WaitingRoomSettingUpdateResponseEnvelope]
+type waitingRoomSettingUpdateResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WaitingRoomSettingUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type WaitingRoomSettingEditParams struct {
 	// Whether to allow verified search engine crawlers to bypass all waiting rooms on
 	// this zone. Verified search engine crawlers will not be tracked or counted by the
@@ -143,4 +167,38 @@ type WaitingRoomSettingEditParams struct {
 
 func (r WaitingRoomSettingEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type WaitingRoomSettingEditResponseEnvelope struct {
+	Result WaitingRoomSettingEditResponse             `json:"result,required"`
+	JSON   waitingRoomSettingEditResponseEnvelopeJSON `json:"-"`
+}
+
+// waitingRoomSettingEditResponseEnvelopeJSON contains the JSON metadata for the
+// struct [WaitingRoomSettingEditResponseEnvelope]
+type waitingRoomSettingEditResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WaitingRoomSettingEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WaitingRoomSettingGetResponseEnvelope struct {
+	Result WaitingRoomSettingGetResponse             `json:"result,required"`
+	JSON   waitingRoomSettingGetResponseEnvelopeJSON `json:"-"`
+}
+
+// waitingRoomSettingGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [WaitingRoomSettingGetResponseEnvelope]
+type waitingRoomSettingGetResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WaitingRoomSettingGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }

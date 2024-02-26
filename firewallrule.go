@@ -99,11 +99,11 @@ func (r *FirewallRuleService) Delete(ctx context.Context, zoneIdentifier string,
 	return
 }
 
-// Updates the priority of existing firewall rules.
-func (r *FirewallRuleService) Edit(ctx context.Context, zoneIdentifier string, body FirewallRuleEditParams, opts ...option.RequestOption) (res *[]FirewallRuleEditResponse, err error) {
+// Updates the priority of an existing firewall rule.
+func (r *FirewallRuleService) Edit(ctx context.Context, zoneIdentifier string, id string, body FirewallRuleEditParams, opts ...option.RequestOption) (res *[]FirewallRuleEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FirewallRuleEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/firewall/rules", zoneIdentifier)
+	path := fmt.Sprintf("zones/%s/firewall/rules/%s", zoneIdentifier, id)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
 		return

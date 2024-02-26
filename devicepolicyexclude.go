@@ -57,6 +57,20 @@ func (r *DevicePolicyExcludeService) List(ctx context.Context, accountID interfa
 	return
 }
 
+// Fetches the list of routes excluded from the WARP client's tunnel for a specific
+// device settings profile.
+func (r *DevicePolicyExcludeService) Get(ctx context.Context, accountID interface{}, policyID string, opts ...option.RequestOption) (res *[]DevicePolicyExcludeGetResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env DevicePolicyExcludeGetResponseEnvelope
+	path := fmt.Sprintf("accounts/%v/devices/policy/%s/exclude", accountID, policyID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 type DevicePolicyExcludeUpdateResponse struct {
 	// The address in CIDR format to exclude from the tunnel. If `address` is present,
 	// `host` must not be present.
@@ -106,6 +120,32 @@ type devicePolicyExcludeListResponseJSON struct {
 }
 
 func (r *DevicePolicyExcludeListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DevicePolicyExcludeGetResponse struct {
+	// The address in CIDR format to exclude from the tunnel. If `address` is present,
+	// `host` must not be present.
+	Address string `json:"address,required"`
+	// A description of the Split Tunnel item, displayed in the client UI.
+	Description string `json:"description,required"`
+	// The domain name to exclude from the tunnel. If `host` is present, `address` must
+	// not be present.
+	Host string                             `json:"host"`
+	JSON devicePolicyExcludeGetResponseJSON `json:"-"`
+}
+
+// devicePolicyExcludeGetResponseJSON contains the JSON metadata for the struct
+// [DevicePolicyExcludeGetResponse]
+type devicePolicyExcludeGetResponseJSON struct {
+	Address     apijson.Field
+	Description apijson.Field
+	Host        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePolicyExcludeGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -325,5 +365,103 @@ type devicePolicyExcludeListResponseEnvelopeResultInfoJSON struct {
 }
 
 func (r *DevicePolicyExcludeListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DevicePolicyExcludeGetResponseEnvelope struct {
+	Errors   []DevicePolicyExcludeGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DevicePolicyExcludeGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   []DevicePolicyExcludeGetResponse                 `json:"result,required,nullable"`
+	// Whether the API call was successful.
+	Success    DevicePolicyExcludeGetResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo DevicePolicyExcludeGetResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       devicePolicyExcludeGetResponseEnvelopeJSON       `json:"-"`
+}
+
+// devicePolicyExcludeGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [DevicePolicyExcludeGetResponseEnvelope]
+type devicePolicyExcludeGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePolicyExcludeGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DevicePolicyExcludeGetResponseEnvelopeErrors struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    devicePolicyExcludeGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// devicePolicyExcludeGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [DevicePolicyExcludeGetResponseEnvelopeErrors]
+type devicePolicyExcludeGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePolicyExcludeGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DevicePolicyExcludeGetResponseEnvelopeMessages struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    devicePolicyExcludeGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// devicePolicyExcludeGetResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [DevicePolicyExcludeGetResponseEnvelopeMessages]
+type devicePolicyExcludeGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePolicyExcludeGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful.
+type DevicePolicyExcludeGetResponseEnvelopeSuccess bool
+
+const (
+	DevicePolicyExcludeGetResponseEnvelopeSuccessTrue DevicePolicyExcludeGetResponseEnvelopeSuccess = true
+)
+
+type DevicePolicyExcludeGetResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                              `json:"total_count"`
+	JSON       devicePolicyExcludeGetResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// devicePolicyExcludeGetResponseEnvelopeResultInfoJSON contains the JSON metadata
+// for the struct [DevicePolicyExcludeGetResponseEnvelopeResultInfo]
+type devicePolicyExcludeGetResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DevicePolicyExcludeGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

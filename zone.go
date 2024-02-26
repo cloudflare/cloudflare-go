@@ -22,8 +22,9 @@ import (
 // from the environment automatically. You should not instantiate this service
 // directly, and instead use the [NewZoneService] method instead.
 type ZoneService struct {
-	Options []option.RequestOption
-	Holds   *ZoneHoldService
+	Options           []option.RequestOption
+	CustomNameservers *ZoneCustomNameserverService
+	Holds             *ZoneHoldService
 }
 
 // NewZoneService generates a new service that applies the given options to each
@@ -32,6 +33,7 @@ type ZoneService struct {
 func NewZoneService(opts ...option.RequestOption) (r *ZoneService) {
 	r = &ZoneService{}
 	r.Options = opts
+	r.CustomNameservers = NewZoneCustomNameserverService(opts...)
 	r.Holds = NewZoneHoldService(opts...)
 	return
 }

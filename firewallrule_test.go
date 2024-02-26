@@ -166,6 +166,7 @@ func TestFirewallRuleEdit(t *testing.T) {
 	_, err := client.Firewalls.Rules.Edit(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
+		"372e67954025e0ba6aaa6d586b9e0b60",
 		cloudflare.FirewallRuleEditParams{
 			Body: cloudflare.F[any](map[string]interface{}{}),
 		},

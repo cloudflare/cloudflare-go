@@ -16,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/tidwall/gjson"
 )
 
 // WARPConnectorService contains methods and other services that help with
@@ -103,6 +104,20 @@ func (r *WARPConnectorService) Get(ctx context.Context, accountID string, tunnel
 	opts = append(r.Options[:], opts...)
 	var env WARPConnectorGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/warp_connector/%s", accountID, tunnelID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Gets the token used to associate warp device with a specific Warp Connector
+// tunnel.
+func (r *WARPConnectorService) Token(ctx context.Context, accountID string, tunnelID string, opts ...option.RequestOption) (res *WARPConnectorTokenResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env WARPConnectorTokenResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/warp_connector/%s/token", accountID, tunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
@@ -1297,6 +1312,27 @@ const (
 	WARPConnectorGetResponseTunnelWARPConnectorTunnelTunTypeCni           WARPConnectorGetResponseTunnelWARPConnectorTunnelTunType = "cni"
 )
 
+// Union satisfied by [WARPConnectorTokenResponseUnknown],
+// [WARPConnectorTokenResponseArray] or [shared.UnionString].
+type WARPConnectorTokenResponse interface {
+	ImplementsWARPConnectorTokenResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*WARPConnectorTokenResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type WARPConnectorTokenResponseArray []interface{}
+
+func (r WARPConnectorTokenResponseArray) ImplementsWARPConnectorTokenResponse() {}
+
 type WARPConnectorNewParams struct {
 	// A user-friendly name for the tunnel.
 	Name param.Field[string] `json:"name,required"`
@@ -1632,4 +1668,73 @@ type WARPConnectorGetResponseEnvelopeSuccess bool
 
 const (
 	WARPConnectorGetResponseEnvelopeSuccessTrue WARPConnectorGetResponseEnvelopeSuccess = true
+)
+
+type WARPConnectorTokenResponseEnvelope struct {
+	Errors   []WARPConnectorTokenResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WARPConnectorTokenResponseEnvelopeMessages `json:"messages,required"`
+	Result   WARPConnectorTokenResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success WARPConnectorTokenResponseEnvelopeSuccess `json:"success,required"`
+	JSON    warpConnectorTokenResponseEnvelopeJSON    `json:"-"`
+}
+
+// warpConnectorTokenResponseEnvelopeJSON contains the JSON metadata for the struct
+// [WARPConnectorTokenResponseEnvelope]
+type warpConnectorTokenResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WARPConnectorTokenResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WARPConnectorTokenResponseEnvelopeErrors struct {
+	Code    int64                                        `json:"code,required"`
+	Message string                                       `json:"message,required"`
+	JSON    warpConnectorTokenResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// warpConnectorTokenResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [WARPConnectorTokenResponseEnvelopeErrors]
+type warpConnectorTokenResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WARPConnectorTokenResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WARPConnectorTokenResponseEnvelopeMessages struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    warpConnectorTokenResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// warpConnectorTokenResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [WARPConnectorTokenResponseEnvelopeMessages]
+type warpConnectorTokenResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WARPConnectorTokenResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type WARPConnectorTokenResponseEnvelopeSuccess bool
+
+const (
+	WARPConnectorTokenResponseEnvelopeSuccessTrue WARPConnectorTokenResponseEnvelopeSuccess = true
 )

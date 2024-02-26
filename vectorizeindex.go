@@ -86,12 +86,38 @@ func (r *VectorizeIndexService) Delete(ctx context.Context, accountIdentifier st
 	return
 }
 
+// Delete a set of vectors from an index by their vector identifiers.
+func (r *VectorizeIndexService) DeleteByIDs(ctx context.Context, accountIdentifier string, indexName string, body VectorizeIndexDeleteByIDsParams, opts ...option.RequestOption) (res *VectorizeIndexDeleteByIDsResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env VectorizeIndexDeleteByIDsResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/vectorize/indexes/%s/delete-by-ids", accountIdentifier, indexName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Returns the specified Vectorize Index.
 func (r *VectorizeIndexService) Get(ctx context.Context, accountIdentifier string, indexName string, opts ...option.RequestOption) (res *VectorizeIndexGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env VectorizeIndexGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/vectorize/indexes/%s", accountIdentifier, indexName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Get a set of vectors from an index by their vector identifiers.
+func (r *VectorizeIndexService) GetByIDs(ctx context.Context, accountIdentifier string, indexName string, body VectorizeIndexGetByIDsParams, opts ...option.RequestOption) (res *VectorizeIndexGetByIDsResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env VectorizeIndexGetByIDsResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/vectorize/indexes/%s/get-by-ids", accountIdentifier, indexName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -331,6 +357,28 @@ func init() {
 	)
 }
 
+type VectorizeIndexDeleteByIDsResponse struct {
+	// The count of the vectors successfully deleted.
+	Count int64 `json:"count"`
+	// Array of vector identifiers of the vectors that were successfully processed for
+	// deletion.
+	IDs  []string                              `json:"ids"`
+	JSON vectorizeIndexDeleteByIDsResponseJSON `json:"-"`
+}
+
+// vectorizeIndexDeleteByIDsResponseJSON contains the JSON metadata for the struct
+// [VectorizeIndexDeleteByIDsResponse]
+type vectorizeIndexDeleteByIDsResponseJSON struct {
+	Count       apijson.Field
+	IDs         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VectorizeIndexDeleteByIDsResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type VectorizeIndexGetResponse struct {
 	Config VectorizeIndexGetResponseConfig `json:"config"`
 	// Specifies the timestamp the resource was created as an ISO8601 string.
@@ -388,6 +436,8 @@ const (
 	VectorizeIndexGetResponseConfigMetricEuclidean  VectorizeIndexGetResponseConfigMetric = "euclidean"
 	VectorizeIndexGetResponseConfigMetricDotProduct VectorizeIndexGetResponseConfigMetric = "dot-product"
 )
+
+type VectorizeIndexGetByIDsResponse = interface{}
 
 type VectorizeIndexInsertResponse struct {
 	// Specifies the count of the vectors successfully inserted.
@@ -828,6 +878,84 @@ const (
 	VectorizeIndexDeleteResponseEnvelopeSuccessTrue VectorizeIndexDeleteResponseEnvelopeSuccess = true
 )
 
+type VectorizeIndexDeleteByIDsParams struct {
+	// A list of vector identifiers to delete from the index indicated by the path.
+	IDs param.Field[[]string] `json:"ids"`
+}
+
+func (r VectorizeIndexDeleteByIDsParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type VectorizeIndexDeleteByIDsResponseEnvelope struct {
+	Errors   []VectorizeIndexDeleteByIDsResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []VectorizeIndexDeleteByIDsResponseEnvelopeMessages `json:"messages,required"`
+	Result   VectorizeIndexDeleteByIDsResponse                   `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success VectorizeIndexDeleteByIDsResponseEnvelopeSuccess `json:"success,required"`
+	JSON    vectorizeIndexDeleteByIDsResponseEnvelopeJSON    `json:"-"`
+}
+
+// vectorizeIndexDeleteByIDsResponseEnvelopeJSON contains the JSON metadata for the
+// struct [VectorizeIndexDeleteByIDsResponseEnvelope]
+type vectorizeIndexDeleteByIDsResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VectorizeIndexDeleteByIDsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type VectorizeIndexDeleteByIDsResponseEnvelopeErrors struct {
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    vectorizeIndexDeleteByIDsResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// vectorizeIndexDeleteByIDsResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [VectorizeIndexDeleteByIDsResponseEnvelopeErrors]
+type vectorizeIndexDeleteByIDsResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VectorizeIndexDeleteByIDsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type VectorizeIndexDeleteByIDsResponseEnvelopeMessages struct {
+	Code    int64                                                 `json:"code,required"`
+	Message string                                                `json:"message,required"`
+	JSON    vectorizeIndexDeleteByIDsResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// vectorizeIndexDeleteByIDsResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [VectorizeIndexDeleteByIDsResponseEnvelopeMessages]
+type vectorizeIndexDeleteByIDsResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VectorizeIndexDeleteByIDsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type VectorizeIndexDeleteByIDsResponseEnvelopeSuccess bool
+
+const (
+	VectorizeIndexDeleteByIDsResponseEnvelopeSuccessTrue VectorizeIndexDeleteByIDsResponseEnvelopeSuccess = true
+)
+
 type VectorizeIndexGetResponseEnvelope struct {
 	Errors   []VectorizeIndexGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []VectorizeIndexGetResponseEnvelopeMessages `json:"messages,required"`
@@ -895,6 +1023,85 @@ type VectorizeIndexGetResponseEnvelopeSuccess bool
 
 const (
 	VectorizeIndexGetResponseEnvelopeSuccessTrue VectorizeIndexGetResponseEnvelopeSuccess = true
+)
+
+type VectorizeIndexGetByIDsParams struct {
+	// A list of vector identifiers to retrieve from the index indicated by the path.
+	IDs param.Field[[]string] `json:"ids"`
+}
+
+func (r VectorizeIndexGetByIDsParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type VectorizeIndexGetByIDsResponseEnvelope struct {
+	Errors   []VectorizeIndexGetByIDsResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []VectorizeIndexGetByIDsResponseEnvelopeMessages `json:"messages,required"`
+	// Array of vectors with matching ids.
+	Result VectorizeIndexGetByIDsResponse `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success VectorizeIndexGetByIDsResponseEnvelopeSuccess `json:"success,required"`
+	JSON    vectorizeIndexGetByIDsResponseEnvelopeJSON    `json:"-"`
+}
+
+// vectorizeIndexGetByIDsResponseEnvelopeJSON contains the JSON metadata for the
+// struct [VectorizeIndexGetByIDsResponseEnvelope]
+type vectorizeIndexGetByIDsResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VectorizeIndexGetByIDsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type VectorizeIndexGetByIDsResponseEnvelopeErrors struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    vectorizeIndexGetByIDsResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// vectorizeIndexGetByIDsResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [VectorizeIndexGetByIDsResponseEnvelopeErrors]
+type vectorizeIndexGetByIDsResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VectorizeIndexGetByIDsResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type VectorizeIndexGetByIDsResponseEnvelopeMessages struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    vectorizeIndexGetByIDsResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// vectorizeIndexGetByIDsResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [VectorizeIndexGetByIDsResponseEnvelopeMessages]
+type vectorizeIndexGetByIDsResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VectorizeIndexGetByIDsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type VectorizeIndexGetByIDsResponseEnvelopeSuccess bool
+
+const (
+	VectorizeIndexGetByIDsResponseEnvelopeSuccessTrue VectorizeIndexGetByIDsResponseEnvelopeSuccess = true
 )
 
 type VectorizeIndexInsertResponseEnvelope struct {

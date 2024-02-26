@@ -50,6 +50,19 @@ func (r *UserLoadBalancerPoolService) New(ctx context.Context, body UserLoadBala
 	return
 }
 
+// Modify a configured pool.
+func (r *UserLoadBalancerPoolService) Update(ctx context.Context, poolID string, body UserLoadBalancerPoolUpdateParams, opts ...option.RequestOption) (res *UserLoadBalancerPoolUpdateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env UserLoadBalancerPoolUpdateResponseEnvelope
+	path := fmt.Sprintf("user/load_balancers/pools/%s", poolID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // List configured pools.
 func (r *UserLoadBalancerPoolService) List(ctx context.Context, query UserLoadBalancerPoolListParams, opts ...option.RequestOption) (res *[]UserLoadBalancerPoolListResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -496,6 +509,364 @@ type userLoadBalancerPoolNewResponseOriginsHeaderJSON struct {
 }
 
 func (r *UserLoadBalancerPoolNewResponseOriginsHeader) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type UserLoadBalancerPoolUpdateResponse struct {
+	ID string `json:"id"`
+	// A list of regions from which to run health checks. Null means every Cloudflare
+	// data center.
+	CheckRegions []UserLoadBalancerPoolUpdateResponseCheckRegion `json:"check_regions,nullable"`
+	CreatedOn    time.Time                                       `json:"created_on" format:"date-time"`
+	// A human-readable description of the pool.
+	Description string `json:"description"`
+	// This field shows up only if the pool is disabled. This field is set with the
+	// time the pool was disabled at.
+	DisabledAt time.Time `json:"disabled_at" format:"date-time"`
+	// Whether to enable (the default) or disable this pool. Disabled pools will not
+	// receive traffic and are excluded from health checks. Disabling a pool will cause
+	// any load balancers using it to failover to the next pool (if any).
+	Enabled bool `json:"enabled"`
+	// The latitude of the data center containing the origins used in this pool in
+	// decimal degrees. If this is set, longitude must also be set.
+	Latitude float64 `json:"latitude"`
+	// Configures load shedding policies and percentages for the pool.
+	LoadShedding UserLoadBalancerPoolUpdateResponseLoadShedding `json:"load_shedding"`
+	// The longitude of the data center containing the origins used in this pool in
+	// decimal degrees. If this is set, latitude must also be set.
+	Longitude float64 `json:"longitude"`
+	// The minimum number of origins that must be healthy for this pool to serve
+	// traffic. If the number of healthy origins falls below this number, the pool will
+	// be marked unhealthy and will failover to the next available pool.
+	MinimumOrigins int64     `json:"minimum_origins"`
+	ModifiedOn     time.Time `json:"modified_on" format:"date-time"`
+	// The ID of the Monitor to use for checking the health of origins within this
+	// pool.
+	Monitor interface{} `json:"monitor"`
+	// A short name (tag) for the pool. Only alphanumeric characters, hyphens, and
+	// underscores are allowed.
+	Name string `json:"name"`
+	// This field is now deprecated. It has been moved to Cloudflare's Centralized
+	// Notification service
+	// https://developers.cloudflare.com/fundamentals/notifications/. The email address
+	// to send health status notifications to. This can be an individual mailbox or a
+	// mailing list. Multiple emails can be supplied as a comma delimited list.
+	NotificationEmail string `json:"notification_email"`
+	// Filter pool and origin health notifications by resource type or health status.
+	// Use null to reset.
+	NotificationFilter UserLoadBalancerPoolUpdateResponseNotificationFilter `json:"notification_filter,nullable"`
+	// Configures origin steering for the pool. Controls how origins are selected for
+	// new sessions and traffic without session affinity.
+	OriginSteering UserLoadBalancerPoolUpdateResponseOriginSteering `json:"origin_steering"`
+	// The list of origins within this pool. Traffic directed at this pool is balanced
+	// across all currently healthy origins, provided the pool itself is healthy.
+	Origins []UserLoadBalancerPoolUpdateResponseOrigin `json:"origins"`
+	JSON    userLoadBalancerPoolUpdateResponseJSON     `json:"-"`
+}
+
+// userLoadBalancerPoolUpdateResponseJSON contains the JSON metadata for the struct
+// [UserLoadBalancerPoolUpdateResponse]
+type userLoadBalancerPoolUpdateResponseJSON struct {
+	ID                 apijson.Field
+	CheckRegions       apijson.Field
+	CreatedOn          apijson.Field
+	Description        apijson.Field
+	DisabledAt         apijson.Field
+	Enabled            apijson.Field
+	Latitude           apijson.Field
+	LoadShedding       apijson.Field
+	Longitude          apijson.Field
+	MinimumOrigins     apijson.Field
+	ModifiedOn         apijson.Field
+	Monitor            apijson.Field
+	Name               apijson.Field
+	NotificationEmail  apijson.Field
+	NotificationFilter apijson.Field
+	OriginSteering     apijson.Field
+	Origins            apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *UserLoadBalancerPoolUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// WNAM: Western North America, ENAM: Eastern North America, WEU: Western Europe,
+// EEU: Eastern Europe, NSAM: Northern South America, SSAM: Southern South America,
+// OC: Oceania, ME: Middle East, NAF: North Africa, SAF: South Africa, SAS:
+// Southern Asia, SEAS: South East Asia, NEAS: North East Asia, ALL_REGIONS: all
+// regions (ENTERPRISE customers only).
+type UserLoadBalancerPoolUpdateResponseCheckRegion string
+
+const (
+	UserLoadBalancerPoolUpdateResponseCheckRegionWnam       UserLoadBalancerPoolUpdateResponseCheckRegion = "WNAM"
+	UserLoadBalancerPoolUpdateResponseCheckRegionEnam       UserLoadBalancerPoolUpdateResponseCheckRegion = "ENAM"
+	UserLoadBalancerPoolUpdateResponseCheckRegionWeu        UserLoadBalancerPoolUpdateResponseCheckRegion = "WEU"
+	UserLoadBalancerPoolUpdateResponseCheckRegionEeu        UserLoadBalancerPoolUpdateResponseCheckRegion = "EEU"
+	UserLoadBalancerPoolUpdateResponseCheckRegionNsam       UserLoadBalancerPoolUpdateResponseCheckRegion = "NSAM"
+	UserLoadBalancerPoolUpdateResponseCheckRegionSsam       UserLoadBalancerPoolUpdateResponseCheckRegion = "SSAM"
+	UserLoadBalancerPoolUpdateResponseCheckRegionOc         UserLoadBalancerPoolUpdateResponseCheckRegion = "OC"
+	UserLoadBalancerPoolUpdateResponseCheckRegionMe         UserLoadBalancerPoolUpdateResponseCheckRegion = "ME"
+	UserLoadBalancerPoolUpdateResponseCheckRegionNaf        UserLoadBalancerPoolUpdateResponseCheckRegion = "NAF"
+	UserLoadBalancerPoolUpdateResponseCheckRegionSaf        UserLoadBalancerPoolUpdateResponseCheckRegion = "SAF"
+	UserLoadBalancerPoolUpdateResponseCheckRegionSas        UserLoadBalancerPoolUpdateResponseCheckRegion = "SAS"
+	UserLoadBalancerPoolUpdateResponseCheckRegionSeas       UserLoadBalancerPoolUpdateResponseCheckRegion = "SEAS"
+	UserLoadBalancerPoolUpdateResponseCheckRegionNeas       UserLoadBalancerPoolUpdateResponseCheckRegion = "NEAS"
+	UserLoadBalancerPoolUpdateResponseCheckRegionAllRegions UserLoadBalancerPoolUpdateResponseCheckRegion = "ALL_REGIONS"
+)
+
+// Configures load shedding policies and percentages for the pool.
+type UserLoadBalancerPoolUpdateResponseLoadShedding struct {
+	// The percent of traffic to shed from the pool, according to the default policy.
+	// Applies to new sessions and traffic without session affinity.
+	DefaultPercent float64 `json:"default_percent"`
+	// The default policy to use when load shedding. A random policy randomly sheds a
+	// given percent of requests. A hash policy computes a hash over the
+	// CF-Connecting-IP address and sheds all requests originating from a percent of
+	// IPs.
+	DefaultPolicy UserLoadBalancerPoolUpdateResponseLoadSheddingDefaultPolicy `json:"default_policy"`
+	// The percent of existing sessions to shed from the pool, according to the session
+	// policy.
+	SessionPercent float64 `json:"session_percent"`
+	// Only the hash policy is supported for existing sessions (to avoid exponential
+	// decay).
+	SessionPolicy UserLoadBalancerPoolUpdateResponseLoadSheddingSessionPolicy `json:"session_policy"`
+	JSON          userLoadBalancerPoolUpdateResponseLoadSheddingJSON          `json:"-"`
+}
+
+// userLoadBalancerPoolUpdateResponseLoadSheddingJSON contains the JSON metadata
+// for the struct [UserLoadBalancerPoolUpdateResponseLoadShedding]
+type userLoadBalancerPoolUpdateResponseLoadSheddingJSON struct {
+	DefaultPercent apijson.Field
+	DefaultPolicy  apijson.Field
+	SessionPercent apijson.Field
+	SessionPolicy  apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *UserLoadBalancerPoolUpdateResponseLoadShedding) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The default policy to use when load shedding. A random policy randomly sheds a
+// given percent of requests. A hash policy computes a hash over the
+// CF-Connecting-IP address and sheds all requests originating from a percent of
+// IPs.
+type UserLoadBalancerPoolUpdateResponseLoadSheddingDefaultPolicy string
+
+const (
+	UserLoadBalancerPoolUpdateResponseLoadSheddingDefaultPolicyRandom UserLoadBalancerPoolUpdateResponseLoadSheddingDefaultPolicy = "random"
+	UserLoadBalancerPoolUpdateResponseLoadSheddingDefaultPolicyHash   UserLoadBalancerPoolUpdateResponseLoadSheddingDefaultPolicy = "hash"
+)
+
+// Only the hash policy is supported for existing sessions (to avoid exponential
+// decay).
+type UserLoadBalancerPoolUpdateResponseLoadSheddingSessionPolicy string
+
+const (
+	UserLoadBalancerPoolUpdateResponseLoadSheddingSessionPolicyHash UserLoadBalancerPoolUpdateResponseLoadSheddingSessionPolicy = "hash"
+)
+
+// Filter pool and origin health notifications by resource type or health status.
+// Use null to reset.
+type UserLoadBalancerPoolUpdateResponseNotificationFilter struct {
+	// Filter options for a particular resource type (pool or origin). Use null to
+	// reset.
+	Origin UserLoadBalancerPoolUpdateResponseNotificationFilterOrigin `json:"origin,nullable"`
+	// Filter options for a particular resource type (pool or origin). Use null to
+	// reset.
+	Pool UserLoadBalancerPoolUpdateResponseNotificationFilterPool `json:"pool,nullable"`
+	JSON userLoadBalancerPoolUpdateResponseNotificationFilterJSON `json:"-"`
+}
+
+// userLoadBalancerPoolUpdateResponseNotificationFilterJSON contains the JSON
+// metadata for the struct [UserLoadBalancerPoolUpdateResponseNotificationFilter]
+type userLoadBalancerPoolUpdateResponseNotificationFilterJSON struct {
+	Origin      apijson.Field
+	Pool        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserLoadBalancerPoolUpdateResponseNotificationFilter) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Filter options for a particular resource type (pool or origin). Use null to
+// reset.
+type UserLoadBalancerPoolUpdateResponseNotificationFilterOrigin struct {
+	// If set true, disable notifications for this type of resource (pool or origin).
+	Disable bool `json:"disable"`
+	// If present, send notifications only for this health status (e.g. false for only
+	// DOWN events). Use null to reset (all events).
+	Healthy bool                                                           `json:"healthy,nullable"`
+	JSON    userLoadBalancerPoolUpdateResponseNotificationFilterOriginJSON `json:"-"`
+}
+
+// userLoadBalancerPoolUpdateResponseNotificationFilterOriginJSON contains the JSON
+// metadata for the struct
+// [UserLoadBalancerPoolUpdateResponseNotificationFilterOrigin]
+type userLoadBalancerPoolUpdateResponseNotificationFilterOriginJSON struct {
+	Disable     apijson.Field
+	Healthy     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserLoadBalancerPoolUpdateResponseNotificationFilterOrigin) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Filter options for a particular resource type (pool or origin). Use null to
+// reset.
+type UserLoadBalancerPoolUpdateResponseNotificationFilterPool struct {
+	// If set true, disable notifications for this type of resource (pool or origin).
+	Disable bool `json:"disable"`
+	// If present, send notifications only for this health status (e.g. false for only
+	// DOWN events). Use null to reset (all events).
+	Healthy bool                                                         `json:"healthy,nullable"`
+	JSON    userLoadBalancerPoolUpdateResponseNotificationFilterPoolJSON `json:"-"`
+}
+
+// userLoadBalancerPoolUpdateResponseNotificationFilterPoolJSON contains the JSON
+// metadata for the struct
+// [UserLoadBalancerPoolUpdateResponseNotificationFilterPool]
+type userLoadBalancerPoolUpdateResponseNotificationFilterPoolJSON struct {
+	Disable     apijson.Field
+	Healthy     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserLoadBalancerPoolUpdateResponseNotificationFilterPool) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Configures origin steering for the pool. Controls how origins are selected for
+// new sessions and traffic without session affinity.
+type UserLoadBalancerPoolUpdateResponseOriginSteering struct {
+	// The type of origin steering policy to use.
+	//
+	//   - `"random"`: Select an origin randomly.
+	//   - `"hash"`: Select an origin by computing a hash over the CF-Connecting-IP
+	//     address.
+	//   - `"least_outstanding_requests"`: Select an origin by taking into consideration
+	//     origin weights, as well as each origin's number of outstanding requests.
+	//     Origins with more pending requests are weighted proportionately less relative
+	//     to others.
+	//   - `"least_connections"`: Select an origin by taking into consideration origin
+	//     weights, as well as each origin's number of open connections. Origins with
+	//     more open connections are weighted proportionately less relative to others.
+	//     Supported for HTTP/1 and HTTP/2 connections.
+	Policy UserLoadBalancerPoolUpdateResponseOriginSteeringPolicy `json:"policy"`
+	JSON   userLoadBalancerPoolUpdateResponseOriginSteeringJSON   `json:"-"`
+}
+
+// userLoadBalancerPoolUpdateResponseOriginSteeringJSON contains the JSON metadata
+// for the struct [UserLoadBalancerPoolUpdateResponseOriginSteering]
+type userLoadBalancerPoolUpdateResponseOriginSteeringJSON struct {
+	Policy      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserLoadBalancerPoolUpdateResponseOriginSteering) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of origin steering policy to use.
+//
+//   - `"random"`: Select an origin randomly.
+//   - `"hash"`: Select an origin by computing a hash over the CF-Connecting-IP
+//     address.
+//   - `"least_outstanding_requests"`: Select an origin by taking into consideration
+//     origin weights, as well as each origin's number of outstanding requests.
+//     Origins with more pending requests are weighted proportionately less relative
+//     to others.
+//   - `"least_connections"`: Select an origin by taking into consideration origin
+//     weights, as well as each origin's number of open connections. Origins with
+//     more open connections are weighted proportionately less relative to others.
+//     Supported for HTTP/1 and HTTP/2 connections.
+type UserLoadBalancerPoolUpdateResponseOriginSteeringPolicy string
+
+const (
+	UserLoadBalancerPoolUpdateResponseOriginSteeringPolicyRandom                   UserLoadBalancerPoolUpdateResponseOriginSteeringPolicy = "random"
+	UserLoadBalancerPoolUpdateResponseOriginSteeringPolicyHash                     UserLoadBalancerPoolUpdateResponseOriginSteeringPolicy = "hash"
+	UserLoadBalancerPoolUpdateResponseOriginSteeringPolicyLeastOutstandingRequests UserLoadBalancerPoolUpdateResponseOriginSteeringPolicy = "least_outstanding_requests"
+	UserLoadBalancerPoolUpdateResponseOriginSteeringPolicyLeastConnections         UserLoadBalancerPoolUpdateResponseOriginSteeringPolicy = "least_connections"
+)
+
+type UserLoadBalancerPoolUpdateResponseOrigin struct {
+	// The IP address (IPv4 or IPv6) of the origin, or its publicly addressable
+	// hostname. Hostnames entered here should resolve directly to the origin, and not
+	// be a hostname proxied by Cloudflare. To set an internal/reserved address,
+	// virtual_network_id must also be set.
+	Address string `json:"address"`
+	// This field shows up only if the origin is disabled. This field is set with the
+	// time the origin was disabled.
+	DisabledAt time.Time `json:"disabled_at" format:"date-time"`
+	// Whether to enable (the default) this origin within the pool. Disabled origins
+	// will not receive traffic and are excluded from health checks. The origin will
+	// only be disabled for the current pool.
+	Enabled bool `json:"enabled"`
+	// The request header is used to pass additional information with an HTTP request.
+	// Currently supported header is 'Host'.
+	Header UserLoadBalancerPoolUpdateResponseOriginsHeader `json:"header"`
+	// A human-identifiable name for the origin.
+	Name string `json:"name"`
+	// The virtual network subnet ID the origin belongs in. Virtual network must also
+	// belong to the account.
+	VirtualNetworkID string `json:"virtual_network_id"`
+	// The weight of this origin relative to other origins in the pool. Based on the
+	// configured weight the total traffic is distributed among origins within the
+	// pool.
+	//
+	//   - `origin_steering.policy="least_outstanding_requests"`: Use weight to scale the
+	//     origin's outstanding requests.
+	//   - `origin_steering.policy="least_connections"`: Use weight to scale the origin's
+	//     open connections.
+	Weight float64                                      `json:"weight"`
+	JSON   userLoadBalancerPoolUpdateResponseOriginJSON `json:"-"`
+}
+
+// userLoadBalancerPoolUpdateResponseOriginJSON contains the JSON metadata for the
+// struct [UserLoadBalancerPoolUpdateResponseOrigin]
+type userLoadBalancerPoolUpdateResponseOriginJSON struct {
+	Address          apijson.Field
+	DisabledAt       apijson.Field
+	Enabled          apijson.Field
+	Header           apijson.Field
+	Name             apijson.Field
+	VirtualNetworkID apijson.Field
+	Weight           apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *UserLoadBalancerPoolUpdateResponseOrigin) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The request header is used to pass additional information with an HTTP request.
+// Currently supported header is 'Host'.
+type UserLoadBalancerPoolUpdateResponseOriginsHeader struct {
+	// The 'Host' header allows to override the hostname set in the HTTP request.
+	// Current support is 1 'Host' header override per origin.
+	Host []string                                            `json:"Host"`
+	JSON userLoadBalancerPoolUpdateResponseOriginsHeaderJSON `json:"-"`
+}
+
+// userLoadBalancerPoolUpdateResponseOriginsHeaderJSON contains the JSON metadata
+// for the struct [UserLoadBalancerPoolUpdateResponseOriginsHeader]
+type userLoadBalancerPoolUpdateResponseOriginsHeaderJSON struct {
+	Host        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserLoadBalancerPoolUpdateResponseOriginsHeader) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1972,6 +2343,322 @@ type UserLoadBalancerPoolNewResponseEnvelopeSuccess bool
 
 const (
 	UserLoadBalancerPoolNewResponseEnvelopeSuccessTrue UserLoadBalancerPoolNewResponseEnvelopeSuccess = true
+)
+
+type UserLoadBalancerPoolUpdateParams struct {
+	// A short name (tag) for the pool. Only alphanumeric characters, hyphens, and
+	// underscores are allowed.
+	Name param.Field[string] `json:"name,required"`
+	// The list of origins within this pool. Traffic directed at this pool is balanced
+	// across all currently healthy origins, provided the pool itself is healthy.
+	Origins param.Field[[]UserLoadBalancerPoolUpdateParamsOrigin] `json:"origins,required"`
+	// A list of regions from which to run health checks. Null means every Cloudflare
+	// data center.
+	CheckRegions param.Field[[]UserLoadBalancerPoolUpdateParamsCheckRegion] `json:"check_regions"`
+	// A human-readable description of the pool.
+	Description param.Field[string] `json:"description"`
+	// Whether to enable (the default) or disable this pool. Disabled pools will not
+	// receive traffic and are excluded from health checks. Disabling a pool will cause
+	// any load balancers using it to failover to the next pool (if any).
+	Enabled param.Field[bool] `json:"enabled"`
+	// The latitude of the data center containing the origins used in this pool in
+	// decimal degrees. If this is set, longitude must also be set.
+	Latitude param.Field[float64] `json:"latitude"`
+	// Configures load shedding policies and percentages for the pool.
+	LoadShedding param.Field[UserLoadBalancerPoolUpdateParamsLoadShedding] `json:"load_shedding"`
+	// The longitude of the data center containing the origins used in this pool in
+	// decimal degrees. If this is set, latitude must also be set.
+	Longitude param.Field[float64] `json:"longitude"`
+	// The minimum number of origins that must be healthy for this pool to serve
+	// traffic. If the number of healthy origins falls below this number, the pool will
+	// be marked unhealthy and will failover to the next available pool.
+	MinimumOrigins param.Field[int64] `json:"minimum_origins"`
+	// The ID of the Monitor to use for checking the health of origins within this
+	// pool.
+	Monitor param.Field[interface{}] `json:"monitor"`
+	// This field is now deprecated. It has been moved to Cloudflare's Centralized
+	// Notification service
+	// https://developers.cloudflare.com/fundamentals/notifications/. The email address
+	// to send health status notifications to. This can be an individual mailbox or a
+	// mailing list. Multiple emails can be supplied as a comma delimited list.
+	NotificationEmail param.Field[string] `json:"notification_email"`
+	// Filter pool and origin health notifications by resource type or health status.
+	// Use null to reset.
+	NotificationFilter param.Field[UserLoadBalancerPoolUpdateParamsNotificationFilter] `json:"notification_filter"`
+	// Configures origin steering for the pool. Controls how origins are selected for
+	// new sessions and traffic without session affinity.
+	OriginSteering param.Field[UserLoadBalancerPoolUpdateParamsOriginSteering] `json:"origin_steering"`
+}
+
+func (r UserLoadBalancerPoolUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type UserLoadBalancerPoolUpdateParamsOrigin struct {
+	// The IP address (IPv4 or IPv6) of the origin, or its publicly addressable
+	// hostname. Hostnames entered here should resolve directly to the origin, and not
+	// be a hostname proxied by Cloudflare. To set an internal/reserved address,
+	// virtual_network_id must also be set.
+	Address param.Field[string] `json:"address"`
+	// Whether to enable (the default) this origin within the pool. Disabled origins
+	// will not receive traffic and are excluded from health checks. The origin will
+	// only be disabled for the current pool.
+	Enabled param.Field[bool] `json:"enabled"`
+	// The request header is used to pass additional information with an HTTP request.
+	// Currently supported header is 'Host'.
+	Header param.Field[UserLoadBalancerPoolUpdateParamsOriginsHeader] `json:"header"`
+	// A human-identifiable name for the origin.
+	Name param.Field[string] `json:"name"`
+	// The virtual network subnet ID the origin belongs in. Virtual network must also
+	// belong to the account.
+	VirtualNetworkID param.Field[string] `json:"virtual_network_id"`
+	// The weight of this origin relative to other origins in the pool. Based on the
+	// configured weight the total traffic is distributed among origins within the
+	// pool.
+	//
+	//   - `origin_steering.policy="least_outstanding_requests"`: Use weight to scale the
+	//     origin's outstanding requests.
+	//   - `origin_steering.policy="least_connections"`: Use weight to scale the origin's
+	//     open connections.
+	Weight param.Field[float64] `json:"weight"`
+}
+
+func (r UserLoadBalancerPoolUpdateParamsOrigin) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The request header is used to pass additional information with an HTTP request.
+// Currently supported header is 'Host'.
+type UserLoadBalancerPoolUpdateParamsOriginsHeader struct {
+	// The 'Host' header allows to override the hostname set in the HTTP request.
+	// Current support is 1 'Host' header override per origin.
+	Host param.Field[[]string] `json:"Host"`
+}
+
+func (r UserLoadBalancerPoolUpdateParamsOriginsHeader) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// WNAM: Western North America, ENAM: Eastern North America, WEU: Western Europe,
+// EEU: Eastern Europe, NSAM: Northern South America, SSAM: Southern South America,
+// OC: Oceania, ME: Middle East, NAF: North Africa, SAF: South Africa, SAS:
+// Southern Asia, SEAS: South East Asia, NEAS: North East Asia, ALL_REGIONS: all
+// regions (ENTERPRISE customers only).
+type UserLoadBalancerPoolUpdateParamsCheckRegion string
+
+const (
+	UserLoadBalancerPoolUpdateParamsCheckRegionWnam       UserLoadBalancerPoolUpdateParamsCheckRegion = "WNAM"
+	UserLoadBalancerPoolUpdateParamsCheckRegionEnam       UserLoadBalancerPoolUpdateParamsCheckRegion = "ENAM"
+	UserLoadBalancerPoolUpdateParamsCheckRegionWeu        UserLoadBalancerPoolUpdateParamsCheckRegion = "WEU"
+	UserLoadBalancerPoolUpdateParamsCheckRegionEeu        UserLoadBalancerPoolUpdateParamsCheckRegion = "EEU"
+	UserLoadBalancerPoolUpdateParamsCheckRegionNsam       UserLoadBalancerPoolUpdateParamsCheckRegion = "NSAM"
+	UserLoadBalancerPoolUpdateParamsCheckRegionSsam       UserLoadBalancerPoolUpdateParamsCheckRegion = "SSAM"
+	UserLoadBalancerPoolUpdateParamsCheckRegionOc         UserLoadBalancerPoolUpdateParamsCheckRegion = "OC"
+	UserLoadBalancerPoolUpdateParamsCheckRegionMe         UserLoadBalancerPoolUpdateParamsCheckRegion = "ME"
+	UserLoadBalancerPoolUpdateParamsCheckRegionNaf        UserLoadBalancerPoolUpdateParamsCheckRegion = "NAF"
+	UserLoadBalancerPoolUpdateParamsCheckRegionSaf        UserLoadBalancerPoolUpdateParamsCheckRegion = "SAF"
+	UserLoadBalancerPoolUpdateParamsCheckRegionSas        UserLoadBalancerPoolUpdateParamsCheckRegion = "SAS"
+	UserLoadBalancerPoolUpdateParamsCheckRegionSeas       UserLoadBalancerPoolUpdateParamsCheckRegion = "SEAS"
+	UserLoadBalancerPoolUpdateParamsCheckRegionNeas       UserLoadBalancerPoolUpdateParamsCheckRegion = "NEAS"
+	UserLoadBalancerPoolUpdateParamsCheckRegionAllRegions UserLoadBalancerPoolUpdateParamsCheckRegion = "ALL_REGIONS"
+)
+
+// Configures load shedding policies and percentages for the pool.
+type UserLoadBalancerPoolUpdateParamsLoadShedding struct {
+	// The percent of traffic to shed from the pool, according to the default policy.
+	// Applies to new sessions and traffic without session affinity.
+	DefaultPercent param.Field[float64] `json:"default_percent"`
+	// The default policy to use when load shedding. A random policy randomly sheds a
+	// given percent of requests. A hash policy computes a hash over the
+	// CF-Connecting-IP address and sheds all requests originating from a percent of
+	// IPs.
+	DefaultPolicy param.Field[UserLoadBalancerPoolUpdateParamsLoadSheddingDefaultPolicy] `json:"default_policy"`
+	// The percent of existing sessions to shed from the pool, according to the session
+	// policy.
+	SessionPercent param.Field[float64] `json:"session_percent"`
+	// Only the hash policy is supported for existing sessions (to avoid exponential
+	// decay).
+	SessionPolicy param.Field[UserLoadBalancerPoolUpdateParamsLoadSheddingSessionPolicy] `json:"session_policy"`
+}
+
+func (r UserLoadBalancerPoolUpdateParamsLoadShedding) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The default policy to use when load shedding. A random policy randomly sheds a
+// given percent of requests. A hash policy computes a hash over the
+// CF-Connecting-IP address and sheds all requests originating from a percent of
+// IPs.
+type UserLoadBalancerPoolUpdateParamsLoadSheddingDefaultPolicy string
+
+const (
+	UserLoadBalancerPoolUpdateParamsLoadSheddingDefaultPolicyRandom UserLoadBalancerPoolUpdateParamsLoadSheddingDefaultPolicy = "random"
+	UserLoadBalancerPoolUpdateParamsLoadSheddingDefaultPolicyHash   UserLoadBalancerPoolUpdateParamsLoadSheddingDefaultPolicy = "hash"
+)
+
+// Only the hash policy is supported for existing sessions (to avoid exponential
+// decay).
+type UserLoadBalancerPoolUpdateParamsLoadSheddingSessionPolicy string
+
+const (
+	UserLoadBalancerPoolUpdateParamsLoadSheddingSessionPolicyHash UserLoadBalancerPoolUpdateParamsLoadSheddingSessionPolicy = "hash"
+)
+
+// Filter pool and origin health notifications by resource type or health status.
+// Use null to reset.
+type UserLoadBalancerPoolUpdateParamsNotificationFilter struct {
+	// Filter options for a particular resource type (pool or origin). Use null to
+	// reset.
+	Origin param.Field[UserLoadBalancerPoolUpdateParamsNotificationFilterOrigin] `json:"origin"`
+	// Filter options for a particular resource type (pool or origin). Use null to
+	// reset.
+	Pool param.Field[UserLoadBalancerPoolUpdateParamsNotificationFilterPool] `json:"pool"`
+}
+
+func (r UserLoadBalancerPoolUpdateParamsNotificationFilter) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Filter options for a particular resource type (pool or origin). Use null to
+// reset.
+type UserLoadBalancerPoolUpdateParamsNotificationFilterOrigin struct {
+	// If set true, disable notifications for this type of resource (pool or origin).
+	Disable param.Field[bool] `json:"disable"`
+	// If present, send notifications only for this health status (e.g. false for only
+	// DOWN events). Use null to reset (all events).
+	Healthy param.Field[bool] `json:"healthy"`
+}
+
+func (r UserLoadBalancerPoolUpdateParamsNotificationFilterOrigin) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Filter options for a particular resource type (pool or origin). Use null to
+// reset.
+type UserLoadBalancerPoolUpdateParamsNotificationFilterPool struct {
+	// If set true, disable notifications for this type of resource (pool or origin).
+	Disable param.Field[bool] `json:"disable"`
+	// If present, send notifications only for this health status (e.g. false for only
+	// DOWN events). Use null to reset (all events).
+	Healthy param.Field[bool] `json:"healthy"`
+}
+
+func (r UserLoadBalancerPoolUpdateParamsNotificationFilterPool) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Configures origin steering for the pool. Controls how origins are selected for
+// new sessions and traffic without session affinity.
+type UserLoadBalancerPoolUpdateParamsOriginSteering struct {
+	// The type of origin steering policy to use.
+	//
+	//   - `"random"`: Select an origin randomly.
+	//   - `"hash"`: Select an origin by computing a hash over the CF-Connecting-IP
+	//     address.
+	//   - `"least_outstanding_requests"`: Select an origin by taking into consideration
+	//     origin weights, as well as each origin's number of outstanding requests.
+	//     Origins with more pending requests are weighted proportionately less relative
+	//     to others.
+	//   - `"least_connections"`: Select an origin by taking into consideration origin
+	//     weights, as well as each origin's number of open connections. Origins with
+	//     more open connections are weighted proportionately less relative to others.
+	//     Supported for HTTP/1 and HTTP/2 connections.
+	Policy param.Field[UserLoadBalancerPoolUpdateParamsOriginSteeringPolicy] `json:"policy"`
+}
+
+func (r UserLoadBalancerPoolUpdateParamsOriginSteering) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The type of origin steering policy to use.
+//
+//   - `"random"`: Select an origin randomly.
+//   - `"hash"`: Select an origin by computing a hash over the CF-Connecting-IP
+//     address.
+//   - `"least_outstanding_requests"`: Select an origin by taking into consideration
+//     origin weights, as well as each origin's number of outstanding requests.
+//     Origins with more pending requests are weighted proportionately less relative
+//     to others.
+//   - `"least_connections"`: Select an origin by taking into consideration origin
+//     weights, as well as each origin's number of open connections. Origins with
+//     more open connections are weighted proportionately less relative to others.
+//     Supported for HTTP/1 and HTTP/2 connections.
+type UserLoadBalancerPoolUpdateParamsOriginSteeringPolicy string
+
+const (
+	UserLoadBalancerPoolUpdateParamsOriginSteeringPolicyRandom                   UserLoadBalancerPoolUpdateParamsOriginSteeringPolicy = "random"
+	UserLoadBalancerPoolUpdateParamsOriginSteeringPolicyHash                     UserLoadBalancerPoolUpdateParamsOriginSteeringPolicy = "hash"
+	UserLoadBalancerPoolUpdateParamsOriginSteeringPolicyLeastOutstandingRequests UserLoadBalancerPoolUpdateParamsOriginSteeringPolicy = "least_outstanding_requests"
+	UserLoadBalancerPoolUpdateParamsOriginSteeringPolicyLeastConnections         UserLoadBalancerPoolUpdateParamsOriginSteeringPolicy = "least_connections"
+)
+
+type UserLoadBalancerPoolUpdateResponseEnvelope struct {
+	Errors   []UserLoadBalancerPoolUpdateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []UserLoadBalancerPoolUpdateResponseEnvelopeMessages `json:"messages,required"`
+	Result   UserLoadBalancerPoolUpdateResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success UserLoadBalancerPoolUpdateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    userLoadBalancerPoolUpdateResponseEnvelopeJSON    `json:"-"`
+}
+
+// userLoadBalancerPoolUpdateResponseEnvelopeJSON contains the JSON metadata for
+// the struct [UserLoadBalancerPoolUpdateResponseEnvelope]
+type userLoadBalancerPoolUpdateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserLoadBalancerPoolUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type UserLoadBalancerPoolUpdateResponseEnvelopeErrors struct {
+	Code    int64                                                `json:"code,required"`
+	Message string                                               `json:"message,required"`
+	JSON    userLoadBalancerPoolUpdateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// userLoadBalancerPoolUpdateResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [UserLoadBalancerPoolUpdateResponseEnvelopeErrors]
+type userLoadBalancerPoolUpdateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserLoadBalancerPoolUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type UserLoadBalancerPoolUpdateResponseEnvelopeMessages struct {
+	Code    int64                                                  `json:"code,required"`
+	Message string                                                 `json:"message,required"`
+	JSON    userLoadBalancerPoolUpdateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// userLoadBalancerPoolUpdateResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [UserLoadBalancerPoolUpdateResponseEnvelopeMessages]
+type userLoadBalancerPoolUpdateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserLoadBalancerPoolUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type UserLoadBalancerPoolUpdateResponseEnvelopeSuccess bool
+
+const (
+	UserLoadBalancerPoolUpdateResponseEnvelopeSuccessTrue UserLoadBalancerPoolUpdateResponseEnvelopeSuccess = true
 )
 
 type UserLoadBalancerPoolListParams struct {

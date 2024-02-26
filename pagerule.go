@@ -91,6 +91,19 @@ func (r *PageruleService) Delete(ctx context.Context, zoneID string, pageruleID 
 	return
 }
 
+// Updates one or more fields of an existing Page Rule.
+func (r *PageruleService) Edit(ctx context.Context, zoneID string, pageruleID string, body PageruleEditParams, opts ...option.RequestOption) (res *PageruleEditResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env PageruleEditResponseEnvelope
+	path := fmt.Sprintf("zones/%s/pagerules/%s", zoneID, pageruleID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Fetches the details of a Page Rule.
 func (r *PageruleService) Get(ctx context.Context, zoneID string, pageruleID string, opts ...option.RequestOption) (res *PageruleGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -324,6 +337,22 @@ type pageruleDeleteResponseJSON struct {
 
 func (r *PageruleDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+// Union satisfied by [PageruleEditResponseUnknown] or [shared.UnionString].
+type PageruleEditResponse interface {
+	ImplementsPageruleEditResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*PageruleEditResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
 
 // Union satisfied by [PageruleGetResponseUnknown] or [shared.UnionString].
@@ -885,6 +914,183 @@ type PageruleDeleteResponseEnvelopeSuccess bool
 
 const (
 	PageruleDeleteResponseEnvelopeSuccessTrue PageruleDeleteResponseEnvelopeSuccess = true
+)
+
+type PageruleEditParams struct {
+	// The set of actions to perform if the targets of this rule match the request.
+	// Actions can redirect to another URL or override settings, but not both.
+	Actions param.Field[[]PageruleEditParamsAction] `json:"actions"`
+	// The priority of the rule, used to define which Page Rule is processed over
+	// another. A higher number indicates a higher priority. For example, if you have a
+	// catch-all Page Rule (rule A: `/images/*`) but want a more specific Page Rule to
+	// take precedence (rule B: `/images/special/*`), specify a higher priority for
+	// rule B so it overrides rule A.
+	Priority param.Field[int64] `json:"priority"`
+	// The status of the Page Rule.
+	Status param.Field[PageruleEditParamsStatus] `json:"status"`
+	// The rule targets to evaluate on each request.
+	Targets param.Field[[]PageruleEditParamsTarget] `json:"targets"`
+}
+
+func (r PageruleEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type PageruleEditParamsAction struct {
+	// The type of route.
+	Name  param.Field[PageruleEditParamsActionsName]  `json:"name"`
+	Value param.Field[PageruleEditParamsActionsValue] `json:"value"`
+}
+
+func (r PageruleEditParamsAction) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The type of route.
+type PageruleEditParamsActionsName string
+
+const (
+	PageruleEditParamsActionsNameForwardURL PageruleEditParamsActionsName = "forward_url"
+)
+
+type PageruleEditParamsActionsValue struct {
+	// The response type for the URL redirect.
+	Type param.Field[PageruleEditParamsActionsValueType] `json:"type"`
+	// The URL to redirect the request to. Notes: ${num} refers to the position of '\*'
+	// in the constraint value.
+	URL param.Field[string] `json:"url"`
+}
+
+func (r PageruleEditParamsActionsValue) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The response type for the URL redirect.
+type PageruleEditParamsActionsValueType string
+
+const (
+	PageruleEditParamsActionsValueTypeTemporary PageruleEditParamsActionsValueType = "temporary"
+	PageruleEditParamsActionsValueTypePermanent PageruleEditParamsActionsValueType = "permanent"
+)
+
+// The status of the Page Rule.
+type PageruleEditParamsStatus string
+
+const (
+	PageruleEditParamsStatusActive   PageruleEditParamsStatus = "active"
+	PageruleEditParamsStatusDisabled PageruleEditParamsStatus = "disabled"
+)
+
+// A request condition target.
+type PageruleEditParamsTarget struct {
+	// String constraint.
+	Constraint param.Field[PageruleEditParamsTargetsConstraint] `json:"constraint,required"`
+	// A target based on the URL of the request.
+	Target param.Field[PageruleEditParamsTargetsTarget] `json:"target,required"`
+}
+
+func (r PageruleEditParamsTarget) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// String constraint.
+type PageruleEditParamsTargetsConstraint struct {
+	// The matches operator can use asterisks and pipes as wildcard and 'or' operators.
+	Operator param.Field[PageruleEditParamsTargetsConstraintOperator] `json:"operator,required"`
+	// The URL pattern to match against the current request. The pattern may contain up
+	// to four asterisks ('\*') as placeholders.
+	Value param.Field[string] `json:"value,required"`
+}
+
+func (r PageruleEditParamsTargetsConstraint) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// The matches operator can use asterisks and pipes as wildcard and 'or' operators.
+type PageruleEditParamsTargetsConstraintOperator string
+
+const (
+	PageruleEditParamsTargetsConstraintOperatorMatches    PageruleEditParamsTargetsConstraintOperator = "matches"
+	PageruleEditParamsTargetsConstraintOperatorContains   PageruleEditParamsTargetsConstraintOperator = "contains"
+	PageruleEditParamsTargetsConstraintOperatorEquals     PageruleEditParamsTargetsConstraintOperator = "equals"
+	PageruleEditParamsTargetsConstraintOperatorNotEqual   PageruleEditParamsTargetsConstraintOperator = "not_equal"
+	PageruleEditParamsTargetsConstraintOperatorNotContain PageruleEditParamsTargetsConstraintOperator = "not_contain"
+)
+
+// A target based on the URL of the request.
+type PageruleEditParamsTargetsTarget string
+
+const (
+	PageruleEditParamsTargetsTargetURL PageruleEditParamsTargetsTarget = "url"
+)
+
+type PageruleEditResponseEnvelope struct {
+	Errors   []PageruleEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PageruleEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   PageruleEditResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success PageruleEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    pageruleEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// pageruleEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [PageruleEditResponseEnvelope]
+type pageruleEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageruleEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type PageruleEditResponseEnvelopeErrors struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    pageruleEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// pageruleEditResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [PageruleEditResponseEnvelopeErrors]
+type pageruleEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageruleEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type PageruleEditResponseEnvelopeMessages struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    pageruleEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// pageruleEditResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [PageruleEditResponseEnvelopeMessages]
+type pageruleEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PageruleEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type PageruleEditResponseEnvelopeSuccess bool
+
+const (
+	PageruleEditResponseEnvelopeSuccessTrue PageruleEditResponseEnvelopeSuccess = true
 )
 
 type PageruleGetResponseEnvelope struct {

@@ -7,13 +7,14 @@ import (
 	"errors"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/testutil"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestUserLoadBalancerMonitorNewWithOptionalParams(t *testing.T) {
+func TestCloudforceOneRequestNewWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,83 +30,15 @@ func TestUserLoadBalancerMonitorNewWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.User.LoadBalancers.Monitors.New(context.TODO(), cloudflare.UserLoadBalancerMonitorNewParams{
-		ExpectedCodes:   cloudflare.F("2xx"),
-		AllowInsecure:   cloudflare.F(true),
-		ConsecutiveDown: cloudflare.F(int64(0)),
-		ConsecutiveUp:   cloudflare.F(int64(0)),
-		Description:     cloudflare.F("Login page monitor"),
-		ExpectedBody:    cloudflare.F("alive"),
-		FollowRedirects: cloudflare.F(true),
-		Header: cloudflare.F[any](map[string]interface{}{
-			"Host": map[string]interface{}{
-				"0": "example.com",
-			},
-			"X-App-ID": map[string]interface{}{
-				"0": "abc123",
-			},
-		}),
-		Interval:  cloudflare.F(int64(0)),
-		Method:    cloudflare.F("GET"),
-		Path:      cloudflare.F("/health"),
-		Port:      cloudflare.F(int64(0)),
-		ProbeZone: cloudflare.F("example.com"),
-		Retries:   cloudflare.F(int64(0)),
-		Timeout:   cloudflare.F(int64(0)),
-		Type:      cloudflare.F(cloudflare.UserLoadBalancerMonitorNewParamsTypeHTTPS),
-	})
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestUserLoadBalancerMonitorUpdateWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
-	)
-	_, err := client.User.LoadBalancers.Monitors.Update(
+	_, err := client.CloudforceOne.Requests.New(
 		context.TODO(),
-		"f1aba936b94213e5b8dca0c0dbf1f9cc",
-		cloudflare.UserLoadBalancerMonitorUpdateParams{
-			ExpectedCodes:   cloudflare.F("2xx"),
-			AllowInsecure:   cloudflare.F(true),
-			ConsecutiveDown: cloudflare.F(int64(0)),
-			ConsecutiveUp:   cloudflare.F(int64(0)),
-			Description:     cloudflare.F("Login page monitor"),
-			ExpectedBody:    cloudflare.F("alive"),
-			FollowRedirects: cloudflare.F(true),
-			Header: cloudflare.F[any](map[string]interface{}{
-				"Host": map[string]interface{}{
-					"0": "example.com",
-				},
-				"X-App-ID": map[string]interface{}{
-					"0": "abc123",
-				},
-			}),
-			Interval:  cloudflare.F(int64(0)),
-			Method:    cloudflare.F("GET"),
-			Path:      cloudflare.F("/health"),
-			Port:      cloudflare.F(int64(0)),
-			ProbeZone: cloudflare.F("example.com"),
-			Retries:   cloudflare.F(int64(0)),
-			Timeout:   cloudflare.F(int64(0)),
-			Type:      cloudflare.F(cloudflare.UserLoadBalancerMonitorUpdateParamsTypeHTTPS),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.CloudforceOneRequestNewParams{
+			Content:     cloudflare.F("What regions were most effected by the recent DoS?"),
+			Priority:    cloudflare.F("routine"),
+			RequestType: cloudflare.F("Victomology"),
+			Summary:     cloudflare.F("DoS attack"),
+			Tlp:         cloudflare.F(cloudflare.CloudforceOneRequestNewParamsTlpClear),
 		},
 	)
 	if err != nil {
@@ -117,7 +50,7 @@ func TestUserLoadBalancerMonitorUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestUserLoadBalancerMonitorList(t *testing.T) {
+func TestCloudforceOneRequestUpdateWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -133,85 +66,16 @@ func TestUserLoadBalancerMonitorList(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.User.LoadBalancers.Monitors.List(context.TODO())
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestUserLoadBalancerMonitorDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
-	)
-	_, err := client.User.LoadBalancers.Monitors.Delete(context.TODO(), "f1aba936b94213e5b8dca0c0dbf1f9cc")
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestUserLoadBalancerMonitorEditWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
-	)
-	_, err := client.User.LoadBalancers.Monitors.Edit(
+	_, err := client.CloudforceOne.Requests.Update(
 		context.TODO(),
-		"f1aba936b94213e5b8dca0c0dbf1f9cc",
-		cloudflare.UserLoadBalancerMonitorEditParams{
-			ExpectedCodes:   cloudflare.F("2xx"),
-			AllowInsecure:   cloudflare.F(true),
-			ConsecutiveDown: cloudflare.F(int64(0)),
-			ConsecutiveUp:   cloudflare.F(int64(0)),
-			Description:     cloudflare.F("Login page monitor"),
-			ExpectedBody:    cloudflare.F("alive"),
-			FollowRedirects: cloudflare.F(true),
-			Header: cloudflare.F[any](map[string]interface{}{
-				"Host": map[string]interface{}{
-					"0": "example.com",
-				},
-				"X-App-ID": map[string]interface{}{
-					"0": "abc123",
-				},
-			}),
-			Interval:  cloudflare.F(int64(0)),
-			Method:    cloudflare.F("GET"),
-			Path:      cloudflare.F("/health"),
-			Port:      cloudflare.F(int64(0)),
-			ProbeZone: cloudflare.F("example.com"),
-			Retries:   cloudflare.F(int64(0)),
-			Timeout:   cloudflare.F(int64(0)),
-			Type:      cloudflare.F(cloudflare.UserLoadBalancerMonitorEditParamsTypeHTTPS),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		cloudflare.CloudforceOneRequestUpdateParams{
+			Content:     cloudflare.F("What regions were most effected by the recent DoS?"),
+			Priority:    cloudflare.F("routine"),
+			RequestType: cloudflare.F("Victomology"),
+			Summary:     cloudflare.F("DoS attack"),
+			Tlp:         cloudflare.F(cloudflare.CloudforceOneRequestUpdateParamsTlpClear),
 		},
 	)
 	if err != nil {
@@ -223,7 +87,7 @@ func TestUserLoadBalancerMonitorEditWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestUserLoadBalancerMonitorGet(t *testing.T) {
+func TestCloudforceOneRequestListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -239,59 +103,20 @@ func TestUserLoadBalancerMonitorGet(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.User.LoadBalancers.Monitors.Get(context.TODO(), "f1aba936b94213e5b8dca0c0dbf1f9cc")
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestUserLoadBalancerMonitorPreviewWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
-	)
-	_, err := client.User.LoadBalancers.Monitors.Preview(
+	_, err := client.CloudforceOne.Requests.List(
 		context.TODO(),
-		"f1aba936b94213e5b8dca0c0dbf1f9cc",
-		cloudflare.UserLoadBalancerMonitorPreviewParams{
-			ExpectedCodes:   cloudflare.F("2xx"),
-			AllowInsecure:   cloudflare.F(true),
-			ConsecutiveDown: cloudflare.F(int64(0)),
-			ConsecutiveUp:   cloudflare.F(int64(0)),
-			Description:     cloudflare.F("Login page monitor"),
-			ExpectedBody:    cloudflare.F("alive"),
-			FollowRedirects: cloudflare.F(true),
-			Header: cloudflare.F[any](map[string]interface{}{
-				"Host": map[string]interface{}{
-					"0": "example.com",
-				},
-				"X-App-ID": map[string]interface{}{
-					"0": "abc123",
-				},
-			}),
-			Interval:  cloudflare.F(int64(0)),
-			Method:    cloudflare.F("GET"),
-			Path:      cloudflare.F("/health"),
-			Port:      cloudflare.F(int64(0)),
-			ProbeZone: cloudflare.F("example.com"),
-			Retries:   cloudflare.F(int64(0)),
-			Timeout:   cloudflare.F(int64(0)),
-			Type:      cloudflare.F(cloudflare.UserLoadBalancerMonitorPreviewParamsTypeHTTPS),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.CloudforceOneRequestListParams{
+			Page:            cloudflare.F(int64(0)),
+			PerPage:         cloudflare.F(int64(10)),
+			CompletedAfter:  cloudflare.F(time.Now()),
+			CompletedBefore: cloudflare.F(time.Now()),
+			CreatedAfter:    cloudflare.F(time.Now()),
+			CreatedBefore:   cloudflare.F(time.Now()),
+			RequestType:     cloudflare.F("Victomology"),
+			SortBy:          cloudflare.F("created"),
+			SortOrder:       cloudflare.F(cloudflare.CloudforceOneRequestListParamsSortOrderAsc),
+			Status:          cloudflare.F(cloudflare.CloudforceOneRequestListParamsStatusOpen),
 		},
 	)
 	if err != nil {
@@ -303,7 +128,7 @@ func TestUserLoadBalancerMonitorPreviewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestUserLoadBalancerMonitorReferences(t *testing.T) {
+func TestCloudforceOneRequestDelete(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -319,7 +144,119 @@ func TestUserLoadBalancerMonitorReferences(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.User.LoadBalancers.Monitors.References(context.TODO(), "f1aba936b94213e5b8dca0c0dbf1f9cc")
+	_, err := client.CloudforceOne.Requests.Delete(
+		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestCloudforceOneRequestConstants(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
+	)
+	_, err := client.CloudforceOne.Requests.Constants(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestCloudforceOneRequestGet(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
+	)
+	_, err := client.CloudforceOne.Requests.Get(
+		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestCloudforceOneRequestQuota(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
+	)
+	_, err := client.CloudforceOne.Requests.Quota(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestCloudforceOneRequestTypes(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
+	)
+	_, err := client.CloudforceOne.Requests.Types(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

@@ -31,6 +31,19 @@ func NewAccessBookmarkService(opts ...option.RequestOption) (r *AccessBookmarkSe
 	return
 }
 
+// Create a new Bookmark application.
+func (r *AccessBookmarkService) New(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *AccessBookmarkNewResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env AccessBookmarkNewResponseEnvelope
+	path := fmt.Sprintf("accounts/%v/access/bookmarks/%s", identifier, uuid)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Updates a configured Bookmark application.
 func (r *AccessBookmarkService) Update(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *AccessBookmarkUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -81,6 +94,40 @@ func (r *AccessBookmarkService) Get(ctx context.Context, identifier interface{},
 	}
 	res = &env.Result
 	return
+}
+
+type AccessBookmarkNewResponse struct {
+	// The unique identifier for the Bookmark application.
+	ID interface{} `json:"id"`
+	// Displays the application in the App Launcher.
+	AppLauncherVisible bool      `json:"app_launcher_visible"`
+	CreatedAt          time.Time `json:"created_at" format:"date-time"`
+	// The domain of the Bookmark application.
+	Domain string `json:"domain"`
+	// The image URL for the logo shown in the App Launcher dashboard.
+	LogoURL string `json:"logo_url"`
+	// The name of the Bookmark application.
+	Name      string                        `json:"name"`
+	UpdatedAt time.Time                     `json:"updated_at" format:"date-time"`
+	JSON      accessBookmarkNewResponseJSON `json:"-"`
+}
+
+// accessBookmarkNewResponseJSON contains the JSON metadata for the struct
+// [AccessBookmarkNewResponse]
+type accessBookmarkNewResponseJSON struct {
+	ID                 apijson.Field
+	AppLauncherVisible apijson.Field
+	CreatedAt          apijson.Field
+	Domain             apijson.Field
+	LogoURL            apijson.Field
+	Name               apijson.Field
+	UpdatedAt          apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *AccessBookmarkNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type AccessBookmarkUpdateResponse struct {
@@ -202,6 +249,75 @@ type accessBookmarkGetResponseJSON struct {
 func (r *AccessBookmarkGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+type AccessBookmarkNewResponseEnvelope struct {
+	Errors   []AccessBookmarkNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessBookmarkNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   AccessBookmarkNewResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success AccessBookmarkNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    accessBookmarkNewResponseEnvelopeJSON    `json:"-"`
+}
+
+// accessBookmarkNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [AccessBookmarkNewResponseEnvelope]
+type accessBookmarkNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessBookmarkNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessBookmarkNewResponseEnvelopeErrors struct {
+	Code    int64                                       `json:"code,required"`
+	Message string                                      `json:"message,required"`
+	JSON    accessBookmarkNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// accessBookmarkNewResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [AccessBookmarkNewResponseEnvelopeErrors]
+type accessBookmarkNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessBookmarkNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccessBookmarkNewResponseEnvelopeMessages struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    accessBookmarkNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// accessBookmarkNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [AccessBookmarkNewResponseEnvelopeMessages]
+type accessBookmarkNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessBookmarkNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type AccessBookmarkNewResponseEnvelopeSuccess bool
+
+const (
+	AccessBookmarkNewResponseEnvelopeSuccessTrue AccessBookmarkNewResponseEnvelopeSuccess = true
+)
 
 type AccessBookmarkUpdateResponseEnvelope struct {
 	Errors   []AccessBookmarkUpdateResponseEnvelopeErrors   `json:"errors,required"`
