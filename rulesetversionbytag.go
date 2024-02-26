@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 	"github.com/tidwall/gjson"
@@ -34,11 +35,11 @@ func NewRulesetVersionByTagService(opts ...option.RequestOption) (r *RulesetVers
 }
 
 // Fetches the rules of a managed account ruleset version for a given tag.
-func (r *RulesetVersionByTagService) Get(ctx context.Context, accountID string, rulesetID string, rulesetVersion string, ruleTag string, opts ...option.RequestOption) (res *RulesetVersionByTagGetResponse, err error) {
+func (r *RulesetVersionByTagService) Get(ctx context.Context, rulesetID string, rulesetVersion string, ruleTag string, query RulesetVersionByTagGetParams, opts ...option.RequestOption) (res *RulesetVersionByTagGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RulesetVersionByTagGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/rulesets/%s/versions/%s/by_tag/%s", accountID, rulesetID, rulesetVersion, ruleTag)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/rulesets/%s/versions/%s/by_tag/%s", query.AccountID, rulesetID, rulesetVersion, ruleTag)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -776,6 +777,11 @@ type rulesetVersionByTagGetResponseRulesRulesetsSkipRuleLoggingJSON struct {
 
 func (r *RulesetVersionByTagGetResponseRulesRulesetsSkipRuleLogging) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type RulesetVersionByTagGetParams struct {
+	// The unique ID of the account.
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 // A response object.

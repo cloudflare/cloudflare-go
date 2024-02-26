@@ -38,11 +38,11 @@ func NewSettingOriginMaxHTTPVersionService(opts ...option.RequestOption) (r *Set
 // [Enable HTTP/2 to Origin](https://developers.cloudflare.com/cache/how-to/enable-http2-to-origin/),
 // for more information.). The default value is "2" for all plan types except ENT
 // where it is "1"
-func (r *SettingOriginMaxHTTPVersionService) Edit(ctx context.Context, zoneID string, body SettingOriginMaxHTTPVersionEditParams, opts ...option.RequestOption) (res *SettingOriginMaxHTTPVersionEditResponse, err error) {
+func (r *SettingOriginMaxHTTPVersionService) Edit(ctx context.Context, params SettingOriginMaxHTTPVersionEditParams, opts ...option.RequestOption) (res *SettingOriginMaxHTTPVersionEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingOriginMaxHTTPVersionEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/origin_max_http_version", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/origin_max_http_version", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -56,11 +56,11 @@ func (r *SettingOriginMaxHTTPVersionService) Edit(ctx context.Context, zoneID st
 // [Enable HTTP/2 to Origin](https://developers.cloudflare.com/cache/how-to/enable-http2-to-origin/),
 // for more information.). The default value is "2" for all plan types except ENT
 // where it is "1"
-func (r *SettingOriginMaxHTTPVersionService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingOriginMaxHTTPVersionGetResponse, err error) {
+func (r *SettingOriginMaxHTTPVersionService) Get(ctx context.Context, query SettingOriginMaxHTTPVersionGetParams, opts ...option.RequestOption) (res *SettingOriginMaxHTTPVersionGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingOriginMaxHTTPVersionGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/origin_max_http_version", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/origin_max_http_version", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -159,6 +159,8 @@ const (
 )
 
 type SettingOriginMaxHTTPVersionEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the Origin Max HTTP Version Setting.
 	Value param.Field[SettingOriginMaxHTTPVersionEditParamsValue] `json:"value,required"`
 }
@@ -250,6 +252,11 @@ type SettingOriginMaxHTTPVersionEditResponseEnvelopeSuccess bool
 const (
 	SettingOriginMaxHTTPVersionEditResponseEnvelopeSuccessTrue SettingOriginMaxHTTPVersionEditResponseEnvelopeSuccess = true
 )
+
+type SettingOriginMaxHTTPVersionGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type SettingOriginMaxHTTPVersionGetResponseEnvelope struct {
 	Errors   []SettingOriginMaxHTTPVersionGetResponseEnvelopeErrors   `json:"errors,required"`

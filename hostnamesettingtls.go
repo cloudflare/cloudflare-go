@@ -36,11 +36,11 @@ func NewHostnameSettingTLSService(opts ...option.RequestOption) (r *HostnameSett
 }
 
 // Update the tls setting value for the hostname.
-func (r *HostnameSettingTLSService) Update(ctx context.Context, zoneID string, settingID HostnameSettingTLSUpdateParamsSettingID, hostname string, body HostnameSettingTLSUpdateParams, opts ...option.RequestOption) (res *HostnameSettingTLSUpdateResponse, err error) {
+func (r *HostnameSettingTLSService) Update(ctx context.Context, settingID HostnameSettingTLSUpdateParamsSettingID, hostname string, params HostnameSettingTLSUpdateParams, opts ...option.RequestOption) (res *HostnameSettingTLSUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameSettingTLSUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/hostnames/settings/%v/%s", zoneID, settingID, hostname)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/hostnames/settings/%v/%s", params.ZoneID, settingID, hostname)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -49,11 +49,11 @@ func (r *HostnameSettingTLSService) Update(ctx context.Context, zoneID string, s
 }
 
 // Delete the tls setting value for the hostname.
-func (r *HostnameSettingTLSService) Delete(ctx context.Context, zoneID string, settingID HostnameSettingTLSDeleteParamsSettingID, hostname string, opts ...option.RequestOption) (res *HostnameSettingTLSDeleteResponse, err error) {
+func (r *HostnameSettingTLSService) Delete(ctx context.Context, settingID HostnameSettingTLSDeleteParamsSettingID, hostname string, body HostnameSettingTLSDeleteParams, opts ...option.RequestOption) (res *HostnameSettingTLSDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameSettingTLSDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/hostnames/settings/%v/%s", zoneID, settingID, hostname)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/hostnames/settings/%v/%s", body.ZoneID, settingID, hostname)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -62,11 +62,11 @@ func (r *HostnameSettingTLSService) Delete(ctx context.Context, zoneID string, s
 }
 
 // List the requested TLS setting for the hostnames under this zone.
-func (r *HostnameSettingTLSService) Get(ctx context.Context, zoneID string, settingID HostnameSettingTLSGetParamsSettingID, opts ...option.RequestOption) (res *[]HostnameSettingTLSGetResponse, err error) {
+func (r *HostnameSettingTLSService) Get(ctx context.Context, settingID HostnameSettingTLSGetParamsSettingID, query HostnameSettingTLSGetParams, opts ...option.RequestOption) (res *[]HostnameSettingTLSGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameSettingTLSGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/hostnames/settings/%v", zoneID, settingID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/hostnames/settings/%v", query.ZoneID, settingID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -218,6 +218,8 @@ type HostnameSettingTLSGetResponseValueArray []string
 func (r HostnameSettingTLSGetResponseValueArray) ImplementsHostnameSettingTLSGetResponseValue() {}
 
 type HostnameSettingTLSUpdateParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The tls setting value.
 	Value param.Field[HostnameSettingTLSUpdateParamsValue] `json:"value,required"`
 }
@@ -316,6 +318,11 @@ const (
 	HostnameSettingTLSUpdateResponseEnvelopeSuccessTrue HostnameSettingTLSUpdateResponseEnvelopeSuccess = true
 )
 
+type HostnameSettingTLSDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 // The TLS Setting name.
 type HostnameSettingTLSDeleteParamsSettingID string
 
@@ -393,6 +400,11 @@ type HostnameSettingTLSDeleteResponseEnvelopeSuccess bool
 const (
 	HostnameSettingTLSDeleteResponseEnvelopeSuccessTrue HostnameSettingTLSDeleteResponseEnvelopeSuccess = true
 )
+
+type HostnameSettingTLSGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 // The TLS Setting name.
 type HostnameSettingTLSGetParamsSettingID string

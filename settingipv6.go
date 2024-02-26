@@ -34,11 +34,11 @@ func NewSettingIPV6Service(opts ...option.RequestOption) (r *SettingIPV6Service)
 
 // Enable IPv6 on all subdomains that are Cloudflare enabled.
 // (https://support.cloudflare.com/hc/en-us/articles/200168586).
-func (r *SettingIPV6Service) Edit(ctx context.Context, zoneID string, body SettingIPV6EditParams, opts ...option.RequestOption) (res *SettingIPV6EditResponse, err error) {
+func (r *SettingIPV6Service) Edit(ctx context.Context, params SettingIPV6EditParams, opts ...option.RequestOption) (res *SettingIPV6EditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingIPV6EditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/ipv6", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/ipv6", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +48,11 @@ func (r *SettingIPV6Service) Edit(ctx context.Context, zoneID string, body Setti
 
 // Enable IPv6 on all subdomains that are Cloudflare enabled.
 // (https://support.cloudflare.com/hc/en-us/articles/200168586).
-func (r *SettingIPV6Service) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingIPV6GetResponse, err error) {
+func (r *SettingIPV6Service) Get(ctx context.Context, query SettingIPV6GetParams, opts ...option.RequestOption) (res *SettingIPV6GetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingIPV6GetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/ipv6", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/ipv6", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -169,6 +169,8 @@ const (
 )
 
 type SettingIPV6EditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the zone setting.
 	Value param.Field[SettingIPV6EditParamsValue] `json:"value,required"`
 }
@@ -247,6 +249,11 @@ type settingIPV6EditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingIPV6EditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingIPV6GetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingIPV6GetResponseEnvelope struct {

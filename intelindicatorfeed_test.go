@@ -29,14 +29,11 @@ func TestIntelIndicatorFeedNewWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Intel.IndicatorFeeds.New(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.IntelIndicatorFeedNewParams{
-			Description: cloudflare.F("example feed description"),
-			Name:        cloudflare.F("example_feed_1"),
-		},
-	)
+	_, err := client.Intel.IndicatorFeeds.New(context.TODO(), cloudflare.IntelIndicatorFeedNewParams{
+		AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Description: cloudflare.F("example feed description"),
+		Name:        cloudflare.F("example_feed_1"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -64,10 +61,10 @@ func TestIntelIndicatorFeedUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Intel.IndicatorFeeds.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		int64(12),
 		cloudflare.IntelIndicatorFeedUpdateParams{
-			Source: cloudflare.F("@/Users/me/test.stix2"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Source:    cloudflare.F("@/Users/me/test.stix2"),
 		},
 	)
 	if err != nil {
@@ -95,7 +92,9 @@ func TestIntelIndicatorFeedList(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Intel.IndicatorFeeds.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Intel.IndicatorFeeds.List(context.TODO(), cloudflare.IntelIndicatorFeedListParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -123,8 +122,10 @@ func TestIntelIndicatorFeedData(t *testing.T) {
 	)
 	_, err := client.Intel.IndicatorFeeds.Data(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		int64(12),
+		cloudflare.IntelIndicatorFeedDataParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -153,8 +154,10 @@ func TestIntelIndicatorFeedGet(t *testing.T) {
 	)
 	_, err := client.Intel.IndicatorFeeds.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		int64(12),
+		cloudflare.IntelIndicatorFeedGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

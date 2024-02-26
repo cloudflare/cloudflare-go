@@ -32,27 +32,27 @@ func NewPageShieldPolicyService(opts ...option.RequestOption) (r *PageShieldPoli
 }
 
 // Create a Page Shield policy.
-func (r *PageShieldPolicyService) New(ctx context.Context, zoneID string, body PageShieldPolicyNewParams, opts ...option.RequestOption) (res *PageShieldPolicyNewResponse, err error) {
+func (r *PageShieldPolicyService) New(ctx context.Context, params PageShieldPolicyNewParams, opts ...option.RequestOption) (res *PageShieldPolicyNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("zones/%s/page_shield/policies", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
+	path := fmt.Sprintf("zones/%s/page_shield/policies", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
 	return
 }
 
 // Update a Page Shield policy by ID.
-func (r *PageShieldPolicyService) Update(ctx context.Context, zoneID string, policyID string, body PageShieldPolicyUpdateParams, opts ...option.RequestOption) (res *PageShieldPolicyUpdateResponse, err error) {
+func (r *PageShieldPolicyService) Update(ctx context.Context, policyID string, params PageShieldPolicyUpdateParams, opts ...option.RequestOption) (res *PageShieldPolicyUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("zones/%s/page_shield/policies/%s", zoneID, policyID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
+	path := fmt.Sprintf("zones/%s/page_shield/policies/%s", params.ZoneID, policyID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
 	return
 }
 
 // Lists all Page Shield policies.
-func (r *PageShieldPolicyService) List(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *[]PageShieldPolicyListResponse, err error) {
+func (r *PageShieldPolicyService) List(ctx context.Context, query PageShieldPolicyListParams, opts ...option.RequestOption) (res *[]PageShieldPolicyListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageShieldPolicyListResponseEnvelope
-	path := fmt.Sprintf("zones/%s/page_shield/policies", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/page_shield/policies", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -61,19 +61,19 @@ func (r *PageShieldPolicyService) List(ctx context.Context, zoneID string, opts 
 }
 
 // Delete a Page Shield policy by ID.
-func (r *PageShieldPolicyService) Delete(ctx context.Context, zoneID string, policyID string, opts ...option.RequestOption) (err error) {
+func (r *PageShieldPolicyService) Delete(ctx context.Context, policyID string, body PageShieldPolicyDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
-	path := fmt.Sprintf("zones/%s/page_shield/policies/%s", zoneID, policyID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
+	path := fmt.Sprintf("zones/%s/page_shield/policies/%s", body.ZoneID, policyID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, nil, opts...)
 	return
 }
 
 // Fetches a Page Shield policy by ID.
-func (r *PageShieldPolicyService) Get(ctx context.Context, zoneID string, policyID string, opts ...option.RequestOption) (res *PageShieldPolicyGetResponse, err error) {
+func (r *PageShieldPolicyService) Get(ctx context.Context, policyID string, query PageShieldPolicyGetParams, opts ...option.RequestOption) (res *PageShieldPolicyGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("zones/%s/page_shield/policies/%s", zoneID, policyID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("zones/%s/page_shield/policies/%s", query.ZoneID, policyID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
@@ -246,6 +246,8 @@ const (
 )
 
 type PageShieldPolicyNewParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The action to take if the expression matches
 	Action param.Field[PageShieldPolicyNewParamsAction] `json:"action"`
 	// A description for the policy
@@ -272,6 +274,8 @@ const (
 )
 
 type PageShieldPolicyUpdateParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The action to take if the expression matches
 	Action param.Field[PageShieldPolicyUpdateParamsAction] `json:"action"`
 	// A description for the policy
@@ -296,6 +300,11 @@ const (
 	PageShieldPolicyUpdateParamsActionAllow PageShieldPolicyUpdateParamsAction = "allow"
 	PageShieldPolicyUpdateParamsActionLog   PageShieldPolicyUpdateParamsAction = "log"
 )
+
+type PageShieldPolicyListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type PageShieldPolicyListResponseEnvelope struct {
 	Errors   []PageShieldPolicyListResponseEnvelopeErrors   `json:"errors,required"`
@@ -393,4 +402,14 @@ type pageShieldPolicyListResponseEnvelopeResultInfoJSON struct {
 
 func (r *PageShieldPolicyListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type PageShieldPolicyDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
+type PageShieldPolicyGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }

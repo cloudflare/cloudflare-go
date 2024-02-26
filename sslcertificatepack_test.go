@@ -29,13 +29,10 @@ func TestSSLCertificatePackListWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.SSL.CertificatePacks.List(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.SSLCertificatePackListParams{
-			Status: cloudflare.F(cloudflare.SSLCertificatePackListParamsStatusAll),
-		},
-	)
+	_, err := client.SSL.CertificatePacks.List(context.TODO(), cloudflare.SSLCertificatePackListParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Status: cloudflare.F(cloudflare.SSLCertificatePackListParamsStatusAll),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -64,7 +61,9 @@ func TestSSLCertificatePackDelete(t *testing.T) {
 	_, err := client.SSL.CertificatePacks.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.SSLCertificatePackDeleteParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -94,7 +93,9 @@ func TestSSLCertificatePackEdit(t *testing.T) {
 	_, err := client.SSL.CertificatePacks.Edit(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.SSLCertificatePackEditParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -124,7 +125,9 @@ func TestSSLCertificatePackGet(t *testing.T) {
 	_, err := client.SSL.CertificatePacks.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.SSLCertificatePackGetParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

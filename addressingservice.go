@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -34,11 +35,11 @@ func NewAddressingServiceService(opts ...option.RequestOption) (r *AddressingSer
 // service running on the Cloudflare network to enable a Cloudflare product on the
 // IP addresses. This endpoint can be used as a reference of available services on
 // the Cloudflare network, and their service IDs.
-func (r *AddressingServiceService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]AddressingServiceListResponse, err error) {
+func (r *AddressingServiceService) List(ctx context.Context, query AddressingServiceListParams, opts ...option.RequestOption) (res *[]AddressingServiceListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressingServiceListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/services", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/addressing/services", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -65,6 +66,11 @@ type addressingServiceListResponseJSON struct {
 
 func (r *AddressingServiceListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type AddressingServiceListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type AddressingServiceListResponseEnvelope struct {

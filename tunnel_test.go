@@ -30,14 +30,11 @@ func TestTunnelNew(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Tunnels.New(
-		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
-		cloudflare.TunnelNewParams{
-			Name:         cloudflare.F("blog"),
-			TunnelSecret: cloudflare.F[any](map[string]interface{}{}),
-		},
-	)
+	_, err := client.Tunnels.New(context.TODO(), cloudflare.TunnelNewParams{
+		AccountID:    cloudflare.F("699d98642c564d2e855e9661899b7252"),
+		Name:         cloudflare.F("blog"),
+		TunnelSecret: cloudflare.F[any](map[string]interface{}{}),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -63,22 +60,19 @@ func TestTunnelListWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Tunnels.List(
-		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
-		cloudflare.TunnelListParams{
-			ExcludePrefix: cloudflare.F("vpc1-"),
-			ExistedAt:     cloudflare.F(time.Now()),
-			IncludePrefix: cloudflare.F("vpc1-"),
-			IsDeleted:     cloudflare.F(true),
-			Name:          cloudflare.F("blog"),
-			Page:          cloudflare.F(1.000000),
-			PerPage:       cloudflare.F(1.000000),
-			TunTypes:      cloudflare.F("cfd_tunnel,warp_connector"),
-			WasActiveAt:   cloudflare.F(time.Now()),
-			WasInactiveAt: cloudflare.F(time.Now()),
-		},
-	)
+	_, err := client.Tunnels.List(context.TODO(), cloudflare.TunnelListParams{
+		AccountID:     cloudflare.F("699d98642c564d2e855e9661899b7252"),
+		ExcludePrefix: cloudflare.F("vpc1-"),
+		ExistedAt:     cloudflare.F(time.Now()),
+		IncludePrefix: cloudflare.F("vpc1-"),
+		IsDeleted:     cloudflare.F(true),
+		Name:          cloudflare.F("blog"),
+		Page:          cloudflare.F(1.000000),
+		PerPage:       cloudflare.F(1.000000),
+		TunTypes:      cloudflare.F("cfd_tunnel,warp_connector"),
+		WasActiveAt:   cloudflare.F(time.Now()),
+		WasInactiveAt: cloudflare.F(time.Now()),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -106,10 +100,10 @@ func TestTunnelDelete(t *testing.T) {
 	)
 	_, err := client.Tunnels.Delete(
 		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
 		"f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
 		cloudflare.TunnelDeleteParams{
-			Body: cloudflare.F[any](map[string]interface{}{}),
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
+			Body:      cloudflare.F[any](map[string]interface{}{}),
 		},
 	)
 	if err != nil {
@@ -139,9 +133,9 @@ func TestTunnelEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Tunnels.Edit(
 		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
 		"f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
 		cloudflare.TunnelEditParams{
+			AccountID:    cloudflare.F("699d98642c564d2e855e9661899b7252"),
 			Name:         cloudflare.F("blog"),
 			TunnelSecret: cloudflare.F("AQIDBAUGBwgBAgMEBQYHCAECAwQFBgcIAQIDBAUGBwg="),
 		},
@@ -173,8 +167,10 @@ func TestTunnelGet(t *testing.T) {
 	)
 	_, err := client.Tunnels.Get(
 		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
 		"f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
+		cloudflare.TunnelGetParams{
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -34,11 +34,11 @@ func NewIntelWhoisService(opts ...option.RequestOption) (r *IntelWhoisService) {
 }
 
 // Get WHOIS Record
-func (r *IntelWhoisService) Get(ctx context.Context, accountID string, query IntelWhoisGetParams, opts ...option.RequestOption) (res *IntelWhoisGetResponse, err error) {
+func (r *IntelWhoisService) Get(ctx context.Context, params IntelWhoisGetParams, opts ...option.RequestOption) (res *IntelWhoisGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IntelWhoisGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/intel/whois", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/intel/whois", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -80,7 +80,9 @@ func (r *IntelWhoisGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type IntelWhoisGetParams struct {
-	Domain param.Field[string] `query:"domain"`
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+	Domain    param.Field[string] `query:"domain"`
 }
 
 // URLQuery serializes [IntelWhoisGetParams]'s query parameters as `url.Values`.

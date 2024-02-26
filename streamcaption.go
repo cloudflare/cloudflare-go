@@ -36,11 +36,11 @@ func NewStreamCaptionService(opts ...option.RequestOption) (r *StreamCaptionServ
 
 // Uploads the caption or subtitle file to the endpoint for a specific BCP47
 // language. One caption or subtitle file per language is allowed.
-func (r *StreamCaptionService) Update(ctx context.Context, accountID string, identifier string, language string, body StreamCaptionUpdateParams, opts ...option.RequestOption) (res *StreamCaptionUpdateResponse, err error) {
+func (r *StreamCaptionService) Update(ctx context.Context, identifier string, language string, params StreamCaptionUpdateParams, opts ...option.RequestOption) (res *StreamCaptionUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamCaptionUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/%s/captions/%s", accountID, identifier, language)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/%s/captions/%s", params.AccountID, identifier, language)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -49,11 +49,11 @@ func (r *StreamCaptionService) Update(ctx context.Context, accountID string, ide
 }
 
 // Lists the available captions or subtitles for a specific video.
-func (r *StreamCaptionService) List(ctx context.Context, accountID string, identifier string, opts ...option.RequestOption) (res *[]StreamCaptionListResponse, err error) {
+func (r *StreamCaptionService) List(ctx context.Context, identifier string, query StreamCaptionListParams, opts ...option.RequestOption) (res *[]StreamCaptionListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamCaptionListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/%s/captions", accountID, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/%s/captions", query.AccountID, identifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -62,11 +62,11 @@ func (r *StreamCaptionService) List(ctx context.Context, accountID string, ident
 }
 
 // Removes the captions or subtitles from a video.
-func (r *StreamCaptionService) Delete(ctx context.Context, accountID string, identifier string, language string, opts ...option.RequestOption) (res *StreamCaptionDeleteResponse, err error) {
+func (r *StreamCaptionService) Delete(ctx context.Context, identifier string, language string, body StreamCaptionDeleteParams, opts ...option.RequestOption) (res *StreamCaptionDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamCaptionDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/%s/captions/%s", accountID, identifier, language)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/%s/captions/%s", body.AccountID, identifier, language)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -133,6 +133,8 @@ type StreamCaptionDeleteResponseArray []interface{}
 func (r StreamCaptionDeleteResponseArray) ImplementsStreamCaptionDeleteResponse() {}
 
 type StreamCaptionUpdateParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The WebVTT file containing the caption or subtitle content.
 	File param.Field[string] `json:"file,required"`
 }
@@ -210,6 +212,11 @@ const (
 	StreamCaptionUpdateResponseEnvelopeSuccessTrue StreamCaptionUpdateResponseEnvelopeSuccess = true
 )
 
+type StreamCaptionListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type StreamCaptionListResponseEnvelope struct {
 	Errors   []StreamCaptionListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []StreamCaptionListResponseEnvelopeMessages `json:"messages,required"`
@@ -278,6 +285,11 @@ type StreamCaptionListResponseEnvelopeSuccess bool
 const (
 	StreamCaptionListResponseEnvelopeSuccessTrue StreamCaptionListResponseEnvelopeSuccess = true
 )
+
+type StreamCaptionDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type StreamCaptionDeleteResponseEnvelope struct {
 	Errors   []StreamCaptionDeleteResponseEnvelopeErrors   `json:"errors,required"`

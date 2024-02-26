@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -31,10 +32,15 @@ func NewImageV1BlobService(opts ...option.RequestOption) (r *ImageV1BlobService)
 
 // Fetch base image. For most images this will be the originally uploaded file. For
 // larger images it can be a near-lossless version of the original.
-func (r *ImageV1BlobService) Get(ctx context.Context, accountID string, imageID string, opts ...option.RequestOption) (res *http.Response, err error) {
+func (r *ImageV1BlobService) Get(ctx context.Context, imageID string, query ImageV1BlobGetParams, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "image/*")}, opts...)
-	path := fmt.Sprintf("accounts/%s/images/v1/%s/blob", accountID, imageID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/images/v1/%s/blob", query.AccountID, imageID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
+}
+
+type ImageV1BlobGetParams struct {
+	// Account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
 }

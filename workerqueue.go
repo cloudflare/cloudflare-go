@@ -37,11 +37,11 @@ func NewWorkerQueueService(opts ...option.RequestOption) (r *WorkerQueueService)
 }
 
 // Creates a new queue.
-func (r *WorkerQueueService) New(ctx context.Context, accountID string, body WorkerQueueNewParams, opts ...option.RequestOption) (res *WorkerQueueNewResponse, err error) {
+func (r *WorkerQueueService) New(ctx context.Context, params WorkerQueueNewParams, opts ...option.RequestOption) (res *WorkerQueueNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerQueueNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/queues", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/queues", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -50,11 +50,11 @@ func (r *WorkerQueueService) New(ctx context.Context, accountID string, body Wor
 }
 
 // Updates a queue.
-func (r *WorkerQueueService) Update(ctx context.Context, accountID string, name string, body WorkerQueueUpdateParams, opts ...option.RequestOption) (res *WorkerQueueUpdateResponse, err error) {
+func (r *WorkerQueueService) Update(ctx context.Context, name string, params WorkerQueueUpdateParams, opts ...option.RequestOption) (res *WorkerQueueUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerQueueUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/queues/%s", accountID, name)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/queues/%s", params.AccountID, name)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -63,11 +63,11 @@ func (r *WorkerQueueService) Update(ctx context.Context, accountID string, name 
 }
 
 // Returns the queues owned by an account.
-func (r *WorkerQueueService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]WorkerQueueListResponse, err error) {
+func (r *WorkerQueueService) List(ctx context.Context, query WorkerQueueListParams, opts ...option.RequestOption) (res *[]WorkerQueueListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerQueueListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/queues", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/queues", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -76,11 +76,11 @@ func (r *WorkerQueueService) List(ctx context.Context, accountID string, opts ..
 }
 
 // Deletes a queue.
-func (r *WorkerQueueService) Delete(ctx context.Context, accountID string, name string, opts ...option.RequestOption) (res *WorkerQueueDeleteResponse, err error) {
+func (r *WorkerQueueService) Delete(ctx context.Context, name string, body WorkerQueueDeleteParams, opts ...option.RequestOption) (res *WorkerQueueDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerQueueDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/queues/%s", accountID, name)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/queues/%s", body.AccountID, name)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -89,11 +89,11 @@ func (r *WorkerQueueService) Delete(ctx context.Context, accountID string, name 
 }
 
 // Get information about a specific queue.
-func (r *WorkerQueueService) Get(ctx context.Context, accountID string, name string, opts ...option.RequestOption) (res *WorkerQueueGetResponse, err error) {
+func (r *WorkerQueueService) Get(ctx context.Context, name string, query WorkerQueueGetParams, opts ...option.RequestOption) (res *WorkerQueueGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerQueueGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/queues/%s", accountID, name)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/queues/%s", query.AccountID, name)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -231,7 +231,9 @@ func (r *WorkerQueueGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type WorkerQueueNewParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	// Identifier
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
 }
 
 func (r WorkerQueueNewParams) MarshalJSON() (data []byte, err error) {
@@ -337,7 +339,9 @@ func (r *WorkerQueueNewResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (e
 }
 
 type WorkerQueueUpdateParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	// Identifier
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
 }
 
 func (r WorkerQueueUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -442,6 +446,11 @@ func (r *WorkerQueueUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type WorkerQueueListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type WorkerQueueListResponseEnvelope struct {
 	Errors   []interface{}             `json:"errors,required,nullable"`
 	Messages []interface{}             `json:"messages,required,nullable"`
@@ -502,6 +511,11 @@ type workerQueueListResponseEnvelopeResultInfoJSON struct {
 
 func (r *WorkerQueueListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type WorkerQueueDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type WorkerQueueDeleteResponseEnvelope struct {
@@ -600,6 +614,11 @@ type workerQueueDeleteResponseEnvelopeResultInfoJSON struct {
 
 func (r *WorkerQueueDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type WorkerQueueGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type WorkerQueueGetResponseEnvelope struct {

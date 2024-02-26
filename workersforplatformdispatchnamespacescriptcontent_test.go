@@ -35,10 +35,10 @@ func TestWorkersForPlatformDispatchNamespaceScriptContentUpdateWithOptionalParam
 	)
 	_, err := client.WorkersForPlatforms.Dispatch.Namespaces.Scripts.Content.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"my-dispatch-namespace",
 		"this-is_my_script-01",
 		cloudflare.WorkersForPlatformDispatchNamespaceScriptContentUpdateParams{
+			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			AnyPartName: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
 			Metadata: cloudflare.F(cloudflare.WorkersForPlatformDispatchNamespaceScriptContentUpdateParamsMetadata{
 				BodyPart:   cloudflare.F("worker.js"),
@@ -74,9 +74,11 @@ func TestWorkersForPlatformDispatchNamespaceScriptContentGet(t *testing.T) {
 	)
 	resp, err := client.WorkersForPlatforms.Dispatch.Namespaces.Scripts.Content.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"my-dispatch-namespace",
 		"this-is_my_script-01",
+		cloudflare.WorkersForPlatformDispatchNamespaceScriptContentGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

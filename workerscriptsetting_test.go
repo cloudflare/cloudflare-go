@@ -31,9 +31,9 @@ func TestWorkerScriptSettingEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.WorkerScripts.Settings.Edit(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"this-is_my_script-01",
 		cloudflare.WorkerScriptSettingEditParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Settings: cloudflare.F(cloudflare.WorkerScriptSettingEditParamsSettings{
 				Errors: cloudflare.F([]cloudflare.WorkerScriptSettingEditParamsSettingsError{{
 					Code:    cloudflare.F(int64(1000)),
@@ -145,8 +145,10 @@ func TestWorkerScriptSettingGet(t *testing.T) {
 	)
 	_, err := client.WorkerScripts.Settings.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"this-is_my_script-01",
+		cloudflare.WorkerScriptSettingGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

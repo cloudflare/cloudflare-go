@@ -35,11 +35,11 @@ func NewDevicePostureService(opts ...option.RequestOption) (r *DevicePostureServ
 }
 
 // Creates a new device posture rule.
-func (r *DevicePostureService) New(ctx context.Context, accountID interface{}, body DevicePostureNewParams, opts ...option.RequestOption) (res *DevicePostureNewResponse, err error) {
+func (r *DevicePostureService) New(ctx context.Context, params DevicePostureNewParams, opts ...option.RequestOption) (res *DevicePostureNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePostureNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/posture", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/devices/posture", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +48,11 @@ func (r *DevicePostureService) New(ctx context.Context, accountID interface{}, b
 }
 
 // Updates a device posture rule.
-func (r *DevicePostureService) Update(ctx context.Context, accountID interface{}, ruleID string, body DevicePostureUpdateParams, opts ...option.RequestOption) (res *DevicePostureUpdateResponse, err error) {
+func (r *DevicePostureService) Update(ctx context.Context, ruleID string, params DevicePostureUpdateParams, opts ...option.RequestOption) (res *DevicePostureUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePostureUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/posture/%s", accountID, ruleID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/devices/posture/%s", params.AccountID, ruleID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -61,11 +61,11 @@ func (r *DevicePostureService) Update(ctx context.Context, accountID interface{}
 }
 
 // Fetches device posture rules for a Zero Trust account.
-func (r *DevicePostureService) List(ctx context.Context, accountID interface{}, opts ...option.RequestOption) (res *[]DevicePostureListResponse, err error) {
+func (r *DevicePostureService) List(ctx context.Context, query DevicePostureListParams, opts ...option.RequestOption) (res *[]DevicePostureListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePostureListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/posture", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/devices/posture", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -74,11 +74,11 @@ func (r *DevicePostureService) List(ctx context.Context, accountID interface{}, 
 }
 
 // Deletes a device posture rule.
-func (r *DevicePostureService) Delete(ctx context.Context, accountID interface{}, ruleID string, opts ...option.RequestOption) (res *DevicePostureDeleteResponse, err error) {
+func (r *DevicePostureService) Delete(ctx context.Context, ruleID string, body DevicePostureDeleteParams, opts ...option.RequestOption) (res *DevicePostureDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePostureDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/posture/%s", accountID, ruleID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/devices/posture/%s", body.AccountID, ruleID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -87,11 +87,11 @@ func (r *DevicePostureService) Delete(ctx context.Context, accountID interface{}
 }
 
 // Fetches a single device posture rule.
-func (r *DevicePostureService) Get(ctx context.Context, accountID interface{}, ruleID string, opts ...option.RequestOption) (res *DevicePostureGetResponse, err error) {
+func (r *DevicePostureService) Get(ctx context.Context, ruleID string, query DevicePostureGetParams, opts ...option.RequestOption) (res *DevicePostureGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePostureGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/posture/%s", accountID, ruleID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/devices/posture/%s", query.AccountID, ruleID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -3323,6 +3323,7 @@ const (
 )
 
 type DevicePostureNewParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// The name of the device posture rule.
 	Name param.Field[string] `json:"name,required"`
 	// The type of device posture rule.
@@ -3957,6 +3958,7 @@ const (
 )
 
 type DevicePostureUpdateParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// The name of the device posture rule.
 	Name param.Field[string] `json:"name,required"`
 	// The type of device posture rule.
@@ -4590,6 +4592,10 @@ const (
 	DevicePostureUpdateResponseEnvelopeSuccessTrue DevicePostureUpdateResponseEnvelopeSuccess = true
 )
 
+type DevicePostureListParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
+
 type DevicePostureListResponseEnvelope struct {
 	Errors   []DevicePostureListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DevicePostureListResponseEnvelopeMessages `json:"messages,required"`
@@ -4688,6 +4694,10 @@ func (r *DevicePostureListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type DevicePostureDeleteParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
+
 type DevicePostureDeleteResponseEnvelope struct {
 	Errors   []DevicePostureDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DevicePostureDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -4756,6 +4766,10 @@ type DevicePostureDeleteResponseEnvelopeSuccess bool
 const (
 	DevicePostureDeleteResponseEnvelopeSuccessTrue DevicePostureDeleteResponseEnvelopeSuccess = true
 )
+
+type DevicePostureGetParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
 
 type DevicePostureGetResponseEnvelope struct {
 	Errors   []DevicePostureGetResponseEnvelopeErrors   `json:"errors,required"`

@@ -32,11 +32,11 @@ func NewACMTotalTLSService(opts ...option.RequestOption) (r *ACMTotalTLSService)
 }
 
 // Set Total TLS Settings or disable the feature for a Zone.
-func (r *ACMTotalTLSService) New(ctx context.Context, zoneID string, body ACMTotalTLSNewParams, opts ...option.RequestOption) (res *ACMTotalTLSNewResponse, err error) {
+func (r *ACMTotalTLSService) New(ctx context.Context, params ACMTotalTLSNewParams, opts ...option.RequestOption) (res *ACMTotalTLSNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ACMTotalTLSNewResponseEnvelope
-	path := fmt.Sprintf("zones/%s/acm/total_tls", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/acm/total_tls", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -45,11 +45,11 @@ func (r *ACMTotalTLSService) New(ctx context.Context, zoneID string, body ACMTot
 }
 
 // Get Total TLS Settings for a Zone.
-func (r *ACMTotalTLSService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *ACMTotalTLSGetResponse, err error) {
+func (r *ACMTotalTLSService) Get(ctx context.Context, query ACMTotalTLSGetParams, opts ...option.RequestOption) (res *ACMTotalTLSGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ACMTotalTLSGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/acm/total_tls", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/acm/total_tls", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -138,6 +138,8 @@ const (
 )
 
 type ACMTotalTLSNewParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// If enabled, Total TLS will order a hostname specific TLS certificate for any
 	// proxied A, AAAA, or CNAME record in your zone.
 	Enabled param.Field[bool] `json:"enabled,required"`
@@ -225,6 +227,11 @@ type ACMTotalTLSNewResponseEnvelopeSuccess bool
 const (
 	ACMTotalTLSNewResponseEnvelopeSuccessTrue ACMTotalTLSNewResponseEnvelopeSuccess = true
 )
+
+type ACMTotalTLSGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type ACMTotalTLSGetResponseEnvelope struct {
 	Errors   []ACMTotalTLSGetResponseEnvelopeErrors   `json:"errors,required"`

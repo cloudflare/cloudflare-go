@@ -35,11 +35,11 @@ func NewDeviceRevokeService(opts ...option.RequestOption) (r *DeviceRevokeServic
 }
 
 // Revokes a list of devices.
-func (r *DeviceRevokeService) New(ctx context.Context, accountID interface{}, body DeviceRevokeNewParams, opts ...option.RequestOption) (res *DeviceRevokeNewResponse, err error) {
+func (r *DeviceRevokeService) New(ctx context.Context, params DeviceRevokeNewParams, opts ...option.RequestOption) (res *DeviceRevokeNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceRevokeNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/revoke", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/devices/revoke", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -64,6 +64,7 @@ func init() {
 }
 
 type DeviceRevokeNewParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// A list of device ids to revoke.
 	Body param.Field[[]string] `json:"body,required"`
 }

@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -31,11 +32,11 @@ func NewSSLCertificatePackQuotaService(opts ...option.RequestOption) (r *SSLCert
 }
 
 // For a given zone, list certificate pack quotas.
-func (r *SSLCertificatePackQuotaService) List(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SSLCertificatePackQuotaListResponse, err error) {
+func (r *SSLCertificatePackQuotaService) List(ctx context.Context, query SSLCertificatePackQuotaListParams, opts ...option.RequestOption) (res *SSLCertificatePackQuotaListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SSLCertificatePackQuotaListResponseEnvelope
-	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/quota", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/quota", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -79,6 +80,11 @@ type sslCertificatePackQuotaListResponseAdvancedJSON struct {
 
 func (r *SSLCertificatePackQuotaListResponseAdvanced) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SSLCertificatePackQuotaListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SSLCertificatePackQuotaListResponseEnvelope struct {

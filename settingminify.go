@@ -35,11 +35,11 @@ func NewSettingMinifyService(opts ...option.RequestOption) (r *SettingMinifyServ
 // Automatically minify certain assets for your website. Refer to
 // [Using Cloudflare Auto Minify](https://support.cloudflare.com/hc/en-us/articles/200168196)
 // for more information.
-func (r *SettingMinifyService) Edit(ctx context.Context, zoneID string, body SettingMinifyEditParams, opts ...option.RequestOption) (res *SettingMinifyEditResponse, err error) {
+func (r *SettingMinifyService) Edit(ctx context.Context, params SettingMinifyEditParams, opts ...option.RequestOption) (res *SettingMinifyEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingMinifyEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/minify", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/minify", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -50,11 +50,11 @@ func (r *SettingMinifyService) Edit(ctx context.Context, zoneID string, body Set
 // Automatically minify certain assets for your website. Refer to
 // [Using Cloudflare Auto Minify](https://support.cloudflare.com/hc/en-us/articles/200168196)
 // for more information.
-func (r *SettingMinifyService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingMinifyGetResponse, err error) {
+func (r *SettingMinifyService) Get(ctx context.Context, query SettingMinifyGetParams, opts ...option.RequestOption) (res *SettingMinifyGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingMinifyGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/minify", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/minify", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -255,6 +255,8 @@ const (
 )
 
 type SettingMinifyEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the zone setting.
 	Value param.Field[SettingMinifyEditParamsValue] `json:"value,required"`
 }
@@ -364,6 +366,11 @@ type settingMinifyEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingMinifyEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingMinifyGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingMinifyGetResponseEnvelope struct {

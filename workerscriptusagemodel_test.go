@@ -31,10 +31,10 @@ func TestWorkerScriptUsageModelUpdate(t *testing.T) {
 	)
 	_, err := client.Workers.Scripts.UsageModel.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"this-is_my_script-01",
 		cloudflare.WorkerScriptUsageModelUpdateParams{
-			Body: cloudflare.F[any]("{'usage_model': 'unbound'}"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body:      cloudflare.F[any]("{'usage_model': 'unbound'}"),
 		},
 	)
 	if err != nil {
@@ -64,8 +64,10 @@ func TestWorkerScriptUsageModelGet(t *testing.T) {
 	)
 	_, err := client.Workers.Scripts.UsageModel.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"this-is_my_script-01",
+		cloudflare.WorkerScriptUsageModelGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

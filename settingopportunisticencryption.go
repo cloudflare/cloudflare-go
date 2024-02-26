@@ -33,11 +33,11 @@ func NewSettingOpportunisticEncryptionService(opts ...option.RequestOption) (r *
 }
 
 // Changes Opportunistic Encryption setting.
-func (r *SettingOpportunisticEncryptionService) Edit(ctx context.Context, zoneID string, body SettingOpportunisticEncryptionEditParams, opts ...option.RequestOption) (res *SettingOpportunisticEncryptionEditResponse, err error) {
+func (r *SettingOpportunisticEncryptionService) Edit(ctx context.Context, params SettingOpportunisticEncryptionEditParams, opts ...option.RequestOption) (res *SettingOpportunisticEncryptionEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingOpportunisticEncryptionEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/opportunistic_encryption", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/opportunistic_encryption", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -46,11 +46,11 @@ func (r *SettingOpportunisticEncryptionService) Edit(ctx context.Context, zoneID
 }
 
 // Gets Opportunistic Encryption setting.
-func (r *SettingOpportunisticEncryptionService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingOpportunisticEncryptionGetResponse, err error) {
+func (r *SettingOpportunisticEncryptionService) Get(ctx context.Context, query SettingOpportunisticEncryptionGetParams, opts ...option.RequestOption) (res *SettingOpportunisticEncryptionGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingOpportunisticEncryptionGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/opportunistic_encryption", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/opportunistic_encryption", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -165,6 +165,8 @@ const (
 )
 
 type SettingOpportunisticEncryptionEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the zone setting. Notes: Default value depends on the zone's plan
 	// level.
 	Value param.Field[SettingOpportunisticEncryptionEditParamsValue] `json:"value,required"`
@@ -246,6 +248,11 @@ type settingOpportunisticEncryptionEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingOpportunisticEncryptionEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingOpportunisticEncryptionGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingOpportunisticEncryptionGetResponseEnvelope struct {

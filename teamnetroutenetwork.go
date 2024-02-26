@@ -36,11 +36,11 @@ func NewTeamnetRouteNetworkService(opts ...option.RequestOption) (r *TeamnetRout
 
 // Routes a private network through a Cloudflare Tunnel. The CIDR in
 // `ip_network_encoded` must be written in URL-encoded format.
-func (r *TeamnetRouteNetworkService) New(ctx context.Context, accountID string, ipNetworkEncoded string, body TeamnetRouteNetworkNewParams, opts ...option.RequestOption) (res *TeamnetRouteNetworkNewResponse, err error) {
+func (r *TeamnetRouteNetworkService) New(ctx context.Context, ipNetworkEncoded string, params TeamnetRouteNetworkNewParams, opts ...option.RequestOption) (res *TeamnetRouteNetworkNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TeamnetRouteNetworkNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/teamnet/routes/network/%s", accountID, ipNetworkEncoded)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/teamnet/routes/network/%s", params.AccountID, ipNetworkEncoded)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -55,11 +55,11 @@ func (r *TeamnetRouteNetworkService) New(ctx context.Context, accountID string, 
 // is missing it will assume Cloudflare Tunnel as default. If tunnel_id is provided
 // it will delete the route from that tunnel, otherwise it will delete the route
 // based on the vnet and tun_type.
-func (r *TeamnetRouteNetworkService) Delete(ctx context.Context, accountID string, ipNetworkEncoded string, body TeamnetRouteNetworkDeleteParams, opts ...option.RequestOption) (res *TeamnetRouteNetworkDeleteResponse, err error) {
+func (r *TeamnetRouteNetworkService) Delete(ctx context.Context, ipNetworkEncoded string, params TeamnetRouteNetworkDeleteParams, opts ...option.RequestOption) (res *TeamnetRouteNetworkDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TeamnetRouteNetworkDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/teamnet/routes/network/%s", accountID, ipNetworkEncoded)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/teamnet/routes/network/%s", params.AccountID, ipNetworkEncoded)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -69,11 +69,11 @@ func (r *TeamnetRouteNetworkService) Delete(ctx context.Context, accountID strin
 
 // Updates an existing private network route in an account. The CIDR in
 // `ip_network_encoded` must be written in URL-encoded format.
-func (r *TeamnetRouteNetworkService) Edit(ctx context.Context, accountID string, ipNetworkEncoded string, opts ...option.RequestOption) (res *TeamnetRouteNetworkEditResponse, err error) {
+func (r *TeamnetRouteNetworkService) Edit(ctx context.Context, ipNetworkEncoded string, body TeamnetRouteNetworkEditParams, opts ...option.RequestOption) (res *TeamnetRouteNetworkEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TeamnetRouteNetworkEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/teamnet/routes/network/%s", accountID, ipNetworkEncoded)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/teamnet/routes/network/%s", body.AccountID, ipNetworkEncoded)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -199,6 +199,8 @@ func (r *TeamnetRouteNetworkEditResponse) UnmarshalJSON(data []byte) (err error)
 }
 
 type TeamnetRouteNetworkNewParams struct {
+	// Cloudflare account ID
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Optional remark describing the route.
 	Comment param.Field[string] `json:"comment"`
 	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks
@@ -281,6 +283,8 @@ const (
 )
 
 type TeamnetRouteNetworkDeleteParams struct {
+	// Cloudflare account ID
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The type of tunnel.
 	TunType param.Field[TeamnetRouteNetworkDeleteParamsTunType] `query:"tun_type"`
 }
@@ -373,6 +377,11 @@ type TeamnetRouteNetworkDeleteResponseEnvelopeSuccess bool
 const (
 	TeamnetRouteNetworkDeleteResponseEnvelopeSuccessTrue TeamnetRouteNetworkDeleteResponseEnvelopeSuccess = true
 )
+
+type TeamnetRouteNetworkEditParams struct {
+	// Cloudflare account ID
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type TeamnetRouteNetworkEditResponseEnvelope struct {
 	Errors   []TeamnetRouteNetworkEditResponseEnvelopeErrors   `json:"errors,required"`

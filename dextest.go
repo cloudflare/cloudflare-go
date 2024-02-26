@@ -36,12 +36,12 @@ func NewDEXTestService(opts ...option.RequestOption) (r *DEXTestService) {
 }
 
 // List DEX tests
-func (r *DEXTestService) List(ctx context.Context, accountID string, query DEXTestListParams, opts ...option.RequestOption) (res *shared.V4PagePagination[DEXTestListResponse], err error) {
+func (r *DEXTestService) List(ctx context.Context, params DEXTestListParams, opts ...option.RequestOption) (res *shared.V4PagePagination[DEXTestListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	path := fmt.Sprintf("accounts/%s/dex/tests", accountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/dex/tests", params.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -54,8 +54,8 @@ func (r *DEXTestService) List(ctx context.Context, accountID string, query DEXTe
 }
 
 // List DEX tests
-func (r *DEXTestService) ListAutoPaging(ctx context.Context, accountID string, query DEXTestListParams, opts ...option.RequestOption) *shared.V4PagePaginationAutoPager[DEXTestListResponse] {
-	return shared.NewV4PagePaginationAutoPager(r.List(ctx, accountID, query, opts...))
+func (r *DEXTestService) ListAutoPaging(ctx context.Context, params DEXTestListParams, opts ...option.RequestOption) *shared.V4PagePaginationAutoPager[DEXTestListResponse] {
+	return shared.NewV4PagePaginationAutoPager(r.List(ctx, params, opts...))
 }
 
 type DEXTestListResponse struct {
@@ -892,6 +892,7 @@ func (r *DEXTestListResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 }
 
 type DEXTestListParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Optionally filter result stats to a Cloudflare colo. Cannot be used in
 	// combination with deviceId param.
 	Colo param.Field[string] `query:"colo"`

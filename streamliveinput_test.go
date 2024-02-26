@@ -29,23 +29,20 @@ func TestStreamLiveInputNewWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Stream.LiveInputs.New(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.StreamLiveInputNewParams{
-			DefaultCreator:           cloudflare.F("string"),
-			DeleteRecordingAfterDays: cloudflare.F(45.000000),
-			Meta: cloudflare.F[any](map[string]interface{}{
-				"name": "test stream 1",
-			}),
-			Recording: cloudflare.F(cloudflare.StreamLiveInputNewParamsRecording{
-				AllowedOrigins:    cloudflare.F([]string{"example.com"}),
-				Mode:              cloudflare.F(cloudflare.StreamLiveInputNewParamsRecordingModeOff),
-				RequireSignedURLs: cloudflare.F(false),
-				TimeoutSeconds:    cloudflare.F(int64(0)),
-			}),
-		},
-	)
+	_, err := client.Stream.LiveInputs.New(context.TODO(), cloudflare.StreamLiveInputNewParams{
+		AccountID:                cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		DefaultCreator:           cloudflare.F("string"),
+		DeleteRecordingAfterDays: cloudflare.F(45.000000),
+		Meta: cloudflare.F[any](map[string]interface{}{
+			"name": "test stream 1",
+		}),
+		Recording: cloudflare.F(cloudflare.StreamLiveInputNewParamsRecording{
+			AllowedOrigins:    cloudflare.F([]string{"example.com"}),
+			Mode:              cloudflare.F(cloudflare.StreamLiveInputNewParamsRecordingModeOff),
+			RequireSignedURLs: cloudflare.F(false),
+			TimeoutSeconds:    cloudflare.F(int64(0)),
+		}),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -73,9 +70,9 @@ func TestStreamLiveInputUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Stream.LiveInputs.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"66be4bf738797e01e1fca35a7bdecdcd",
 		cloudflare.StreamLiveInputUpdateParams{
+			AccountID:                cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			DefaultCreator:           cloudflare.F("string"),
 			DeleteRecordingAfterDays: cloudflare.F(45.000000),
 			Meta: cloudflare.F[any](map[string]interface{}{
@@ -114,13 +111,10 @@ func TestStreamLiveInputListWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Stream.LiveInputs.List(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.StreamLiveInputListParams{
-			IncludeCounts: cloudflare.F(true),
-		},
-	)
+	_, err := client.Stream.LiveInputs.List(context.TODO(), cloudflare.StreamLiveInputListParams{
+		AccountID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		IncludeCounts: cloudflare.F(true),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -148,8 +142,10 @@ func TestStreamLiveInputDelete(t *testing.T) {
 	)
 	err := client.Stream.LiveInputs.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"66be4bf738797e01e1fca35a7bdecdcd",
+		cloudflare.StreamLiveInputDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -178,8 +174,10 @@ func TestStreamLiveInputGet(t *testing.T) {
 	)
 	_, err := client.Stream.LiveInputs.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"66be4bf738797e01e1fca35a7bdecdcd",
+		cloudflare.StreamLiveInputGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

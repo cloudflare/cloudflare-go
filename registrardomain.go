@@ -36,11 +36,11 @@ func NewRegistrarDomainService(opts ...option.RequestOption) (r *RegistrarDomain
 }
 
 // Update individual domain.
-func (r *RegistrarDomainService) Update(ctx context.Context, accountID string, domainName string, body RegistrarDomainUpdateParams, opts ...option.RequestOption) (res *RegistrarDomainUpdateResponse, err error) {
+func (r *RegistrarDomainService) Update(ctx context.Context, domainName string, params RegistrarDomainUpdateParams, opts ...option.RequestOption) (res *RegistrarDomainUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RegistrarDomainUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/registrar/domains/%s", accountID, domainName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/registrar/domains/%s", params.AccountID, domainName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -49,11 +49,11 @@ func (r *RegistrarDomainService) Update(ctx context.Context, accountID string, d
 }
 
 // List domains handled by Registrar.
-func (r *RegistrarDomainService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]RegistrarDomainListResponse, err error) {
+func (r *RegistrarDomainService) List(ctx context.Context, query RegistrarDomainListParams, opts ...option.RequestOption) (res *[]RegistrarDomainListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RegistrarDomainListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/registrar/domains", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/registrar/domains", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -62,11 +62,11 @@ func (r *RegistrarDomainService) List(ctx context.Context, accountID string, opt
 }
 
 // Show individual domain.
-func (r *RegistrarDomainService) Get(ctx context.Context, accountID string, domainName string, opts ...option.RequestOption) (res *RegistrarDomainGetResponse, err error) {
+func (r *RegistrarDomainService) Get(ctx context.Context, domainName string, query RegistrarDomainGetParams, opts ...option.RequestOption) (res *RegistrarDomainGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RegistrarDomainGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/registrar/domains/%s", accountID, domainName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/registrar/domains/%s", query.AccountID, domainName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -261,6 +261,8 @@ type RegistrarDomainGetResponseArray []interface{}
 func (r RegistrarDomainGetResponseArray) ImplementsRegistrarDomainGetResponse() {}
 
 type RegistrarDomainUpdateParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Auto-renew controls whether subscription is automatically renewed upon domain
 	// expiration.
 	AutoRenew param.Field[bool] `json:"auto_renew"`
@@ -342,6 +344,11 @@ type RegistrarDomainUpdateResponseEnvelopeSuccess bool
 const (
 	RegistrarDomainUpdateResponseEnvelopeSuccessTrue RegistrarDomainUpdateResponseEnvelopeSuccess = true
 )
+
+type RegistrarDomainListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type RegistrarDomainListResponseEnvelope struct {
 	Errors   []RegistrarDomainListResponseEnvelopeErrors   `json:"errors,required"`
@@ -439,6 +446,11 @@ type registrarDomainListResponseEnvelopeResultInfoJSON struct {
 
 func (r *RegistrarDomainListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type RegistrarDomainGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type RegistrarDomainGetResponseEnvelope struct {

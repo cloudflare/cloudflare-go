@@ -34,11 +34,11 @@ func NewStreamLiveInputOutputService(opts ...option.RequestOption) (r *StreamLiv
 // Creates a new output that can be used to simulcast or restream live video to
 // other RTMP or SRT destinations. Outputs are always linked to a specific live
 // input — one live input can have many outputs.
-func (r *StreamLiveInputOutputService) New(ctx context.Context, accountID string, liveInputIdentifier string, body StreamLiveInputOutputNewParams, opts ...option.RequestOption) (res *StreamLiveInputOutputNewResponse, err error) {
+func (r *StreamLiveInputOutputService) New(ctx context.Context, liveInputIdentifier string, params StreamLiveInputOutputNewParams, opts ...option.RequestOption) (res *StreamLiveInputOutputNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamLiveInputOutputNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s/outputs", accountID, liveInputIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s/outputs", params.AccountID, liveInputIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -47,11 +47,11 @@ func (r *StreamLiveInputOutputService) New(ctx context.Context, accountID string
 }
 
 // Updates the state of an output.
-func (r *StreamLiveInputOutputService) Update(ctx context.Context, accountID string, liveInputIdentifier string, outputIdentifier string, body StreamLiveInputOutputUpdateParams, opts ...option.RequestOption) (res *StreamLiveInputOutputUpdateResponse, err error) {
+func (r *StreamLiveInputOutputService) Update(ctx context.Context, liveInputIdentifier string, outputIdentifier string, params StreamLiveInputOutputUpdateParams, opts ...option.RequestOption) (res *StreamLiveInputOutputUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamLiveInputOutputUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s/outputs/%s", accountID, liveInputIdentifier, outputIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s/outputs/%s", params.AccountID, liveInputIdentifier, outputIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -60,11 +60,11 @@ func (r *StreamLiveInputOutputService) Update(ctx context.Context, accountID str
 }
 
 // Retrieves all outputs associated with a specified live input.
-func (r *StreamLiveInputOutputService) List(ctx context.Context, accountID string, liveInputIdentifier string, opts ...option.RequestOption) (res *[]StreamLiveInputOutputListResponse, err error) {
+func (r *StreamLiveInputOutputService) List(ctx context.Context, liveInputIdentifier string, query StreamLiveInputOutputListParams, opts ...option.RequestOption) (res *[]StreamLiveInputOutputListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamLiveInputOutputListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s/outputs", accountID, liveInputIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s/outputs", query.AccountID, liveInputIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -73,11 +73,11 @@ func (r *StreamLiveInputOutputService) List(ctx context.Context, accountID strin
 }
 
 // Deletes an output and removes it from the associated live input.
-func (r *StreamLiveInputOutputService) Delete(ctx context.Context, accountID string, liveInputIdentifier string, outputIdentifier string, opts ...option.RequestOption) (err error) {
+func (r *StreamLiveInputOutputService) Delete(ctx context.Context, liveInputIdentifier string, outputIdentifier string, body StreamLiveInputOutputDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
-	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s/outputs/%s", accountID, liveInputIdentifier, outputIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s/outputs/%s", body.AccountID, liveInputIdentifier, outputIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, nil, opts...)
 	return
 }
 
@@ -175,6 +175,8 @@ func (r *StreamLiveInputOutputListResponse) UnmarshalJSON(data []byte) (err erro
 }
 
 type StreamLiveInputOutputNewParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The streamKey used to authenticate against an output's target.
 	StreamKey param.Field[string] `json:"streamKey,required"`
 	// The URL an output uses to restream.
@@ -261,6 +263,8 @@ const (
 )
 
 type StreamLiveInputOutputUpdateParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// When enabled, live video streamed to the associated live input will be sent to
 	// the output URL. When disabled, live video will not be sent to the output URL,
 	// even when streaming to the associated live input. Use this to control precisely
@@ -342,6 +346,11 @@ const (
 	StreamLiveInputOutputUpdateResponseEnvelopeSuccessTrue StreamLiveInputOutputUpdateResponseEnvelopeSuccess = true
 )
 
+type StreamLiveInputOutputListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type StreamLiveInputOutputListResponseEnvelope struct {
 	Errors   []StreamLiveInputOutputListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []StreamLiveInputOutputListResponseEnvelopeMessages `json:"messages,required"`
@@ -410,3 +419,8 @@ type StreamLiveInputOutputListResponseEnvelopeSuccess bool
 const (
 	StreamLiveInputOutputListResponseEnvelopeSuccessTrue StreamLiveInputOutputListResponseEnvelopeSuccess = true
 )
+
+type StreamLiveInputOutputDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}

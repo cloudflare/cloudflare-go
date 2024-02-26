@@ -35,12 +35,12 @@ func NewDEXFleetStatusDeviceService(opts ...option.RequestOption) (r *DEXFleetSt
 }
 
 // List details for devices using WARP
-func (r *DEXFleetStatusDeviceService) List(ctx context.Context, accountID string, query DEXFleetStatusDeviceListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[DEXFleetStatusDeviceListResponse], err error) {
+func (r *DEXFleetStatusDeviceService) List(ctx context.Context, params DEXFleetStatusDeviceListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[DEXFleetStatusDeviceListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	path := fmt.Sprintf("accounts/%s/dex/fleet-status/devices", accountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/dex/fleet-status/devices", params.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -53,8 +53,8 @@ func (r *DEXFleetStatusDeviceService) List(ctx context.Context, accountID string
 }
 
 // List details for devices using WARP
-func (r *DEXFleetStatusDeviceService) ListAutoPaging(ctx context.Context, accountID string, query DEXFleetStatusDeviceListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[DEXFleetStatusDeviceListResponse] {
-	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, accountID, query, opts...))
+func (r *DEXFleetStatusDeviceService) ListAutoPaging(ctx context.Context, params DEXFleetStatusDeviceListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[DEXFleetStatusDeviceListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 type DEXFleetStatusDeviceListResponse struct {
@@ -94,6 +94,7 @@ func (r *DEXFleetStatusDeviceListResponse) UnmarshalJSON(data []byte) (err error
 }
 
 type DEXFleetStatusDeviceListParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Page number of paginated results
 	Page param.Field[float64] `query:"page,required"`
 	// Number of items per page

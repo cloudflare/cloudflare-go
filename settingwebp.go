@@ -35,11 +35,11 @@ func NewSettingWebpService(opts ...option.RequestOption) (r *SettingWebpService)
 // When the client requesting the image supports the WebP image codec, and WebP
 // offers a performance advantage over the original image format, Cloudflare will
 // serve a WebP version of the original image.
-func (r *SettingWebpService) Edit(ctx context.Context, zoneID string, body SettingWebpEditParams, opts ...option.RequestOption) (res *SettingWebpEditResponse, err error) {
+func (r *SettingWebpService) Edit(ctx context.Context, params SettingWebpEditParams, opts ...option.RequestOption) (res *SettingWebpEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingWebpEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/webp", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/webp", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -50,11 +50,11 @@ func (r *SettingWebpService) Edit(ctx context.Context, zoneID string, body Setti
 // When the client requesting the image supports the WebP image codec, and WebP
 // offers a performance advantage over the original image format, Cloudflare will
 // serve a WebP version of the original image.
-func (r *SettingWebpService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingWebpGetResponse, err error) {
+func (r *SettingWebpService) Get(ctx context.Context, query SettingWebpGetParams, opts ...option.RequestOption) (res *SettingWebpGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingWebpGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/webp", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/webp", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -173,6 +173,8 @@ const (
 )
 
 type SettingWebpEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the zone setting.
 	Value param.Field[SettingWebpEditParamsValue] `json:"value,required"`
 }
@@ -252,6 +254,11 @@ type settingWebpEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingWebpEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingWebpGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingWebpGetResponseEnvelope struct {

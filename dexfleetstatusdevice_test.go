@@ -29,23 +29,20 @@ func TestDEXFleetStatusDeviceListWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.DEX.FleetStatus.Devices.List(
-		context.TODO(),
-		"01a7362d577a6c3019a474fd6f485823",
-		cloudflare.DEXFleetStatusDeviceListParams{
-			Page:      cloudflare.F(1.000000),
-			PerPage:   cloudflare.F(10.000000),
-			TimeEnd:   cloudflare.F("2023-10-11T00:00:00Z"),
-			TimeStart: cloudflare.F("2023-10-11T00:00:00Z"),
-			Colo:      cloudflare.F("SJC"),
-			DeviceID:  cloudflare.F("cb49c27f-7f97-49c5-b6f3-f7c01ead0fd7"),
-			Mode:      cloudflare.F("proxy"),
-			Platform:  cloudflare.F("windows"),
-			SortBy:    cloudflare.F(cloudflare.DEXFleetStatusDeviceListParamsSortByColo),
-			Status:    cloudflare.F("connected"),
-			Version:   cloudflare.F("1.0.0"),
-		},
-	)
+	_, err := client.DEX.FleetStatus.Devices.List(context.TODO(), cloudflare.DEXFleetStatusDeviceListParams{
+		AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
+		Page:      cloudflare.F(1.000000),
+		PerPage:   cloudflare.F(10.000000),
+		TimeEnd:   cloudflare.F("2023-10-11T00:00:00Z"),
+		TimeStart: cloudflare.F("2023-10-11T00:00:00Z"),
+		Colo:      cloudflare.F("SJC"),
+		DeviceID:  cloudflare.F("cb49c27f-7f97-49c5-b6f3-f7c01ead0fd7"),
+		Mode:      cloudflare.F("proxy"),
+		Platform:  cloudflare.F("windows"),
+		SortBy:    cloudflare.F(cloudflare.DEXFleetStatusDeviceListParamsSortByColo),
+		Status:    cloudflare.F("connected"),
+		Version:   cloudflare.F("1.0.0"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

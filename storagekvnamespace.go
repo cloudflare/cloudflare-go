@@ -47,11 +47,11 @@ func NewStorageKVNamespaceService(opts ...option.RequestOption) (r *StorageKVNam
 // Creates a namespace under the given title. A `400` is returned if the account
 // already owns a namespace with this title. A namespace must be explicitly deleted
 // to be replaced.
-func (r *StorageKVNamespaceService) New(ctx context.Context, accountID string, body StorageKVNamespaceNewParams, opts ...option.RequestOption) (res *StorageKVNamespaceNewResponse, err error) {
+func (r *StorageKVNamespaceService) New(ctx context.Context, params StorageKVNamespaceNewParams, opts ...option.RequestOption) (res *StorageKVNamespaceNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StorageKVNamespaceNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -60,11 +60,11 @@ func (r *StorageKVNamespaceService) New(ctx context.Context, accountID string, b
 }
 
 // Modifies a namespace's title.
-func (r *StorageKVNamespaceService) Update(ctx context.Context, accountID string, namespaceID string, body StorageKVNamespaceUpdateParams, opts ...option.RequestOption) (res *StorageKVNamespaceUpdateResponse, err error) {
+func (r *StorageKVNamespaceService) Update(ctx context.Context, namespaceID string, params StorageKVNamespaceUpdateParams, opts ...option.RequestOption) (res *StorageKVNamespaceUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StorageKVNamespaceUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s", accountID, namespaceID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s", params.AccountID, namespaceID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -73,12 +73,12 @@ func (r *StorageKVNamespaceService) Update(ctx context.Context, accountID string
 }
 
 // Returns the namespaces owned by an account.
-func (r *StorageKVNamespaceService) List(ctx context.Context, accountID string, query StorageKVNamespaceListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[StorageKVNamespaceListResponse], err error) {
+func (r *StorageKVNamespaceService) List(ctx context.Context, params StorageKVNamespaceListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[StorageKVNamespaceListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces", accountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces", params.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -91,16 +91,16 @@ func (r *StorageKVNamespaceService) List(ctx context.Context, accountID string, 
 }
 
 // Returns the namespaces owned by an account.
-func (r *StorageKVNamespaceService) ListAutoPaging(ctx context.Context, accountID string, query StorageKVNamespaceListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[StorageKVNamespaceListResponse] {
-	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, accountID, query, opts...))
+func (r *StorageKVNamespaceService) ListAutoPaging(ctx context.Context, params StorageKVNamespaceListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[StorageKVNamespaceListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes the namespace corresponding to the given ID.
-func (r *StorageKVNamespaceService) Delete(ctx context.Context, accountID string, namespaceID string, opts ...option.RequestOption) (res *StorageKVNamespaceDeleteResponse, err error) {
+func (r *StorageKVNamespaceService) Delete(ctx context.Context, namespaceID string, body StorageKVNamespaceDeleteParams, opts ...option.RequestOption) (res *StorageKVNamespaceDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StorageKVNamespaceDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s", accountID, namespaceID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s", body.AccountID, namespaceID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -193,6 +193,8 @@ func init() {
 }
 
 type StorageKVNamespaceNewParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// A human-readable string name for a Namespace.
 	Title param.Field[string] `json:"title,required"`
 }
@@ -271,6 +273,8 @@ const (
 )
 
 type StorageKVNamespaceUpdateParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// A human-readable string name for a Namespace.
 	Title param.Field[string] `json:"title,required"`
 }
@@ -349,6 +353,8 @@ const (
 )
 
 type StorageKVNamespaceListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Direction to order namespaces.
 	Direction param.Field[StorageKVNamespaceListParamsDirection] `query:"direction"`
 	// Field to order results by.
@@ -383,6 +389,11 @@ const (
 	StorageKVNamespaceListParamsOrderID    StorageKVNamespaceListParamsOrder = "id"
 	StorageKVNamespaceListParamsOrderTitle StorageKVNamespaceListParamsOrder = "title"
 )
+
+type StorageKVNamespaceDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type StorageKVNamespaceDeleteResponseEnvelope struct {
 	Errors   []StorageKVNamespaceDeleteResponseEnvelopeErrors   `json:"errors,required"`

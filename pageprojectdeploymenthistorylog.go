@@ -9,6 +9,7 @@ import (
 	"reflect"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
@@ -34,11 +35,11 @@ func NewPageProjectDeploymentHistoryLogService(opts ...option.RequestOption) (r 
 }
 
 // Fetch deployment logs for a project.
-func (r *PageProjectDeploymentHistoryLogService) List(ctx context.Context, accountID string, projectName string, deploymentID string, opts ...option.RequestOption) (res *PageProjectDeploymentHistoryLogListResponse, err error) {
+func (r *PageProjectDeploymentHistoryLogService) List(ctx context.Context, projectName string, deploymentID string, query PageProjectDeploymentHistoryLogListParams, opts ...option.RequestOption) (res *PageProjectDeploymentHistoryLogListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageProjectDeploymentHistoryLogListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s/history/logs", accountID, projectName, deploymentID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s/history/logs", query.AccountID, projectName, deploymentID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -66,6 +67,11 @@ func init() {
 type PageProjectDeploymentHistoryLogListResponseArray []interface{}
 
 func (r PageProjectDeploymentHistoryLogListResponseArray) ImplementsPageProjectDeploymentHistoryLogListResponse() {
+}
+
+type PageProjectDeploymentHistoryLogListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type PageProjectDeploymentHistoryLogListResponseEnvelope struct {

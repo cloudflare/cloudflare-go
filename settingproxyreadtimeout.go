@@ -33,11 +33,11 @@ func NewSettingProxyReadTimeoutService(opts ...option.RequestOption) (r *Setting
 }
 
 // Maximum time between two read operations from origin.
-func (r *SettingProxyReadTimeoutService) Edit(ctx context.Context, zoneID string, body SettingProxyReadTimeoutEditParams, opts ...option.RequestOption) (res *SettingProxyReadTimeoutEditResponse, err error) {
+func (r *SettingProxyReadTimeoutService) Edit(ctx context.Context, params SettingProxyReadTimeoutEditParams, opts ...option.RequestOption) (res *SettingProxyReadTimeoutEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingProxyReadTimeoutEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/proxy_read_timeout", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/proxy_read_timeout", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -46,11 +46,11 @@ func (r *SettingProxyReadTimeoutService) Edit(ctx context.Context, zoneID string
 }
 
 // Maximum time between two read operations from origin.
-func (r *SettingProxyReadTimeoutService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingProxyReadTimeoutGetResponse, err error) {
+func (r *SettingProxyReadTimeoutService) Get(ctx context.Context, query SettingProxyReadTimeoutGetParams, opts ...option.RequestOption) (res *SettingProxyReadTimeoutGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingProxyReadTimeoutGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/proxy_read_timeout", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/proxy_read_timeout", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -149,6 +149,8 @@ const (
 )
 
 type SettingProxyReadTimeoutEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Maximum time between two read operations from origin.
 	Value param.Field[SettingProxyReadTimeoutEditParamsValue] `json:"value,required"`
 }
@@ -246,6 +248,11 @@ type settingProxyReadTimeoutEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingProxyReadTimeoutEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingProxyReadTimeoutGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingProxyReadTimeoutGetResponseEnvelope struct {

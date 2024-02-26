@@ -32,11 +32,11 @@ func NewSSLUniversalSettingService(opts ...option.RequestOption) (r *SSLUniversa
 }
 
 // Patch Universal SSL Settings for a Zone.
-func (r *SSLUniversalSettingService) Edit(ctx context.Context, zoneID string, body SSLUniversalSettingEditParams, opts ...option.RequestOption) (res *SSLUniversalSettingEditResponse, err error) {
+func (r *SSLUniversalSettingService) Edit(ctx context.Context, params SSLUniversalSettingEditParams, opts ...option.RequestOption) (res *SSLUniversalSettingEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SSLUniversalSettingEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/ssl/universal/settings", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/ssl/universal/settings", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -45,11 +45,11 @@ func (r *SSLUniversalSettingService) Edit(ctx context.Context, zoneID string, bo
 }
 
 // Get Universal SSL Settings for a Zone.
-func (r *SSLUniversalSettingService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SSLUniversalSettingGetResponse, err error) {
+func (r *SSLUniversalSettingService) Get(ctx context.Context, query SSLUniversalSettingGetParams, opts ...option.RequestOption) (res *SSLUniversalSettingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SSLUniversalSettingGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/ssl/universal/settings", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/ssl/universal/settings", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -142,6 +142,8 @@ func (r *SSLUniversalSettingGetResponse) UnmarshalJSON(data []byte) (err error) 
 }
 
 type SSLUniversalSettingEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Disabling Universal SSL removes any currently active Universal SSL certificates
 	// for your zone from the edge and prevents any future Universal SSL certificates
 	// from being ordered. If there are no advanced certificates or custom certificates
@@ -242,6 +244,11 @@ type SSLUniversalSettingEditResponseEnvelopeSuccess bool
 const (
 	SSLUniversalSettingEditResponseEnvelopeSuccessTrue SSLUniversalSettingEditResponseEnvelopeSuccess = true
 )
+
+type SSLUniversalSettingGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type SSLUniversalSettingGetResponseEnvelope struct {
 	Errors   []SSLUniversalSettingGetResponseEnvelopeErrors   `json:"errors,required"`

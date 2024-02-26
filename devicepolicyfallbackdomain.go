@@ -34,11 +34,11 @@ func NewDevicePolicyFallbackDomainService(opts ...option.RequestOption) (r *Devi
 // Sets the list of domains to bypass Gateway DNS resolution. These domains will
 // use the specified local DNS resolver instead. This will only apply to the
 // specified device settings profile.
-func (r *DevicePolicyFallbackDomainService) Update(ctx context.Context, accountID interface{}, policyID string, body DevicePolicyFallbackDomainUpdateParams, opts ...option.RequestOption) (res *[]DevicePolicyFallbackDomainUpdateResponse, err error) {
+func (r *DevicePolicyFallbackDomainService) Update(ctx context.Context, policyID string, params DevicePolicyFallbackDomainUpdateParams, opts ...option.RequestOption) (res *[]DevicePolicyFallbackDomainUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyFallbackDomainUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/policy/%s/fallback_domains", accountID, policyID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/devices/policy/%s/fallback_domains", params.AccountID, policyID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +48,11 @@ func (r *DevicePolicyFallbackDomainService) Update(ctx context.Context, accountI
 
 // Fetches a list of domains to bypass Gateway DNS resolution. These domains will
 // use the specified local DNS resolver instead.
-func (r *DevicePolicyFallbackDomainService) List(ctx context.Context, accountID interface{}, opts ...option.RequestOption) (res *[]DevicePolicyFallbackDomainListResponse, err error) {
+func (r *DevicePolicyFallbackDomainService) List(ctx context.Context, query DevicePolicyFallbackDomainListParams, opts ...option.RequestOption) (res *[]DevicePolicyFallbackDomainListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyFallbackDomainListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/policy/fallback_domains", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/devices/policy/fallback_domains", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -63,11 +63,11 @@ func (r *DevicePolicyFallbackDomainService) List(ctx context.Context, accountID 
 // Fetches the list of domains to bypass Gateway DNS resolution from a specified
 // device settings profile. These domains will use the specified local DNS resolver
 // instead.
-func (r *DevicePolicyFallbackDomainService) Get(ctx context.Context, accountID interface{}, policyID string, opts ...option.RequestOption) (res *[]DevicePolicyFallbackDomainGetResponse, err error) {
+func (r *DevicePolicyFallbackDomainService) Get(ctx context.Context, policyID string, query DevicePolicyFallbackDomainGetParams, opts ...option.RequestOption) (res *[]DevicePolicyFallbackDomainGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyFallbackDomainGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/policy/%s/fallback_domains", accountID, policyID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/devices/policy/%s/fallback_domains", query.AccountID, policyID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -148,7 +148,8 @@ func (r *DevicePolicyFallbackDomainGetResponse) UnmarshalJSON(data []byte) (err 
 }
 
 type DevicePolicyFallbackDomainUpdateParams struct {
-	Body param.Field[[]DevicePolicyFallbackDomainUpdateParamsBody] `json:"body,required"`
+	AccountID param.Field[interface{}]                                  `path:"account_id,required"`
+	Body      param.Field[[]DevicePolicyFallbackDomainUpdateParamsBody] `json:"body,required"`
 }
 
 func (r DevicePolicyFallbackDomainUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -268,6 +269,10 @@ func (r *DevicePolicyFallbackDomainUpdateResponseEnvelopeResultInfo) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type DevicePolicyFallbackDomainListParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
+
 type DevicePolicyFallbackDomainListResponseEnvelope struct {
 	Errors   []DevicePolicyFallbackDomainListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DevicePolicyFallbackDomainListResponseEnvelopeMessages `json:"messages,required"`
@@ -365,6 +370,10 @@ type devicePolicyFallbackDomainListResponseEnvelopeResultInfoJSON struct {
 
 func (r *DevicePolicyFallbackDomainListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type DevicePolicyFallbackDomainGetParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
 
 type DevicePolicyFallbackDomainGetResponseEnvelope struct {

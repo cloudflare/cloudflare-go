@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -31,11 +32,11 @@ func NewSpeedPageService(opts ...option.RequestOption) (r *SpeedPageService) {
 }
 
 // Lists all webpages which have been tested.
-func (r *SpeedPageService) List(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *[]SpeedPageListResponse, err error) {
+func (r *SpeedPageService) List(ctx context.Context, query SpeedPageListParams, opts ...option.RequestOption) (res *[]SpeedPageListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SpeedPageListResponseEnvelope
-	path := fmt.Sprintf("zones/%s/speed_api/pages", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/speed_api/pages", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -421,6 +422,11 @@ const (
 	SpeedPageListResponseTestsScheduleFrequencyDaily  SpeedPageListResponseTestsScheduleFrequency = "DAILY"
 	SpeedPageListResponseTestsScheduleFrequencyWeekly SpeedPageListResponseTestsScheduleFrequency = "WEEKLY"
 )
+
+type SpeedPageListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type SpeedPageListResponseEnvelope struct {
 	Result []SpeedPageListResponse           `json:"result"`

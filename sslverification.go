@@ -34,11 +34,11 @@ func NewSSLVerificationService(opts ...option.RequestOption) (r *SSLVerification
 }
 
 // Get SSL Verification Info for a Zone.
-func (r *SSLVerificationService) List(ctx context.Context, zoneID string, query SSLVerificationListParams, opts ...option.RequestOption) (res *[]SSLVerificationListResponse, err error) {
+func (r *SSLVerificationService) List(ctx context.Context, params SSLVerificationListParams, opts ...option.RequestOption) (res *[]SSLVerificationListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SSLVerificationListResponseEnvelope
-	path := fmt.Sprintf("zones/%s/ssl/verification", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("zones/%s/ssl/verification", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -50,11 +50,11 @@ func (r *SSLVerificationService) List(ctx context.Context, zoneID string, query 
 // an immediate validation check on any certificate, and return the updated status.
 // If a validation method is provided, the validation will be immediately attempted
 // using that method.
-func (r *SSLVerificationService) Edit(ctx context.Context, zoneID string, certificatePackID string, body SSLVerificationEditParams, opts ...option.RequestOption) (res *SSLVerificationEditResponse, err error) {
+func (r *SSLVerificationService) Edit(ctx context.Context, certificatePackID string, params SSLVerificationEditParams, opts ...option.RequestOption) (res *SSLVerificationEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SSLVerificationEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/ssl/verification/%s", zoneID, certificatePackID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/ssl/verification/%s", params.ZoneID, certificatePackID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -215,6 +215,8 @@ const (
 )
 
 type SSLVerificationListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Immediately retry SSL Verification.
 	Retry param.Field[SSLVerificationListParamsRetry] `query:"retry"`
 }
@@ -253,6 +255,8 @@ func (r *SSLVerificationListResponseEnvelope) UnmarshalJSON(data []byte) (err er
 }
 
 type SSLVerificationEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Desired validation method.
 	ValidationMethod param.Field[SSLVerificationEditParamsValidationMethod] `json:"validation_method,required"`
 }

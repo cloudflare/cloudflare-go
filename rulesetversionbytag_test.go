@@ -31,10 +31,12 @@ func TestRulesetVersionByTagGet(t *testing.T) {
 	)
 	_, err := client.Rulesets.Versions.ByTags.Get(
 		context.TODO(),
-		"abf9b32d38c5f572afde3336ec0ce302",
 		"2f2feab2026849078ba485f918791bdc",
 		"1",
 		"directory-traversal",
+		cloudflare.RulesetVersionByTagGetParams{
+			AccountID: cloudflare.F("abf9b32d38c5f572afde3336ec0ce302"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

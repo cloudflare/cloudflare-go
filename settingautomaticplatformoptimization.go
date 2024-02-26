@@ -35,11 +35,11 @@ func NewSettingAutomaticPlatformOptimizationService(opts ...option.RequestOption
 // [Automatic Platform Optimization for WordPress](https://developers.cloudflare.com/automatic-platform-optimization/)
 // serves your WordPress site from Cloudflare's edge network and caches third-party
 // fonts.
-func (r *SettingAutomaticPlatformOptimizationService) Edit(ctx context.Context, zoneID string, body SettingAutomaticPlatformOptimizationEditParams, opts ...option.RequestOption) (res *SettingAutomaticPlatformOptimizationEditResponse, err error) {
+func (r *SettingAutomaticPlatformOptimizationService) Edit(ctx context.Context, params SettingAutomaticPlatformOptimizationEditParams, opts ...option.RequestOption) (res *SettingAutomaticPlatformOptimizationEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingAutomaticPlatformOptimizationEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/automatic_platform_optimization", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/automatic_platform_optimization", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -50,11 +50,11 @@ func (r *SettingAutomaticPlatformOptimizationService) Edit(ctx context.Context, 
 // [Automatic Platform Optimization for WordPress](https://developers.cloudflare.com/automatic-platform-optimization/)
 // serves your WordPress site from Cloudflare's edge network and caches third-party
 // fonts.
-func (r *SettingAutomaticPlatformOptimizationService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingAutomaticPlatformOptimizationGetResponse, err error) {
+func (r *SettingAutomaticPlatformOptimizationService) Get(ctx context.Context, query SettingAutomaticPlatformOptimizationGetParams, opts ...option.RequestOption) (res *SettingAutomaticPlatformOptimizationGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingAutomaticPlatformOptimizationGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/automatic_platform_optimization", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/automatic_platform_optimization", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -139,7 +139,9 @@ func (r *SettingAutomaticPlatformOptimizationGetResponse) UnmarshalJSON(data []b
 }
 
 type SettingAutomaticPlatformOptimizationEditParams struct {
-	Value param.Field[SettingAutomaticPlatformOptimizationEditParamsValue] `json:"value,required"`
+	// Identifier
+	ZoneID param.Field[string]                                              `path:"zone_id,required"`
+	Value  param.Field[SettingAutomaticPlatformOptimizationEditParamsValue] `json:"value,required"`
 }
 
 func (r SettingAutomaticPlatformOptimizationEditParams) MarshalJSON() (data []byte, err error) {
@@ -233,6 +235,11 @@ type settingAutomaticPlatformOptimizationEditResponseEnvelopeMessagesJSON struct
 
 func (r *SettingAutomaticPlatformOptimizationEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingAutomaticPlatformOptimizationGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingAutomaticPlatformOptimizationGetResponseEnvelope struct {

@@ -32,7 +32,9 @@ func TestMTLSCertificateAssociationList(t *testing.T) {
 	_, err := client.MTLSCertificates.Associations.List(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.MTLSCertificateAssociationListParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

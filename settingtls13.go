@@ -33,11 +33,11 @@ func NewSettingTLS1_3Service(opts ...option.RequestOption) (r *SettingTLS1_3Serv
 }
 
 // Changes TLS 1.3 setting.
-func (r *SettingTLS1_3Service) Edit(ctx context.Context, zoneID string, body SettingTLS1_3EditParams, opts ...option.RequestOption) (res *SettingTls1_3EditResponse, err error) {
+func (r *SettingTLS1_3Service) Edit(ctx context.Context, params SettingTLS1_3EditParams, opts ...option.RequestOption) (res *SettingTls1_3EditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingTls1_3EditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/tls_1_3", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/tls_1_3", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -46,11 +46,11 @@ func (r *SettingTLS1_3Service) Edit(ctx context.Context, zoneID string, body Set
 }
 
 // Gets TLS 1.3 setting enabled for a zone.
-func (r *SettingTLS1_3Service) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingTls1_3GetResponse, err error) {
+func (r *SettingTLS1_3Service) Get(ctx context.Context, query SettingTLS1_3GetParams, opts ...option.RequestOption) (res *SettingTls1_3GetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingTls1_3GetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/tls_1_3", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/tls_1_3", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -167,6 +167,8 @@ const (
 )
 
 type SettingTLS1_3EditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the zone setting. Notes: Default value depends on the zone's plan
 	// level.
 	Value param.Field[SettingTls1_3EditParamsValue] `json:"value,required"`
@@ -247,6 +249,11 @@ type settingTls1_3EditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingTls1_3EditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingTLS1_3GetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingTls1_3GetResponseEnvelope struct {

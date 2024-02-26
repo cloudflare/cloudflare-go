@@ -37,11 +37,11 @@ func NewPageShieldService(opts ...option.RequestOption) (r *PageShieldService) {
 }
 
 // Updates Page Shield settings.
-func (r *PageShieldService) Update(ctx context.Context, zoneID string, body PageShieldUpdateParams, opts ...option.RequestOption) (res *PageShieldUpdateResponse, err error) {
+func (r *PageShieldService) Update(ctx context.Context, params PageShieldUpdateParams, opts ...option.RequestOption) (res *PageShieldUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageShieldUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/page_shield", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/page_shield", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -50,11 +50,11 @@ func (r *PageShieldService) Update(ctx context.Context, zoneID string, body Page
 }
 
 // Fetches the Page Shield settings.
-func (r *PageShieldService) List(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *PageShieldListResponse, err error) {
+func (r *PageShieldService) List(ctx context.Context, query PageShieldListParams, opts ...option.RequestOption) (res *PageShieldListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageShieldListResponseEnvelope
-	path := fmt.Sprintf("zones/%s/page_shield", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/page_shield", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -119,6 +119,8 @@ func (r *PageShieldListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type PageShieldUpdateParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// When true, indicates that Page Shield is enabled.
 	Enabled param.Field[bool] `json:"enabled"`
 	// When true, CSP reports will be sent to
@@ -200,6 +202,11 @@ type PageShieldUpdateResponseEnvelopeSuccess bool
 const (
 	PageShieldUpdateResponseEnvelopeSuccessTrue PageShieldUpdateResponseEnvelopeSuccess = true
 )
+
+type PageShieldListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type PageShieldListResponseEnvelope struct {
 	Errors   []PageShieldListResponseEnvelopeErrors   `json:"errors,required"`

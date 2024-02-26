@@ -37,11 +37,11 @@ func NewSettingBrowserCheckService(opts ...option.RequestOption) (r *SettingBrow
 // also challenge visitors that do not have a user agent or a non standard user
 // agent (also commonly used by abuse bots, crawlers or visitors).
 // (https://support.cloudflare.com/hc/en-us/articles/200170086).
-func (r *SettingBrowserCheckService) Edit(ctx context.Context, zoneID string, body SettingBrowserCheckEditParams, opts ...option.RequestOption) (res *SettingBrowserCheckEditResponse, err error) {
+func (r *SettingBrowserCheckService) Edit(ctx context.Context, params SettingBrowserCheckEditParams, opts ...option.RequestOption) (res *SettingBrowserCheckEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingBrowserCheckEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/browser_check", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/browser_check", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -54,11 +54,11 @@ func (r *SettingBrowserCheckService) Edit(ctx context.Context, zoneID string, bo
 // also challenge visitors that do not have a user agent or a non standard user
 // agent (also commonly used by abuse bots, crawlers or visitors).
 // (https://support.cloudflare.com/hc/en-us/articles/200170086).
-func (r *SettingBrowserCheckService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingBrowserCheckGetResponse, err error) {
+func (r *SettingBrowserCheckService) Get(ctx context.Context, query SettingBrowserCheckGetParams, opts ...option.RequestOption) (res *SettingBrowserCheckGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingBrowserCheckGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/browser_check", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/browser_check", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -181,6 +181,8 @@ const (
 )
 
 type SettingBrowserCheckEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the zone setting.
 	Value param.Field[SettingBrowserCheckEditParamsValue] `json:"value,required"`
 }
@@ -262,6 +264,11 @@ type settingBrowserCheckEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingBrowserCheckEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingBrowserCheckGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingBrowserCheckGetResponseEnvelope struct {

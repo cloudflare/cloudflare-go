@@ -35,11 +35,11 @@ func NewLogControlCmbConfigService(opts ...option.RequestOption) (r *LogControlC
 }
 
 // Updates CMB config.
-func (r *LogControlCmbConfigService) New(ctx context.Context, accountID string, body LogControlCmbConfigNewParams, opts ...option.RequestOption) (res *LogControlCmbConfigNewResponse, err error) {
+func (r *LogControlCmbConfigService) New(ctx context.Context, params LogControlCmbConfigNewParams, opts ...option.RequestOption) (res *LogControlCmbConfigNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LogControlCmbConfigNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/logs/control/cmb/config", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/logs/control/cmb/config", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +48,11 @@ func (r *LogControlCmbConfigService) New(ctx context.Context, accountID string, 
 }
 
 // Deletes CMB config.
-func (r *LogControlCmbConfigService) Delete(ctx context.Context, accountID string, opts ...option.RequestOption) (res *LogControlCmbConfigDeleteResponse, err error) {
+func (r *LogControlCmbConfigService) Delete(ctx context.Context, body LogControlCmbConfigDeleteParams, opts ...option.RequestOption) (res *LogControlCmbConfigDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LogControlCmbConfigDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/logs/control/cmb/config", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/logs/control/cmb/config", body.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -61,11 +61,11 @@ func (r *LogControlCmbConfigService) Delete(ctx context.Context, accountID strin
 }
 
 // Gets CMB config.
-func (r *LogControlCmbConfigService) Get(ctx context.Context, accountID string, opts ...option.RequestOption) (res *LogControlCmbConfigGetResponse, err error) {
+func (r *LogControlCmbConfigService) Get(ctx context.Context, query LogControlCmbConfigGetParams, opts ...option.RequestOption) (res *LogControlCmbConfigGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LogControlCmbConfigGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/logs/control/cmb/config", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/logs/control/cmb/config", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -131,6 +131,8 @@ func (r *LogControlCmbConfigGetResponse) UnmarshalJSON(data []byte) (err error) 
 }
 
 type LogControlCmbConfigNewParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Comma-separated list of regions.
 	Regions param.Field[string] `json:"regions"`
 }
@@ -208,6 +210,11 @@ const (
 	LogControlCmbConfigNewResponseEnvelopeSuccessTrue LogControlCmbConfigNewResponseEnvelopeSuccess = true
 )
 
+type LogControlCmbConfigDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type LogControlCmbConfigDeleteResponseEnvelope struct {
 	Errors   []LogControlCmbConfigDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []LogControlCmbConfigDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -276,6 +283,11 @@ type LogControlCmbConfigDeleteResponseEnvelopeSuccess bool
 const (
 	LogControlCmbConfigDeleteResponseEnvelopeSuccessTrue LogControlCmbConfigDeleteResponseEnvelopeSuccess = true
 )
+
+type LogControlCmbConfigGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type LogControlCmbConfigGetResponseEnvelope struct {
 	Errors   []LogControlCmbConfigGetResponseEnvelopeErrors   `json:"errors,required"`

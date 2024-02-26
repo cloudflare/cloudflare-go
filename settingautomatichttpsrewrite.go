@@ -33,11 +33,11 @@ func NewSettingAutomaticHTTPSRewriteService(opts ...option.RequestOption) (r *Se
 }
 
 // Enable the Automatic HTTPS Rewrites feature for this zone.
-func (r *SettingAutomaticHTTPSRewriteService) Edit(ctx context.Context, zoneID string, body SettingAutomaticHTTPSRewriteEditParams, opts ...option.RequestOption) (res *SettingAutomaticHTTPSRewriteEditResponse, err error) {
+func (r *SettingAutomaticHTTPSRewriteService) Edit(ctx context.Context, params SettingAutomaticHTTPSRewriteEditParams, opts ...option.RequestOption) (res *SettingAutomaticHTTPSRewriteEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingAutomaticHTTPSRewriteEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/automatic_https_rewrites", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/automatic_https_rewrites", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -46,11 +46,11 @@ func (r *SettingAutomaticHTTPSRewriteService) Edit(ctx context.Context, zoneID s
 }
 
 // Enable the Automatic HTTPS Rewrites feature for this zone.
-func (r *SettingAutomaticHTTPSRewriteService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingAutomaticHTTPSRewriteGetResponse, err error) {
+func (r *SettingAutomaticHTTPSRewriteService) Get(ctx context.Context, query SettingAutomaticHTTPSRewriteGetParams, opts ...option.RequestOption) (res *SettingAutomaticHTTPSRewriteGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingAutomaticHTTPSRewriteGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/automatic_https_rewrites", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/automatic_https_rewrites", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -165,6 +165,8 @@ const (
 )
 
 type SettingAutomaticHTTPSRewriteEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the zone setting. Notes: Default value depends on the zone's plan
 	// level.
 	Value param.Field[SettingAutomaticHTTPSRewriteEditParamsValue] `json:"value,required"`
@@ -245,6 +247,11 @@ type settingAutomaticHTTPSRewriteEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingAutomaticHTTPSRewriteEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingAutomaticHTTPSRewriteGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingAutomaticHTTPSRewriteGetResponseEnvelope struct {

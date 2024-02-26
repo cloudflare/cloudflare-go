@@ -39,11 +39,11 @@ func NewOriginTLSClientAuthHostnameService(opts ...option.RequestOption) (r *Ori
 // even if activated at the zone level. 100 maximum associations on a single
 // certificate are allowed. Note: Use a null value for parameter _enabled_ to
 // invalidate the association.
-func (r *OriginTLSClientAuthHostnameService) Update(ctx context.Context, zoneID string, body OriginTLSClientAuthHostnameUpdateParams, opts ...option.RequestOption) (res *[]OriginTLSClientAuthHostnameUpdateResponse, err error) {
+func (r *OriginTLSClientAuthHostnameService) Update(ctx context.Context, params OriginTLSClientAuthHostnameUpdateParams, opts ...option.RequestOption) (res *[]OriginTLSClientAuthHostnameUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OriginTLSClientAuthHostnameUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -52,11 +52,11 @@ func (r *OriginTLSClientAuthHostnameService) Update(ctx context.Context, zoneID 
 }
 
 // Get the Hostname Status for Client Authentication
-func (r *OriginTLSClientAuthHostnameService) Get(ctx context.Context, zoneID string, hostname string, opts ...option.RequestOption) (res *OriginTLSClientAuthHostnameGetResponse, err error) {
+func (r *OriginTLSClientAuthHostnameService) Get(ctx context.Context, hostname string, query OriginTLSClientAuthHostnameGetParams, opts ...option.RequestOption) (res *OriginTLSClientAuthHostnameGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OriginTLSClientAuthHostnameGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/%s", zoneID, hostname)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/%s", query.ZoneID, hostname)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -185,6 +185,8 @@ const (
 )
 
 type OriginTLSClientAuthHostnameUpdateParams struct {
+	// Identifier
+	ZoneID param.Field[string]                                          `path:"zone_id,required"`
 	Config param.Field[[]OriginTLSClientAuthHostnameUpdateParamsConfig] `json:"config,required"`
 }
 
@@ -306,6 +308,11 @@ type originTLSClientAuthHostnameUpdateResponseEnvelopeResultInfoJSON struct {
 
 func (r *OriginTLSClientAuthHostnameUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type OriginTLSClientAuthHostnameGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type OriginTLSClientAuthHostnameGetResponseEnvelope struct {

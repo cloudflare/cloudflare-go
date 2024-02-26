@@ -44,11 +44,11 @@ func NewCustomHostnameService(opts ...option.RequestOption) (r *CustomHostnameSe
 // plus hostmaster, postmaster, webmaster, admin, administrator. If http is used
 // and the domain is not already pointing to the Managed CNAME host, the PATCH
 // method must be used once it is (to complete validation).
-func (r *CustomHostnameService) New(ctx context.Context, zoneID string, body CustomHostnameNewParams, opts ...option.RequestOption) (res *CustomHostnameNewResponse, err error) {
+func (r *CustomHostnameService) New(ctx context.Context, params CustomHostnameNewParams, opts ...option.RequestOption) (res *CustomHostnameNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomHostnameNewResponseEnvelope
-	path := fmt.Sprintf("zones/%s/custom_hostnames", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/custom_hostnames", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -57,12 +57,12 @@ func (r *CustomHostnameService) New(ctx context.Context, zoneID string, body Cus
 }
 
 // List, search, sort, and filter all of your custom hostnames.
-func (r *CustomHostnameService) List(ctx context.Context, zoneID string, query CustomHostnameListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[CustomHostnameListResponse], err error) {
+func (r *CustomHostnameService) List(ctx context.Context, params CustomHostnameListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[CustomHostnameListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	path := fmt.Sprintf("zones/%s/custom_hostnames", zoneID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	path := fmt.Sprintf("zones/%s/custom_hostnames", params.ZoneID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -75,15 +75,15 @@ func (r *CustomHostnameService) List(ctx context.Context, zoneID string, query C
 }
 
 // List, search, sort, and filter all of your custom hostnames.
-func (r *CustomHostnameService) ListAutoPaging(ctx context.Context, zoneID string, query CustomHostnameListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[CustomHostnameListResponse] {
-	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneID, query, opts...))
+func (r *CustomHostnameService) ListAutoPaging(ctx context.Context, params CustomHostnameListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[CustomHostnameListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Delete Custom Hostname (and any issued SSL certificates)
-func (r *CustomHostnameService) Delete(ctx context.Context, zoneID string, customHostnameID string, opts ...option.RequestOption) (res *CustomHostnameDeleteResponse, err error) {
+func (r *CustomHostnameService) Delete(ctx context.Context, customHostnameID string, body CustomHostnameDeleteParams, opts ...option.RequestOption) (res *CustomHostnameDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("zones/%s/custom_hostnames/%s", zoneID, customHostnameID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
+	path := fmt.Sprintf("zones/%s/custom_hostnames/%s", body.ZoneID, customHostnameID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &res, opts...)
 	return
 }
 
@@ -91,11 +91,11 @@ func (r *CustomHostnameService) Delete(ctx context.Context, zoneID string, custo
 // matches existing config, used to indicate that hostname should pass domain
 // control validation (DCV). Can also be used to change validation type, e.g., from
 // 'http' to 'email'.
-func (r *CustomHostnameService) Edit(ctx context.Context, zoneID string, customHostnameID string, body CustomHostnameEditParams, opts ...option.RequestOption) (res *CustomHostnameEditResponse, err error) {
+func (r *CustomHostnameService) Edit(ctx context.Context, customHostnameID string, params CustomHostnameEditParams, opts ...option.RequestOption) (res *CustomHostnameEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomHostnameEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/custom_hostnames/%s", zoneID, customHostnameID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/custom_hostnames/%s", params.ZoneID, customHostnameID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -104,11 +104,11 @@ func (r *CustomHostnameService) Edit(ctx context.Context, zoneID string, customH
 }
 
 // Custom Hostname Details
-func (r *CustomHostnameService) Get(ctx context.Context, zoneID string, customHostnameID string, opts ...option.RequestOption) (res *CustomHostnameGetResponse, err error) {
+func (r *CustomHostnameService) Get(ctx context.Context, customHostnameID string, query CustomHostnameGetParams, opts ...option.RequestOption) (res *CustomHostnameGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomHostnameGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/custom_hostnames/%s", zoneID, customHostnameID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/custom_hostnames/%s", query.ZoneID, customHostnameID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -1275,6 +1275,8 @@ func (r *CustomHostnameGetResponseSSLValidationRecord) UnmarshalJSON(data []byte
 }
 
 type CustomHostnameNewParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The custom hostname that will point to your hostname via CNAME.
 	Hostname param.Field[string] `json:"hostname,required"`
 	// SSL properties used when creating the custom hostname.
@@ -1486,6 +1488,8 @@ const (
 )
 
 type CustomHostnameListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Hostname ID to match against. This ID was generated and returned during the
 	// initial custom_hostname creation. This parameter cannot be used with the
 	// 'hostname' parameter.
@@ -1538,7 +1542,14 @@ const (
 	CustomHostnameListParamsSSL1 CustomHostnameListParamsSSL = 1
 )
 
+type CustomHostnameDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type CustomHostnameEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// These are per-hostname (customer) settings.
 	CustomMetadata param.Field[CustomHostnameEditParamsCustomMetadata] `json:"custom_metadata"`
 	// a valid hostname that’s been added to your DNS zone as an A, AAAA, or CNAME
@@ -1755,6 +1766,11 @@ type CustomHostnameEditResponseEnvelopeSuccess bool
 const (
 	CustomHostnameEditResponseEnvelopeSuccessTrue CustomHostnameEditResponseEnvelopeSuccess = true
 )
+
+type CustomHostnameGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type CustomHostnameGetResponseEnvelope struct {
 	Errors   []CustomHostnameGetResponseEnvelopeErrors   `json:"errors,required"`

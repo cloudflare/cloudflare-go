@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -31,11 +32,11 @@ func NewLoadBalancerMonitorReferenceService(opts ...option.RequestOption) (r *Lo
 }
 
 // Get the list of resources that reference the provided monitor.
-func (r *LoadBalancerMonitorReferenceService) List(ctx context.Context, accountID string, monitorID string, opts ...option.RequestOption) (res *[]LoadBalancerMonitorReferenceListResponse, err error) {
+func (r *LoadBalancerMonitorReferenceService) List(ctx context.Context, monitorID string, query LoadBalancerMonitorReferenceListParams, opts ...option.RequestOption) (res *[]LoadBalancerMonitorReferenceListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerMonitorReferenceListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s/references", accountID, monitorID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s/references", query.AccountID, monitorID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -73,6 +74,11 @@ const (
 	LoadBalancerMonitorReferenceListResponseReferenceTypeReferral LoadBalancerMonitorReferenceListResponseReferenceType = "referral"
 	LoadBalancerMonitorReferenceListResponseReferenceTypeReferrer LoadBalancerMonitorReferenceListResponseReferenceType = "referrer"
 )
+
+type LoadBalancerMonitorReferenceListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type LoadBalancerMonitorReferenceListResponseEnvelope struct {
 	Errors   []LoadBalancerMonitorReferenceListResponseEnvelopeErrors   `json:"errors,required"`

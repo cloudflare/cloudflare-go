@@ -37,11 +37,11 @@ func NewStreamWatermarkService(opts ...option.RequestOption) (r *StreamWatermark
 
 // Creates watermark profiles using a single `HTTP POST multipart/form-data`
 // request.
-func (r *StreamWatermarkService) New(ctx context.Context, accountID string, body StreamWatermarkNewParams, opts ...option.RequestOption) (res *StreamWatermarkNewResponse, err error) {
+func (r *StreamWatermarkService) New(ctx context.Context, params StreamWatermarkNewParams, opts ...option.RequestOption) (res *StreamWatermarkNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamWatermarkNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/watermarks", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/watermarks", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -50,11 +50,11 @@ func (r *StreamWatermarkService) New(ctx context.Context, accountID string, body
 }
 
 // Lists all watermark profiles for an account.
-func (r *StreamWatermarkService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]StreamWatermarkListResponse, err error) {
+func (r *StreamWatermarkService) List(ctx context.Context, query StreamWatermarkListParams, opts ...option.RequestOption) (res *[]StreamWatermarkListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamWatermarkListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/watermarks", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/watermarks", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -63,11 +63,11 @@ func (r *StreamWatermarkService) List(ctx context.Context, accountID string, opt
 }
 
 // Deletes a watermark profile.
-func (r *StreamWatermarkService) Delete(ctx context.Context, accountID string, identifier string, opts ...option.RequestOption) (res *StreamWatermarkDeleteResponse, err error) {
+func (r *StreamWatermarkService) Delete(ctx context.Context, identifier string, body StreamWatermarkDeleteParams, opts ...option.RequestOption) (res *StreamWatermarkDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamWatermarkDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/watermarks/%s", accountID, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/watermarks/%s", body.AccountID, identifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -76,11 +76,11 @@ func (r *StreamWatermarkService) Delete(ctx context.Context, accountID string, i
 }
 
 // Retrieves details for a single watermark profile.
-func (r *StreamWatermarkService) Get(ctx context.Context, accountID string, identifier string, opts ...option.RequestOption) (res *StreamWatermarkGetResponse, err error) {
+func (r *StreamWatermarkService) Get(ctx context.Context, identifier string, query StreamWatermarkGetParams, opts ...option.RequestOption) (res *StreamWatermarkGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamWatermarkGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/watermarks/%s", accountID, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/watermarks/%s", query.AccountID, identifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -196,6 +196,8 @@ func init() {
 }
 
 type StreamWatermarkNewParams struct {
+	// The account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The image file to upload.
 	File param.Field[string] `json:"file,required"`
 	// A short description of the watermark profile.
@@ -292,6 +294,11 @@ const (
 	StreamWatermarkNewResponseEnvelopeSuccessTrue StreamWatermarkNewResponseEnvelopeSuccess = true
 )
 
+type StreamWatermarkListParams struct {
+	// The account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type StreamWatermarkListResponseEnvelope struct {
 	Errors   []StreamWatermarkListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []StreamWatermarkListResponseEnvelopeMessages `json:"messages,required"`
@@ -361,6 +368,11 @@ const (
 	StreamWatermarkListResponseEnvelopeSuccessTrue StreamWatermarkListResponseEnvelopeSuccess = true
 )
 
+type StreamWatermarkDeleteParams struct {
+	// The account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type StreamWatermarkDeleteResponseEnvelope struct {
 	Errors   []StreamWatermarkDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []StreamWatermarkDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -429,6 +441,11 @@ type StreamWatermarkDeleteResponseEnvelopeSuccess bool
 const (
 	StreamWatermarkDeleteResponseEnvelopeSuccessTrue StreamWatermarkDeleteResponseEnvelopeSuccess = true
 )
+
+type StreamWatermarkGetParams struct {
+	// The account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type StreamWatermarkGetResponseEnvelope struct {
 	Errors   []StreamWatermarkGetResponseEnvelopeErrors   `json:"errors,required"`

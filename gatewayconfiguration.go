@@ -33,11 +33,11 @@ func NewGatewayConfigurationService(opts ...option.RequestOption) (r *GatewayCon
 }
 
 // Updates the current Zero Trust account configuration.
-func (r *GatewayConfigurationService) Update(ctx context.Context, accountID interface{}, body GatewayConfigurationUpdateParams, opts ...option.RequestOption) (res *GatewayConfigurationUpdateResponse, err error) {
+func (r *GatewayConfigurationService) Update(ctx context.Context, params GatewayConfigurationUpdateParams, opts ...option.RequestOption) (res *GatewayConfigurationUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayConfigurationUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/configuration", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/gateway/configuration", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -50,11 +50,11 @@ func (r *GatewayConfigurationService) Update(ctx context.Context, accountID inte
 // `activity_log`, `block_page`, `browser_isolation`, `fips`, `body_scanning`, or
 // `custom_certificate`, without updating the entire configuration object. Returns
 // an error if any collection of settings is not properly configured.
-func (r *GatewayConfigurationService) Edit(ctx context.Context, accountID interface{}, body GatewayConfigurationEditParams, opts ...option.RequestOption) (res *GatewayConfigurationEditResponse, err error) {
+func (r *GatewayConfigurationService) Edit(ctx context.Context, params GatewayConfigurationEditParams, opts ...option.RequestOption) (res *GatewayConfigurationEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayConfigurationEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/configuration", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/gateway/configuration", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -63,11 +63,11 @@ func (r *GatewayConfigurationService) Edit(ctx context.Context, accountID interf
 }
 
 // Fetches the current Zero Trust account configuration.
-func (r *GatewayConfigurationService) Get(ctx context.Context, accountID interface{}, opts ...option.RequestOption) (res *GatewayConfigurationGetResponse, err error) {
+func (r *GatewayConfigurationService) Get(ctx context.Context, query GatewayConfigurationGetParams, opts ...option.RequestOption) (res *GatewayConfigurationGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayConfigurationGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/configuration", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/gateway/configuration", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -1087,6 +1087,7 @@ func (r *GatewayConfigurationGetResponseSettingsTLSDecrypt) UnmarshalJSON(data [
 }
 
 type GatewayConfigurationUpdateParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// account settings.
 	Settings param.Field[GatewayConfigurationUpdateParamsSettings] `json:"settings"`
 }
@@ -1338,6 +1339,7 @@ const (
 )
 
 type GatewayConfigurationEditParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// account settings.
 	Settings param.Field[GatewayConfigurationEditParamsSettings] `json:"settings"`
 }
@@ -1587,6 +1589,10 @@ type GatewayConfigurationEditResponseEnvelopeSuccess bool
 const (
 	GatewayConfigurationEditResponseEnvelopeSuccessTrue GatewayConfigurationEditResponseEnvelopeSuccess = true
 )
+
+type GatewayConfigurationGetParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
 
 type GatewayConfigurationGetResponseEnvelope struct {
 	Errors   []GatewayConfigurationGetResponseEnvelopeErrors   `json:"errors,required"`

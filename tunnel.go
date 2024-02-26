@@ -46,11 +46,11 @@ func NewTunnelService(opts ...option.RequestOption) (r *TunnelService) {
 }
 
 // Creates a new Argo Tunnel in an account.
-func (r *TunnelService) New(ctx context.Context, accountID string, body TunnelNewParams, opts ...option.RequestOption) (res *TunnelNewResponse, err error) {
+func (r *TunnelService) New(ctx context.Context, params TunnelNewParams, opts ...option.RequestOption) (res *TunnelNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/tunnels", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/tunnels", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -59,12 +59,12 @@ func (r *TunnelService) New(ctx context.Context, accountID string, body TunnelNe
 }
 
 // Lists and filters all types of Tunnels in an account.
-func (r *TunnelService) List(ctx context.Context, accountID string, query TunnelListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[TunnelListResponse], err error) {
+func (r *TunnelService) List(ctx context.Context, params TunnelListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[TunnelListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	path := fmt.Sprintf("accounts/%s/tunnels", accountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/tunnels", params.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -77,16 +77,16 @@ func (r *TunnelService) List(ctx context.Context, accountID string, query Tunnel
 }
 
 // Lists and filters all types of Tunnels in an account.
-func (r *TunnelService) ListAutoPaging(ctx context.Context, accountID string, query TunnelListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[TunnelListResponse] {
-	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, accountID, query, opts...))
+func (r *TunnelService) ListAutoPaging(ctx context.Context, params TunnelListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[TunnelListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes an Argo Tunnel from an account.
-func (r *TunnelService) Delete(ctx context.Context, accountID string, tunnelID string, body TunnelDeleteParams, opts ...option.RequestOption) (res *TunnelDeleteResponse, err error) {
+func (r *TunnelService) Delete(ctx context.Context, tunnelID string, params TunnelDeleteParams, opts ...option.RequestOption) (res *TunnelDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/tunnels/%s", accountID, tunnelID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/tunnels/%s", params.AccountID, tunnelID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -95,11 +95,11 @@ func (r *TunnelService) Delete(ctx context.Context, accountID string, tunnelID s
 }
 
 // Updates an existing Cloudflare Tunnel.
-func (r *TunnelService) Edit(ctx context.Context, accountID string, tunnelID string, body TunnelEditParams, opts ...option.RequestOption) (res *TunnelEditResponse, err error) {
+func (r *TunnelService) Edit(ctx context.Context, tunnelID string, params TunnelEditParams, opts ...option.RequestOption) (res *TunnelEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s", accountID, tunnelID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s", params.AccountID, tunnelID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -108,11 +108,11 @@ func (r *TunnelService) Edit(ctx context.Context, accountID string, tunnelID str
 }
 
 // Fetches a single Argo Tunnel.
-func (r *TunnelService) Get(ctx context.Context, accountID string, tunnelID string, opts ...option.RequestOption) (res *TunnelGetResponse, err error) {
+func (r *TunnelService) Get(ctx context.Context, tunnelID string, query TunnelGetParams, opts ...option.RequestOption) (res *TunnelGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/tunnels/%s", accountID, tunnelID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/tunnels/%s", query.AccountID, tunnelID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -767,6 +767,8 @@ func (r *TunnelGetResponseConnection) UnmarshalJSON(data []byte) (err error) {
 }
 
 type TunnelNewParams struct {
+	// Cloudflare account ID
+	AccountID param.Field[string] `path:"account_id,required"`
 	// A user-friendly name for the tunnel.
 	Name param.Field[string] `json:"name,required"`
 	// Sets the password required to run the tunnel. Must be at least 32 bytes and
@@ -848,6 +850,8 @@ const (
 )
 
 type TunnelListParams struct {
+	// Cloudflare account ID
+	AccountID     param.Field[string] `path:"account_id,required"`
 	ExcludePrefix param.Field[string] `query:"exclude_prefix"`
 	// If provided, include only tunnels that were created (and not deleted) before
 	// this time.
@@ -877,7 +881,9 @@ func (r TunnelListParams) URLQuery() (v url.Values) {
 }
 
 type TunnelDeleteParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	// Cloudflare account ID
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
 }
 
 func (r TunnelDeleteParams) MarshalJSON() (data []byte, err error) {
@@ -954,6 +960,8 @@ const (
 )
 
 type TunnelEditParams struct {
+	// Cloudflare account ID
+	AccountID param.Field[string] `path:"account_id,required"`
 	// A user-friendly name for the tunnel.
 	Name param.Field[string] `json:"name"`
 	// Sets the password required to run a locally-managed tunnel. Must be at least 32
@@ -1034,6 +1042,11 @@ type TunnelEditResponseEnvelopeSuccess bool
 const (
 	TunnelEditResponseEnvelopeSuccessTrue TunnelEditResponseEnvelopeSuccess = true
 )
+
+type TunnelGetParams struct {
+	// Cloudflare account ID
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type TunnelGetResponseEnvelope struct {
 	Errors   []TunnelGetResponseEnvelopeErrors   `json:"errors,required"`

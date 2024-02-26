@@ -32,11 +32,11 @@ func NewStreamClipService(opts ...option.RequestOption) (r *StreamClipService) {
 }
 
 // Clips a video based on the specified start and end times provided in seconds.
-func (r *StreamClipService) New(ctx context.Context, accountID string, body StreamClipNewParams, opts ...option.RequestOption) (res *StreamClipNewResponse, err error) {
+func (r *StreamClipService) New(ctx context.Context, params StreamClipNewParams, opts ...option.RequestOption) (res *StreamClipNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamClipNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/clip", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/clip", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -164,6 +164,8 @@ func (r *StreamClipNewResponseWatermark) UnmarshalJSON(data []byte) (err error) 
 }
 
 type StreamClipNewParams struct {
+	// The account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The unique video identifier (UID).
 	ClippedFromVideoUid param.Field[string] `json:"clippedFromVideoUID,required"`
 	// Specifies the end time for the video clip in seconds.

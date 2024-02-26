@@ -31,9 +31,9 @@ func TestRuleListItemNew(t *testing.T) {
 	)
 	_, err := client.Rules.Lists.Items.New(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"2c0fc9fa937b11eaa1b71c4d701ab86e",
 		cloudflare.RuleListItemNewParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Body: cloudflare.F([]cloudflare.RuleListItemNewParamsBody{{
 				ASN:     cloudflare.F(int64(5567)),
 				Comment: cloudflare.F("Private IP address"),
@@ -112,9 +112,9 @@ func TestRuleListItemUpdate(t *testing.T) {
 	)
 	_, err := client.Rules.Lists.Items.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"2c0fc9fa937b11eaa1b71c4d701ab86e",
 		cloudflare.RuleListItemUpdateParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Body: cloudflare.F([]cloudflare.RuleListItemUpdateParamsBody{{
 				ASN:     cloudflare.F(int64(5567)),
 				Comment: cloudflare.F("Private IP address"),
@@ -193,12 +193,12 @@ func TestRuleListItemListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Rules.Lists.Items.List(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"2c0fc9fa937b11eaa1b71c4d701ab86e",
 		cloudflare.RuleListItemListParams{
-			Cursor:  cloudflare.F("zzz"),
-			PerPage: cloudflare.F(int64(1)),
-			Search:  cloudflare.F("1.1.1."),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Cursor:    cloudflare.F("zzz"),
+			PerPage:   cloudflare.F(int64(1)),
+			Search:    cloudflare.F("1.1.1."),
 		},
 	)
 	if err != nil {
@@ -228,9 +228,9 @@ func TestRuleListItemDeleteWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Rules.Lists.Items.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"2c0fc9fa937b11eaa1b71c4d701ab86e",
 		cloudflare.RuleListItemDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Items: cloudflare.F([]cloudflare.RuleListItemDeleteParamsItem{{
 				ID: cloudflare.F("34b12448945f11eaa1b71c4d701ab86e"),
 			}}),

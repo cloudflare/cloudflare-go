@@ -33,10 +33,10 @@ func TestDispatcherScriptUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Dispatchers.Scripts.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"my-dispatch-namespace",
 		"this-is_my_script-01",
 		cloudflare.DispatcherScriptUpdateParams{
+			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			AnyPartName: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
 			Message:     cloudflare.F("string"),
 			Metadata: cloudflare.F(cloudflare.DispatcherScriptUpdateParamsMetadata{
@@ -125,11 +125,11 @@ func TestDispatcherScriptDeleteWithOptionalParams(t *testing.T) {
 	)
 	err := client.Dispatchers.Scripts.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"my-dispatch-namespace",
 		"this-is_my_script-01",
 		cloudflare.DispatcherScriptDeleteParams{
-			Force: cloudflare.F(true),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Force:     cloudflare.F(true),
 		},
 	)
 	if err != nil {
@@ -159,9 +159,11 @@ func TestDispatcherScriptGet(t *testing.T) {
 	)
 	_, err := client.Dispatchers.Scripts.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"my-dispatch-namespace",
 		"this-is_my_script-01",
+		cloudflare.DispatcherScriptGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

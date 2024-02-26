@@ -34,11 +34,11 @@ func NewSecondaryDNSOutgoingService(opts ...option.RequestOption) (r *SecondaryD
 }
 
 // Create primary zone configuration for outgoing zone transfers.
-func (r *SecondaryDNSOutgoingService) New(ctx context.Context, zoneID interface{}, body SecondaryDNSOutgoingNewParams, opts ...option.RequestOption) (res *SecondaryDNSOutgoingNewResponse, err error) {
+func (r *SecondaryDNSOutgoingService) New(ctx context.Context, params SecondaryDNSOutgoingNewParams, opts ...option.RequestOption) (res *SecondaryDNSOutgoingNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SecondaryDNSOutgoingNewResponseEnvelope
-	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -47,11 +47,11 @@ func (r *SecondaryDNSOutgoingService) New(ctx context.Context, zoneID interface{
 }
 
 // Update primary zone configuration for outgoing zone transfers.
-func (r *SecondaryDNSOutgoingService) Update(ctx context.Context, zoneID interface{}, body SecondaryDNSOutgoingUpdateParams, opts ...option.RequestOption) (res *SecondaryDNSOutgoingUpdateResponse, err error) {
+func (r *SecondaryDNSOutgoingService) Update(ctx context.Context, params SecondaryDNSOutgoingUpdateParams, opts ...option.RequestOption) (res *SecondaryDNSOutgoingUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SecondaryDNSOutgoingUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -60,11 +60,11 @@ func (r *SecondaryDNSOutgoingService) Update(ctx context.Context, zoneID interfa
 }
 
 // Delete primary zone configuration for outgoing zone transfers.
-func (r *SecondaryDNSOutgoingService) Delete(ctx context.Context, zoneID interface{}, opts ...option.RequestOption) (res *SecondaryDNSOutgoingDeleteResponse, err error) {
+func (r *SecondaryDNSOutgoingService) Delete(ctx context.Context, body SecondaryDNSOutgoingDeleteParams, opts ...option.RequestOption) (res *SecondaryDNSOutgoingDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SecondaryDNSOutgoingDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing", body.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -74,11 +74,11 @@ func (r *SecondaryDNSOutgoingService) Delete(ctx context.Context, zoneID interfa
 
 // Disable outgoing zone transfers for primary zone and clears IXFR backlog of
 // primary zone.
-func (r *SecondaryDNSOutgoingService) Disable(ctx context.Context, zoneID interface{}, opts ...option.RequestOption) (res *string, err error) {
+func (r *SecondaryDNSOutgoingService) Disable(ctx context.Context, body SecondaryDNSOutgoingDisableParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SecondaryDNSOutgoingDisableResponseEnvelope
-	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing/disable", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing/disable", body.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -87,11 +87,11 @@ func (r *SecondaryDNSOutgoingService) Disable(ctx context.Context, zoneID interf
 }
 
 // Enable outgoing zone transfers for primary zone.
-func (r *SecondaryDNSOutgoingService) Enable(ctx context.Context, zoneID interface{}, opts ...option.RequestOption) (res *string, err error) {
+func (r *SecondaryDNSOutgoingService) Enable(ctx context.Context, body SecondaryDNSOutgoingEnableParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SecondaryDNSOutgoingEnableResponseEnvelope
-	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing/enable", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing/enable", body.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -100,11 +100,11 @@ func (r *SecondaryDNSOutgoingService) Enable(ctx context.Context, zoneID interfa
 }
 
 // Notifies the secondary nameserver(s) and clears IXFR backlog of primary zone.
-func (r *SecondaryDNSOutgoingService) ForceNotify(ctx context.Context, zoneID interface{}, opts ...option.RequestOption) (res *string, err error) {
+func (r *SecondaryDNSOutgoingService) ForceNotify(ctx context.Context, body SecondaryDNSOutgoingForceNotifyParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SecondaryDNSOutgoingForceNotifyResponseEnvelope
-	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing/force_notify", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing/force_notify", body.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -113,11 +113,11 @@ func (r *SecondaryDNSOutgoingService) ForceNotify(ctx context.Context, zoneID in
 }
 
 // Get primary zone configuration for outgoing zone transfers.
-func (r *SecondaryDNSOutgoingService) Get(ctx context.Context, zoneID interface{}, opts ...option.RequestOption) (res *SecondaryDNSOutgoingGetResponse, err error) {
+func (r *SecondaryDNSOutgoingService) Get(ctx context.Context, query SecondaryDNSOutgoingGetParams, opts ...option.RequestOption) (res *SecondaryDNSOutgoingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SecondaryDNSOutgoingGetResponseEnvelope
-	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -248,6 +248,7 @@ func (r *SecondaryDNSOutgoingGetResponse) UnmarshalJSON(data []byte) (err error)
 }
 
 type SecondaryDNSOutgoingNewParams struct {
+	ZoneID param.Field[interface{}] `path:"zone_id,required"`
 	// Zone name.
 	Name param.Field[string] `json:"name,required"`
 	// A list of peer tags.
@@ -328,6 +329,7 @@ const (
 )
 
 type SecondaryDNSOutgoingUpdateParams struct {
+	ZoneID param.Field[interface{}] `path:"zone_id,required"`
 	// Zone name.
 	Name param.Field[string] `json:"name,required"`
 	// A list of peer tags.
@@ -407,6 +409,10 @@ const (
 	SecondaryDNSOutgoingUpdateResponseEnvelopeSuccessTrue SecondaryDNSOutgoingUpdateResponseEnvelopeSuccess = true
 )
 
+type SecondaryDNSOutgoingDeleteParams struct {
+	ZoneID param.Field[interface{}] `path:"zone_id,required"`
+}
+
 type SecondaryDNSOutgoingDeleteResponseEnvelope struct {
 	Errors   []SecondaryDNSOutgoingDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SecondaryDNSOutgoingDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -475,6 +481,10 @@ type SecondaryDNSOutgoingDeleteResponseEnvelopeSuccess bool
 const (
 	SecondaryDNSOutgoingDeleteResponseEnvelopeSuccessTrue SecondaryDNSOutgoingDeleteResponseEnvelopeSuccess = true
 )
+
+type SecondaryDNSOutgoingDisableParams struct {
+	ZoneID param.Field[interface{}] `path:"zone_id,required"`
+}
 
 type SecondaryDNSOutgoingDisableResponseEnvelope struct {
 	Errors   []SecondaryDNSOutgoingDisableResponseEnvelopeErrors   `json:"errors,required"`
@@ -546,6 +556,10 @@ const (
 	SecondaryDNSOutgoingDisableResponseEnvelopeSuccessTrue SecondaryDNSOutgoingDisableResponseEnvelopeSuccess = true
 )
 
+type SecondaryDNSOutgoingEnableParams struct {
+	ZoneID param.Field[interface{}] `path:"zone_id,required"`
+}
+
 type SecondaryDNSOutgoingEnableResponseEnvelope struct {
 	Errors   []SecondaryDNSOutgoingEnableResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SecondaryDNSOutgoingEnableResponseEnvelopeMessages `json:"messages,required"`
@@ -615,6 +629,10 @@ type SecondaryDNSOutgoingEnableResponseEnvelopeSuccess bool
 const (
 	SecondaryDNSOutgoingEnableResponseEnvelopeSuccessTrue SecondaryDNSOutgoingEnableResponseEnvelopeSuccess = true
 )
+
+type SecondaryDNSOutgoingForceNotifyParams struct {
+	ZoneID param.Field[interface{}] `path:"zone_id,required"`
+}
 
 type SecondaryDNSOutgoingForceNotifyResponseEnvelope struct {
 	Errors   []SecondaryDNSOutgoingForceNotifyResponseEnvelopeErrors   `json:"errors,required"`
@@ -687,6 +705,10 @@ type SecondaryDNSOutgoingForceNotifyResponseEnvelopeSuccess bool
 const (
 	SecondaryDNSOutgoingForceNotifyResponseEnvelopeSuccessTrue SecondaryDNSOutgoingForceNotifyResponseEnvelopeSuccess = true
 )
+
+type SecondaryDNSOutgoingGetParams struct {
+	ZoneID param.Field[interface{}] `path:"zone_id,required"`
+}
 
 type SecondaryDNSOutgoingGetResponseEnvelope struct {
 	Errors   []SecondaryDNSOutgoingGetResponseEnvelopeErrors   `json:"errors,required"`

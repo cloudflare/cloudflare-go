@@ -35,11 +35,11 @@ func NewIntelIndicatorFeedService(opts ...option.RequestOption) (r *IntelIndicat
 }
 
 // Create new indicator feed
-func (r *IntelIndicatorFeedService) New(ctx context.Context, accountID string, body IntelIndicatorFeedNewParams, opts ...option.RequestOption) (res *IntelIndicatorFeedNewResponse, err error) {
+func (r *IntelIndicatorFeedService) New(ctx context.Context, params IntelIndicatorFeedNewParams, opts ...option.RequestOption) (res *IntelIndicatorFeedNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IntelIndicatorFeedNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +48,11 @@ func (r *IntelIndicatorFeedService) New(ctx context.Context, accountID string, b
 }
 
 // Update indicator feed data
-func (r *IntelIndicatorFeedService) Update(ctx context.Context, accountID string, feedID int64, body IntelIndicatorFeedUpdateParams, opts ...option.RequestOption) (res *IntelIndicatorFeedUpdateResponse, err error) {
+func (r *IntelIndicatorFeedService) Update(ctx context.Context, feedID int64, params IntelIndicatorFeedUpdateParams, opts ...option.RequestOption) (res *IntelIndicatorFeedUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IntelIndicatorFeedUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/%v/snapshot", accountID, feedID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/%v/snapshot", params.AccountID, feedID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -61,11 +61,11 @@ func (r *IntelIndicatorFeedService) Update(ctx context.Context, accountID string
 }
 
 // Get indicator feeds owned by this account
-func (r *IntelIndicatorFeedService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]IntelIndicatorFeedListResponse, err error) {
+func (r *IntelIndicatorFeedService) List(ctx context.Context, query IntelIndicatorFeedListParams, opts ...option.RequestOption) (res *[]IntelIndicatorFeedListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IntelIndicatorFeedListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -74,20 +74,20 @@ func (r *IntelIndicatorFeedService) List(ctx context.Context, accountID string, 
 }
 
 // Get indicator feed data
-func (r *IntelIndicatorFeedService) Data(ctx context.Context, accountID string, feedID int64, opts ...option.RequestOption) (res *string, err error) {
+func (r *IntelIndicatorFeedService) Data(ctx context.Context, feedID int64, query IntelIndicatorFeedDataParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "text/csv")}, opts...)
-	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/%v/data", accountID, feedID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/%v/data", query.AccountID, feedID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
 // Get indicator feed metadata
-func (r *IntelIndicatorFeedService) Get(ctx context.Context, accountID string, feedID int64, opts ...option.RequestOption) (res *IntelIndicatorFeedGetResponse, err error) {
+func (r *IntelIndicatorFeedService) Get(ctx context.Context, feedID int64, query IntelIndicatorFeedGetParams, opts ...option.RequestOption) (res *IntelIndicatorFeedGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IntelIndicatorFeedGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/%v", accountID, feedID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/%v", query.AccountID, feedID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -225,6 +225,8 @@ const (
 )
 
 type IntelIndicatorFeedNewParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The description of the example test
 	Description param.Field[string] `json:"description"`
 	// The name of the indicator feed
@@ -305,6 +307,8 @@ const (
 )
 
 type IntelIndicatorFeedUpdateParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The file to upload
 	Source param.Field[string] `json:"source"`
 }
@@ -382,6 +386,11 @@ const (
 	IntelIndicatorFeedUpdateResponseEnvelopeSuccessTrue IntelIndicatorFeedUpdateResponseEnvelopeSuccess = true
 )
 
+type IntelIndicatorFeedListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type IntelIndicatorFeedListResponseEnvelope struct {
 	Errors   []IntelIndicatorFeedListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []IntelIndicatorFeedListResponseEnvelopeMessages `json:"messages,required"`
@@ -450,6 +459,16 @@ type IntelIndicatorFeedListResponseEnvelopeSuccess bool
 const (
 	IntelIndicatorFeedListResponseEnvelopeSuccessTrue IntelIndicatorFeedListResponseEnvelopeSuccess = true
 )
+
+type IntelIndicatorFeedDataParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type IntelIndicatorFeedGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type IntelIndicatorFeedGetResponseEnvelope struct {
 	Errors   []IntelIndicatorFeedGetResponseEnvelopeErrors   `json:"errors,required"`

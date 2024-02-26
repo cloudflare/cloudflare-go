@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -32,11 +33,11 @@ func NewActivationCheckService(opts ...option.RequestOption) (r *ActivationCheck
 
 // Triggeres a new activation check for a PENDING Zone. This can be triggered every
 // 5 min for paygo/ent customers, every hour for FREE Zones.
-func (r *ActivationCheckService) Update(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *ActivationCheckUpdateResponse, err error) {
+func (r *ActivationCheckService) Update(ctx context.Context, body ActivationCheckUpdateParams, opts ...option.RequestOption) (res *ActivationCheckUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ActivationCheckUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/activation_check", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/activation_check", body.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -60,6 +61,11 @@ type activationCheckUpdateResponseJSON struct {
 
 func (r *ActivationCheckUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type ActivationCheckUpdateParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type ActivationCheckUpdateResponseEnvelope struct {

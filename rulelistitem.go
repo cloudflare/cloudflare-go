@@ -41,11 +41,11 @@ func NewRuleListItemService(opts ...option.RequestOption) (r *RuleListItemServic
 // This operation is asynchronous. To get current the operation status, invoke the
 // [Get bulk operation status](/operations/lists-get-bulk-operation-status)
 // endpoint with the returned `operation_id`.
-func (r *RuleListItemService) New(ctx context.Context, accountID string, listID string, body RuleListItemNewParams, opts ...option.RequestOption) (res *RuleListItemNewResponse, err error) {
+func (r *RuleListItemService) New(ctx context.Context, listID string, params RuleListItemNewParams, opts ...option.RequestOption) (res *RuleListItemNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleListItemNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/rules/lists/%s/items", accountID, listID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/rules/lists/%s/items", params.AccountID, listID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -59,11 +59,11 @@ func (r *RuleListItemService) New(ctx context.Context, accountID string, listID 
 // This operation is asynchronous. To get current the operation status, invoke the
 // [Get bulk operation status](/operations/lists-get-bulk-operation-status)
 // endpoint with the returned `operation_id`.
-func (r *RuleListItemService) Update(ctx context.Context, accountID string, listID string, body RuleListItemUpdateParams, opts ...option.RequestOption) (res *RuleListItemUpdateResponse, err error) {
+func (r *RuleListItemService) Update(ctx context.Context, listID string, params RuleListItemUpdateParams, opts ...option.RequestOption) (res *RuleListItemUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleListItemUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/rules/lists/%s/items", accountID, listID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/rules/lists/%s/items", params.AccountID, listID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -72,11 +72,11 @@ func (r *RuleListItemService) Update(ctx context.Context, accountID string, list
 }
 
 // Fetches all the items in the list.
-func (r *RuleListItemService) List(ctx context.Context, accountID string, listID string, query RuleListItemListParams, opts ...option.RequestOption) (res *[]RuleListItemListResponse, err error) {
+func (r *RuleListItemService) List(ctx context.Context, listID string, params RuleListItemListParams, opts ...option.RequestOption) (res *[]RuleListItemListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleListItemListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/rules/lists/%s/items", accountID, listID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/rules/lists/%s/items", params.AccountID, listID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -89,11 +89,11 @@ func (r *RuleListItemService) List(ctx context.Context, accountID string, listID
 // This operation is asynchronous. To get current the operation status, invoke the
 // [Get bulk operation status](/operations/lists-get-bulk-operation-status)
 // endpoint with the returned `operation_id`.
-func (r *RuleListItemService) Delete(ctx context.Context, accountID string, listID string, body RuleListItemDeleteParams, opts ...option.RequestOption) (res *RuleListItemDeleteResponse, err error) {
+func (r *RuleListItemService) Delete(ctx context.Context, listID string, params RuleListItemDeleteParams, opts ...option.RequestOption) (res *RuleListItemDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleListItemDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/rules/lists/%s/items", accountID, listID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/rules/lists/%s/items", params.AccountID, listID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -258,7 +258,9 @@ func (r *RuleListItemGetResponseListsItemHostname) UnmarshalJSON(data []byte) (e
 func (r RuleListItemGetResponseListsItemHostname) ImplementsRuleListItemGetResponse() {}
 
 type RuleListItemNewParams struct {
-	Body param.Field[[]RuleListItemNewParamsBody] `json:"body,required"`
+	// Identifier
+	AccountID param.Field[string]                      `path:"account_id,required"`
+	Body      param.Field[[]RuleListItemNewParamsBody] `json:"body,required"`
 }
 
 func (r RuleListItemNewParams) MarshalJSON() (data []byte, err error) {
@@ -388,7 +390,9 @@ const (
 )
 
 type RuleListItemUpdateParams struct {
-	Body param.Field[[]RuleListItemUpdateParamsBody] `json:"body,required"`
+	// Identifier
+	AccountID param.Field[string]                         `path:"account_id,required"`
+	Body      param.Field[[]RuleListItemUpdateParamsBody] `json:"body,required"`
 }
 
 func (r RuleListItemUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -518,6 +522,8 @@ const (
 )
 
 type RuleListItemListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The pagination cursor. An opaque string token indicating the position from which
 	// to continue when requesting the next/previous set of records. Cursor values are
 	// provided under `result_info.cursors` in the response. You should make no
@@ -648,7 +654,9 @@ func (r *RuleListItemListResponseEnvelopeResultInfoCursors) UnmarshalJSON(data [
 }
 
 type RuleListItemDeleteParams struct {
-	Items param.Field[[]RuleListItemDeleteParamsItem] `json:"items"`
+	// Identifier
+	AccountID param.Field[string]                         `path:"account_id,required"`
+	Items     param.Field[[]RuleListItemDeleteParamsItem] `json:"items"`
 }
 
 func (r RuleListItemDeleteParams) MarshalJSON() (data []byte, err error) {

@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -31,16 +32,20 @@ func NewSecondaryDNSForceAxfrService(opts ...option.RequestOption) (r *Secondary
 }
 
 // Sends AXFR zone transfer request to primary nameserver(s).
-func (r *SecondaryDNSForceAxfrService) New(ctx context.Context, zoneID interface{}, opts ...option.RequestOption) (res *string, err error) {
+func (r *SecondaryDNSForceAxfrService) New(ctx context.Context, body SecondaryDNSForceAxfrNewParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SecondaryDNSForceAxfrNewResponseEnvelope
-	path := fmt.Sprintf("zones/%v/secondary_dns/force_axfr", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%v/secondary_dns/force_axfr", body.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
 	res = &env.Result
 	return
+}
+
+type SecondaryDNSForceAxfrNewParams struct {
+	ZoneID param.Field[interface{}] `path:"zone_id,required"`
 }
 
 type SecondaryDNSForceAxfrNewResponseEnvelope struct {

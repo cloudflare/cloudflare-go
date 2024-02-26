@@ -33,9 +33,9 @@ func TestWorkerScriptContentUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.WorkerScripts.Content.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"this-is_my_script-01",
 		cloudflare.WorkerScriptContentUpdateParams{
+			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			AnyPartName: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
 			Metadata: cloudflare.F(cloudflare.WorkerScriptContentUpdateParamsMetadata{
 				BodyPart:   cloudflare.F("worker.js"),

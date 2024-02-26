@@ -32,11 +32,11 @@ func NewGatewayLoggingService(opts ...option.RequestOption) (r *GatewayLoggingSe
 }
 
 // Updates logging settings for the current Zero Trust account.
-func (r *GatewayLoggingService) Update(ctx context.Context, accountID interface{}, body GatewayLoggingUpdateParams, opts ...option.RequestOption) (res *GatewayLoggingUpdateResponse, err error) {
+func (r *GatewayLoggingService) Update(ctx context.Context, params GatewayLoggingUpdateParams, opts ...option.RequestOption) (res *GatewayLoggingUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayLoggingUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/logging", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/gateway/logging", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -45,11 +45,11 @@ func (r *GatewayLoggingService) Update(ctx context.Context, accountID interface{
 }
 
 // Fetches the current logging settings for Zero Trust account.
-func (r *GatewayLoggingService) Get(ctx context.Context, accountID interface{}, opts ...option.RequestOption) (res *GatewayLoggingGetResponse, err error) {
+func (r *GatewayLoggingService) Get(ctx context.Context, query GatewayLoggingGetParams, opts ...option.RequestOption) (res *GatewayLoggingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayLoggingGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/logging", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/gateway/logging", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -152,6 +152,7 @@ func (r *GatewayLoggingGetResponseSettingsByRuleType) UnmarshalJSON(data []byte)
 }
 
 type GatewayLoggingUpdateParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// Redact personally identifiable information from activity logging (PII fields
 	// are: source IP, user email, user ID, device ID, URL, referrer, user agent).
 	RedactPii param.Field[bool] `json:"redact_pii"`
@@ -245,6 +246,10 @@ type GatewayLoggingUpdateResponseEnvelopeSuccess bool
 const (
 	GatewayLoggingUpdateResponseEnvelopeSuccessTrue GatewayLoggingUpdateResponseEnvelopeSuccess = true
 )
+
+type GatewayLoggingGetParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
 
 type GatewayLoggingGetResponseEnvelope struct {
 	Errors   []GatewayLoggingGetResponseEnvelopeErrors   `json:"errors,required"`

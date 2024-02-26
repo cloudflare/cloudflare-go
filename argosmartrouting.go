@@ -35,11 +35,11 @@ func NewArgoSmartRoutingService(opts ...option.RequestOption) (r *ArgoSmartRouti
 }
 
 // Updates enablement of Argo Smart Routing.
-func (r *ArgoSmartRoutingService) Edit(ctx context.Context, zoneID string, body ArgoSmartRoutingEditParams, opts ...option.RequestOption) (res *ArgoSmartRoutingEditResponse, err error) {
+func (r *ArgoSmartRoutingService) Edit(ctx context.Context, params ArgoSmartRoutingEditParams, opts ...option.RequestOption) (res *ArgoSmartRoutingEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ArgoSmartRoutingEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/argo/smart_routing", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/argo/smart_routing", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +48,11 @@ func (r *ArgoSmartRoutingService) Edit(ctx context.Context, zoneID string, body 
 }
 
 // Get Argo Smart Routing setting
-func (r *ArgoSmartRoutingService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *ArgoSmartRoutingGetResponse, err error) {
+func (r *ArgoSmartRoutingService) Get(ctx context.Context, query ArgoSmartRoutingGetParams, opts ...option.RequestOption) (res *ArgoSmartRoutingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ArgoSmartRoutingGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/argo/smart_routing", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/argo/smart_routing", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -94,6 +94,8 @@ func init() {
 }
 
 type ArgoSmartRoutingEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Enables Argo Smart Routing.
 	Value param.Field[ArgoSmartRoutingEditParamsValue] `json:"value,required"`
 }
@@ -178,6 +180,11 @@ type ArgoSmartRoutingEditResponseEnvelopeSuccess bool
 const (
 	ArgoSmartRoutingEditResponseEnvelopeSuccessTrue ArgoSmartRoutingEditResponseEnvelopeSuccess = true
 )
+
+type ArgoSmartRoutingGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type ArgoSmartRoutingGetResponseEnvelope struct {
 	Errors   []ArgoSmartRoutingGetResponseEnvelopeErrors   `json:"errors,required"`

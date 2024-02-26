@@ -33,11 +33,11 @@ func NewCallService(opts ...option.RequestOption) (r *CallService) {
 
 // Creates a new Cloudflare calls app. An app is an unique enviroment where each
 // Session can access all Tracks within the app.
-func (r *CallService) New(ctx context.Context, accountID string, body CallNewParams, opts ...option.RequestOption) (res *CallNewResponse, err error) {
+func (r *CallService) New(ctx context.Context, params CallNewParams, opts ...option.RequestOption) (res *CallNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CallNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/calls/apps", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/calls/apps", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -46,11 +46,11 @@ func (r *CallService) New(ctx context.Context, accountID string, body CallNewPar
 }
 
 // Edit details for a single app.
-func (r *CallService) Update(ctx context.Context, accountID string, appID string, body CallUpdateParams, opts ...option.RequestOption) (res *CallUpdateResponse, err error) {
+func (r *CallService) Update(ctx context.Context, appID string, params CallUpdateParams, opts ...option.RequestOption) (res *CallUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CallUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/calls/apps/%s", accountID, appID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/calls/apps/%s", params.AccountID, appID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -59,11 +59,11 @@ func (r *CallService) Update(ctx context.Context, accountID string, appID string
 }
 
 // Lists all apps in the Cloudflare account
-func (r *CallService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]CallListResponse, err error) {
+func (r *CallService) List(ctx context.Context, query CallListParams, opts ...option.RequestOption) (res *[]CallListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CallListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/calls/apps", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/calls/apps", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -72,11 +72,11 @@ func (r *CallService) List(ctx context.Context, accountID string, opts ...option
 }
 
 // Deletes an app from Cloudflare Calls
-func (r *CallService) Delete(ctx context.Context, accountID string, appID string, opts ...option.RequestOption) (res *CallDeleteResponse, err error) {
+func (r *CallService) Delete(ctx context.Context, appID string, body CallDeleteParams, opts ...option.RequestOption) (res *CallDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CallDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/calls/apps/%s", accountID, appID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/calls/apps/%s", body.AccountID, appID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -85,11 +85,11 @@ func (r *CallService) Delete(ctx context.Context, accountID string, appID string
 }
 
 // Fetches details for a single Calls app.
-func (r *CallService) Get(ctx context.Context, accountID string, appID string, opts ...option.RequestOption) (res *CallGetResponse, err error) {
+func (r *CallService) Get(ctx context.Context, appID string, query CallGetParams, opts ...option.RequestOption) (res *CallGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CallGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/calls/apps/%s", accountID, appID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/calls/apps/%s", query.AccountID, appID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -234,6 +234,8 @@ func (r *CallGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type CallNewParams struct {
+	// The account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
 	// A short description of Calls app, not shown to end users.
 	Name param.Field[string] `json:"name"`
 }
@@ -312,6 +314,8 @@ const (
 )
 
 type CallUpdateParams struct {
+	// The account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
 	// A short description of Calls app, not shown to end users.
 	Name param.Field[string] `json:"name"`
 }
@@ -389,6 +393,11 @@ const (
 	CallUpdateResponseEnvelopeSuccessTrue CallUpdateResponseEnvelopeSuccess = true
 )
 
+type CallListParams struct {
+	// The account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type CallListResponseEnvelope struct {
 	Errors   []CallListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []CallListResponseEnvelopeMessages `json:"messages,required"`
@@ -458,6 +467,11 @@ const (
 	CallListResponseEnvelopeSuccessTrue CallListResponseEnvelopeSuccess = true
 )
 
+type CallDeleteParams struct {
+	// The account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type CallDeleteResponseEnvelope struct {
 	Errors   []CallDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []CallDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -526,6 +540,11 @@ type CallDeleteResponseEnvelopeSuccess bool
 const (
 	CallDeleteResponseEnvelopeSuccessTrue CallDeleteResponseEnvelopeSuccess = true
 )
+
+type CallGetParams struct {
+	// The account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type CallGetResponseEnvelope struct {
 	Errors   []CallGetResponseEnvelopeErrors   `json:"errors,required"`

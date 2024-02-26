@@ -31,11 +31,11 @@ func TestFirewallWAFPackageRuleEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Firewalls.WAF.Packages.Rules.Edit(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"a25a9a7e9c00afc1fb2e0245519d725b",
 		"a25a9a7e9c00afc1fb2e0245519d725b",
 		cloudflare.FirewallWAFPackageRuleEditParams{
-			Mode: cloudflare.F(cloudflare.FirewallWAFPackageRuleEditParamsModeOn),
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Mode:   cloudflare.F(cloudflare.FirewallWAFPackageRuleEditParamsModeOn),
 		},
 	)
 	if err != nil {
@@ -65,9 +65,11 @@ func TestFirewallWAFPackageRuleGet(t *testing.T) {
 	)
 	_, err := client.Firewalls.WAF.Packages.Rules.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"a25a9a7e9c00afc1fb2e0245519d725b",
 		"a25a9a7e9c00afc1fb2e0245519d725b",
+		cloudflare.FirewallWAFPackageRuleGetParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -96,9 +98,9 @@ func TestFirewallWAFPackageRuleWAFRulesListWAFRulesWithOptionalParams(t *testing
 	)
 	_, err := client.Firewalls.WAF.Packages.Rules.WAFRulesListWAFRules(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"a25a9a7e9c00afc1fb2e0245519d725b",
 		cloudflare.FirewallWAFPackageRuleWAFRulesListWAFRulesParams{
+			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Direction: cloudflare.F(cloudflare.FirewallWAFPackageRuleWAFRulesListWAFRulesParamsDirectionDesc),
 			Match:     cloudflare.F(cloudflare.FirewallWAFPackageRuleWAFRulesListWAFRulesParamsMatchAny),
 			Mode:      cloudflare.F(cloudflare.FirewallWAFPackageRuleWAFRulesListWAFRulesParamsModeChl),

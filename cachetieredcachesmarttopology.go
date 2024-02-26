@@ -35,11 +35,11 @@ func NewCacheTieredCacheSmartTopologyService(opts ...option.RequestOption) (r *C
 }
 
 // Remvoves enablement of Smart Tiered Cache
-func (r *CacheTieredCacheSmartTopologyService) Delete(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *CacheTieredCacheSmartTopologyDeleteResponse, err error) {
+func (r *CacheTieredCacheSmartTopologyService) Delete(ctx context.Context, body CacheTieredCacheSmartTopologyDeleteParams, opts ...option.RequestOption) (res *CacheTieredCacheSmartTopologyDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CacheTieredCacheSmartTopologyDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/cache/tiered_cache_smart_topology_enable", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/cache/tiered_cache_smart_topology_enable", body.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +48,11 @@ func (r *CacheTieredCacheSmartTopologyService) Delete(ctx context.Context, zoneI
 }
 
 // Updates enablement of Tiered Cache
-func (r *CacheTieredCacheSmartTopologyService) Edit(ctx context.Context, zoneID string, body CacheTieredCacheSmartTopologyEditParams, opts ...option.RequestOption) (res *CacheTieredCacheSmartTopologyEditResponse, err error) {
+func (r *CacheTieredCacheSmartTopologyService) Edit(ctx context.Context, params CacheTieredCacheSmartTopologyEditParams, opts ...option.RequestOption) (res *CacheTieredCacheSmartTopologyEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CacheTieredCacheSmartTopologyEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/cache/tiered_cache_smart_topology_enable", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/cache/tiered_cache_smart_topology_enable", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -61,11 +61,11 @@ func (r *CacheTieredCacheSmartTopologyService) Edit(ctx context.Context, zoneID 
 }
 
 // Get Smart Tiered Cache setting
-func (r *CacheTieredCacheSmartTopologyService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *CacheTieredCacheSmartTopologyGetResponse, err error) {
+func (r *CacheTieredCacheSmartTopologyService) Get(ctx context.Context, query CacheTieredCacheSmartTopologyGetParams, opts ...option.RequestOption) (res *CacheTieredCacheSmartTopologyGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CacheTieredCacheSmartTopologyGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/cache/tiered_cache_smart_topology_enable", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/cache/tiered_cache_smart_topology_enable", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -122,6 +122,11 @@ func init() {
 			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
 	)
+}
+
+type CacheTieredCacheSmartTopologyDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type CacheTieredCacheSmartTopologyDeleteResponseEnvelope struct {
@@ -196,6 +201,8 @@ const (
 )
 
 type CacheTieredCacheSmartTopologyEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Enables Tiered Cache.
 	Value param.Field[CacheTieredCacheSmartTopologyEditParamsValue] `json:"value,required"`
 }
@@ -282,6 +289,11 @@ type CacheTieredCacheSmartTopologyEditResponseEnvelopeSuccess bool
 const (
 	CacheTieredCacheSmartTopologyEditResponseEnvelopeSuccessTrue CacheTieredCacheSmartTopologyEditResponseEnvelopeSuccess = true
 )
+
+type CacheTieredCacheSmartTopologyGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type CacheTieredCacheSmartTopologyGetResponseEnvelope struct {
 	Errors   []CacheTieredCacheSmartTopologyGetResponseEnvelopeErrors   `json:"errors,required"`

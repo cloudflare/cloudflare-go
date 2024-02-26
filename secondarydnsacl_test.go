@@ -29,13 +29,10 @@ func TestSecondaryDNSACLNew(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.SecondaryDNS.ACLs.New(
-		context.TODO(),
-		"01a7362d577a6c3019a474fd6f485823",
-		cloudflare.SecondaryDNSACLNewParams{
-			Body: cloudflare.F[any](map[string]interface{}{}),
-		},
-	)
+	_, err := client.SecondaryDNS.ACLs.New(context.TODO(), cloudflare.SecondaryDNSACLNewParams{
+		AccountID: cloudflare.F[any]("01a7362d577a6c3019a474fd6f485823"),
+		Body:      cloudflare.F[any](map[string]interface{}{}),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -63,11 +60,11 @@ func TestSecondaryDNSACLUpdate(t *testing.T) {
 	)
 	_, err := client.SecondaryDNS.ACLs.Update(
 		context.TODO(),
-		"01a7362d577a6c3019a474fd6f485823",
 		"23ff594956f20c2a721606e94745a8aa",
 		cloudflare.SecondaryDNSACLUpdateParams{
-			IPRange: cloudflare.F("192.0.2.53/28"),
-			Name:    cloudflare.F("my-acl-1"),
+			AccountID: cloudflare.F[any]("01a7362d577a6c3019a474fd6f485823"),
+			IPRange:   cloudflare.F("192.0.2.53/28"),
+			Name:      cloudflare.F("my-acl-1"),
 		},
 	)
 	if err != nil {
@@ -95,7 +92,9 @@ func TestSecondaryDNSACLList(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.SecondaryDNS.ACLs.List(context.TODO(), "01a7362d577a6c3019a474fd6f485823")
+	_, err := client.SecondaryDNS.ACLs.List(context.TODO(), cloudflare.SecondaryDNSACLListParams{
+		AccountID: cloudflare.F[any]("01a7362d577a6c3019a474fd6f485823"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -123,8 +122,10 @@ func TestSecondaryDNSACLDelete(t *testing.T) {
 	)
 	_, err := client.SecondaryDNS.ACLs.Delete(
 		context.TODO(),
-		"01a7362d577a6c3019a474fd6f485823",
 		"23ff594956f20c2a721606e94745a8aa",
+		cloudflare.SecondaryDNSACLDeleteParams{
+			AccountID: cloudflare.F[any]("01a7362d577a6c3019a474fd6f485823"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -153,8 +154,10 @@ func TestSecondaryDNSACLGet(t *testing.T) {
 	)
 	_, err := client.SecondaryDNS.ACLs.Get(
 		context.TODO(),
-		"01a7362d577a6c3019a474fd6f485823",
 		"23ff594956f20c2a721606e94745a8aa",
+		cloudflare.SecondaryDNSACLGetParams{
+			AccountID: cloudflare.F[any]("01a7362d577a6c3019a474fd6f485823"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

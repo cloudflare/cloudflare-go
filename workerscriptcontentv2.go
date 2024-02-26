@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -30,10 +31,15 @@ func NewWorkerScriptContentV2Service(opts ...option.RequestOption) (r *WorkerScr
 }
 
 // Fetch script content only
-func (r *WorkerScriptContentV2Service) Get(ctx context.Context, accountID string, scriptName string, opts ...option.RequestOption) (res *http.Response, err error) {
+func (r *WorkerScriptContentV2Service) Get(ctx context.Context, scriptName string, query WorkerScriptContentV2GetParams, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "string")}, opts...)
-	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/content/v2", accountID, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/content/v2", query.AccountID, scriptName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
+}
+
+type WorkerScriptContentV2GetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }

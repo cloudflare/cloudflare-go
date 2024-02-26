@@ -31,8 +31,10 @@ func TestAddressLOADocumentDownloadList(t *testing.T) {
 	)
 	_, err := client.Addresses.LOADocuments.Downloads.List(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"d933b1530bc56c9953cf8ce166da8004",
+		cloudflare.AddressLOADocumentDownloadListParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -31,9 +31,9 @@ func TestTeamnetRouteNetworkNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Teamnets.Routes.Networks.New(
 		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
 		"172.16.0.0%2F16",
 		cloudflare.TeamnetRouteNetworkNewParams{
+			AccountID:        cloudflare.F("699d98642c564d2e855e9661899b7252"),
 			Comment:          cloudflare.F("Example comment for this route."),
 			VirtualNetworkID: cloudflare.F[any](map[string]interface{}{}),
 		},
@@ -65,10 +65,10 @@ func TestTeamnetRouteNetworkDeleteWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Teamnets.Routes.Networks.Delete(
 		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
 		"172.16.0.0%2F16",
 		cloudflare.TeamnetRouteNetworkDeleteParams{
-			TunType: cloudflare.F(cloudflare.TeamnetRouteNetworkDeleteParamsTunTypeCfdTunnel),
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
+			TunType:   cloudflare.F(cloudflare.TeamnetRouteNetworkDeleteParamsTunTypeCfdTunnel),
 		},
 	)
 	if err != nil {
@@ -98,8 +98,10 @@ func TestTeamnetRouteNetworkEdit(t *testing.T) {
 	)
 	_, err := client.Teamnets.Routes.Networks.Edit(
 		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
 		"172.16.0.0%2F16",
+		cloudflare.TeamnetRouteNetworkEditParams{
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

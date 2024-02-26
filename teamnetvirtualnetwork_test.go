@@ -29,15 +29,12 @@ func TestTeamnetVirtualNetworkNewWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Teamnets.VirtualNetworks.New(
-		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
-		cloudflare.TeamnetVirtualNetworkNewParams{
-			Name:      cloudflare.F("us-east-1-vpc"),
-			Comment:   cloudflare.F("Staging VPC for data science"),
-			IsDefault: cloudflare.F(true),
-		},
-	)
+	_, err := client.Teamnets.VirtualNetworks.New(context.TODO(), cloudflare.TeamnetVirtualNetworkNewParams{
+		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
+		Name:      cloudflare.F("us-east-1-vpc"),
+		Comment:   cloudflare.F("Staging VPC for data science"),
+		IsDefault: cloudflare.F(true),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -63,16 +60,13 @@ func TestTeamnetVirtualNetworkListWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Teamnets.VirtualNetworks.List(
-		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
-		cloudflare.TeamnetVirtualNetworkListParams{
-			IsDefault: cloudflare.F[any](map[string]interface{}{}),
-			IsDeleted: cloudflare.F[any](map[string]interface{}{}),
-			Name:      cloudflare.F("us-east-1-vpc"),
-			VnetName:  cloudflare.F("us-east-1-vpc"),
-		},
-	)
+	_, err := client.Teamnets.VirtualNetworks.List(context.TODO(), cloudflare.TeamnetVirtualNetworkListParams{
+		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
+		IsDefault: cloudflare.F[any](map[string]interface{}{}),
+		IsDeleted: cloudflare.F[any](map[string]interface{}{}),
+		Name:      cloudflare.F("us-east-1-vpc"),
+		VnetName:  cloudflare.F("us-east-1-vpc"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -100,8 +94,10 @@ func TestTeamnetVirtualNetworkDelete(t *testing.T) {
 	)
 	_, err := client.Teamnets.VirtualNetworks.Delete(
 		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
 		"f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
+		cloudflare.TeamnetVirtualNetworkDeleteParams{
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -130,9 +126,9 @@ func TestTeamnetVirtualNetworkEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Teamnets.VirtualNetworks.Edit(
 		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
 		"f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
 		cloudflare.TeamnetVirtualNetworkEditParams{
+			AccountID:        cloudflare.F("699d98642c564d2e855e9661899b7252"),
 			Comment:          cloudflare.F("Staging VPC for data science"),
 			IsDefaultNetwork: cloudflare.F(true),
 			Name:             cloudflare.F("us-east-1-vpc"),

@@ -35,11 +35,11 @@ func NewCacheRegionalTieredCacheService(opts ...option.RequestOption) (r *CacheR
 // Instructs Cloudflare to check a regional hub data center on the way to your
 // upper tier. This can help improve performance for smart and custom tiered cache
 // topologies.
-func (r *CacheRegionalTieredCacheService) Edit(ctx context.Context, zoneID string, body CacheRegionalTieredCacheEditParams, opts ...option.RequestOption) (res *CacheRegionalTieredCacheEditResponse, err error) {
+func (r *CacheRegionalTieredCacheService) Edit(ctx context.Context, params CacheRegionalTieredCacheEditParams, opts ...option.RequestOption) (res *CacheRegionalTieredCacheEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CacheRegionalTieredCacheEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/cache/regional_tiered_cache", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/cache/regional_tiered_cache", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -50,11 +50,11 @@ func (r *CacheRegionalTieredCacheService) Edit(ctx context.Context, zoneID strin
 // Instructs Cloudflare to check a regional hub data center on the way to your
 // upper tier. This can help improve performance for smart and custom tiered cache
 // topologies.
-func (r *CacheRegionalTieredCacheService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *CacheRegionalTieredCacheGetResponse, err error) {
+func (r *CacheRegionalTieredCacheService) Get(ctx context.Context, query CacheRegionalTieredCacheGetParams, opts ...option.RequestOption) (res *CacheRegionalTieredCacheGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CacheRegionalTieredCacheGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/cache/regional_tiered_cache", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/cache/regional_tiered_cache", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -197,6 +197,8 @@ const (
 )
 
 type CacheRegionalTieredCacheEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the Regional Tiered Cache zone setting.
 	Value param.Field[CacheRegionalTieredCacheEditParamsValue] `json:"value,required"`
 }
@@ -284,6 +286,11 @@ type CacheRegionalTieredCacheEditResponseEnvelopeSuccess bool
 const (
 	CacheRegionalTieredCacheEditResponseEnvelopeSuccessTrue CacheRegionalTieredCacheEditResponseEnvelopeSuccess = true
 )
+
+type CacheRegionalTieredCacheGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type CacheRegionalTieredCacheGetResponseEnvelope struct {
 	Errors   []CacheRegionalTieredCacheGetResponseEnvelopeErrors   `json:"errors,required"`

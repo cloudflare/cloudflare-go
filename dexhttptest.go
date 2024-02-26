@@ -37,11 +37,11 @@ func NewDEXHTTPTestService(opts ...option.RequestOption) (r *DEXHTTPTestService)
 
 // Get test details and aggregate performance metrics for an http test for a given
 // time period between 1 hour and 7 days.
-func (r *DEXHTTPTestService) Get(ctx context.Context, accountID string, testID string, query DEXHTTPTestGetParams, opts ...option.RequestOption) (res *DexhttpTestGetResponse, err error) {
+func (r *DEXHTTPTestService) Get(ctx context.Context, testID string, params DEXHTTPTestGetParams, opts ...option.RequestOption) (res *DexhttpTestGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DexhttpTestGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/dex/http-tests/%s", accountID, testID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/dex/http-tests/%s", params.AccountID, testID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -469,6 +469,7 @@ const (
 )
 
 type DEXHTTPTestGetParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Time interval for aggregate time slots.
 	Interval param.Field[DexhttpTestGetParamsInterval] `query:"interval,required"`
 	// End time for aggregate metrics in ISO ms

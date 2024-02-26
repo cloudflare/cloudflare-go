@@ -31,9 +31,9 @@ func TestStreamLiveInputOutputNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Stream.LiveInputs.Outputs.New(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"66be4bf738797e01e1fca35a7bdecdcd",
 		cloudflare.StreamLiveInputOutputNewParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			StreamKey: cloudflare.F("uzya-f19y-g2g9-a2ee-51j2"),
 			URL:       cloudflare.F("rtmp://a.rtmp.youtube.com/live2"),
 			Enabled:   cloudflare.F(true),
@@ -66,11 +66,11 @@ func TestStreamLiveInputOutputUpdate(t *testing.T) {
 	)
 	_, err := client.Stream.LiveInputs.Outputs.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"66be4bf738797e01e1fca35a7bdecdcd",
 		"baea4d9c515887b80289d5c33cf01145",
 		cloudflare.StreamLiveInputOutputUpdateParams{
-			Enabled: cloudflare.F(true),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Enabled:   cloudflare.F(true),
 		},
 	)
 	if err != nil {
@@ -100,8 +100,10 @@ func TestStreamLiveInputOutputList(t *testing.T) {
 	)
 	_, err := client.Stream.LiveInputs.Outputs.List(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"66be4bf738797e01e1fca35a7bdecdcd",
+		cloudflare.StreamLiveInputOutputListParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -130,9 +132,11 @@ func TestStreamLiveInputOutputDelete(t *testing.T) {
 	)
 	err := client.Stream.LiveInputs.Outputs.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"66be4bf738797e01e1fca35a7bdecdcd",
 		"baea4d9c515887b80289d5c33cf01145",
+		cloudflare.StreamLiveInputOutputDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

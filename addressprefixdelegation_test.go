@@ -32,8 +32,8 @@ func TestAddressPrefixDelegationNew(t *testing.T) {
 	_, err := client.Addresses.Prefixes.Delegations.New(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.AddressPrefixDelegationNewParams{
+			AccountID:          cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Cidr:               cloudflare.F("192.0.2.0/24"),
 			DelegatedAccountID: cloudflare.F("b1946ac92492d2347c6235b4d2611184"),
 		},
@@ -66,7 +66,9 @@ func TestAddressPrefixDelegationList(t *testing.T) {
 	_, err := client.Addresses.Prefixes.Delegations.List(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.AddressPrefixDelegationListParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -96,8 +98,10 @@ func TestAddressPrefixDelegationDelete(t *testing.T) {
 	_, err := client.Addresses.Prefixes.Delegations.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"d933b1530bc56c9953cf8ce166da8004",
+		cloudflare.AddressPrefixDelegationDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

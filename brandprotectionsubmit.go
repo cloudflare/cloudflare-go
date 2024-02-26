@@ -32,11 +32,11 @@ func NewBrandProtectionSubmitService(opts ...option.RequestOption) (r *BrandProt
 }
 
 // Submit suspicious URL for scanning
-func (r *BrandProtectionSubmitService) New(ctx context.Context, accountID string, body BrandProtectionSubmitNewParams, opts ...option.RequestOption) (res *BrandProtectionSubmitNewResponse, err error) {
+func (r *BrandProtectionSubmitService) New(ctx context.Context, params BrandProtectionSubmitNewParams, opts ...option.RequestOption) (res *BrandProtectionSubmitNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env BrandProtectionSubmitNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/brand-protection/submit", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/brand-protection/submit", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -130,6 +130,8 @@ func (r *BrandProtectionSubmitNewResponseSubmittedURL) UnmarshalJSON(data []byte
 }
 
 type BrandProtectionSubmitNewParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// URL(s) to filter submissions results by
 	URL param.Field[string] `json:"url" format:"uri"`
 }

@@ -34,7 +34,7 @@ func TestAccessApplicationPolicyNewWithOptionalParams(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.AccessApplicationPolicyNewParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID:    cloudflare.F("string"),
 			Decision:  cloudflare.F(cloudflare.AccessApplicationPolicyNewParamsDecisionAllow),
 			Include: cloudflare.F([]cloudflare.AccessApplicationPolicyNewParamsInclude{cloudflare.AccessApplicationPolicyNewParamsIncludeAccessEmailRule(cloudflare.AccessApplicationPolicyNewParamsIncludeAccessEmailRule{
 				Email: cloudflare.F(cloudflare.AccessApplicationPolicyNewParamsIncludeAccessEmailRuleEmail{
@@ -124,7 +124,7 @@ func TestAccessApplicationPolicyUpdateWithOptionalParams(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.AccessApplicationPolicyUpdateParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID:    cloudflare.F("string"),
 			Decision:  cloudflare.F(cloudflare.AccessApplicationPolicyUpdateParamsDecisionAllow),
 			Include: cloudflare.F([]cloudflare.AccessApplicationPolicyUpdateParamsInclude{cloudflare.AccessApplicationPolicyUpdateParamsIncludeAccessEmailRule(cloudflare.AccessApplicationPolicyUpdateParamsIncludeAccessEmailRule{
 				Email: cloudflare.F(cloudflare.AccessApplicationPolicyUpdateParamsIncludeAccessEmailRuleEmail{
@@ -213,7 +213,7 @@ func TestAccessApplicationPolicyList(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.AccessApplicationPolicyListParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {
@@ -247,7 +247,7 @@ func TestAccessApplicationPolicyDelete(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.AccessApplicationPolicyDeleteParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {
@@ -281,7 +281,7 @@ func TestAccessApplicationPolicyGet(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.AccessApplicationPolicyGetParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {

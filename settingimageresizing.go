@@ -36,11 +36,11 @@ func NewSettingImageResizingService(opts ...option.RequestOption) (r *SettingIma
 // images served through Cloudflare's network. Refer to the
 // [Image Resizing documentation](https://developers.cloudflare.com/images/) for
 // more information.
-func (r *SettingImageResizingService) Edit(ctx context.Context, zoneID string, body SettingImageResizingEditParams, opts ...option.RequestOption) (res *SettingImageResizingEditResponse, err error) {
+func (r *SettingImageResizingService) Edit(ctx context.Context, params SettingImageResizingEditParams, opts ...option.RequestOption) (res *SettingImageResizingEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingImageResizingEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/image_resizing", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/image_resizing", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -52,11 +52,11 @@ func (r *SettingImageResizingService) Edit(ctx context.Context, zoneID string, b
 // images served through Cloudflare's network. Refer to the
 // [Image Resizing documentation](https://developers.cloudflare.com/images/) for
 // more information.
-func (r *SettingImageResizingService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingImageResizingGetResponse, err error) {
+func (r *SettingImageResizingService) Get(ctx context.Context, query SettingImageResizingGetParams, opts ...option.RequestOption) (res *SettingImageResizingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingImageResizingGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/image_resizing", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/image_resizing", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -179,6 +179,8 @@ const (
 )
 
 type SettingImageResizingEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Image Resizing provides on-demand resizing, conversion and optimisation for
 	// images served through Cloudflare's network. Refer to the
 	// [Image Resizing documentation](https://developers.cloudflare.com/images/) for
@@ -294,6 +296,11 @@ type settingImageResizingEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingImageResizingEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingImageResizingGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingImageResizingGetResponseEnvelope struct {

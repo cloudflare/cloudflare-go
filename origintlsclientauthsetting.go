@@ -34,11 +34,11 @@ func NewOriginTLSClientAuthSettingService(opts ...option.RequestOption) (r *Orig
 // Enable or disable zone-level authenticated origin pulls. 'enabled' should be set
 // true either before/after the certificate is uploaded to see the certificate in
 // use.
-func (r *OriginTLSClientAuthSettingService) Update(ctx context.Context, zoneID string, body OriginTLSClientAuthSettingUpdateParams, opts ...option.RequestOption) (res *OriginTLSClientAuthSettingUpdateResponse, err error) {
+func (r *OriginTLSClientAuthSettingService) Update(ctx context.Context, params OriginTLSClientAuthSettingUpdateParams, opts ...option.RequestOption) (res *OriginTLSClientAuthSettingUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OriginTLSClientAuthSettingUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/settings", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/settings", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +48,11 @@ func (r *OriginTLSClientAuthSettingService) Update(ctx context.Context, zoneID s
 
 // Get whether zone-level authenticated origin pulls is enabled or not. It is false
 // by default.
-func (r *OriginTLSClientAuthSettingService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *OriginTLSClientAuthSettingGetResponse, err error) {
+func (r *OriginTLSClientAuthSettingService) Get(ctx context.Context, query OriginTLSClientAuthSettingGetParams, opts ...option.RequestOption) (res *OriginTLSClientAuthSettingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OriginTLSClientAuthSettingGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/settings", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/settings", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -97,6 +97,8 @@ func (r *OriginTLSClientAuthSettingGetResponse) UnmarshalJSON(data []byte) (err 
 }
 
 type OriginTLSClientAuthSettingUpdateParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Indicates whether zone-level authenticated origin pulls is enabled.
 	Enabled param.Field[bool] `json:"enabled,required"`
 }
@@ -174,6 +176,11 @@ type OriginTLSClientAuthSettingUpdateResponseEnvelopeSuccess bool
 const (
 	OriginTLSClientAuthSettingUpdateResponseEnvelopeSuccessTrue OriginTLSClientAuthSettingUpdateResponseEnvelopeSuccess = true
 )
+
+type OriginTLSClientAuthSettingGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type OriginTLSClientAuthSettingGetResponseEnvelope struct {
 	Errors   []OriginTLSClientAuthSettingGetResponseEnvelopeErrors   `json:"errors,required"`

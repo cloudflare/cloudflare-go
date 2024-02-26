@@ -32,11 +32,11 @@ func NewPCAPOwnershipService(opts ...option.RequestOption) (r *PCAPOwnershipServ
 }
 
 // Adds an AWS or GCP bucket to use with full packet captures.
-func (r *PCAPOwnershipService) New(ctx context.Context, accountID string, body PCAPOwnershipNewParams, opts ...option.RequestOption) (res *PCAPOwnershipNewResponse, err error) {
+func (r *PCAPOwnershipService) New(ctx context.Context, params PCAPOwnershipNewParams, opts ...option.RequestOption) (res *PCAPOwnershipNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PCAPOwnershipNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/pcaps/ownership", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/pcaps/ownership", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -45,20 +45,20 @@ func (r *PCAPOwnershipService) New(ctx context.Context, accountID string, body P
 }
 
 // Deletes buckets added to the packet captures API.
-func (r *PCAPOwnershipService) Delete(ctx context.Context, accountID string, ownershipID string, opts ...option.RequestOption) (err error) {
+func (r *PCAPOwnershipService) Delete(ctx context.Context, ownershipID string, body PCAPOwnershipDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
-	path := fmt.Sprintf("accounts/%s/pcaps/ownership/%s", accountID, ownershipID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
+	path := fmt.Sprintf("accounts/%s/pcaps/ownership/%s", body.AccountID, ownershipID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, nil, opts...)
 	return
 }
 
 // List all buckets configured for use with PCAPs API.
-func (r *PCAPOwnershipService) Get(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]PCAPOwnershipGetResponse, err error) {
+func (r *PCAPOwnershipService) Get(ctx context.Context, query PCAPOwnershipGetParams, opts ...option.RequestOption) (res *[]PCAPOwnershipGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PCAPOwnershipGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/pcaps/ownership", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/pcaps/ownership", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -67,11 +67,11 @@ func (r *PCAPOwnershipService) Get(ctx context.Context, accountID string, opts .
 }
 
 // Validates buckets added to the packet captures API.
-func (r *PCAPOwnershipService) Validate(ctx context.Context, accountID string, body PCAPOwnershipValidateParams, opts ...option.RequestOption) (res *PCAPOwnershipValidateResponse, err error) {
+func (r *PCAPOwnershipService) Validate(ctx context.Context, params PCAPOwnershipValidateParams, opts ...option.RequestOption) (res *PCAPOwnershipValidateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PCAPOwnershipValidateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/pcaps/ownership/validate", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/pcaps/ownership/validate", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -206,6 +206,8 @@ const (
 )
 
 type PCAPOwnershipNewParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The full URI for the bucket. This field only applies to `full` packet captures.
 	DestinationConf param.Field[string] `json:"destination_conf,required"`
 }
@@ -282,6 +284,16 @@ type PCAPOwnershipNewResponseEnvelopeSuccess bool
 const (
 	PCAPOwnershipNewResponseEnvelopeSuccessTrue PCAPOwnershipNewResponseEnvelopeSuccess = true
 )
+
+type PCAPOwnershipDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type PCAPOwnershipGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type PCAPOwnershipGetResponseEnvelope struct {
 	Errors   []PCAPOwnershipGetResponseEnvelopeErrors   `json:"errors,required"`
@@ -382,6 +394,8 @@ func (r *PCAPOwnershipGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) 
 }
 
 type PCAPOwnershipValidateParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The full URI for the bucket. This field only applies to `full` packet captures.
 	DestinationConf param.Field[string] `json:"destination_conf,required"`
 	// The ownership challenge filename stored in the bucket.

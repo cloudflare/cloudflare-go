@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -32,11 +33,11 @@ func NewPageruleSettingService(opts ...option.RequestOption) (r *PageruleSetting
 
 // Returns a list of settings (and their details) that Page Rules can apply to
 // matching requests.
-func (r *PageruleSettingService) List(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *[]PageruleSettingListResponse, err error) {
+func (r *PageruleSettingService) List(ctx context.Context, query PageruleSettingListParams, opts ...option.RequestOption) (res *[]PageruleSettingListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageruleSettingListResponseEnvelope
-	path := fmt.Sprintf("zones/%s/pagerules/settings", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/pagerules/settings", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -45,6 +46,11 @@ func (r *PageruleSettingService) List(ctx context.Context, zoneID string, opts .
 }
 
 type PageruleSettingListResponse = interface{}
+
+type PageruleSettingListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type PageruleSettingListResponseEnvelope struct {
 	Errors   []PageruleSettingListResponseEnvelopeErrors   `json:"errors,required"`

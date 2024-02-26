@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -33,11 +34,11 @@ func NewStorageKVNamespaceMetadataService(opts ...option.RequestOption) (r *Stor
 // Returns the metadata associated with the given key in the given namespace. Use
 // URL-encoding to use special characters (for example, `:`, `!`, `%`) in the key
 // name.
-func (r *StorageKVNamespaceMetadataService) Get(ctx context.Context, accountID string, namespaceID string, keyName string, opts ...option.RequestOption) (res *StorageKVNamespaceMetadataGetResponse, err error) {
+func (r *StorageKVNamespaceMetadataService) Get(ctx context.Context, namespaceID string, keyName string, query StorageKVNamespaceMetadataGetParams, opts ...option.RequestOption) (res *StorageKVNamespaceMetadataGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StorageKVNamespaceMetadataGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/metadata/%s", accountID, namespaceID, keyName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/metadata/%s", query.AccountID, namespaceID, keyName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -46,6 +47,11 @@ func (r *StorageKVNamespaceMetadataService) Get(ctx context.Context, accountID s
 }
 
 type StorageKVNamespaceMetadataGetResponse = interface{}
+
+type StorageKVNamespaceMetadataGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type StorageKVNamespaceMetadataGetResponseEnvelope struct {
 	Errors   []StorageKVNamespaceMetadataGetResponseEnvelopeErrors   `json:"errors,required"`

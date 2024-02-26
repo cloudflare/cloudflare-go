@@ -31,9 +31,11 @@ func TestPageProjectDeploymentHistoryLogList(t *testing.T) {
 	)
 	_, err := client.Pages.Projects.Deployments.History.Logs.List(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"this-is-my-project-01",
 		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.PageProjectDeploymentHistoryLogListParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

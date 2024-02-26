@@ -36,11 +36,11 @@ func NewSettingResponseBufferingService(opts ...option.RequestOption) (r *Settin
 // may buffer the whole payload to deliver it at once to the client versus allowing
 // it to be delivered in chunks. By default, the proxied server streams directly
 // and is not buffered by Cloudflare. This is limited to Enterprise Zones.
-func (r *SettingResponseBufferingService) Edit(ctx context.Context, zoneID string, body SettingResponseBufferingEditParams, opts ...option.RequestOption) (res *SettingResponseBufferingEditResponse, err error) {
+func (r *SettingResponseBufferingService) Edit(ctx context.Context, params SettingResponseBufferingEditParams, opts ...option.RequestOption) (res *SettingResponseBufferingEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingResponseBufferingEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/response_buffering", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/response_buffering", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -52,11 +52,11 @@ func (r *SettingResponseBufferingService) Edit(ctx context.Context, zoneID strin
 // may buffer the whole payload to deliver it at once to the client versus allowing
 // it to be delivered in chunks. By default, the proxied server streams directly
 // and is not buffered by Cloudflare. This is limited to Enterprise Zones.
-func (r *SettingResponseBufferingService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingResponseBufferingGetResponse, err error) {
+func (r *SettingResponseBufferingService) Get(ctx context.Context, query SettingResponseBufferingGetParams, opts ...option.RequestOption) (res *SettingResponseBufferingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingResponseBufferingGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/response_buffering", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/response_buffering", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -177,6 +177,8 @@ const (
 )
 
 type SettingResponseBufferingEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the zone setting.
 	Value param.Field[SettingResponseBufferingEditParamsValue] `json:"value,required"`
 }
@@ -257,6 +259,11 @@ type settingResponseBufferingEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingResponseBufferingEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingResponseBufferingGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingResponseBufferingGetResponseEnvelope struct {

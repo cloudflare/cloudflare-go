@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -30,11 +31,16 @@ func NewAddressLOADocumentDownloadService(opts ...option.RequestOption) (r *Addr
 }
 
 // Download specified LOA document under the account.
-func (r *AddressLOADocumentDownloadService) List(ctx context.Context, accountID string, loaDocumentID string, opts ...option.RequestOption) (res *AddressLOADocumentDownloadListResponse, err error) {
+func (r *AddressLOADocumentDownloadService) List(ctx context.Context, loaDocumentID string, query AddressLOADocumentDownloadListParams, opts ...option.RequestOption) (res *AddressLOADocumentDownloadListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%s/addressing/loa_documents/%s/download", accountID, loaDocumentID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/addressing/loa_documents/%s/download", query.AccountID, loaDocumentID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
 type AddressLOADocumentDownloadListResponse = interface{}
+
+type AddressLOADocumentDownloadListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}

@@ -38,11 +38,11 @@ func NewAddressingPrefixBindingService(opts ...option.RequestOption) (r *Address
 // service running on Cloudflare's network. **Note:** This API may only be used on
 // prefixes currently configured with a Magic Transit service binding, and only
 // allows creating service bindings for the Cloudflare CDN or Cloudflare Spectrum.
-func (r *AddressingPrefixBindingService) New(ctx context.Context, accountID string, prefixID string, body AddressingPrefixBindingNewParams, opts ...option.RequestOption) (res *AddressingPrefixBindingNewResponse, err error) {
+func (r *AddressingPrefixBindingService) New(ctx context.Context, prefixID string, params AddressingPrefixBindingNewParams, opts ...option.RequestOption) (res *AddressingPrefixBindingNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressingPrefixBindingNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bindings", accountID, prefixID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bindings", params.AccountID, prefixID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -56,11 +56,11 @@ func (r *AddressingPrefixBindingService) New(ctx context.Context, accountID stri
 // `192.0.2.0/24` to Cloudflare Magic Transit and `192.0.2.1/32` to the Cloudflare
 // CDN would route traffic for `192.0.2.1` to the CDN, and traffic for all other
 // IPs in the prefix to Cloudflare Magic Transit.
-func (r *AddressingPrefixBindingService) List(ctx context.Context, accountID string, prefixID string, opts ...option.RequestOption) (res *[]AddressingPrefixBindingListResponse, err error) {
+func (r *AddressingPrefixBindingService) List(ctx context.Context, prefixID string, query AddressingPrefixBindingListParams, opts ...option.RequestOption) (res *[]AddressingPrefixBindingListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressingPrefixBindingListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bindings", accountID, prefixID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bindings", query.AccountID, prefixID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -69,11 +69,11 @@ func (r *AddressingPrefixBindingService) List(ctx context.Context, accountID str
 }
 
 // Delete a Service Binding
-func (r *AddressingPrefixBindingService) Delete(ctx context.Context, accountID string, prefixID string, bindingID string, opts ...option.RequestOption) (res *AddressingPrefixBindingDeleteResponse, err error) {
+func (r *AddressingPrefixBindingService) Delete(ctx context.Context, prefixID string, bindingID string, body AddressingPrefixBindingDeleteParams, opts ...option.RequestOption) (res *AddressingPrefixBindingDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressingPrefixBindingDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bindings/%s", accountID, prefixID, bindingID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bindings/%s", body.AccountID, prefixID, bindingID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -82,11 +82,11 @@ func (r *AddressingPrefixBindingService) Delete(ctx context.Context, accountID s
 }
 
 // Fetch a single Service Binding
-func (r *AddressingPrefixBindingService) Get(ctx context.Context, accountID string, prefixID string, bindingID string, opts ...option.RequestOption) (res *AddressingPrefixBindingGetResponse, err error) {
+func (r *AddressingPrefixBindingService) Get(ctx context.Context, prefixID string, bindingID string, query AddressingPrefixBindingGetParams, opts ...option.RequestOption) (res *AddressingPrefixBindingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressingPrefixBindingGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bindings/%s", accountID, prefixID, bindingID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bindings/%s", query.AccountID, prefixID, bindingID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -294,6 +294,8 @@ const (
 )
 
 type AddressingPrefixBindingNewParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
 	Cidr param.Field[string] `json:"cidr"`
 	// Identifier
@@ -373,6 +375,11 @@ const (
 	AddressingPrefixBindingNewResponseEnvelopeSuccessTrue AddressingPrefixBindingNewResponseEnvelopeSuccess = true
 )
 
+type AddressingPrefixBindingListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type AddressingPrefixBindingListResponseEnvelope struct {
 	Errors   []AddressingPrefixBindingListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AddressingPrefixBindingListResponseEnvelopeMessages `json:"messages,required"`
@@ -442,6 +449,11 @@ const (
 	AddressingPrefixBindingListResponseEnvelopeSuccessTrue AddressingPrefixBindingListResponseEnvelopeSuccess = true
 )
 
+type AddressingPrefixBindingDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type AddressingPrefixBindingDeleteResponseEnvelope struct {
 	Errors   []AddressingPrefixBindingDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AddressingPrefixBindingDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -510,6 +522,11 @@ type AddressingPrefixBindingDeleteResponseEnvelopeSuccess bool
 const (
 	AddressingPrefixBindingDeleteResponseEnvelopeSuccessTrue AddressingPrefixBindingDeleteResponseEnvelopeSuccess = true
 )
+
+type AddressingPrefixBindingGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type AddressingPrefixBindingGetResponseEnvelope struct {
 	Errors   []AddressingPrefixBindingGetResponseEnvelopeErrors   `json:"errors,required"`

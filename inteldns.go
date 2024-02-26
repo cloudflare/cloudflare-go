@@ -34,11 +34,11 @@ func NewIntelDNSService(opts ...option.RequestOption) (r *IntelDNSService) {
 }
 
 // Get Passive DNS by IP
-func (r *IntelDNSService) Get(ctx context.Context, accountID string, query IntelDNSGetParams, opts ...option.RequestOption) (res *IntelDNSGetResponse, err error) {
+func (r *IntelDNSService) Get(ctx context.Context, params IntelDNSGetParams, opts ...option.RequestOption) (res *IntelDNSGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IntelDNSGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/intel/dns", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/intel/dns", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -98,7 +98,9 @@ func (r *IntelDNSGetResponseReverseRecord) UnmarshalJSON(data []byte) (err error
 }
 
 type IntelDNSGetParams struct {
-	IPV4 param.Field[string] `query:"ipv4"`
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+	IPV4      param.Field[string] `query:"ipv4"`
 	// Requested page within paginated list of results.
 	Page param.Field[float64] `query:"page"`
 	// Maximum number of results requested.

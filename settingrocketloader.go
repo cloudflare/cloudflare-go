@@ -42,11 +42,11 @@ func NewSettingRocketLoaderService(opts ...option.RequestOption) (r *SettingRock
 // with no configuration required. Refer to
 // [Understanding Rocket Loader](https://support.cloudflare.com/hc/articles/200168056)
 // for more information.
-func (r *SettingRocketLoaderService) Edit(ctx context.Context, zoneID string, body SettingRocketLoaderEditParams, opts ...option.RequestOption) (res *SettingRocketLoaderEditResponse, err error) {
+func (r *SettingRocketLoaderService) Edit(ctx context.Context, params SettingRocketLoaderEditParams, opts ...option.RequestOption) (res *SettingRocketLoaderEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingRocketLoaderEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/rocket_loader", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/rocket_loader", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -64,11 +64,11 @@ func (r *SettingRocketLoaderService) Edit(ctx context.Context, zoneID string, bo
 // with no configuration required. Refer to
 // [Understanding Rocket Loader](https://support.cloudflare.com/hc/articles/200168056)
 // for more information.
-func (r *SettingRocketLoaderService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingRocketLoaderGetResponse, err error) {
+func (r *SettingRocketLoaderService) Get(ctx context.Context, query SettingRocketLoaderGetParams, opts ...option.RequestOption) (res *SettingRocketLoaderGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingRocketLoaderGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/rocket_loader", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/rocket_loader", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -201,6 +201,8 @@ const (
 )
 
 type SettingRocketLoaderEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Rocket Loader is a general-purpose asynchronous JavaScript optimisation that
 	// prioritises rendering your content while loading your site's Javascript
 	// asynchronously. Turning on Rocket Loader will immediately improve a web page's
@@ -333,6 +335,11 @@ type settingRocketLoaderEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingRocketLoaderEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingRocketLoaderGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingRocketLoaderGetResponseEnvelope struct {

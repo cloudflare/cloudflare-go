@@ -34,7 +34,7 @@ func TestRulesetVersionList(t *testing.T) {
 		"2f2feab2026849078ba485f918791bdc",
 		cloudflare.RulesetVersionListParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("abf9b32d38c5f572afde3336ec0ce302"),
+			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {
@@ -68,7 +68,7 @@ func TestRulesetVersionDelete(t *testing.T) {
 		"1",
 		cloudflare.RulesetVersionDeleteParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("abf9b32d38c5f572afde3336ec0ce302"),
+			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {
@@ -102,7 +102,7 @@ func TestRulesetVersionGet(t *testing.T) {
 		"1",
 		cloudflare.RulesetVersionGetParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("abf9b32d38c5f572afde3336ec0ce302"),
+			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {

@@ -35,11 +35,11 @@ func NewHyperdriveConfigService(opts ...option.RequestOption) (r *HyperdriveConf
 }
 
 // Creates and returns a new Hyperdrive configuration.
-func (r *HyperdriveConfigService) New(ctx context.Context, accountID string, body HyperdriveConfigNewParams, opts ...option.RequestOption) (res *HyperdriveConfigNewResponse, err error) {
+func (r *HyperdriveConfigService) New(ctx context.Context, params HyperdriveConfigNewParams, opts ...option.RequestOption) (res *HyperdriveConfigNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HyperdriveConfigNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/hyperdrive/configs", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/hyperdrive/configs", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +48,11 @@ func (r *HyperdriveConfigService) New(ctx context.Context, accountID string, bod
 }
 
 // Updates and returns the specified Hyperdrive configuration.
-func (r *HyperdriveConfigService) Update(ctx context.Context, accountID string, hyperdriveID string, body HyperdriveConfigUpdateParams, opts ...option.RequestOption) (res *HyperdriveConfigUpdateResponse, err error) {
+func (r *HyperdriveConfigService) Update(ctx context.Context, hyperdriveID string, params HyperdriveConfigUpdateParams, opts ...option.RequestOption) (res *HyperdriveConfigUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HyperdriveConfigUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/hyperdrive/configs/%s", accountID, hyperdriveID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/hyperdrive/configs/%s", params.AccountID, hyperdriveID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -61,11 +61,11 @@ func (r *HyperdriveConfigService) Update(ctx context.Context, accountID string, 
 }
 
 // Returns a list of Hyperdrives
-func (r *HyperdriveConfigService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]HyperdriveConfigListResponse, err error) {
+func (r *HyperdriveConfigService) List(ctx context.Context, query HyperdriveConfigListParams, opts ...option.RequestOption) (res *[]HyperdriveConfigListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HyperdriveConfigListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/hyperdrive/configs", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/hyperdrive/configs", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -74,11 +74,11 @@ func (r *HyperdriveConfigService) List(ctx context.Context, accountID string, op
 }
 
 // Deletes the specified Hyperdrive.
-func (r *HyperdriveConfigService) Delete(ctx context.Context, accountID string, hyperdriveID string, opts ...option.RequestOption) (res *HyperdriveConfigDeleteResponse, err error) {
+func (r *HyperdriveConfigService) Delete(ctx context.Context, hyperdriveID string, body HyperdriveConfigDeleteParams, opts ...option.RequestOption) (res *HyperdriveConfigDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HyperdriveConfigDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/hyperdrive/configs/%s", accountID, hyperdriveID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/hyperdrive/configs/%s", body.AccountID, hyperdriveID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -88,11 +88,11 @@ func (r *HyperdriveConfigService) Delete(ctx context.Context, accountID string, 
 
 // Patches and returns the specified Hyperdrive configuration. Updates to the
 // origin and caching settings are applied with an all-or-nothing approach.
-func (r *HyperdriveConfigService) Edit(ctx context.Context, accountID string, hyperdriveID string, body HyperdriveConfigEditParams, opts ...option.RequestOption) (res *HyperdriveConfigEditResponse, err error) {
+func (r *HyperdriveConfigService) Edit(ctx context.Context, hyperdriveID string, params HyperdriveConfigEditParams, opts ...option.RequestOption) (res *HyperdriveConfigEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HyperdriveConfigEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/hyperdrive/configs/%s", accountID, hyperdriveID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/hyperdrive/configs/%s", params.AccountID, hyperdriveID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -101,11 +101,11 @@ func (r *HyperdriveConfigService) Edit(ctx context.Context, accountID string, hy
 }
 
 // Returns the specified Hyperdrive configuration.
-func (r *HyperdriveConfigService) Get(ctx context.Context, accountID string, hyperdriveID string, opts ...option.RequestOption) (res *HyperdriveConfigGetResponse, err error) {
+func (r *HyperdriveConfigService) Get(ctx context.Context, hyperdriveID string, query HyperdriveConfigGetParams, opts ...option.RequestOption) (res *HyperdriveConfigGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HyperdriveConfigGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/hyperdrive/configs/%s", accountID, hyperdriveID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/hyperdrive/configs/%s", query.AccountID, hyperdriveID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -221,7 +221,9 @@ func (r *HyperdriveConfigGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type HyperdriveConfigNewParams struct {
-	Origin param.Field[HyperdriveConfigNewParamsOrigin] `json:"origin,required"`
+	// Identifier
+	AccountID param.Field[string]                          `path:"account_id,required"`
+	Origin    param.Field[HyperdriveConfigNewParamsOrigin] `json:"origin,required"`
 }
 
 func (r HyperdriveConfigNewParams) MarshalJSON() (data []byte, err error) {
@@ -308,7 +310,9 @@ const (
 )
 
 type HyperdriveConfigUpdateParams struct {
-	Origin param.Field[HyperdriveConfigUpdateParamsOrigin] `json:"origin,required"`
+	// Identifier
+	AccountID param.Field[string]                             `path:"account_id,required"`
+	Origin    param.Field[HyperdriveConfigUpdateParamsOrigin] `json:"origin,required"`
 }
 
 func (r HyperdriveConfigUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -394,6 +398,11 @@ const (
 	HyperdriveConfigUpdateResponseEnvelopeSuccessTrue HyperdriveConfigUpdateResponseEnvelopeSuccess = true
 )
 
+type HyperdriveConfigListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type HyperdriveConfigListResponseEnvelope struct {
 	Errors   []HyperdriveConfigListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []HyperdriveConfigListResponseEnvelopeMessages `json:"messages,required"`
@@ -462,6 +471,11 @@ type HyperdriveConfigListResponseEnvelopeSuccess bool
 const (
 	HyperdriveConfigListResponseEnvelopeSuccessTrue HyperdriveConfigListResponseEnvelopeSuccess = true
 )
+
+type HyperdriveConfigDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type HyperdriveConfigDeleteResponseEnvelope struct {
 	Errors   []HyperdriveConfigDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -533,7 +547,9 @@ const (
 )
 
 type HyperdriveConfigEditParams struct {
-	Origin param.Field[HyperdriveConfigEditParamsOrigin] `json:"origin"`
+	// Identifier
+	AccountID param.Field[string]                           `path:"account_id,required"`
+	Origin    param.Field[HyperdriveConfigEditParamsOrigin] `json:"origin"`
 }
 
 func (r HyperdriveConfigEditParams) MarshalJSON() (data []byte, err error) {
@@ -618,6 +634,11 @@ type HyperdriveConfigEditResponseEnvelopeSuccess bool
 const (
 	HyperdriveConfigEditResponseEnvelopeSuccessTrue HyperdriveConfigEditResponseEnvelopeSuccess = true
 )
+
+type HyperdriveConfigGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type HyperdriveConfigGetResponseEnvelope struct {
 	Errors   []HyperdriveConfigGetResponseEnvelopeErrors   `json:"errors,required"`

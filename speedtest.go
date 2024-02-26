@@ -34,11 +34,11 @@ func NewSpeedTestService(opts ...option.RequestOption) (r *SpeedTestService) {
 }
 
 // Starts a test for a specific webpage, in a specific region.
-func (r *SpeedTestService) New(ctx context.Context, zoneID string, url string, body SpeedTestNewParams, opts ...option.RequestOption) (res *SpeedTestNewResponse, err error) {
+func (r *SpeedTestService) New(ctx context.Context, url string, params SpeedTestNewParams, opts ...option.RequestOption) (res *SpeedTestNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SpeedTestNewResponseEnvelope
-	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/tests", zoneID, url)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/tests", params.ZoneID, url)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -47,20 +47,20 @@ func (r *SpeedTestService) New(ctx context.Context, zoneID string, url string, b
 }
 
 // Test history (list of tests) for a specific webpage.
-func (r *SpeedTestService) List(ctx context.Context, zoneID string, url string, query SpeedTestListParams, opts ...option.RequestOption) (res *SpeedTestListResponse, err error) {
+func (r *SpeedTestService) List(ctx context.Context, url string, params SpeedTestListParams, opts ...option.RequestOption) (res *SpeedTestListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/tests", zoneID, url)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/tests", params.ZoneID, url)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
 	return
 }
 
 // Deletes all tests for a specific webpage from a specific region. Deleted tests
 // are still counted as part of the quota.
-func (r *SpeedTestService) Delete(ctx context.Context, zoneID string, url string, body SpeedTestDeleteParams, opts ...option.RequestOption) (res *SpeedTestDeleteResponse, err error) {
+func (r *SpeedTestService) Delete(ctx context.Context, url string, params SpeedTestDeleteParams, opts ...option.RequestOption) (res *SpeedTestDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SpeedTestDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/tests", zoneID, url)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/tests", params.ZoneID, url)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -69,11 +69,11 @@ func (r *SpeedTestService) Delete(ctx context.Context, zoneID string, url string
 }
 
 // Retrieves the result of a specific test.
-func (r *SpeedTestService) Get(ctx context.Context, zoneID string, url string, testID string, opts ...option.RequestOption) (res *SpeedTestGetResponse, err error) {
+func (r *SpeedTestService) Get(ctx context.Context, url string, testID string, query SpeedTestGetParams, opts ...option.RequestOption) (res *SpeedTestGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SpeedTestGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/tests/%s", zoneID, url, testID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/tests/%s", query.ZoneID, url, testID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -779,6 +779,8 @@ const (
 )
 
 type SpeedTestNewParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// A test region.
 	Region param.Field[SpeedTestNewParamsRegion] `json:"region"`
 }
@@ -832,8 +834,10 @@ func (r *SpeedTestNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 type SpeedTestListParams struct {
-	Page    param.Field[int64] `query:"page"`
-	PerPage param.Field[int64] `query:"per_page"`
+	// Identifier
+	ZoneID  param.Field[string] `path:"zone_id,required"`
+	Page    param.Field[int64]  `query:"page"`
+	PerPage param.Field[int64]  `query:"per_page"`
 	// A test region.
 	Region param.Field[SpeedTestListParamsRegion] `query:"region"`
 }
@@ -874,6 +878,8 @@ const (
 )
 
 type SpeedTestDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// A test region.
 	Region param.Field[SpeedTestDeleteParamsRegion] `query:"region"`
 }
@@ -928,6 +934,11 @@ type speedTestDeleteResponseEnvelopeJSON struct {
 
 func (r *SpeedTestDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SpeedTestGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SpeedTestGetResponseEnvelope struct {

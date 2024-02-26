@@ -35,11 +35,11 @@ func NewSettingAlwaysUseHTTPSService(opts ...option.RequestOption) (r *SettingAl
 // Reply to all requests for URLs that use "http" with a 301 redirect to the
 // equivalent "https" URL. If you only want to redirect for a subset of requests,
 // consider creating an "Always use HTTPS" page rule.
-func (r *SettingAlwaysUseHTTPSService) Edit(ctx context.Context, zoneID string, body SettingAlwaysUseHTTPSEditParams, opts ...option.RequestOption) (res *SettingAlwaysUseHTTPSEditResponse, err error) {
+func (r *SettingAlwaysUseHTTPSService) Edit(ctx context.Context, params SettingAlwaysUseHTTPSEditParams, opts ...option.RequestOption) (res *SettingAlwaysUseHTTPSEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingAlwaysUseHTTPSEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/always_use_https", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/always_use_https", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -50,11 +50,11 @@ func (r *SettingAlwaysUseHTTPSService) Edit(ctx context.Context, zoneID string, 
 // Reply to all requests for URLs that use "http" with a 301 redirect to the
 // equivalent "https" URL. If you only want to redirect for a subset of requests,
 // consider creating an "Always use HTTPS" page rule.
-func (r *SettingAlwaysUseHTTPSService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingAlwaysUseHTTPSGetResponse, err error) {
+func (r *SettingAlwaysUseHTTPSService) Get(ctx context.Context, query SettingAlwaysUseHTTPSGetParams, opts ...option.RequestOption) (res *SettingAlwaysUseHTTPSGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingAlwaysUseHTTPSGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/always_use_https", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/always_use_https", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -173,6 +173,8 @@ const (
 )
 
 type SettingAlwaysUseHTTPSEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the zone setting.
 	Value param.Field[SettingAlwaysUseHTTPSEditParamsValue] `json:"value,required"`
 }
@@ -252,6 +254,11 @@ type settingAlwaysUseHTTPSEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingAlwaysUseHTTPSEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingAlwaysUseHTTPSGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingAlwaysUseHTTPSGetResponseEnvelope struct {

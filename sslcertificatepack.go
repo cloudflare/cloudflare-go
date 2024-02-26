@@ -41,11 +41,11 @@ func NewSSLCertificatePackService(opts ...option.RequestOption) (r *SSLCertifica
 }
 
 // For a given zone, list all active certificate packs.
-func (r *SSLCertificatePackService) List(ctx context.Context, zoneID string, query SSLCertificatePackListParams, opts ...option.RequestOption) (res *[]SSLCertificatePackListResponse, err error) {
+func (r *SSLCertificatePackService) List(ctx context.Context, params SSLCertificatePackListParams, opts ...option.RequestOption) (res *[]SSLCertificatePackListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SSLCertificatePackListResponseEnvelope
-	path := fmt.Sprintf("zones/%s/ssl/certificate_packs", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("zones/%s/ssl/certificate_packs", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -54,11 +54,11 @@ func (r *SSLCertificatePackService) List(ctx context.Context, zoneID string, que
 }
 
 // For a given zone, delete an advanced certificate pack.
-func (r *SSLCertificatePackService) Delete(ctx context.Context, zoneID string, certificatePackID string, opts ...option.RequestOption) (res *SSLCertificatePackDeleteResponse, err error) {
+func (r *SSLCertificatePackService) Delete(ctx context.Context, certificatePackID string, body SSLCertificatePackDeleteParams, opts ...option.RequestOption) (res *SSLCertificatePackDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SSLCertificatePackDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", zoneID, certificatePackID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", body.ZoneID, certificatePackID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -69,11 +69,11 @@ func (r *SSLCertificatePackService) Delete(ctx context.Context, zoneID string, c
 // For a given zone, restart validation for an advanced certificate pack. This is
 // only a validation operation for a Certificate Pack in a validation_timed_out
 // status.
-func (r *SSLCertificatePackService) Edit(ctx context.Context, zoneID string, certificatePackID string, opts ...option.RequestOption) (res *SSLCertificatePackEditResponse, err error) {
+func (r *SSLCertificatePackService) Edit(ctx context.Context, certificatePackID string, body SSLCertificatePackEditParams, opts ...option.RequestOption) (res *SSLCertificatePackEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SSLCertificatePackEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", zoneID, certificatePackID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", body.ZoneID, certificatePackID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -82,11 +82,11 @@ func (r *SSLCertificatePackService) Edit(ctx context.Context, zoneID string, cer
 }
 
 // For a given zone, get a certificate pack.
-func (r *SSLCertificatePackService) Get(ctx context.Context, zoneID string, certificatePackID string, opts ...option.RequestOption) (res *SSLCertificatePackGetResponse, err error) {
+func (r *SSLCertificatePackService) Get(ctx context.Context, certificatePackID string, query SSLCertificatePackGetParams, opts ...option.RequestOption) (res *SSLCertificatePackGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SSLCertificatePackGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", zoneID, certificatePackID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", query.ZoneID, certificatePackID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -238,6 +238,8 @@ func init() {
 }
 
 type SSLCertificatePackListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Include Certificate Packs of all statuses, not just active ones.
 	Status param.Field[SSLCertificatePackListParamsStatus] `query:"status"`
 }
@@ -356,6 +358,11 @@ func (r *SSLCertificatePackListResponseEnvelopeResultInfo) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type SSLCertificatePackDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type SSLCertificatePackDeleteResponseEnvelope struct {
 	Errors   []SSLCertificatePackDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SSLCertificatePackDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -425,6 +432,11 @@ const (
 	SSLCertificatePackDeleteResponseEnvelopeSuccessTrue SSLCertificatePackDeleteResponseEnvelopeSuccess = true
 )
 
+type SSLCertificatePackEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type SSLCertificatePackEditResponseEnvelope struct {
 	Errors   []SSLCertificatePackEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SSLCertificatePackEditResponseEnvelopeMessages `json:"messages,required"`
@@ -493,6 +505,11 @@ type SSLCertificatePackEditResponseEnvelopeSuccess bool
 const (
 	SSLCertificatePackEditResponseEnvelopeSuccessTrue SSLCertificatePackEditResponseEnvelopeSuccess = true
 )
+
+type SSLCertificatePackGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type SSLCertificatePackGetResponseEnvelope struct {
 	Errors   []SSLCertificatePackGetResponseEnvelopeErrors   `json:"errors,required"`

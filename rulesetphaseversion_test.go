@@ -34,7 +34,7 @@ func TestRulesetPhaseVersionList(t *testing.T) {
 		cloudflare.RulesetPhaseVersionListParamsRulesetPhaseHTTPRequestFirewallCustom,
 		cloudflare.RulesetPhaseVersionListParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("abf9b32d38c5f572afde3336ec0ce302"),
+			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {
@@ -68,7 +68,7 @@ func TestRulesetPhaseVersionGet(t *testing.T) {
 		"1",
 		cloudflare.RulesetPhaseVersionGetParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("abf9b32d38c5f572afde3336ec0ce302"),
+			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {

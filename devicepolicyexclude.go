@@ -32,11 +32,11 @@ func NewDevicePolicyExcludeService(opts ...option.RequestOption) (r *DevicePolic
 }
 
 // Sets the list of routes excluded from the WARP client's tunnel.
-func (r *DevicePolicyExcludeService) Update(ctx context.Context, accountID interface{}, body DevicePolicyExcludeUpdateParams, opts ...option.RequestOption) (res *[]DevicePolicyExcludeUpdateResponse, err error) {
+func (r *DevicePolicyExcludeService) Update(ctx context.Context, params DevicePolicyExcludeUpdateParams, opts ...option.RequestOption) (res *[]DevicePolicyExcludeUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyExcludeUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/policy/exclude", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/devices/policy/exclude", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -45,11 +45,11 @@ func (r *DevicePolicyExcludeService) Update(ctx context.Context, accountID inter
 }
 
 // Fetches the list of routes excluded from the WARP client's tunnel.
-func (r *DevicePolicyExcludeService) List(ctx context.Context, accountID interface{}, opts ...option.RequestOption) (res *[]DevicePolicyExcludeListResponse, err error) {
+func (r *DevicePolicyExcludeService) List(ctx context.Context, query DevicePolicyExcludeListParams, opts ...option.RequestOption) (res *[]DevicePolicyExcludeListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyExcludeListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/policy/exclude", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/devices/policy/exclude", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -59,11 +59,11 @@ func (r *DevicePolicyExcludeService) List(ctx context.Context, accountID interfa
 
 // Fetches the list of routes excluded from the WARP client's tunnel for a specific
 // device settings profile.
-func (r *DevicePolicyExcludeService) Get(ctx context.Context, accountID interface{}, policyID string, opts ...option.RequestOption) (res *[]DevicePolicyExcludeGetResponse, err error) {
+func (r *DevicePolicyExcludeService) Get(ctx context.Context, policyID string, query DevicePolicyExcludeGetParams, opts ...option.RequestOption) (res *[]DevicePolicyExcludeGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyExcludeGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/policy/%s/exclude", accountID, policyID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/devices/policy/%s/exclude", query.AccountID, policyID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -150,7 +150,8 @@ func (r *DevicePolicyExcludeGetResponse) UnmarshalJSON(data []byte) (err error) 
 }
 
 type DevicePolicyExcludeUpdateParams struct {
-	Body param.Field[[]DevicePolicyExcludeUpdateParamsBody] `json:"body,required"`
+	AccountID param.Field[interface{}]                           `path:"account_id,required"`
+	Body      param.Field[[]DevicePolicyExcludeUpdateParamsBody] `json:"body,required"`
 }
 
 func (r DevicePolicyExcludeUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -270,6 +271,10 @@ func (r *DevicePolicyExcludeUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type DevicePolicyExcludeListParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
+
 type DevicePolicyExcludeListResponseEnvelope struct {
 	Errors   []DevicePolicyExcludeListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DevicePolicyExcludeListResponseEnvelopeMessages `json:"messages,required"`
@@ -366,6 +371,10 @@ type devicePolicyExcludeListResponseEnvelopeResultInfoJSON struct {
 
 func (r *DevicePolicyExcludeListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type DevicePolicyExcludeGetParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
 
 type DevicePolicyExcludeGetResponseEnvelope struct {

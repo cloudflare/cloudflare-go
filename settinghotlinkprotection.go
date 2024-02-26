@@ -39,11 +39,11 @@ func NewSettingHotlinkProtectionService(opts ...option.RequestOption) (r *Settin
 // view images from your page, but other sites won't be able to steal them for use
 // on their own pages.
 // (https://support.cloudflare.com/hc/en-us/articles/200170026).
-func (r *SettingHotlinkProtectionService) Edit(ctx context.Context, zoneID string, body SettingHotlinkProtectionEditParams, opts ...option.RequestOption) (res *SettingHotlinkProtectionEditResponse, err error) {
+func (r *SettingHotlinkProtectionService) Edit(ctx context.Context, params SettingHotlinkProtectionEditParams, opts ...option.RequestOption) (res *SettingHotlinkProtectionEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingHotlinkProtectionEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/hotlink_protection", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/hotlink_protection", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -58,11 +58,11 @@ func (r *SettingHotlinkProtectionService) Edit(ctx context.Context, zoneID strin
 // view images from your page, but other sites won't be able to steal them for use
 // on their own pages.
 // (https://support.cloudflare.com/hc/en-us/articles/200170026).
-func (r *SettingHotlinkProtectionService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingHotlinkProtectionGetResponse, err error) {
+func (r *SettingHotlinkProtectionService) Get(ctx context.Context, query SettingHotlinkProtectionGetParams, opts ...option.RequestOption) (res *SettingHotlinkProtectionGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingHotlinkProtectionGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/hotlink_protection", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/hotlink_protection", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -189,6 +189,8 @@ const (
 )
 
 type SettingHotlinkProtectionEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the zone setting.
 	Value param.Field[SettingHotlinkProtectionEditParamsValue] `json:"value,required"`
 }
@@ -272,6 +274,11 @@ type settingHotlinkProtectionEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingHotlinkProtectionEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingHotlinkProtectionGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingHotlinkProtectionGetResponseEnvelope struct {

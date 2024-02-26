@@ -47,11 +47,11 @@ func NewSettingSSLService(opts ...option.RequestOption) (r *SettingSSLService) {
 // web server. This certificate must be signed by a certificate authority, have an
 // expiration date in the future, and respond for the request domain name
 // (hostname). (https://support.cloudflare.com/hc/en-us/articles/200170416).
-func (r *SettingSSLService) Edit(ctx context.Context, zoneID string, body SettingSSLEditParams, opts ...option.RequestOption) (res *SettingSSLEditResponse, err error) {
+func (r *SettingSSLService) Edit(ctx context.Context, params SettingSSLEditParams, opts ...option.RequestOption) (res *SettingSSLEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingSSLEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/ssl", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/ssl", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -75,11 +75,11 @@ func (r *SettingSSLService) Edit(ctx context.Context, zoneID string, body Settin
 // web server. This certificate must be signed by a certificate authority, have an
 // expiration date in the future, and respond for the request domain name
 // (hostname). (https://support.cloudflare.com/hc/en-us/articles/200170416).
-func (r *SettingSSLService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingSSLGetResponse, err error) {
+func (r *SettingSSLService) Get(ctx context.Context, query SettingSSLGetParams, opts ...option.RequestOption) (res *SettingSSLGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingSSLGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/ssl", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/ssl", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -228,6 +228,8 @@ const (
 )
 
 type SettingSSLEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the zone setting. Notes: Depends on the zone's plan level
 	Value param.Field[SettingSSLEditParamsValue] `json:"value,required"`
 }
@@ -322,6 +324,11 @@ type settingSSLEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingSSLEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingSSLGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingSSLGetResponseEnvelope struct {

@@ -31,10 +31,10 @@ func TestWorkerServiceEnvironmentSettingEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Workers.Services.Environments.Settings.Edit(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"my-worker",
 		"production",
 		cloudflare.WorkerServiceEnvironmentSettingEditParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Errors: cloudflare.F([]cloudflare.WorkerServiceEnvironmentSettingEditParamsError{{
 				Code:    cloudflare.F(int64(1000)),
 				Message: cloudflare.F("string"),
@@ -144,9 +144,11 @@ func TestWorkerServiceEnvironmentSettingGet(t *testing.T) {
 	)
 	_, err := client.Workers.Services.Environments.Settings.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"my-worker",
 		"production",
+		cloudflare.WorkerServiceEnvironmentSettingGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

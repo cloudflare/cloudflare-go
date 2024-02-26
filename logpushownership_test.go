@@ -31,7 +31,7 @@ func TestLogpushOwnershipNew(t *testing.T) {
 	)
 	_, err := client.Logpush.Ownership.New(context.TODO(), cloudflare.LogpushOwnershipNewParams{
 		AccountID:       cloudflare.F("string"),
-		ZoneID:          cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ZoneID:          cloudflare.F("string"),
 		DestinationConf: cloudflare.F("s3://mybucket/logs?region=us-west-2"),
 	})
 	if err != nil {
@@ -61,7 +61,7 @@ func TestLogpushOwnershipValidate(t *testing.T) {
 	)
 	_, err := client.Logpush.Ownership.Validate(context.TODO(), cloudflare.LogpushOwnershipValidateParams{
 		AccountID:          cloudflare.F("string"),
-		ZoneID:             cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ZoneID:             cloudflare.F("string"),
 		DestinationConf:    cloudflare.F("s3://mybucket/logs?region=us-west-2"),
 		OwnershipChallenge: cloudflare.F("00000000000000000000"),
 	})

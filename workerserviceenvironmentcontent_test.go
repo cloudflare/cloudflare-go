@@ -35,10 +35,10 @@ func TestWorkerServiceEnvironmentContentUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Workers.Services.Environments.Content.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"my-worker",
 		"production",
 		cloudflare.WorkerServiceEnvironmentContentUpdateParams{
+			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			AnyPartName: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
 			Metadata: cloudflare.F(cloudflare.WorkerServiceEnvironmentContentUpdateParamsMetadata{
 				BodyPart:   cloudflare.F("worker.js"),
@@ -74,9 +74,11 @@ func TestWorkerServiceEnvironmentContentGet(t *testing.T) {
 	)
 	resp, err := client.Workers.Services.Environments.Content.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"my-worker",
 		"production",
+		cloudflare.WorkerServiceEnvironmentContentGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

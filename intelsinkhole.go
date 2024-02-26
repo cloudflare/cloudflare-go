@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -32,11 +33,11 @@ func NewIntelSinkholeService(opts ...option.RequestOption) (r *IntelSinkholeServ
 }
 
 // List sinkholes owned by this account
-func (r *IntelSinkholeService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]IntelSinkholeListResponse, err error) {
+func (r *IntelSinkholeService) List(ctx context.Context, query IntelSinkholeListParams, opts ...option.RequestOption) (res *[]IntelSinkholeListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IntelSinkholeListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/intel/sinkholes", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/intel/sinkholes", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -78,6 +79,11 @@ type intelSinkholeListResponseJSON struct {
 
 func (r *IntelSinkholeListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type IntelSinkholeListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type IntelSinkholeListResponseEnvelope struct {

@@ -33,11 +33,11 @@ func NewR2BucketService(opts ...option.RequestOption) (r *R2BucketService) {
 }
 
 // Creates a new R2 bucket.
-func (r *R2BucketService) New(ctx context.Context, accountID string, body R2BucketNewParams, opts ...option.RequestOption) (res *R2BucketNewResponse, err error) {
+func (r *R2BucketService) New(ctx context.Context, params R2BucketNewParams, opts ...option.RequestOption) (res *R2BucketNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env R2BucketNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/r2/buckets", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/r2/buckets", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -46,11 +46,11 @@ func (r *R2BucketService) New(ctx context.Context, accountID string, body R2Buck
 }
 
 // Lists all R2 buckets on your account
-func (r *R2BucketService) List(ctx context.Context, accountID string, query R2BucketListParams, opts ...option.RequestOption) (res *[]R2BucketListResponse, err error) {
+func (r *R2BucketService) List(ctx context.Context, params R2BucketListParams, opts ...option.RequestOption) (res *[]R2BucketListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env R2BucketListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/r2/buckets", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/r2/buckets", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -59,11 +59,11 @@ func (r *R2BucketService) List(ctx context.Context, accountID string, query R2Bu
 }
 
 // Deletes an existing R2 bucket.
-func (r *R2BucketService) Delete(ctx context.Context, accountID string, bucketName string, opts ...option.RequestOption) (res *R2BucketDeleteResponse, err error) {
+func (r *R2BucketService) Delete(ctx context.Context, bucketName string, body R2BucketDeleteParams, opts ...option.RequestOption) (res *R2BucketDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env R2BucketDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/r2/buckets/%s", accountID, bucketName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/r2/buckets/%s", body.AccountID, bucketName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -72,11 +72,11 @@ func (r *R2BucketService) Delete(ctx context.Context, accountID string, bucketNa
 }
 
 // Gets metadata for an existing R2 bucket.
-func (r *R2BucketService) Get(ctx context.Context, accountID string, bucketName string, opts ...option.RequestOption) (res *R2BucketGetResponse, err error) {
+func (r *R2BucketService) Get(ctx context.Context, bucketName string, query R2BucketGetParams, opts ...option.RequestOption) (res *R2BucketGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env R2BucketGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/r2/buckets/%s", accountID, bucketName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/r2/buckets/%s", query.AccountID, bucketName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -195,6 +195,8 @@ const (
 )
 
 type R2BucketNewParams struct {
+	// Account ID
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Name of the bucket
 	Name param.Field[string] `json:"name,required"`
 	// Location of the bucket
@@ -268,6 +270,8 @@ const (
 )
 
 type R2BucketListParams struct {
+	// Account ID
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Pagination cursor received during the last List Buckets call. R2 buckets are
 	// paginated using cursors instead of page numbers.
 	Cursor param.Field[string] `query:"cursor"`
@@ -380,6 +384,11 @@ func (r *R2BucketListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type R2BucketDeleteParams struct {
+	// Account ID
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type R2BucketDeleteResponseEnvelope struct {
 	Errors   []R2BucketDeleteResponseEnvelopeErrors `json:"errors,required"`
 	Messages []string                               `json:"messages,required"`
@@ -429,6 +438,11 @@ type R2BucketDeleteResponseEnvelopeSuccess bool
 const (
 	R2BucketDeleteResponseEnvelopeSuccessTrue R2BucketDeleteResponseEnvelopeSuccess = true
 )
+
+type R2BucketGetParams struct {
+	// Account ID
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type R2BucketGetResponseEnvelope struct {
 	Errors   []R2BucketGetResponseEnvelopeErrors `json:"errors,required"`

@@ -35,11 +35,11 @@ func NewSettingSortQueryStringForCacheService(opts ...option.RequestOption) (r *
 // Cloudflare will treat files with the same query strings as the same file in
 // cache, regardless of the order of the query strings. This is limited to
 // Enterprise Zones.
-func (r *SettingSortQueryStringForCacheService) Edit(ctx context.Context, zoneID string, body SettingSortQueryStringForCacheEditParams, opts ...option.RequestOption) (res *SettingSortQueryStringForCacheEditResponse, err error) {
+func (r *SettingSortQueryStringForCacheService) Edit(ctx context.Context, params SettingSortQueryStringForCacheEditParams, opts ...option.RequestOption) (res *SettingSortQueryStringForCacheEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingSortQueryStringForCacheEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/sort_query_string_for_cache", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/sort_query_string_for_cache", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -50,11 +50,11 @@ func (r *SettingSortQueryStringForCacheService) Edit(ctx context.Context, zoneID
 // Cloudflare will treat files with the same query strings as the same file in
 // cache, regardless of the order of the query strings. This is limited to
 // Enterprise Zones.
-func (r *SettingSortQueryStringForCacheService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingSortQueryStringForCacheGetResponse, err error) {
+func (r *SettingSortQueryStringForCacheService) Get(ctx context.Context, query SettingSortQueryStringForCacheGetParams, opts ...option.RequestOption) (res *SettingSortQueryStringForCacheGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingSortQueryStringForCacheGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/sort_query_string_for_cache", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/sort_query_string_for_cache", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -173,6 +173,8 @@ const (
 )
 
 type SettingSortQueryStringForCacheEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the zone setting.
 	Value param.Field[SettingSortQueryStringForCacheEditParamsValue] `json:"value,required"`
 }
@@ -254,6 +256,11 @@ type settingSortQueryStringForCacheEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingSortQueryStringForCacheEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingSortQueryStringForCacheGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingSortQueryStringForCacheGetResponseEnvelope struct {

@@ -31,7 +31,7 @@ func TestAccessCertificateNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Access.Certificates.New(context.TODO(), cloudflare.AccessCertificateNewParams{
 		AccountID:           cloudflare.F("string"),
-		ZoneID:              cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ZoneID:              cloudflare.F("string"),
 		Certificate:         cloudflare.F("-----BEGIN CERTIFICATE-----\nMIIGAjCCA+qgAwIBAgIJAI7kymlF7CWT...N4RI7KKB7nikiuUf8vhULKy5IX10\nDrUtmu/B\n-----END CERTIFICATE-----"),
 		Name:                cloudflare.F("Allow devs"),
 		AssociatedHostnames: cloudflare.F([]string{"admin.example.com", "admin.example.com", "admin.example.com"}),
@@ -66,7 +66,7 @@ func TestAccessCertificateUpdateWithOptionalParams(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.AccessCertificateUpdateParams{
 			AccountID:           cloudflare.F("string"),
-			ZoneID:              cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID:              cloudflare.F("string"),
 			AssociatedHostnames: cloudflare.F([]string{"admin.example.com", "admin.example.com", "admin.example.com"}),
 			Name:                cloudflare.F("Allow devs"),
 		},
@@ -98,7 +98,7 @@ func TestAccessCertificateList(t *testing.T) {
 	)
 	_, err := client.Access.Certificates.List(context.TODO(), cloudflare.AccessCertificateListParams{
 		AccountID: cloudflare.F("string"),
-		ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ZoneID:    cloudflare.F("string"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -130,7 +130,7 @@ func TestAccessCertificateDelete(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.AccessCertificateDeleteParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {
@@ -163,7 +163,7 @@ func TestAccessCertificateGet(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.AccessCertificateGetParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {

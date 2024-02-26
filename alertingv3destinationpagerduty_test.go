@@ -29,7 +29,9 @@ func TestAlertingV3DestinationPagerdutyNew(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Alerting.V3.Destinations.Pagerduty.New(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Alerting.V3.Destinations.Pagerduty.New(context.TODO(), cloudflare.AlertingV3DestinationPagerdutyNewParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -55,7 +57,9 @@ func TestAlertingV3DestinationPagerdutyDelete(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Alerting.V3.Destinations.Pagerduty.Delete(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Alerting.V3.Destinations.Pagerduty.Delete(context.TODO(), cloudflare.AlertingV3DestinationPagerdutyDeleteParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -81,7 +85,9 @@ func TestAlertingV3DestinationPagerdutyGet(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Alerting.V3.Destinations.Pagerduty.Get(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Alerting.V3.Destinations.Pagerduty.Get(context.TODO(), cloudflare.AlertingV3DestinationPagerdutyGetParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -109,8 +115,10 @@ func TestAlertingV3DestinationPagerdutyLink(t *testing.T) {
 	)
 	_, err := client.Alerting.V3.Destinations.Pagerduty.Link(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"8c71e667571b4f61b94d9e4b12158038",
+		cloudflare.AlertingV3DestinationPagerdutyLinkParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

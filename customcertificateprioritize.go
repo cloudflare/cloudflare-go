@@ -35,11 +35,11 @@ func NewCustomCertificatePrioritizeService(opts ...option.RequestOption) (r *Cus
 // If a zone has multiple SSL certificates, you can set the order in which they
 // should be used during a request. The higher priority will break ties across
 // overlapping 'legacy_custom' certificates.
-func (r *CustomCertificatePrioritizeService) Update(ctx context.Context, zoneID string, body CustomCertificatePrioritizeUpdateParams, opts ...option.RequestOption) (res *[]CustomCertificatePrioritizeUpdateResponse, err error) {
+func (r *CustomCertificatePrioritizeService) Update(ctx context.Context, params CustomCertificatePrioritizeUpdateParams, opts ...option.RequestOption) (res *[]CustomCertificatePrioritizeUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomCertificatePrioritizeUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/custom_certificates/prioritize", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/custom_certificates/prioritize", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -257,6 +257,8 @@ func (r *CustomCertificatePrioritizeUpdateResponseKeylessServerTunnel) Unmarshal
 }
 
 type CustomCertificatePrioritizeUpdateParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Array of ordered certificates.
 	Certificates param.Field[[]CustomCertificatePrioritizeUpdateParamsCertificate] `json:"certificates,required"`
 }

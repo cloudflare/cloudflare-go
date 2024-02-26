@@ -53,7 +53,7 @@ func (r *FirewallAccessRuleService) New(ctx context.Context, params FirewallAcce
 		accountOrZone = "zones"
 		accountOrZoneID = params.ZoneID
 	}
-	path := fmt.Sprintf("%s/%v/firewall/access_rules/rules", accountOrZone, accountOrZoneID)
+	path := fmt.Sprintf("%s/%s/firewall/access_rules/rules", accountOrZone, accountOrZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -69,7 +69,16 @@ func (r *FirewallAccessRuleService) List(ctx context.Context, params FirewallAcc
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	path := fmt.Sprintf("%s/%v/firewall/access_rules/rules", accountOrZone, accountOrZoneID)
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if params.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = params.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = params.ZoneID
+	}
+	path := fmt.Sprintf("%s/%s/firewall/access_rules/rules", accountOrZone, accountOrZoneID)
 	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
@@ -104,7 +113,7 @@ func (r *FirewallAccessRuleService) Delete(ctx context.Context, identifier inter
 		accountOrZone = "zones"
 		accountOrZoneID = body.ZoneID
 	}
-	path := fmt.Sprintf("%s/%v/firewall/access_rules/rules/%v", accountOrZone, accountOrZoneID, identifier)
+	path := fmt.Sprintf("%s/%s/firewall/access_rules/rules/%v", accountOrZone, accountOrZoneID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
@@ -141,7 +150,7 @@ func (r *FirewallAccessRuleService) Get(ctx context.Context, identifier interfac
 		accountOrZone = "zones"
 		accountOrZoneID = query.ZoneID
 	}
-	path := fmt.Sprintf("%s/%v/firewall/access_rules/rules/%v", accountOrZone, accountOrZoneID, identifier)
+	path := fmt.Sprintf("%s/%s/firewall/access_rules/rules/%v", accountOrZone, accountOrZoneID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
@@ -225,7 +234,7 @@ type FirewallAccessRuleNewParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[interface{}] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The rule configuration.
 	Configuration param.Field[FirewallAccessRuleNewParamsConfiguration] `json:"configuration,required"`
 	// The action to apply to a matched request.
@@ -451,7 +460,7 @@ type FirewallAccessRuleListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[interface{}] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The direction used to sort returned rules.
 	Direction     param.Field[FirewallAccessRuleListParamsDirection]     `query:"direction"`
 	EgsPagination param.Field[FirewallAccessRuleListParamsEgsPagination] `query:"egs-pagination"`
@@ -582,7 +591,7 @@ type FirewallAccessRuleDeleteParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[interface{}] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type FirewallAccessRuleDeleteResponseEnvelope struct {
@@ -882,7 +891,7 @@ type FirewallAccessRuleGetParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[interface{}] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type FirewallAccessRuleGetResponseEnvelope struct {

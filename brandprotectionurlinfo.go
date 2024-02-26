@@ -34,11 +34,11 @@ func NewBrandProtectionURLInfoService(opts ...option.RequestOption) (r *BrandPro
 }
 
 // Get results for a URL scan
-func (r *BrandProtectionURLInfoService) Get(ctx context.Context, accountID string, query BrandProtectionURLInfoGetParams, opts ...option.RequestOption) (res *BrandProtectionURLInfoGetResponse, err error) {
+func (r *BrandProtectionURLInfoService) Get(ctx context.Context, params BrandProtectionURLInfoGetParams, opts ...option.RequestOption) (res *BrandProtectionURLInfoGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env BrandProtectionURLInfoGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/brand-protection/url-info", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/brand-protection/url-info", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -181,6 +181,8 @@ func (r *BrandProtectionURLInfoGetResponseScanStatus) UnmarshalJSON(data []byte)
 }
 
 type BrandProtectionURLInfoGetParams struct {
+	// Identifier
+	AccountID  param.Field[string]                                    `path:"account_id,required"`
 	URL        param.Field[string]                                    `query:"url"`
 	URLIDParam param.Field[BrandProtectionURLInfoGetParamsURLIDParam] `query:"url_id_param"`
 }

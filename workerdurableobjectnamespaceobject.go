@@ -35,11 +35,11 @@ func NewWorkerDurableObjectNamespaceObjectService(opts ...option.RequestOption) 
 }
 
 // Returns the Durable Objects in a given namespace.
-func (r *WorkerDurableObjectNamespaceObjectService) List(ctx context.Context, accountID string, id string, query WorkerDurableObjectNamespaceObjectListParams, opts ...option.RequestOption) (res *[]WorkerDurableObjectNamespaceObjectListResponse, err error) {
+func (r *WorkerDurableObjectNamespaceObjectService) List(ctx context.Context, id string, params WorkerDurableObjectNamespaceObjectListParams, opts ...option.RequestOption) (res *[]WorkerDurableObjectNamespaceObjectListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerDurableObjectNamespaceObjectListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/durable_objects/namespaces/%s/objects", accountID, id)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/durable_objects/namespaces/%s/objects", params.AccountID, id)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -69,6 +69,8 @@ func (r *WorkerDurableObjectNamespaceObjectListResponse) UnmarshalJSON(data []by
 }
 
 type WorkerDurableObjectNamespaceObjectListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Opaque token indicating the position from which to continue when requesting the
 	// next set of records. A valid value for the cursor can be obtained from the
 	// cursors object in the result_info structure.

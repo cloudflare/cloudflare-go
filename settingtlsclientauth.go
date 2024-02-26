@@ -34,11 +34,11 @@ func NewSettingTLSClientAuthService(opts ...option.RequestOption) (r *SettingTLS
 
 // TLS Client Auth requires Cloudflare to connect to your origin server using a
 // client certificate (Enterprise Only).
-func (r *SettingTLSClientAuthService) Edit(ctx context.Context, zoneID string, body SettingTLSClientAuthEditParams, opts ...option.RequestOption) (res *SettingTLSClientAuthEditResponse, err error) {
+func (r *SettingTLSClientAuthService) Edit(ctx context.Context, params SettingTLSClientAuthEditParams, opts ...option.RequestOption) (res *SettingTLSClientAuthEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingTLSClientAuthEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/tls_client_auth", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/tls_client_auth", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +48,11 @@ func (r *SettingTLSClientAuthService) Edit(ctx context.Context, zoneID string, b
 
 // TLS Client Auth requires Cloudflare to connect to your origin server using a
 // client certificate (Enterprise Only).
-func (r *SettingTLSClientAuthService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingTLSClientAuthGetResponse, err error) {
+func (r *SettingTLSClientAuthService) Get(ctx context.Context, query SettingTLSClientAuthGetParams, opts ...option.RequestOption) (res *SettingTLSClientAuthGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingTLSClientAuthGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/tls_client_auth", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/tls_client_auth", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -169,6 +169,8 @@ const (
 )
 
 type SettingTLSClientAuthEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// value of the zone setting.
 	Value param.Field[SettingTLSClientAuthEditParamsValue] `json:"value,required"`
 }
@@ -247,6 +249,11 @@ type settingTLSClientAuthEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingTLSClientAuthEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingTLSClientAuthGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingTLSClientAuthGetResponseEnvelope struct {

@@ -35,11 +35,11 @@ func NewStorageAnalyticsService(opts ...option.RequestOption) (r *StorageAnalyti
 }
 
 // Retrieves Workers KV request metrics for the given account.
-func (r *StorageAnalyticsService) List(ctx context.Context, accountID string, query StorageAnalyticsListParams, opts ...option.RequestOption) (res *StorageAnalyticsListResponse, err error) {
+func (r *StorageAnalyticsService) List(ctx context.Context, params StorageAnalyticsListParams, opts ...option.RequestOption) (res *StorageAnalyticsListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StorageAnalyticsListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/storage/analytics", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/storage/analytics", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +48,11 @@ func (r *StorageAnalyticsService) List(ctx context.Context, accountID string, qu
 }
 
 // Retrieves Workers KV stored data metrics for the given account.
-func (r *StorageAnalyticsService) Stored(ctx context.Context, accountID string, query StorageAnalyticsStoredParams, opts ...option.RequestOption) (res *StorageAnalyticsStoredResponse, err error) {
+func (r *StorageAnalyticsService) Stored(ctx context.Context, params StorageAnalyticsStoredParams, opts ...option.RequestOption) (res *StorageAnalyticsStoredResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StorageAnalyticsStoredResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/storage/analytics/stored", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/storage/analytics/stored", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -275,6 +275,8 @@ func (r *StorageAnalyticsStoredResponseQuery) UnmarshalJSON(data []byte) (err er
 }
 
 type StorageAnalyticsListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// For specifying result metrics.
 	Query param.Field[StorageAnalyticsListParamsQuery] `query:"query"`
 }
@@ -419,6 +421,8 @@ const (
 )
 
 type StorageAnalyticsStoredParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// For specifying result metrics.
 	Query param.Field[StorageAnalyticsStoredParamsQuery] `query:"query"`
 }

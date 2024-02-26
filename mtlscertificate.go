@@ -35,11 +35,11 @@ func NewMTLSCertificateService(opts ...option.RequestOption) (r *MTLSCertificate
 }
 
 // Upload a certificate that you want to use with mTLS-enabled Cloudflare services.
-func (r *MTLSCertificateService) New(ctx context.Context, accountID string, body MTLSCertificateNewParams, opts ...option.RequestOption) (res *MTLSCertificateNewResponse, err error) {
+func (r *MTLSCertificateService) New(ctx context.Context, params MTLSCertificateNewParams, opts ...option.RequestOption) (res *MTLSCertificateNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MTLSCertificateNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/mtls_certificates", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/mtls_certificates", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +48,11 @@ func (r *MTLSCertificateService) New(ctx context.Context, accountID string, body
 }
 
 // Lists all mTLS certificates.
-func (r *MTLSCertificateService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]MTLSCertificateListResponse, err error) {
+func (r *MTLSCertificateService) List(ctx context.Context, query MTLSCertificateListParams, opts ...option.RequestOption) (res *[]MTLSCertificateListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MTLSCertificateListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/mtls_certificates", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/mtls_certificates", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -62,11 +62,11 @@ func (r *MTLSCertificateService) List(ctx context.Context, accountID string, opt
 
 // Deletes the mTLS certificate unless the certificate is in use by one or more
 // Cloudflare services.
-func (r *MTLSCertificateService) Delete(ctx context.Context, accountID string, mtlsCertificateID string, opts ...option.RequestOption) (res *MTLSCertificateDeleteResponse, err error) {
+func (r *MTLSCertificateService) Delete(ctx context.Context, mtlsCertificateID string, body MTLSCertificateDeleteParams, opts ...option.RequestOption) (res *MTLSCertificateDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MTLSCertificateDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/mtls_certificates/%s", accountID, mtlsCertificateID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/mtls_certificates/%s", body.AccountID, mtlsCertificateID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -75,11 +75,11 @@ func (r *MTLSCertificateService) Delete(ctx context.Context, accountID string, m
 }
 
 // Fetches a single mTLS certificate.
-func (r *MTLSCertificateService) Get(ctx context.Context, accountID string, mtlsCertificateID string, opts ...option.RequestOption) (res *MTLSCertificateGetResponse, err error) {
+func (r *MTLSCertificateService) Get(ctx context.Context, mtlsCertificateID string, query MTLSCertificateGetParams, opts ...option.RequestOption) (res *MTLSCertificateGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MTLSCertificateGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/mtls_certificates/%s", accountID, mtlsCertificateID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/mtls_certificates/%s", query.AccountID, mtlsCertificateID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -259,6 +259,8 @@ func (r *MTLSCertificateGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type MTLSCertificateNewParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Indicates whether the certificate is a CA or leaf certificate.
 	CA param.Field[bool] `json:"ca,required"`
 	// The uploaded root CA certificate.
@@ -341,6 +343,11 @@ type MTLSCertificateNewResponseEnvelopeSuccess bool
 const (
 	MTLSCertificateNewResponseEnvelopeSuccessTrue MTLSCertificateNewResponseEnvelopeSuccess = true
 )
+
+type MTLSCertificateListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type MTLSCertificateListResponseEnvelope struct {
 	Errors   []MTLSCertificateListResponseEnvelopeErrors   `json:"errors,required"`
@@ -442,6 +449,11 @@ func (r *MTLSCertificateListResponseEnvelopeResultInfo) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type MTLSCertificateDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type MTLSCertificateDeleteResponseEnvelope struct {
 	Errors   []MTLSCertificateDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []MTLSCertificateDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -510,6 +522,11 @@ type MTLSCertificateDeleteResponseEnvelopeSuccess bool
 const (
 	MTLSCertificateDeleteResponseEnvelopeSuccessTrue MTLSCertificateDeleteResponseEnvelopeSuccess = true
 )
+
+type MTLSCertificateGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type MTLSCertificateGetResponseEnvelope struct {
 	Errors   []MTLSCertificateGetResponseEnvelopeErrors   `json:"errors,required"`

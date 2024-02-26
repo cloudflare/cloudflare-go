@@ -47,11 +47,11 @@ func NewImageV1Service(opts ...option.RequestOption) (r *ImageV1Service) {
 // Upload an image with up to 10 Megabytes using a single HTTP POST
 // (multipart/form-data) request. An image can be uploaded by sending an image file
 // or passing an accessible to an API url.
-func (r *ImageV1Service) New(ctx context.Context, accountID string, body ImageV1NewParams, opts ...option.RequestOption) (res *ImageV1NewResponse, err error) {
+func (r *ImageV1Service) New(ctx context.Context, params ImageV1NewParams, opts ...option.RequestOption) (res *ImageV1NewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ImageV1NewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/images/v1", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/images/v1", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -61,12 +61,12 @@ func (r *ImageV1Service) New(ctx context.Context, accountID string, body ImageV1
 
 // List up to 100 images with one request. Use the optional parameters below to get
 // a specific range of images.
-func (r *ImageV1Service) List(ctx context.Context, accountID string, query ImageV1ListParams, opts ...option.RequestOption) (res *shared.V4PagePagination[ImageV1ListResponse], err error) {
+func (r *ImageV1Service) List(ctx context.Context, params ImageV1ListParams, opts ...option.RequestOption) (res *shared.V4PagePagination[ImageV1ListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	path := fmt.Sprintf("accounts/%s/images/v1", accountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/images/v1", params.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -80,17 +80,17 @@ func (r *ImageV1Service) List(ctx context.Context, accountID string, query Image
 
 // List up to 100 images with one request. Use the optional parameters below to get
 // a specific range of images.
-func (r *ImageV1Service) ListAutoPaging(ctx context.Context, accountID string, query ImageV1ListParams, opts ...option.RequestOption) *shared.V4PagePaginationAutoPager[ImageV1ListResponse] {
-	return shared.NewV4PagePaginationAutoPager(r.List(ctx, accountID, query, opts...))
+func (r *ImageV1Service) ListAutoPaging(ctx context.Context, params ImageV1ListParams, opts ...option.RequestOption) *shared.V4PagePaginationAutoPager[ImageV1ListResponse] {
+	return shared.NewV4PagePaginationAutoPager(r.List(ctx, params, opts...))
 }
 
 // Delete an image on Cloudflare Images. On success, all copies of the image are
 // deleted and purged from cache.
-func (r *ImageV1Service) Delete(ctx context.Context, accountID string, imageID string, opts ...option.RequestOption) (res *ImageV1DeleteResponse, err error) {
+func (r *ImageV1Service) Delete(ctx context.Context, imageID string, body ImageV1DeleteParams, opts ...option.RequestOption) (res *ImageV1DeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ImageV1DeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/images/v1/%s", accountID, imageID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/images/v1/%s", body.AccountID, imageID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -100,11 +100,11 @@ func (r *ImageV1Service) Delete(ctx context.Context, accountID string, imageID s
 
 // Update image access control. On access control change, all copies of the image
 // are purged from cache.
-func (r *ImageV1Service) Edit(ctx context.Context, accountID string, imageID string, body ImageV1EditParams, opts ...option.RequestOption) (res *ImageV1EditResponse, err error) {
+func (r *ImageV1Service) Edit(ctx context.Context, imageID string, params ImageV1EditParams, opts ...option.RequestOption) (res *ImageV1EditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ImageV1EditResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/images/v1/%s", accountID, imageID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/images/v1/%s", params.AccountID, imageID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -113,11 +113,11 @@ func (r *ImageV1Service) Edit(ctx context.Context, accountID string, imageID str
 }
 
 // Fetch details for a single image.
-func (r *ImageV1Service) Get(ctx context.Context, accountID string, imageID string, opts ...option.RequestOption) (res *ImageV1GetResponse, err error) {
+func (r *ImageV1Service) Get(ctx context.Context, imageID string, query ImageV1GetParams, opts ...option.RequestOption) (res *ImageV1GetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ImageV1GetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/images/v1/%s", accountID, imageID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/images/v1/%s", query.AccountID, imageID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -476,7 +476,9 @@ func init() {
 }
 
 type ImageV1NewParams struct {
-	Metadata param.Field[interface{}] `json:"metadata"`
+	// Account identifier tag.
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Metadata  param.Field[interface{}] `json:"metadata"`
 	// Indicates whether the image requires a signature token for the access.
 	RequireSignedURLs param.Field[bool] `json:"requireSignedURLs"`
 }
@@ -555,6 +557,8 @@ const (
 )
 
 type ImageV1ListParams struct {
+	// Account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Page number of paginated results.
 	Page param.Field[float64] `query:"page"`
 	// Number of items per page.
@@ -567,6 +571,11 @@ func (r ImageV1ListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
+}
+
+type ImageV1DeleteParams struct {
+	// Account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ImageV1DeleteResponseEnvelope struct {
@@ -639,6 +648,8 @@ const (
 )
 
 type ImageV1EditParams struct {
+	// Account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
 	// User modifiable key-value store. Can be used for keeping references to another
 	// system of record for managing images. No change if not specified.
 	Metadata param.Field[interface{}] `json:"metadata"`
@@ -720,6 +731,11 @@ type ImageV1EditResponseEnvelopeSuccess bool
 const (
 	ImageV1EditResponseEnvelopeSuccessTrue ImageV1EditResponseEnvelopeSuccess = true
 )
+
+type ImageV1GetParams struct {
+	// Account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type ImageV1GetResponseEnvelope struct {
 	Errors   []ImageV1GetResponseEnvelopeErrors   `json:"errors,required"`

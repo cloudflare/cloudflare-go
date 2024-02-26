@@ -32,18 +32,18 @@ func NewURLNormalizationService(opts ...option.RequestOption) (r *URLNormalizati
 }
 
 // Updates the URL normalization settings.
-func (r *URLNormalizationService) Update(ctx context.Context, zoneID string, body URLNormalizationUpdateParams, opts ...option.RequestOption) (res *URLNormalizationUpdateResponse, err error) {
+func (r *URLNormalizationService) Update(ctx context.Context, params URLNormalizationUpdateParams, opts ...option.RequestOption) (res *URLNormalizationUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("zones/%s/url_normalization", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
+	path := fmt.Sprintf("zones/%s/url_normalization", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
 	return
 }
 
 // Fetches the current URL normalization settings.
-func (r *URLNormalizationService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *URLNormalizationGetResponse, err error) {
+func (r *URLNormalizationService) Get(ctx context.Context, query URLNormalizationGetParams, opts ...option.RequestOption) (res *URLNormalizationGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("zones/%s/url_normalization", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("zones/%s/url_normalization", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
@@ -90,6 +90,8 @@ func (r *URLNormalizationGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type URLNormalizationUpdateParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The scope of the URL normalization.
 	Scope param.Field[string] `json:"scope"`
 	// The type of URL normalization performed by Cloudflare.
@@ -98,4 +100,9 @@ type URLNormalizationUpdateParams struct {
 
 func (r URLNormalizationUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type URLNormalizationGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }

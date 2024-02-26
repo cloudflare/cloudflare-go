@@ -34,11 +34,11 @@ func NewStreamVideoService(opts ...option.RequestOption) (r *StreamVideoService)
 }
 
 // Returns information about an account's storage use.
-func (r *StreamVideoService) StorageUsage(ctx context.Context, accountID string, query StreamVideoStorageUsageParams, opts ...option.RequestOption) (res *StreamVideoStorageUsageResponse, err error) {
+func (r *StreamVideoService) StorageUsage(ctx context.Context, params StreamVideoStorageUsageParams, opts ...option.RequestOption) (res *StreamVideoStorageUsageResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamVideoStorageUsageResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/storage-usage", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/storage-usage", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -74,6 +74,8 @@ func (r *StreamVideoStorageUsageResponse) UnmarshalJSON(data []byte) (err error)
 }
 
 type StreamVideoStorageUsageParams struct {
+	// The account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
 	// A user-defined identifier for the media creator.
 	Creator param.Field[string] `query:"creator"`
 }

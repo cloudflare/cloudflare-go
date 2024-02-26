@@ -36,11 +36,11 @@ func NewIntelIPService(opts ...option.RequestOption) (r *IntelIPService) {
 }
 
 // Get IP Overview
-func (r *IntelIPService) Get(ctx context.Context, accountID string, query IntelIPGetParams, opts ...option.RequestOption) (res *[]IntelIPGetResponse, err error) {
+func (r *IntelIPService) Get(ctx context.Context, params IntelIPGetParams, opts ...option.RequestOption) (res *[]IntelIPGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IntelIPGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/intel/ip", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/intel/ip", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -129,8 +129,10 @@ func init() {
 }
 
 type IntelIPGetParams struct {
-	IPV4 param.Field[string] `query:"ipv4"`
-	IPV6 param.Field[string] `query:"ipv6"`
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+	IPV4      param.Field[string] `query:"ipv4"`
+	IPV6      param.Field[string] `query:"ipv6"`
 }
 
 // URLQuery serializes [IntelIPGetParams]'s query parameters as `url.Values`.

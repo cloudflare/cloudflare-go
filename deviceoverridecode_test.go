@@ -31,8 +31,10 @@ func TestDeviceOverrideCodeList(t *testing.T) {
 	)
 	_, err := client.Devices.OverrideCodes.List(
 		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		cloudflare.DeviceOverrideCodeListParams{
+			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

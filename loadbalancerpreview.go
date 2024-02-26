@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -31,11 +32,11 @@ func NewLoadBalancerPreviewService(opts ...option.RequestOption) (r *LoadBalance
 }
 
 // Get the result of a previous preview operation using the provided preview_id.
-func (r *LoadBalancerPreviewService) Get(ctx context.Context, accountID string, previewID interface{}, opts ...option.RequestOption) (res *LoadBalancerPreviewGetResponse, err error) {
+func (r *LoadBalancerPreviewService) Get(ctx context.Context, previewID interface{}, query LoadBalancerPreviewGetParams, opts ...option.RequestOption) (res *LoadBalancerPreviewGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerPreviewGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/load_balancers/preview/%v", accountID, previewID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/load_balancers/preview/%v", query.AccountID, previewID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -44,6 +45,11 @@ func (r *LoadBalancerPreviewService) Get(ctx context.Context, accountID string, 
 }
 
 type LoadBalancerPreviewGetResponse map[string]LoadBalancerPreviewGetResponse
+
+type LoadBalancerPreviewGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type LoadBalancerPreviewGetResponseEnvelope struct {
 	Errors   []LoadBalancerPreviewGetResponseEnvelopeErrors   `json:"errors,required"`

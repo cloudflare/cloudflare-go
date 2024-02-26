@@ -33,11 +33,11 @@ func NewSettingZeroRTTService(opts ...option.RequestOption) (r *SettingZeroRTTSe
 }
 
 // Changes the 0-RTT session resumption setting.
-func (r *SettingZeroRTTService) Edit(ctx context.Context, zoneID string, body SettingZeroRTTEditParams, opts ...option.RequestOption) (res *SettingZeroRTTEditResponse, err error) {
+func (r *SettingZeroRTTService) Edit(ctx context.Context, params SettingZeroRTTEditParams, opts ...option.RequestOption) (res *SettingZeroRTTEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingZeroRTTEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/0rtt", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/0rtt", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -46,11 +46,11 @@ func (r *SettingZeroRTTService) Edit(ctx context.Context, zoneID string, body Se
 }
 
 // Gets 0-RTT session resumption setting.
-func (r *SettingZeroRTTService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingZeroRTTGetResponse, err error) {
+func (r *SettingZeroRTTService) Get(ctx context.Context, query SettingZeroRTTGetParams, opts ...option.RequestOption) (res *SettingZeroRTTGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingZeroRTTGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/0rtt", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/0rtt", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -165,6 +165,8 @@ const (
 )
 
 type SettingZeroRTTEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the 0-RTT setting.
 	Value param.Field[SettingZeroRTTEditParamsValue] `json:"value,required"`
 }
@@ -242,6 +244,11 @@ type settingZeroRTTEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingZeroRTTEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingZeroRTTGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingZeroRTTGetResponseEnvelope struct {

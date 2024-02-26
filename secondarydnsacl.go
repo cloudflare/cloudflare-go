@@ -32,11 +32,11 @@ func NewSecondaryDNSACLService(opts ...option.RequestOption) (r *SecondaryDNSACL
 }
 
 // Create ACL.
-func (r *SecondaryDNSACLService) New(ctx context.Context, accountID interface{}, body SecondaryDNSACLNewParams, opts ...option.RequestOption) (res *SecondaryDnsaclNewResponse, err error) {
+func (r *SecondaryDNSACLService) New(ctx context.Context, params SecondaryDNSACLNewParams, opts ...option.RequestOption) (res *SecondaryDnsaclNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SecondaryDnsaclNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/secondary_dns/acls", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/secondary_dns/acls", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -45,11 +45,11 @@ func (r *SecondaryDNSACLService) New(ctx context.Context, accountID interface{},
 }
 
 // Modify ACL.
-func (r *SecondaryDNSACLService) Update(ctx context.Context, accountID interface{}, aclID interface{}, body SecondaryDNSACLUpdateParams, opts ...option.RequestOption) (res *SecondaryDnsaclUpdateResponse, err error) {
+func (r *SecondaryDNSACLService) Update(ctx context.Context, aclID interface{}, params SecondaryDNSACLUpdateParams, opts ...option.RequestOption) (res *SecondaryDnsaclUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SecondaryDnsaclUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/secondary_dns/acls/%v", accountID, aclID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/secondary_dns/acls/%v", params.AccountID, aclID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -58,11 +58,11 @@ func (r *SecondaryDNSACLService) Update(ctx context.Context, accountID interface
 }
 
 // List ACLs.
-func (r *SecondaryDNSACLService) List(ctx context.Context, accountID interface{}, opts ...option.RequestOption) (res *[]SecondaryDnsaclListResponse, err error) {
+func (r *SecondaryDNSACLService) List(ctx context.Context, query SecondaryDNSACLListParams, opts ...option.RequestOption) (res *[]SecondaryDnsaclListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SecondaryDnsaclListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/secondary_dns/acls", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/secondary_dns/acls", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -71,11 +71,11 @@ func (r *SecondaryDNSACLService) List(ctx context.Context, accountID interface{}
 }
 
 // Delete ACL.
-func (r *SecondaryDNSACLService) Delete(ctx context.Context, accountID interface{}, aclID interface{}, opts ...option.RequestOption) (res *SecondaryDnsaclDeleteResponse, err error) {
+func (r *SecondaryDNSACLService) Delete(ctx context.Context, aclID interface{}, body SecondaryDNSACLDeleteParams, opts ...option.RequestOption) (res *SecondaryDnsaclDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SecondaryDnsaclDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/secondary_dns/acls/%v", accountID, aclID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/secondary_dns/acls/%v", body.AccountID, aclID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -84,11 +84,11 @@ func (r *SecondaryDNSACLService) Delete(ctx context.Context, accountID interface
 }
 
 // Get ACL.
-func (r *SecondaryDNSACLService) Get(ctx context.Context, accountID interface{}, aclID interface{}, opts ...option.RequestOption) (res *SecondaryDnsaclGetResponse, err error) {
+func (r *SecondaryDNSACLService) Get(ctx context.Context, aclID interface{}, query SecondaryDNSACLGetParams, opts ...option.RequestOption) (res *SecondaryDnsaclGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SecondaryDnsaclGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/secondary_dns/acls/%v", accountID, aclID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/secondary_dns/acls/%v", query.AccountID, aclID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -222,7 +222,8 @@ func (r *SecondaryDnsaclGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type SecondaryDNSACLNewParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
 }
 
 func (r SecondaryDNSACLNewParams) MarshalJSON() (data []byte, err error) {
@@ -299,6 +300,7 @@ const (
 )
 
 type SecondaryDNSACLUpdateParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// Allowed IPv4/IPv6 address range of primary or secondary nameservers. This will
 	// be applied for the entire account. The IP range is used to allow additional
 	// NOTIFY IPs for secondary zones and IPs Cloudflare allows AXFR/IXFR requests from
@@ -381,6 +383,10 @@ type SecondaryDnsaclUpdateResponseEnvelopeSuccess bool
 const (
 	SecondaryDnsaclUpdateResponseEnvelopeSuccessTrue SecondaryDnsaclUpdateResponseEnvelopeSuccess = true
 )
+
+type SecondaryDNSACLListParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
 
 type SecondaryDnsaclListResponseEnvelope struct {
 	Errors   []SecondaryDnsaclListResponseEnvelopeErrors   `json:"errors,required"`
@@ -480,6 +486,10 @@ func (r *SecondaryDnsaclListResponseEnvelopeResultInfo) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type SecondaryDNSACLDeleteParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
+
 type SecondaryDnsaclDeleteResponseEnvelope struct {
 	Errors   []SecondaryDnsaclDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SecondaryDnsaclDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -548,6 +558,10 @@ type SecondaryDnsaclDeleteResponseEnvelopeSuccess bool
 const (
 	SecondaryDnsaclDeleteResponseEnvelopeSuccessTrue SecondaryDnsaclDeleteResponseEnvelopeSuccess = true
 )
+
+type SecondaryDNSACLGetParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
 
 type SecondaryDnsaclGetResponseEnvelope struct {
 	Errors   []SecondaryDnsaclGetResponseEnvelopeErrors   `json:"errors,required"`

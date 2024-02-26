@@ -181,7 +181,9 @@ When the API returns a non-success status code, we return an error with type
 To handle errors, we recommend that you use the `errors.As` pattern:
 
 ```go
-_, err := client.Zones.Get(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+_, err := client.Zones.Get(context.TODO(), cloudflare.ZoneGetParams{
+	ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+})
 if err != nil {
 	var apierr *cloudflare.Error
 	if errors.As(err, &apierr) {
@@ -208,8 +210,9 @@ ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 defer cancel()
 client.Zones.Edit(
 	ctx,
-	"023e105f4ecef8ad9ca31a8372d0c353",
-	cloudflare.ZoneEditParams{},
+	cloudflare.ZoneEditParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	},
 	// This sets the per-retry timeout
 	option.WithRequestTimeout(20*time.Second),
 )
@@ -232,7 +235,9 @@ client := cloudflare.NewClient(
 // Override per-request:
 client.Zones.Get(
 	context.TODO(),
-	"023e105f4ecef8ad9ca31a8372d0c353",
+	cloudflare.ZoneGetParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	},
 	option.WithMaxRetries(5),
 )
 ```

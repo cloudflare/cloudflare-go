@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -32,11 +33,16 @@ func NewStreamEmbedService(opts ...option.RequestOption) (r *StreamEmbedService)
 // Fetches an HTML code snippet to embed a video in a web page delivered through
 // Cloudflare. On success, returns an HTML fragment for use on web pages to display
 // a video. On failure, returns a JSON response body.
-func (r *StreamEmbedService) List(ctx context.Context, accountID string, identifier string, opts ...option.RequestOption) (res *StreamEmbedListResponse, err error) {
+func (r *StreamEmbedService) List(ctx context.Context, identifier string, query StreamEmbedListParams, opts ...option.RequestOption) (res *StreamEmbedListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%s/stream/%s/embed", accountID, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/%s/embed", query.AccountID, identifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
 type StreamEmbedListResponse = interface{}
+
+type StreamEmbedListParams struct {
+	// The account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
+}

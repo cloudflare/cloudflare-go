@@ -32,11 +32,11 @@ func NewIntelIndicatorFeedPermissionService(opts ...option.RequestOption) (r *In
 }
 
 // Grant permission to indicator feed
-func (r *IntelIndicatorFeedPermissionService) New(ctx context.Context, accountID string, body IntelIndicatorFeedPermissionNewParams, opts ...option.RequestOption) (res *IntelIndicatorFeedPermissionNewResponse, err error) {
+func (r *IntelIndicatorFeedPermissionService) New(ctx context.Context, params IntelIndicatorFeedPermissionNewParams, opts ...option.RequestOption) (res *IntelIndicatorFeedPermissionNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IntelIndicatorFeedPermissionNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/permissions/add", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/permissions/add", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -45,11 +45,11 @@ func (r *IntelIndicatorFeedPermissionService) New(ctx context.Context, accountID
 }
 
 // List indicator feed permissions
-func (r *IntelIndicatorFeedPermissionService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]IntelIndicatorFeedPermissionListResponse, err error) {
+func (r *IntelIndicatorFeedPermissionService) List(ctx context.Context, query IntelIndicatorFeedPermissionListParams, opts ...option.RequestOption) (res *[]IntelIndicatorFeedPermissionListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IntelIndicatorFeedPermissionListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/permissions/view", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/permissions/view", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -58,11 +58,11 @@ func (r *IntelIndicatorFeedPermissionService) List(ctx context.Context, accountI
 }
 
 // Revoke permission to indicator feed
-func (r *IntelIndicatorFeedPermissionService) Delete(ctx context.Context, accountID string, body IntelIndicatorFeedPermissionDeleteParams, opts ...option.RequestOption) (res *IntelIndicatorFeedPermissionDeleteResponse, err error) {
+func (r *IntelIndicatorFeedPermissionService) Delete(ctx context.Context, params IntelIndicatorFeedPermissionDeleteParams, opts ...option.RequestOption) (res *IntelIndicatorFeedPermissionDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IntelIndicatorFeedPermissionDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/permissions/remove", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/permissions/remove", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -131,6 +131,8 @@ func (r *IntelIndicatorFeedPermissionDeleteResponse) UnmarshalJSON(data []byte) 
 }
 
 type IntelIndicatorFeedPermissionNewParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The Cloudflare account tag of the account to change permissions on
 	AccountTag param.Field[string] `json:"account_tag"`
 	// The ID of the feed to add/remove permissions on
@@ -211,6 +213,11 @@ const (
 	IntelIndicatorFeedPermissionNewResponseEnvelopeSuccessTrue IntelIndicatorFeedPermissionNewResponseEnvelopeSuccess = true
 )
 
+type IntelIndicatorFeedPermissionListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type IntelIndicatorFeedPermissionListResponseEnvelope struct {
 	Errors   []IntelIndicatorFeedPermissionListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []IntelIndicatorFeedPermissionListResponseEnvelopeMessages `json:"messages,required"`
@@ -282,6 +289,8 @@ const (
 )
 
 type IntelIndicatorFeedPermissionDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The Cloudflare account tag of the account to change permissions on
 	AccountTag param.Field[string] `json:"account_tag"`
 	// The ID of the feed to add/remove permissions on

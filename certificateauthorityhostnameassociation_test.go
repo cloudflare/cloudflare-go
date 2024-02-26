@@ -29,14 +29,11 @@ func TestCertificateAuthorityHostnameAssociationUpdateWithOptionalParams(t *test
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.CertificateAuthorities.HostnameAssociations.Update(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.CertificateAuthorityHostnameAssociationUpdateParams{
-			Hostnames:         cloudflare.F([]string{"api.example.com", "api.example.com", "api.example.com"}),
-			MTLSCertificateID: cloudflare.F("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
-		},
-	)
+	_, err := client.CertificateAuthorities.HostnameAssociations.Update(context.TODO(), cloudflare.CertificateAuthorityHostnameAssociationUpdateParams{
+		ZoneID:            cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Hostnames:         cloudflare.F([]string{"api.example.com", "api.example.com", "api.example.com"}),
+		MTLSCertificateID: cloudflare.F("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -62,13 +59,10 @@ func TestCertificateAuthorityHostnameAssociationListWithOptionalParams(t *testin
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.CertificateAuthorities.HostnameAssociations.List(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.CertificateAuthorityHostnameAssociationListParams{
-			MTLSCertificateID: cloudflare.F("b2134436-2555-4acf-be5b-26c48136575e"),
-		},
-	)
+	_, err := client.CertificateAuthorities.HostnameAssociations.List(context.TODO(), cloudflare.CertificateAuthorityHostnameAssociationListParams{
+		ZoneID:            cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		MTLSCertificateID: cloudflare.F("b2134436-2555-4acf-be5b-26c48136575e"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

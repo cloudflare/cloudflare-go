@@ -29,21 +29,18 @@ func TestDeviceDEXTestNewWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Devices.DEXTests.New(
-		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
-		cloudflare.DeviceDEXTestNewParams{
-			Data: cloudflare.F(cloudflare.DeviceDEXTestNewParamsData{
-				Host:   cloudflare.F("https://dash.cloudflare.com"),
-				Kind:   cloudflare.F("http"),
-				Method: cloudflare.F("GET"),
-			}),
-			Enabled:     cloudflare.F(true),
-			Interval:    cloudflare.F("30m"),
-			Name:        cloudflare.F("HTTP dash health check"),
-			Description: cloudflare.F("Checks the dash endpoint every 30 minutes"),
-		},
-	)
+	_, err := client.Devices.DEXTests.New(context.TODO(), cloudflare.DeviceDEXTestNewParams{
+		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		Data: cloudflare.F(cloudflare.DeviceDEXTestNewParamsData{
+			Host:   cloudflare.F("https://dash.cloudflare.com"),
+			Kind:   cloudflare.F("http"),
+			Method: cloudflare.F("GET"),
+		}),
+		Enabled:     cloudflare.F(true),
+		Interval:    cloudflare.F("30m"),
+		Name:        cloudflare.F("HTTP dash health check"),
+		Description: cloudflare.F("Checks the dash endpoint every 30 minutes"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -71,9 +68,9 @@ func TestDeviceDEXTestUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Devices.DEXTests.Update(
 		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.DeviceDEXTestUpdateParams{
+			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
 			Data: cloudflare.F(cloudflare.DeviceDEXTestUpdateParamsData{
 				Host:   cloudflare.F("https://dash.cloudflare.com"),
 				Kind:   cloudflare.F("http"),
@@ -110,7 +107,9 @@ func TestDeviceDEXTestList(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Devices.DEXTests.List(context.TODO(), "699d98642c564d2e855e9661899b7252")
+	_, err := client.Devices.DEXTests.List(context.TODO(), cloudflare.DeviceDEXTestListParams{
+		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -138,8 +137,10 @@ func TestDeviceDEXTestDelete(t *testing.T) {
 	)
 	_, err := client.Devices.DEXTests.Delete(
 		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		cloudflare.DeviceDEXTestDeleteParams{
+			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -168,8 +169,10 @@ func TestDeviceDEXTestGet(t *testing.T) {
 	)
 	_, err := client.Devices.DEXTests.Get(
 		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		cloudflare.DeviceDEXTestGetParams{
+			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

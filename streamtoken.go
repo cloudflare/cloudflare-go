@@ -33,11 +33,11 @@ func NewStreamTokenService(opts ...option.RequestOption) (r *StreamTokenService)
 
 // Creates a signed URL token for a video. If a body is not provided in the
 // request, a token is created with default values.
-func (r *StreamTokenService) New(ctx context.Context, accountID string, identifier string, body StreamTokenNewParams, opts ...option.RequestOption) (res *StreamTokenNewResponse, err error) {
+func (r *StreamTokenService) New(ctx context.Context, identifier string, params StreamTokenNewParams, opts ...option.RequestOption) (res *StreamTokenNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamTokenNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/%s/token", accountID, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/%s/token", params.AccountID, identifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -64,6 +64,8 @@ func (r *StreamTokenNewResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type StreamTokenNewParams struct {
+	// The account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The optional ID of a Stream signing key. If present, the `pem` field is also
 	// required.
 	ID param.Field[string] `json:"id"`

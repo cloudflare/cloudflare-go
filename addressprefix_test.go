@@ -29,15 +29,12 @@ func TestAddressPrefixNew(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Addresses.Prefixes.New(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.AddressPrefixNewParams{
-			ASN:           cloudflare.F(int64(209242)),
-			Cidr:          cloudflare.F("192.0.2.0/24"),
-			LOADocumentID: cloudflare.F("d933b1530bc56c9953cf8ce166da8004"),
-		},
-	)
+	_, err := client.Addresses.Prefixes.New(context.TODO(), cloudflare.AddressPrefixNewParams{
+		AccountID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ASN:           cloudflare.F(int64(209242)),
+		Cidr:          cloudflare.F("192.0.2.0/24"),
+		LOADocumentID: cloudflare.F("d933b1530bc56c9953cf8ce166da8004"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -63,7 +60,9 @@ func TestAddressPrefixList(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Addresses.Prefixes.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Addresses.Prefixes.List(context.TODO(), cloudflare.AddressPrefixListParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -92,7 +91,9 @@ func TestAddressPrefixDelete(t *testing.T) {
 	_, err := client.Addresses.Prefixes.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.AddressPrefixDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -122,8 +123,8 @@ func TestAddressPrefixEdit(t *testing.T) {
 	_, err := client.Addresses.Prefixes.Edit(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.AddressPrefixEditParams{
+			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Description: cloudflare.F("Internal test prefix"),
 		},
 	)
@@ -155,7 +156,9 @@ func TestAddressPrefixGet(t *testing.T) {
 	_, err := client.Addresses.Prefixes.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.AddressPrefixGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

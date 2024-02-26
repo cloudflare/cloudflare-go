@@ -33,11 +33,11 @@ func NewSettingCipherService(opts ...option.RequestOption) (r *SettingCipherServ
 }
 
 // Changes ciphers setting.
-func (r *SettingCipherService) Edit(ctx context.Context, zoneID string, body SettingCipherEditParams, opts ...option.RequestOption) (res *SettingCipherEditResponse, err error) {
+func (r *SettingCipherService) Edit(ctx context.Context, params SettingCipherEditParams, opts ...option.RequestOption) (res *SettingCipherEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingCipherEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/ciphers", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/ciphers", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -46,11 +46,11 @@ func (r *SettingCipherService) Edit(ctx context.Context, zoneID string, body Set
 }
 
 // Gets ciphers setting.
-func (r *SettingCipherService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingCipherGetResponse, err error) {
+func (r *SettingCipherService) Get(ctx context.Context, query SettingCipherGetParams, opts ...option.RequestOption) (res *SettingCipherGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingCipherGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/ciphers", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/ciphers", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -151,6 +151,8 @@ const (
 )
 
 type SettingCipherEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the zone setting.
 	Value param.Field[[]string] `json:"value,required"`
 }
@@ -221,6 +223,11 @@ type settingCipherEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingCipherEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingCipherGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingCipherGetResponseEnvelope struct {

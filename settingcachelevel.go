@@ -37,11 +37,11 @@ func NewSettingCacheLevelService(opts ...option.RequestOption) (r *SettingCacheL
 // setting will ignore the query string when delivering a cached resource. The
 // aggressive setting will cache all static resources, including ones with a query
 // string. (https://support.cloudflare.com/hc/en-us/articles/200168256).
-func (r *SettingCacheLevelService) Edit(ctx context.Context, zoneID string, body SettingCacheLevelEditParams, opts ...option.RequestOption) (res *SettingCacheLevelEditResponse, err error) {
+func (r *SettingCacheLevelService) Edit(ctx context.Context, params SettingCacheLevelEditParams, opts ...option.RequestOption) (res *SettingCacheLevelEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingCacheLevelEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/cache_level", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/cache_level", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -54,11 +54,11 @@ func (r *SettingCacheLevelService) Edit(ctx context.Context, zoneID string, body
 // setting will ignore the query string when delivering a cached resource. The
 // aggressive setting will cache all static resources, including ones with a query
 // string. (https://support.cloudflare.com/hc/en-us/articles/200168256).
-func (r *SettingCacheLevelService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingCacheLevelGetResponse, err error) {
+func (r *SettingCacheLevelService) Get(ctx context.Context, query SettingCacheLevelGetParams, opts ...option.RequestOption) (res *SettingCacheLevelGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingCacheLevelGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/cache_level", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/cache_level", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -183,6 +183,8 @@ const (
 )
 
 type SettingCacheLevelEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the zone setting.
 	Value param.Field[SettingCacheLevelEditParamsValue] `json:"value,required"`
 }
@@ -265,6 +267,11 @@ type settingCacheLevelEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingCacheLevelEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingCacheLevelGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingCacheLevelGetResponseEnvelope struct {

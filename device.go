@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
@@ -50,11 +51,11 @@ func NewDeviceService(opts ...option.RequestOption) (r *DeviceService) {
 }
 
 // Fetches a list of enrolled devices.
-func (r *DeviceService) DevicesListDevices(ctx context.Context, accountID interface{}, opts ...option.RequestOption) (res *[]DeviceDevicesListDevicesResponse, err error) {
+func (r *DeviceService) DevicesListDevices(ctx context.Context, query DeviceDevicesListDevicesParams, opts ...option.RequestOption) (res *[]DeviceDevicesListDevicesResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceDevicesListDevicesResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/devices", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -63,11 +64,11 @@ func (r *DeviceService) DevicesListDevices(ctx context.Context, accountID interf
 }
 
 // Fetches details for a single device.
-func (r *DeviceService) Get(ctx context.Context, accountID interface{}, deviceID string, opts ...option.RequestOption) (res *DeviceGetResponse, err error) {
+func (r *DeviceService) Get(ctx context.Context, deviceID string, query DeviceGetParams, opts ...option.RequestOption) (res *DeviceGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/%s", accountID, deviceID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/devices/%s", query.AccountID, deviceID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -198,6 +199,10 @@ func init() {
 	)
 }
 
+type DeviceDevicesListDevicesParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
+
 type DeviceDevicesListDevicesResponseEnvelope struct {
 	Errors   []DeviceDevicesListDevicesResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DeviceDevicesListDevicesResponseEnvelopeMessages `json:"messages,required"`
@@ -294,6 +299,10 @@ type deviceDevicesListDevicesResponseEnvelopeResultInfoJSON struct {
 
 func (r *DeviceDevicesListDevicesResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type DeviceGetParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
 
 type DeviceGetResponseEnvelope struct {

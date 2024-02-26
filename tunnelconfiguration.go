@@ -35,11 +35,11 @@ func NewTunnelConfigurationService(opts ...option.RequestOption) (r *TunnelConfi
 }
 
 // Adds or updates the configuration for a remotely-managed tunnel.
-func (r *TunnelConfigurationService) Update(ctx context.Context, accountID string, tunnelID string, body TunnelConfigurationUpdateParams, opts ...option.RequestOption) (res *TunnelConfigurationUpdateResponse, err error) {
+func (r *TunnelConfigurationService) Update(ctx context.Context, tunnelID string, params TunnelConfigurationUpdateParams, opts ...option.RequestOption) (res *TunnelConfigurationUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelConfigurationUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/configurations", accountID, tunnelID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/configurations", params.AccountID, tunnelID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +48,11 @@ func (r *TunnelConfigurationService) Update(ctx context.Context, accountID strin
 }
 
 // Gets the configuration for a remotely-managed tunnel
-func (r *TunnelConfigurationService) List(ctx context.Context, accountID string, tunnelID string, opts ...option.RequestOption) (res *TunnelConfigurationListResponse, err error) {
+func (r *TunnelConfigurationService) List(ctx context.Context, tunnelID string, query TunnelConfigurationListParams, opts ...option.RequestOption) (res *TunnelConfigurationListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelConfigurationListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/configurations", accountID, tunnelID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/configurations", query.AccountID, tunnelID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -103,6 +103,8 @@ type TunnelConfigurationListResponseArray []interface{}
 func (r TunnelConfigurationListResponseArray) ImplementsTunnelConfigurationListResponse() {}
 
 type TunnelConfigurationUpdateParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The tunnel configuration and ingress rules.
 	Config param.Field[TunnelConfigurationUpdateParamsConfig] `json:"config"`
 }
@@ -346,6 +348,11 @@ type TunnelConfigurationUpdateResponseEnvelopeSuccess bool
 const (
 	TunnelConfigurationUpdateResponseEnvelopeSuccessTrue TunnelConfigurationUpdateResponseEnvelopeSuccess = true
 )
+
+type TunnelConfigurationListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type TunnelConfigurationListResponseEnvelope struct {
 	Errors   []TunnelConfigurationListResponseEnvelopeErrors   `json:"errors,required"`

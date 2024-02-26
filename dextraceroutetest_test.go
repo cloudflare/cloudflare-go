@@ -31,9 +31,9 @@ func TestDEXTracerouteTestGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.DEX.TracerouteTests.Get(
 		context.TODO(),
-		"01a7362d577a6c3019a474fd6f485823",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.DEXTracerouteTestGetParams{
+			AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
 			Interval:  cloudflare.F(cloudflare.DEXTracerouteTestGetParamsIntervalMinute),
 			TimeEnd:   cloudflare.F("string"),
 			TimeStart: cloudflare.F("string"),
@@ -68,9 +68,9 @@ func TestDEXTracerouteTestNetworkPath(t *testing.T) {
 	)
 	_, err := client.DEX.TracerouteTests.NetworkPath(
 		context.TODO(),
-		"01a7362d577a6c3019a474fd6f485823",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.DEXTracerouteTestNetworkPathParams{
+			AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
 			DeviceID:  cloudflare.F("string"),
 			Interval:  cloudflare.F(cloudflare.DEXTracerouteTestNetworkPathParamsIntervalMinute),
 			TimeEnd:   cloudflare.F("string"),
@@ -104,9 +104,9 @@ func TestDEXTracerouteTestPercentilesWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.DEX.TracerouteTests.Percentiles(
 		context.TODO(),
-		"01a7362d577a6c3019a474fd6f485823",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.DEXTracerouteTestPercentilesParams{
+			AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
 			TimeEnd:   cloudflare.F("2023-09-20T17:00:00Z"),
 			TimeStart: cloudflare.F("2023-09-20T17:00:00Z"),
 			Colo:      cloudflare.F("string"),

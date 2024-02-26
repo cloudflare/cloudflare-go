@@ -35,11 +35,11 @@ func NewOriginTLSClientAuthHostnameCertificateService(opts ...option.RequestOpti
 
 // Upload a certificate to be used for client authentication on a hostname. 10
 // hostname certificates per zone are allowed.
-func (r *OriginTLSClientAuthHostnameCertificateService) New(ctx context.Context, zoneID string, body OriginTLSClientAuthHostnameCertificateNewParams, opts ...option.RequestOption) (res *OriginTLSClientAuthHostnameCertificateNewResponse, err error) {
+func (r *OriginTLSClientAuthHostnameCertificateService) New(ctx context.Context, params OriginTLSClientAuthHostnameCertificateNewParams, opts ...option.RequestOption) (res *OriginTLSClientAuthHostnameCertificateNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OriginTLSClientAuthHostnameCertificateNewResponseEnvelope
-	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/certificates", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/certificates", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +48,11 @@ func (r *OriginTLSClientAuthHostnameCertificateService) New(ctx context.Context,
 }
 
 // List Certificates
-func (r *OriginTLSClientAuthHostnameCertificateService) List(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *[]OriginTLSClientAuthHostnameCertificateListResponse, err error) {
+func (r *OriginTLSClientAuthHostnameCertificateService) List(ctx context.Context, query OriginTLSClientAuthHostnameCertificateListParams, opts ...option.RequestOption) (res *[]OriginTLSClientAuthHostnameCertificateListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OriginTLSClientAuthHostnameCertificateListResponseEnvelope
-	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/certificates", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/certificates", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -61,11 +61,11 @@ func (r *OriginTLSClientAuthHostnameCertificateService) List(ctx context.Context
 }
 
 // Delete Hostname Client Certificate
-func (r *OriginTLSClientAuthHostnameCertificateService) Delete(ctx context.Context, zoneID string, certificateID string, opts ...option.RequestOption) (res *OriginTLSClientAuthHostnameCertificateDeleteResponse, err error) {
+func (r *OriginTLSClientAuthHostnameCertificateService) Delete(ctx context.Context, certificateID string, body OriginTLSClientAuthHostnameCertificateDeleteParams, opts ...option.RequestOption) (res *OriginTLSClientAuthHostnameCertificateDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OriginTLSClientAuthHostnameCertificateDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/certificates/%s", zoneID, certificateID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/certificates/%s", body.ZoneID, certificateID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -74,11 +74,11 @@ func (r *OriginTLSClientAuthHostnameCertificateService) Delete(ctx context.Conte
 }
 
 // Get the certificate by ID to be used for client authentication on a hostname.
-func (r *OriginTLSClientAuthHostnameCertificateService) Get(ctx context.Context, zoneID string, certificateID string, opts ...option.RequestOption) (res *OriginTLSClientAuthHostnameCertificateGetResponse, err error) {
+func (r *OriginTLSClientAuthHostnameCertificateService) Get(ctx context.Context, certificateID string, query OriginTLSClientAuthHostnameCertificateGetParams, opts ...option.RequestOption) (res *OriginTLSClientAuthHostnameCertificateGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OriginTLSClientAuthHostnameCertificateGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/certificates/%s", zoneID, certificateID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/certificates/%s", query.ZoneID, certificateID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -278,6 +278,8 @@ const (
 )
 
 type OriginTLSClientAuthHostnameCertificateNewParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The hostname certificate.
 	Certificate param.Field[string] `json:"certificate,required"`
 	// The hostname certificate's private key.
@@ -359,6 +361,11 @@ type OriginTLSClientAuthHostnameCertificateNewResponseEnvelopeSuccess bool
 const (
 	OriginTLSClientAuthHostnameCertificateNewResponseEnvelopeSuccessTrue OriginTLSClientAuthHostnameCertificateNewResponseEnvelopeSuccess = true
 )
+
+type OriginTLSClientAuthHostnameCertificateListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type OriginTLSClientAuthHostnameCertificateListResponseEnvelope struct {
 	Errors   []OriginTLSClientAuthHostnameCertificateListResponseEnvelopeErrors   `json:"errors,required"`
@@ -462,6 +469,11 @@ func (r *OriginTLSClientAuthHostnameCertificateListResponseEnvelopeResultInfo) U
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type OriginTLSClientAuthHostnameCertificateDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type OriginTLSClientAuthHostnameCertificateDeleteResponseEnvelope struct {
 	Errors   []OriginTLSClientAuthHostnameCertificateDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []OriginTLSClientAuthHostnameCertificateDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -533,6 +545,11 @@ type OriginTLSClientAuthHostnameCertificateDeleteResponseEnvelopeSuccess bool
 const (
 	OriginTLSClientAuthHostnameCertificateDeleteResponseEnvelopeSuccessTrue OriginTLSClientAuthHostnameCertificateDeleteResponseEnvelopeSuccess = true
 )
+
+type OriginTLSClientAuthHostnameCertificateGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type OriginTLSClientAuthHostnameCertificateGetResponseEnvelope struct {
 	Errors   []OriginTLSClientAuthHostnameCertificateGetResponseEnvelopeErrors   `json:"errors,required"`

@@ -40,11 +40,11 @@ func NewStorageKVNamespaceBulkService(opts ...option.RequestOption) (r *StorageK
 // `expiration_ttl` is specified, the key-value pair will never expire. If both are
 // set, `expiration_ttl` is used and `expiration` is ignored. The entire request
 // size must be 100 megabytes or less.
-func (r *StorageKVNamespaceBulkService) Update(ctx context.Context, accountID string, namespaceID string, body StorageKVNamespaceBulkUpdateParams, opts ...option.RequestOption) (res *StorageKVNamespaceBulkUpdateResponse, err error) {
+func (r *StorageKVNamespaceBulkService) Update(ctx context.Context, namespaceID string, params StorageKVNamespaceBulkUpdateParams, opts ...option.RequestOption) (res *StorageKVNamespaceBulkUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StorageKVNamespaceBulkUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/bulk", accountID, namespaceID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/bulk", params.AccountID, namespaceID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -54,11 +54,11 @@ func (r *StorageKVNamespaceBulkService) Update(ctx context.Context, accountID st
 
 // Remove multiple KV pairs from the namespace. Body should be an array of up to
 // 10,000 keys to be removed.
-func (r *StorageKVNamespaceBulkService) Delete(ctx context.Context, accountID string, namespaceID string, body StorageKVNamespaceBulkDeleteParams, opts ...option.RequestOption) (res *StorageKVNamespaceBulkDeleteResponse, err error) {
+func (r *StorageKVNamespaceBulkService) Delete(ctx context.Context, namespaceID string, params StorageKVNamespaceBulkDeleteParams, opts ...option.RequestOption) (res *StorageKVNamespaceBulkDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StorageKVNamespaceBulkDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/bulk", accountID, namespaceID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/bulk", params.AccountID, namespaceID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -101,7 +101,9 @@ func init() {
 }
 
 type StorageKVNamespaceBulkUpdateParams struct {
-	Body param.Field[[]StorageKVNamespaceBulkUpdateParamsBody] `json:"body,required"`
+	// Identifier
+	AccountID param.Field[string]                                   `path:"account_id,required"`
+	Body      param.Field[[]StorageKVNamespaceBulkUpdateParamsBody] `json:"body,required"`
 }
 
 func (r StorageKVNamespaceBulkUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -202,7 +204,9 @@ const (
 )
 
 type StorageKVNamespaceBulkDeleteParams struct {
-	Body param.Field[[]string] `json:"body,required"`
+	// Identifier
+	AccountID param.Field[string]   `path:"account_id,required"`
+	Body      param.Field[[]string] `json:"body,required"`
 }
 
 func (r StorageKVNamespaceBulkDeleteParams) MarshalJSON() (data []byte, err error) {

@@ -36,11 +36,11 @@ func NewRUMSiteInfoService(opts ...option.RequestOption) (r *RUMSiteInfoService)
 }
 
 // Creates a new Web Analytics site.
-func (r *RUMSiteInfoService) New(ctx context.Context, accountID string, body RUMSiteInfoNewParams, opts ...option.RequestOption) (res *RUMSiteInfoNewResponse, err error) {
+func (r *RUMSiteInfoService) New(ctx context.Context, params RUMSiteInfoNewParams, opts ...option.RequestOption) (res *RUMSiteInfoNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RUMSiteInfoNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/rum/site_info", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/rum/site_info", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -49,11 +49,11 @@ func (r *RUMSiteInfoService) New(ctx context.Context, accountID string, body RUM
 }
 
 // Updates an existing Web Analytics site.
-func (r *RUMSiteInfoService) Update(ctx context.Context, accountID string, siteID string, body RUMSiteInfoUpdateParams, opts ...option.RequestOption) (res *RUMSiteInfoUpdateResponse, err error) {
+func (r *RUMSiteInfoService) Update(ctx context.Context, siteID string, params RUMSiteInfoUpdateParams, opts ...option.RequestOption) (res *RUMSiteInfoUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RUMSiteInfoUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/rum/site_info/%s", accountID, siteID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/rum/site_info/%s", params.AccountID, siteID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -62,12 +62,12 @@ func (r *RUMSiteInfoService) Update(ctx context.Context, accountID string, siteI
 }
 
 // Lists all Web Analytics sites of an account.
-func (r *RUMSiteInfoService) List(ctx context.Context, accountID string, query RUMSiteInfoListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[RUMSiteInfoListResponse], err error) {
+func (r *RUMSiteInfoService) List(ctx context.Context, params RUMSiteInfoListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[RUMSiteInfoListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	path := fmt.Sprintf("accounts/%s/rum/site_info/list", accountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/rum/site_info/list", params.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -80,16 +80,16 @@ func (r *RUMSiteInfoService) List(ctx context.Context, accountID string, query R
 }
 
 // Lists all Web Analytics sites of an account.
-func (r *RUMSiteInfoService) ListAutoPaging(ctx context.Context, accountID string, query RUMSiteInfoListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[RUMSiteInfoListResponse] {
-	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, accountID, query, opts...))
+func (r *RUMSiteInfoService) ListAutoPaging(ctx context.Context, params RUMSiteInfoListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[RUMSiteInfoListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes an existing Web Analytics site.
-func (r *RUMSiteInfoService) Delete(ctx context.Context, accountID string, siteID string, opts ...option.RequestOption) (res *RUMSiteInfoDeleteResponse, err error) {
+func (r *RUMSiteInfoService) Delete(ctx context.Context, siteID string, body RUMSiteInfoDeleteParams, opts ...option.RequestOption) (res *RUMSiteInfoDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RUMSiteInfoDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/rum/site_info/%s", accountID, siteID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/rum/site_info/%s", body.AccountID, siteID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -98,11 +98,11 @@ func (r *RUMSiteInfoService) Delete(ctx context.Context, accountID string, siteI
 }
 
 // Retrieves a Web Analytics site.
-func (r *RUMSiteInfoService) Get(ctx context.Context, accountID string, siteID string, opts ...option.RequestOption) (res *RUMSiteInfoGetResponse, err error) {
+func (r *RUMSiteInfoService) Get(ctx context.Context, siteID string, query RUMSiteInfoGetParams, opts ...option.RequestOption) (res *RUMSiteInfoGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RUMSiteInfoGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/rum/site_info/%s", accountID, siteID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/rum/site_info/%s", query.AccountID, siteID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -509,6 +509,8 @@ func (r *RUMSiteInfoGetResponseRuleset) UnmarshalJSON(data []byte) (err error) {
 }
 
 type RUMSiteInfoNewParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// If enabled, the JavaScript snippet is automatically injected for orange-clouded
 	// sites.
 	AutoInstall param.Field[bool] `json:"auto_install"`
@@ -540,6 +542,8 @@ func (r *RUMSiteInfoNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 }
 
 type RUMSiteInfoUpdateParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// If enabled, the JavaScript snippet is automatically injected for orange-clouded
 	// sites.
 	AutoInstall param.Field[bool] `json:"auto_install"`
@@ -571,6 +575,8 @@ func (r *RUMSiteInfoUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 }
 
 type RUMSiteInfoListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The property used to sort the list of results.
 	OrderBy param.Field[RUMSiteInfoListParamsOrderBy] `query:"order_by"`
 	// Current page within the paginated list of results.
@@ -595,6 +601,11 @@ const (
 	RUMSiteInfoListParamsOrderByCreated RUMSiteInfoListParamsOrderBy = "created"
 )
 
+type RUMSiteInfoDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type RUMSiteInfoDeleteResponseEnvelope struct {
 	Result RUMSiteInfoDeleteResponse             `json:"result"`
 	JSON   rumSiteInfoDeleteResponseEnvelopeJSON `json:"-"`
@@ -610,6 +621,11 @@ type rumSiteInfoDeleteResponseEnvelopeJSON struct {
 
 func (r *RUMSiteInfoDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type RUMSiteInfoGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type RUMSiteInfoGetResponseEnvelope struct {

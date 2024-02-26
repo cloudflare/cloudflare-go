@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -32,16 +33,21 @@ func NewIntelASNService(opts ...option.RequestOption) (r *IntelASNService) {
 }
 
 // Get ASN Overview
-func (r *IntelASNService) Get(ctx context.Context, accountID string, asn int64, opts ...option.RequestOption) (res *int64, err error) {
+func (r *IntelASNService) Get(ctx context.Context, asn int64, query IntelASNGetParams, opts ...option.RequestOption) (res *int64, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IntelASNGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/intel/asn/%v", accountID, asn)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/intel/asn/%v", query.AccountID, asn)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
 	res = &env.Result
 	return
+}
+
+type IntelASNGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type IntelASNGetResponseEnvelope struct {

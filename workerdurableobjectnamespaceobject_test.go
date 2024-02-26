@@ -31,11 +31,11 @@ func TestWorkerDurableObjectNamespaceObjectListWithOptionalParams(t *testing.T) 
 	)
 	_, err := client.Workers.DurableObjects.Namespaces.Objects.List(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"5fd1cafff895419c8bcc647fc64ab8f0",
 		cloudflare.WorkerDurableObjectNamespaceObjectListParams{
-			Cursor: cloudflare.F("AAAAANuhDN7SjacTnSVsDu3WW1Lvst6dxJGTjRY5BhxPXdf6L6uTcpd_NVtjhn11OUYRsVEykxoUwF-JQU4dn6QylZSKTOJuG0indrdn_MlHpMRtsxgXjs-RPdHYIVm3odE_uvEQ_dTQGFm8oikZMohns34DLBgrQpc"),
-			Limit:  cloudflare.F(10.000000),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Cursor:    cloudflare.F("AAAAANuhDN7SjacTnSVsDu3WW1Lvst6dxJGTjRY5BhxPXdf6L6uTcpd_NVtjhn11OUYRsVEykxoUwF-JQU4dn6QylZSKTOJuG0indrdn_MlHpMRtsxgXjs-RPdHYIVm3odE_uvEQ_dTQGFm8oikZMohns34DLBgrQpc"),
+			Limit:     cloudflare.F(10.000000),
 		},
 	)
 	if err != nil {

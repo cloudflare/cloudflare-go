@@ -34,11 +34,11 @@ func NewDLPDatasetService(opts ...option.RequestOption) (r *DLPDatasetService) {
 }
 
 // Create a new dataset.
-func (r *DLPDatasetService) New(ctx context.Context, accountID string, body DLPDatasetNewParams, opts ...option.RequestOption) (res *DLPDatasetNewResponse, err error) {
+func (r *DLPDatasetService) New(ctx context.Context, params DLPDatasetNewParams, opts ...option.RequestOption) (res *DLPDatasetNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPDatasetNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/dlp/datasets", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/dlp/datasets", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -47,11 +47,11 @@ func (r *DLPDatasetService) New(ctx context.Context, accountID string, body DLPD
 }
 
 // Update details about a dataset.
-func (r *DLPDatasetService) Update(ctx context.Context, accountID string, datasetID string, body DLPDatasetUpdateParams, opts ...option.RequestOption) (res *DLPDatasetUpdateResponse, err error) {
+func (r *DLPDatasetService) Update(ctx context.Context, datasetID string, params DLPDatasetUpdateParams, opts ...option.RequestOption) (res *DLPDatasetUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPDatasetUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s", accountID, datasetID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s", params.AccountID, datasetID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -60,11 +60,11 @@ func (r *DLPDatasetService) Update(ctx context.Context, accountID string, datase
 }
 
 // Fetch all datasets with information about available versions.
-func (r *DLPDatasetService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]DLPDatasetListResponse, err error) {
+func (r *DLPDatasetService) List(ctx context.Context, query DLPDatasetListParams, opts ...option.RequestOption) (res *[]DLPDatasetListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPDatasetListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/dlp/datasets", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/dlp/datasets", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -75,20 +75,20 @@ func (r *DLPDatasetService) List(ctx context.Context, accountID string, opts ...
 // Delete a dataset.
 //
 // This deletes all versions of the dataset.
-func (r *DLPDatasetService) Delete(ctx context.Context, accountID string, datasetID string, opts ...option.RequestOption) (err error) {
+func (r *DLPDatasetService) Delete(ctx context.Context, datasetID string, body DLPDatasetDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
-	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s", accountID, datasetID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
+	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s", body.AccountID, datasetID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, nil, opts...)
 	return
 }
 
 // Fetch a specific dataset with information about available versions.
-func (r *DLPDatasetService) Get(ctx context.Context, accountID string, datasetID string, opts ...option.RequestOption) (res *DLPDatasetGetResponse, err error) {
+func (r *DLPDatasetService) Get(ctx context.Context, datasetID string, query DLPDatasetGetParams, opts ...option.RequestOption) (res *DLPDatasetGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPDatasetGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s", accountID, datasetID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s", query.AccountID, datasetID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -411,6 +411,7 @@ const (
 )
 
 type DLPDatasetNewParams struct {
+	AccountID   param.Field[string] `path:"account_id,required"`
 	Name        param.Field[string] `json:"name,required"`
 	Description param.Field[string] `json:"description"`
 	// Generate a secret dataset.
@@ -515,6 +516,7 @@ func (r *DLPDatasetNewResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (er
 }
 
 type DLPDatasetUpdateParams struct {
+	AccountID   param.Field[string] `path:"account_id,required"`
 	Description param.Field[string] `json:"description"`
 	Name        param.Field[string] `json:"name"`
 }
@@ -613,6 +615,10 @@ func (r *DLPDatasetUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type DLPDatasetListParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type DLPDatasetListResponseEnvelope struct {
 	Errors     []DLPDatasetListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages   []DLPDatasetListResponseEnvelopeMessages `json:"messages,required"`
@@ -701,6 +707,14 @@ type dlpDatasetListResponseEnvelopeResultInfoJSON struct {
 
 func (r *DLPDatasetListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type DLPDatasetDeleteParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type DLPDatasetGetParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type DLPDatasetGetResponseEnvelope struct {

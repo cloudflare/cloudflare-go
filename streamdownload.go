@@ -9,6 +9,7 @@ import (
 	"reflect"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
@@ -34,11 +35,11 @@ func NewStreamDownloadService(opts ...option.RequestOption) (r *StreamDownloadSe
 }
 
 // Creates a download for a video when a video is ready to view.
-func (r *StreamDownloadService) New(ctx context.Context, accountID string, identifier string, opts ...option.RequestOption) (res *StreamDownloadNewResponse, err error) {
+func (r *StreamDownloadService) New(ctx context.Context, identifier string, body StreamDownloadNewParams, opts ...option.RequestOption) (res *StreamDownloadNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamDownloadNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/%s/downloads", accountID, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/%s/downloads", body.AccountID, identifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -47,11 +48,11 @@ func (r *StreamDownloadService) New(ctx context.Context, accountID string, ident
 }
 
 // Lists the downloads created for a video.
-func (r *StreamDownloadService) List(ctx context.Context, accountID string, identifier string, opts ...option.RequestOption) (res *StreamDownloadListResponse, err error) {
+func (r *StreamDownloadService) List(ctx context.Context, identifier string, query StreamDownloadListParams, opts ...option.RequestOption) (res *StreamDownloadListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamDownloadListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/%s/downloads", accountID, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/%s/downloads", query.AccountID, identifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -60,11 +61,11 @@ func (r *StreamDownloadService) List(ctx context.Context, accountID string, iden
 }
 
 // Delete the downloads for a video.
-func (r *StreamDownloadService) Delete(ctx context.Context, accountID string, identifier string, opts ...option.RequestOption) (res *StreamDownloadDeleteResponse, err error) {
+func (r *StreamDownloadService) Delete(ctx context.Context, identifier string, body StreamDownloadDeleteParams, opts ...option.RequestOption) (res *StreamDownloadDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamDownloadDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/%s/downloads", accountID, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/%s/downloads", body.AccountID, identifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -119,6 +120,11 @@ func init() {
 			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
 	)
+}
+
+type StreamDownloadNewParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type StreamDownloadNewResponseEnvelope struct {
@@ -190,6 +196,11 @@ const (
 	StreamDownloadNewResponseEnvelopeSuccessTrue StreamDownloadNewResponseEnvelopeSuccess = true
 )
 
+type StreamDownloadListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type StreamDownloadListResponseEnvelope struct {
 	Errors   []StreamDownloadListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []StreamDownloadListResponseEnvelopeMessages `json:"messages,required"`
@@ -258,6 +269,11 @@ type StreamDownloadListResponseEnvelopeSuccess bool
 const (
 	StreamDownloadListResponseEnvelopeSuccessTrue StreamDownloadListResponseEnvelopeSuccess = true
 )
+
+type StreamDownloadDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type StreamDownloadDeleteResponseEnvelope struct {
 	Errors   []StreamDownloadDeleteResponseEnvelopeErrors   `json:"errors,required"`

@@ -35,11 +35,11 @@ func NewClientCertificateService(opts ...option.RequestOption) (r *ClientCertifi
 }
 
 // Create a new API Shield mTLS Client Certificate
-func (r *ClientCertificateService) New(ctx context.Context, zoneID string, body ClientCertificateNewParams, opts ...option.RequestOption) (res *ClientCertificateNewResponse, err error) {
+func (r *ClientCertificateService) New(ctx context.Context, params ClientCertificateNewParams, opts ...option.RequestOption) (res *ClientCertificateNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ClientCertificateNewResponseEnvelope
-	path := fmt.Sprintf("zones/%s/client_certificates", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/client_certificates", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -49,12 +49,12 @@ func (r *ClientCertificateService) New(ctx context.Context, zoneID string, body 
 
 // List all of your Zone's API Shield mTLS Client Certificates by Status and/or
 // using Pagination
-func (r *ClientCertificateService) List(ctx context.Context, zoneID string, query ClientCertificateListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[ClientCertificateListResponse], err error) {
+func (r *ClientCertificateService) List(ctx context.Context, params ClientCertificateListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[ClientCertificateListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	path := fmt.Sprintf("zones/%s/client_certificates", zoneID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	path := fmt.Sprintf("zones/%s/client_certificates", params.ZoneID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -68,17 +68,17 @@ func (r *ClientCertificateService) List(ctx context.Context, zoneID string, quer
 
 // List all of your Zone's API Shield mTLS Client Certificates by Status and/or
 // using Pagination
-func (r *ClientCertificateService) ListAutoPaging(ctx context.Context, zoneID string, query ClientCertificateListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[ClientCertificateListResponse] {
-	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneID, query, opts...))
+func (r *ClientCertificateService) ListAutoPaging(ctx context.Context, params ClientCertificateListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[ClientCertificateListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Set a API Shield mTLS Client Certificate to pending_revocation status for
 // processing to revoked status.
-func (r *ClientCertificateService) Delete(ctx context.Context, zoneID string, clientCertificateID string, opts ...option.RequestOption) (res *ClientCertificateDeleteResponse, err error) {
+func (r *ClientCertificateService) Delete(ctx context.Context, clientCertificateID string, body ClientCertificateDeleteParams, opts ...option.RequestOption) (res *ClientCertificateDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ClientCertificateDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/client_certificates/%s", zoneID, clientCertificateID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/client_certificates/%s", body.ZoneID, clientCertificateID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -88,11 +88,11 @@ func (r *ClientCertificateService) Delete(ctx context.Context, zoneID string, cl
 
 // If a API Shield mTLS Client Certificate is in a pending_revocation state, you
 // may reactivate it with this endpoint.
-func (r *ClientCertificateService) Edit(ctx context.Context, zoneID string, clientCertificateID string, opts ...option.RequestOption) (res *ClientCertificateEditResponse, err error) {
+func (r *ClientCertificateService) Edit(ctx context.Context, clientCertificateID string, body ClientCertificateEditParams, opts ...option.RequestOption) (res *ClientCertificateEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ClientCertificateEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/client_certificates/%s", zoneID, clientCertificateID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/client_certificates/%s", body.ZoneID, clientCertificateID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -101,11 +101,11 @@ func (r *ClientCertificateService) Edit(ctx context.Context, zoneID string, clie
 }
 
 // Get Details for a single mTLS API Shield Client Certificate
-func (r *ClientCertificateService) Get(ctx context.Context, zoneID string, clientCertificateID string, opts ...option.RequestOption) (res *ClientCertificateGetResponse, err error) {
+func (r *ClientCertificateService) Get(ctx context.Context, clientCertificateID string, query ClientCertificateGetParams, opts ...option.RequestOption) (res *ClientCertificateGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ClientCertificateGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/client_certificates/%s", zoneID, clientCertificateID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/client_certificates/%s", query.ZoneID, clientCertificateID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -619,6 +619,8 @@ const (
 )
 
 type ClientCertificateNewParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The Certificate Signing Request (CSR). Must be newline-encoded.
 	Csr param.Field[string] `json:"csr,required"`
 	// The number of days the Client Certificate will be valid after the issued_on date
@@ -699,6 +701,8 @@ const (
 )
 
 type ClientCertificateListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Limit to the number of records returned.
 	Limit param.Field[int64] `query:"limit"`
 	// Offset the results
@@ -730,6 +734,11 @@ const (
 	ClientCertificateListParamsStatusPendingRevocation   ClientCertificateListParamsStatus = "pending_revocation"
 	ClientCertificateListParamsStatusRevoked             ClientCertificateListParamsStatus = "revoked"
 )
+
+type ClientCertificateDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type ClientCertificateDeleteResponseEnvelope struct {
 	Errors   []ClientCertificateDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -800,6 +809,11 @@ const (
 	ClientCertificateDeleteResponseEnvelopeSuccessTrue ClientCertificateDeleteResponseEnvelopeSuccess = true
 )
 
+type ClientCertificateEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type ClientCertificateEditResponseEnvelope struct {
 	Errors   []ClientCertificateEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ClientCertificateEditResponseEnvelopeMessages `json:"messages,required"`
@@ -868,6 +882,11 @@ type ClientCertificateEditResponseEnvelopeSuccess bool
 const (
 	ClientCertificateEditResponseEnvelopeSuccessTrue ClientCertificateEditResponseEnvelopeSuccess = true
 )
+
+type ClientCertificateGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type ClientCertificateGetResponseEnvelope struct {
 	Errors   []ClientCertificateGetResponseEnvelopeErrors   `json:"errors,required"`

@@ -32,8 +32,10 @@ func TestWorkerScriptContentV2Get(t *testing.T) {
 	)
 	resp, err := client.WorkerScripts.ContentV2.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"this-is_my_script-01",
+		cloudflare.WorkerScriptContentV2GetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

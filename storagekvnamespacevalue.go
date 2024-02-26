@@ -40,11 +40,11 @@ func NewStorageKVNamespaceValueService(opts ...option.RequestOption) (r *Storage
 // Existing values, expirations, and metadata will be overwritten. If neither
 // `expiration` nor `expiration_ttl` is specified, the key-value pair will never
 // expire. If both are set, `expiration_ttl` is used and `expiration` is ignored.
-func (r *StorageKVNamespaceValueService) Update(ctx context.Context, accountID string, namespaceID string, keyName string, body StorageKVNamespaceValueUpdateParams, opts ...option.RequestOption) (res *StorageKVNamespaceValueUpdateResponse, err error) {
+func (r *StorageKVNamespaceValueService) Update(ctx context.Context, namespaceID string, keyName string, params StorageKVNamespaceValueUpdateParams, opts ...option.RequestOption) (res *StorageKVNamespaceValueUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StorageKVNamespaceValueUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/values/%s", accountID, namespaceID, keyName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/values/%s", params.AccountID, namespaceID, keyName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -54,11 +54,11 @@ func (r *StorageKVNamespaceValueService) Update(ctx context.Context, accountID s
 
 // Remove a KV pair from the namespace. Use URL-encoding to use special characters
 // (for example, `:`, `!`, `%`) in the key name.
-func (r *StorageKVNamespaceValueService) Delete(ctx context.Context, accountID string, namespaceID string, keyName string, opts ...option.RequestOption) (res *StorageKVNamespaceValueDeleteResponse, err error) {
+func (r *StorageKVNamespaceValueService) Delete(ctx context.Context, namespaceID string, keyName string, body StorageKVNamespaceValueDeleteParams, opts ...option.RequestOption) (res *StorageKVNamespaceValueDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StorageKVNamespaceValueDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/values/%s", accountID, namespaceID, keyName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/values/%s", body.AccountID, namespaceID, keyName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -71,10 +71,10 @@ func (r *StorageKVNamespaceValueService) Delete(ctx context.Context, accountID s
 // name. If the KV-pair is set to expire at some point, the expiration time as
 // measured in seconds since the UNIX epoch will be returned in the `expiration`
 // response header.
-func (r *StorageKVNamespaceValueService) Get(ctx context.Context, accountID string, namespaceID string, keyName string, opts ...option.RequestOption) (res *string, err error) {
+func (r *StorageKVNamespaceValueService) Get(ctx context.Context, namespaceID string, keyName string, query StorageKVNamespaceValueGetParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/values/%s", accountID, namespaceID, keyName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/values/%s", query.AccountID, namespaceID, keyName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
@@ -113,6 +113,8 @@ func init() {
 }
 
 type StorageKVNamespaceValueUpdateParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Arbitrary JSON to be associated with a key/value pair.
 	Metadata param.Field[string] `json:"metadata,required"`
 	// A byte sequence to be stored, up to 25 MiB in length.
@@ -192,6 +194,11 @@ const (
 	StorageKVNamespaceValueUpdateResponseEnvelopeSuccessTrue StorageKVNamespaceValueUpdateResponseEnvelopeSuccess = true
 )
 
+type StorageKVNamespaceValueDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type StorageKVNamespaceValueDeleteResponseEnvelope struct {
 	Errors   []StorageKVNamespaceValueDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []StorageKVNamespaceValueDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -260,3 +267,8 @@ type StorageKVNamespaceValueDeleteResponseEnvelopeSuccess bool
 const (
 	StorageKVNamespaceValueDeleteResponseEnvelopeSuccessTrue StorageKVNamespaceValueDeleteResponseEnvelopeSuccess = true
 )
+
+type StorageKVNamespaceValueGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}

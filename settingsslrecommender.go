@@ -34,11 +34,11 @@ func NewSettingSSLRecommenderService(opts ...option.RequestOption) (r *SettingSS
 // Enrollment in the SSL/TLS Recommender service which tries to detect and
 // recommend (by sending periodic emails) the most secure SSL/TLS setting your
 // origin servers support.
-func (r *SettingSSLRecommenderService) Edit(ctx context.Context, zoneID string, body SettingSSLRecommenderEditParams, opts ...option.RequestOption) (res *SettingSSLRecommenderEditResponse, err error) {
+func (r *SettingSSLRecommenderService) Edit(ctx context.Context, params SettingSSLRecommenderEditParams, opts ...option.RequestOption) (res *SettingSSLRecommenderEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingSSLRecommenderEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/ssl_recommender", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/ssl_recommender", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -49,11 +49,11 @@ func (r *SettingSSLRecommenderService) Edit(ctx context.Context, zoneID string, 
 // Enrollment in the SSL/TLS Recommender service which tries to detect and
 // recommend (by sending periodic emails) the most secure SSL/TLS setting your
 // origin servers support.
-func (r *SettingSSLRecommenderService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingSSLRecommenderGetResponse, err error) {
+func (r *SettingSSLRecommenderService) Get(ctx context.Context, query SettingSSLRecommenderGetParams, opts ...option.RequestOption) (res *SettingSSLRecommenderGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingSSLRecommenderGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/ssl_recommender", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/ssl_recommender", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -124,6 +124,8 @@ const (
 )
 
 type SettingSSLRecommenderEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Enrollment in the SSL/TLS Recommender service which tries to detect and
 	// recommend (by sending periodic emails) the most secure SSL/TLS setting your
 	// origin servers support.
@@ -218,6 +220,11 @@ type settingSSLRecommenderEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingSSLRecommenderEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingSSLRecommenderGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingSSLRecommenderGetResponseEnvelope struct {

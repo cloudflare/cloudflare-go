@@ -66,11 +66,11 @@ func NewCacheService(opts ...option.RequestOption) (r *CacheService) {
 // purge API calls in every 24 hour period. You may purge up to 30 tags, hosts, or
 // prefixes in one API call. This rate limit can be raised for customers who need
 // to purge at higher volume.
-func (r *CacheService) Purge(ctx context.Context, zoneID string, body CachePurgeParams, opts ...option.RequestOption) (res *CachePurgeResponse, err error) {
+func (r *CacheService) Purge(ctx context.Context, params CachePurgeParams, opts ...option.RequestOption) (res *CachePurgeResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CachePurgeResponseEnvelope
-	path := fmt.Sprintf("zones/%s/purge_cache", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/purge_cache", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -97,99 +97,34 @@ func (r *CachePurgeResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type CachePurgeParams struct {
-	Body param.Field[CachePurgeParamsBody] `json:"body,required"`
+	ZoneID          param.Field[string]                 `path:"zone_id,required"`
+	Files           param.Field[[]CachePurgeParamsFile] `json:"files"`
+	Hosts           param.Field[[]string]               `json:"hosts"`
+	Prefixes        param.Field[[]string]               `json:"prefixes"`
+	PurgeEverything param.Field[bool]                   `json:"purge_everything"`
+	Tags            param.Field[[]string]               `json:"tags"`
 }
 
 func (r CachePurgeParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
-}
-
-// Satisfied by [CachePurgeParamsBodyCachePurgeFlex],
-// [CachePurgeParamsBodyCachePurgeEverything],
-// [CachePurgeParamsBodyCachePurgeFiles].
-type CachePurgeParamsBody interface {
-	implementsCachePurgeParamsBody()
-}
-
-// Satisfied by [CachePurgeParamsBodyCachePurgeFlexCachePurgeTags],
-// [CachePurgeParamsBodyCachePurgeFlexCachePurgeHosts],
-// [CachePurgeParamsBodyCachePurgeFlexCachePurgePrefixes].
-type CachePurgeParamsBodyCachePurgeFlex interface {
-	implementsCachePurgeParamsBodyCachePurgeFlex()
-}
-
-func (r CachePurgeParamsBodyCachePurgeFlex) implementsCachePurgeParamsBody() {}
-
-type CachePurgeParamsBodyCachePurgeFlexCachePurgeTags struct {
-	Tags param.Field[[]string] `json:"tags"`
-}
-
-func (r CachePurgeParamsBodyCachePurgeFlexCachePurgeTags) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
-
-func (r CachePurgeParamsBodyCachePurgeFlexCachePurgeTags) implementsCachePurgeParamsBodyCachePurgeFlex() {
-}
-
-type CachePurgeParamsBodyCachePurgeFlexCachePurgeHosts struct {
-	Hosts param.Field[[]string] `json:"hosts"`
-}
-
-func (r CachePurgeParamsBodyCachePurgeFlexCachePurgeHosts) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r CachePurgeParamsBodyCachePurgeFlexCachePurgeHosts) implementsCachePurgeParamsBodyCachePurgeFlex() {
-}
-
-type CachePurgeParamsBodyCachePurgeFlexCachePurgePrefixes struct {
-	Prefixes param.Field[[]string] `json:"prefixes"`
-}
-
-func (r CachePurgeParamsBodyCachePurgeFlexCachePurgePrefixes) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r CachePurgeParamsBodyCachePurgeFlexCachePurgePrefixes) implementsCachePurgeParamsBodyCachePurgeFlex() {
-}
-
-type CachePurgeParamsBodyCachePurgeEverything struct {
-	PurgeEverything param.Field[bool] `json:"purge_everything"`
-}
-
-func (r CachePurgeParamsBodyCachePurgeEverything) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r CachePurgeParamsBodyCachePurgeEverything) implementsCachePurgeParamsBody() {}
-
-type CachePurgeParamsBodyCachePurgeFiles struct {
-	Files param.Field[[]CachePurgeParamsBodyCachePurgeFilesFile] `json:"files"`
-}
-
-func (r CachePurgeParamsBodyCachePurgeFiles) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-func (r CachePurgeParamsBodyCachePurgeFiles) implementsCachePurgeParamsBody() {}
 
 // Satisfied by [shared.UnionString],
-// [CachePurgeParamsBodyCachePurgeFilesFilesCachePurgeURLAndHeaders].
-type CachePurgeParamsBodyCachePurgeFilesFile interface {
-	ImplementsCachePurgeParamsBodyCachePurgeFilesFile()
+// [CachePurgeParamsFilesCachePurgeURLAndHeaders].
+type CachePurgeParamsFile interface {
+	ImplementsCachePurgeParamsFile()
 }
 
-type CachePurgeParamsBodyCachePurgeFilesFilesCachePurgeURLAndHeaders struct {
+type CachePurgeParamsFilesCachePurgeURLAndHeaders struct {
 	Headers param.Field[interface{}] `json:"headers"`
 	URL     param.Field[string]      `json:"url"`
 }
 
-func (r CachePurgeParamsBodyCachePurgeFilesFilesCachePurgeURLAndHeaders) MarshalJSON() (data []byte, err error) {
+func (r CachePurgeParamsFilesCachePurgeURLAndHeaders) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r CachePurgeParamsBodyCachePurgeFilesFilesCachePurgeURLAndHeaders) ImplementsCachePurgeParamsBodyCachePurgeFilesFile() {
-}
+func (r CachePurgeParamsFilesCachePurgeURLAndHeaders) ImplementsCachePurgeParamsFile() {}
 
 type CachePurgeResponseEnvelope struct {
 	Errors   []CachePurgeResponseEnvelopeErrors   `json:"errors,required"`

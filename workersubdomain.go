@@ -32,11 +32,11 @@ func NewWorkerSubdomainService(opts ...option.RequestOption) (r *WorkerSubdomain
 }
 
 // Creates a Workers subdomain for an account.
-func (r *WorkerSubdomainService) Update(ctx context.Context, accountID string, body WorkerSubdomainUpdateParams, opts ...option.RequestOption) (res *WorkerSubdomainUpdateResponse, err error) {
+func (r *WorkerSubdomainService) Update(ctx context.Context, params WorkerSubdomainUpdateParams, opts ...option.RequestOption) (res *WorkerSubdomainUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerSubdomainUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/subdomain", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/subdomain", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -45,11 +45,11 @@ func (r *WorkerSubdomainService) Update(ctx context.Context, accountID string, b
 }
 
 // Returns a Workers subdomain for an account.
-func (r *WorkerSubdomainService) Get(ctx context.Context, accountID string, opts ...option.RequestOption) (res *WorkerSubdomainGetResponse, err error) {
+func (r *WorkerSubdomainService) Get(ctx context.Context, query WorkerSubdomainGetParams, opts ...option.RequestOption) (res *WorkerSubdomainGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerSubdomainGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/subdomain", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/subdomain", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -92,7 +92,9 @@ func (r *WorkerSubdomainGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type WorkerSubdomainUpdateParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	// Identifier
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
 }
 
 func (r WorkerSubdomainUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -167,6 +169,11 @@ type WorkerSubdomainUpdateResponseEnvelopeSuccess bool
 const (
 	WorkerSubdomainUpdateResponseEnvelopeSuccessTrue WorkerSubdomainUpdateResponseEnvelopeSuccess = true
 )
+
+type WorkerSubdomainGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type WorkerSubdomainGetResponseEnvelope struct {
 	Errors   []WorkerSubdomainGetResponseEnvelopeErrors   `json:"errors,required"`

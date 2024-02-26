@@ -32,11 +32,11 @@ func NewWorkerScriptScheduleService(opts ...option.RequestOption) (r *WorkerScri
 }
 
 // Updates Cron Triggers for a Worker.
-func (r *WorkerScriptScheduleService) Update(ctx context.Context, accountID string, scriptName string, body WorkerScriptScheduleUpdateParams, opts ...option.RequestOption) (res *WorkerScriptScheduleUpdateResponse, err error) {
+func (r *WorkerScriptScheduleService) Update(ctx context.Context, scriptName string, params WorkerScriptScheduleUpdateParams, opts ...option.RequestOption) (res *WorkerScriptScheduleUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerScriptScheduleUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/schedules", accountID, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/schedules", params.AccountID, scriptName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -45,11 +45,11 @@ func (r *WorkerScriptScheduleService) Update(ctx context.Context, accountID stri
 }
 
 // Fetches Cron Triggers for a Worker.
-func (r *WorkerScriptScheduleService) List(ctx context.Context, accountID string, scriptName string, opts ...option.RequestOption) (res *WorkerScriptScheduleListResponse, err error) {
+func (r *WorkerScriptScheduleService) List(ctx context.Context, scriptName string, query WorkerScriptScheduleListParams, opts ...option.RequestOption) (res *WorkerScriptScheduleListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerScriptScheduleListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/schedules", accountID, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/schedules", query.AccountID, scriptName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -134,7 +134,9 @@ func (r *WorkerScriptScheduleListResponseSchedule) UnmarshalJSON(data []byte) (e
 }
 
 type WorkerScriptScheduleUpdateParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	// Identifier
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
 }
 
 func (r WorkerScriptScheduleUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -209,6 +211,11 @@ type WorkerScriptScheduleUpdateResponseEnvelopeSuccess bool
 const (
 	WorkerScriptScheduleUpdateResponseEnvelopeSuccessTrue WorkerScriptScheduleUpdateResponseEnvelopeSuccess = true
 )
+
+type WorkerScriptScheduleListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type WorkerScriptScheduleListResponseEnvelope struct {
 	Errors   []WorkerScriptScheduleListResponseEnvelopeErrors   `json:"errors,required"`

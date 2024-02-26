@@ -29,21 +29,18 @@ func TestDiagnosticTracerouteNewWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Diagnostics.Traceroutes.New(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.DiagnosticTracerouteNewParams{
-			Targets: cloudflare.F([]string{"203.0.113.1", "cloudflare.com"}),
-			Colos:   cloudflare.F([]string{"den", "sin"}),
-			Options: cloudflare.F(cloudflare.DiagnosticTracerouteNewParamsOptions{
-				MaxTTL:        cloudflare.F(int64(15)),
-				PacketType:    cloudflare.F(cloudflare.DiagnosticTracerouteNewParamsOptionsPacketTypeIcmp),
-				PacketsPerTTL: cloudflare.F(int64(0)),
-				Port:          cloudflare.F(int64(0)),
-				WaitTime:      cloudflare.F(int64(1)),
-			}),
-		},
-	)
+	_, err := client.Diagnostics.Traceroutes.New(context.TODO(), cloudflare.DiagnosticTracerouteNewParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Targets:   cloudflare.F([]string{"203.0.113.1", "cloudflare.com"}),
+		Colos:     cloudflare.F([]string{"den", "sin"}),
+		Options: cloudflare.F(cloudflare.DiagnosticTracerouteNewParamsOptions{
+			MaxTTL:        cloudflare.F(int64(15)),
+			PacketType:    cloudflare.F(cloudflare.DiagnosticTracerouteNewParamsOptionsPacketTypeIcmp),
+			PacketsPerTTL: cloudflare.F(int64(0)),
+			Port:          cloudflare.F(int64(0)),
+			WaitTime:      cloudflare.F(int64(1)),
+		}),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

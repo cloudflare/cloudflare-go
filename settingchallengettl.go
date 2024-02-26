@@ -37,11 +37,11 @@ func NewSettingChallengeTTLService(opts ...option.RequestOption) (r *SettingChal
 // visitor will have to complete a new challenge. We recommend a 15 - 45 minute
 // setting and will attempt to honor any setting above 45 minutes.
 // (https://support.cloudflare.com/hc/en-us/articles/200170136).
-func (r *SettingChallengeTTLService) Edit(ctx context.Context, zoneID string, body SettingChallengeTTLEditParams, opts ...option.RequestOption) (res *SettingChallengeTTLEditResponse, err error) {
+func (r *SettingChallengeTTLService) Edit(ctx context.Context, params SettingChallengeTTLEditParams, opts ...option.RequestOption) (res *SettingChallengeTTLEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingChallengeTTLEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/challenge_ttl", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/challenge_ttl", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -54,11 +54,11 @@ func (r *SettingChallengeTTLService) Edit(ctx context.Context, zoneID string, bo
 // visitor will have to complete a new challenge. We recommend a 15 - 45 minute
 // setting and will attempt to honor any setting above 45 minutes.
 // (https://support.cloudflare.com/hc/en-us/articles/200170136).
-func (r *SettingChallengeTTLService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingChallengeTTLGetResponse, err error) {
+func (r *SettingChallengeTTLService) Get(ctx context.Context, query SettingChallengeTTLGetParams, opts ...option.RequestOption) (res *SettingChallengeTTLGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingChallengeTTLGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/challenge_ttl", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/challenge_ttl", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -205,6 +205,8 @@ const (
 )
 
 type SettingChallengeTTLEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the zone setting.
 	Value param.Field[SettingChallengeTTLEditParamsValue] `json:"value,required"`
 }
@@ -298,6 +300,11 @@ type settingChallengeTTLEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingChallengeTTLEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingChallengeTTLGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingChallengeTTLGetResponseEnvelope struct {

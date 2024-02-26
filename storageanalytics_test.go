@@ -30,21 +30,18 @@ func TestStorageAnalyticsListWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Storage.Analytics.List(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.StorageAnalyticsListParams{
-			Query: cloudflare.F(cloudflare.StorageAnalyticsListParamsQuery{
-				Dimensions: cloudflare.F([]cloudflare.StorageAnalyticsListParamsQueryDimension{cloudflare.StorageAnalyticsListParamsQueryDimensionAccountID, cloudflare.StorageAnalyticsListParamsQueryDimensionResponseCode, cloudflare.StorageAnalyticsListParamsQueryDimensionRequestType}),
-				Filters:    cloudflare.F("requestType==read AND responseCode!=200"),
-				Limit:      cloudflare.F(int64(0)),
-				Metrics:    cloudflare.F([]cloudflare.StorageAnalyticsListParamsQueryMetric{cloudflare.StorageAnalyticsListParamsQueryMetricRequests, cloudflare.StorageAnalyticsListParamsQueryMetricWriteKiB, cloudflare.StorageAnalyticsListParamsQueryMetricReadKiB}),
-				Since:      cloudflare.F(time.Now()),
-				Sort:       cloudflare.F([]interface{}{"+requests", "-responseCode"}),
-				Until:      cloudflare.F(time.Now()),
-			}),
-		},
-	)
+	_, err := client.Storage.Analytics.List(context.TODO(), cloudflare.StorageAnalyticsListParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Query: cloudflare.F(cloudflare.StorageAnalyticsListParamsQuery{
+			Dimensions: cloudflare.F([]cloudflare.StorageAnalyticsListParamsQueryDimension{cloudflare.StorageAnalyticsListParamsQueryDimensionAccountID, cloudflare.StorageAnalyticsListParamsQueryDimensionResponseCode, cloudflare.StorageAnalyticsListParamsQueryDimensionRequestType}),
+			Filters:    cloudflare.F("requestType==read AND responseCode!=200"),
+			Limit:      cloudflare.F(int64(0)),
+			Metrics:    cloudflare.F([]cloudflare.StorageAnalyticsListParamsQueryMetric{cloudflare.StorageAnalyticsListParamsQueryMetricRequests, cloudflare.StorageAnalyticsListParamsQueryMetricWriteKiB, cloudflare.StorageAnalyticsListParamsQueryMetricReadKiB}),
+			Since:      cloudflare.F(time.Now()),
+			Sort:       cloudflare.F([]interface{}{"+requests", "-responseCode"}),
+			Until:      cloudflare.F(time.Now()),
+		}),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -70,21 +67,18 @@ func TestStorageAnalyticsStoredWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Storage.Analytics.Stored(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.StorageAnalyticsStoredParams{
-			Query: cloudflare.F(cloudflare.StorageAnalyticsStoredParamsQuery{
-				Dimensions: cloudflare.F([]cloudflare.StorageAnalyticsStoredParamsQueryDimension{cloudflare.StorageAnalyticsStoredParamsQueryDimensionNamespaceID}),
-				Filters:    cloudflare.F("namespaceId==a4e8cbb7-1b58-4990-925e-e026d40c4c64"),
-				Limit:      cloudflare.F(int64(0)),
-				Metrics:    cloudflare.F([]cloudflare.StorageAnalyticsStoredParamsQueryMetric{cloudflare.StorageAnalyticsStoredParamsQueryMetricStoredBytes, cloudflare.StorageAnalyticsStoredParamsQueryMetricStoredKeys}),
-				Since:      cloudflare.F(time.Now()),
-				Sort:       cloudflare.F([]interface{}{"+storedBytes", "-namespaceId"}),
-				Until:      cloudflare.F(time.Now()),
-			}),
-		},
-	)
+	_, err := client.Storage.Analytics.Stored(context.TODO(), cloudflare.StorageAnalyticsStoredParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Query: cloudflare.F(cloudflare.StorageAnalyticsStoredParamsQuery{
+			Dimensions: cloudflare.F([]cloudflare.StorageAnalyticsStoredParamsQueryDimension{cloudflare.StorageAnalyticsStoredParamsQueryDimensionNamespaceID}),
+			Filters:    cloudflare.F("namespaceId==a4e8cbb7-1b58-4990-925e-e026d40c4c64"),
+			Limit:      cloudflare.F(int64(0)),
+			Metrics:    cloudflare.F([]cloudflare.StorageAnalyticsStoredParamsQueryMetric{cloudflare.StorageAnalyticsStoredParamsQueryMetricStoredBytes, cloudflare.StorageAnalyticsStoredParamsQueryMetricStoredKeys}),
+			Since:      cloudflare.F(time.Now()),
+			Sort:       cloudflare.F([]interface{}{"+storedBytes", "-namespaceId"}),
+			Until:      cloudflare.F(time.Now()),
+		}),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

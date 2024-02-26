@@ -33,11 +33,11 @@ func NewLoadBalancerMonitorPreviewService(opts ...option.RequestOption) (r *Load
 
 // Preview pools using the specified monitor with provided monitor details. The
 // returned preview_id can be used in the preview endpoint to retrieve the results.
-func (r *LoadBalancerMonitorPreviewService) New(ctx context.Context, accountID string, monitorID string, body LoadBalancerMonitorPreviewNewParams, opts ...option.RequestOption) (res *LoadBalancerMonitorPreviewNewResponse, err error) {
+func (r *LoadBalancerMonitorPreviewService) New(ctx context.Context, monitorID string, params LoadBalancerMonitorPreviewNewParams, opts ...option.RequestOption) (res *LoadBalancerMonitorPreviewNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerMonitorPreviewNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s/preview", accountID, monitorID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s/preview", params.AccountID, monitorID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -66,6 +66,8 @@ func (r *LoadBalancerMonitorPreviewNewResponse) UnmarshalJSON(data []byte) (err 
 }
 
 type LoadBalancerMonitorPreviewNewParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The expected HTTP response code or code range of the health check. This
 	// parameter is only valid for HTTP and HTTPS monitors.
 	ExpectedCodes param.Field[string] `json:"expected_codes,required"`

@@ -32,11 +32,11 @@ func NewSSLCertificatePackOrderService(opts ...option.RequestOption) (r *SSLCert
 }
 
 // For a given zone, order an advanced certificate pack.
-func (r *SSLCertificatePackOrderService) New(ctx context.Context, zoneID string, body SSLCertificatePackOrderNewParams, opts ...option.RequestOption) (res *SSLCertificatePackOrderNewResponse, err error) {
+func (r *SSLCertificatePackOrderService) New(ctx context.Context, params SSLCertificatePackOrderNewParams, opts ...option.RequestOption) (res *SSLCertificatePackOrderNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SSLCertificatePackOrderNewResponseEnvelope
-	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/order", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/order", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -151,6 +151,8 @@ const (
 )
 
 type SSLCertificatePackOrderNewParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Certificate Authority selected for the order. For information on any certificate
 	// authority specific details or restrictions
 	// [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)

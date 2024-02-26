@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	"github.com/cloudflare/cloudflare-sdk-go"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/testutil"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -29,18 +30,14 @@ func TestCachePurgeWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Cache.Purge(
-		context.TODO(),
-		"string",
-		cloudflare.CachePurgeParams{
-			Body: cloudflare.F[cloudflare.CachePurgeParamsBody](cloudflare.CachePurgeParamsBodyCachePurgeEverything(cloudflare.CachePurgeParamsBodyCachePurgeEverything{
-				Tags: map[string]interface{}{
-					"0": "some-tag",
-					"1": "another-tag",
-				},
-			})),
-		},
-	)
+	_, err := client.Cache.Purge(context.TODO(), cloudflare.CachePurgeParams{
+		ZoneID:          cloudflare.F("string"),
+		Files:           cloudflare.F([]cloudflare.CachePurgeParamsFile{shared.UnionString("http://www.example.com/css/styles.css"), shared.UnionString("http://www.example.com/css/styles.css"), shared.UnionString("http://www.example.com/css/styles.css")}),
+		Hosts:           cloudflare.F([]string{"www.example.com", "images.example.com"}),
+		Prefixes:        cloudflare.F([]string{"www.example.com/foo", "images.example.com/bar/baz"}),
+		PurgeEverything: cloudflare.F(true),
+		Tags:            cloudflare.F([]string{"some-tag", "another-tag"}),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

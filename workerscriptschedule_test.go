@@ -31,10 +31,10 @@ func TestWorkerScriptScheduleUpdate(t *testing.T) {
 	)
 	_, err := client.Workers.Scripts.Schedules.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"this-is_my_script-01",
 		cloudflare.WorkerScriptScheduleUpdateParams{
-			Body: cloudflare.F[any]("[{'cron': '*/30 * * * *'}]"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body:      cloudflare.F[any]("[{'cron': '*/30 * * * *'}]"),
 		},
 	)
 	if err != nil {
@@ -64,8 +64,10 @@ func TestWorkerScriptScheduleList(t *testing.T) {
 	)
 	_, err := client.Workers.Scripts.Schedules.List(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"this-is_my_script-01",
+		cloudflare.WorkerScriptScheduleListParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

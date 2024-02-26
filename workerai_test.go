@@ -31,10 +31,10 @@ func TestWorkerAIRun(t *testing.T) {
 	)
 	_, err := client.Workers.AI.Run(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"string",
 		cloudflare.WorkerAIRunParams{
-			Body: cloudflare.F[any](map[string]interface{}{}),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body:      cloudflare.F[any](map[string]interface{}{}),
 		},
 	)
 	if err != nil {

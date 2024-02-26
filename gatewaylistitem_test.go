@@ -31,8 +31,10 @@ func TestGatewayListItemList(t *testing.T) {
 	)
 	_, err := client.Gateways.Lists.Items.List(
 		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		cloudflare.GatewayListItemListParams{
+			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

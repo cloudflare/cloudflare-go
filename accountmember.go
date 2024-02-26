@@ -35,11 +35,11 @@ func NewAccountMemberService(opts ...option.RequestOption) (r *AccountMemberServ
 }
 
 // Add a user to the list of members for this account.
-func (r *AccountMemberService) New(ctx context.Context, accountID interface{}, body AccountMemberNewParams, opts ...option.RequestOption) (res *AccountMemberNewResponse, err error) {
+func (r *AccountMemberService) New(ctx context.Context, params AccountMemberNewParams, opts ...option.RequestOption) (res *AccountMemberNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccountMemberNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/members", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/members", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +48,11 @@ func (r *AccountMemberService) New(ctx context.Context, accountID interface{}, b
 }
 
 // Modify an account member.
-func (r *AccountMemberService) Update(ctx context.Context, accountID interface{}, memberID string, body AccountMemberUpdateParams, opts ...option.RequestOption) (res *AccountMemberUpdateResponse, err error) {
+func (r *AccountMemberService) Update(ctx context.Context, memberID string, params AccountMemberUpdateParams, opts ...option.RequestOption) (res *AccountMemberUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccountMemberUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/members/%s", accountID, memberID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/members/%s", params.AccountID, memberID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -61,12 +61,12 @@ func (r *AccountMemberService) Update(ctx context.Context, accountID interface{}
 }
 
 // List all members of an account.
-func (r *AccountMemberService) List(ctx context.Context, accountID interface{}, query AccountMemberListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[AccountMemberListResponse], err error) {
+func (r *AccountMemberService) List(ctx context.Context, params AccountMemberListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[AccountMemberListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	path := fmt.Sprintf("accounts/%v/members", accountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	path := fmt.Sprintf("accounts/%v/members", params.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -79,16 +79,16 @@ func (r *AccountMemberService) List(ctx context.Context, accountID interface{}, 
 }
 
 // List all members of an account.
-func (r *AccountMemberService) ListAutoPaging(ctx context.Context, accountID interface{}, query AccountMemberListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[AccountMemberListResponse] {
-	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, accountID, query, opts...))
+func (r *AccountMemberService) ListAutoPaging(ctx context.Context, params AccountMemberListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[AccountMemberListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Remove a member from an account.
-func (r *AccountMemberService) Delete(ctx context.Context, accountID interface{}, memberID string, opts ...option.RequestOption) (res *AccountMemberDeleteResponse, err error) {
+func (r *AccountMemberService) Delete(ctx context.Context, memberID string, body AccountMemberDeleteParams, opts ...option.RequestOption) (res *AccountMemberDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccountMemberDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/members/%s", accountID, memberID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/members/%s", body.AccountID, memberID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -97,11 +97,11 @@ func (r *AccountMemberService) Delete(ctx context.Context, accountID interface{}
 }
 
 // Get information about a specific member of an account.
-func (r *AccountMemberService) Get(ctx context.Context, accountID interface{}, memberID string, opts ...option.RequestOption) (res *AccountMemberGetResponse, err error) {
+func (r *AccountMemberService) Get(ctx context.Context, memberID string, query AccountMemberGetParams, opts ...option.RequestOption) (res *AccountMemberGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccountMemberGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/members/%s", accountID, memberID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/members/%s", query.AccountID, memberID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -1245,6 +1245,7 @@ func (r *AccountMemberGetResponseUser) UnmarshalJSON(data []byte) (err error) {
 }
 
 type AccountMemberNewParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// The contact email address of the user.
 	Email param.Field[string] `json:"email,required"`
 	// Array of roles associated with this member.
@@ -1333,6 +1334,7 @@ const (
 )
 
 type AccountMemberUpdateParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// Roles assigned to this member.
 	Roles param.Field[[]AccountMemberUpdateParamsRole] `json:"roles,required"`
 }
@@ -1547,6 +1549,7 @@ const (
 )
 
 type AccountMemberListParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// Direction to order results.
 	Direction param.Field[AccountMemberListParamsDirection] `query:"direction"`
 	// Field to order results by.
@@ -1594,6 +1597,10 @@ const (
 	AccountMemberListParamsStatusPending  AccountMemberListParamsStatus = "pending"
 	AccountMemberListParamsStatusRejected AccountMemberListParamsStatus = "rejected"
 )
+
+type AccountMemberDeleteParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
 
 type AccountMemberDeleteResponseEnvelope struct {
 	Errors   []AccountMemberDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -1663,6 +1670,10 @@ type AccountMemberDeleteResponseEnvelopeSuccess bool
 const (
 	AccountMemberDeleteResponseEnvelopeSuccessTrue AccountMemberDeleteResponseEnvelopeSuccess = true
 )
+
+type AccountMemberGetParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
 
 type AccountMemberGetResponseEnvelope struct {
 	Errors   []AccountMemberGetResponseEnvelopeErrors   `json:"errors,required"`

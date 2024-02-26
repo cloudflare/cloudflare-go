@@ -29,22 +29,19 @@ func TestTeamnetRouteListWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Teamnets.Routes.List(
-		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
-		cloudflare.TeamnetRouteListParams{
-			Comment:          cloudflare.F("Example comment for this route."),
-			ExistedAt:        cloudflare.F[any](map[string]interface{}{}),
-			IsDeleted:        cloudflare.F[any](map[string]interface{}{}),
-			NetworkSubset:    cloudflare.F[any](map[string]interface{}{}),
-			NetworkSuperset:  cloudflare.F[any](map[string]interface{}{}),
-			Page:             cloudflare.F(1.000000),
-			PerPage:          cloudflare.F(1.000000),
-			TunTypes:         cloudflare.F("cfd_tunnel,warp_connector"),
-			TunnelID:         cloudflare.F[any](map[string]interface{}{}),
-			VirtualNetworkID: cloudflare.F[any](map[string]interface{}{}),
-		},
-	)
+	_, err := client.Teamnets.Routes.List(context.TODO(), cloudflare.TeamnetRouteListParams{
+		AccountID:        cloudflare.F("699d98642c564d2e855e9661899b7252"),
+		Comment:          cloudflare.F("Example comment for this route."),
+		ExistedAt:        cloudflare.F[any](map[string]interface{}{}),
+		IsDeleted:        cloudflare.F[any](map[string]interface{}{}),
+		NetworkSubset:    cloudflare.F[any](map[string]interface{}{}),
+		NetworkSuperset:  cloudflare.F[any](map[string]interface{}{}),
+		Page:             cloudflare.F(1.000000),
+		PerPage:          cloudflare.F(1.000000),
+		TunTypes:         cloudflare.F("cfd_tunnel,warp_connector"),
+		TunnelID:         cloudflare.F[any](map[string]interface{}{}),
+		VirtualNetworkID: cloudflare.F[any](map[string]interface{}{}),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

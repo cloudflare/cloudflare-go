@@ -31,8 +31,10 @@ func TestWorkerDeploymentByScriptList(t *testing.T) {
 	)
 	_, err := client.Workers.Deployments.ByScripts.List(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"8ee82b3a2c0f42928b8f14dae4a97121",
+		cloudflare.WorkerDeploymentByScriptListParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -61,9 +63,11 @@ func TestWorkerDeploymentByScriptGet(t *testing.T) {
 	)
 	_, err := client.Workers.Deployments.ByScripts.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"8ee82b3a2c0f42928b8f14dae4a97121",
 		"bcf48806-b317-4351-9ee7-36e7d557d4de",
+		cloudflare.WorkerDeploymentByScriptGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -32,11 +33,11 @@ func NewTunnelConnectorService(opts ...option.RequestOption) (r *TunnelConnector
 }
 
 // Fetches connector and connection details for a Cloudflare Tunnel.
-func (r *TunnelConnectorService) Get(ctx context.Context, accountID string, tunnelID string, connectorID string, opts ...option.RequestOption) (res *TunnelConnectorGetResponse, err error) {
+func (r *TunnelConnectorService) Get(ctx context.Context, tunnelID string, connectorID string, query TunnelConnectorGetParams, opts ...option.RequestOption) (res *TunnelConnectorGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelConnectorGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/connectors/%s", accountID, tunnelID, connectorID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/connectors/%s", query.AccountID, tunnelID, connectorID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -123,6 +124,11 @@ type tunnelConnectorGetResponseConnJSON struct {
 
 func (r *TunnelConnectorGetResponseConn) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type TunnelConnectorGetParams struct {
+	// Cloudflare account ID
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type TunnelConnectorGetResponseEnvelope struct {

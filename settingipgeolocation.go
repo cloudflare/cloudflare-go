@@ -35,11 +35,11 @@ func NewSettingIPGeolocationService(opts ...option.RequestOption) (r *SettingIPG
 // Enable IP Geolocation to have Cloudflare geolocate visitors to your website and
 // pass the country code to you.
 // (https://support.cloudflare.com/hc/en-us/articles/200168236).
-func (r *SettingIPGeolocationService) Edit(ctx context.Context, zoneID string, body SettingIPGeolocationEditParams, opts ...option.RequestOption) (res *SettingIPGeolocationEditResponse, err error) {
+func (r *SettingIPGeolocationService) Edit(ctx context.Context, params SettingIPGeolocationEditParams, opts ...option.RequestOption) (res *SettingIPGeolocationEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingIPGeolocationEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/ip_geolocation", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/ip_geolocation", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -50,11 +50,11 @@ func (r *SettingIPGeolocationService) Edit(ctx context.Context, zoneID string, b
 // Enable IP Geolocation to have Cloudflare geolocate visitors to your website and
 // pass the country code to you.
 // (https://support.cloudflare.com/hc/en-us/articles/200168236).
-func (r *SettingIPGeolocationService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingIPGeolocationGetResponse, err error) {
+func (r *SettingIPGeolocationService) Get(ctx context.Context, query SettingIPGeolocationGetParams, opts ...option.RequestOption) (res *SettingIPGeolocationGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingIPGeolocationGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/ip_geolocation", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/ip_geolocation", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -173,6 +173,8 @@ const (
 )
 
 type SettingIPGeolocationEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the zone setting.
 	Value param.Field[SettingIPGeolocationEditParamsValue] `json:"value,required"`
 }
@@ -252,6 +254,11 @@ type settingIPGeolocationEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingIPGeolocationEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingIPGeolocationGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingIPGeolocationGetResponseEnvelope struct {

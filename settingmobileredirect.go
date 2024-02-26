@@ -36,11 +36,11 @@ func NewSettingMobileRedirectService(opts ...option.RequestOption) (r *SettingMo
 // subdomain. Refer to
 // [Understanding Cloudflare Mobile Redirect](https://support.cloudflare.com/hc/articles/200168336)
 // for more information.
-func (r *SettingMobileRedirectService) Edit(ctx context.Context, zoneID string, body SettingMobileRedirectEditParams, opts ...option.RequestOption) (res *SettingMobileRedirectEditResponse, err error) {
+func (r *SettingMobileRedirectService) Edit(ctx context.Context, params SettingMobileRedirectEditParams, opts ...option.RequestOption) (res *SettingMobileRedirectEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingMobileRedirectEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/mobile_redirect", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/mobile_redirect", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -52,11 +52,11 @@ func (r *SettingMobileRedirectService) Edit(ctx context.Context, zoneID string, 
 // subdomain. Refer to
 // [Understanding Cloudflare Mobile Redirect](https://support.cloudflare.com/hc/articles/200168336)
 // for more information.
-func (r *SettingMobileRedirectService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingMobileRedirectGetResponse, err error) {
+func (r *SettingMobileRedirectService) Get(ctx context.Context, query SettingMobileRedirectGetParams, opts ...option.RequestOption) (res *SettingMobileRedirectGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingMobileRedirectGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/mobile_redirect", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/mobile_redirect", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -231,6 +231,8 @@ const (
 )
 
 type SettingMobileRedirectEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the zone setting.
 	Value param.Field[SettingMobileRedirectEditParamsValue] `json:"value,required"`
 }
@@ -327,6 +329,11 @@ type settingMobileRedirectEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingMobileRedirectEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingMobileRedirectGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingMobileRedirectGetResponseEnvelope struct {

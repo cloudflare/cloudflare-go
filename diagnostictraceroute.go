@@ -32,11 +32,11 @@ func NewDiagnosticTracerouteService(opts ...option.RequestOption) (r *Diagnostic
 }
 
 // Run traceroutes from Cloudflare colos.
-func (r *DiagnosticTracerouteService) New(ctx context.Context, accountID string, body DiagnosticTracerouteNewParams, opts ...option.RequestOption) (res *[]DiagnosticTracerouteNewResponse, err error) {
+func (r *DiagnosticTracerouteService) New(ctx context.Context, params DiagnosticTracerouteNewParams, opts ...option.RequestOption) (res *[]DiagnosticTracerouteNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DiagnosticTracerouteNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/diagnostics/traceroute", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/diagnostics/traceroute", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -196,7 +196,9 @@ func (r *DiagnosticTracerouteNewResponseColosHopsNode) UnmarshalJSON(data []byte
 }
 
 type DiagnosticTracerouteNewParams struct {
-	Targets param.Field[[]string] `json:"targets,required"`
+	// Identifier
+	AccountID param.Field[string]   `path:"account_id,required"`
+	Targets   param.Field[[]string] `json:"targets,required"`
 	// If no source colo names specified, all colos will be used. China colos are
 	// unavailable for traceroutes.
 	Colos   param.Field[[]string]                             `json:"colos"`

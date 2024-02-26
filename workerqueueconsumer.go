@@ -35,11 +35,11 @@ func NewWorkerQueueConsumerService(opts ...option.RequestOption) (r *WorkerQueue
 }
 
 // Creates a new consumer for a queue.
-func (r *WorkerQueueConsumerService) New(ctx context.Context, accountID string, name string, body WorkerQueueConsumerNewParams, opts ...option.RequestOption) (res *WorkerQueueConsumerNewResponse, err error) {
+func (r *WorkerQueueConsumerService) New(ctx context.Context, name string, params WorkerQueueConsumerNewParams, opts ...option.RequestOption) (res *WorkerQueueConsumerNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerQueueConsumerNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/queues/%s/consumers", accountID, name)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/queues/%s/consumers", params.AccountID, name)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +48,11 @@ func (r *WorkerQueueConsumerService) New(ctx context.Context, accountID string, 
 }
 
 // Updates the consumer for a queue, or creates one if it does not exist.
-func (r *WorkerQueueConsumerService) Update(ctx context.Context, accountID string, name string, consumerName string, body WorkerQueueConsumerUpdateParams, opts ...option.RequestOption) (res *WorkerQueueConsumerUpdateResponse, err error) {
+func (r *WorkerQueueConsumerService) Update(ctx context.Context, name string, consumerName string, params WorkerQueueConsumerUpdateParams, opts ...option.RequestOption) (res *WorkerQueueConsumerUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerQueueConsumerUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/queues/%s/consumers/%s", accountID, name, consumerName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/queues/%s/consumers/%s", params.AccountID, name, consumerName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -61,11 +61,11 @@ func (r *WorkerQueueConsumerService) Update(ctx context.Context, accountID strin
 }
 
 // Returns the consumers for a queue.
-func (r *WorkerQueueConsumerService) List(ctx context.Context, accountID string, name string, opts ...option.RequestOption) (res *[]WorkerQueueConsumerListResponse, err error) {
+func (r *WorkerQueueConsumerService) List(ctx context.Context, name string, query WorkerQueueConsumerListParams, opts ...option.RequestOption) (res *[]WorkerQueueConsumerListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerQueueConsumerListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/queues/%s/consumers", accountID, name)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/queues/%s/consumers", query.AccountID, name)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -74,11 +74,11 @@ func (r *WorkerQueueConsumerService) List(ctx context.Context, accountID string,
 }
 
 // Deletes the consumer for a queue.
-func (r *WorkerQueueConsumerService) Delete(ctx context.Context, accountID string, name string, consumerName string, opts ...option.RequestOption) (res *WorkerQueueConsumerDeleteResponse, err error) {
+func (r *WorkerQueueConsumerService) Delete(ctx context.Context, name string, consumerName string, body WorkerQueueConsumerDeleteParams, opts ...option.RequestOption) (res *WorkerQueueConsumerDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerQueueConsumerDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/queues/%s/consumers/%s", accountID, name, consumerName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/queues/%s/consumers/%s", body.AccountID, name, consumerName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -250,7 +250,9 @@ type WorkerQueueConsumerDeleteResponseArray []interface{}
 func (r WorkerQueueConsumerDeleteResponseArray) ImplementsWorkerQueueConsumerDeleteResponse() {}
 
 type WorkerQueueConsumerNewParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	// Identifier
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
 }
 
 func (r WorkerQueueConsumerNewParams) MarshalJSON() (data []byte, err error) {
@@ -356,7 +358,9 @@ func (r *WorkerQueueConsumerNewResponseEnvelopeResultInfo) UnmarshalJSON(data []
 }
 
 type WorkerQueueConsumerUpdateParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	// Identifier
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
 }
 
 func (r WorkerQueueConsumerUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -461,6 +465,11 @@ func (r *WorkerQueueConsumerUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type WorkerQueueConsumerListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type WorkerQueueConsumerListResponseEnvelope struct {
 	Errors   []interface{}                     `json:"errors,required,nullable"`
 	Messages []interface{}                     `json:"messages,required,nullable"`
@@ -521,6 +530,11 @@ type workerQueueConsumerListResponseEnvelopeResultInfoJSON struct {
 
 func (r *WorkerQueueConsumerListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type WorkerQueueConsumerDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type WorkerQueueConsumerDeleteResponseEnvelope struct {

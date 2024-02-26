@@ -31,9 +31,9 @@ func TestR2SippyUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.R2.Sippy.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"example-bucket",
 		cloudflare.R2SippyUpdateParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Destination: cloudflare.F(cloudflare.R2SippyUpdateParamsDestination{
 				AccessKeyID:     cloudflare.F("string"),
 				Provider:        cloudflare.F(cloudflare.R2SippyUpdateParamsDestinationProviderR2),
@@ -77,8 +77,10 @@ func TestR2SippyDelete(t *testing.T) {
 	)
 	_, err := client.R2.Sippy.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"example-bucket",
+		cloudflare.R2SippyDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -107,8 +109,10 @@ func TestR2SippyGet(t *testing.T) {
 	)
 	_, err := client.R2.Sippy.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"example-bucket",
+		cloudflare.R2SippyGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -31,11 +31,11 @@ func NewR2SippyService(opts ...option.RequestOption) (r *R2SippyService) {
 }
 
 // Sets configuration for Sippy for an existing R2 bucket.
-func (r *R2SippyService) Update(ctx context.Context, accountID string, bucketName string, body R2SippyUpdateParams, opts ...option.RequestOption) (res *R2SippyUpdateResponse, err error) {
+func (r *R2SippyService) Update(ctx context.Context, bucketName string, params R2SippyUpdateParams, opts ...option.RequestOption) (res *R2SippyUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env R2SippyUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/sippy", accountID, bucketName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/sippy", params.AccountID, bucketName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -44,11 +44,11 @@ func (r *R2SippyService) Update(ctx context.Context, accountID string, bucketNam
 }
 
 // Disables Sippy on this bucket
-func (r *R2SippyService) Delete(ctx context.Context, accountID string, bucketName string, opts ...option.RequestOption) (res *R2SippyDeleteResponse, err error) {
+func (r *R2SippyService) Delete(ctx context.Context, bucketName string, body R2SippyDeleteParams, opts ...option.RequestOption) (res *R2SippyDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env R2SippyDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/sippy", accountID, bucketName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/sippy", body.AccountID, bucketName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -57,11 +57,11 @@ func (r *R2SippyService) Delete(ctx context.Context, accountID string, bucketNam
 }
 
 // Gets configuration for Sippy for an existing R2 bucket.
-func (r *R2SippyService) Get(ctx context.Context, accountID string, bucketName string, opts ...option.RequestOption) (res *R2SippyGetResponse, err error) {
+func (r *R2SippyService) Get(ctx context.Context, bucketName string, query R2SippyGetParams, opts ...option.RequestOption) (res *R2SippyGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env R2SippyGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/sippy", accountID, bucketName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/sippy", query.AccountID, bucketName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -267,6 +267,8 @@ const (
 )
 
 type R2SippyUpdateParams struct {
+	// Account ID
+	AccountID   param.Field[string]                         `path:"account_id,required"`
 	Destination param.Field[R2SippyUpdateParamsDestination] `json:"destination"`
 	Source      param.Field[R2SippyUpdateParamsSource]      `json:"source"`
 }
@@ -379,6 +381,11 @@ const (
 	R2SippyUpdateResponseEnvelopeSuccessTrue R2SippyUpdateResponseEnvelopeSuccess = true
 )
 
+type R2SippyDeleteParams struct {
+	// Account ID
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type R2SippyDeleteResponseEnvelope struct {
 	Errors   []R2SippyDeleteResponseEnvelopeErrors `json:"errors,required"`
 	Messages []string                              `json:"messages,required"`
@@ -428,6 +435,11 @@ type R2SippyDeleteResponseEnvelopeSuccess bool
 const (
 	R2SippyDeleteResponseEnvelopeSuccessTrue R2SippyDeleteResponseEnvelopeSuccess = true
 )
+
+type R2SippyGetParams struct {
+	// Account ID
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type R2SippyGetResponseEnvelope struct {
 	Errors   []R2SippyGetResponseEnvelopeErrors `json:"errors,required"`

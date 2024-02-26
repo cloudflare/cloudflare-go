@@ -29,14 +29,11 @@ func TestZoneCustomNameserverUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Zones.CustomNameservers.Update(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.ZoneCustomNameserverUpdateParams{
-			Enabled: cloudflare.F(true),
-			NsSet:   cloudflare.F(1.000000),
-		},
-	)
+	_, err := client.Zones.CustomNameservers.Update(context.TODO(), cloudflare.ZoneCustomNameserverUpdateParams{
+		ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Enabled: cloudflare.F(true),
+		NsSet:   cloudflare.F(1.000000),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -62,7 +59,9 @@ func TestZoneCustomNameserverGet(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Zones.CustomNameservers.Get(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Zones.CustomNameservers.Get(context.TODO(), cloudflare.ZoneCustomNameserverGetParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

@@ -32,11 +32,11 @@ func NewDeviceSettingService(opts ...option.RequestOption) (r *DeviceSettingServ
 }
 
 // Updates the current device settings for a Zero Trust account.
-func (r *DeviceSettingService) Update(ctx context.Context, accountID interface{}, body DeviceSettingUpdateParams, opts ...option.RequestOption) (res *DeviceSettingUpdateResponse, err error) {
+func (r *DeviceSettingService) Update(ctx context.Context, params DeviceSettingUpdateParams, opts ...option.RequestOption) (res *DeviceSettingUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceSettingUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/settings", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/devices/settings", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -45,11 +45,11 @@ func (r *DeviceSettingService) Update(ctx context.Context, accountID interface{}
 }
 
 // Describes the current device settings for a Zero Trust account.
-func (r *DeviceSettingService) List(ctx context.Context, accountID interface{}, opts ...option.RequestOption) (res *DeviceSettingListResponse, err error) {
+func (r *DeviceSettingService) List(ctx context.Context, query DeviceSettingListParams, opts ...option.RequestOption) (res *DeviceSettingListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceSettingListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/settings", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/devices/settings", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -112,6 +112,7 @@ func (r *DeviceSettingListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type DeviceSettingUpdateParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// Enable gateway proxy filtering on TCP.
 	GatewayProxyEnabled param.Field[bool] `json:"gateway_proxy_enabled"`
 	// Enable gateway proxy filtering on UDP.
@@ -194,6 +195,10 @@ type DeviceSettingUpdateResponseEnvelopeSuccess bool
 const (
 	DeviceSettingUpdateResponseEnvelopeSuccessTrue DeviceSettingUpdateResponseEnvelopeSuccess = true
 )
+
+type DeviceSettingListParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
 
 type DeviceSettingListResponseEnvelope struct {
 	Errors   []DeviceSettingListResponseEnvelopeErrors   `json:"errors,required"`

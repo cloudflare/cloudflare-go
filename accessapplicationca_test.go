@@ -34,7 +34,7 @@ func TestAccessApplicationCANew(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.AccessApplicationCANewParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {
@@ -64,7 +64,7 @@ func TestAccessApplicationCAList(t *testing.T) {
 	)
 	_, err := client.Access.Applications.CAs.List(context.TODO(), cloudflare.AccessApplicationCAListParams{
 		AccountID: cloudflare.F("string"),
-		ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ZoneID:    cloudflare.F("string"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -96,7 +96,7 @@ func TestAccessApplicationCADelete(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.AccessApplicationCADeleteParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {
@@ -129,7 +129,7 @@ func TestAccessApplicationCAGet(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.AccessApplicationCAGetParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {

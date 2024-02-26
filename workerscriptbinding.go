@@ -9,6 +9,7 @@ import (
 	"reflect"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -32,11 +33,11 @@ func NewWorkerScriptBindingService(opts ...option.RequestOption) (r *WorkerScrip
 }
 
 // List the bindings for a Workers script.
-func (r *WorkerScriptBindingService) List(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *[]WorkerScriptBindingListResponse, err error) {
+func (r *WorkerScriptBindingService) List(ctx context.Context, query WorkerScriptBindingListParams, opts ...option.RequestOption) (res *[]WorkerScriptBindingListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerScriptBindingListResponseEnvelope
-	path := fmt.Sprintf("zones/%s/workers/script/bindings", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/workers/script/bindings", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -120,6 +121,11 @@ type WorkerScriptBindingListResponseWorkersWasmModuleBindingType string
 const (
 	WorkerScriptBindingListResponseWorkersWasmModuleBindingTypeWasmModule WorkerScriptBindingListResponseWorkersWasmModuleBindingType = "wasm_module"
 )
+
+type WorkerScriptBindingListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type WorkerScriptBindingListResponseEnvelope struct {
 	Errors   []WorkerScriptBindingListResponseEnvelopeErrors   `json:"errors,required"`

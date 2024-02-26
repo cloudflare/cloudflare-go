@@ -32,11 +32,11 @@ func NewSecondaryDNSTSIGService(opts ...option.RequestOption) (r *SecondaryDNSTS
 }
 
 // Create TSIG.
-func (r *SecondaryDNSTSIGService) New(ctx context.Context, accountID interface{}, body SecondaryDNSTSIGNewParams, opts ...option.RequestOption) (res *SecondaryDnstsigNewResponse, err error) {
+func (r *SecondaryDNSTSIGService) New(ctx context.Context, params SecondaryDNSTSIGNewParams, opts ...option.RequestOption) (res *SecondaryDnstsigNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SecondaryDnstsigNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/secondary_dns/tsigs", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/secondary_dns/tsigs", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -45,11 +45,11 @@ func (r *SecondaryDNSTSIGService) New(ctx context.Context, accountID interface{}
 }
 
 // Modify TSIG.
-func (r *SecondaryDNSTSIGService) Update(ctx context.Context, accountID interface{}, tsigID interface{}, body SecondaryDNSTSIGUpdateParams, opts ...option.RequestOption) (res *SecondaryDnstsigUpdateResponse, err error) {
+func (r *SecondaryDNSTSIGService) Update(ctx context.Context, tsigID interface{}, params SecondaryDNSTSIGUpdateParams, opts ...option.RequestOption) (res *SecondaryDnstsigUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SecondaryDnstsigUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/secondary_dns/tsigs/%v", accountID, tsigID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/secondary_dns/tsigs/%v", params.AccountID, tsigID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -58,11 +58,11 @@ func (r *SecondaryDNSTSIGService) Update(ctx context.Context, accountID interfac
 }
 
 // List TSIGs.
-func (r *SecondaryDNSTSIGService) List(ctx context.Context, accountID interface{}, opts ...option.RequestOption) (res *[]SecondaryDnstsigListResponse, err error) {
+func (r *SecondaryDNSTSIGService) List(ctx context.Context, query SecondaryDNSTSIGListParams, opts ...option.RequestOption) (res *[]SecondaryDnstsigListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SecondaryDnstsigListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/secondary_dns/tsigs", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/secondary_dns/tsigs", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -71,11 +71,11 @@ func (r *SecondaryDNSTSIGService) List(ctx context.Context, accountID interface{
 }
 
 // Delete TSIG.
-func (r *SecondaryDNSTSIGService) Delete(ctx context.Context, accountID interface{}, tsigID interface{}, opts ...option.RequestOption) (res *SecondaryDnstsigDeleteResponse, err error) {
+func (r *SecondaryDNSTSIGService) Delete(ctx context.Context, tsigID interface{}, body SecondaryDNSTSIGDeleteParams, opts ...option.RequestOption) (res *SecondaryDnstsigDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SecondaryDnstsigDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/secondary_dns/tsigs/%v", accountID, tsigID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/secondary_dns/tsigs/%v", body.AccountID, tsigID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -84,11 +84,11 @@ func (r *SecondaryDNSTSIGService) Delete(ctx context.Context, accountID interfac
 }
 
 // Get TSIG.
-func (r *SecondaryDNSTSIGService) Get(ctx context.Context, accountID interface{}, tsigID interface{}, opts ...option.RequestOption) (res *SecondaryDnstsigGetResponse, err error) {
+func (r *SecondaryDNSTSIGService) Get(ctx context.Context, tsigID interface{}, query SecondaryDNSTSIGGetParams, opts ...option.RequestOption) (res *SecondaryDnstsigGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SecondaryDnstsigGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/secondary_dns/tsigs/%v", accountID, tsigID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/secondary_dns/tsigs/%v", query.AccountID, tsigID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -218,6 +218,7 @@ func (r *SecondaryDnstsigGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type SecondaryDNSTSIGNewParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// TSIG algorithm.
 	Algo param.Field[string] `json:"algo,required"`
 	// TSIG key name.
@@ -300,6 +301,7 @@ const (
 )
 
 type SecondaryDNSTSIGUpdateParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// TSIG algorithm.
 	Algo param.Field[string] `json:"algo,required"`
 	// TSIG key name.
@@ -380,6 +382,10 @@ type SecondaryDnstsigUpdateResponseEnvelopeSuccess bool
 const (
 	SecondaryDnstsigUpdateResponseEnvelopeSuccessTrue SecondaryDnstsigUpdateResponseEnvelopeSuccess = true
 )
+
+type SecondaryDNSTSIGListParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
 
 type SecondaryDnstsigListResponseEnvelope struct {
 	Errors   []SecondaryDnstsigListResponseEnvelopeErrors   `json:"errors,required"`
@@ -479,6 +485,10 @@ func (r *SecondaryDnstsigListResponseEnvelopeResultInfo) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type SecondaryDNSTSIGDeleteParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
+
 type SecondaryDnstsigDeleteResponseEnvelope struct {
 	Errors   []SecondaryDnstsigDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SecondaryDnstsigDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -547,6 +557,10 @@ type SecondaryDnstsigDeleteResponseEnvelopeSuccess bool
 const (
 	SecondaryDnstsigDeleteResponseEnvelopeSuccessTrue SecondaryDnstsigDeleteResponseEnvelopeSuccess = true
 )
+
+type SecondaryDNSTSIGGetParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
 
 type SecondaryDnstsigGetResponseEnvelope struct {
 	Errors   []SecondaryDnstsigGetResponseEnvelopeErrors   `json:"errors,required"`

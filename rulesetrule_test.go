@@ -34,7 +34,7 @@ func TestRulesetRuleNewWithOptionalParams(t *testing.T) {
 		"2f2feab2026849078ba485f918791bdc",
 		cloudflare.RulesetRuleNewParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("abf9b32d38c5f572afde3336ec0ce302"),
+			ZoneID:    cloudflare.F("string"),
 			Position: cloudflare.F[cloudflare.RulesetRuleNewParamsPosition](cloudflare.RulesetRuleNewParamsPositionPosition(cloudflare.RulesetRuleNewParamsPositionPosition{
 				Before: cloudflare.F("da5e8e506c8e7877fe06cdf4c41add54"),
 			})),
@@ -71,7 +71,7 @@ func TestRulesetRuleDelete(t *testing.T) {
 		"3a03d665bac047339bb530ecb439a90d",
 		cloudflare.RulesetRuleDeleteParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("abf9b32d38c5f572afde3336ec0ce302"),
+			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {

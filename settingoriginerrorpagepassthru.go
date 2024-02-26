@@ -35,11 +35,11 @@ func NewSettingOriginErrorPagePassThruService(opts ...option.RequestOption) (r *
 // Cloudflare will proxy customer error pages on any 502,504 errors on origin
 // server instead of showing a default Cloudflare error page. This does not apply
 // to 522 errors and is limited to Enterprise Zones.
-func (r *SettingOriginErrorPagePassThruService) Edit(ctx context.Context, zoneID string, body SettingOriginErrorPagePassThruEditParams, opts ...option.RequestOption) (res *SettingOriginErrorPagePassThruEditResponse, err error) {
+func (r *SettingOriginErrorPagePassThruService) Edit(ctx context.Context, params SettingOriginErrorPagePassThruEditParams, opts ...option.RequestOption) (res *SettingOriginErrorPagePassThruEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingOriginErrorPagePassThruEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/origin_error_page_pass_thru", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/origin_error_page_pass_thru", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -50,11 +50,11 @@ func (r *SettingOriginErrorPagePassThruService) Edit(ctx context.Context, zoneID
 // Cloudflare will proxy customer error pages on any 502,504 errors on origin
 // server instead of showing a default Cloudflare error page. This does not apply
 // to 522 errors and is limited to Enterprise Zones.
-func (r *SettingOriginErrorPagePassThruService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingOriginErrorPagePassThruGetResponse, err error) {
+func (r *SettingOriginErrorPagePassThruService) Get(ctx context.Context, query SettingOriginErrorPagePassThruGetParams, opts ...option.RequestOption) (res *SettingOriginErrorPagePassThruGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingOriginErrorPagePassThruGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/origin_error_page_pass_thru", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/origin_error_page_pass_thru", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -173,6 +173,8 @@ const (
 )
 
 type SettingOriginErrorPagePassThruEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the zone setting.
 	Value param.Field[SettingOriginErrorPagePassThruEditParamsValue] `json:"value,required"`
 }
@@ -254,6 +256,11 @@ type settingOriginErrorPagePassThruEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingOriginErrorPagePassThruEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingOriginErrorPagePassThruGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingOriginErrorPagePassThruGetResponseEnvelope struct {

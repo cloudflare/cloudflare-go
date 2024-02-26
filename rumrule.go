@@ -32,11 +32,11 @@ func NewRUMRuleService(opts ...option.RequestOption) (r *RUMRuleService) {
 }
 
 // Creates a new rule in a Web Analytics ruleset.
-func (r *RUMRuleService) New(ctx context.Context, accountID string, rulesetID string, body RUMRuleNewParams, opts ...option.RequestOption) (res *RUMRuleNewResponse, err error) {
+func (r *RUMRuleService) New(ctx context.Context, rulesetID string, params RUMRuleNewParams, opts ...option.RequestOption) (res *RUMRuleNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RUMRuleNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/rum/v2/%s/rule", accountID, rulesetID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/rum/v2/%s/rule", params.AccountID, rulesetID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -45,11 +45,11 @@ func (r *RUMRuleService) New(ctx context.Context, accountID string, rulesetID st
 }
 
 // Updates a rule in a Web Analytics ruleset.
-func (r *RUMRuleService) Update(ctx context.Context, accountID string, rulesetID string, ruleID string, body RUMRuleUpdateParams, opts ...option.RequestOption) (res *RUMRuleUpdateResponse, err error) {
+func (r *RUMRuleService) Update(ctx context.Context, rulesetID string, ruleID string, params RUMRuleUpdateParams, opts ...option.RequestOption) (res *RUMRuleUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RUMRuleUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/rum/v2/%s/rule/%s", accountID, rulesetID, ruleID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/rum/v2/%s/rule/%s", params.AccountID, rulesetID, ruleID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -58,11 +58,11 @@ func (r *RUMRuleService) Update(ctx context.Context, accountID string, rulesetID
 }
 
 // Lists all the rules in a Web Analytics ruleset.
-func (r *RUMRuleService) List(ctx context.Context, accountID string, rulesetID string, opts ...option.RequestOption) (res *RUMRuleListResponse, err error) {
+func (r *RUMRuleService) List(ctx context.Context, rulesetID string, query RUMRuleListParams, opts ...option.RequestOption) (res *RUMRuleListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RUMRuleListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/rum/v2/%s/rules", accountID, rulesetID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/rum/v2/%s/rules", query.AccountID, rulesetID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -71,11 +71,11 @@ func (r *RUMRuleService) List(ctx context.Context, accountID string, rulesetID s
 }
 
 // Deletes an existing rule from a Web Analytics ruleset.
-func (r *RUMRuleService) Delete(ctx context.Context, accountID string, rulesetID string, ruleID string, opts ...option.RequestOption) (res *RUMRuleDeleteResponse, err error) {
+func (r *RUMRuleService) Delete(ctx context.Context, rulesetID string, ruleID string, body RUMRuleDeleteParams, opts ...option.RequestOption) (res *RUMRuleDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RUMRuleDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/rum/v2/%s/rule/%s", accountID, rulesetID, ruleID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/rum/v2/%s/rule/%s", body.AccountID, rulesetID, ruleID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -250,7 +250,9 @@ func (r *RUMRuleDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type RUMRuleNewParams struct {
-	Host param.Field[string] `json:"host"`
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+	Host      param.Field[string] `json:"host"`
 	// Whether the rule includes or excludes traffic from being measured.
 	Inclusive param.Field[bool] `json:"inclusive"`
 	// Whether the rule is paused or not.
@@ -280,7 +282,9 @@ func (r *RUMRuleNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 type RUMRuleUpdateParams struct {
-	Host param.Field[string] `json:"host"`
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+	Host      param.Field[string] `json:"host"`
 	// Whether the rule includes or excludes traffic from being measured.
 	Inclusive param.Field[bool] `json:"inclusive"`
 	// Whether the rule is paused or not.
@@ -309,6 +313,11 @@ func (r *RUMRuleUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type RUMRuleListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type RUMRuleListResponseEnvelope struct {
 	Result RUMRuleListResponse             `json:"result"`
 	JSON   rumRuleListResponseEnvelopeJSON `json:"-"`
@@ -324,6 +333,11 @@ type rumRuleListResponseEnvelopeJSON struct {
 
 func (r *RUMRuleListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type RUMRuleDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type RUMRuleDeleteResponseEnvelope struct {

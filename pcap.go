@@ -36,11 +36,11 @@ func NewPCAPService(opts ...option.RequestOption) (r *PCAPService) {
 }
 
 // Create new PCAP request for account.
-func (r *PCAPService) New(ctx context.Context, accountID string, body PCAPNewParams, opts ...option.RequestOption) (res *PCAPNewResponse, err error) {
+func (r *PCAPService) New(ctx context.Context, params PCAPNewParams, opts ...option.RequestOption) (res *PCAPNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PCAPNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/pcaps", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/pcaps", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -49,11 +49,11 @@ func (r *PCAPService) New(ctx context.Context, accountID string, body PCAPNewPar
 }
 
 // Lists all packet capture requests for an account.
-func (r *PCAPService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]PCAPListResponse, err error) {
+func (r *PCAPService) List(ctx context.Context, query PCAPListParams, opts ...option.RequestOption) (res *[]PCAPListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PCAPListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/pcaps", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/pcaps", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -62,11 +62,11 @@ func (r *PCAPService) List(ctx context.Context, accountID string, opts ...option
 }
 
 // Get information for a PCAP request by id.
-func (r *PCAPService) Get(ctx context.Context, accountID string, pcapID string, opts ...option.RequestOption) (res *PCAPGetResponse, err error) {
+func (r *PCAPService) Get(ctx context.Context, pcapID string, query PCAPGetParams, opts ...option.RequestOption) (res *PCAPGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PCAPGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/pcaps/%s", accountID, pcapID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/pcaps/%s", query.AccountID, pcapID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -759,6 +759,8 @@ const (
 )
 
 type PCAPNewParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The system used to collect packet captures.
 	System param.Field[PCAPNewParamsSystem] `json:"system,required"`
 	// The packet capture duration in seconds.
@@ -886,6 +888,11 @@ const (
 	PCAPNewResponseEnvelopeSuccessTrue PCAPNewResponseEnvelopeSuccess = true
 )
 
+type PCAPListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type PCAPListResponseEnvelope struct {
 	Errors   []PCAPListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []PCAPListResponseEnvelopeMessages `json:"messages,required"`
@@ -982,6 +989,11 @@ type pcapListResponseEnvelopeResultInfoJSON struct {
 
 func (r *PCAPListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type PCAPGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type PCAPGetResponseEnvelope struct {

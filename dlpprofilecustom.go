@@ -36,11 +36,11 @@ func NewDLPProfileCustomService(opts ...option.RequestOption) (r *DLPProfileCust
 }
 
 // Creates a set of DLP custom profiles.
-func (r *DLPProfileCustomService) New(ctx context.Context, accountID string, body DLPProfileCustomNewParams, opts ...option.RequestOption) (res *[]DLPProfileCustomNewResponse, err error) {
+func (r *DLPProfileCustomService) New(ctx context.Context, params DLPProfileCustomNewParams, opts ...option.RequestOption) (res *[]DLPProfileCustomNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPProfileCustomNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/dlp/profiles/custom", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/dlp/profiles/custom", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -49,19 +49,19 @@ func (r *DLPProfileCustomService) New(ctx context.Context, accountID string, bod
 }
 
 // Updates a DLP custom profile.
-func (r *DLPProfileCustomService) Update(ctx context.Context, accountID string, profileID string, body DLPProfileCustomUpdateParams, opts ...option.RequestOption) (res *DLPProfileCustomUpdateResponse, err error) {
+func (r *DLPProfileCustomService) Update(ctx context.Context, profileID string, params DLPProfileCustomUpdateParams, opts ...option.RequestOption) (res *DLPProfileCustomUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%s/dlp/profiles/custom/%s", accountID, profileID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/dlp/profiles/custom/%s", params.AccountID, profileID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
 	return
 }
 
 // Deletes a DLP custom profile.
-func (r *DLPProfileCustomService) Delete(ctx context.Context, accountID string, profileID string, opts ...option.RequestOption) (res *DLPProfileCustomDeleteResponse, err error) {
+func (r *DLPProfileCustomService) Delete(ctx context.Context, profileID string, body DLPProfileCustomDeleteParams, opts ...option.RequestOption) (res *DLPProfileCustomDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPProfileCustomDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/dlp/profiles/custom/%s", accountID, profileID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/dlp/profiles/custom/%s", body.AccountID, profileID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -70,11 +70,11 @@ func (r *DLPProfileCustomService) Delete(ctx context.Context, accountID string, 
 }
 
 // Fetches a custom DLP profile.
-func (r *DLPProfileCustomService) Get(ctx context.Context, accountID string, profileID string, opts ...option.RequestOption) (res *DLPProfileCustomGetResponse, err error) {
+func (r *DLPProfileCustomService) Get(ctx context.Context, profileID string, query DLPProfileCustomGetParams, opts ...option.RequestOption) (res *DLPProfileCustomGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPProfileCustomGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/dlp/profiles/custom/%s", accountID, profileID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/dlp/profiles/custom/%s", query.AccountID, profileID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -430,7 +430,9 @@ const (
 )
 
 type DLPProfileCustomNewParams struct {
-	Profiles param.Field[[]DLPProfileCustomNewParamsProfile] `json:"profiles,required"`
+	// Identifier
+	AccountID param.Field[string]                             `path:"account_id,required"`
+	Profiles  param.Field[[]DLPProfileCustomNewParamsProfile] `json:"profiles,required"`
 }
 
 func (r DLPProfileCustomNewParams) MarshalJSON() (data []byte, err error) {
@@ -586,6 +588,8 @@ func (r *DLPProfileCustomNewResponseEnvelopeResultInfo) UnmarshalJSON(data []byt
 }
 
 type DLPProfileCustomUpdateParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Related DLP policies will trigger when the match count exceeds the number set.
 	AllowedMatchCount param.Field[float64] `json:"allowed_match_count"`
 	// The description of the profile.
@@ -677,6 +681,11 @@ func (r DLPProfileCustomUpdateParamsSharedEntriesDLPSharedEntryUpdateIntegration
 func (r DLPProfileCustomUpdateParamsSharedEntriesDLPSharedEntryUpdateIntegration) implementsDLPProfileCustomUpdateParamsSharedEntry() {
 }
 
+type DLPProfileCustomDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type DLPProfileCustomDeleteResponseEnvelope struct {
 	Errors   []DLPProfileCustomDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DLPProfileCustomDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -745,6 +754,11 @@ type DLPProfileCustomDeleteResponseEnvelopeSuccess bool
 const (
 	DLPProfileCustomDeleteResponseEnvelopeSuccessTrue DLPProfileCustomDeleteResponseEnvelopeSuccess = true
 )
+
+type DLPProfileCustomGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type DLPProfileCustomGetResponseEnvelope struct {
 	Errors   []DLPProfileCustomGetResponseEnvelopeErrors   `json:"errors,required"`

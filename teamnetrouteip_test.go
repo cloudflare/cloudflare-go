@@ -31,9 +31,9 @@ func TestTeamnetRouteIPGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Teamnets.Routes.IPs.Get(
 		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
 		"10.1.0.137",
 		cloudflare.TeamnetRouteIPGetParams{
+			AccountID:        cloudflare.F("699d98642c564d2e855e9661899b7252"),
 			VirtualNetworkID: cloudflare.F[any](map[string]interface{}{}),
 		},
 	)

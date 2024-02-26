@@ -31,12 +31,12 @@ func TestStorageKVNamespaceKeyListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Storage.KV.Namespaces.Keys.List(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"0f2ac74b498b48028cb68387c421e279",
 		cloudflare.StorageKVNamespaceKeyListParams{
-			Cursor: cloudflare.F("6Ck1la0VxJ0djhidm1MdX2FyDGxLKVeeHZZmORS_8XeSuhz9SjIJRaSa2lnsF01tQOHrfTGAP3R5X1Kv5iVUuMbNKhWNAXHOl6ePB0TUL8nw"),
-			Limit:  cloudflare.F(10.000000),
-			Prefix: cloudflare.F("My-Prefix"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Cursor:    cloudflare.F("6Ck1la0VxJ0djhidm1MdX2FyDGxLKVeeHZZmORS_8XeSuhz9SjIJRaSa2lnsF01tQOHrfTGAP3R5X1Kv5iVUuMbNKhWNAXHOl6ePB0TUL8nw"),
+			Limit:     cloudflare.F(10.000000),
+			Prefix:    cloudflare.F("My-Prefix"),
 		},
 	)
 	if err != nil {

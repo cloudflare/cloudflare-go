@@ -31,9 +31,9 @@ func TestDEXHTTPTestPercentileListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.DEX.HTTPTests.Percentiles.List(
 		context.TODO(),
-		"01a7362d577a6c3019a474fd6f485823",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.DEXHTTPTestPercentileListParams{
+			AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
 			TimeEnd:   cloudflare.F("2023-09-20T17:00:00Z"),
 			TimeStart: cloudflare.F("2023-09-20T17:00:00Z"),
 			Colo:      cloudflare.F("string"),

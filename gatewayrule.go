@@ -36,11 +36,11 @@ func NewGatewayRuleService(opts ...option.RequestOption) (r *GatewayRuleService)
 }
 
 // Creates a new Zero Trust Gateway rule.
-func (r *GatewayRuleService) New(ctx context.Context, accountID interface{}, body GatewayRuleNewParams, opts ...option.RequestOption) (res *GatewayRuleNewResponse, err error) {
+func (r *GatewayRuleService) New(ctx context.Context, params GatewayRuleNewParams, opts ...option.RequestOption) (res *GatewayRuleNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayRuleNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/rules", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/gateway/rules", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -49,11 +49,11 @@ func (r *GatewayRuleService) New(ctx context.Context, accountID interface{}, bod
 }
 
 // Updates a configured Zero Trust Gateway rule.
-func (r *GatewayRuleService) Update(ctx context.Context, accountID interface{}, ruleID string, body GatewayRuleUpdateParams, opts ...option.RequestOption) (res *GatewayRuleUpdateResponse, err error) {
+func (r *GatewayRuleService) Update(ctx context.Context, ruleID string, params GatewayRuleUpdateParams, opts ...option.RequestOption) (res *GatewayRuleUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayRuleUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/rules/%s", accountID, ruleID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/gateway/rules/%s", params.AccountID, ruleID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -62,11 +62,11 @@ func (r *GatewayRuleService) Update(ctx context.Context, accountID interface{}, 
 }
 
 // Fetches the Zero Trust Gateway rules for an account.
-func (r *GatewayRuleService) List(ctx context.Context, accountID interface{}, opts ...option.RequestOption) (res *[]GatewayRuleListResponse, err error) {
+func (r *GatewayRuleService) List(ctx context.Context, query GatewayRuleListParams, opts ...option.RequestOption) (res *[]GatewayRuleListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayRuleListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/rules", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/gateway/rules", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -75,11 +75,11 @@ func (r *GatewayRuleService) List(ctx context.Context, accountID interface{}, op
 }
 
 // Deletes a Zero Trust Gateway rule.
-func (r *GatewayRuleService) Delete(ctx context.Context, accountID interface{}, ruleID string, opts ...option.RequestOption) (res *GatewayRuleDeleteResponse, err error) {
+func (r *GatewayRuleService) Delete(ctx context.Context, ruleID string, body GatewayRuleDeleteParams, opts ...option.RequestOption) (res *GatewayRuleDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayRuleDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/rules/%s", accountID, ruleID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/gateway/rules/%s", body.AccountID, ruleID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -88,11 +88,11 @@ func (r *GatewayRuleService) Delete(ctx context.Context, accountID interface{}, 
 }
 
 // Fetches a single Zero Trust Gateway rule.
-func (r *GatewayRuleService) Get(ctx context.Context, accountID interface{}, ruleID string, opts ...option.RequestOption) (res *GatewayRuleGetResponse, err error) {
+func (r *GatewayRuleService) Get(ctx context.Context, ruleID string, query GatewayRuleGetParams, opts ...option.RequestOption) (res *GatewayRuleGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayRuleGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/rules/%s", accountID, ruleID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/gateway/rules/%s", query.AccountID, ruleID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -2199,6 +2199,7 @@ func (r *GatewayRuleGetResponseSchedule) UnmarshalJSON(data []byte) (err error) 
 }
 
 type GatewayRuleNewParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// The action to preform when the associated traffic, identity, and device posture
 	// expressions are either absent or evaluate to `true`.
 	Action param.Field[GatewayRuleNewParamsAction] `json:"action,required"`
@@ -2599,6 +2600,7 @@ const (
 )
 
 type GatewayRuleUpdateParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// The action to preform when the associated traffic, identity, and device posture
 	// expressions are either absent or evaluate to `true`.
 	Action param.Field[GatewayRuleUpdateParamsAction] `json:"action,required"`
@@ -2998,6 +3000,10 @@ const (
 	GatewayRuleUpdateResponseEnvelopeSuccessTrue GatewayRuleUpdateResponseEnvelopeSuccess = true
 )
 
+type GatewayRuleListParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
+
 type GatewayRuleListResponseEnvelope struct {
 	Errors   []GatewayRuleListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []GatewayRuleListResponseEnvelopeMessages `json:"messages,required"`
@@ -3096,6 +3102,10 @@ func (r *GatewayRuleListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type GatewayRuleDeleteParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
+
 type GatewayRuleDeleteResponseEnvelope struct {
 	Errors   []GatewayRuleDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []GatewayRuleDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -3164,6 +3174,10 @@ type GatewayRuleDeleteResponseEnvelopeSuccess bool
 const (
 	GatewayRuleDeleteResponseEnvelopeSuccessTrue GatewayRuleDeleteResponseEnvelopeSuccess = true
 )
+
+type GatewayRuleGetParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
 
 type GatewayRuleGetResponseEnvelope struct {
 	Errors   []GatewayRuleGetResponseEnvelopeErrors   `json:"errors,required"`

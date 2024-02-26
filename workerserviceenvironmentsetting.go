@@ -33,11 +33,11 @@ func NewWorkerServiceEnvironmentSettingService(opts ...option.RequestOption) (r 
 }
 
 // Patch script metadata, such as bindings
-func (r *WorkerServiceEnvironmentSettingService) Edit(ctx context.Context, accountID string, serviceName string, environmentName string, body WorkerServiceEnvironmentSettingEditParams, opts ...option.RequestOption) (res *WorkerServiceEnvironmentSettingEditResponse, err error) {
+func (r *WorkerServiceEnvironmentSettingService) Edit(ctx context.Context, serviceName string, environmentName string, params WorkerServiceEnvironmentSettingEditParams, opts ...option.RequestOption) (res *WorkerServiceEnvironmentSettingEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerServiceEnvironmentSettingEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/services/%s/environments/%s/settings", accountID, serviceName, environmentName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/services/%s/environments/%s/settings", params.AccountID, serviceName, environmentName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -46,11 +46,11 @@ func (r *WorkerServiceEnvironmentSettingService) Edit(ctx context.Context, accou
 }
 
 // Get script settings from a worker with an environment
-func (r *WorkerServiceEnvironmentSettingService) Get(ctx context.Context, accountID string, serviceName string, environmentName string, opts ...option.RequestOption) (res *WorkerServiceEnvironmentSettingGetResponse, err error) {
+func (r *WorkerServiceEnvironmentSettingService) Get(ctx context.Context, serviceName string, environmentName string, query WorkerServiceEnvironmentSettingGetParams, opts ...option.RequestOption) (res *WorkerServiceEnvironmentSettingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerServiceEnvironmentSettingGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/services/%s/environments/%s/settings", accountID, serviceName, environmentName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/services/%s/environments/%s/settings", query.AccountID, serviceName, environmentName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -1370,9 +1370,11 @@ func (r *WorkerServiceEnvironmentSettingGetResponseTailConsumer) UnmarshalJSON(d
 }
 
 type WorkerServiceEnvironmentSettingEditParams struct {
-	Errors   param.Field[[]WorkerServiceEnvironmentSettingEditParamsError]   `json:"errors,required"`
-	Messages param.Field[[]WorkerServiceEnvironmentSettingEditParamsMessage] `json:"messages,required"`
-	Result   param.Field[WorkerServiceEnvironmentSettingEditParamsResult]    `json:"result,required"`
+	// Identifier
+	AccountID param.Field[string]                                             `path:"account_id,required"`
+	Errors    param.Field[[]WorkerServiceEnvironmentSettingEditParamsError]   `json:"errors,required"`
+	Messages  param.Field[[]WorkerServiceEnvironmentSettingEditParamsMessage] `json:"messages,required"`
+	Result    param.Field[WorkerServiceEnvironmentSettingEditParamsResult]    `json:"result,required"`
 	// Whether the API call was successful
 	Success param.Field[WorkerServiceEnvironmentSettingEditParamsSuccess] `json:"success,required"`
 }
@@ -1855,6 +1857,11 @@ type WorkerServiceEnvironmentSettingEditResponseEnvelopeSuccess bool
 const (
 	WorkerServiceEnvironmentSettingEditResponseEnvelopeSuccessTrue WorkerServiceEnvironmentSettingEditResponseEnvelopeSuccess = true
 )
+
+type WorkerServiceEnvironmentSettingGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type WorkerServiceEnvironmentSettingGetResponseEnvelope struct {
 	Errors   []WorkerServiceEnvironmentSettingGetResponseEnvelopeErrors   `json:"errors,required"`

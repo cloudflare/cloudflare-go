@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -31,11 +32,11 @@ func NewMTLSCertificateAssociationService(opts ...option.RequestOption) (r *MTLS
 }
 
 // Lists all active associations between the certificate and Cloudflare services.
-func (r *MTLSCertificateAssociationService) List(ctx context.Context, accountID string, mtlsCertificateID string, opts ...option.RequestOption) (res *[]MTLSCertificateAssociationListResponse, err error) {
+func (r *MTLSCertificateAssociationService) List(ctx context.Context, mtlsCertificateID string, query MTLSCertificateAssociationListParams, opts ...option.RequestOption) (res *[]MTLSCertificateAssociationListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MTLSCertificateAssociationListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/mtls_certificates/%s/associations", accountID, mtlsCertificateID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/mtls_certificates/%s/associations", query.AccountID, mtlsCertificateID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -62,6 +63,11 @@ type mtlsCertificateAssociationListResponseJSON struct {
 
 func (r *MTLSCertificateAssociationListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type MTLSCertificateAssociationListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type MTLSCertificateAssociationListResponseEnvelope struct {

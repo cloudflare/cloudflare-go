@@ -29,35 +29,32 @@ func TestLoadBalancerMonitorNewWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.LoadBalancers.Monitors.New(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.LoadBalancerMonitorNewParams{
-			ExpectedCodes:   cloudflare.F("2xx"),
-			AllowInsecure:   cloudflare.F(true),
-			ConsecutiveDown: cloudflare.F(int64(0)),
-			ConsecutiveUp:   cloudflare.F(int64(0)),
-			Description:     cloudflare.F("Login page monitor"),
-			ExpectedBody:    cloudflare.F("alive"),
-			FollowRedirects: cloudflare.F(true),
-			Header: cloudflare.F[any](map[string]interface{}{
-				"Host": map[string]interface{}{
-					"0": "example.com",
-				},
-				"X-App-ID": map[string]interface{}{
-					"0": "abc123",
-				},
-			}),
-			Interval:  cloudflare.F(int64(0)),
-			Method:    cloudflare.F("GET"),
-			Path:      cloudflare.F("/health"),
-			Port:      cloudflare.F(int64(0)),
-			ProbeZone: cloudflare.F("example.com"),
-			Retries:   cloudflare.F(int64(0)),
-			Timeout:   cloudflare.F(int64(0)),
-			Type:      cloudflare.F(cloudflare.LoadBalancerMonitorNewParamsTypeHTTPS),
-		},
-	)
+	_, err := client.LoadBalancers.Monitors.New(context.TODO(), cloudflare.LoadBalancerMonitorNewParams{
+		AccountID:       cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ExpectedCodes:   cloudflare.F("2xx"),
+		AllowInsecure:   cloudflare.F(true),
+		ConsecutiveDown: cloudflare.F(int64(0)),
+		ConsecutiveUp:   cloudflare.F(int64(0)),
+		Description:     cloudflare.F("Login page monitor"),
+		ExpectedBody:    cloudflare.F("alive"),
+		FollowRedirects: cloudflare.F(true),
+		Header: cloudflare.F[any](map[string]interface{}{
+			"Host": map[string]interface{}{
+				"0": "example.com",
+			},
+			"X-App-ID": map[string]interface{}{
+				"0": "abc123",
+			},
+		}),
+		Interval:  cloudflare.F(int64(0)),
+		Method:    cloudflare.F("GET"),
+		Path:      cloudflare.F("/health"),
+		Port:      cloudflare.F(int64(0)),
+		ProbeZone: cloudflare.F("example.com"),
+		Retries:   cloudflare.F(int64(0)),
+		Timeout:   cloudflare.F(int64(0)),
+		Type:      cloudflare.F(cloudflare.LoadBalancerMonitorNewParamsTypeHTTPS),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -85,9 +82,9 @@ func TestLoadBalancerMonitorUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.LoadBalancers.Monitors.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f1aba936b94213e5b8dca0c0dbf1f9cc",
 		cloudflare.LoadBalancerMonitorUpdateParams{
+			AccountID:       cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			ExpectedCodes:   cloudflare.F("2xx"),
 			AllowInsecure:   cloudflare.F(true),
 			ConsecutiveDown: cloudflare.F(int64(0)),
@@ -138,7 +135,9 @@ func TestLoadBalancerMonitorList(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.LoadBalancers.Monitors.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.LoadBalancers.Monitors.List(context.TODO(), cloudflare.LoadBalancerMonitorListParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -166,8 +165,10 @@ func TestLoadBalancerMonitorDelete(t *testing.T) {
 	)
 	_, err := client.LoadBalancers.Monitors.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f1aba936b94213e5b8dca0c0dbf1f9cc",
+		cloudflare.LoadBalancerMonitorDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -196,9 +197,9 @@ func TestLoadBalancerMonitorEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.LoadBalancers.Monitors.Edit(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f1aba936b94213e5b8dca0c0dbf1f9cc",
 		cloudflare.LoadBalancerMonitorEditParams{
+			AccountID:       cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			ExpectedCodes:   cloudflare.F("2xx"),
 			AllowInsecure:   cloudflare.F(true),
 			ConsecutiveDown: cloudflare.F(int64(0)),
@@ -251,8 +252,10 @@ func TestLoadBalancerMonitorGet(t *testing.T) {
 	)
 	_, err := client.LoadBalancers.Monitors.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f1aba936b94213e5b8dca0c0dbf1f9cc",
+		cloudflare.LoadBalancerMonitorGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

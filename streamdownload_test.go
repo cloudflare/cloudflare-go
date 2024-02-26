@@ -31,8 +31,10 @@ func TestStreamDownloadNew(t *testing.T) {
 	)
 	_, err := client.Stream.Downloads.New(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"ea95132c15732412d22c1476fa83f27a",
+		cloudflare.StreamDownloadNewParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -61,8 +63,10 @@ func TestStreamDownloadList(t *testing.T) {
 	)
 	_, err := client.Stream.Downloads.List(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"ea95132c15732412d22c1476fa83f27a",
+		cloudflare.StreamDownloadListParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -91,8 +95,10 @@ func TestStreamDownloadDelete(t *testing.T) {
 	)
 	_, err := client.Stream.Downloads.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"ea95132c15732412d22c1476fa83f27a",
+		cloudflare.StreamDownloadDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

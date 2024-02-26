@@ -36,11 +36,11 @@ func NewPageProjectDeploymentService(opts ...option.RequestOption) (r *PageProje
 
 // Start a new deployment from production. The repository and account must have
 // already been authorized on the Cloudflare Pages dashboard.
-func (r *PageProjectDeploymentService) New(ctx context.Context, accountID string, projectName string, body PageProjectDeploymentNewParams, opts ...option.RequestOption) (res *PageProjectDeploymentNewResponse, err error) {
+func (r *PageProjectDeploymentService) New(ctx context.Context, projectName string, params PageProjectDeploymentNewParams, opts ...option.RequestOption) (res *PageProjectDeploymentNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageProjectDeploymentNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments", accountID, projectName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments", params.AccountID, projectName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -49,11 +49,11 @@ func (r *PageProjectDeploymentService) New(ctx context.Context, accountID string
 }
 
 // Fetch a list of project deployments.
-func (r *PageProjectDeploymentService) List(ctx context.Context, accountID string, projectName string, opts ...option.RequestOption) (res *[]PageProjectDeploymentListResponse, err error) {
+func (r *PageProjectDeploymentService) List(ctx context.Context, projectName string, query PageProjectDeploymentListParams, opts ...option.RequestOption) (res *[]PageProjectDeploymentListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageProjectDeploymentListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments", accountID, projectName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments", query.AccountID, projectName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -62,19 +62,19 @@ func (r *PageProjectDeploymentService) List(ctx context.Context, accountID strin
 }
 
 // Delete a deployment.
-func (r *PageProjectDeploymentService) Delete(ctx context.Context, accountID string, projectName string, deploymentID string, opts ...option.RequestOption) (res *PageProjectDeploymentDeleteResponse, err error) {
+func (r *PageProjectDeploymentService) Delete(ctx context.Context, projectName string, deploymentID string, body PageProjectDeploymentDeleteParams, opts ...option.RequestOption) (res *PageProjectDeploymentDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s", accountID, projectName, deploymentID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s", body.AccountID, projectName, deploymentID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &res, opts...)
 	return
 }
 
 // Fetch information about a deployment.
-func (r *PageProjectDeploymentService) Get(ctx context.Context, accountID string, projectName string, deploymentID string, opts ...option.RequestOption) (res *PageProjectDeploymentGetResponse, err error) {
+func (r *PageProjectDeploymentService) Get(ctx context.Context, projectName string, deploymentID string, query PageProjectDeploymentGetParams, opts ...option.RequestOption) (res *PageProjectDeploymentGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageProjectDeploymentGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s", accountID, projectName, deploymentID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s", query.AccountID, projectName, deploymentID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -83,11 +83,11 @@ func (r *PageProjectDeploymentService) Get(ctx context.Context, accountID string
 }
 
 // Retry a previous deployment.
-func (r *PageProjectDeploymentService) Retry(ctx context.Context, accountID string, projectName string, deploymentID string, opts ...option.RequestOption) (res *PageProjectDeploymentRetryResponse, err error) {
+func (r *PageProjectDeploymentService) Retry(ctx context.Context, projectName string, deploymentID string, body PageProjectDeploymentRetryParams, opts ...option.RequestOption) (res *PageProjectDeploymentRetryResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageProjectDeploymentRetryResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s/retry", accountID, projectName, deploymentID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s/retry", body.AccountID, projectName, deploymentID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -97,11 +97,11 @@ func (r *PageProjectDeploymentService) Retry(ctx context.Context, accountID stri
 
 // Rollback the production deployment to a previous deployment. You can only
 // rollback to succesful builds on production.
-func (r *PageProjectDeploymentService) Rollback(ctx context.Context, accountID string, projectName string, deploymentID string, opts ...option.RequestOption) (res *PageProjectDeploymentRollbackResponse, err error) {
+func (r *PageProjectDeploymentService) Rollback(ctx context.Context, projectName string, deploymentID string, body PageProjectDeploymentRollbackParams, opts ...option.RequestOption) (res *PageProjectDeploymentRollbackResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageProjectDeploymentRollbackResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s/rollback", accountID, projectName, deploymentID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s/rollback", body.AccountID, projectName, deploymentID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -792,6 +792,8 @@ func (r *PageProjectDeploymentRollbackResponseStage) UnmarshalJSON(data []byte) 
 }
 
 type PageProjectDeploymentNewParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The branch to build the new deployment from. The `HEAD` of the branch will be
 	// used. If omitted, the production branch will be used by default.
 	Branch param.Field[string] `json:"branch"`
@@ -869,6 +871,11 @@ type PageProjectDeploymentNewResponseEnvelopeSuccess bool
 const (
 	PageProjectDeploymentNewResponseEnvelopeSuccessTrue PageProjectDeploymentNewResponseEnvelopeSuccess = true
 )
+
+type PageProjectDeploymentListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type PageProjectDeploymentListResponseEnvelope struct {
 	Errors   []PageProjectDeploymentListResponseEnvelopeErrors   `json:"errors,required"`
@@ -964,6 +971,16 @@ func (r *PageProjectDeploymentListResponseEnvelopeResultInfo) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type PageProjectDeploymentDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type PageProjectDeploymentGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type PageProjectDeploymentGetResponseEnvelope struct {
 	Errors   []PageProjectDeploymentGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []PageProjectDeploymentGetResponseEnvelopeMessages `json:"messages,required"`
@@ -1033,6 +1050,11 @@ const (
 	PageProjectDeploymentGetResponseEnvelopeSuccessTrue PageProjectDeploymentGetResponseEnvelopeSuccess = true
 )
 
+type PageProjectDeploymentRetryParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type PageProjectDeploymentRetryResponseEnvelope struct {
 	Errors   []PageProjectDeploymentRetryResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []PageProjectDeploymentRetryResponseEnvelopeMessages `json:"messages,required"`
@@ -1101,6 +1123,11 @@ type PageProjectDeploymentRetryResponseEnvelopeSuccess bool
 const (
 	PageProjectDeploymentRetryResponseEnvelopeSuccessTrue PageProjectDeploymentRetryResponseEnvelopeSuccess = true
 )
+
+type PageProjectDeploymentRollbackParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type PageProjectDeploymentRollbackResponseEnvelope struct {
 	Errors   []PageProjectDeploymentRollbackResponseEnvelopeErrors   `json:"errors,required"`

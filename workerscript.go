@@ -47,10 +47,10 @@ func NewWorkerScriptService(opts ...option.RequestOption) (r *WorkerScriptServic
 }
 
 // Upload a worker module.
-func (r *WorkerScriptService) Update(ctx context.Context, accountID string, scriptName string, params WorkerScriptUpdateParams, opts ...option.RequestOption) (res *WorkerScriptUpdateResponse, err error) {
+func (r *WorkerScriptService) Update(ctx context.Context, scriptName string, params WorkerScriptUpdateParams, opts ...option.RequestOption) (res *WorkerScriptUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerScriptUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/scripts/%s", accountID, scriptName)
+	path := fmt.Sprintf("accounts/%s/workers/scripts/%s", params.AccountID, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -60,11 +60,11 @@ func (r *WorkerScriptService) Update(ctx context.Context, accountID string, scri
 }
 
 // Fetch a list of uploaded workers.
-func (r *WorkerScriptService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]WorkerScriptListResponse, err error) {
+func (r *WorkerScriptService) List(ctx context.Context, query WorkerScriptListParams, opts ...option.RequestOption) (res *[]WorkerScriptListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerScriptListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/scripts", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/scripts", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -73,21 +73,21 @@ func (r *WorkerScriptService) List(ctx context.Context, accountID string, opts .
 }
 
 // Delete your worker. This call has no response body on a successful delete.
-func (r *WorkerScriptService) Delete(ctx context.Context, accountID string, scriptName string, body WorkerScriptDeleteParams, opts ...option.RequestOption) (err error) {
+func (r *WorkerScriptService) Delete(ctx context.Context, scriptName string, params WorkerScriptDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
-	path := fmt.Sprintf("accounts/%s/workers/scripts/%s", accountID, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, nil, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/scripts/%s", params.AccountID, scriptName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, nil, opts...)
 	return
 }
 
 // Fetch raw script content for your worker. Note this is the original script
 // content, not JSON encoded.
-func (r *WorkerScriptService) Get(ctx context.Context, accountID string, scriptName string, opts ...option.RequestOption) (res *http.Response, err error) {
+func (r *WorkerScriptService) Get(ctx context.Context, scriptName string, query WorkerScriptGetParams, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "undefined")}, opts...)
-	path := fmt.Sprintf("accounts/%s/workers/scripts/%s", accountID, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/scripts/%s", query.AccountID, scriptName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
@@ -226,6 +226,8 @@ func (r *WorkerScriptListResponseTailConsumer) UnmarshalJSON(data []byte) (err e
 }
 
 type WorkerScriptUpdateParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Rollback to provided deployment based on deployment ID. Request body will only
 	// parse a "message" part. You can learn more about deployments
 	// [here](https://developers.cloudflare.com/workers/platform/deployments/).
@@ -520,6 +522,11 @@ const (
 	WorkerScriptUpdateResponseEnvelopeSuccessTrue WorkerScriptUpdateResponseEnvelopeSuccess = true
 )
 
+type WorkerScriptListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type WorkerScriptListResponseEnvelope struct {
 	Errors   []WorkerScriptListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []WorkerScriptListResponseEnvelopeMessages `json:"messages,required"`
@@ -590,6 +597,8 @@ const (
 )
 
 type WorkerScriptDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// If set to true, delete will not be stopped by associated service binding,
 	// durable object, or other binding. Any of these associated bindings/durable
 	// objects will be deleted along with the script.
@@ -603,4 +612,9 @@ func (r WorkerScriptDeleteParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
+}
+
+type WorkerScriptGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }

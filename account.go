@@ -36,11 +36,11 @@ func NewAccountService(opts ...option.RequestOption) (r *AccountService) {
 }
 
 // Update an existing account.
-func (r *AccountService) Update(ctx context.Context, accountID interface{}, body AccountUpdateParams, opts ...option.RequestOption) (res *AccountUpdateResponse, err error) {
+func (r *AccountService) Update(ctx context.Context, params AccountUpdateParams, opts ...option.RequestOption) (res *AccountUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccountUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%v", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -72,11 +72,11 @@ func (r *AccountService) ListAutoPaging(ctx context.Context, query AccountListPa
 }
 
 // Get information about a specific account that you are a member of.
-func (r *AccountService) Get(ctx context.Context, accountID interface{}, opts ...option.RequestOption) (res *AccountGetResponse, err error) {
+func (r *AccountService) Get(ctx context.Context, query AccountGetParams, opts ...option.RequestOption) (res *AccountGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccountGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -119,6 +119,7 @@ func init() {
 }
 
 type AccountUpdateParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// Account name
 	Name param.Field[string] `json:"name,required"`
 	// Account settings
@@ -267,6 +268,10 @@ const (
 	AccountListParamsDirectionAsc  AccountListParamsDirection = "asc"
 	AccountListParamsDirectionDesc AccountListParamsDirection = "desc"
 )
+
+type AccountGetParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
 
 type AccountGetResponseEnvelope struct {
 	Errors   []AccountGetResponseEnvelopeErrors   `json:"errors,required"`

@@ -31,8 +31,10 @@ func TestIntelASNSubnetList(t *testing.T) {
 	)
 	_, err := client.Intel.ASN.Subnets.List(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		int64(0),
+		cloudflare.IntelASNSubnetListParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

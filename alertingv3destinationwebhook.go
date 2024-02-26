@@ -36,11 +36,11 @@ func NewAlertingV3DestinationWebhookService(opts ...option.RequestOption) (r *Al
 }
 
 // Creates a new webhook destination.
-func (r *AlertingV3DestinationWebhookService) New(ctx context.Context, accountID string, body AlertingV3DestinationWebhookNewParams, opts ...option.RequestOption) (res *AlertingV3DestinationWebhookNewResponse, err error) {
+func (r *AlertingV3DestinationWebhookService) New(ctx context.Context, params AlertingV3DestinationWebhookNewParams, opts ...option.RequestOption) (res *AlertingV3DestinationWebhookNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AlertingV3DestinationWebhookNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/webhooks", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/webhooks", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -49,11 +49,11 @@ func (r *AlertingV3DestinationWebhookService) New(ctx context.Context, accountID
 }
 
 // Update a webhook destination.
-func (r *AlertingV3DestinationWebhookService) Update(ctx context.Context, accountID string, webhookID string, body AlertingV3DestinationWebhookUpdateParams, opts ...option.RequestOption) (res *AlertingV3DestinationWebhookUpdateResponse, err error) {
+func (r *AlertingV3DestinationWebhookService) Update(ctx context.Context, webhookID string, params AlertingV3DestinationWebhookUpdateParams, opts ...option.RequestOption) (res *AlertingV3DestinationWebhookUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AlertingV3DestinationWebhookUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/webhooks/%s", accountID, webhookID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/webhooks/%s", params.AccountID, webhookID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -62,11 +62,11 @@ func (r *AlertingV3DestinationWebhookService) Update(ctx context.Context, accoun
 }
 
 // Gets a list of all configured webhook destinations.
-func (r *AlertingV3DestinationWebhookService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]AlertingV3DestinationWebhookListResponse, err error) {
+func (r *AlertingV3DestinationWebhookService) List(ctx context.Context, query AlertingV3DestinationWebhookListParams, opts ...option.RequestOption) (res *[]AlertingV3DestinationWebhookListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AlertingV3DestinationWebhookListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/webhooks", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/webhooks", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -75,11 +75,11 @@ func (r *AlertingV3DestinationWebhookService) List(ctx context.Context, accountI
 }
 
 // Delete a configured webhook destination.
-func (r *AlertingV3DestinationWebhookService) Delete(ctx context.Context, accountID string, webhookID string, opts ...option.RequestOption) (res *AlertingV3DestinationWebhookDeleteResponse, err error) {
+func (r *AlertingV3DestinationWebhookService) Delete(ctx context.Context, webhookID string, body AlertingV3DestinationWebhookDeleteParams, opts ...option.RequestOption) (res *AlertingV3DestinationWebhookDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AlertingV3DestinationWebhookDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/webhooks/%s", accountID, webhookID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/webhooks/%s", body.AccountID, webhookID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -88,11 +88,11 @@ func (r *AlertingV3DestinationWebhookService) Delete(ctx context.Context, accoun
 }
 
 // Get details for a single webhooks destination.
-func (r *AlertingV3DestinationWebhookService) Get(ctx context.Context, accountID string, webhookID string, opts ...option.RequestOption) (res *AlertingV3DestinationWebhookGetResponse, err error) {
+func (r *AlertingV3DestinationWebhookService) Get(ctx context.Context, webhookID string, query AlertingV3DestinationWebhookGetParams, opts ...option.RequestOption) (res *AlertingV3DestinationWebhookGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AlertingV3DestinationWebhookGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/webhooks/%s", accountID, webhookID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/webhooks/%s", query.AccountID, webhookID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -265,6 +265,8 @@ const (
 )
 
 type AlertingV3DestinationWebhookNewParams struct {
+	// The account id
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The name of the webhook destination. This will be included in the request body
 	// when you receive a webhook notification.
 	Name param.Field[string] `json:"name,required"`
@@ -351,6 +353,8 @@ const (
 )
 
 type AlertingV3DestinationWebhookUpdateParams struct {
+	// The account id
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The name of the webhook destination. This will be included in the request body
 	// when you receive a webhook notification.
 	Name param.Field[string] `json:"name,required"`
@@ -436,6 +440,11 @@ type AlertingV3DestinationWebhookUpdateResponseEnvelopeSuccess bool
 const (
 	AlertingV3DestinationWebhookUpdateResponseEnvelopeSuccessTrue AlertingV3DestinationWebhookUpdateResponseEnvelopeSuccess = true
 )
+
+type AlertingV3DestinationWebhookListParams struct {
+	// The account id
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type AlertingV3DestinationWebhookListResponseEnvelope struct {
 	Errors   []AlertingV3DestinationWebhookListResponseEnvelopeErrors   `json:"errors,required"`
@@ -537,6 +546,11 @@ func (r *AlertingV3DestinationWebhookListResponseEnvelopeResultInfo) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type AlertingV3DestinationWebhookDeleteParams struct {
+	// The account id
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type AlertingV3DestinationWebhookDeleteResponseEnvelope struct {
 	Errors   []AlertingV3DestinationWebhookDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AlertingV3DestinationWebhookDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -636,6 +650,11 @@ type alertingV3DestinationWebhookDeleteResponseEnvelopeResultInfoJSON struct {
 
 func (r *AlertingV3DestinationWebhookDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type AlertingV3DestinationWebhookGetParams struct {
+	// The account id
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type AlertingV3DestinationWebhookGetResponseEnvelope struct {

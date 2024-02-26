@@ -31,9 +31,9 @@ func TestTunnelConfigurationUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Tunnels.Configurations.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
 		cloudflare.TunnelConfigurationUpdateParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Config: cloudflare.F(cloudflare.TunnelConfigurationUpdateParamsConfig{
 				Ingress: cloudflare.F([]cloudflare.TunnelConfigurationUpdateParamsConfigIngress{{
 					Hostname: cloudflare.F("tunnel.example.com"),
@@ -161,8 +161,10 @@ func TestTunnelConfigurationList(t *testing.T) {
 	)
 	_, err := client.Tunnels.Configurations.List(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
+		cloudflare.TunnelConfigurationListParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

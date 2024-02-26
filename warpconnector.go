@@ -38,11 +38,11 @@ func NewWARPConnectorService(opts ...option.RequestOption) (r *WARPConnectorServ
 }
 
 // Creates a new Warp Connector Tunnel in an account.
-func (r *WARPConnectorService) New(ctx context.Context, accountID string, body WARPConnectorNewParams, opts ...option.RequestOption) (res *WARPConnectorNewResponse, err error) {
+func (r *WARPConnectorService) New(ctx context.Context, params WARPConnectorNewParams, opts ...option.RequestOption) (res *WARPConnectorNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WARPConnectorNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/warp_connector", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/warp_connector", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -51,12 +51,12 @@ func (r *WARPConnectorService) New(ctx context.Context, accountID string, body W
 }
 
 // Lists and filters Warp Connector Tunnels in an account.
-func (r *WARPConnectorService) List(ctx context.Context, accountID string, query WARPConnectorListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[WARPConnectorListResponse], err error) {
+func (r *WARPConnectorService) List(ctx context.Context, params WARPConnectorListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[WARPConnectorListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	path := fmt.Sprintf("accounts/%s/warp_connector", accountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/warp_connector", params.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -69,16 +69,16 @@ func (r *WARPConnectorService) List(ctx context.Context, accountID string, query
 }
 
 // Lists and filters Warp Connector Tunnels in an account.
-func (r *WARPConnectorService) ListAutoPaging(ctx context.Context, accountID string, query WARPConnectorListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[WARPConnectorListResponse] {
-	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, accountID, query, opts...))
+func (r *WARPConnectorService) ListAutoPaging(ctx context.Context, params WARPConnectorListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[WARPConnectorListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes a Warp Connector Tunnel from an account.
-func (r *WARPConnectorService) Delete(ctx context.Context, accountID string, tunnelID string, body WARPConnectorDeleteParams, opts ...option.RequestOption) (res *WARPConnectorDeleteResponse, err error) {
+func (r *WARPConnectorService) Delete(ctx context.Context, tunnelID string, params WARPConnectorDeleteParams, opts ...option.RequestOption) (res *WARPConnectorDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WARPConnectorDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/warp_connector/%s", accountID, tunnelID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/warp_connector/%s", params.AccountID, tunnelID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -87,11 +87,11 @@ func (r *WARPConnectorService) Delete(ctx context.Context, accountID string, tun
 }
 
 // Updates an existing Warp Connector Tunnel.
-func (r *WARPConnectorService) Edit(ctx context.Context, accountID string, tunnelID string, body WARPConnectorEditParams, opts ...option.RequestOption) (res *WARPConnectorEditResponse, err error) {
+func (r *WARPConnectorService) Edit(ctx context.Context, tunnelID string, params WARPConnectorEditParams, opts ...option.RequestOption) (res *WARPConnectorEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WARPConnectorEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/warp_connector/%s", accountID, tunnelID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/warp_connector/%s", params.AccountID, tunnelID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -100,11 +100,11 @@ func (r *WARPConnectorService) Edit(ctx context.Context, accountID string, tunne
 }
 
 // Fetches a single Warp Connector Tunnel.
-func (r *WARPConnectorService) Get(ctx context.Context, accountID string, tunnelID string, opts ...option.RequestOption) (res *WARPConnectorGetResponse, err error) {
+func (r *WARPConnectorService) Get(ctx context.Context, tunnelID string, query WARPConnectorGetParams, opts ...option.RequestOption) (res *WARPConnectorGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WARPConnectorGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/warp_connector/%s", accountID, tunnelID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/warp_connector/%s", query.AccountID, tunnelID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -114,11 +114,11 @@ func (r *WARPConnectorService) Get(ctx context.Context, accountID string, tunnel
 
 // Gets the token used to associate warp device with a specific Warp Connector
 // tunnel.
-func (r *WARPConnectorService) Token(ctx context.Context, accountID string, tunnelID string, opts ...option.RequestOption) (res *WARPConnectorTokenResponse, err error) {
+func (r *WARPConnectorService) Token(ctx context.Context, tunnelID string, query WARPConnectorTokenParams, opts ...option.RequestOption) (res *WARPConnectorTokenResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WARPConnectorTokenResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/warp_connector/%s/token", accountID, tunnelID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/warp_connector/%s/token", query.AccountID, tunnelID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -1334,6 +1334,8 @@ type WARPConnectorTokenResponseArray []interface{}
 func (r WARPConnectorTokenResponseArray) ImplementsWARPConnectorTokenResponse() {}
 
 type WARPConnectorNewParams struct {
+	// Cloudflare account ID
+	AccountID param.Field[string] `path:"account_id,required"`
 	// A user-friendly name for the tunnel.
 	Name param.Field[string] `json:"name,required"`
 }
@@ -1413,6 +1415,8 @@ const (
 )
 
 type WARPConnectorListParams struct {
+	// Cloudflare account ID
+	AccountID     param.Field[string] `path:"account_id,required"`
 	ExcludePrefix param.Field[string] `query:"exclude_prefix"`
 	// If provided, include only tunnels that were created (and not deleted) before
 	// this time.
@@ -1441,7 +1445,9 @@ func (r WARPConnectorListParams) URLQuery() (v url.Values) {
 }
 
 type WARPConnectorDeleteParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	// Cloudflare account ID
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
 }
 
 func (r WARPConnectorDeleteParams) MarshalJSON() (data []byte, err error) {
@@ -1519,6 +1525,8 @@ const (
 )
 
 type WARPConnectorEditParams struct {
+	// Cloudflare account ID
+	AccountID param.Field[string] `path:"account_id,required"`
 	// A user-friendly name for the tunnel.
 	Name param.Field[string] `json:"name"`
 	// Sets the password required to run a locally-managed tunnel. Must be at least 32
@@ -1600,6 +1608,11 @@ const (
 	WARPConnectorEditResponseEnvelopeSuccessTrue WARPConnectorEditResponseEnvelopeSuccess = true
 )
 
+type WARPConnectorGetParams struct {
+	// Cloudflare account ID
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type WARPConnectorGetResponseEnvelope struct {
 	Errors   []WARPConnectorGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []WARPConnectorGetResponseEnvelopeMessages `json:"messages,required"`
@@ -1669,6 +1682,11 @@ type WARPConnectorGetResponseEnvelopeSuccess bool
 const (
 	WARPConnectorGetResponseEnvelopeSuccessTrue WARPConnectorGetResponseEnvelopeSuccess = true
 )
+
+type WARPConnectorTokenParams struct {
+	// Cloudflare account ID
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type WARPConnectorTokenResponseEnvelope struct {
 	Errors   []WARPConnectorTokenResponseEnvelopeErrors   `json:"errors,required"`

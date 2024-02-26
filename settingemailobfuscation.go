@@ -34,11 +34,11 @@ func NewSettingEmailObfuscationService(opts ...option.RequestOption) (r *Setting
 
 // Encrypt email adresses on your web page from bots, while keeping them visible to
 // humans. (https://support.cloudflare.com/hc/en-us/articles/200170016).
-func (r *SettingEmailObfuscationService) Edit(ctx context.Context, zoneID string, body SettingEmailObfuscationEditParams, opts ...option.RequestOption) (res *SettingEmailObfuscationEditResponse, err error) {
+func (r *SettingEmailObfuscationService) Edit(ctx context.Context, params SettingEmailObfuscationEditParams, opts ...option.RequestOption) (res *SettingEmailObfuscationEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingEmailObfuscationEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/email_obfuscation", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/email_obfuscation", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +48,11 @@ func (r *SettingEmailObfuscationService) Edit(ctx context.Context, zoneID string
 
 // Encrypt email adresses on your web page from bots, while keeping them visible to
 // humans. (https://support.cloudflare.com/hc/en-us/articles/200170016).
-func (r *SettingEmailObfuscationService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingEmailObfuscationGetResponse, err error) {
+func (r *SettingEmailObfuscationService) Get(ctx context.Context, query SettingEmailObfuscationGetParams, opts ...option.RequestOption) (res *SettingEmailObfuscationGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingEmailObfuscationGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/email_obfuscation", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/email_obfuscation", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -169,6 +169,8 @@ const (
 )
 
 type SettingEmailObfuscationEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the zone setting.
 	Value param.Field[SettingEmailObfuscationEditParamsValue] `json:"value,required"`
 }
@@ -247,6 +249,11 @@ type settingEmailObfuscationEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingEmailObfuscationEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingEmailObfuscationGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingEmailObfuscationGetResponseEnvelope struct {

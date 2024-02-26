@@ -63,21 +63,21 @@ func NewStreamService(opts ...option.RequestOption) (r *StreamService) {
 // with a status code 201 (created) and includes a `location` header to indicate
 // where the content should be uploaded. Refer to https://tus.io for protocol
 // details.
-func (r *StreamService) New(ctx context.Context, accountID string, body StreamNewParams, opts ...option.RequestOption) (err error) {
+func (r *StreamService) New(ctx context.Context, params StreamNewParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
-	path := fmt.Sprintf("accounts/%s/stream", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, nil, opts...)
+	path := fmt.Sprintf("accounts/%s/stream", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, nil, opts...)
 	return
 }
 
 // Lists up to 1000 videos from a single request. For a specific range, refer to
 // the optional parameters.
-func (r *StreamService) List(ctx context.Context, accountID string, query StreamListParams, opts ...option.RequestOption) (res *[]StreamListResponse, err error) {
+func (r *StreamService) List(ctx context.Context, params StreamListParams, opts ...option.RequestOption) (res *[]StreamListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/stream", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -86,20 +86,20 @@ func (r *StreamService) List(ctx context.Context, accountID string, query Stream
 }
 
 // Deletes a video and its copies from Cloudflare Stream.
-func (r *StreamService) Delete(ctx context.Context, accountID string, identifier string, opts ...option.RequestOption) (err error) {
+func (r *StreamService) Delete(ctx context.Context, identifier string, body StreamDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
-	path := fmt.Sprintf("accounts/%s/stream/%s", accountID, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/%s", body.AccountID, identifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, nil, opts...)
 	return
 }
 
 // Fetches details for a single video.
-func (r *StreamService) Get(ctx context.Context, accountID string, identifier string, opts ...option.RequestOption) (res *StreamGetResponse, err error) {
+func (r *StreamService) Get(ctx context.Context, identifier string, query StreamGetParams, opts ...option.RequestOption) (res *StreamGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/%s", accountID, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/%s", query.AccountID, identifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -612,6 +612,8 @@ func (r *StreamGetResponseWatermark) UnmarshalJSON(data []byte) (err error) {
 }
 
 type StreamNewParams struct {
+	// The account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Specifies the TUS protocol version. This value must be included in every upload
 	// request. Notes: The only supported version of TUS protocol is 1.0.0.
 	TusResumable param.Field[StreamNewParamsTusResumable] `header:"Tus-Resumable,required"`
@@ -635,6 +637,8 @@ const (
 )
 
 type StreamListParams struct {
+	// The account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Lists videos in ascending order of creation.
 	Asc param.Field[bool] `query:"asc"`
 	// A user-defined identifier for the media creator.
@@ -749,6 +753,16 @@ type StreamListResponseEnvelopeSuccess bool
 const (
 	StreamListResponseEnvelopeSuccessTrue StreamListResponseEnvelopeSuccess = true
 )
+
+type StreamDeleteParams struct {
+	// The account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type StreamGetParams struct {
+	// The account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type StreamGetResponseEnvelope struct {
 	Errors   []StreamGetResponseEnvelopeErrors   `json:"errors,required"`

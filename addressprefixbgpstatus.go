@@ -33,11 +33,11 @@ func NewAddressPrefixBGPStatusService(opts ...option.RequestOption) (r *AddressP
 }
 
 // Advertise or withdraw BGP route for a prefix.
-func (r *AddressPrefixBGPStatusService) Edit(ctx context.Context, accountID string, prefixID string, body AddressPrefixBGPStatusEditParams, opts ...option.RequestOption) (res *AddressPrefixBGPStatusEditResponse, err error) {
+func (r *AddressPrefixBGPStatusService) Edit(ctx context.Context, prefixID string, params AddressPrefixBGPStatusEditParams, opts ...option.RequestOption) (res *AddressPrefixBGPStatusEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressPrefixBGPStatusEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bgp/status", accountID, prefixID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bgp/status", params.AccountID, prefixID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -46,11 +46,11 @@ func (r *AddressPrefixBGPStatusService) Edit(ctx context.Context, accountID stri
 }
 
 // List the current advertisement state for a prefix.
-func (r *AddressPrefixBGPStatusService) Get(ctx context.Context, accountID string, prefixID string, opts ...option.RequestOption) (res *AddressPrefixBGPStatusGetResponse, err error) {
+func (r *AddressPrefixBGPStatusService) Get(ctx context.Context, prefixID string, query AddressPrefixBGPStatusGetParams, opts ...option.RequestOption) (res *AddressPrefixBGPStatusGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressPrefixBGPStatusGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bgp/status", accountID, prefixID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bgp/status", query.AccountID, prefixID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -103,6 +103,8 @@ func (r *AddressPrefixBGPStatusGetResponse) UnmarshalJSON(data []byte) (err erro
 }
 
 type AddressPrefixBGPStatusEditParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Enablement of prefix advertisement to the Internet.
 	Advertised param.Field[bool] `json:"advertised,required"`
 }
@@ -179,6 +181,11 @@ type AddressPrefixBGPStatusEditResponseEnvelopeSuccess bool
 const (
 	AddressPrefixBGPStatusEditResponseEnvelopeSuccessTrue AddressPrefixBGPStatusEditResponseEnvelopeSuccess = true
 )
+
+type AddressPrefixBGPStatusGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type AddressPrefixBGPStatusGetResponseEnvelope struct {
 	Errors   []AddressPrefixBGPStatusGetResponseEnvelopeErrors   `json:"errors,required"`

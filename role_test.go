@@ -29,7 +29,9 @@ func TestRoleList(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Roles.List(context.TODO(), map[string]interface{}{})
+	_, err := client.Roles.List(context.TODO(), cloudflare.RoleListParams{
+		AccountID: cloudflare.F[any](map[string]interface{}{}),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -58,7 +60,9 @@ func TestRoleGet(t *testing.T) {
 	_, err := client.Roles.Get(
 		context.TODO(),
 		map[string]interface{}{},
-		map[string]interface{}{},
+		cloudflare.RoleGetParams{
+			AccountID: cloudflare.F[any](map[string]interface{}{}),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

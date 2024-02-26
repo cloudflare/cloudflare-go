@@ -29,13 +29,10 @@ func TestPCAPOwnershipNew(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.PCAPs.Ownerships.New(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.PCAPOwnershipNewParams{
-			DestinationConf: cloudflare.F("s3://pcaps-bucket?region=us-east-1"),
-		},
-	)
+	_, err := client.PCAPs.Ownerships.New(context.TODO(), cloudflare.PCAPOwnershipNewParams{
+		AccountID:       cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		DestinationConf: cloudflare.F("s3://pcaps-bucket?region=us-east-1"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -64,7 +61,9 @@ func TestPCAPOwnershipDelete(t *testing.T) {
 	err := client.PCAPs.Ownerships.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.PCAPOwnershipDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -91,7 +90,9 @@ func TestPCAPOwnershipGet(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.PCAPs.Ownerships.Get(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.PCAPs.Ownerships.Get(context.TODO(), cloudflare.PCAPOwnershipGetParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -117,14 +118,11 @@ func TestPCAPOwnershipValidate(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.PCAPs.Ownerships.Validate(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.PCAPOwnershipValidateParams{
-			DestinationConf:    cloudflare.F("s3://pcaps-bucket?region=us-east-1"),
-			OwnershipChallenge: cloudflare.F("ownership-challenge-9883874ecac311ec8475433579a6bf5f.txt"),
-		},
-	)
+	_, err := client.PCAPs.Ownerships.Validate(context.TODO(), cloudflare.PCAPOwnershipValidateParams{
+		AccountID:          cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		DestinationConf:    cloudflare.F("s3://pcaps-bucket?region=us-east-1"),
+		OwnershipChallenge: cloudflare.F("ownership-challenge-9883874ecac311ec8475433579a6bf5f.txt"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

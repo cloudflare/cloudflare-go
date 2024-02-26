@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -48,11 +49,11 @@ func NewGatewayService(opts ...option.RequestOption) (r *GatewayService) {
 }
 
 // Creates a Zero Trust account with an existing Cloudflare account.
-func (r *GatewayService) New(ctx context.Context, accountID interface{}, opts ...option.RequestOption) (res *GatewayNewResponse, err error) {
+func (r *GatewayService) New(ctx context.Context, body GatewayNewParams, opts ...option.RequestOption) (res *GatewayNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/gateway", body.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -61,11 +62,11 @@ func (r *GatewayService) New(ctx context.Context, accountID interface{}, opts ..
 }
 
 // Gets information about the current Zero Trust account.
-func (r *GatewayService) List(ctx context.Context, accountID interface{}, opts ...option.RequestOption) (res *GatewayListResponse, err error) {
+func (r *GatewayService) List(ctx context.Context, query GatewayListParams, opts ...option.RequestOption) (res *GatewayListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/gateway", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -119,6 +120,10 @@ type gatewayListResponseJSON struct {
 
 func (r *GatewayListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type GatewayNewParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
 
 type GatewayNewResponseEnvelope struct {
@@ -189,6 +194,10 @@ type GatewayNewResponseEnvelopeSuccess bool
 const (
 	GatewayNewResponseEnvelopeSuccessTrue GatewayNewResponseEnvelopeSuccess = true
 )
+
+type GatewayListParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
 
 type GatewayListResponseEnvelope struct {
 	Errors   []GatewayListResponseEnvelopeErrors   `json:"errors,required"`

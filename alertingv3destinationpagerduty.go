@@ -9,6 +9,7 @@ import (
 	"reflect"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
@@ -34,11 +35,11 @@ func NewAlertingV3DestinationPagerdutyService(opts ...option.RequestOption) (r *
 }
 
 // Creates a new token for integrating with PagerDuty.
-func (r *AlertingV3DestinationPagerdutyService) New(ctx context.Context, accountID string, opts ...option.RequestOption) (res *AlertingV3DestinationPagerdutyNewResponse, err error) {
+func (r *AlertingV3DestinationPagerdutyService) New(ctx context.Context, body AlertingV3DestinationPagerdutyNewParams, opts ...option.RequestOption) (res *AlertingV3DestinationPagerdutyNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AlertingV3DestinationPagerdutyNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/pagerduty/connect", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/pagerduty/connect", body.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -47,11 +48,11 @@ func (r *AlertingV3DestinationPagerdutyService) New(ctx context.Context, account
 }
 
 // Deletes all the PagerDuty Services connected to the account.
-func (r *AlertingV3DestinationPagerdutyService) Delete(ctx context.Context, accountID string, opts ...option.RequestOption) (res *AlertingV3DestinationPagerdutyDeleteResponse, err error) {
+func (r *AlertingV3DestinationPagerdutyService) Delete(ctx context.Context, body AlertingV3DestinationPagerdutyDeleteParams, opts ...option.RequestOption) (res *AlertingV3DestinationPagerdutyDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AlertingV3DestinationPagerdutyDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/pagerduty", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/pagerduty", body.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -60,11 +61,11 @@ func (r *AlertingV3DestinationPagerdutyService) Delete(ctx context.Context, acco
 }
 
 // Get a list of all configured PagerDuty services.
-func (r *AlertingV3DestinationPagerdutyService) Get(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]AlertingV3DestinationPagerdutyGetResponse, err error) {
+func (r *AlertingV3DestinationPagerdutyService) Get(ctx context.Context, query AlertingV3DestinationPagerdutyGetParams, opts ...option.RequestOption) (res *[]AlertingV3DestinationPagerdutyGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AlertingV3DestinationPagerdutyGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/pagerduty", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/pagerduty", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -73,11 +74,11 @@ func (r *AlertingV3DestinationPagerdutyService) Get(ctx context.Context, account
 }
 
 // Links PagerDuty with the account using the integration token.
-func (r *AlertingV3DestinationPagerdutyService) Link(ctx context.Context, accountID string, tokenID string, opts ...option.RequestOption) (res *AlertingV3DestinationPagerdutyLinkResponse, err error) {
+func (r *AlertingV3DestinationPagerdutyService) Link(ctx context.Context, tokenID string, query AlertingV3DestinationPagerdutyLinkParams, opts ...option.RequestOption) (res *AlertingV3DestinationPagerdutyLinkResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AlertingV3DestinationPagerdutyLinkResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/pagerduty/connect/%s", accountID, tokenID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/pagerduty/connect/%s", query.AccountID, tokenID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -164,6 +165,11 @@ func (r *AlertingV3DestinationPagerdutyLinkResponse) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type AlertingV3DestinationPagerdutyNewParams struct {
+	// The account id
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type AlertingV3DestinationPagerdutyNewResponseEnvelope struct {
 	Errors   []AlertingV3DestinationPagerdutyNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AlertingV3DestinationPagerdutyNewResponseEnvelopeMessages `json:"messages,required"`
@@ -234,6 +240,11 @@ type AlertingV3DestinationPagerdutyNewResponseEnvelopeSuccess bool
 const (
 	AlertingV3DestinationPagerdutyNewResponseEnvelopeSuccessTrue AlertingV3DestinationPagerdutyNewResponseEnvelopeSuccess = true
 )
+
+type AlertingV3DestinationPagerdutyDeleteParams struct {
+	// The account id
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type AlertingV3DestinationPagerdutyDeleteResponseEnvelope struct {
 	Errors   []AlertingV3DestinationPagerdutyDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -336,6 +347,11 @@ func (r *AlertingV3DestinationPagerdutyDeleteResponseEnvelopeResultInfo) Unmarsh
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type AlertingV3DestinationPagerdutyGetParams struct {
+	// The account id
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type AlertingV3DestinationPagerdutyGetResponseEnvelope struct {
 	Errors   []AlertingV3DestinationPagerdutyGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AlertingV3DestinationPagerdutyGetResponseEnvelopeMessages `json:"messages,required"`
@@ -435,6 +451,11 @@ type alertingV3DestinationPagerdutyGetResponseEnvelopeResultInfoJSON struct {
 
 func (r *AlertingV3DestinationPagerdutyGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type AlertingV3DestinationPagerdutyLinkParams struct {
+	// The account id
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type AlertingV3DestinationPagerdutyLinkResponseEnvelope struct {

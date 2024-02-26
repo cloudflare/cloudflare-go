@@ -31,11 +31,11 @@ func TestStreamCaptionUpdate(t *testing.T) {
 	)
 	_, err := client.Stream.Captions.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"ea95132c15732412d22c1476fa83f27a",
 		"tr",
 		cloudflare.StreamCaptionUpdateParams{
-			File: cloudflare.F("@/Users/kyle/Desktop/tr.vtt"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			File:      cloudflare.F("@/Users/kyle/Desktop/tr.vtt"),
 		},
 	)
 	if err != nil {
@@ -65,8 +65,10 @@ func TestStreamCaptionList(t *testing.T) {
 	)
 	_, err := client.Stream.Captions.List(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"ea95132c15732412d22c1476fa83f27a",
+		cloudflare.StreamCaptionListParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -95,9 +97,11 @@ func TestStreamCaptionDelete(t *testing.T) {
 	)
 	_, err := client.Stream.Captions.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"ea95132c15732412d22c1476fa83f27a",
 		"tr",
+		cloudflare.StreamCaptionDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

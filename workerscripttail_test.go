@@ -31,8 +31,10 @@ func TestWorkerScriptTailNew(t *testing.T) {
 	)
 	_, err := client.Workers.Scripts.Tail.New(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"this-is_my_script-01",
+		cloudflare.WorkerScriptTailNewParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -61,8 +63,10 @@ func TestWorkerScriptTailList(t *testing.T) {
 	)
 	_, err := client.Workers.Scripts.Tail.List(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"this-is_my_script-01",
+		cloudflare.WorkerScriptTailListParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -91,9 +95,11 @@ func TestWorkerScriptTailDelete(t *testing.T) {
 	)
 	_, err := client.Workers.Scripts.Tail.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"this-is_my_script-01",
 		"03dc9f77817b488fb26c5861ec18f791",
+		cloudflare.WorkerScriptTailDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

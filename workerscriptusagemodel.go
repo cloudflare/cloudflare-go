@@ -33,11 +33,11 @@ func NewWorkerScriptUsageModelService(opts ...option.RequestOption) (r *WorkerSc
 
 // Updates the Usage Model for a given Worker. Requires a Workers Paid
 // subscription.
-func (r *WorkerScriptUsageModelService) Update(ctx context.Context, accountID string, scriptName string, body WorkerScriptUsageModelUpdateParams, opts ...option.RequestOption) (res *WorkerScriptUsageModelUpdateResponse, err error) {
+func (r *WorkerScriptUsageModelService) Update(ctx context.Context, scriptName string, params WorkerScriptUsageModelUpdateParams, opts ...option.RequestOption) (res *WorkerScriptUsageModelUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerScriptUsageModelUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/usage-model", accountID, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/usage-model", params.AccountID, scriptName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -46,11 +46,11 @@ func (r *WorkerScriptUsageModelService) Update(ctx context.Context, accountID st
 }
 
 // Fetches the Usage Model for a given Worker.
-func (r *WorkerScriptUsageModelService) Get(ctx context.Context, accountID string, scriptName string, opts ...option.RequestOption) (res *WorkerScriptUsageModelGetResponse, err error) {
+func (r *WorkerScriptUsageModelService) Get(ctx context.Context, scriptName string, query WorkerScriptUsageModelGetParams, opts ...option.RequestOption) (res *WorkerScriptUsageModelGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerScriptUsageModelGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/usage-model", accountID, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/usage-model", query.AccountID, scriptName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -93,7 +93,9 @@ func (r *WorkerScriptUsageModelGetResponse) UnmarshalJSON(data []byte) (err erro
 }
 
 type WorkerScriptUsageModelUpdateParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	// Identifier
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
 }
 
 func (r WorkerScriptUsageModelUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -168,6 +170,11 @@ type WorkerScriptUsageModelUpdateResponseEnvelopeSuccess bool
 const (
 	WorkerScriptUsageModelUpdateResponseEnvelopeSuccessTrue WorkerScriptUsageModelUpdateResponseEnvelopeSuccess = true
 )
+
+type WorkerScriptUsageModelGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type WorkerScriptUsageModelGetResponseEnvelope struct {
 	Errors   []WorkerScriptUsageModelGetResponseEnvelopeErrors   `json:"errors,required"`

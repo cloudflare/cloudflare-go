@@ -43,11 +43,11 @@ func NewLoadBalancerService(opts ...option.RequestOption) (r *LoadBalancerServic
 }
 
 // Create a new load balancer.
-func (r *LoadBalancerService) New(ctx context.Context, zoneID string, body LoadBalancerNewParams, opts ...option.RequestOption) (res *LoadBalancerNewResponse, err error) {
+func (r *LoadBalancerService) New(ctx context.Context, params LoadBalancerNewParams, opts ...option.RequestOption) (res *LoadBalancerNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerNewResponseEnvelope
-	path := fmt.Sprintf("zones/%s/load_balancers", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/load_balancers", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -56,11 +56,11 @@ func (r *LoadBalancerService) New(ctx context.Context, zoneID string, body LoadB
 }
 
 // Update a configured load balancer.
-func (r *LoadBalancerService) Update(ctx context.Context, zoneID string, loadBalancerID string, body LoadBalancerUpdateParams, opts ...option.RequestOption) (res *LoadBalancerUpdateResponse, err error) {
+func (r *LoadBalancerService) Update(ctx context.Context, loadBalancerID string, params LoadBalancerUpdateParams, opts ...option.RequestOption) (res *LoadBalancerUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/load_balancers/%s", zoneID, loadBalancerID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/load_balancers/%s", params.ZoneID, loadBalancerID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -69,11 +69,11 @@ func (r *LoadBalancerService) Update(ctx context.Context, zoneID string, loadBal
 }
 
 // List configured load balancers.
-func (r *LoadBalancerService) List(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *[]LoadBalancerListResponse, err error) {
+func (r *LoadBalancerService) List(ctx context.Context, query LoadBalancerListParams, opts ...option.RequestOption) (res *[]LoadBalancerListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerListResponseEnvelope
-	path := fmt.Sprintf("zones/%s/load_balancers", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/load_balancers", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -82,11 +82,11 @@ func (r *LoadBalancerService) List(ctx context.Context, zoneID string, opts ...o
 }
 
 // Delete a configured load balancer.
-func (r *LoadBalancerService) Delete(ctx context.Context, zoneID string, loadBalancerID string, opts ...option.RequestOption) (res *LoadBalancerDeleteResponse, err error) {
+func (r *LoadBalancerService) Delete(ctx context.Context, loadBalancerID string, body LoadBalancerDeleteParams, opts ...option.RequestOption) (res *LoadBalancerDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/load_balancers/%s", zoneID, loadBalancerID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/load_balancers/%s", body.ZoneID, loadBalancerID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -95,11 +95,11 @@ func (r *LoadBalancerService) Delete(ctx context.Context, zoneID string, loadBal
 }
 
 // Apply changes to an existing load balancer, overwriting the supplied properties.
-func (r *LoadBalancerService) Edit(ctx context.Context, zoneID string, loadBalancerID string, body LoadBalancerEditParams, opts ...option.RequestOption) (res *LoadBalancerEditResponse, err error) {
+func (r *LoadBalancerService) Edit(ctx context.Context, loadBalancerID string, params LoadBalancerEditParams, opts ...option.RequestOption) (res *LoadBalancerEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/load_balancers/%s", zoneID, loadBalancerID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/load_balancers/%s", params.ZoneID, loadBalancerID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -108,11 +108,11 @@ func (r *LoadBalancerService) Edit(ctx context.Context, zoneID string, loadBalan
 }
 
 // Fetch a single configured load balancer.
-func (r *LoadBalancerService) Get(ctx context.Context, zoneID string, loadBalancerID string, opts ...option.RequestOption) (res *LoadBalancerGetResponse, err error) {
+func (r *LoadBalancerService) Get(ctx context.Context, loadBalancerID string, query LoadBalancerGetParams, opts ...option.RequestOption) (res *LoadBalancerGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/load_balancers/%s", zoneID, loadBalancerID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/load_balancers/%s", query.ZoneID, loadBalancerID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -4960,6 +4960,7 @@ const (
 )
 
 type LoadBalancerNewParams struct {
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// A list of pool IDs ordered by their failover priority. Pools defined here are
 	// used by default, or when region_pools are not configured for a given region.
 	DefaultPools param.Field[[]string] `json:"default_pools,required"`
@@ -5824,6 +5825,7 @@ const (
 )
 
 type LoadBalancerUpdateParams struct {
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// A list of pool IDs ordered by their failover priority. Pools defined here are
 	// used by default, or when region_pools are not configured for a given region.
 	DefaultPools param.Field[[]string] `json:"default_pools,required"`
@@ -6689,6 +6691,10 @@ const (
 	LoadBalancerUpdateResponseEnvelopeSuccessTrue LoadBalancerUpdateResponseEnvelopeSuccess = true
 )
 
+type LoadBalancerListParams struct {
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type LoadBalancerListResponseEnvelope struct {
 	Errors   []LoadBalancerListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []LoadBalancerListResponseEnvelopeMessages `json:"messages,required"`
@@ -6787,6 +6793,10 @@ func (r *LoadBalancerListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type LoadBalancerDeleteParams struct {
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type LoadBalancerDeleteResponseEnvelope struct {
 	Errors   []LoadBalancerDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []LoadBalancerDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -6857,6 +6867,7 @@ const (
 )
 
 type LoadBalancerEditParams struct {
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Controls features that modify the routing of requests to pools and origins in
 	// response to dynamic conditions, such as during the interval between active
 	// health monitoring requests. For example, zero-downtime failover occurs
@@ -7721,6 +7732,10 @@ type LoadBalancerEditResponseEnvelopeSuccess bool
 const (
 	LoadBalancerEditResponseEnvelopeSuccessTrue LoadBalancerEditResponseEnvelopeSuccess = true
 )
+
+type LoadBalancerGetParams struct {
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type LoadBalancerGetResponseEnvelope struct {
 	Errors   []LoadBalancerGetResponseEnvelopeErrors   `json:"errors,required"`

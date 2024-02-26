@@ -35,11 +35,11 @@ func NewSettingFontSettingService(opts ...option.RequestOption) (r *SettingFontS
 // Enhance your website's font delivery with Cloudflare Fonts. Deliver Google
 // Hosted fonts from your own domain, boost performance, and enhance user privacy.
 // Refer to the Cloudflare Fonts documentation for more information.
-func (r *SettingFontSettingService) Edit(ctx context.Context, zoneID string, body SettingFontSettingEditParams, opts ...option.RequestOption) (res *SettingFontSettingEditResponse, err error) {
+func (r *SettingFontSettingService) Edit(ctx context.Context, params SettingFontSettingEditParams, opts ...option.RequestOption) (res *SettingFontSettingEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingFontSettingEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/fonts", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/fonts", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -50,11 +50,11 @@ func (r *SettingFontSettingService) Edit(ctx context.Context, zoneID string, bod
 // Enhance your website's font delivery with Cloudflare Fonts. Deliver Google
 // Hosted fonts from your own domain, boost performance, and enhance user privacy.
 // Refer to the Cloudflare Fonts documentation for more information.
-func (r *SettingFontSettingService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingFontSettingGetResponse, err error) {
+func (r *SettingFontSettingService) Get(ctx context.Context, query SettingFontSettingGetParams, opts ...option.RequestOption) (res *SettingFontSettingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingFontSettingGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/fonts", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/fonts", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -173,6 +173,8 @@ const (
 )
 
 type SettingFontSettingEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Whether the feature is enabled or disabled.
 	Value param.Field[SettingFontSettingEditParamsValue] `json:"value,required"`
 }
@@ -252,6 +254,11 @@ type settingFontSettingEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingFontSettingEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingFontSettingGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingFontSettingGetResponseEnvelope struct {

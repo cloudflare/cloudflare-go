@@ -42,11 +42,11 @@ func NewBotManagementService(opts ...option.RequestOption) (r *BotManagementServ
 //
 // See [Bot Plans](https://developers.cloudflare.com/bots/plans/) for more
 // information on the different plans
-func (r *BotManagementService) Update(ctx context.Context, zoneID string, body BotManagementUpdateParams, opts ...option.RequestOption) (res *BotManagementUpdateResponse, err error) {
+func (r *BotManagementService) Update(ctx context.Context, params BotManagementUpdateParams, opts ...option.RequestOption) (res *BotManagementUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env BotManagementUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/bot_management", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/bot_management", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -55,11 +55,11 @@ func (r *BotManagementService) Update(ctx context.Context, zoneID string, body B
 }
 
 // Retrieve a zone's Bot Management Config
-func (r *BotManagementService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *BotManagementGetResponse, err error) {
+func (r *BotManagementService) Get(ctx context.Context, query BotManagementGetParams, opts ...option.RequestOption) (res *BotManagementGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env BotManagementGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/bot_management", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/bot_management", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -478,6 +478,8 @@ func (r BotManagementGetResponseBotManagementBmSubscriptionConfig) implementsBot
 }
 
 type BotManagementUpdateParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Automatically update to the newest bot detection models created by Cloudflare as
 	// they are released.
 	// [Learn more.](https://developers.cloudflare.com/bots/reference/machine-learning-models#model-versions-and-release-notes)
@@ -602,6 +604,11 @@ type BotManagementUpdateResponseEnvelopeSuccess bool
 const (
 	BotManagementUpdateResponseEnvelopeSuccessTrue BotManagementUpdateResponseEnvelopeSuccess = true
 )
+
+type BotManagementGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type BotManagementGetResponseEnvelope struct {
 	Errors   []BotManagementGetResponseEnvelopeErrors   `json:"errors,required"`

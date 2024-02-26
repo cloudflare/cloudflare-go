@@ -31,12 +31,12 @@ func TestStorageKVNamespaceValueUpdate(t *testing.T) {
 	)
 	_, err := client.Storage.KV.Namespaces.Values.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"0f2ac74b498b48028cb68387c421e279",
 		"My-Key",
 		cloudflare.StorageKVNamespaceValueUpdateParams{
-			Metadata: cloudflare.F("{\"someMetadataKey\": \"someMetadataValue\"}"),
-			Value:    cloudflare.F("Some Value"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Metadata:  cloudflare.F("{\"someMetadataKey\": \"someMetadataValue\"}"),
+			Value:     cloudflare.F("Some Value"),
 		},
 	)
 	if err != nil {
@@ -66,9 +66,11 @@ func TestStorageKVNamespaceValueDelete(t *testing.T) {
 	)
 	_, err := client.Storage.KV.Namespaces.Values.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"0f2ac74b498b48028cb68387c421e279",
 		"My-Key",
+		cloudflare.StorageKVNamespaceValueDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -97,9 +99,11 @@ func TestStorageKVNamespaceValueGet(t *testing.T) {
 	)
 	_, err := client.Storage.KV.Namespaces.Values.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"0f2ac74b498b48028cb68387c421e279",
 		"My-Key",
+		cloudflare.StorageKVNamespaceValueGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

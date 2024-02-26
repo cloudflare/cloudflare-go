@@ -32,11 +32,11 @@ func NewSecondaryDNSPeerService(opts ...option.RequestOption) (r *SecondaryDNSPe
 }
 
 // Create Peer.
-func (r *SecondaryDNSPeerService) New(ctx context.Context, accountID interface{}, body SecondaryDNSPeerNewParams, opts ...option.RequestOption) (res *SecondaryDNSPeerNewResponse, err error) {
+func (r *SecondaryDNSPeerService) New(ctx context.Context, params SecondaryDNSPeerNewParams, opts ...option.RequestOption) (res *SecondaryDNSPeerNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SecondaryDNSPeerNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/secondary_dns/peers", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/secondary_dns/peers", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -45,11 +45,11 @@ func (r *SecondaryDNSPeerService) New(ctx context.Context, accountID interface{}
 }
 
 // Modify Peer.
-func (r *SecondaryDNSPeerService) Update(ctx context.Context, accountID interface{}, peerID interface{}, body SecondaryDNSPeerUpdateParams, opts ...option.RequestOption) (res *SecondaryDNSPeerUpdateResponse, err error) {
+func (r *SecondaryDNSPeerService) Update(ctx context.Context, peerID interface{}, params SecondaryDNSPeerUpdateParams, opts ...option.RequestOption) (res *SecondaryDNSPeerUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SecondaryDNSPeerUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/secondary_dns/peers/%v", accountID, peerID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/secondary_dns/peers/%v", params.AccountID, peerID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -58,11 +58,11 @@ func (r *SecondaryDNSPeerService) Update(ctx context.Context, accountID interfac
 }
 
 // List Peers.
-func (r *SecondaryDNSPeerService) List(ctx context.Context, accountID interface{}, opts ...option.RequestOption) (res *[]SecondaryDNSPeerListResponse, err error) {
+func (r *SecondaryDNSPeerService) List(ctx context.Context, query SecondaryDNSPeerListParams, opts ...option.RequestOption) (res *[]SecondaryDNSPeerListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SecondaryDNSPeerListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/secondary_dns/peers", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/secondary_dns/peers", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -71,11 +71,11 @@ func (r *SecondaryDNSPeerService) List(ctx context.Context, accountID interface{
 }
 
 // Delete Peer.
-func (r *SecondaryDNSPeerService) Delete(ctx context.Context, accountID interface{}, peerID interface{}, opts ...option.RequestOption) (res *SecondaryDNSPeerDeleteResponse, err error) {
+func (r *SecondaryDNSPeerService) Delete(ctx context.Context, peerID interface{}, body SecondaryDNSPeerDeleteParams, opts ...option.RequestOption) (res *SecondaryDNSPeerDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SecondaryDNSPeerDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/secondary_dns/peers/%v", accountID, peerID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/secondary_dns/peers/%v", body.AccountID, peerID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -84,11 +84,11 @@ func (r *SecondaryDNSPeerService) Delete(ctx context.Context, accountID interfac
 }
 
 // Get Peer.
-func (r *SecondaryDNSPeerService) Get(ctx context.Context, accountID interface{}, peerID interface{}, opts ...option.RequestOption) (res *SecondaryDNSPeerGetResponse, err error) {
+func (r *SecondaryDNSPeerService) Get(ctx context.Context, peerID interface{}, query SecondaryDNSPeerGetParams, opts ...option.RequestOption) (res *SecondaryDNSPeerGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SecondaryDNSPeerGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/secondary_dns/peers/%v", accountID, peerID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/secondary_dns/peers/%v", query.AccountID, peerID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -266,7 +266,8 @@ func (r *SecondaryDNSPeerGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type SecondaryDNSPeerNewParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
 }
 
 func (r SecondaryDNSPeerNewParams) MarshalJSON() (data []byte, err error) {
@@ -343,6 +344,7 @@ const (
 )
 
 type SecondaryDNSPeerUpdateParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// The name of the peer.
 	Name param.Field[string] `json:"name,required"`
 	// IPv4/IPv6 address of primary or secondary nameserver, depending on what zone
@@ -433,6 +435,10 @@ type SecondaryDNSPeerUpdateResponseEnvelopeSuccess bool
 const (
 	SecondaryDNSPeerUpdateResponseEnvelopeSuccessTrue SecondaryDNSPeerUpdateResponseEnvelopeSuccess = true
 )
+
+type SecondaryDNSPeerListParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
 
 type SecondaryDNSPeerListResponseEnvelope struct {
 	Errors   []SecondaryDNSPeerListResponseEnvelopeErrors   `json:"errors,required"`
@@ -532,6 +538,10 @@ func (r *SecondaryDNSPeerListResponseEnvelopeResultInfo) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type SecondaryDNSPeerDeleteParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
+
 type SecondaryDNSPeerDeleteResponseEnvelope struct {
 	Errors   []SecondaryDNSPeerDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SecondaryDNSPeerDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -600,6 +610,10 @@ type SecondaryDNSPeerDeleteResponseEnvelopeSuccess bool
 const (
 	SecondaryDNSPeerDeleteResponseEnvelopeSuccessTrue SecondaryDNSPeerDeleteResponseEnvelopeSuccess = true
 )
+
+type SecondaryDNSPeerGetParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
 
 type SecondaryDNSPeerGetResponseEnvelope struct {
 	Errors   []SecondaryDNSPeerGetResponseEnvelopeErrors   `json:"errors,required"`

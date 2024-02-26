@@ -34,11 +34,11 @@ func NewDEXFleetStatusLiveService(opts ...option.RequestOption) (r *DEXFleetStat
 }
 
 // List details for live (up to 60 minutes) devices using WARP
-func (r *DEXFleetStatusLiveService) List(ctx context.Context, accountID string, query DEXFleetStatusLiveListParams, opts ...option.RequestOption) (res *DEXFleetStatusLiveListResponse, err error) {
+func (r *DEXFleetStatusLiveService) List(ctx context.Context, params DEXFleetStatusLiveListParams, opts ...option.RequestOption) (res *DEXFleetStatusLiveListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DEXFleetStatusLiveListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/dex/fleet-status/live", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/dex/fleet-status/live", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -192,6 +192,7 @@ func (r *DEXFleetStatusLiveListResponseDeviceStatsByVersion) UnmarshalJSON(data 
 }
 
 type DEXFleetStatusLiveListParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Number of minutes before current time
 	SinceMinutes param.Field[float64] `query:"since_minutes,required"`
 }

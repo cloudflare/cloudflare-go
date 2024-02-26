@@ -37,10 +37,10 @@ func NewWorkerServiceEnvironmentContentService(opts ...option.RequestOption) (r 
 }
 
 // Put script content from a worker with an environment
-func (r *WorkerServiceEnvironmentContentService) Update(ctx context.Context, accountID string, serviceName string, environmentName string, params WorkerServiceEnvironmentContentUpdateParams, opts ...option.RequestOption) (res *WorkerServiceEnvironmentContentUpdateResponse, err error) {
+func (r *WorkerServiceEnvironmentContentService) Update(ctx context.Context, serviceName string, environmentName string, params WorkerServiceEnvironmentContentUpdateParams, opts ...option.RequestOption) (res *WorkerServiceEnvironmentContentUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerServiceEnvironmentContentUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/services/%s/environments/%s/content", accountID, serviceName, environmentName)
+	path := fmt.Sprintf("accounts/%s/workers/services/%s/environments/%s/content", params.AccountID, serviceName, environmentName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -50,11 +50,11 @@ func (r *WorkerServiceEnvironmentContentService) Update(ctx context.Context, acc
 }
 
 // Get script content from a worker with an environment
-func (r *WorkerServiceEnvironmentContentService) Get(ctx context.Context, accountID string, serviceName string, environmentName string, opts ...option.RequestOption) (res *http.Response, err error) {
+func (r *WorkerServiceEnvironmentContentService) Get(ctx context.Context, serviceName string, environmentName string, query WorkerServiceEnvironmentContentGetParams, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "string")}, opts...)
-	path := fmt.Sprintf("accounts/%s/workers/services/%s/environments/%s/content", accountID, serviceName, environmentName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/services/%s/environments/%s/content", query.AccountID, serviceName, environmentName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
@@ -127,6 +127,8 @@ func (r *WorkerServiceEnvironmentContentUpdateResponseTailConsumer) UnmarshalJSO
 }
 
 type WorkerServiceEnvironmentContentUpdateParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// A module comprising a Worker script, often a javascript file. Multiple modules
 	// may be provided as separate named parts, but at least one module must be
 	// present. This should be referenced either in the metadata as `main_module`
@@ -239,3 +241,8 @@ type WorkerServiceEnvironmentContentUpdateResponseEnvelopeSuccess bool
 const (
 	WorkerServiceEnvironmentContentUpdateResponseEnvelopeSuccessTrue WorkerServiceEnvironmentContentUpdateResponseEnvelopeSuccess = true
 )
+
+type WorkerServiceEnvironmentContentGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}

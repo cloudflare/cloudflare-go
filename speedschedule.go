@@ -35,11 +35,11 @@ func NewSpeedScheduleService(opts ...option.RequestOption) (r *SpeedScheduleServ
 }
 
 // Creates a scheduled test for a page.
-func (r *SpeedScheduleService) New(ctx context.Context, zoneID string, url string, body SpeedScheduleNewParams, opts ...option.RequestOption) (res *SpeedScheduleNewResponse, err error) {
+func (r *SpeedScheduleService) New(ctx context.Context, url string, params SpeedScheduleNewParams, opts ...option.RequestOption) (res *SpeedScheduleNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SpeedScheduleNewResponseEnvelope
-	path := fmt.Sprintf("zones/%s/speed_api/schedule/%s", zoneID, url)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/speed_api/schedule/%s", params.ZoneID, url)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -425,6 +425,8 @@ const (
 )
 
 type SpeedScheduleNewParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// A test region.
 	Region param.Field[SpeedScheduleNewParamsRegion] `query:"region"`
 }

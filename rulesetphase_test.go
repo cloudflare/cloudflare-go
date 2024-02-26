@@ -34,7 +34,7 @@ func TestRulesetPhaseUpdateWithOptionalParams(t *testing.T) {
 		cloudflare.RulesetPhaseUpdateParamsRulesetPhaseHTTPRequestFirewallCustom,
 		cloudflare.RulesetPhaseUpdateParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("abf9b32d38c5f572afde3336ec0ce302"),
+			ZoneID:    cloudflare.F("string"),
 			ID:        cloudflare.F("2f2feab2026849078ba485f918791bdc"),
 			Rules: cloudflare.F([]cloudflare.RulesetPhaseUpdateParamsRule{cloudflare.RulesetPhaseUpdateParamsRulesRulesetsBlockRule(cloudflare.RulesetPhaseUpdateParamsRulesRulesetsBlockRule{
 				Action: cloudflare.F(cloudflare.RulesetPhaseUpdateParamsRulesRulesetsBlockRuleActionBlock),
@@ -124,7 +124,7 @@ func TestRulesetPhaseGet(t *testing.T) {
 		cloudflare.RulesetPhaseGetParamsRulesetPhaseHTTPRequestFirewallCustom,
 		cloudflare.RulesetPhaseGetParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("abf9b32d38c5f572afde3336ec0ce302"),
+			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {

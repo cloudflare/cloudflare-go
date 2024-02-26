@@ -40,11 +40,11 @@ func NewDNSFirewallService(opts ...option.RequestOption) (r *DNSFirewallService)
 }
 
 // Create a configured DNS Firewall Cluster.
-func (r *DNSFirewallService) New(ctx context.Context, accountID string, body DNSFirewallNewParams, opts ...option.RequestOption) (res *DNSFirewallNewResponse, err error) {
+func (r *DNSFirewallService) New(ctx context.Context, params DNSFirewallNewParams, opts ...option.RequestOption) (res *DNSFirewallNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DNSFirewallNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/dns_firewall", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/dns_firewall", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -53,12 +53,12 @@ func (r *DNSFirewallService) New(ctx context.Context, accountID string, body DNS
 }
 
 // List configured DNS Firewall clusters for an account.
-func (r *DNSFirewallService) List(ctx context.Context, accountID string, query DNSFirewallListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[DNSFirewallListResponse], err error) {
+func (r *DNSFirewallService) List(ctx context.Context, params DNSFirewallListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[DNSFirewallListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	path := fmt.Sprintf("accounts/%s/dns_firewall", accountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/dns_firewall", params.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -71,16 +71,16 @@ func (r *DNSFirewallService) List(ctx context.Context, accountID string, query D
 }
 
 // List configured DNS Firewall clusters for an account.
-func (r *DNSFirewallService) ListAutoPaging(ctx context.Context, accountID string, query DNSFirewallListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[DNSFirewallListResponse] {
-	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, accountID, query, opts...))
+func (r *DNSFirewallService) ListAutoPaging(ctx context.Context, params DNSFirewallListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[DNSFirewallListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Delete a configured DNS Firewall Cluster.
-func (r *DNSFirewallService) Delete(ctx context.Context, accountID string, dnsFirewallID string, opts ...option.RequestOption) (res *DNSFirewallDeleteResponse, err error) {
+func (r *DNSFirewallService) Delete(ctx context.Context, dnsFirewallID string, body DNSFirewallDeleteParams, opts ...option.RequestOption) (res *DNSFirewallDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DNSFirewallDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/dns_firewall/%s", accountID, dnsFirewallID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/dns_firewall/%s", body.AccountID, dnsFirewallID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -89,11 +89,11 @@ func (r *DNSFirewallService) Delete(ctx context.Context, accountID string, dnsFi
 }
 
 // Modify a DNS Firewall Cluster configuration.
-func (r *DNSFirewallService) Edit(ctx context.Context, accountID string, dnsFirewallID string, body DNSFirewallEditParams, opts ...option.RequestOption) (res *DNSFirewallEditResponse, err error) {
+func (r *DNSFirewallService) Edit(ctx context.Context, dnsFirewallID string, params DNSFirewallEditParams, opts ...option.RequestOption) (res *DNSFirewallEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DNSFirewallEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/dns_firewall/%s", accountID, dnsFirewallID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/dns_firewall/%s", params.AccountID, dnsFirewallID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -102,11 +102,11 @@ func (r *DNSFirewallService) Edit(ctx context.Context, accountID string, dnsFire
 }
 
 // Show a single configured DNS Firewall cluster for an account.
-func (r *DNSFirewallService) Get(ctx context.Context, accountID string, dnsFirewallID string, opts ...option.RequestOption) (res *DNSFirewallGetResponse, err error) {
+func (r *DNSFirewallService) Get(ctx context.Context, dnsFirewallID string, query DNSFirewallGetParams, opts ...option.RequestOption) (res *DNSFirewallGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DNSFirewallGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/dns_firewall/%s", accountID, dnsFirewallID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/dns_firewall/%s", query.AccountID, dnsFirewallID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -641,6 +641,8 @@ func (r *DNSFirewallGetResponseAttackMitigation) UnmarshalJSON(data []byte) (err
 }
 
 type DNSFirewallNewParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// DNS Firewall Cluster Name.
 	Name        param.Field[string]                           `json:"name,required"`
 	UpstreamIPs param.Field[[]DNSFirewallNewParamsUpstreamIP] `json:"upstream_ips,required" format:"ipv4"`
@@ -762,6 +764,8 @@ const (
 )
 
 type DNSFirewallListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Page number of paginated results.
 	Page param.Field[float64] `query:"page"`
 	// Number of clusters per page.
@@ -774,6 +778,11 @@ func (r DNSFirewallListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
+}
+
+type DNSFirewallDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type DNSFirewallDeleteResponseEnvelope struct {
@@ -846,6 +855,8 @@ const (
 )
 
 type DNSFirewallEditParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Deprecate the response to ANY requests.
 	DeprecateAnyRequests param.Field[bool]                                 `json:"deprecate_any_requests,required"`
 	DNSFirewallIPs       param.Field[[]DNSFirewallEditParamsDNSFirewallIP] `json:"dns_firewall_ips,required" format:"ipv4"`
@@ -973,6 +984,11 @@ type DNSFirewallEditResponseEnvelopeSuccess bool
 const (
 	DNSFirewallEditResponseEnvelopeSuccessTrue DNSFirewallEditResponseEnvelopeSuccess = true
 )
+
+type DNSFirewallGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type DNSFirewallGetResponseEnvelope struct {
 	Errors   []DNSFirewallGetResponseEnvelopeErrors   `json:"errors,required"`

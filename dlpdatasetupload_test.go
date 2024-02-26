@@ -31,8 +31,10 @@ func TestDLPDatasetUploadNew(t *testing.T) {
 	)
 	_, err := client.DLP.Datasets.Upload.New(
 		context.TODO(),
-		"string",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		cloudflare.DLPDatasetUploadNewParams{
+			AccountID: cloudflare.F("string"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -61,9 +63,11 @@ func TestDLPDatasetUploadEdit(t *testing.T) {
 	)
 	_, err := client.DLP.Datasets.Upload.Edit(
 		context.TODO(),
-		"string",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		int64(0),
+		cloudflare.DLPDatasetUploadEditParams{
+			AccountID: cloudflare.F("string"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

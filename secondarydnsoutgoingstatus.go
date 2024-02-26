@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -31,16 +32,20 @@ func NewSecondaryDNSOutgoingStatusService(opts ...option.RequestOption) (r *Seco
 }
 
 // Get primary zone transfer status.
-func (r *SecondaryDNSOutgoingStatusService) Get(ctx context.Context, zoneID interface{}, opts ...option.RequestOption) (res *string, err error) {
+func (r *SecondaryDNSOutgoingStatusService) Get(ctx context.Context, query SecondaryDNSOutgoingStatusGetParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SecondaryDNSOutgoingStatusGetResponseEnvelope
-	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing/status", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing/status", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
 	res = &env.Result
 	return
+}
+
+type SecondaryDNSOutgoingStatusGetParams struct {
+	ZoneID param.Field[interface{}] `path:"zone_id,required"`
 }
 
 type SecondaryDNSOutgoingStatusGetResponseEnvelope struct {

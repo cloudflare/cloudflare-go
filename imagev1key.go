@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -30,11 +31,11 @@ func NewImageV1KeyService(opts ...option.RequestOption) (r *ImageV1KeyService) {
 }
 
 // Lists your signing keys. These can be found on your Cloudflare Images dashboard.
-func (r *ImageV1KeyService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *ImageV1KeyListResponse, err error) {
+func (r *ImageV1KeyService) List(ctx context.Context, query ImageV1KeyListParams, opts ...option.RequestOption) (res *ImageV1KeyListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ImageV1KeyListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/images/v1/keys", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/images/v1/keys", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -78,6 +79,11 @@ type imageV1KeyListResponseKeyJSON struct {
 
 func (r *ImageV1KeyListResponseKey) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type ImageV1KeyListParams struct {
+	// Account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ImageV1KeyListResponseEnvelope struct {

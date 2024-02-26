@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -32,11 +33,11 @@ func NewDeviceOverrideCodeService(opts ...option.RequestOption) (r *DeviceOverri
 
 // Fetches a one-time use admin override code for a device. This relies on the
 // **Admin Override** setting being enabled in your device configuration.
-func (r *DeviceOverrideCodeService) List(ctx context.Context, accountID interface{}, deviceID string, opts ...option.RequestOption) (res *DeviceOverrideCodeListResponse, err error) {
+func (r *DeviceOverrideCodeService) List(ctx context.Context, deviceID string, query DeviceOverrideCodeListParams, opts ...option.RequestOption) (res *DeviceOverrideCodeListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceOverrideCodeListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/%s/override_codes", accountID, deviceID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/devices/%s/override_codes", query.AccountID, deviceID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -89,6 +90,10 @@ type deviceOverrideCodeListResponseDisableForTimeJSON struct {
 
 func (r *DeviceOverrideCodeListResponseDisableForTime) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type DeviceOverrideCodeListParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
 
 type DeviceOverrideCodeListResponseEnvelope struct {

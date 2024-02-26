@@ -35,11 +35,11 @@ func NewDEXTestUniqueDeviceService(opts ...option.RequestOption) (r *DEXTestUniq
 
 // Returns unique count of devices that have run synthetic application monitoring
 // tests in the past 7 days.
-func (r *DEXTestUniqueDeviceService) List(ctx context.Context, accountID string, query DEXTestUniqueDeviceListParams, opts ...option.RequestOption) (res *DEXTestUniqueDeviceListResponse, err error) {
+func (r *DEXTestUniqueDeviceService) List(ctx context.Context, params DEXTestUniqueDeviceListParams, opts ...option.RequestOption) (res *DEXTestUniqueDeviceListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DEXTestUniqueDeviceListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/dex/tests/unique-devices", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/dex/tests/unique-devices", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -66,6 +66,7 @@ func (r *DEXTestUniqueDeviceListResponse) UnmarshalJSON(data []byte) (err error)
 }
 
 type DEXTestUniqueDeviceListParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Optionally filter result stats to a specific device(s). Cannot be used in
 	// combination with colo param.
 	DeviceID param.Field[[]string] `query:"deviceId"`

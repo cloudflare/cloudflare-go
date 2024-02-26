@@ -35,11 +35,11 @@ func NewSettingPolishService(opts ...option.RequestOption) (r *SettingPolishServ
 // Automatically optimize image loading for website visitors on mobile devices.
 // Refer to our [blog post](http://blog.cloudflare.com/polish-solving-mobile-speed)
 // for more information.
-func (r *SettingPolishService) Edit(ctx context.Context, zoneID string, body SettingPolishEditParams, opts ...option.RequestOption) (res *SettingPolishEditResponse, err error) {
+func (r *SettingPolishService) Edit(ctx context.Context, params SettingPolishEditParams, opts ...option.RequestOption) (res *SettingPolishEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingPolishEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/polish", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/polish", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -50,11 +50,11 @@ func (r *SettingPolishService) Edit(ctx context.Context, zoneID string, body Set
 // Automatically optimize image loading for website visitors on mobile devices.
 // Refer to our [blog post](http://blog.cloudflare.com/polish-solving-mobile-speed)
 // for more information.
-func (r *SettingPolishService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingPolishGetResponse, err error) {
+func (r *SettingPolishService) Get(ctx context.Context, query SettingPolishGetParams, opts ...option.RequestOption) (res *SettingPolishGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingPolishGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/polish", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/polish", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -181,6 +181,8 @@ const (
 )
 
 type SettingPolishEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Removes metadata and compresses your images for faster page load times. Basic
 	// (Lossless): Reduce the size of PNG, JPEG, and GIF files - no impact on visual
 	// quality. Basic + JPEG (Lossy): Further reduce the size of JPEG files for faster
@@ -302,6 +304,11 @@ type settingPolishEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingPolishEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingPolishGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingPolishGetResponseEnvelope struct {

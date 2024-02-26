@@ -35,11 +35,11 @@ func NewCertificateAuthorityHostnameAssociationService(opts ...option.RequestOpt
 }
 
 // Replace Hostname Associations
-func (r *CertificateAuthorityHostnameAssociationService) Update(ctx context.Context, zoneID string, body CertificateAuthorityHostnameAssociationUpdateParams, opts ...option.RequestOption) (res *CertificateAuthorityHostnameAssociationUpdateResponse, err error) {
+func (r *CertificateAuthorityHostnameAssociationService) Update(ctx context.Context, params CertificateAuthorityHostnameAssociationUpdateParams, opts ...option.RequestOption) (res *CertificateAuthorityHostnameAssociationUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CertificateAuthorityHostnameAssociationUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/certificate_authorities/hostname_associations", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/certificate_authorities/hostname_associations", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +48,11 @@ func (r *CertificateAuthorityHostnameAssociationService) Update(ctx context.Cont
 }
 
 // List Hostname Associations
-func (r *CertificateAuthorityHostnameAssociationService) List(ctx context.Context, zoneID string, query CertificateAuthorityHostnameAssociationListParams, opts ...option.RequestOption) (res *CertificateAuthorityHostnameAssociationListResponse, err error) {
+func (r *CertificateAuthorityHostnameAssociationService) List(ctx context.Context, params CertificateAuthorityHostnameAssociationListParams, opts ...option.RequestOption) (res *CertificateAuthorityHostnameAssociationListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CertificateAuthorityHostnameAssociationListResponseEnvelope
-	path := fmt.Sprintf("zones/%s/certificate_authorities/hostname_associations", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("zones/%s/certificate_authorities/hostname_associations", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -105,6 +105,8 @@ func (r *CertificateAuthorityHostnameAssociationListResponse) UnmarshalJSON(data
 }
 
 type CertificateAuthorityHostnameAssociationUpdateParams struct {
+	// Identifier
+	ZoneID    param.Field[string]   `path:"zone_id,required"`
 	Hostnames param.Field[[]string] `json:"hostnames"`
 	// The UUID for a certificate that was uploaded to the mTLS Certificate Management
 	// endpoint. If no mtls_certificate_id is given, the hostnames will be associated
@@ -189,6 +191,8 @@ const (
 )
 
 type CertificateAuthorityHostnameAssociationListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The UUID to match against for a certificate that was uploaded to the mTLS
 	// Certificate Management endpoint. If no mtls_certificate_id is given, the results
 	// will be the hostnames associated to your active Cloudflare Managed CA.

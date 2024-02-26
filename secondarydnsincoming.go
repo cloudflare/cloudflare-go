@@ -32,11 +32,11 @@ func NewSecondaryDNSIncomingService(opts ...option.RequestOption) (r *SecondaryD
 }
 
 // Create secondary zone configuration for incoming zone transfers.
-func (r *SecondaryDNSIncomingService) New(ctx context.Context, zoneID interface{}, body SecondaryDNSIncomingNewParams, opts ...option.RequestOption) (res *SecondaryDNSIncomingNewResponse, err error) {
+func (r *SecondaryDNSIncomingService) New(ctx context.Context, params SecondaryDNSIncomingNewParams, opts ...option.RequestOption) (res *SecondaryDNSIncomingNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SecondaryDNSIncomingNewResponseEnvelope
-	path := fmt.Sprintf("zones/%v/secondary_dns/incoming", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%v/secondary_dns/incoming", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -45,11 +45,11 @@ func (r *SecondaryDNSIncomingService) New(ctx context.Context, zoneID interface{
 }
 
 // Update secondary zone configuration for incoming zone transfers.
-func (r *SecondaryDNSIncomingService) Update(ctx context.Context, zoneID interface{}, body SecondaryDNSIncomingUpdateParams, opts ...option.RequestOption) (res *SecondaryDNSIncomingUpdateResponse, err error) {
+func (r *SecondaryDNSIncomingService) Update(ctx context.Context, params SecondaryDNSIncomingUpdateParams, opts ...option.RequestOption) (res *SecondaryDNSIncomingUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SecondaryDNSIncomingUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%v/secondary_dns/incoming", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%v/secondary_dns/incoming", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -58,11 +58,11 @@ func (r *SecondaryDNSIncomingService) Update(ctx context.Context, zoneID interfa
 }
 
 // Delete secondary zone configuration for incoming zone transfers.
-func (r *SecondaryDNSIncomingService) Delete(ctx context.Context, zoneID interface{}, opts ...option.RequestOption) (res *SecondaryDNSIncomingDeleteResponse, err error) {
+func (r *SecondaryDNSIncomingService) Delete(ctx context.Context, body SecondaryDNSIncomingDeleteParams, opts ...option.RequestOption) (res *SecondaryDNSIncomingDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SecondaryDNSIncomingDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%v/secondary_dns/incoming", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%v/secondary_dns/incoming", body.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -71,11 +71,11 @@ func (r *SecondaryDNSIncomingService) Delete(ctx context.Context, zoneID interfa
 }
 
 // Get secondary zone configuration for incoming zone transfers.
-func (r *SecondaryDNSIncomingService) Get(ctx context.Context, zoneID interface{}, opts ...option.RequestOption) (res *SecondaryDNSIncomingGetResponse, err error) {
+func (r *SecondaryDNSIncomingService) Get(ctx context.Context, query SecondaryDNSIncomingGetParams, opts ...option.RequestOption) (res *SecondaryDNSIncomingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SecondaryDNSIncomingGetResponseEnvelope
-	path := fmt.Sprintf("zones/%v/secondary_dns/incoming", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%v/secondary_dns/incoming", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -218,6 +218,7 @@ func (r *SecondaryDNSIncomingGetResponse) UnmarshalJSON(data []byte) (err error)
 }
 
 type SecondaryDNSIncomingNewParams struct {
+	ZoneID param.Field[interface{}] `path:"zone_id,required"`
 	// How often should a secondary zone auto refresh regardless of DNS NOTIFY. Not
 	// applicable for primary zones.
 	AutoRefreshSeconds param.Field[float64] `json:"auto_refresh_seconds,required"`
@@ -301,6 +302,7 @@ const (
 )
 
 type SecondaryDNSIncomingUpdateParams struct {
+	ZoneID param.Field[interface{}] `path:"zone_id,required"`
 	// How often should a secondary zone auto refresh regardless of DNS NOTIFY. Not
 	// applicable for primary zones.
 	AutoRefreshSeconds param.Field[float64] `json:"auto_refresh_seconds,required"`
@@ -383,6 +385,10 @@ const (
 	SecondaryDNSIncomingUpdateResponseEnvelopeSuccessTrue SecondaryDNSIncomingUpdateResponseEnvelopeSuccess = true
 )
 
+type SecondaryDNSIncomingDeleteParams struct {
+	ZoneID param.Field[interface{}] `path:"zone_id,required"`
+}
+
 type SecondaryDNSIncomingDeleteResponseEnvelope struct {
 	Errors   []SecondaryDNSIncomingDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SecondaryDNSIncomingDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -451,6 +457,10 @@ type SecondaryDNSIncomingDeleteResponseEnvelopeSuccess bool
 const (
 	SecondaryDNSIncomingDeleteResponseEnvelopeSuccessTrue SecondaryDNSIncomingDeleteResponseEnvelopeSuccess = true
 )
+
+type SecondaryDNSIncomingGetParams struct {
+	ZoneID param.Field[interface{}] `path:"zone_id,required"`
+}
 
 type SecondaryDNSIncomingGetResponseEnvelope struct {
 	Errors   []SecondaryDNSIncomingGetResponseEnvelopeErrors   `json:"errors,required"`

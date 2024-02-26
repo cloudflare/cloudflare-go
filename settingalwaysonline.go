@@ -37,11 +37,11 @@ func NewSettingAlwaysOnlineService(opts ...option.RequestOption) (r *SettingAlwa
 // offline. Refer to
 // [Always Online](https://developers.cloudflare.com/cache/about/always-online) for
 // more information.
-func (r *SettingAlwaysOnlineService) Edit(ctx context.Context, zoneID string, body SettingAlwaysOnlineEditParams, opts ...option.RequestOption) (res *SettingAlwaysOnlineEditResponse, err error) {
+func (r *SettingAlwaysOnlineService) Edit(ctx context.Context, params SettingAlwaysOnlineEditParams, opts ...option.RequestOption) (res *SettingAlwaysOnlineEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingAlwaysOnlineEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/always_online", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/always_online", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -54,11 +54,11 @@ func (r *SettingAlwaysOnlineService) Edit(ctx context.Context, zoneID string, bo
 // offline. Refer to
 // [Always Online](https://developers.cloudflare.com/cache/about/always-online) for
 // more information.
-func (r *SettingAlwaysOnlineService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingAlwaysOnlineGetResponse, err error) {
+func (r *SettingAlwaysOnlineService) Get(ctx context.Context, query SettingAlwaysOnlineGetParams, opts ...option.RequestOption) (res *SettingAlwaysOnlineGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingAlwaysOnlineGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/always_online", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/always_online", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -181,6 +181,8 @@ const (
 )
 
 type SettingAlwaysOnlineEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the zone setting.
 	Value param.Field[SettingAlwaysOnlineEditParamsValue] `json:"value,required"`
 }
@@ -262,6 +264,11 @@ type settingAlwaysOnlineEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingAlwaysOnlineEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingAlwaysOnlineGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingAlwaysOnlineGetResponseEnvelope struct {

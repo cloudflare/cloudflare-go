@@ -43,11 +43,11 @@ func NewOriginTLSClientAuthService(opts ...option.RequestOption) (r *OriginTLSCl
 // important to keep only one certificate active. Also, make sure to enable
 // zone-level authenticated origin pulls by making a PUT call to settings endpoint
 // to see the uploaded certificate in use.
-func (r *OriginTLSClientAuthService) New(ctx context.Context, zoneID string, body OriginTLSClientAuthNewParams, opts ...option.RequestOption) (res *OriginTLSClientAuthNewResponse, err error) {
+func (r *OriginTLSClientAuthService) New(ctx context.Context, params OriginTLSClientAuthNewParams, opts ...option.RequestOption) (res *OriginTLSClientAuthNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OriginTLSClientAuthNewResponseEnvelope
-	path := fmt.Sprintf("zones/%s/origin_tls_client_auth", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/origin_tls_client_auth", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -56,11 +56,11 @@ func (r *OriginTLSClientAuthService) New(ctx context.Context, zoneID string, bod
 }
 
 // List Certificates
-func (r *OriginTLSClientAuthService) List(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *[]OriginTLSClientAuthListResponse, err error) {
+func (r *OriginTLSClientAuthService) List(ctx context.Context, query OriginTLSClientAuthListParams, opts ...option.RequestOption) (res *[]OriginTLSClientAuthListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OriginTLSClientAuthListResponseEnvelope
-	path := fmt.Sprintf("zones/%s/origin_tls_client_auth", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/origin_tls_client_auth", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -69,11 +69,11 @@ func (r *OriginTLSClientAuthService) List(ctx context.Context, zoneID string, op
 }
 
 // Delete Certificate
-func (r *OriginTLSClientAuthService) Delete(ctx context.Context, zoneID string, certificateID string, opts ...option.RequestOption) (res *OriginTLSClientAuthDeleteResponse, err error) {
+func (r *OriginTLSClientAuthService) Delete(ctx context.Context, certificateID string, body OriginTLSClientAuthDeleteParams, opts ...option.RequestOption) (res *OriginTLSClientAuthDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OriginTLSClientAuthDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/%s", zoneID, certificateID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/%s", body.ZoneID, certificateID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -82,11 +82,11 @@ func (r *OriginTLSClientAuthService) Delete(ctx context.Context, zoneID string, 
 }
 
 // Get Certificate Details
-func (r *OriginTLSClientAuthService) Get(ctx context.Context, zoneID string, certificateID string, opts ...option.RequestOption) (res *OriginTLSClientAuthGetResponse, err error) {
+func (r *OriginTLSClientAuthService) Get(ctx context.Context, certificateID string, query OriginTLSClientAuthGetParams, opts ...option.RequestOption) (res *OriginTLSClientAuthGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OriginTLSClientAuthGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/%s", zoneID, certificateID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/%s", query.ZoneID, certificateID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -173,6 +173,8 @@ func init() {
 }
 
 type OriginTLSClientAuthNewParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The zone's leaf certificate.
 	Certificate param.Field[string] `json:"certificate,required"`
 	// The zone's private key.
@@ -251,6 +253,11 @@ type OriginTLSClientAuthNewResponseEnvelopeSuccess bool
 const (
 	OriginTLSClientAuthNewResponseEnvelopeSuccessTrue OriginTLSClientAuthNewResponseEnvelopeSuccess = true
 )
+
+type OriginTLSClientAuthListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type OriginTLSClientAuthListResponseEnvelope struct {
 	Errors   []OriginTLSClientAuthListResponseEnvelopeErrors   `json:"errors,required"`
@@ -350,6 +357,11 @@ func (r *OriginTLSClientAuthListResponseEnvelopeResultInfo) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type OriginTLSClientAuthDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type OriginTLSClientAuthDeleteResponseEnvelope struct {
 	Errors   []OriginTLSClientAuthDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []OriginTLSClientAuthDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -418,6 +430,11 @@ type OriginTLSClientAuthDeleteResponseEnvelopeSuccess bool
 const (
 	OriginTLSClientAuthDeleteResponseEnvelopeSuccessTrue OriginTLSClientAuthDeleteResponseEnvelopeSuccess = true
 )
+
+type OriginTLSClientAuthGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type OriginTLSClientAuthGetResponseEnvelope struct {
 	Errors   []OriginTLSClientAuthGetResponseEnvelopeErrors   `json:"errors,required"`

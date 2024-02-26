@@ -31,11 +31,11 @@ func TestHostnameSettingTLSUpdate(t *testing.T) {
 	)
 	_, err := client.Hostnames.Settings.TLS.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.HostnameSettingTLSUpdateParamsSettingIDCiphers,
 		"app.example.com",
 		cloudflare.HostnameSettingTLSUpdateParams{
-			Value: cloudflare.F[cloudflare.HostnameSettingTLSUpdateParamsValue](cloudflare.HostnameSettingTLSUpdateParamsValueArray([]string{"ECDHE-RSA-AES128-GCM-SHA256", "AES128-GCM-SHA256"})),
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Value:  cloudflare.F[cloudflare.HostnameSettingTLSUpdateParamsValue](cloudflare.HostnameSettingTLSUpdateParamsValueArray([]string{"ECDHE-RSA-AES128-GCM-SHA256", "AES128-GCM-SHA256"})),
 		},
 	)
 	if err != nil {
@@ -65,9 +65,11 @@ func TestHostnameSettingTLSDelete(t *testing.T) {
 	)
 	_, err := client.Hostnames.Settings.TLS.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.HostnameSettingTLSDeleteParamsSettingIDCiphers,
 		"app.example.com",
+		cloudflare.HostnameSettingTLSDeleteParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -96,8 +98,10 @@ func TestHostnameSettingTLSGet(t *testing.T) {
 	)
 	_, err := client.Hostnames.Settings.TLS.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.HostnameSettingTLSGetParamsSettingIDCiphers,
+		cloudflare.HostnameSettingTLSGetParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

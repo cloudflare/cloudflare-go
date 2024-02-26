@@ -32,11 +32,11 @@ func NewDeviceDEXTestService(opts ...option.RequestOption) (r *DeviceDEXTestServ
 }
 
 // Create a DEX test.
-func (r *DeviceDEXTestService) New(ctx context.Context, accountID interface{}, body DeviceDEXTestNewParams, opts ...option.RequestOption) (res *DeviceDEXTestNewResponse, err error) {
+func (r *DeviceDEXTestService) New(ctx context.Context, params DeviceDEXTestNewParams, opts ...option.RequestOption) (res *DeviceDEXTestNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceDEXTestNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/dex_tests", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/devices/dex_tests", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -45,11 +45,11 @@ func (r *DeviceDEXTestService) New(ctx context.Context, accountID interface{}, b
 }
 
 // Update a DEX test.
-func (r *DeviceDEXTestService) Update(ctx context.Context, accountID interface{}, dexTestID string, body DeviceDEXTestUpdateParams, opts ...option.RequestOption) (res *DeviceDEXTestUpdateResponse, err error) {
+func (r *DeviceDEXTestService) Update(ctx context.Context, dexTestID string, params DeviceDEXTestUpdateParams, opts ...option.RequestOption) (res *DeviceDEXTestUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceDEXTestUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/dex_tests/%s", accountID, dexTestID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/devices/dex_tests/%s", params.AccountID, dexTestID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -58,11 +58,11 @@ func (r *DeviceDEXTestService) Update(ctx context.Context, accountID interface{}
 }
 
 // Fetch all DEX tests.
-func (r *DeviceDEXTestService) List(ctx context.Context, accountID interface{}, opts ...option.RequestOption) (res *[]DeviceDEXTestListResponse, err error) {
+func (r *DeviceDEXTestService) List(ctx context.Context, query DeviceDEXTestListParams, opts ...option.RequestOption) (res *[]DeviceDEXTestListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceDEXTestListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/dex_tests", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/devices/dex_tests", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -72,11 +72,11 @@ func (r *DeviceDEXTestService) List(ctx context.Context, accountID interface{}, 
 
 // Delete a Device DEX test. Returns the remaining device dex tests for the
 // account.
-func (r *DeviceDEXTestService) Delete(ctx context.Context, accountID interface{}, dexTestID string, opts ...option.RequestOption) (res *[]DeviceDEXTestDeleteResponse, err error) {
+func (r *DeviceDEXTestService) Delete(ctx context.Context, dexTestID string, body DeviceDEXTestDeleteParams, opts ...option.RequestOption) (res *[]DeviceDEXTestDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceDEXTestDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/dex_tests/%s", accountID, dexTestID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/devices/dex_tests/%s", body.AccountID, dexTestID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -85,11 +85,11 @@ func (r *DeviceDEXTestService) Delete(ctx context.Context, accountID interface{}
 }
 
 // Fetch a single DEX test.
-func (r *DeviceDEXTestService) Get(ctx context.Context, accountID interface{}, dexTestID string, opts ...option.RequestOption) (res *DeviceDEXTestGetResponse, err error) {
+func (r *DeviceDEXTestService) Get(ctx context.Context, dexTestID string, query DeviceDEXTestGetParams, opts ...option.RequestOption) (res *DeviceDEXTestGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceDEXTestGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/dex_tests/%s", accountID, dexTestID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/devices/dex_tests/%s", query.AccountID, dexTestID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -383,6 +383,7 @@ func (r *DeviceDEXTestGetResponseData) UnmarshalJSON(data []byte) (err error) {
 }
 
 type DeviceDEXTestNewParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// The configuration object which contains the details for the WARP client to
 	// conduct the test.
 	Data param.Field[DeviceDEXTestNewParamsData] `json:"data,required"`
@@ -485,6 +486,7 @@ const (
 )
 
 type DeviceDEXTestUpdateParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// The configuration object which contains the details for the WARP client to
 	// conduct the test.
 	Data param.Field[DeviceDEXTestUpdateParamsData] `json:"data,required"`
@@ -586,6 +588,10 @@ const (
 	DeviceDEXTestUpdateResponseEnvelopeSuccessTrue DeviceDEXTestUpdateResponseEnvelopeSuccess = true
 )
 
+type DeviceDEXTestListParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
+
 type DeviceDEXTestListResponseEnvelope struct {
 	Errors   []DeviceDEXTestListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DeviceDEXTestListResponseEnvelopeMessages `json:"messages,required"`
@@ -655,6 +661,10 @@ const (
 	DeviceDEXTestListResponseEnvelopeSuccessTrue DeviceDEXTestListResponseEnvelopeSuccess = true
 )
 
+type DeviceDEXTestDeleteParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
+
 type DeviceDEXTestDeleteResponseEnvelope struct {
 	Errors   []DeviceDEXTestDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DeviceDEXTestDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -723,6 +733,10 @@ type DeviceDEXTestDeleteResponseEnvelopeSuccess bool
 const (
 	DeviceDEXTestDeleteResponseEnvelopeSuccessTrue DeviceDEXTestDeleteResponseEnvelopeSuccess = true
 )
+
+type DeviceDEXTestGetParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
 
 type DeviceDEXTestGetResponseEnvelope struct {
 	Errors   []DeviceDEXTestGetResponseEnvelopeErrors   `json:"errors,required"`

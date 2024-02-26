@@ -9,6 +9,7 @@ import (
 	"reflect"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
@@ -34,11 +35,11 @@ func NewAddressAddressMapIPService(opts ...option.RequestOption) (r *AddressAddr
 }
 
 // Add an IP from a prefix owned by the account to a particular address map.
-func (r *AddressAddressMapIPService) Update(ctx context.Context, accountID string, addressMapID string, ipAddress string, opts ...option.RequestOption) (res *AddressAddressMapIPUpdateResponse, err error) {
+func (r *AddressAddressMapIPService) Update(ctx context.Context, addressMapID string, ipAddress string, body AddressAddressMapIPUpdateParams, opts ...option.RequestOption) (res *AddressAddressMapIPUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressAddressMapIPUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/ips/%s", accountID, addressMapID, ipAddress)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/ips/%s", body.AccountID, addressMapID, ipAddress)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -47,11 +48,11 @@ func (r *AddressAddressMapIPService) Update(ctx context.Context, accountID strin
 }
 
 // Remove an IP from a particular address map.
-func (r *AddressAddressMapIPService) Delete(ctx context.Context, accountID string, addressMapID string, ipAddress string, opts ...option.RequestOption) (res *AddressAddressMapIPDeleteResponse, err error) {
+func (r *AddressAddressMapIPService) Delete(ctx context.Context, addressMapID string, ipAddress string, body AddressAddressMapIPDeleteParams, opts ...option.RequestOption) (res *AddressAddressMapIPDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressAddressMapIPDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/ips/%s", accountID, addressMapID, ipAddress)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/ips/%s", body.AccountID, addressMapID, ipAddress)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -100,6 +101,11 @@ func init() {
 type AddressAddressMapIPDeleteResponseArray []interface{}
 
 func (r AddressAddressMapIPDeleteResponseArray) ImplementsAddressAddressMapIPDeleteResponse() {}
+
+type AddressAddressMapIPUpdateParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type AddressAddressMapIPUpdateResponseEnvelope struct {
 	Errors   []AddressAddressMapIPUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -197,6 +203,11 @@ type addressAddressMapIPUpdateResponseEnvelopeResultInfoJSON struct {
 
 func (r *AddressAddressMapIPUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type AddressAddressMapIPDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type AddressAddressMapIPDeleteResponseEnvelope struct {

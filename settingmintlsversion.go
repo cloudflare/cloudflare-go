@@ -33,11 +33,11 @@ func NewSettingMinTLSVersionService(opts ...option.RequestOption) (r *SettingMin
 }
 
 // Changes Minimum TLS Version setting.
-func (r *SettingMinTLSVersionService) Edit(ctx context.Context, zoneID string, body SettingMinTLSVersionEditParams, opts ...option.RequestOption) (res *SettingMinTLSVersionEditResponse, err error) {
+func (r *SettingMinTLSVersionService) Edit(ctx context.Context, params SettingMinTLSVersionEditParams, opts ...option.RequestOption) (res *SettingMinTLSVersionEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingMinTLSVersionEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/min_tls_version", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/min_tls_version", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -46,11 +46,11 @@ func (r *SettingMinTLSVersionService) Edit(ctx context.Context, zoneID string, b
 }
 
 // Gets Minimum TLS Version setting.
-func (r *SettingMinTLSVersionService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingMinTLSVersionGetResponse, err error) {
+func (r *SettingMinTLSVersionService) Get(ctx context.Context, query SettingMinTLSVersionGetParams, opts ...option.RequestOption) (res *SettingMinTLSVersionGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingMinTLSVersionGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/min_tls_version", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/min_tls_version", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -173,6 +173,8 @@ const (
 )
 
 type SettingMinTLSVersionEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the zone setting.
 	Value param.Field[SettingMinTLSVersionEditParamsValue] `json:"value,required"`
 }
@@ -254,6 +256,11 @@ type settingMinTLSVersionEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingMinTLSVersionEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingMinTLSVersionGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingMinTLSVersionGetResponseEnvelope struct {

@@ -34,11 +34,11 @@ func NewSettingTrueClientIPHeaderService(opts ...option.RequestOption) (r *Setti
 
 // Allows customer to continue to use True Client IP (Akamai feature) in the
 // headers we send to the origin. This is limited to Enterprise Zones.
-func (r *SettingTrueClientIPHeaderService) Edit(ctx context.Context, zoneID string, body SettingTrueClientIPHeaderEditParams, opts ...option.RequestOption) (res *SettingTrueClientIPHeaderEditResponse, err error) {
+func (r *SettingTrueClientIPHeaderService) Edit(ctx context.Context, params SettingTrueClientIPHeaderEditParams, opts ...option.RequestOption) (res *SettingTrueClientIPHeaderEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingTrueClientIPHeaderEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/true_client_ip_header", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/true_client_ip_header", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +48,11 @@ func (r *SettingTrueClientIPHeaderService) Edit(ctx context.Context, zoneID stri
 
 // Allows customer to continue to use True Client IP (Akamai feature) in the
 // headers we send to the origin. This is limited to Enterprise Zones.
-func (r *SettingTrueClientIPHeaderService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingTrueClientIPHeaderGetResponse, err error) {
+func (r *SettingTrueClientIPHeaderService) Get(ctx context.Context, query SettingTrueClientIPHeaderGetParams, opts ...option.RequestOption) (res *SettingTrueClientIPHeaderGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingTrueClientIPHeaderGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/true_client_ip_header", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/true_client_ip_header", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -169,6 +169,8 @@ const (
 )
 
 type SettingTrueClientIPHeaderEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the zone setting.
 	Value param.Field[SettingTrueClientIPHeaderEditParamsValue] `json:"value,required"`
 }
@@ -247,6 +249,11 @@ type settingTrueClientIPHeaderEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingTrueClientIPHeaderEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingTrueClientIPHeaderGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingTrueClientIPHeaderGetResponseEnvelope struct {

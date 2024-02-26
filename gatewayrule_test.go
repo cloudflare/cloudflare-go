@@ -29,120 +29,117 @@ func TestGatewayRuleNewWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Gateways.Rules.New(
-		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
-		cloudflare.GatewayRuleNewParams{
-			Action:        cloudflare.F(cloudflare.GatewayRuleNewParamsActionAllow),
-			Name:          cloudflare.F("block bad websites"),
-			Description:   cloudflare.F("Block bad websites based on their host name."),
-			DevicePosture: cloudflare.F("any(device_posture.checks.passed[*] in {\"1308749e-fcfb-4ebc-b051-fe022b632644\"})"),
-			Enabled:       cloudflare.F(true),
-			Filters:       cloudflare.F([]cloudflare.GatewayRuleNewParamsFilter{cloudflare.GatewayRuleNewParamsFilterHTTP}),
-			Identity:      cloudflare.F("any(identity.groups.name[*] in {\"finance\"})"),
-			Precedence:    cloudflare.F(int64(0)),
-			RuleSettings: cloudflare.F(cloudflare.GatewayRuleNewParamsRuleSettings{
-				AddHeaders: cloudflare.F[any](map[string]interface{}{
-					"My-Next-Header": map[string]interface{}{
-						"0": "foo",
-						"1": "bar",
-					},
-					"X-Custom-Header-Name": map[string]interface{}{
-						"0": "somecustomvalue",
-					},
-				}),
-				AllowChildBypass: cloudflare.F(false),
-				AuditSSH: cloudflare.F(cloudflare.GatewayRuleNewParamsRuleSettingsAuditSSH{
-					CommandLogging: cloudflare.F(false),
-				}),
-				BisoAdminControls: cloudflare.F(cloudflare.GatewayRuleNewParamsRuleSettingsBisoAdminControls{
-					Dcp: cloudflare.F(false),
-					Dd:  cloudflare.F(false),
-					Dk:  cloudflare.F(false),
-					Dp:  cloudflare.F(false),
-					Du:  cloudflare.F(false),
-				}),
-				BlockPageEnabled: cloudflare.F(true),
-				BlockReason:      cloudflare.F("This website is a security risk"),
-				BypassParentRule: cloudflare.F(false),
-				CheckSession: cloudflare.F(cloudflare.GatewayRuleNewParamsRuleSettingsCheckSession{
-					Duration: cloudflare.F("300s"),
-					Enforce:  cloudflare.F(true),
-				}),
-				DNSResolvers: cloudflare.F(cloudflare.GatewayRuleNewParamsRuleSettingsDNSResolvers{
-					IPV4: cloudflare.F([]cloudflare.GatewayRuleNewParamsRuleSettingsDNSResolversIPV4{{
-						IP:                         cloudflare.F("2001:DB8::/64"),
-						Port:                       cloudflare.F(int64(5053)),
-						RouteThroughPrivateNetwork: cloudflare.F(true),
-						VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
-					}, {
-						IP:                         cloudflare.F("2001:DB8::/64"),
-						Port:                       cloudflare.F(int64(5053)),
-						RouteThroughPrivateNetwork: cloudflare.F(true),
-						VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
-					}, {
-						IP:                         cloudflare.F("2001:DB8::/64"),
-						Port:                       cloudflare.F(int64(5053)),
-						RouteThroughPrivateNetwork: cloudflare.F(true),
-						VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
-					}}),
-					IPV6: cloudflare.F([]cloudflare.GatewayRuleNewParamsRuleSettingsDNSResolversIPV6{{
-						IP:                         cloudflare.F("2001:DB8::/64"),
-						Port:                       cloudflare.F(int64(5053)),
-						RouteThroughPrivateNetwork: cloudflare.F(true),
-						VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
-					}, {
-						IP:                         cloudflare.F("2001:DB8::/64"),
-						Port:                       cloudflare.F(int64(5053)),
-						RouteThroughPrivateNetwork: cloudflare.F(true),
-						VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
-					}, {
-						IP:                         cloudflare.F("2001:DB8::/64"),
-						Port:                       cloudflare.F(int64(5053)),
-						RouteThroughPrivateNetwork: cloudflare.F(true),
-						VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
-					}}),
-				}),
-				Egress: cloudflare.F(cloudflare.GatewayRuleNewParamsRuleSettingsEgress{
-					IPV4:         cloudflare.F("192.0.2.2"),
-					IPV4Fallback: cloudflare.F("192.0.2.3"),
-					IPV6:         cloudflare.F("2001:DB8::/64"),
-				}),
-				InsecureDisableDNSSECValidation: cloudflare.F(false),
-				IPCategories:                    cloudflare.F(true),
-				IPIndicatorFeeds:                cloudflare.F(true),
-				L4override: cloudflare.F(cloudflare.GatewayRuleNewParamsRuleSettingsL4override{
-					IP:   cloudflare.F("1.1.1.1"),
-					Port: cloudflare.F(int64(0)),
-				}),
-				NotificationSettings: cloudflare.F(cloudflare.GatewayRuleNewParamsRuleSettingsNotificationSettings{
-					Enabled:    cloudflare.F(true),
-					Msg:        cloudflare.F("string"),
-					SupportURL: cloudflare.F("string"),
-				}),
-				OverrideHost: cloudflare.F("example.com"),
-				OverrideIPs:  cloudflare.F([]string{"1.1.1.1", "2.2.2.2"}),
-				PayloadLog: cloudflare.F(cloudflare.GatewayRuleNewParamsRuleSettingsPayloadLog{
-					Enabled: cloudflare.F(true),
-				}),
-				ResolveDNSThroughCloudflare: cloudflare.F(true),
-				UntrustedCert: cloudflare.F(cloudflare.GatewayRuleNewParamsRuleSettingsUntrustedCert{
-					Action: cloudflare.F(cloudflare.GatewayRuleNewParamsRuleSettingsUntrustedCertActionError),
-				}),
+	_, err := client.Gateways.Rules.New(context.TODO(), cloudflare.GatewayRuleNewParams{
+		AccountID:     cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		Action:        cloudflare.F(cloudflare.GatewayRuleNewParamsActionAllow),
+		Name:          cloudflare.F("block bad websites"),
+		Description:   cloudflare.F("Block bad websites based on their host name."),
+		DevicePosture: cloudflare.F("any(device_posture.checks.passed[*] in {\"1308749e-fcfb-4ebc-b051-fe022b632644\"})"),
+		Enabled:       cloudflare.F(true),
+		Filters:       cloudflare.F([]cloudflare.GatewayRuleNewParamsFilter{cloudflare.GatewayRuleNewParamsFilterHTTP}),
+		Identity:      cloudflare.F("any(identity.groups.name[*] in {\"finance\"})"),
+		Precedence:    cloudflare.F(int64(0)),
+		RuleSettings: cloudflare.F(cloudflare.GatewayRuleNewParamsRuleSettings{
+			AddHeaders: cloudflare.F[any](map[string]interface{}{
+				"My-Next-Header": map[string]interface{}{
+					"0": "foo",
+					"1": "bar",
+				},
+				"X-Custom-Header-Name": map[string]interface{}{
+					"0": "somecustomvalue",
+				},
 			}),
-			Schedule: cloudflare.F(cloudflare.GatewayRuleNewParamsSchedule{
-				Fri:      cloudflare.F("08:00-12:30,13:30-17:00"),
-				Mon:      cloudflare.F("08:00-12:30,13:30-17:00"),
-				Sat:      cloudflare.F("08:00-12:30,13:30-17:00"),
-				Sun:      cloudflare.F("08:00-12:30,13:30-17:00"),
-				Thu:      cloudflare.F("08:00-12:30,13:30-17:00"),
-				TimeZone: cloudflare.F("America/New York"),
-				Tue:      cloudflare.F("08:00-12:30,13:30-17:00"),
-				Wed:      cloudflare.F("08:00-12:30,13:30-17:00"),
+			AllowChildBypass: cloudflare.F(false),
+			AuditSSH: cloudflare.F(cloudflare.GatewayRuleNewParamsRuleSettingsAuditSSH{
+				CommandLogging: cloudflare.F(false),
 			}),
-			Traffic: cloudflare.F("http.request.uri matches \".*a/partial/uri.*\" and http.request.host in $01302951-49f9-47c9-a400-0297e60b6a10"),
-		},
-	)
+			BisoAdminControls: cloudflare.F(cloudflare.GatewayRuleNewParamsRuleSettingsBisoAdminControls{
+				Dcp: cloudflare.F(false),
+				Dd:  cloudflare.F(false),
+				Dk:  cloudflare.F(false),
+				Dp:  cloudflare.F(false),
+				Du:  cloudflare.F(false),
+			}),
+			BlockPageEnabled: cloudflare.F(true),
+			BlockReason:      cloudflare.F("This website is a security risk"),
+			BypassParentRule: cloudflare.F(false),
+			CheckSession: cloudflare.F(cloudflare.GatewayRuleNewParamsRuleSettingsCheckSession{
+				Duration: cloudflare.F("300s"),
+				Enforce:  cloudflare.F(true),
+			}),
+			DNSResolvers: cloudflare.F(cloudflare.GatewayRuleNewParamsRuleSettingsDNSResolvers{
+				IPV4: cloudflare.F([]cloudflare.GatewayRuleNewParamsRuleSettingsDNSResolversIPV4{{
+					IP:                         cloudflare.F("2001:DB8::/64"),
+					Port:                       cloudflare.F(int64(5053)),
+					RouteThroughPrivateNetwork: cloudflare.F(true),
+					VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
+				}, {
+					IP:                         cloudflare.F("2001:DB8::/64"),
+					Port:                       cloudflare.F(int64(5053)),
+					RouteThroughPrivateNetwork: cloudflare.F(true),
+					VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
+				}, {
+					IP:                         cloudflare.F("2001:DB8::/64"),
+					Port:                       cloudflare.F(int64(5053)),
+					RouteThroughPrivateNetwork: cloudflare.F(true),
+					VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
+				}}),
+				IPV6: cloudflare.F([]cloudflare.GatewayRuleNewParamsRuleSettingsDNSResolversIPV6{{
+					IP:                         cloudflare.F("2001:DB8::/64"),
+					Port:                       cloudflare.F(int64(5053)),
+					RouteThroughPrivateNetwork: cloudflare.F(true),
+					VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
+				}, {
+					IP:                         cloudflare.F("2001:DB8::/64"),
+					Port:                       cloudflare.F(int64(5053)),
+					RouteThroughPrivateNetwork: cloudflare.F(true),
+					VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
+				}, {
+					IP:                         cloudflare.F("2001:DB8::/64"),
+					Port:                       cloudflare.F(int64(5053)),
+					RouteThroughPrivateNetwork: cloudflare.F(true),
+					VnetID:                     cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
+				}}),
+			}),
+			Egress: cloudflare.F(cloudflare.GatewayRuleNewParamsRuleSettingsEgress{
+				IPV4:         cloudflare.F("192.0.2.2"),
+				IPV4Fallback: cloudflare.F("192.0.2.3"),
+				IPV6:         cloudflare.F("2001:DB8::/64"),
+			}),
+			InsecureDisableDNSSECValidation: cloudflare.F(false),
+			IPCategories:                    cloudflare.F(true),
+			IPIndicatorFeeds:                cloudflare.F(true),
+			L4override: cloudflare.F(cloudflare.GatewayRuleNewParamsRuleSettingsL4override{
+				IP:   cloudflare.F("1.1.1.1"),
+				Port: cloudflare.F(int64(0)),
+			}),
+			NotificationSettings: cloudflare.F(cloudflare.GatewayRuleNewParamsRuleSettingsNotificationSettings{
+				Enabled:    cloudflare.F(true),
+				Msg:        cloudflare.F("string"),
+				SupportURL: cloudflare.F("string"),
+			}),
+			OverrideHost: cloudflare.F("example.com"),
+			OverrideIPs:  cloudflare.F([]string{"1.1.1.1", "2.2.2.2"}),
+			PayloadLog: cloudflare.F(cloudflare.GatewayRuleNewParamsRuleSettingsPayloadLog{
+				Enabled: cloudflare.F(true),
+			}),
+			ResolveDNSThroughCloudflare: cloudflare.F(true),
+			UntrustedCert: cloudflare.F(cloudflare.GatewayRuleNewParamsRuleSettingsUntrustedCert{
+				Action: cloudflare.F(cloudflare.GatewayRuleNewParamsRuleSettingsUntrustedCertActionError),
+			}),
+		}),
+		Schedule: cloudflare.F(cloudflare.GatewayRuleNewParamsSchedule{
+			Fri:      cloudflare.F("08:00-12:30,13:30-17:00"),
+			Mon:      cloudflare.F("08:00-12:30,13:30-17:00"),
+			Sat:      cloudflare.F("08:00-12:30,13:30-17:00"),
+			Sun:      cloudflare.F("08:00-12:30,13:30-17:00"),
+			Thu:      cloudflare.F("08:00-12:30,13:30-17:00"),
+			TimeZone: cloudflare.F("America/New York"),
+			Tue:      cloudflare.F("08:00-12:30,13:30-17:00"),
+			Wed:      cloudflare.F("08:00-12:30,13:30-17:00"),
+		}),
+		Traffic: cloudflare.F("http.request.uri matches \".*a/partial/uri.*\" and http.request.host in $01302951-49f9-47c9-a400-0297e60b6a10"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -170,9 +167,9 @@ func TestGatewayRuleUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Gateways.Rules.Update(
 		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.GatewayRuleUpdateParams{
+			AccountID:     cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
 			Action:        cloudflare.F(cloudflare.GatewayRuleUpdateParamsActionAllow),
 			Name:          cloudflare.F("block bad websites"),
 			Description:   cloudflare.F("Block bad websites based on their host name."),
@@ -308,7 +305,9 @@ func TestGatewayRuleList(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Gateways.Rules.List(context.TODO(), "699d98642c564d2e855e9661899b7252")
+	_, err := client.Gateways.Rules.List(context.TODO(), cloudflare.GatewayRuleListParams{
+		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -336,8 +335,10 @@ func TestGatewayRuleDelete(t *testing.T) {
 	)
 	_, err := client.Gateways.Rules.Delete(
 		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		cloudflare.GatewayRuleDeleteParams{
+			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -366,8 +367,10 @@ func TestGatewayRuleGet(t *testing.T) {
 	)
 	_, err := client.Gateways.Rules.Get(
 		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		cloudflare.GatewayRuleGetParams{
+			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

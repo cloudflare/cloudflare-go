@@ -31,9 +31,9 @@ func TestSpeedTestNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Speed.Tests.New(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"example.com",
 		cloudflare.SpeedTestNewParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Region: cloudflare.F(cloudflare.SpeedTestNewParamsRegionUsCentral1),
 		},
 	)
@@ -64,9 +64,9 @@ func TestSpeedTestListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Speed.Tests.List(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"example.com",
 		cloudflare.SpeedTestListParams{
+			ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Page:    cloudflare.F(int64(1)),
 			PerPage: cloudflare.F(int64(20)),
 			Region:  cloudflare.F(cloudflare.SpeedTestListParamsRegionUsCentral1),
@@ -99,9 +99,9 @@ func TestSpeedTestDeleteWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Speed.Tests.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"example.com",
 		cloudflare.SpeedTestDeleteParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Region: cloudflare.F(cloudflare.SpeedTestDeleteParamsRegionUsCentral1),
 		},
 	)
@@ -132,9 +132,11 @@ func TestSpeedTestGet(t *testing.T) {
 	)
 	_, err := client.Speed.Tests.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"example.com",
 		"string",
+		cloudflare.SpeedTestGetParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

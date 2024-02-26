@@ -34,11 +34,11 @@ func NewLoadBalancerSearchService(opts ...option.RequestOption) (r *LoadBalancer
 }
 
 // Search for Load Balancing resources.
-func (r *LoadBalancerSearchService) List(ctx context.Context, accountID string, query LoadBalancerSearchListParams, opts ...option.RequestOption) (res *[]LoadBalancerSearchListResponse, err error) {
+func (r *LoadBalancerSearchService) List(ctx context.Context, params LoadBalancerSearchListParams, opts ...option.RequestOption) (res *[]LoadBalancerSearchListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerSearchListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/load_balancers/search", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/load_balancers/search", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -49,6 +49,8 @@ func (r *LoadBalancerSearchService) List(ctx context.Context, accountID string, 
 type LoadBalancerSearchListResponse = interface{}
 
 type LoadBalancerSearchListParams struct {
+	// Identifier
+	AccountID    param.Field[string]                                   `path:"account_id,required"`
 	Page         param.Field[interface{}]                              `query:"page"`
 	PerPage      param.Field[interface{}]                              `query:"per_page"`
 	SearchParams param.Field[LoadBalancerSearchListParamsSearchParams] `query:"search_params"`

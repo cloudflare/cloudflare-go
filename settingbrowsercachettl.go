@@ -36,11 +36,11 @@ func NewSettingBrowserCacheTTLService(opts ...option.RequestOption) (r *SettingB
 // will remain on your visitors' computers. Cloudflare will honor any larger times
 // specified by your server.
 // (https://support.cloudflare.com/hc/en-us/articles/200168276).
-func (r *SettingBrowserCacheTTLService) Edit(ctx context.Context, zoneID string, body SettingBrowserCacheTTLEditParams, opts ...option.RequestOption) (res *SettingBrowserCacheTTLEditResponse, err error) {
+func (r *SettingBrowserCacheTTLService) Edit(ctx context.Context, params SettingBrowserCacheTTLEditParams, opts ...option.RequestOption) (res *SettingBrowserCacheTTLEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingBrowserCacheTTLEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/browser_cache_ttl", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/browser_cache_ttl", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -52,11 +52,11 @@ func (r *SettingBrowserCacheTTLService) Edit(ctx context.Context, zoneID string,
 // will remain on your visitors' computers. Cloudflare will honor any larger times
 // specified by your server.
 // (https://support.cloudflare.com/hc/en-us/articles/200168276).
-func (r *SettingBrowserCacheTTLService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingBrowserCacheTTLGetResponse, err error) {
+func (r *SettingBrowserCacheTTLService) Get(ctx context.Context, query SettingBrowserCacheTTLGetParams, opts ...option.RequestOption) (res *SettingBrowserCacheTTLGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingBrowserCacheTTLGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/browser_cache_ttl", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/browser_cache_ttl", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -229,6 +229,8 @@ const (
 )
 
 type SettingBrowserCacheTTLEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the zone setting. Notes: Setting a TTL of 0 is equivalent to selecting
 	// `Respect Existing Headers`
 	Value param.Field[SettingBrowserCacheTTLEditParamsValue] `json:"value,required"`
@@ -337,6 +339,11 @@ type settingBrowserCacheTTLEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingBrowserCacheTTLEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingBrowserCacheTTLGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingBrowserCacheTTLGetResponseEnvelope struct {

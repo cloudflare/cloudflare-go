@@ -35,11 +35,11 @@ func NewDEXHTTPTestPercentileService(opts ...option.RequestOption) (r *DEXHTTPTe
 
 // Get percentiles for an http test for a given time period between 1 hour and 7
 // days.
-func (r *DEXHTTPTestPercentileService) List(ctx context.Context, accountID string, testID string, query DEXHTTPTestPercentileListParams, opts ...option.RequestOption) (res *DexhttpTestPercentileListResponse, err error) {
+func (r *DEXHTTPTestPercentileService) List(ctx context.Context, testID string, params DEXHTTPTestPercentileListParams, opts ...option.RequestOption) (res *DexhttpTestPercentileListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DexhttpTestPercentileListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/dex/http-tests/%s/percentiles", accountID, testID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/dex/http-tests/%s/percentiles", params.AccountID, testID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -150,6 +150,7 @@ func (r *DexhttpTestPercentileListResponseServerResponseTimeMs) UnmarshalJSON(da
 }
 
 type DEXHTTPTestPercentileListParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
 	// End time for aggregate metrics in ISO format
 	TimeEnd param.Field[string] `query:"timeEnd,required"`
 	// Start time for aggregate metrics in ISO format

@@ -41,11 +41,11 @@ func NewSpeedService(opts ...option.RequestOption) (r *SpeedService) {
 }
 
 // Deletes a scheduled test for a page.
-func (r *SpeedService) Delete(ctx context.Context, zoneID string, url string, body SpeedDeleteParams, opts ...option.RequestOption) (res *SpeedDeleteResponse, err error) {
+func (r *SpeedService) Delete(ctx context.Context, url string, params SpeedDeleteParams, opts ...option.RequestOption) (res *SpeedDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SpeedDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/speed_api/schedule/%s", zoneID, url)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/speed_api/schedule/%s", params.ZoneID, url)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -54,11 +54,11 @@ func (r *SpeedService) Delete(ctx context.Context, zoneID string, url string, bo
 }
 
 // Retrieves the test schedule for a page in a specific region.
-func (r *SpeedService) ScheduleGet(ctx context.Context, zoneID string, url string, query SpeedScheduleGetParams, opts ...option.RequestOption) (res *SpeedScheduleGetResponse, err error) {
+func (r *SpeedService) ScheduleGet(ctx context.Context, url string, params SpeedScheduleGetParams, opts ...option.RequestOption) (res *SpeedScheduleGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SpeedScheduleGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/speed_api/schedule/%s", zoneID, url)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("zones/%s/speed_api/schedule/%s", params.ZoneID, url)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -67,11 +67,11 @@ func (r *SpeedService) ScheduleGet(ctx context.Context, zoneID string, url strin
 }
 
 // Lists the core web vital metrics trend over time for a specific page.
-func (r *SpeedService) TrendsList(ctx context.Context, zoneID string, url string, query SpeedTrendsListParams, opts ...option.RequestOption) (res *SpeedTrendsListResponse, err error) {
+func (r *SpeedService) TrendsList(ctx context.Context, url string, params SpeedTrendsListParams, opts ...option.RequestOption) (res *SpeedTrendsListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SpeedTrendsListResponseEnvelope
-	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/trend", zoneID, url)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/trend", params.ZoneID, url)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -197,6 +197,8 @@ func (r *SpeedTrendsListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type SpeedDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// A test region.
 	Region param.Field[SpeedDeleteParamsRegion] `query:"region"`
 }
@@ -254,6 +256,8 @@ func (r *SpeedDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 }
 
 type SpeedScheduleGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// A test region.
 	Region param.Field[SpeedScheduleGetParamsRegion] `query:"region"`
 }
@@ -312,6 +316,8 @@ func (r *SpeedScheduleGetResponseEnvelope) UnmarshalJSON(data []byte) (err error
 }
 
 type SpeedTrendsListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The type of device.
 	DeviceType param.Field[SpeedTrendsListParamsDeviceType] `query:"deviceType,required"`
 	// A comma-separated list of metrics to include in the results.

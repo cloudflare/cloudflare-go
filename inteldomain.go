@@ -36,11 +36,11 @@ func NewIntelDomainService(opts ...option.RequestOption) (r *IntelDomainService)
 }
 
 // Get Domain Details
-func (r *IntelDomainService) Get(ctx context.Context, accountID string, query IntelDomainGetParams, opts ...option.RequestOption) (res *IntelDomainGetResponse, err error) {
+func (r *IntelDomainService) Get(ctx context.Context, params IntelDomainGetParams, opts ...option.RequestOption) (res *IntelDomainGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IntelDomainGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/intel/domain", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/intel/domain", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -200,7 +200,9 @@ func (r *IntelDomainGetResponseResolvesToRef) UnmarshalJSON(data []byte) (err er
 }
 
 type IntelDomainGetParams struct {
-	Domain param.Field[string] `query:"domain"`
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+	Domain    param.Field[string] `query:"domain"`
 }
 
 // URLQuery serializes [IntelDomainGetParams]'s query parameters as `url.Values`.

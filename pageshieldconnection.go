@@ -34,11 +34,11 @@ func NewPageShieldConnectionService(opts ...option.RequestOption) (r *PageShield
 }
 
 // Lists all connections detected by Page Shield.
-func (r *PageShieldConnectionService) List(ctx context.Context, zoneID string, query PageShieldConnectionListParams, opts ...option.RequestOption) (res *[]PageShieldConnectionListResponse, err error) {
+func (r *PageShieldConnectionService) List(ctx context.Context, params PageShieldConnectionListParams, opts ...option.RequestOption) (res *[]PageShieldConnectionListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageShieldConnectionListResponseEnvelope
-	path := fmt.Sprintf("zones/%s/page_shield/connections", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("zones/%s/page_shield/connections", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -47,10 +47,10 @@ func (r *PageShieldConnectionService) List(ctx context.Context, zoneID string, q
 }
 
 // Fetches a connection detected by Page Shield by connection ID.
-func (r *PageShieldConnectionService) Get(ctx context.Context, zoneID string, connectionID string, opts ...option.RequestOption) (res *PageShieldConnectionGetResponse, err error) {
+func (r *PageShieldConnectionService) Get(ctx context.Context, connectionID string, query PageShieldConnectionGetParams, opts ...option.RequestOption) (res *PageShieldConnectionGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("zones/%s/page_shield/connections/%s", zoneID, connectionID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("zones/%s/page_shield/connections/%s", query.ZoneID, connectionID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
@@ -125,6 +125,8 @@ func (r *PageShieldConnectionGetResponse) UnmarshalJSON(data []byte) (err error)
 }
 
 type PageShieldConnectionListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The direction used to sort returned connections.
 	Direction param.Field[PageShieldConnectionListParamsDirection] `query:"direction"`
 	// When true, excludes connections seen in a `/cdn-cgi` path from the returned
@@ -302,4 +304,9 @@ type pageShieldConnectionListResponseEnvelopeResultInfoJSON struct {
 
 func (r *PageShieldConnectionListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type PageShieldConnectionGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }

@@ -36,11 +36,11 @@ func NewSettingEarlyHintService(opts ...option.RequestOption) (r *SettingEarlyHi
 // `103` responses with `Link` headers from the final response. Refer to
 // [Early Hints](https://developers.cloudflare.com/cache/about/early-hints) for
 // more information.
-func (r *SettingEarlyHintService) Edit(ctx context.Context, zoneID string, body SettingEarlyHintEditParams, opts ...option.RequestOption) (res *SettingEarlyHintEditResponse, err error) {
+func (r *SettingEarlyHintService) Edit(ctx context.Context, params SettingEarlyHintEditParams, opts ...option.RequestOption) (res *SettingEarlyHintEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingEarlyHintEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/early_hints", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/early_hints", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -52,11 +52,11 @@ func (r *SettingEarlyHintService) Edit(ctx context.Context, zoneID string, body 
 // `103` responses with `Link` headers from the final response. Refer to
 // [Early Hints](https://developers.cloudflare.com/cache/about/early-hints) for
 // more information.
-func (r *SettingEarlyHintService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingEarlyHintGetResponse, err error) {
+func (r *SettingEarlyHintService) Get(ctx context.Context, query SettingEarlyHintGetParams, opts ...option.RequestOption) (res *SettingEarlyHintGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingEarlyHintGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/early_hints", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/early_hints", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -177,6 +177,8 @@ const (
 )
 
 type SettingEarlyHintEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the zone setting.
 	Value param.Field[SettingEarlyHintEditParamsValue] `json:"value,required"`
 }
@@ -257,6 +259,11 @@ type settingEarlyHintEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingEarlyHintEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingEarlyHintGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingEarlyHintGetResponseEnvelope struct {

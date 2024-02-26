@@ -38,11 +38,11 @@ func NewCacheCacheReserveService(opts ...option.RequestOption) (r *CacheCacheRes
 // to reduce Reserve operations costs. See the
 // [developer docs](https://developers.cloudflare.com/cache/about/cache-reserve)
 // for more information.
-func (r *CacheCacheReserveService) List(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *CacheCacheReserveListResponse, err error) {
+func (r *CacheCacheReserveService) List(ctx context.Context, query CacheCacheReserveListParams, opts ...option.RequestOption) (res *CacheCacheReserveListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CacheCacheReserveListResponseEnvelope
-	path := fmt.Sprintf("zones/%s/cache/cache_reserve", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/cache/cache_reserve", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -54,11 +54,11 @@ func (r *CacheCacheReserveService) List(ctx context.Context, zoneID string, opts
 // disable Cache Reserve. In most cases, this will be accomplished within 24 hours.
 // You cannot re-enable Cache Reserve while this process is ongoing. Keep in mind
 // that you cannot undo or cancel this operation.
-func (r *CacheCacheReserveService) Clear(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *CacheCacheReserveClearResponse, err error) {
+func (r *CacheCacheReserveService) Clear(ctx context.Context, body CacheCacheReserveClearParams, opts ...option.RequestOption) (res *CacheCacheReserveClearResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CacheCacheReserveClearResponseEnvelope
-	path := fmt.Sprintf("zones/%s/cache/cache_reserve_clear", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/cache/cache_reserve_clear", body.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -72,11 +72,11 @@ func (r *CacheCacheReserveService) Clear(ctx context.Context, zoneID string, opt
 // to reduce Reserve operations costs. See the
 // [developer docs](https://developers.cloudflare.com/cache/about/cache-reserve)
 // for more information.
-func (r *CacheCacheReserveService) Edit(ctx context.Context, zoneID string, body CacheCacheReserveEditParams, opts ...option.RequestOption) (res *CacheCacheReserveEditResponse, err error) {
+func (r *CacheCacheReserveService) Edit(ctx context.Context, params CacheCacheReserveEditParams, opts ...option.RequestOption) (res *CacheCacheReserveEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CacheCacheReserveEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/cache/cache_reserve", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/cache/cache_reserve", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -88,11 +88,11 @@ func (r *CacheCacheReserveService) Edit(ctx context.Context, zoneID string, body
 // disable Cache Reserve. In most cases, this will be accomplished within 24 hours.
 // You cannot re-enable Cache Reserve while this process is ongoing. Keep in mind
 // that you cannot undo or cancel this operation.
-func (r *CacheCacheReserveService) Status(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *CacheCacheReserveStatusResponse, err error) {
+func (r *CacheCacheReserveService) Status(ctx context.Context, query CacheCacheReserveStatusParams, opts ...option.RequestOption) (res *CacheCacheReserveStatusResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CacheCacheReserveStatusResponseEnvelope
-	path := fmt.Sprintf("zones/%s/cache/cache_reserve_clear", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/cache/cache_reserve_clear", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -288,6 +288,11 @@ const (
 	CacheCacheReserveStatusResponseStateCompleted  CacheCacheReserveStatusResponseState = "Completed"
 )
 
+type CacheCacheReserveListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type CacheCacheReserveListResponseEnvelope struct {
 	Errors   []CacheCacheReserveListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []CacheCacheReserveListResponseEnvelopeMessages `json:"messages,required"`
@@ -363,6 +368,11 @@ const (
 	CacheCacheReserveListResponseEnvelopeSuccessTrue CacheCacheReserveListResponseEnvelopeSuccess = true
 )
 
+type CacheCacheReserveClearParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type CacheCacheReserveClearResponseEnvelope struct {
 	Errors   []CacheCacheReserveClearResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []CacheCacheReserveClearResponseEnvelopeMessages `json:"messages,required"`
@@ -437,6 +447,8 @@ const (
 )
 
 type CacheCacheReserveEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the Cache Reserve zone setting.
 	Value param.Field[CacheCacheReserveEditParamsValue] `json:"value,required"`
 }
@@ -527,6 +539,11 @@ type CacheCacheReserveEditResponseEnvelopeSuccess bool
 const (
 	CacheCacheReserveEditResponseEnvelopeSuccessTrue CacheCacheReserveEditResponseEnvelopeSuccess = true
 )
+
+type CacheCacheReserveStatusParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type CacheCacheReserveStatusResponseEnvelope struct {
 	Errors   []CacheCacheReserveStatusResponseEnvelopeErrors   `json:"errors,required"`

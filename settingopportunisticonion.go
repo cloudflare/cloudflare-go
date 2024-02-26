@@ -34,11 +34,11 @@ func NewSettingOpportunisticOnionService(opts ...option.RequestOption) (r *Setti
 
 // Add an Alt-Svc header to all legitimate requests from Tor, allowing the
 // connection to use our onion services instead of exit nodes.
-func (r *SettingOpportunisticOnionService) Edit(ctx context.Context, zoneID string, body SettingOpportunisticOnionEditParams, opts ...option.RequestOption) (res *SettingOpportunisticOnionEditResponse, err error) {
+func (r *SettingOpportunisticOnionService) Edit(ctx context.Context, params SettingOpportunisticOnionEditParams, opts ...option.RequestOption) (res *SettingOpportunisticOnionEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingOpportunisticOnionEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/opportunistic_onion", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/opportunistic_onion", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +48,11 @@ func (r *SettingOpportunisticOnionService) Edit(ctx context.Context, zoneID stri
 
 // Add an Alt-Svc header to all legitimate requests from Tor, allowing the
 // connection to use our onion services instead of exit nodes.
-func (r *SettingOpportunisticOnionService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingOpportunisticOnionGetResponse, err error) {
+func (r *SettingOpportunisticOnionService) Get(ctx context.Context, query SettingOpportunisticOnionGetParams, opts ...option.RequestOption) (res *SettingOpportunisticOnionGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingOpportunisticOnionGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/opportunistic_onion", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/opportunistic_onion", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -169,6 +169,8 @@ const (
 )
 
 type SettingOpportunisticOnionEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the zone setting. Notes: Default value depends on the zone's plan
 	// level.
 	Value param.Field[SettingOpportunisticOnionEditParamsValue] `json:"value,required"`
@@ -249,6 +251,11 @@ type settingOpportunisticOnionEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingOpportunisticOnionEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingOpportunisticOnionGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingOpportunisticOnionGetResponseEnvelope struct {

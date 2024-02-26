@@ -37,11 +37,11 @@ func NewTeamnetVirtualNetworkService(opts ...option.RequestOption) (r *TeamnetVi
 }
 
 // Adds a new virtual network to an account.
-func (r *TeamnetVirtualNetworkService) New(ctx context.Context, accountID string, body TeamnetVirtualNetworkNewParams, opts ...option.RequestOption) (res *TeamnetVirtualNetworkNewResponse, err error) {
+func (r *TeamnetVirtualNetworkService) New(ctx context.Context, params TeamnetVirtualNetworkNewParams, opts ...option.RequestOption) (res *TeamnetVirtualNetworkNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TeamnetVirtualNetworkNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/teamnet/virtual_networks", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/teamnet/virtual_networks", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -50,11 +50,11 @@ func (r *TeamnetVirtualNetworkService) New(ctx context.Context, accountID string
 }
 
 // Lists and filters virtual networks in an account.
-func (r *TeamnetVirtualNetworkService) List(ctx context.Context, accountID string, query TeamnetVirtualNetworkListParams, opts ...option.RequestOption) (res *[]TeamnetVirtualNetworkListResponse, err error) {
+func (r *TeamnetVirtualNetworkService) List(ctx context.Context, params TeamnetVirtualNetworkListParams, opts ...option.RequestOption) (res *[]TeamnetVirtualNetworkListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TeamnetVirtualNetworkListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/teamnet/virtual_networks", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/teamnet/virtual_networks", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -63,11 +63,11 @@ func (r *TeamnetVirtualNetworkService) List(ctx context.Context, accountID strin
 }
 
 // Deletes an existing virtual network.
-func (r *TeamnetVirtualNetworkService) Delete(ctx context.Context, accountID string, virtualNetworkID string, opts ...option.RequestOption) (res *TeamnetVirtualNetworkDeleteResponse, err error) {
+func (r *TeamnetVirtualNetworkService) Delete(ctx context.Context, virtualNetworkID string, body TeamnetVirtualNetworkDeleteParams, opts ...option.RequestOption) (res *TeamnetVirtualNetworkDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TeamnetVirtualNetworkDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/teamnet/virtual_networks/%s", accountID, virtualNetworkID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/teamnet/virtual_networks/%s", body.AccountID, virtualNetworkID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -76,11 +76,11 @@ func (r *TeamnetVirtualNetworkService) Delete(ctx context.Context, accountID str
 }
 
 // Updates an existing virtual network.
-func (r *TeamnetVirtualNetworkService) Edit(ctx context.Context, accountID string, virtualNetworkID string, body TeamnetVirtualNetworkEditParams, opts ...option.RequestOption) (res *TeamnetVirtualNetworkEditResponse, err error) {
+func (r *TeamnetVirtualNetworkService) Edit(ctx context.Context, virtualNetworkID string, params TeamnetVirtualNetworkEditParams, opts ...option.RequestOption) (res *TeamnetVirtualNetworkEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TeamnetVirtualNetworkEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/teamnet/virtual_networks/%s", accountID, virtualNetworkID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/teamnet/virtual_networks/%s", params.AccountID, virtualNetworkID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -186,6 +186,8 @@ type TeamnetVirtualNetworkEditResponseArray []interface{}
 func (r TeamnetVirtualNetworkEditResponseArray) ImplementsTeamnetVirtualNetworkEditResponse() {}
 
 type TeamnetVirtualNetworkNewParams struct {
+	// Cloudflare account ID
+	AccountID param.Field[string] `path:"account_id,required"`
 	// A user-friendly name for the virtual network.
 	Name param.Field[string] `json:"name,required"`
 	// Optional remark describing the virtual network.
@@ -268,6 +270,8 @@ const (
 )
 
 type TeamnetVirtualNetworkListParams struct {
+	// Cloudflare account ID
+	AccountID param.Field[string] `path:"account_id,required"`
 	// If `true`, only include the default virtual network. If `false`, exclude the
 	// default virtual network. If empty, all virtual networks will be included.
 	IsDefault param.Field[interface{}] `query:"is_default"`
@@ -387,6 +391,11 @@ func (r *TeamnetVirtualNetworkListResponseEnvelopeResultInfo) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type TeamnetVirtualNetworkDeleteParams struct {
+	// Cloudflare account ID
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type TeamnetVirtualNetworkDeleteResponseEnvelope struct {
 	Errors   []TeamnetVirtualNetworkDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []TeamnetVirtualNetworkDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -457,6 +466,8 @@ const (
 )
 
 type TeamnetVirtualNetworkEditParams struct {
+	// Cloudflare account ID
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Optional remark describing the virtual network.
 	Comment param.Field[string] `json:"comment"`
 	// If `true`, this virtual network is the default for the account.

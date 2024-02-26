@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -31,10 +32,10 @@ func NewIntelASNSubnetService(opts ...option.RequestOption) (r *IntelASNSubnetSe
 }
 
 // Get ASN Subnets
-func (r *IntelASNSubnetService) List(ctx context.Context, accountID string, asn int64, opts ...option.RequestOption) (res *IntelASNSubnetListResponse, err error) {
+func (r *IntelASNSubnetService) List(ctx context.Context, asn int64, query IntelASNSubnetListParams, opts ...option.RequestOption) (res *IntelASNSubnetListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%s/intel/asn/%v/subnets", accountID, asn)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/intel/asn/%v/subnets", query.AccountID, asn)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
@@ -66,4 +67,9 @@ type intelASNSubnetListResponseJSON struct {
 
 func (r *IntelASNSubnetListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type IntelASNSubnetListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }

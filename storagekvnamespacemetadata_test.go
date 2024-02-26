@@ -31,9 +31,11 @@ func TestStorageKVNamespaceMetadataGet(t *testing.T) {
 	)
 	_, err := client.Storage.KV.Namespaces.Metadata.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"0f2ac74b498b48028cb68387c421e279",
 		"My-Key",
+		cloudflare.StorageKVNamespaceMetadataGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

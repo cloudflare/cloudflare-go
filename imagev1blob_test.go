@@ -32,8 +32,10 @@ func TestImageV1BlobGet(t *testing.T) {
 	)
 	resp, err := client.Images.V1s.Blobs.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"string",
+		cloudflare.ImageV1BlobGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

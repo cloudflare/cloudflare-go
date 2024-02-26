@@ -31,7 +31,7 @@ func TestLogpushJobNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Logpush.Jobs.New(context.TODO(), cloudflare.LogpushJobNewParams{
 		AccountID:       cloudflare.F("string"),
-		ZoneID:          cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ZoneID:          cloudflare.F("string"),
 		DestinationConf: cloudflare.F("s3://mybucket/logs?region=us-west-2"),
 		Dataset:         cloudflare.F("http_requests"),
 		Enabled:         cloudflare.F(false),
@@ -84,7 +84,7 @@ func TestLogpushJobUpdateWithOptionalParams(t *testing.T) {
 		int64(1),
 		cloudflare.LogpushJobUpdateParams{
 			AccountID:       cloudflare.F("string"),
-			ZoneID:          cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID:          cloudflare.F("string"),
 			DestinationConf: cloudflare.F("s3://mybucket/logs?region=us-west-2"),
 			Enabled:         cloudflare.F(false),
 			Frequency:       cloudflare.F(cloudflare.LogpushJobUpdateParamsFrequencyHigh),
@@ -133,7 +133,7 @@ func TestLogpushJobList(t *testing.T) {
 	)
 	_, err := client.Logpush.Jobs.List(context.TODO(), cloudflare.LogpushJobListParams{
 		AccountID: cloudflare.F("string"),
-		ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ZoneID:    cloudflare.F("string"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -165,7 +165,7 @@ func TestLogpushJobDelete(t *testing.T) {
 		int64(1),
 		cloudflare.LogpushJobDeleteParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {
@@ -198,7 +198,7 @@ func TestLogpushJobGet(t *testing.T) {
 		int64(1),
 		cloudflare.LogpushJobGetParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {

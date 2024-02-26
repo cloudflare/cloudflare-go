@@ -40,12 +40,12 @@ func NewTeamnetRouteService(opts ...option.RequestOption) (r *TeamnetRouteServic
 }
 
 // Lists and filters private network routes in an account.
-func (r *TeamnetRouteService) List(ctx context.Context, accountID string, query TeamnetRouteListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[TeamnetRouteListResponse], err error) {
+func (r *TeamnetRouteService) List(ctx context.Context, params TeamnetRouteListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[TeamnetRouteListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	path := fmt.Sprintf("accounts/%s/teamnet/routes", accountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/teamnet/routes", params.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -58,8 +58,8 @@ func (r *TeamnetRouteService) List(ctx context.Context, accountID string, query 
 }
 
 // Lists and filters private network routes in an account.
-func (r *TeamnetRouteService) ListAutoPaging(ctx context.Context, accountID string, query TeamnetRouteListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[TeamnetRouteListResponse] {
-	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, accountID, query, opts...))
+func (r *TeamnetRouteService) ListAutoPaging(ctx context.Context, params TeamnetRouteListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[TeamnetRouteListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 type TeamnetRouteListResponse struct {
@@ -122,6 +122,8 @@ const (
 )
 
 type TeamnetRouteListParams struct {
+	// Cloudflare account ID
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Optional remark describing the route.
 	Comment param.Field[string] `query:"comment"`
 	// If provided, include only routes that were created (and not deleted) before this

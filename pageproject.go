@@ -40,11 +40,11 @@ func NewPageProjectService(opts ...option.RequestOption) (r *PageProjectService)
 }
 
 // Create a new project.
-func (r *PageProjectService) New(ctx context.Context, accountID string, body PageProjectNewParams, opts ...option.RequestOption) (res *PageProjectNewResponse, err error) {
+func (r *PageProjectService) New(ctx context.Context, params PageProjectNewParams, opts ...option.RequestOption) (res *PageProjectNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageProjectNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/pages/projects", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/pages/projects", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -53,11 +53,11 @@ func (r *PageProjectService) New(ctx context.Context, accountID string, body Pag
 }
 
 // Fetch a list of all user projects.
-func (r *PageProjectService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]PageProjectListResponse, err error) {
+func (r *PageProjectService) List(ctx context.Context, query PageProjectListParams, opts ...option.RequestOption) (res *[]PageProjectListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageProjectListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/pages/projects", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/pages/projects", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -66,20 +66,20 @@ func (r *PageProjectService) List(ctx context.Context, accountID string, opts ..
 }
 
 // Delete a project by name.
-func (r *PageProjectService) Delete(ctx context.Context, accountID string, projectName string, opts ...option.RequestOption) (res *PageProjectDeleteResponse, err error) {
+func (r *PageProjectService) Delete(ctx context.Context, projectName string, body PageProjectDeleteParams, opts ...option.RequestOption) (res *PageProjectDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%s/pages/projects/%s", accountID, projectName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/pages/projects/%s", body.AccountID, projectName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &res, opts...)
 	return
 }
 
 // Set new attributes for an existing project. Modify environment variables. To
 // delete an environment variable, set the key to null.
-func (r *PageProjectService) Edit(ctx context.Context, accountID string, projectName string, body PageProjectEditParams, opts ...option.RequestOption) (res *PageProjectEditResponse, err error) {
+func (r *PageProjectService) Edit(ctx context.Context, projectName string, params PageProjectEditParams, opts ...option.RequestOption) (res *PageProjectEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageProjectEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/pages/projects/%s", accountID, projectName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/pages/projects/%s", params.AccountID, projectName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -88,11 +88,11 @@ func (r *PageProjectService) Edit(ctx context.Context, accountID string, project
 }
 
 // Fetch a project by name.
-func (r *PageProjectService) Get(ctx context.Context, accountID string, projectName string, opts ...option.RequestOption) (res *PageProjectGetResponse, err error) {
+func (r *PageProjectService) Get(ctx context.Context, projectName string, query PageProjectGetParams, opts ...option.RequestOption) (res *PageProjectGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageProjectGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/pages/projects/%s", accountID, projectName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/pages/projects/%s", query.AccountID, projectName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -101,10 +101,10 @@ func (r *PageProjectService) Get(ctx context.Context, accountID string, projectN
 }
 
 // Purge all cached build artifacts for a Pages project
-func (r *PageProjectService) PurgeBuildCache(ctx context.Context, accountID string, projectName string, opts ...option.RequestOption) (res *PageProjectPurgeBuildCacheResponse, err error) {
+func (r *PageProjectService) PurgeBuildCache(ctx context.Context, projectName string, body PageProjectPurgeBuildCacheParams, opts ...option.RequestOption) (res *PageProjectPurgeBuildCacheResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%s/pages/projects/%s/purge_build_cache", accountID, projectName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/pages/projects/%s/purge_build_cache", body.AccountID, projectName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
@@ -1554,6 +1554,8 @@ func (r *PageProjectGetResponseLatestDeploymentStage) UnmarshalJSON(data []byte)
 type PageProjectPurgeBuildCacheResponse = interface{}
 
 type PageProjectNewParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Configs for the project build process.
 	BuildConfig         param.Field[PageProjectNewParamsBuildConfig]         `json:"build_config"`
 	CanonicalDeployment param.Field[PageProjectNewParamsCanonicalDeployment] `json:"canonical_deployment"`
@@ -2207,6 +2209,11 @@ const (
 	PageProjectNewResponseEnvelopeSuccessTrue PageProjectNewResponseEnvelopeSuccess = true
 )
 
+type PageProjectListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type PageProjectListResponseEnvelope struct {
 	Errors   []PageProjectListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []PageProjectListResponseEnvelopeMessages `json:"messages,required"`
@@ -2301,8 +2308,15 @@ func (r *PageProjectListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type PageProjectDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type PageProjectEditParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	// Identifier
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
 }
 
 func (r PageProjectEditParams) MarshalJSON() (data []byte, err error) {
@@ -2378,6 +2392,11 @@ const (
 	PageProjectEditResponseEnvelopeSuccessTrue PageProjectEditResponseEnvelopeSuccess = true
 )
 
+type PageProjectGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type PageProjectGetResponseEnvelope struct {
 	Errors   []PageProjectGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []PageProjectGetResponseEnvelopeMessages `json:"messages,required"`
@@ -2446,3 +2465,8 @@ type PageProjectGetResponseEnvelopeSuccess bool
 const (
 	PageProjectGetResponseEnvelopeSuccessTrue PageProjectGetResponseEnvelopeSuccess = true
 )
+
+type PageProjectPurgeBuildCacheParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}

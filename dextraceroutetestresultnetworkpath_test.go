@@ -31,8 +31,10 @@ func TestDEXTracerouteTestResultNetworkPathList(t *testing.T) {
 	)
 	_, err := client.DEX.TracerouteTestResults.NetworkPath.List(
 		context.TODO(),
-		"01a7362d577a6c3019a474fd6f485823",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		cloudflare.DEXTracerouteTestResultNetworkPathListParams{
+			AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -35,11 +35,11 @@ func NewArgoTieredCachingService(opts ...option.RequestOption) (r *ArgoTieredCac
 }
 
 // Updates enablement of Tiered Caching
-func (r *ArgoTieredCachingService) Edit(ctx context.Context, zoneID string, body ArgoTieredCachingEditParams, opts ...option.RequestOption) (res *ArgoTieredCachingEditResponse, err error) {
+func (r *ArgoTieredCachingService) Edit(ctx context.Context, params ArgoTieredCachingEditParams, opts ...option.RequestOption) (res *ArgoTieredCachingEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ArgoTieredCachingEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/argo/tiered_caching", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/argo/tiered_caching", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +48,11 @@ func (r *ArgoTieredCachingService) Edit(ctx context.Context, zoneID string, body
 }
 
 // Get Tiered Caching setting
-func (r *ArgoTieredCachingService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *ArgoTieredCachingGetResponse, err error) {
+func (r *ArgoTieredCachingService) Get(ctx context.Context, query ArgoTieredCachingGetParams, opts ...option.RequestOption) (res *ArgoTieredCachingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ArgoTieredCachingGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/argo/tiered_caching", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/argo/tiered_caching", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -95,6 +95,8 @@ func init() {
 }
 
 type ArgoTieredCachingEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Enables Tiered Caching.
 	Value param.Field[ArgoTieredCachingEditParamsValue] `json:"value,required"`
 }
@@ -179,6 +181,11 @@ type ArgoTieredCachingEditResponseEnvelopeSuccess bool
 const (
 	ArgoTieredCachingEditResponseEnvelopeSuccessTrue ArgoTieredCachingEditResponseEnvelopeSuccess = true
 )
+
+type ArgoTieredCachingGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type ArgoTieredCachingGetResponseEnvelope struct {
 	Errors   []ArgoTieredCachingGetResponseEnvelopeErrors   `json:"errors,required"`

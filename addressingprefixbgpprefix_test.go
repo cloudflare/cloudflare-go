@@ -32,7 +32,9 @@ func TestAddressingPrefixBGPPrefixList(t *testing.T) {
 	_, err := client.Addressing.Prefixes.BGPPrefixes.List(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.AddressingPrefixBGPPrefixListParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -63,8 +65,8 @@ func TestAddressingPrefixBGPPrefixEditWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.AddressingPrefixBGPPrefixEditParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			OnDemand: cloudflare.F(cloudflare.AddressingPrefixBGPPrefixEditParamsOnDemand{
 				Advertised: cloudflare.F(true),
 			}),
@@ -99,7 +101,9 @@ func TestAddressingPrefixBGPPrefixGet(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.AddressingPrefixBGPPrefixGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

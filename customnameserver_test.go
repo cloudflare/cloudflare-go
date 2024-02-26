@@ -29,14 +29,11 @@ func TestCustomNameserverNewWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.CustomNameservers.New(
-		context.TODO(),
-		"372e67954025e0ba6aaa6d586b9e0b59",
-		cloudflare.CustomNameserverNewParams{
-			NsName: cloudflare.F("ns1.example.com"),
-			NsSet:  cloudflare.F(1.000000),
-		},
-	)
+	_, err := client.CustomNameservers.New(context.TODO(), cloudflare.CustomNameserverNewParams{
+		AccountID: cloudflare.F("372e67954025e0ba6aaa6d586b9e0b59"),
+		NsName:    cloudflare.F("ns1.example.com"),
+		NsSet:     cloudflare.F(1.000000),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -62,7 +59,9 @@ func TestCustomNameserverList(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.CustomNameservers.List(context.TODO(), "372e67954025e0ba6aaa6d586b9e0b59")
+	_, err := client.CustomNameservers.List(context.TODO(), cloudflare.CustomNameserverListParams{
+		AccountID: cloudflare.F("372e67954025e0ba6aaa6d586b9e0b59"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -90,8 +89,10 @@ func TestCustomNameserverDelete(t *testing.T) {
 	)
 	_, err := client.CustomNameservers.Delete(
 		context.TODO(),
-		"372e67954025e0ba6aaa6d586b9e0b59",
 		"ns1.example.com",
+		cloudflare.CustomNameserverDeleteParams{
+			AccountID: cloudflare.F("372e67954025e0ba6aaa6d586b9e0b59"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -118,7 +119,9 @@ func TestCustomNameserverAvailabilty(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.CustomNameservers.Availabilty(context.TODO(), "372e67954025e0ba6aaa6d586b9e0b59")
+	_, err := client.CustomNameservers.Availabilty(context.TODO(), cloudflare.CustomNameserverAvailabiltyParams{
+		AccountID: cloudflare.F("372e67954025e0ba6aaa6d586b9e0b59"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -144,7 +147,9 @@ func TestCustomNameserverVerify(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.CustomNameservers.Verify(context.TODO(), "372e67954025e0ba6aaa6d586b9e0b59")
+	_, err := client.CustomNameservers.Verify(context.TODO(), cloudflare.CustomNameserverVerifyParams{
+		AccountID: cloudflare.F("372e67954025e0ba6aaa6d586b9e0b59"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

@@ -35,11 +35,11 @@ func NewIntelMiscategorizationService(opts ...option.RequestOption) (r *IntelMis
 }
 
 // Create Miscategorization
-func (r *IntelMiscategorizationService) New(ctx context.Context, accountID string, body IntelMiscategorizationNewParams, opts ...option.RequestOption) (res *IntelMiscategorizationNewResponse, err error) {
+func (r *IntelMiscategorizationService) New(ctx context.Context, params IntelMiscategorizationNewParams, opts ...option.RequestOption) (res *IntelMiscategorizationNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IntelMiscategorizationNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/intel/miscategorization", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/intel/miscategorization", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -65,6 +65,8 @@ func init() {
 }
 
 type IntelMiscategorizationNewParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Content category IDs to add.
 	ContentAdds param.Field[interface{}] `json:"content_adds"`
 	// Content category IDs to remove.

@@ -34,20 +34,11 @@ func NewWorkerDomainService(opts ...option.RequestOption) (r *WorkerDomainServic
 }
 
 // Attaches a Worker to a zone and hostname.
-func (r *WorkerDomainService) Update(ctx context.Context, accountID interface{}, body WorkerDomainUpdateParams, opts ...option.RequestOption) (res *WorkerDomainUpdateResponse, err error) {
+func (r *WorkerDomainService) Update(ctx context.Context, params WorkerDomainUpdateParams, opts ...option.RequestOption) (res *WorkerDomainUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerDomainUpdateResponseEnvelope
-	var accountOrZone string
-	var accountOrZoneID param.Field[string]
-	if body.AccountID.Present {
-		accountOrZone = "accounts"
-		accountOrZoneID = body.AccountID
-	} else {
-		accountOrZone = "zones"
-		accountOrZoneID = body.ZoneID
-	}
-	path := fmt.Sprintf("accounts/%v/workers/domains", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/workers/domains", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -56,20 +47,11 @@ func (r *WorkerDomainService) Update(ctx context.Context, accountID interface{},
 }
 
 // Lists all Worker Domains for an account.
-func (r *WorkerDomainService) List(ctx context.Context, accountID interface{}, query WorkerDomainListParams, opts ...option.RequestOption) (res *[]WorkerDomainListResponse, err error) {
+func (r *WorkerDomainService) List(ctx context.Context, params WorkerDomainListParams, opts ...option.RequestOption) (res *[]WorkerDomainListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerDomainListResponseEnvelope
-	var accountOrZone string
-	var accountOrZoneID param.Field[string]
-	if query.AccountID.Present {
-		accountOrZone = "accounts"
-		accountOrZoneID = query.AccountID
-	} else {
-		accountOrZone = "zones"
-		accountOrZoneID = query.ZoneID
-	}
-	path := fmt.Sprintf("accounts/%v/workers/domains", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/workers/domains", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -78,20 +60,20 @@ func (r *WorkerDomainService) List(ctx context.Context, accountID interface{}, q
 }
 
 // Detaches a Worker from a zone and hostname.
-func (r *WorkerDomainService) Delete(ctx context.Context, accountID interface{}, domainID interface{}, opts ...option.RequestOption) (err error) {
+func (r *WorkerDomainService) Delete(ctx context.Context, domainID interface{}, body WorkerDomainDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
-	path := fmt.Sprintf("accounts/%v/workers/domains/%v", accountID, domainID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
+	path := fmt.Sprintf("accounts/%v/workers/domains/%v", body.AccountID, domainID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, nil, opts...)
 	return
 }
 
 // Gets a Worker domain.
-func (r *WorkerDomainService) Get(ctx context.Context, accountID interface{}, domainID interface{}, opts ...option.RequestOption) (res *WorkerDomainGetResponse, err error) {
+func (r *WorkerDomainService) Get(ctx context.Context, domainID interface{}, query WorkerDomainGetParams, opts ...option.RequestOption) (res *WorkerDomainGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerDomainGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/workers/domains/%v", accountID, domainID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/workers/domains/%v", query.AccountID, domainID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -199,6 +181,7 @@ func (r *WorkerDomainGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type WorkerDomainUpdateParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// Worker environment associated with the zone and hostname.
 	Environment param.Field[string] `json:"environment,required"`
 	// Hostname of the Worker Domain.
@@ -283,6 +266,7 @@ const (
 )
 
 type WorkerDomainListParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// Worker environment associated with the zone and hostname.
 	Environment param.Field[string] `query:"environment"`
 	// Hostname of the Worker Domain.
@@ -371,6 +355,14 @@ type WorkerDomainListResponseEnvelopeSuccess bool
 const (
 	WorkerDomainListResponseEnvelopeSuccessTrue WorkerDomainListResponseEnvelopeSuccess = true
 )
+
+type WorkerDomainDeleteParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
+
+type WorkerDomainGetParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
 
 type WorkerDomainGetResponseEnvelope struct {
 	Errors   []WorkerDomainGetResponseEnvelopeErrors   `json:"errors,required"`

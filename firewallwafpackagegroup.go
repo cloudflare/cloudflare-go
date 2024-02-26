@@ -40,12 +40,12 @@ func NewFirewallWAFPackageGroupService(opts ...option.RequestOption) (r *Firewal
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *FirewallWAFPackageGroupService) List(ctx context.Context, zoneID string, packageID string, query FirewallWAFPackageGroupListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[FirewallWAFPackageGroupListResponse], err error) {
+func (r *FirewallWAFPackageGroupService) List(ctx context.Context, packageID string, params FirewallWAFPackageGroupListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[FirewallWAFPackageGroupListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	path := fmt.Sprintf("zones/%s/firewall/waf/packages/%s/groups", zoneID, packageID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	path := fmt.Sprintf("zones/%s/firewall/waf/packages/%s/groups", params.ZoneID, packageID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -61,8 +61,8 @@ func (r *FirewallWAFPackageGroupService) List(ctx context.Context, zoneID string
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *FirewallWAFPackageGroupService) ListAutoPaging(ctx context.Context, zoneID string, packageID string, query FirewallWAFPackageGroupListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[FirewallWAFPackageGroupListResponse] {
-	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneID, packageID, query, opts...))
+func (r *FirewallWAFPackageGroupService) ListAutoPaging(ctx context.Context, packageID string, params FirewallWAFPackageGroupListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[FirewallWAFPackageGroupListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, packageID, params, opts...))
 }
 
 // Updates a WAF rule group. You can update the state (`mode` parameter) of a rule
@@ -70,11 +70,11 @@ func (r *FirewallWAFPackageGroupService) ListAutoPaging(ctx context.Context, zon
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *FirewallWAFPackageGroupService) Edit(ctx context.Context, zoneID string, packageID string, groupID string, body FirewallWAFPackageGroupEditParams, opts ...option.RequestOption) (res *FirewallWAFPackageGroupEditResponse, err error) {
+func (r *FirewallWAFPackageGroupService) Edit(ctx context.Context, packageID string, groupID string, params FirewallWAFPackageGroupEditParams, opts ...option.RequestOption) (res *FirewallWAFPackageGroupEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FirewallWAFPackageGroupEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/firewall/waf/packages/%s/groups/%s", zoneID, packageID, groupID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/firewall/waf/packages/%s/groups/%s", params.ZoneID, packageID, groupID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -86,11 +86,11 @@ func (r *FirewallWAFPackageGroupService) Edit(ctx context.Context, zoneID string
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *FirewallWAFPackageGroupService) Get(ctx context.Context, zoneID string, packageID string, groupID string, opts ...option.RequestOption) (res *FirewallWAFPackageGroupGetResponse, err error) {
+func (r *FirewallWAFPackageGroupService) Get(ctx context.Context, packageID string, groupID string, query FirewallWAFPackageGroupGetParams, opts ...option.RequestOption) (res *FirewallWAFPackageGroupGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FirewallWAFPackageGroupGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/firewall/waf/packages/%s/groups/%s", zoneID, packageID, groupID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/firewall/waf/packages/%s/groups/%s", query.ZoneID, packageID, groupID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -200,6 +200,8 @@ type FirewallWAFPackageGroupGetResponseArray []interface{}
 func (r FirewallWAFPackageGroupGetResponseArray) ImplementsFirewallWAFPackageGroupGetResponse() {}
 
 type FirewallWAFPackageGroupListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The direction used to sort returned rule groups.
 	Direction param.Field[FirewallWAFPackageGroupListParamsDirection] `query:"direction"`
 	// When set to `all`, all the search requirements must match. When set to `any`,
@@ -260,6 +262,8 @@ const (
 )
 
 type FirewallWAFPackageGroupEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The state of the rules contained in the rule group. When `on`, the rules in the
 	// group are configurable/usable.
 	Mode param.Field[FirewallWAFPackageGroupEditParamsMode] `json:"mode"`
@@ -346,6 +350,11 @@ type FirewallWAFPackageGroupEditResponseEnvelopeSuccess bool
 const (
 	FirewallWAFPackageGroupEditResponseEnvelopeSuccessTrue FirewallWAFPackageGroupEditResponseEnvelopeSuccess = true
 )
+
+type FirewallWAFPackageGroupGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type FirewallWAFPackageGroupGetResponseEnvelope struct {
 	Errors   []FirewallWAFPackageGroupGetResponseEnvelopeErrors   `json:"errors,required"`

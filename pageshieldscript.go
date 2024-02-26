@@ -34,11 +34,11 @@ func NewPageShieldScriptService(opts ...option.RequestOption) (r *PageShieldScri
 }
 
 // Lists all scripts detected by Page Shield.
-func (r *PageShieldScriptService) List(ctx context.Context, zoneID string, query PageShieldScriptListParams, opts ...option.RequestOption) (res *[]PageShieldScriptListResponse, err error) {
+func (r *PageShieldScriptService) List(ctx context.Context, params PageShieldScriptListParams, opts ...option.RequestOption) (res *[]PageShieldScriptListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageShieldScriptListResponseEnvelope
-	path := fmt.Sprintf("zones/%s/page_shield/scripts", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("zones/%s/page_shield/scripts", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -47,10 +47,10 @@ func (r *PageShieldScriptService) List(ctx context.Context, zoneID string, query
 }
 
 // Fetches a script detected by Page Shield by script ID.
-func (r *PageShieldScriptService) Get(ctx context.Context, zoneID string, scriptID string, opts ...option.RequestOption) (res *PageShieldScriptGetResponse, err error) {
+func (r *PageShieldScriptService) Get(ctx context.Context, scriptID string, query PageShieldScriptGetParams, opts ...option.RequestOption) (res *PageShieldScriptGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("zones/%s/page_shield/scripts/%s", zoneID, scriptID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("zones/%s/page_shield/scripts/%s", query.ZoneID, scriptID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
@@ -164,6 +164,8 @@ func (r *PageShieldScriptGetResponseVersion) UnmarshalJSON(data []byte) (err err
 }
 
 type PageShieldScriptListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The direction used to sort returned scripts.
 	Direction param.Field[PageShieldScriptListParamsDirection] `query:"direction"`
 	// When true, excludes scripts seen in a `/cdn-cgi` path from the returned scripts.
@@ -346,4 +348,9 @@ type pageShieldScriptListResponseEnvelopeResultInfoJSON struct {
 
 func (r *PageShieldScriptListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type PageShieldScriptGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }

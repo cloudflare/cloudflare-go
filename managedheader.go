@@ -32,18 +32,18 @@ func NewManagedHeaderService(opts ...option.RequestOption) (r *ManagedHeaderServ
 }
 
 // Fetches a list of all Managed Transforms.
-func (r *ManagedHeaderService) List(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *ManagedHeaderListResponse, err error) {
+func (r *ManagedHeaderService) List(ctx context.Context, query ManagedHeaderListParams, opts ...option.RequestOption) (res *ManagedHeaderListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("zones/%s/managed_headers", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("zones/%s/managed_headers", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
 // Updates the status of one or more Managed Transforms.
-func (r *ManagedHeaderService) Edit(ctx context.Context, zoneID string, body ManagedHeaderEditParams, opts ...option.RequestOption) (res *ManagedHeaderEditResponse, err error) {
+func (r *ManagedHeaderService) Edit(ctx context.Context, params ManagedHeaderEditParams, opts ...option.RequestOption) (res *ManagedHeaderEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("zones/%s/managed_headers", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
+	path := fmt.Sprintf("zones/%s/managed_headers", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &res, opts...)
 	return
 }
 
@@ -175,7 +175,14 @@ func (r *ManagedHeaderEditResponseManagedResponseHeader) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type ManagedHeaderListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type ManagedHeaderEditParams struct {
+	// Identifier
+	ZoneID                 param.Field[string]                                         `path:"zone_id,required"`
 	ManagedRequestHeaders  param.Field[[]ManagedHeaderEditParamsManagedRequestHeader]  `json:"managed_request_headers,required"`
 	ManagedResponseHeaders param.Field[[]ManagedHeaderEditParamsManagedResponseHeader] `json:"managed_response_headers,required"`
 }

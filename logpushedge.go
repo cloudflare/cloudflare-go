@@ -32,11 +32,11 @@ func NewLogpushEdgeService(opts ...option.RequestOption) (r *LogpushEdgeService)
 }
 
 // Creates a new Instant Logs job for a zone.
-func (r *LogpushEdgeService) New(ctx context.Context, zoneID string, body LogpushEdgeNewParams, opts ...option.RequestOption) (res *LogpushEdgeNewResponse, err error) {
+func (r *LogpushEdgeService) New(ctx context.Context, params LogpushEdgeNewParams, opts ...option.RequestOption) (res *LogpushEdgeNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LogpushEdgeNewResponseEnvelope
-	path := fmt.Sprintf("zones/%s/logpush/edge", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/logpush/edge", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -45,11 +45,11 @@ func (r *LogpushEdgeService) New(ctx context.Context, zoneID string, body Logpus
 }
 
 // Lists Instant Logs jobs for a zone.
-func (r *LogpushEdgeService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *[]LogpushEdgeGetResponse, err error) {
+func (r *LogpushEdgeService) Get(ctx context.Context, query LogpushEdgeGetParams, opts ...option.RequestOption) (res *[]LogpushEdgeGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LogpushEdgeGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/logpush/edge", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/logpush/edge", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -120,6 +120,8 @@ func (r *LogpushEdgeGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type LogpushEdgeNewParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Comma-separated list of fields.
 	Fields param.Field[string] `json:"fields"`
 	// Filters to drill down into specific events.
@@ -201,6 +203,11 @@ type LogpushEdgeNewResponseEnvelopeSuccess bool
 const (
 	LogpushEdgeNewResponseEnvelopeSuccessTrue LogpushEdgeNewResponseEnvelopeSuccess = true
 )
+
+type LogpushEdgeGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type LogpushEdgeGetResponseEnvelope struct {
 	Errors   []LogpushEdgeGetResponseEnvelopeErrors   `json:"errors,required"`

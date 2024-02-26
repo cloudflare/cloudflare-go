@@ -39,11 +39,11 @@ func NewImageV2DirectUploadService(opts ...option.RequestOption) (r *ImageV2Dire
 // image itself has been uploaded, send an image details request
 // (accounts/:account_identifier/images/v1/:identifier), and check that the
 // `draft: true` property is not present.
-func (r *ImageV2DirectUploadService) New(ctx context.Context, accountID string, body ImageV2DirectUploadNewParams, opts ...option.RequestOption) (res *ImageV2DirectUploadNewResponse, err error) {
+func (r *ImageV2DirectUploadService) New(ctx context.Context, params ImageV2DirectUploadNewParams, opts ...option.RequestOption) (res *ImageV2DirectUploadNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ImageV2DirectUploadNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/images/v2/direct_upload", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/images/v2/direct_upload", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -74,6 +74,8 @@ func (r *ImageV2DirectUploadNewResponse) UnmarshalJSON(data []byte) (err error) 
 }
 
 type ImageV2DirectUploadNewParams struct {
+	// Account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The date after which the upload will not be accepted. Minimum: Now + 2 minutes.
 	// Maximum: Now + 6 hours.
 	Expiry param.Field[time.Time] `json:"expiry" format:"date-time"`

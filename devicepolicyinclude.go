@@ -32,11 +32,11 @@ func NewDevicePolicyIncludeService(opts ...option.RequestOption) (r *DevicePolic
 }
 
 // Sets the list of routes included in the WARP client's tunnel.
-func (r *DevicePolicyIncludeService) Update(ctx context.Context, accountID interface{}, body DevicePolicyIncludeUpdateParams, opts ...option.RequestOption) (res *[]DevicePolicyIncludeUpdateResponse, err error) {
+func (r *DevicePolicyIncludeService) Update(ctx context.Context, params DevicePolicyIncludeUpdateParams, opts ...option.RequestOption) (res *[]DevicePolicyIncludeUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyIncludeUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/policy/include", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/devices/policy/include", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -45,11 +45,11 @@ func (r *DevicePolicyIncludeService) Update(ctx context.Context, accountID inter
 }
 
 // Fetches the list of routes included in the WARP client's tunnel.
-func (r *DevicePolicyIncludeService) List(ctx context.Context, accountID interface{}, opts ...option.RequestOption) (res *[]DevicePolicyIncludeListResponse, err error) {
+func (r *DevicePolicyIncludeService) List(ctx context.Context, query DevicePolicyIncludeListParams, opts ...option.RequestOption) (res *[]DevicePolicyIncludeListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyIncludeListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/policy/include", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/devices/policy/include", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -59,11 +59,11 @@ func (r *DevicePolicyIncludeService) List(ctx context.Context, accountID interfa
 
 // Fetches the list of routes included in the WARP client's tunnel for a specific
 // device settings profile.
-func (r *DevicePolicyIncludeService) Get(ctx context.Context, accountID interface{}, policyID string, opts ...option.RequestOption) (res *[]DevicePolicyIncludeGetResponse, err error) {
+func (r *DevicePolicyIncludeService) Get(ctx context.Context, policyID string, query DevicePolicyIncludeGetParams, opts ...option.RequestOption) (res *[]DevicePolicyIncludeGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyIncludeGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/policy/%s/include", accountID, policyID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/devices/policy/%s/include", query.AccountID, policyID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -150,7 +150,8 @@ func (r *DevicePolicyIncludeGetResponse) UnmarshalJSON(data []byte) (err error) 
 }
 
 type DevicePolicyIncludeUpdateParams struct {
-	Body param.Field[[]DevicePolicyIncludeUpdateParamsBody] `json:"body,required"`
+	AccountID param.Field[interface{}]                           `path:"account_id,required"`
+	Body      param.Field[[]DevicePolicyIncludeUpdateParamsBody] `json:"body,required"`
 }
 
 func (r DevicePolicyIncludeUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -270,6 +271,10 @@ func (r *DevicePolicyIncludeUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type DevicePolicyIncludeListParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
+
 type DevicePolicyIncludeListResponseEnvelope struct {
 	Errors   []DevicePolicyIncludeListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DevicePolicyIncludeListResponseEnvelopeMessages `json:"messages,required"`
@@ -366,6 +371,10 @@ type devicePolicyIncludeListResponseEnvelopeResultInfoJSON struct {
 
 func (r *DevicePolicyIncludeListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type DevicePolicyIncludeGetParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
 
 type DevicePolicyIncludeGetResponseEnvelope struct {

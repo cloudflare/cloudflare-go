@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -31,11 +32,11 @@ func NewIntelIPListService(opts ...option.RequestOption) (r *IntelIPListService)
 }
 
 // Get IP Lists
-func (r *IntelIPListService) Get(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]IntelIPListGetResponse, err error) {
+func (r *IntelIPListService) Get(ctx context.Context, query IntelIPListGetParams, opts ...option.RequestOption) (res *[]IntelIPListGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IntelIPListGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/intel/ip-list", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/intel/ip-list", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -62,6 +63,11 @@ type intelIPListGetResponseJSON struct {
 
 func (r *IntelIPListGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type IntelIPListGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type IntelIPListGetResponseEnvelope struct {

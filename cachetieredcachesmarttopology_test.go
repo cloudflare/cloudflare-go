@@ -29,7 +29,9 @@ func TestCacheTieredCacheSmartTopologyDelete(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Cache.TieredCacheSmartTopology.Delete(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Cache.TieredCacheSmartTopology.Delete(context.TODO(), cloudflare.CacheTieredCacheSmartTopologyDeleteParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -55,13 +57,10 @@ func TestCacheTieredCacheSmartTopologyEdit(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Cache.TieredCacheSmartTopology.Edit(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.CacheTieredCacheSmartTopologyEditParams{
-			Value: cloudflare.F(cloudflare.CacheTieredCacheSmartTopologyEditParamsValueOn),
-		},
-	)
+	_, err := client.Cache.TieredCacheSmartTopology.Edit(context.TODO(), cloudflare.CacheTieredCacheSmartTopologyEditParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Value:  cloudflare.F(cloudflare.CacheTieredCacheSmartTopologyEditParamsValueOn),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -87,7 +86,9 @@ func TestCacheTieredCacheSmartTopologyGet(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Cache.TieredCacheSmartTopology.Get(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Cache.TieredCacheSmartTopology.Get(context.TODO(), cloudflare.CacheTieredCacheSmartTopologyGetParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

@@ -38,12 +38,12 @@ func NewAlertingV3HistoryService(opts ...option.RequestOption) (r *AlertingV3His
 // Gets a list of history records for notifications sent to an account. The records
 // are displayed for last `x` number of days based on the zone plan (free = 30, pro
 // = 30, biz = 30, ent = 90).
-func (r *AlertingV3HistoryService) List(ctx context.Context, accountID string, query AlertingV3HistoryListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[AlertingV3HistoryListResponse], err error) {
+func (r *AlertingV3HistoryService) List(ctx context.Context, params AlertingV3HistoryListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[AlertingV3HistoryListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	path := fmt.Sprintf("accounts/%s/alerting/v3/history", accountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/alerting/v3/history", params.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -58,8 +58,8 @@ func (r *AlertingV3HistoryService) List(ctx context.Context, accountID string, q
 // Gets a list of history records for notifications sent to an account. The records
 // are displayed for last `x` number of days based on the zone plan (free = 30, pro
 // = 30, biz = 30, ent = 90).
-func (r *AlertingV3HistoryService) ListAutoPaging(ctx context.Context, accountID string, query AlertingV3HistoryListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[AlertingV3HistoryListResponse] {
-	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, accountID, query, opts...))
+func (r *AlertingV3HistoryService) ListAutoPaging(ctx context.Context, params AlertingV3HistoryListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[AlertingV3HistoryListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 type AlertingV3HistoryListResponse struct {
@@ -116,6 +116,8 @@ const (
 )
 
 type AlertingV3HistoryListParams struct {
+	// The account id
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Limit the returned results to history records older than the specified date.
 	// This must be a timestamp that conforms to RFC3339.
 	Before param.Field[time.Time] `query:"before" format:"date-time"`

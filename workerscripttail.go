@@ -9,6 +9,7 @@ import (
 	"reflect"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
@@ -34,11 +35,11 @@ func NewWorkerScriptTailService(opts ...option.RequestOption) (r *WorkerScriptTa
 }
 
 // Starts a tail that receives logs and exception from a Worker.
-func (r *WorkerScriptTailService) New(ctx context.Context, accountID string, scriptName string, opts ...option.RequestOption) (res *WorkerScriptTailNewResponse, err error) {
+func (r *WorkerScriptTailService) New(ctx context.Context, scriptName string, body WorkerScriptTailNewParams, opts ...option.RequestOption) (res *WorkerScriptTailNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerScriptTailNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/tails", accountID, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/tails", body.AccountID, scriptName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -47,11 +48,11 @@ func (r *WorkerScriptTailService) New(ctx context.Context, accountID string, scr
 }
 
 // Get list of tails currently deployed on a Worker.
-func (r *WorkerScriptTailService) List(ctx context.Context, accountID string, scriptName string, opts ...option.RequestOption) (res *WorkerScriptTailListResponse, err error) {
+func (r *WorkerScriptTailService) List(ctx context.Context, scriptName string, query WorkerScriptTailListParams, opts ...option.RequestOption) (res *WorkerScriptTailListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerScriptTailListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/tails", accountID, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/tails", query.AccountID, scriptName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -60,11 +61,11 @@ func (r *WorkerScriptTailService) List(ctx context.Context, accountID string, sc
 }
 
 // Deletes a tail from a Worker.
-func (r *WorkerScriptTailService) Delete(ctx context.Context, accountID string, scriptName string, id string, opts ...option.RequestOption) (res *WorkerScriptTailDeleteResponse, err error) {
+func (r *WorkerScriptTailService) Delete(ctx context.Context, scriptName string, id string, body WorkerScriptTailDeleteParams, opts ...option.RequestOption) (res *WorkerScriptTailDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerScriptTailDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/tails/%s", accountID, scriptName, id)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/tails/%s", body.AccountID, scriptName, id)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -135,6 +136,11 @@ type WorkerScriptTailDeleteResponseArray []interface{}
 
 func (r WorkerScriptTailDeleteResponseArray) ImplementsWorkerScriptTailDeleteResponse() {}
 
+type WorkerScriptTailNewParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type WorkerScriptTailNewResponseEnvelope struct {
 	Errors   []WorkerScriptTailNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []WorkerScriptTailNewResponseEnvelopeMessages `json:"messages,required"`
@@ -204,6 +210,11 @@ const (
 	WorkerScriptTailNewResponseEnvelopeSuccessTrue WorkerScriptTailNewResponseEnvelopeSuccess = true
 )
 
+type WorkerScriptTailListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type WorkerScriptTailListResponseEnvelope struct {
 	Errors   []WorkerScriptTailListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []WorkerScriptTailListResponseEnvelopeMessages `json:"messages,required"`
@@ -272,6 +283,11 @@ type WorkerScriptTailListResponseEnvelopeSuccess bool
 const (
 	WorkerScriptTailListResponseEnvelopeSuccessTrue WorkerScriptTailListResponseEnvelopeSuccess = true
 )
+
+type WorkerScriptTailDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type WorkerScriptTailDeleteResponseEnvelope struct {
 	Errors   []WorkerScriptTailDeleteResponseEnvelopeErrors   `json:"errors,required"`

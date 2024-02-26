@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -31,11 +32,11 @@ func NewSpeedAvailabilityService(opts ...option.RequestOption) (r *SpeedAvailabi
 }
 
 // Retrieves quota for all plans, as well as the current zone quota.
-func (r *SpeedAvailabilityService) List(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SpeedAvailabilityListResponse, err error) {
+func (r *SpeedAvailabilityService) List(ctx context.Context, query SpeedAvailabilityListParams, opts ...option.RequestOption) (res *SpeedAvailabilityListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SpeedAvailabilityListResponseEnvelope
-	path := fmt.Sprintf("zones/%s/speed_api/availabilities", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/speed_api/availabilities", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -141,6 +142,11 @@ const (
 	SpeedAvailabilityListResponseRegionsValueUsSouth1            SpeedAvailabilityListResponseRegionsValue = "us-south1"
 	SpeedAvailabilityListResponseRegionsValueUsWest1             SpeedAvailabilityListResponseRegionsValue = "us-west1"
 )
+
+type SpeedAvailabilityListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type SpeedAvailabilityListResponseEnvelope struct {
 	Result SpeedAvailabilityListResponse             `json:"result"`

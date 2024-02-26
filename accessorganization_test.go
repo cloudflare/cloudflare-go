@@ -31,7 +31,7 @@ func TestAccessOrganizationNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Access.Organizations.New(context.TODO(), cloudflare.AccessOrganizationNewParams{
 		AccountID:                cloudflare.F("string"),
-		ZoneID:                   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ZoneID:                   cloudflare.F("string"),
 		AuthDomain:               cloudflare.F("test.cloudflareaccess.com"),
 		Name:                     cloudflare.F("Widget Corps Internal Applications"),
 		AllowAuthenticateViaWARP: cloudflare.F(true),
@@ -76,7 +76,7 @@ func TestAccessOrganizationUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Access.Organizations.Update(context.TODO(), cloudflare.AccessOrganizationUpdateParams{
 		AccountID:                cloudflare.F("string"),
-		ZoneID:                   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ZoneID:                   cloudflare.F("string"),
 		AllowAuthenticateViaWARP: cloudflare.F(true),
 		AuthDomain:               cloudflare.F("test.cloudflareaccess.com"),
 		AutoRedirectToIdentity:   cloudflare.F(true),
@@ -125,7 +125,7 @@ func TestAccessOrganizationList(t *testing.T) {
 	)
 	_, err := client.Access.Organizations.List(context.TODO(), cloudflare.AccessOrganizationListParams{
 		AccountID: cloudflare.F("string"),
-		ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ZoneID:    cloudflare.F("string"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -154,7 +154,7 @@ func TestAccessOrganizationRevokeUsers(t *testing.T) {
 	)
 	_, err := client.Access.Organizations.RevokeUsers(context.TODO(), cloudflare.AccessOrganizationRevokeUsersParams{
 		AccountID: cloudflare.F("string"),
-		ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ZoneID:    cloudflare.F("string"),
 		Email:     cloudflare.F("test@example.com"),
 	})
 	if err != nil {

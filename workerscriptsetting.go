@@ -33,11 +33,11 @@ func NewWorkerScriptSettingService(opts ...option.RequestOption) (r *WorkerScrip
 }
 
 // Patch script metadata or config, such as bindings or usage model
-func (r *WorkerScriptSettingService) Edit(ctx context.Context, accountID string, scriptName string, body WorkerScriptSettingEditParams, opts ...option.RequestOption) (res *WorkerScriptSettingEditResponse, err error) {
+func (r *WorkerScriptSettingService) Edit(ctx context.Context, scriptName string, params WorkerScriptSettingEditParams, opts ...option.RequestOption) (res *WorkerScriptSettingEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerScriptSettingEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/settings", accountID, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/settings", params.AccountID, scriptName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -46,11 +46,11 @@ func (r *WorkerScriptSettingService) Edit(ctx context.Context, accountID string,
 }
 
 // Get script metadata and config, such as bindings or usage model
-func (r *WorkerScriptSettingService) Get(ctx context.Context, accountID string, scriptName string, opts ...option.RequestOption) (res *WorkerScriptSettingGetResponse, err error) {
+func (r *WorkerScriptSettingService) Get(ctx context.Context, scriptName string, query WorkerScriptSettingGetParams, opts ...option.RequestOption) (res *WorkerScriptSettingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerScriptSettingGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/settings", accountID, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/settings", query.AccountID, scriptName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -1364,7 +1364,9 @@ func (r *WorkerScriptSettingGetResponseTailConsumer) UnmarshalJSON(data []byte) 
 }
 
 type WorkerScriptSettingEditParams struct {
-	Settings param.Field[WorkerScriptSettingEditParamsSettings] `json:"settings"`
+	// Identifier
+	AccountID param.Field[string]                                `path:"account_id,required"`
+	Settings  param.Field[WorkerScriptSettingEditParamsSettings] `json:"settings"`
 }
 
 func (r WorkerScriptSettingEditParams) MarshalJSON() (data []byte, err error) {
@@ -1855,6 +1857,11 @@ type WorkerScriptSettingEditResponseEnvelopeSuccess bool
 const (
 	WorkerScriptSettingEditResponseEnvelopeSuccessTrue WorkerScriptSettingEditResponseEnvelopeSuccess = true
 )
+
+type WorkerScriptSettingGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type WorkerScriptSettingGetResponseEnvelope struct {
 	Errors   []WorkerScriptSettingGetResponseEnvelopeErrors   `json:"errors,required"`

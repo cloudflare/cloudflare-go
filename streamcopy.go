@@ -32,10 +32,10 @@ func NewStreamCopyService(opts ...option.RequestOption) (r *StreamCopyService) {
 }
 
 // Uploads a video to Stream from a provided URL.
-func (r *StreamCopyService) New(ctx context.Context, accountID string, params StreamCopyNewParams, opts ...option.RequestOption) (res *StreamCopyNewResponse, err error) {
+func (r *StreamCopyService) New(ctx context.Context, params StreamCopyNewParams, opts ...option.RequestOption) (res *StreamCopyNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamCopyNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/copy", accountID)
+	path := fmt.Sprintf("accounts/%s/stream/copy", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -297,6 +297,8 @@ func (r *StreamCopyNewResponseWatermark) UnmarshalJSON(data []byte) (err error) 
 }
 
 type StreamCopyNewParams struct {
+	// The account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
 	// A video's URL. The server must be publicly routable and support `HTTP HEAD`
 	// requests and `HTTP GET` range requests. The server should respond to `HTTP HEAD`
 	// requests with a `content-range` header that includes the size of the file.

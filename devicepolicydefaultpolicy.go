@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -31,11 +32,11 @@ func NewDevicePolicyDefaultPolicyService(opts ...option.RequestOption) (r *Devic
 }
 
 // Fetches the default device settings profile for an account.
-func (r *DevicePolicyDefaultPolicyService) Get(ctx context.Context, accountID interface{}, opts ...option.RequestOption) (res *[]DevicePolicyDefaultPolicyGetResponse, err error) {
+func (r *DevicePolicyDefaultPolicyService) Get(ctx context.Context, query DevicePolicyDefaultPolicyGetParams, opts ...option.RequestOption) (res *[]DevicePolicyDefaultPolicyGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyDefaultPolicyGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/policy", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/devices/policy", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -44,6 +45,10 @@ func (r *DevicePolicyDefaultPolicyService) Get(ctx context.Context, accountID in
 }
 
 type DevicePolicyDefaultPolicyGetResponse = interface{}
+
+type DevicePolicyDefaultPolicyGetParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
 
 type DevicePolicyDefaultPolicyGetResponseEnvelope struct {
 	Errors   []DevicePolicyDefaultPolicyGetResponseEnvelopeErrors   `json:"errors,required"`

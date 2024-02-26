@@ -34,11 +34,11 @@ func NewWorkersForPlatformDispatchNamespaceScriptSettingService(opts ...option.R
 }
 
 // Patch script metadata, such as bindings
-func (r *WorkersForPlatformDispatchNamespaceScriptSettingService) Edit(ctx context.Context, accountID string, dispatchNamespace string, scriptName string, body WorkersForPlatformDispatchNamespaceScriptSettingEditParams, opts ...option.RequestOption) (res *WorkersForPlatformDispatchNamespaceScriptSettingEditResponse, err error) {
+func (r *WorkersForPlatformDispatchNamespaceScriptSettingService) Edit(ctx context.Context, dispatchNamespace string, scriptName string, params WorkersForPlatformDispatchNamespaceScriptSettingEditParams, opts ...option.RequestOption) (res *WorkersForPlatformDispatchNamespaceScriptSettingEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkersForPlatformDispatchNamespaceScriptSettingEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/settings", accountID, dispatchNamespace, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/settings", params.AccountID, dispatchNamespace, scriptName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -47,11 +47,11 @@ func (r *WorkersForPlatformDispatchNamespaceScriptSettingService) Edit(ctx conte
 }
 
 // Get script settings from a script uploaded to a Workers for Platforms namespace.
-func (r *WorkersForPlatformDispatchNamespaceScriptSettingService) Get(ctx context.Context, accountID string, dispatchNamespace string, scriptName string, opts ...option.RequestOption) (res *WorkersForPlatformDispatchNamespaceScriptSettingGetResponse, err error) {
+func (r *WorkersForPlatformDispatchNamespaceScriptSettingService) Get(ctx context.Context, dispatchNamespace string, scriptName string, query WorkersForPlatformDispatchNamespaceScriptSettingGetParams, opts ...option.RequestOption) (res *WorkersForPlatformDispatchNamespaceScriptSettingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkersForPlatformDispatchNamespaceScriptSettingGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/settings", accountID, dispatchNamespace, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/settings", query.AccountID, dispatchNamespace, scriptName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -1378,9 +1378,11 @@ func (r *WorkersForPlatformDispatchNamespaceScriptSettingGetResponseTailConsumer
 }
 
 type WorkersForPlatformDispatchNamespaceScriptSettingEditParams struct {
-	Errors   param.Field[[]WorkersForPlatformDispatchNamespaceScriptSettingEditParamsError]   `json:"errors,required"`
-	Messages param.Field[[]WorkersForPlatformDispatchNamespaceScriptSettingEditParamsMessage] `json:"messages,required"`
-	Result   param.Field[WorkersForPlatformDispatchNamespaceScriptSettingEditParamsResult]    `json:"result,required"`
+	// Identifier
+	AccountID param.Field[string]                                                              `path:"account_id,required"`
+	Errors    param.Field[[]WorkersForPlatformDispatchNamespaceScriptSettingEditParamsError]   `json:"errors,required"`
+	Messages  param.Field[[]WorkersForPlatformDispatchNamespaceScriptSettingEditParamsMessage] `json:"messages,required"`
+	Result    param.Field[WorkersForPlatformDispatchNamespaceScriptSettingEditParamsResult]    `json:"result,required"`
 	// Whether the API call was successful
 	Success param.Field[WorkersForPlatformDispatchNamespaceScriptSettingEditParamsSuccess] `json:"success,required"`
 }
@@ -1864,6 +1866,11 @@ type WorkersForPlatformDispatchNamespaceScriptSettingEditResponseEnvelopeSuccess
 const (
 	WorkersForPlatformDispatchNamespaceScriptSettingEditResponseEnvelopeSuccessTrue WorkersForPlatformDispatchNamespaceScriptSettingEditResponseEnvelopeSuccess = true
 )
+
+type WorkersForPlatformDispatchNamespaceScriptSettingGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type WorkersForPlatformDispatchNamespaceScriptSettingGetResponseEnvelope struct {
 	Errors   []WorkersForPlatformDispatchNamespaceScriptSettingGetResponseEnvelopeErrors   `json:"errors,required"`

@@ -31,9 +31,9 @@ func TestRUMRuleNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.RUM.Rules.New(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.RUMRuleNewParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Host:      cloudflare.F("example.com"),
 			Inclusive: cloudflare.F(true),
 			IsPaused:  cloudflare.F(false),
@@ -67,10 +67,10 @@ func TestRUMRuleUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.RUM.Rules.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.RUMRuleUpdateParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Host:      cloudflare.F("example.com"),
 			Inclusive: cloudflare.F(true),
 			IsPaused:  cloudflare.F(false),
@@ -104,8 +104,10 @@ func TestRUMRuleList(t *testing.T) {
 	)
 	_, err := client.RUM.Rules.List(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		cloudflare.RUMRuleListParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -134,9 +136,11 @@ func TestRUMRuleDelete(t *testing.T) {
 	)
 	_, err := client.RUM.Rules.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		cloudflare.RUMRuleDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

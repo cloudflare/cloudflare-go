@@ -33,15 +33,16 @@ func NewDEXFleetStatusOverTimeService(opts ...option.RequestOption) (r *DEXFleet
 }
 
 // List details for devices using WARP, up to 7 days
-func (r *DEXFleetStatusOverTimeService) List(ctx context.Context, accountID string, query DEXFleetStatusOverTimeListParams, opts ...option.RequestOption) (err error) {
+func (r *DEXFleetStatusOverTimeService) List(ctx context.Context, params DEXFleetStatusOverTimeListParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
-	path := fmt.Sprintf("accounts/%s/dex/fleet-status/over-time", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, nil, opts...)
+	path := fmt.Sprintf("accounts/%s/dex/fleet-status/over-time", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, nil, opts...)
 	return
 }
 
 type DEXFleetStatusOverTimeListParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Timestamp in ISO format
 	TimeEnd param.Field[string] `query:"time_end,required"`
 	// Timestamp in ISO format

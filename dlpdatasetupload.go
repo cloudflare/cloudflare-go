@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -32,11 +33,11 @@ func NewDLPDatasetUploadService(opts ...option.RequestOption) (r *DLPDatasetUplo
 }
 
 // Prepare to upload a new version of a dataset.
-func (r *DLPDatasetUploadService) New(ctx context.Context, accountID string, datasetID string, opts ...option.RequestOption) (res *DLPDatasetUploadNewResponse, err error) {
+func (r *DLPDatasetUploadService) New(ctx context.Context, datasetID string, body DLPDatasetUploadNewParams, opts ...option.RequestOption) (res *DLPDatasetUploadNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPDatasetUploadNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s/upload", accountID, datasetID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s/upload", body.AccountID, datasetID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -45,11 +46,11 @@ func (r *DLPDatasetUploadService) New(ctx context.Context, accountID string, dat
 }
 
 // Upload a new version of a dataset.
-func (r *DLPDatasetUploadService) Edit(ctx context.Context, accountID string, datasetID string, version int64, opts ...option.RequestOption) (res *DLPDatasetUploadEditResponse, err error) {
+func (r *DLPDatasetUploadService) Edit(ctx context.Context, datasetID string, version int64, body DLPDatasetUploadEditParams, opts ...option.RequestOption) (res *DLPDatasetUploadEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPDatasetUploadEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s/upload/%v", accountID, datasetID, version)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s/upload/%v", body.AccountID, datasetID, version)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -150,6 +151,10 @@ const (
 	DLPDatasetUploadEditResponseUploadsStatusComplete  DLPDatasetUploadEditResponseUploadsStatus = "complete"
 )
 
+type DLPDatasetUploadNewParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type DLPDatasetUploadNewResponseEnvelope struct {
 	Errors     []DLPDatasetUploadNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages   []DLPDatasetUploadNewResponseEnvelopeMessages `json:"messages,required"`
@@ -238,6 +243,10 @@ type dlpDatasetUploadNewResponseEnvelopeResultInfoJSON struct {
 
 func (r *DLPDatasetUploadNewResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type DLPDatasetUploadEditParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type DLPDatasetUploadEditResponseEnvelope struct {

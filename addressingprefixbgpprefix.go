@@ -36,11 +36,11 @@ func NewAddressingPrefixBGPPrefixService(opts ...option.RequestOption) (r *Addre
 // control which specific subnets are advertised to the Internet. It is possible to
 // advertise subnets more specific than an IP Prefix by creating more specific BGP
 // Prefixes.
-func (r *AddressingPrefixBGPPrefixService) List(ctx context.Context, accountID string, prefixID string, opts ...option.RequestOption) (res *[]AddressingPrefixBGPPrefixListResponse, err error) {
+func (r *AddressingPrefixBGPPrefixService) List(ctx context.Context, prefixID string, query AddressingPrefixBGPPrefixListParams, opts ...option.RequestOption) (res *[]AddressingPrefixBGPPrefixListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressingPrefixBGPPrefixListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bgp/prefixes", accountID, prefixID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bgp/prefixes", query.AccountID, prefixID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -50,11 +50,11 @@ func (r *AddressingPrefixBGPPrefixService) List(ctx context.Context, accountID s
 
 // Update the properties of a BGP Prefix, such as the on demand advertisement
 // status (advertised or withdrawn).
-func (r *AddressingPrefixBGPPrefixService) Edit(ctx context.Context, accountID string, prefixID string, bgpPrefixID string, body AddressingPrefixBGPPrefixEditParams, opts ...option.RequestOption) (res *AddressingPrefixBGPPrefixEditResponse, err error) {
+func (r *AddressingPrefixBGPPrefixService) Edit(ctx context.Context, prefixID string, bgpPrefixID string, params AddressingPrefixBGPPrefixEditParams, opts ...option.RequestOption) (res *AddressingPrefixBGPPrefixEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressingPrefixBGPPrefixEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bgp/prefixes/%s", accountID, prefixID, bgpPrefixID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bgp/prefixes/%s", params.AccountID, prefixID, bgpPrefixID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -63,11 +63,11 @@ func (r *AddressingPrefixBGPPrefixService) Edit(ctx context.Context, accountID s
 }
 
 // Retrieve a single BGP Prefix according to its identifier
-func (r *AddressingPrefixBGPPrefixService) Get(ctx context.Context, accountID string, prefixID string, bgpPrefixID string, opts ...option.RequestOption) (res *AddressingPrefixBGPPrefixGetResponse, err error) {
+func (r *AddressingPrefixBGPPrefixService) Get(ctx context.Context, prefixID string, bgpPrefixID string, query AddressingPrefixBGPPrefixGetParams, opts ...option.RequestOption) (res *AddressingPrefixBGPPrefixGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressingPrefixBGPPrefixGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bgp/prefixes/%s", accountID, prefixID, bgpPrefixID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bgp/prefixes/%s", query.AccountID, prefixID, bgpPrefixID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -333,6 +333,11 @@ func (r *AddressingPrefixBGPPrefixGetResponseOnDemand) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type AddressingPrefixBGPPrefixListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type AddressingPrefixBGPPrefixListResponseEnvelope struct {
 	Errors   []AddressingPrefixBGPPrefixListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AddressingPrefixBGPPrefixListResponseEnvelopeMessages `json:"messages,required"`
@@ -433,7 +438,9 @@ func (r *AddressingPrefixBGPPrefixListResponseEnvelopeResultInfo) UnmarshalJSON(
 }
 
 type AddressingPrefixBGPPrefixEditParams struct {
-	OnDemand param.Field[AddressingPrefixBGPPrefixEditParamsOnDemand] `json:"on_demand"`
+	// Identifier
+	AccountID param.Field[string]                                      `path:"account_id,required"`
+	OnDemand  param.Field[AddressingPrefixBGPPrefixEditParamsOnDemand] `json:"on_demand"`
 }
 
 func (r AddressingPrefixBGPPrefixEditParams) MarshalJSON() (data []byte, err error) {
@@ -516,6 +523,11 @@ type AddressingPrefixBGPPrefixEditResponseEnvelopeSuccess bool
 const (
 	AddressingPrefixBGPPrefixEditResponseEnvelopeSuccessTrue AddressingPrefixBGPPrefixEditResponseEnvelopeSuccess = true
 )
+
+type AddressingPrefixBGPPrefixGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type AddressingPrefixBGPPrefixGetResponseEnvelope struct {
 	Errors   []AddressingPrefixBGPPrefixGetResponseEnvelopeErrors   `json:"errors,required"`

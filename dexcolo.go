@@ -35,11 +35,11 @@ func NewDEXColoService(opts ...option.RequestOption) (r *DEXColoService) {
 // List Cloudflare colos that account's devices were connected to during a time
 // period, sorted by usage starting from the most used colo. Colos without traffic
 // are also returned and sorted alphabetically.
-func (r *DEXColoService) List(ctx context.Context, accountID string, query DEXColoListParams, opts ...option.RequestOption) (res *[]DEXColoListResponse, err error) {
+func (r *DEXColoService) List(ctx context.Context, params DEXColoListParams, opts ...option.RequestOption) (res *[]DEXColoListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DEXColoListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/dex/colos", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/dex/colos", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -50,6 +50,7 @@ func (r *DEXColoService) List(ctx context.Context, accountID string, query DEXCo
 type DEXColoListResponse = interface{}
 
 type DEXColoListParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
 	// End time for connection period in RFC3339 (ISO 8601) format.
 	TimeEnd param.Field[string] `query:"timeEnd,required"`
 	// Start time for connection period in RFC3339 (ISO 8601) format.

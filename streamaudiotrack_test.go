@@ -31,11 +31,11 @@ func TestStreamAudioTrackNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Stream.AudioTracks.New(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"ea95132c15732412d22c1476fa83f27a",
 		cloudflare.StreamAudioTrackNewParams{
-			Label: cloudflare.F("director commentary"),
-			URL:   cloudflare.F("https://www.examplestorage.com/audio_file.mp3"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Label:     cloudflare.F("director commentary"),
+			URL:       cloudflare.F("https://www.examplestorage.com/audio_file.mp3"),
 		},
 	)
 	if err != nil {
@@ -65,8 +65,10 @@ func TestStreamAudioTrackList(t *testing.T) {
 	)
 	_, err := client.Stream.AudioTracks.List(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"ea95132c15732412d22c1476fa83f27a",
+		cloudflare.StreamAudioTrackListParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -95,9 +97,11 @@ func TestStreamAudioTrackDelete(t *testing.T) {
 	)
 	_, err := client.Stream.AudioTracks.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"ea95132c15732412d22c1476fa83f27a",
 		"ea95132c15732412d22c1476fa83f27a",
+		cloudflare.StreamAudioTrackDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -126,12 +130,12 @@ func TestStreamAudioTrackEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Stream.AudioTracks.Edit(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"ea95132c15732412d22c1476fa83f27a",
 		"ea95132c15732412d22c1476fa83f27a",
 		cloudflare.StreamAudioTrackEditParams{
-			Default: cloudflare.F(true),
-			Label:   cloudflare.F("director commentary"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Default:   cloudflare.F(true),
+			Label:     cloudflare.F("director commentary"),
 		},
 	)
 	if err != nil {

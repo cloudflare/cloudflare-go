@@ -37,11 +37,11 @@ func NewCacheVariantService(opts ...option.RequestOption) (r *CacheVariantServic
 // 'Vary: Accept' response header. If the origin server sends 'Vary: Accept' but
 // does not serve the variant requested, the response will not be cached. This will
 // be indicated with BYPASS cache status in the response headers.
-func (r *CacheVariantService) List(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *CacheVariantListResponse, err error) {
+func (r *CacheVariantService) List(ctx context.Context, query CacheVariantListParams, opts ...option.RequestOption) (res *CacheVariantListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CacheVariantListResponseEnvelope
-	path := fmt.Sprintf("zones/%s/cache/variants", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/cache/variants", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -54,11 +54,11 @@ func (r *CacheVariantService) List(ctx context.Context, zoneID string, opts ...o
 // 'Vary: Accept' response header. If the origin server sends 'Vary: Accept' but
 // does not serve the variant requested, the response will not be cached. This will
 // be indicated with BYPASS cache status in the response headers.
-func (r *CacheVariantService) Delete(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *CacheVariantDeleteResponse, err error) {
+func (r *CacheVariantService) Delete(ctx context.Context, body CacheVariantDeleteParams, opts ...option.RequestOption) (res *CacheVariantDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CacheVariantDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/cache/variants", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/cache/variants", body.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -71,11 +71,11 @@ func (r *CacheVariantService) Delete(ctx context.Context, zoneID string, opts ..
 // 'Vary: Accept' response header. If the origin server sends 'Vary: Accept' but
 // does not serve the variant requested, the response will not be cached. This will
 // be indicated with BYPASS cache status in the response headers.
-func (r *CacheVariantService) Edit(ctx context.Context, zoneID string, body CacheVariantEditParams, opts ...option.RequestOption) (res *CacheVariantEditResponse, err error) {
+func (r *CacheVariantService) Edit(ctx context.Context, params CacheVariantEditParams, opts ...option.RequestOption) (res *CacheVariantEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CacheVariantEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/cache/variants", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/cache/variants", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -308,6 +308,11 @@ func (r *CacheVariantEditResponseValue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type CacheVariantListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type CacheVariantListResponseEnvelope struct {
 	Errors   []CacheVariantListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []CacheVariantListResponseEnvelopeMessages `json:"messages,required"`
@@ -381,6 +386,11 @@ type CacheVariantListResponseEnvelopeSuccess bool
 const (
 	CacheVariantListResponseEnvelopeSuccessTrue CacheVariantListResponseEnvelopeSuccess = true
 )
+
+type CacheVariantDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type CacheVariantDeleteResponseEnvelope struct {
 	Errors   []CacheVariantDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -457,6 +467,8 @@ const (
 )
 
 type CacheVariantEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the zone setting.
 	Value param.Field[CacheVariantEditParamsValue] `json:"value,required"`
 }

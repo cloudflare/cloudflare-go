@@ -29,15 +29,12 @@ func TestRuleListNewWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Rules.Lists.New(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.RuleListNewParams{
-			Kind:        cloudflare.F(cloudflare.RuleListNewParamsKindIP),
-			Name:        cloudflare.F("list1"),
-			Description: cloudflare.F("This is a note"),
-		},
-	)
+	_, err := client.Rules.Lists.New(context.TODO(), cloudflare.RuleListNewParams{
+		AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Kind:        cloudflare.F(cloudflare.RuleListNewParamsKindIP),
+		Name:        cloudflare.F("list1"),
+		Description: cloudflare.F("This is a note"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -65,9 +62,9 @@ func TestRuleListUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Rules.Lists.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"2c0fc9fa937b11eaa1b71c4d701ab86e",
 		cloudflare.RuleListUpdateParams{
+			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Description: cloudflare.F("This is a note"),
 		},
 	)
@@ -96,7 +93,9 @@ func TestRuleListList(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Rules.Lists.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Rules.Lists.List(context.TODO(), cloudflare.RuleListListParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -124,8 +123,10 @@ func TestRuleListDelete(t *testing.T) {
 	)
 	_, err := client.Rules.Lists.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"2c0fc9fa937b11eaa1b71c4d701ab86e",
+		cloudflare.RuleListDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -154,8 +155,10 @@ func TestRuleListGet(t *testing.T) {
 	)
 	_, err := client.Rules.Lists.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"2c0fc9fa937b11eaa1b71c4d701ab86e",
+		cloudflare.RuleListGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -36,11 +36,11 @@ func NewTunnelConnectionService(opts ...option.RequestOption) (r *TunnelConnecti
 }
 
 // Fetches connection details for a Cloudflare Tunnel.
-func (r *TunnelConnectionService) List(ctx context.Context, accountID string, tunnelID string, opts ...option.RequestOption) (res *[]TunnelConnectionListResponse, err error) {
+func (r *TunnelConnectionService) List(ctx context.Context, tunnelID string, query TunnelConnectionListParams, opts ...option.RequestOption) (res *[]TunnelConnectionListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelConnectionListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/connections", accountID, tunnelID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/connections", query.AccountID, tunnelID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -50,11 +50,11 @@ func (r *TunnelConnectionService) List(ctx context.Context, accountID string, tu
 
 // Removes connections that are in a disconnected or pending reconnect state. We
 // recommend running this command after shutting down a tunnel.
-func (r *TunnelConnectionService) Delete(ctx context.Context, accountID string, tunnelID string, body TunnelConnectionDeleteParams, opts ...option.RequestOption) (res *TunnelConnectionDeleteResponse, err error) {
+func (r *TunnelConnectionService) Delete(ctx context.Context, tunnelID string, params TunnelConnectionDeleteParams, opts ...option.RequestOption) (res *TunnelConnectionDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelConnectionDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/tunnels/%s/connections", accountID, tunnelID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/tunnels/%s/connections", params.AccountID, tunnelID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -164,6 +164,11 @@ type TunnelConnectionDeleteResponseArray []interface{}
 
 func (r TunnelConnectionDeleteResponseArray) ImplementsTunnelConnectionDeleteResponse() {}
 
+type TunnelConnectionListParams struct {
+	// Cloudflare account ID
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type TunnelConnectionListResponseEnvelope struct {
 	Errors   []TunnelConnectionListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []TunnelConnectionListResponseEnvelopeMessages `json:"messages,required"`
@@ -263,7 +268,9 @@ func (r *TunnelConnectionListResponseEnvelopeResultInfo) UnmarshalJSON(data []by
 }
 
 type TunnelConnectionDeleteParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	// Cloudflare account ID
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
 }
 
 func (r TunnelConnectionDeleteParams) MarshalJSON() (data []byte, err error) {

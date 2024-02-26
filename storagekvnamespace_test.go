@@ -29,13 +29,10 @@ func TestStorageKVNamespaceNew(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Storage.KV.Namespaces.New(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.StorageKVNamespaceNewParams{
-			Title: cloudflare.F("My Own Namespace"),
-		},
-	)
+	_, err := client.Storage.KV.Namespaces.New(context.TODO(), cloudflare.StorageKVNamespaceNewParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Title:     cloudflare.F("My Own Namespace"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -63,10 +60,10 @@ func TestStorageKVNamespaceUpdate(t *testing.T) {
 	)
 	_, err := client.Storage.KV.Namespaces.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"0f2ac74b498b48028cb68387c421e279",
 		cloudflare.StorageKVNamespaceUpdateParams{
-			Title: cloudflare.F("My Own Namespace"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Title:     cloudflare.F("My Own Namespace"),
 		},
 	)
 	if err != nil {
@@ -94,16 +91,13 @@ func TestStorageKVNamespaceListWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Storage.KV.Namespaces.List(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.StorageKVNamespaceListParams{
-			Direction: cloudflare.F(cloudflare.StorageKVNamespaceListParamsDirectionAsc),
-			Order:     cloudflare.F(cloudflare.StorageKVNamespaceListParamsOrderID),
-			Page:      cloudflare.F(1.000000),
-			PerPage:   cloudflare.F(5.000000),
-		},
-	)
+	_, err := client.Storage.KV.Namespaces.List(context.TODO(), cloudflare.StorageKVNamespaceListParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Direction: cloudflare.F(cloudflare.StorageKVNamespaceListParamsDirectionAsc),
+		Order:     cloudflare.F(cloudflare.StorageKVNamespaceListParamsOrderID),
+		Page:      cloudflare.F(1.000000),
+		PerPage:   cloudflare.F(5.000000),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -131,8 +125,10 @@ func TestStorageKVNamespaceDelete(t *testing.T) {
 	)
 	_, err := client.Storage.KV.Namespaces.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"0f2ac74b498b48028cb68387c421e279",
+		cloudflare.StorageKVNamespaceDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

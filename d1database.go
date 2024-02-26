@@ -34,11 +34,11 @@ func NewD1DatabaseService(opts ...option.RequestOption) (r *D1DatabaseService) {
 }
 
 // Returns the created D1 database.
-func (r *D1DatabaseService) New(ctx context.Context, accountID string, body D1DatabaseNewParams, opts ...option.RequestOption) (res *D1DatabaseNewResponse, err error) {
+func (r *D1DatabaseService) New(ctx context.Context, params D1DatabaseNewParams, opts ...option.RequestOption) (res *D1DatabaseNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env D1DatabaseNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/d1/database", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/d1/database", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -47,12 +47,12 @@ func (r *D1DatabaseService) New(ctx context.Context, accountID string, body D1Da
 }
 
 // Returns a list of D1 databases.
-func (r *D1DatabaseService) List(ctx context.Context, accountID string, query D1DatabaseListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[D1DatabaseListResponse], err error) {
+func (r *D1DatabaseService) List(ctx context.Context, params D1DatabaseListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[D1DatabaseListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	path := fmt.Sprintf("accounts/%s/d1/database", accountID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/d1/database", params.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -65,8 +65,8 @@ func (r *D1DatabaseService) List(ctx context.Context, accountID string, query D1
 }
 
 // Returns a list of D1 databases.
-func (r *D1DatabaseService) ListAutoPaging(ctx context.Context, accountID string, query D1DatabaseListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[D1DatabaseListResponse] {
-	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, accountID, query, opts...))
+func (r *D1DatabaseService) ListAutoPaging(ctx context.Context, params D1DatabaseListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[D1DatabaseListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 type D1DatabaseNewResponse struct {
@@ -118,7 +118,9 @@ func (r *D1DatabaseListResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type D1DatabaseNewParams struct {
-	Name param.Field[string] `json:"name,required"`
+	// Account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
+	Name      param.Field[string] `json:"name,required"`
 }
 
 func (r D1DatabaseNewParams) MarshalJSON() (data []byte, err error) {
@@ -195,6 +197,8 @@ const (
 )
 
 type D1DatabaseListParams struct {
+	// Account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
 	// a database name to search for.
 	Name param.Field[string] `query:"name"`
 	// Page number of paginated results.

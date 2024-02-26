@@ -33,7 +33,9 @@ func TestPCAPDownloadGet(t *testing.T) {
 	resp, err := client.PCAPs.Downloads.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.PCAPDownloadGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

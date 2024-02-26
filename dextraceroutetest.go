@@ -35,11 +35,11 @@ func NewDEXTracerouteTestService(opts ...option.RequestOption) (r *DEXTraceroute
 
 // Get test details and aggregate performance metrics for an traceroute test for a
 // given time period between 1 hour and 7 days.
-func (r *DEXTracerouteTestService) Get(ctx context.Context, accountID string, testID string, query DEXTracerouteTestGetParams, opts ...option.RequestOption) (res *DEXTracerouteTestGetResponse, err error) {
+func (r *DEXTracerouteTestService) Get(ctx context.Context, testID string, params DEXTracerouteTestGetParams, opts ...option.RequestOption) (res *DEXTracerouteTestGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DEXTracerouteTestGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/dex/traceroute-tests/%s", accountID, testID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/dex/traceroute-tests/%s", params.AccountID, testID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +48,11 @@ func (r *DEXTracerouteTestService) Get(ctx context.Context, accountID string, te
 }
 
 // Get a breakdown of metrics by hop for individual traceroute test runs
-func (r *DEXTracerouteTestService) NetworkPath(ctx context.Context, accountID string, testID string, query DEXTracerouteTestNetworkPathParams, opts ...option.RequestOption) (res *DEXTracerouteTestNetworkPathResponse, err error) {
+func (r *DEXTracerouteTestService) NetworkPath(ctx context.Context, testID string, params DEXTracerouteTestNetworkPathParams, opts ...option.RequestOption) (res *DEXTracerouteTestNetworkPathResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DEXTracerouteTestNetworkPathResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/dex/traceroute-tests/%s/network-path", accountID, testID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/dex/traceroute-tests/%s/network-path", params.AccountID, testID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -62,11 +62,11 @@ func (r *DEXTracerouteTestService) NetworkPath(ctx context.Context, accountID st
 
 // Get percentiles for a traceroute test for a given time period between 1 hour and
 // 7 days.
-func (r *DEXTracerouteTestService) Percentiles(ctx context.Context, accountID string, testID string, query DEXTracerouteTestPercentilesParams, opts ...option.RequestOption) (res *DEXTracerouteTestPercentilesResponse, err error) {
+func (r *DEXTracerouteTestService) Percentiles(ctx context.Context, testID string, params DEXTracerouteTestPercentilesParams, opts ...option.RequestOption) (res *DEXTracerouteTestPercentilesResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DEXTracerouteTestPercentilesResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/dex/traceroute-tests/%s/percentiles", accountID, testID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/dex/traceroute-tests/%s/percentiles", params.AccountID, testID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -763,6 +763,7 @@ func (r *DEXTracerouteTestPercentilesResponseRoundTripTimeMs) UnmarshalJSON(data
 }
 
 type DEXTracerouteTestGetParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Time interval for aggregate time slots.
 	Interval param.Field[DEXTracerouteTestGetParamsInterval] `query:"interval,required"`
 	// End time for aggregate metrics in ISO ms
@@ -864,6 +865,7 @@ const (
 )
 
 type DEXTracerouteTestNetworkPathParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Device to filter tracroute result runs to
 	DeviceID param.Field[string] `query:"deviceId,required"`
 	// Time interval for aggregate time slots.
@@ -961,6 +963,7 @@ const (
 )
 
 type DEXTracerouteTestPercentilesParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
 	// End time for aggregate metrics in ISO format
 	TimeEnd param.Field[string] `query:"timeEnd,required"`
 	// Start time for aggregate metrics in ISO format

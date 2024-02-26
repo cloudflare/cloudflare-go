@@ -37,11 +37,11 @@ func NewLoadBalancerRegionService(opts ...option.RequestOption) (r *LoadBalancer
 }
 
 // List all region mappings.
-func (r *LoadBalancerRegionService) List(ctx context.Context, accountID string, query LoadBalancerRegionListParams, opts ...option.RequestOption) (res *LoadBalancerRegionListResponse, err error) {
+func (r *LoadBalancerRegionService) List(ctx context.Context, params LoadBalancerRegionListParams, opts ...option.RequestOption) (res *LoadBalancerRegionListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerRegionListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/load_balancers/regions", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/load_balancers/regions", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -50,11 +50,11 @@ func (r *LoadBalancerRegionService) List(ctx context.Context, accountID string, 
 }
 
 // Get a single region mapping.
-func (r *LoadBalancerRegionService) Get(ctx context.Context, accountID string, regionID LoadBalancerRegionGetParamsRegionID, opts ...option.RequestOption) (res *LoadBalancerRegionGetResponse, err error) {
+func (r *LoadBalancerRegionService) Get(ctx context.Context, regionID LoadBalancerRegionGetParamsRegionID, query LoadBalancerRegionGetParams, opts ...option.RequestOption) (res *LoadBalancerRegionGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerRegionGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/load_balancers/regions/%v", accountID, regionID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/load_balancers/regions/%v", query.AccountID, regionID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -99,6 +99,8 @@ func init() {
 }
 
 type LoadBalancerRegionListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Two-letter alpha-2 country code followed in ISO 3166-1.
 	CountryCodeA2 param.Field[string] `query:"country_code_a2"`
 	// Two-letter subdivision code followed in ISO 3166-2.
@@ -184,6 +186,11 @@ type LoadBalancerRegionListResponseEnvelopeSuccess bool
 const (
 	LoadBalancerRegionListResponseEnvelopeSuccessTrue LoadBalancerRegionListResponseEnvelopeSuccess = true
 )
+
+type LoadBalancerRegionGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 // A list of Cloudflare regions. WNAM: Western North America, ENAM: Eastern North
 // America, WEU: Western Europe, EEU: Eastern Europe, NSAM: Northern South America,

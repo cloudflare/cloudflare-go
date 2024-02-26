@@ -31,9 +31,9 @@ func TestDLPProfilePredefinedUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.DLP.Profiles.Predefineds.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"384e129d-25bd-403c-8019-bc19eb7a8a5f",
 		cloudflare.DLPProfilePredefinedUpdateParams{
+			AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			AllowedMatchCount: cloudflare.F(5.000000),
 			Entries: cloudflare.F([]cloudflare.DLPProfilePredefinedUpdateParamsEntry{{
 				Enabled: cloudflare.F(true),
@@ -71,8 +71,10 @@ func TestDLPProfilePredefinedGet(t *testing.T) {
 	)
 	_, err := client.DLP.Profiles.Predefineds.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"384e129d-25bd-403c-8019-bc19eb7a8a5f",
+		cloudflare.DLPProfilePredefinedGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -9,6 +9,7 @@ import (
 	"reflect"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
@@ -34,11 +35,11 @@ func NewAlertingV3DestinationEligibleService(opts ...option.RequestOption) (r *A
 }
 
 // Get a list of all delivery mechanism types for which an account is eligible.
-func (r *AlertingV3DestinationEligibleService) Get(ctx context.Context, accountID string, opts ...option.RequestOption) (res *AlertingV3DestinationEligibleGetResponse, err error) {
+func (r *AlertingV3DestinationEligibleService) Get(ctx context.Context, query AlertingV3DestinationEligibleGetParams, opts ...option.RequestOption) (res *AlertingV3DestinationEligibleGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AlertingV3DestinationEligibleGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/eligible", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/eligible", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -66,6 +67,11 @@ func init() {
 type AlertingV3DestinationEligibleGetResponseArray []interface{}
 
 func (r AlertingV3DestinationEligibleGetResponseArray) ImplementsAlertingV3DestinationEligibleGetResponse() {
+}
+
+type AlertingV3DestinationEligibleGetParams struct {
+	// The account id
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type AlertingV3DestinationEligibleGetResponseEnvelope struct {

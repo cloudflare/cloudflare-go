@@ -35,11 +35,11 @@ func NewPageProjectDomainService(opts ...option.RequestOption) (r *PageProjectDo
 }
 
 // Add a new domain for the Pages project.
-func (r *PageProjectDomainService) New(ctx context.Context, accountID string, projectName string, body PageProjectDomainNewParams, opts ...option.RequestOption) (res *PageProjectDomainNewResponse, err error) {
+func (r *PageProjectDomainService) New(ctx context.Context, projectName string, params PageProjectDomainNewParams, opts ...option.RequestOption) (res *PageProjectDomainNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageProjectDomainNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains", accountID, projectName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains", params.AccountID, projectName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +48,11 @@ func (r *PageProjectDomainService) New(ctx context.Context, accountID string, pr
 }
 
 // Fetch a list of all domains associated with a Pages project.
-func (r *PageProjectDomainService) List(ctx context.Context, accountID string, projectName string, opts ...option.RequestOption) (res *[]PageProjectDomainListResponse, err error) {
+func (r *PageProjectDomainService) List(ctx context.Context, projectName string, query PageProjectDomainListParams, opts ...option.RequestOption) (res *[]PageProjectDomainListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageProjectDomainListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains", accountID, projectName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains", query.AccountID, projectName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -61,19 +61,19 @@ func (r *PageProjectDomainService) List(ctx context.Context, accountID string, p
 }
 
 // Delete a Pages project's domain.
-func (r *PageProjectDomainService) Delete(ctx context.Context, accountID string, projectName string, domainName string, opts ...option.RequestOption) (res *PageProjectDomainDeleteResponse, err error) {
+func (r *PageProjectDomainService) Delete(ctx context.Context, projectName string, domainName string, body PageProjectDomainDeleteParams, opts ...option.RequestOption) (res *PageProjectDomainDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains/%s", accountID, projectName, domainName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains/%s", body.AccountID, projectName, domainName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &res, opts...)
 	return
 }
 
 // Retry the validation status of a single domain.
-func (r *PageProjectDomainService) Edit(ctx context.Context, accountID string, projectName string, domainName string, opts ...option.RequestOption) (res *PageProjectDomainEditResponse, err error) {
+func (r *PageProjectDomainService) Edit(ctx context.Context, projectName string, domainName string, body PageProjectDomainEditParams, opts ...option.RequestOption) (res *PageProjectDomainEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageProjectDomainEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains/%s", accountID, projectName, domainName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains/%s", body.AccountID, projectName, domainName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -82,11 +82,11 @@ func (r *PageProjectDomainService) Edit(ctx context.Context, accountID string, p
 }
 
 // Fetch a single domain.
-func (r *PageProjectDomainService) Get(ctx context.Context, accountID string, projectName string, domainName string, opts ...option.RequestOption) (res *PageProjectDomainGetResponse, err error) {
+func (r *PageProjectDomainService) Get(ctx context.Context, projectName string, domainName string, query PageProjectDomainGetParams, opts ...option.RequestOption) (res *PageProjectDomainGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageProjectDomainGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains/%s", accountID, projectName, domainName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains/%s", query.AccountID, projectName, domainName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -162,7 +162,9 @@ type PageProjectDomainGetResponseArray []interface{}
 func (r PageProjectDomainGetResponseArray) ImplementsPageProjectDomainGetResponse() {}
 
 type PageProjectDomainNewParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	// Identifier
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
 }
 
 func (r PageProjectDomainNewParams) MarshalJSON() (data []byte, err error) {
@@ -237,6 +239,11 @@ type PageProjectDomainNewResponseEnvelopeSuccess bool
 const (
 	PageProjectDomainNewResponseEnvelopeSuccessTrue PageProjectDomainNewResponseEnvelopeSuccess = true
 )
+
+type PageProjectDomainListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type PageProjectDomainListResponseEnvelope struct {
 	Errors   []PageProjectDomainListResponseEnvelopeErrors   `json:"errors,required"`
@@ -332,6 +339,16 @@ func (r *PageProjectDomainListResponseEnvelopeResultInfo) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type PageProjectDomainDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type PageProjectDomainEditParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type PageProjectDomainEditResponseEnvelope struct {
 	Errors   []PageProjectDomainEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []PageProjectDomainEditResponseEnvelopeMessages `json:"messages,required"`
@@ -400,6 +417,11 @@ type PageProjectDomainEditResponseEnvelopeSuccess bool
 const (
 	PageProjectDomainEditResponseEnvelopeSuccessTrue PageProjectDomainEditResponseEnvelopeSuccess = true
 )
+
+type PageProjectDomainGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type PageProjectDomainGetResponseEnvelope struct {
 	Errors   []PageProjectDomainGetResponseEnvelopeErrors   `json:"errors,required"`

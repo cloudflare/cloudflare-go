@@ -31,10 +31,10 @@ func TestStreamTokenNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Stream.Tokens.New(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"ea95132c15732412d22c1476fa83f27a",
 		cloudflare.StreamTokenNewParams{
-			ID: cloudflare.F("ab0d4ef71g4425f8dcba9041231813000"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ID:        cloudflare.F("ab0d4ef71g4425f8dcba9041231813000"),
 			AccessRules: cloudflare.F([]cloudflare.StreamTokenNewParamsAccessRule{{
 				Action:  cloudflare.F(cloudflare.StreamTokenNewParamsAccessRulesActionBlock),
 				Country: cloudflare.F([]string{"US", "MX"}),

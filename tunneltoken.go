@@ -9,6 +9,7 @@ import (
 	"reflect"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
@@ -34,11 +35,11 @@ func NewTunnelTokenService(opts ...option.RequestOption) (r *TunnelTokenService)
 }
 
 // Gets the token used to associate cloudflared with a specific tunnel.
-func (r *TunnelTokenService) Get(ctx context.Context, accountID string, tunnelID string, opts ...option.RequestOption) (res *TunnelTokenGetResponse, err error) {
+func (r *TunnelTokenService) Get(ctx context.Context, tunnelID string, query TunnelTokenGetParams, opts ...option.RequestOption) (res *TunnelTokenGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelTokenGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/token", accountID, tunnelID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/token", query.AccountID, tunnelID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -66,6 +67,11 @@ func init() {
 type TunnelTokenGetResponseArray []interface{}
 
 func (r TunnelTokenGetResponseArray) ImplementsTunnelTokenGetResponse() {}
+
+type TunnelTokenGetParams struct {
+	// Cloudflare account ID
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type TunnelTokenGetResponseEnvelope struct {
 	Errors   []TunnelTokenGetResponseEnvelopeErrors   `json:"errors,required"`

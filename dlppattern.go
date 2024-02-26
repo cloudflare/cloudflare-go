@@ -34,11 +34,11 @@ func NewDLPPatternService(opts ...option.RequestOption) (r *DLPPatternService) {
 // regular expression is too complex or can match an unbounded-length string. Your
 // regex will be rejected if it uses the Kleene Star -- be sure to bound the
 // maximum number of characters that can be matched.
-func (r *DLPPatternService) Validate(ctx context.Context, accountID string, body DLPPatternValidateParams, opts ...option.RequestOption) (res *DLPPatternValidateResponse, err error) {
+func (r *DLPPatternService) Validate(ctx context.Context, params DLPPatternValidateParams, opts ...option.RequestOption) (res *DLPPatternValidateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPPatternValidateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/dlp/patterns/validate", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/dlp/patterns/validate", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -64,6 +64,8 @@ func (r *DLPPatternValidateResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type DLPPatternValidateParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The regex pattern.
 	Regex param.Field[string] `json:"regex,required"`
 }

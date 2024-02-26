@@ -36,11 +36,11 @@ func NewLoadBalancerPoolHealthService(opts ...option.RequestOption) (r *LoadBala
 
 // Preview pool health using provided monitor details. The returned preview_id can
 // be used in the preview endpoint to retrieve the results.
-func (r *LoadBalancerPoolHealthService) New(ctx context.Context, accountID string, poolID string, body LoadBalancerPoolHealthNewParams, opts ...option.RequestOption) (res *LoadBalancerPoolHealthNewResponse, err error) {
+func (r *LoadBalancerPoolHealthService) New(ctx context.Context, poolID string, params LoadBalancerPoolHealthNewParams, opts ...option.RequestOption) (res *LoadBalancerPoolHealthNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerPoolHealthNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s/preview", accountID, poolID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s/preview", params.AccountID, poolID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -49,11 +49,11 @@ func (r *LoadBalancerPoolHealthService) New(ctx context.Context, accountID strin
 }
 
 // Fetch the latest pool health status for a single pool.
-func (r *LoadBalancerPoolHealthService) Get(ctx context.Context, accountID string, poolID string, opts ...option.RequestOption) (res *LoadBalancerPoolHealthGetResponse, err error) {
+func (r *LoadBalancerPoolHealthService) Get(ctx context.Context, poolID string, query LoadBalancerPoolHealthGetParams, opts ...option.RequestOption) (res *LoadBalancerPoolHealthGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerPoolHealthGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s/health", accountID, poolID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s/health", query.AccountID, poolID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -102,6 +102,8 @@ func init() {
 }
 
 type LoadBalancerPoolHealthNewParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The expected HTTP response code or code range of the health check. This
 	// parameter is only valid for HTTP and HTTPS monitors.
 	ExpectedCodes param.Field[string] `json:"expected_codes,required"`
@@ -238,6 +240,11 @@ type LoadBalancerPoolHealthNewResponseEnvelopeSuccess bool
 const (
 	LoadBalancerPoolHealthNewResponseEnvelopeSuccessTrue LoadBalancerPoolHealthNewResponseEnvelopeSuccess = true
 )
+
+type LoadBalancerPoolHealthGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type LoadBalancerPoolHealthGetResponseEnvelope struct {
 	Errors   []LoadBalancerPoolHealthGetResponseEnvelopeErrors   `json:"errors,required"`

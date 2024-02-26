@@ -38,11 +38,11 @@ func NewSettingDevelopmentModeService(opts ...option.RequestOption) (r *SettingD
 // changes to cacheable content (like images, css, or JavaScript) and would like to
 // see those changes right away. Once entered, development mode will last for 3
 // hours and then automatically toggle off.
-func (r *SettingDevelopmentModeService) Edit(ctx context.Context, zoneID string, body SettingDevelopmentModeEditParams, opts ...option.RequestOption) (res *SettingDevelopmentModeEditResponse, err error) {
+func (r *SettingDevelopmentModeService) Edit(ctx context.Context, params SettingDevelopmentModeEditParams, opts ...option.RequestOption) (res *SettingDevelopmentModeEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingDevelopmentModeEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/development_mode", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/development_mode", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -56,11 +56,11 @@ func (r *SettingDevelopmentModeService) Edit(ctx context.Context, zoneID string,
 // changes to cacheable content (like images, css, or JavaScript) and would like to
 // see those changes right away. Once entered, development mode will last for 3
 // hours and then automatically toggle off.
-func (r *SettingDevelopmentModeService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingDevelopmentModeGetResponse, err error) {
+func (r *SettingDevelopmentModeService) Get(ctx context.Context, query SettingDevelopmentModeGetParams, opts ...option.RequestOption) (res *SettingDevelopmentModeGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingDevelopmentModeGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/development_mode", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/development_mode", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -195,6 +195,8 @@ const (
 )
 
 type SettingDevelopmentModeEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the zone setting.
 	Value param.Field[SettingDevelopmentModeEditParamsValue] `json:"value,required"`
 }
@@ -277,6 +279,11 @@ type settingDevelopmentModeEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingDevelopmentModeEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingDevelopmentModeGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingDevelopmentModeGetResponseEnvelope struct {

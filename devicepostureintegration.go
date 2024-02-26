@@ -35,11 +35,11 @@ func NewDevicePostureIntegrationService(opts ...option.RequestOption) (r *Device
 }
 
 // Create a new device posture integration.
-func (r *DevicePostureIntegrationService) New(ctx context.Context, accountID interface{}, body DevicePostureIntegrationNewParams, opts ...option.RequestOption) (res *DevicePostureIntegrationNewResponse, err error) {
+func (r *DevicePostureIntegrationService) New(ctx context.Context, params DevicePostureIntegrationNewParams, opts ...option.RequestOption) (res *DevicePostureIntegrationNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePostureIntegrationNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/posture/integration", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/devices/posture/integration", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +48,11 @@ func (r *DevicePostureIntegrationService) New(ctx context.Context, accountID int
 }
 
 // Fetches the list of device posture integrations for an account.
-func (r *DevicePostureIntegrationService) List(ctx context.Context, accountID interface{}, opts ...option.RequestOption) (res *[]DevicePostureIntegrationListResponse, err error) {
+func (r *DevicePostureIntegrationService) List(ctx context.Context, query DevicePostureIntegrationListParams, opts ...option.RequestOption) (res *[]DevicePostureIntegrationListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePostureIntegrationListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/posture/integration", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/devices/posture/integration", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -61,11 +61,11 @@ func (r *DevicePostureIntegrationService) List(ctx context.Context, accountID in
 }
 
 // Delete a configured device posture integration.
-func (r *DevicePostureIntegrationService) Delete(ctx context.Context, accountID interface{}, integrationID string, opts ...option.RequestOption) (res *DevicePostureIntegrationDeleteResponse, err error) {
+func (r *DevicePostureIntegrationService) Delete(ctx context.Context, integrationID string, body DevicePostureIntegrationDeleteParams, opts ...option.RequestOption) (res *DevicePostureIntegrationDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePostureIntegrationDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/posture/integration/%s", accountID, integrationID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/devices/posture/integration/%s", body.AccountID, integrationID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -74,11 +74,11 @@ func (r *DevicePostureIntegrationService) Delete(ctx context.Context, accountID 
 }
 
 // Updates a configured device posture integration.
-func (r *DevicePostureIntegrationService) Edit(ctx context.Context, accountID interface{}, integrationID string, body DevicePostureIntegrationEditParams, opts ...option.RequestOption) (res *DevicePostureIntegrationEditResponse, err error) {
+func (r *DevicePostureIntegrationService) Edit(ctx context.Context, integrationID string, params DevicePostureIntegrationEditParams, opts ...option.RequestOption) (res *DevicePostureIntegrationEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePostureIntegrationEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/posture/integration/%s", accountID, integrationID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/devices/posture/integration/%s", params.AccountID, integrationID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -87,11 +87,11 @@ func (r *DevicePostureIntegrationService) Edit(ctx context.Context, accountID in
 }
 
 // Fetches details for a single device posture integration.
-func (r *DevicePostureIntegrationService) Get(ctx context.Context, accountID interface{}, integrationID string, opts ...option.RequestOption) (res *DevicePostureIntegrationGetResponse, err error) {
+func (r *DevicePostureIntegrationService) Get(ctx context.Context, integrationID string, query DevicePostureIntegrationGetParams, opts ...option.RequestOption) (res *DevicePostureIntegrationGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePostureIntegrationGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/posture/integration/%s", accountID, integrationID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/devices/posture/integration/%s", query.AccountID, integrationID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -393,6 +393,7 @@ const (
 )
 
 type DevicePostureIntegrationNewParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// The configuration object containing third-party integration information.
 	Config param.Field[DevicePostureIntegrationNewParamsConfig] `json:"config,required"`
 	// The interval between each posture check with the third-party API. Use `m` for
@@ -622,6 +623,10 @@ const (
 	DevicePostureIntegrationNewResponseEnvelopeSuccessTrue DevicePostureIntegrationNewResponseEnvelopeSuccess = true
 )
 
+type DevicePostureIntegrationListParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
+
 type DevicePostureIntegrationListResponseEnvelope struct {
 	Errors   []DevicePostureIntegrationListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DevicePostureIntegrationListResponseEnvelopeMessages `json:"messages,required"`
@@ -720,6 +725,10 @@ func (r *DevicePostureIntegrationListResponseEnvelopeResultInfo) UnmarshalJSON(d
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type DevicePostureIntegrationDeleteParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
+
 type DevicePostureIntegrationDeleteResponseEnvelope struct {
 	Errors   []DevicePostureIntegrationDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DevicePostureIntegrationDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -790,6 +799,7 @@ const (
 )
 
 type DevicePostureIntegrationEditParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// The configuration object containing third-party integration information.
 	Config param.Field[DevicePostureIntegrationEditParamsConfig] `json:"config"`
 	// The interval between each posture check with the third-party API. Use `m` for
@@ -1018,6 +1028,10 @@ type DevicePostureIntegrationEditResponseEnvelopeSuccess bool
 const (
 	DevicePostureIntegrationEditResponseEnvelopeSuccessTrue DevicePostureIntegrationEditResponseEnvelopeSuccess = true
 )
+
+type DevicePostureIntegrationGetParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
 
 type DevicePostureIntegrationGetResponseEnvelope struct {
 	Errors   []DevicePostureIntegrationGetResponseEnvelopeErrors   `json:"errors,required"`

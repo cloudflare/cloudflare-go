@@ -32,11 +32,11 @@ func NewWorkerAccountSettingService(opts ...option.RequestOption) (r *WorkerAcco
 }
 
 // Creates Worker account settings for an account.
-func (r *WorkerAccountSettingService) Update(ctx context.Context, accountID string, body WorkerAccountSettingUpdateParams, opts ...option.RequestOption) (res *WorkerAccountSettingUpdateResponse, err error) {
+func (r *WorkerAccountSettingService) Update(ctx context.Context, params WorkerAccountSettingUpdateParams, opts ...option.RequestOption) (res *WorkerAccountSettingUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerAccountSettingUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/account-settings", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/account-settings", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -45,11 +45,11 @@ func (r *WorkerAccountSettingService) Update(ctx context.Context, accountID stri
 }
 
 // Fetches Worker account settings for an account.
-func (r *WorkerAccountSettingService) Get(ctx context.Context, accountID string, opts ...option.RequestOption) (res *WorkerAccountSettingGetResponse, err error) {
+func (r *WorkerAccountSettingService) Get(ctx context.Context, query WorkerAccountSettingGetParams, opts ...option.RequestOption) (res *WorkerAccountSettingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerAccountSettingGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/account-settings", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/account-settings", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -96,7 +96,9 @@ func (r *WorkerAccountSettingGetResponse) UnmarshalJSON(data []byte) (err error)
 }
 
 type WorkerAccountSettingUpdateParams struct {
-	Body param.Field[interface{}] `json:"body,required"`
+	// Identifier
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Body      param.Field[interface{}] `json:"body,required"`
 }
 
 func (r WorkerAccountSettingUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -171,6 +173,11 @@ type WorkerAccountSettingUpdateResponseEnvelopeSuccess bool
 const (
 	WorkerAccountSettingUpdateResponseEnvelopeSuccessTrue WorkerAccountSettingUpdateResponseEnvelopeSuccess = true
 )
+
+type WorkerAccountSettingGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type WorkerAccountSettingGetResponseEnvelope struct {
 	Errors   []WorkerAccountSettingGetResponseEnvelopeErrors   `json:"errors,required"`

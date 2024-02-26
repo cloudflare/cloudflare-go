@@ -29,22 +29,19 @@ func TestGatewayListNewWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Gateways.Lists.New(
-		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
-		cloudflare.GatewayListNewParams{
-			Name:        cloudflare.F("Admin Serial Numbers"),
-			Type:        cloudflare.F(cloudflare.GatewayListNewParamsTypeSerial),
-			Description: cloudflare.F("The serial numbers for administrators"),
-			Items: cloudflare.F([]cloudflare.GatewayListNewParamsItem{{
-				Value: cloudflare.F("8GE8721REF"),
-			}, {
-				Value: cloudflare.F("8GE8721REF"),
-			}, {
-				Value: cloudflare.F("8GE8721REF"),
-			}}),
-		},
-	)
+	_, err := client.Gateways.Lists.New(context.TODO(), cloudflare.GatewayListNewParams{
+		AccountID:   cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		Name:        cloudflare.F("Admin Serial Numbers"),
+		Type:        cloudflare.F(cloudflare.GatewayListNewParamsTypeSerial),
+		Description: cloudflare.F("The serial numbers for administrators"),
+		Items: cloudflare.F([]cloudflare.GatewayListNewParamsItem{{
+			Value: cloudflare.F("8GE8721REF"),
+		}, {
+			Value: cloudflare.F("8GE8721REF"),
+		}, {
+			Value: cloudflare.F("8GE8721REF"),
+		}}),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -72,9 +69,9 @@ func TestGatewayListUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Gateways.Lists.Update(
 		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.GatewayListUpdateParams{
+			AccountID:   cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
 			Name:        cloudflare.F("Admin Serial Numbers"),
 			Description: cloudflare.F("The serial numbers for administrators"),
 		},
@@ -104,7 +101,9 @@ func TestGatewayListList(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Gateways.Lists.List(context.TODO(), "699d98642c564d2e855e9661899b7252")
+	_, err := client.Gateways.Lists.List(context.TODO(), cloudflare.GatewayListListParams{
+		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -132,8 +131,10 @@ func TestGatewayListDelete(t *testing.T) {
 	)
 	_, err := client.Gateways.Lists.Delete(
 		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		cloudflare.GatewayListDeleteParams{
+			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -162,9 +163,9 @@ func TestGatewayListEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Gateways.Lists.Edit(
 		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.GatewayListEditParams{
+			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
 			Append: cloudflare.F([]cloudflare.GatewayListEditParamsAppend{{
 				Value: cloudflare.F("8GE8721REF"),
 			}, {
@@ -202,8 +203,10 @@ func TestGatewayListGet(t *testing.T) {
 	)
 	_, err := client.Gateways.Lists.Get(
 		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		cloudflare.GatewayListGetParams{
+			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

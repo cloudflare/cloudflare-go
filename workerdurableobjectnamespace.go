@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -33,11 +34,11 @@ func NewWorkerDurableObjectNamespaceService(opts ...option.RequestOption) (r *Wo
 }
 
 // Returns the Durable Object namespaces owned by an account.
-func (r *WorkerDurableObjectNamespaceService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]WorkerDurableObjectNamespaceListResponse, err error) {
+func (r *WorkerDurableObjectNamespaceService) List(ctx context.Context, query WorkerDurableObjectNamespaceListParams, opts ...option.RequestOption) (res *[]WorkerDurableObjectNamespaceListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerDurableObjectNamespaceListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/durable_objects/namespaces", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/durable_objects/namespaces", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -66,6 +67,11 @@ type workerDurableObjectNamespaceListResponseJSON struct {
 
 func (r *WorkerDurableObjectNamespaceListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type WorkerDurableObjectNamespaceListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type WorkerDurableObjectNamespaceListResponseEnvelope struct {

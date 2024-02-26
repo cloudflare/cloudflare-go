@@ -29,15 +29,12 @@ func TestDLPDatasetNewWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.DLP.Datasets.New(
-		context.TODO(),
-		"string",
-		cloudflare.DLPDatasetNewParams{
-			Name:        cloudflare.F("string"),
-			Description: cloudflare.F("string"),
-			Secret:      cloudflare.F(true),
-		},
-	)
+	_, err := client.DLP.Datasets.New(context.TODO(), cloudflare.DLPDatasetNewParams{
+		AccountID:   cloudflare.F("string"),
+		Name:        cloudflare.F("string"),
+		Description: cloudflare.F("string"),
+		Secret:      cloudflare.F(true),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -65,9 +62,9 @@ func TestDLPDatasetUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.DLP.Datasets.Update(
 		context.TODO(),
-		"string",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		cloudflare.DLPDatasetUpdateParams{
+			AccountID:   cloudflare.F("string"),
 			Description: cloudflare.F("string"),
 			Name:        cloudflare.F("string"),
 		},
@@ -97,7 +94,9 @@ func TestDLPDatasetList(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.DLP.Datasets.List(context.TODO(), "string")
+	_, err := client.DLP.Datasets.List(context.TODO(), cloudflare.DLPDatasetListParams{
+		AccountID: cloudflare.F("string"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -125,8 +124,10 @@ func TestDLPDatasetDelete(t *testing.T) {
 	)
 	err := client.DLP.Datasets.Delete(
 		context.TODO(),
-		"string",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		cloudflare.DLPDatasetDeleteParams{
+			AccountID: cloudflare.F("string"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -155,8 +156,10 @@ func TestDLPDatasetGet(t *testing.T) {
 	)
 	_, err := client.DLP.Datasets.Get(
 		context.TODO(),
-		"string",
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		cloudflare.DLPDatasetGetParams{
+			AccountID: cloudflare.F("string"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

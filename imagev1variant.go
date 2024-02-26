@@ -35,11 +35,11 @@ func NewImageV1VariantService(opts ...option.RequestOption) (r *ImageV1VariantSe
 }
 
 // Specify variants that allow you to resize images for different use cases.
-func (r *ImageV1VariantService) New(ctx context.Context, accountID string, body ImageV1VariantNewParams, opts ...option.RequestOption) (res *ImageV1VariantNewResponse, err error) {
+func (r *ImageV1VariantService) New(ctx context.Context, params ImageV1VariantNewParams, opts ...option.RequestOption) (res *ImageV1VariantNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ImageV1VariantNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/images/v1/variants", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/images/v1/variants", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +48,11 @@ func (r *ImageV1VariantService) New(ctx context.Context, accountID string, body 
 }
 
 // Lists existing variants.
-func (r *ImageV1VariantService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *ImageV1VariantListResponse, err error) {
+func (r *ImageV1VariantService) List(ctx context.Context, query ImageV1VariantListParams, opts ...option.RequestOption) (res *ImageV1VariantListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ImageV1VariantListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/images/v1/variants", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/images/v1/variants", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -61,11 +61,11 @@ func (r *ImageV1VariantService) List(ctx context.Context, accountID string, opts
 }
 
 // Deleting a variant purges the cache for all images associated with the variant.
-func (r *ImageV1VariantService) Delete(ctx context.Context, accountID string, variantID interface{}, opts ...option.RequestOption) (res *ImageV1VariantDeleteResponse, err error) {
+func (r *ImageV1VariantService) Delete(ctx context.Context, variantID interface{}, body ImageV1VariantDeleteParams, opts ...option.RequestOption) (res *ImageV1VariantDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ImageV1VariantDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/images/v1/variants/%v", accountID, variantID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/images/v1/variants/%v", body.AccountID, variantID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -74,11 +74,11 @@ func (r *ImageV1VariantService) Delete(ctx context.Context, accountID string, va
 }
 
 // Updating a variant purges the cache for all images associated with the variant.
-func (r *ImageV1VariantService) Edit(ctx context.Context, accountID string, variantID interface{}, body ImageV1VariantEditParams, opts ...option.RequestOption) (res *ImageV1VariantEditResponse, err error) {
+func (r *ImageV1VariantService) Edit(ctx context.Context, variantID interface{}, params ImageV1VariantEditParams, opts ...option.RequestOption) (res *ImageV1VariantEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ImageV1VariantEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/images/v1/variants/%v", accountID, variantID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/images/v1/variants/%v", params.AccountID, variantID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -87,11 +87,11 @@ func (r *ImageV1VariantService) Edit(ctx context.Context, accountID string, vari
 }
 
 // Fetch details for a single variant.
-func (r *ImageV1VariantService) Get(ctx context.Context, accountID string, variantID interface{}, opts ...option.RequestOption) (res *ImageV1VariantGetResponse, err error) {
+func (r *ImageV1VariantService) Get(ctx context.Context, variantID interface{}, query ImageV1VariantGetParams, opts ...option.RequestOption) (res *ImageV1VariantGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ImageV1VariantGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/images/v1/variants/%v", accountID, variantID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/images/v1/variants/%v", query.AccountID, variantID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -498,7 +498,9 @@ const (
 )
 
 type ImageV1VariantNewParams struct {
-	ID param.Field[interface{}] `json:"id,required"`
+	// Account identifier tag.
+	AccountID param.Field[string]      `path:"account_id,required"`
+	ID        param.Field[interface{}] `json:"id,required"`
 	// Allows you to define image resizing sizes for different use cases.
 	Options param.Field[ImageV1VariantNewParamsOptions] `json:"options,required"`
 	// Indicates whether the variant can access an image without a signature,
@@ -617,6 +619,11 @@ const (
 	ImageV1VariantNewResponseEnvelopeSuccessTrue ImageV1VariantNewResponseEnvelopeSuccess = true
 )
 
+type ImageV1VariantListParams struct {
+	// Account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type ImageV1VariantListResponseEnvelope struct {
 	Errors   []ImageV1VariantListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ImageV1VariantListResponseEnvelopeMessages `json:"messages,required"`
@@ -685,6 +692,11 @@ type ImageV1VariantListResponseEnvelopeSuccess bool
 const (
 	ImageV1VariantListResponseEnvelopeSuccessTrue ImageV1VariantListResponseEnvelopeSuccess = true
 )
+
+type ImageV1VariantDeleteParams struct {
+	// Account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type ImageV1VariantDeleteResponseEnvelope struct {
 	Errors   []ImageV1VariantDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -756,6 +768,8 @@ const (
 )
 
 type ImageV1VariantEditParams struct {
+	// Account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Allows you to define image resizing sizes for different use cases.
 	Options param.Field[ImageV1VariantEditParamsOptions] `json:"options,required"`
 	// Indicates whether the variant can access an image without a signature,
@@ -873,6 +887,11 @@ type ImageV1VariantEditResponseEnvelopeSuccess bool
 const (
 	ImageV1VariantEditResponseEnvelopeSuccessTrue ImageV1VariantEditResponseEnvelopeSuccess = true
 )
+
+type ImageV1VariantGetParams struct {
+	// Account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type ImageV1VariantGetResponseEnvelope struct {
 	Errors   []ImageV1VariantGetResponseEnvelopeErrors   `json:"errors,required"`

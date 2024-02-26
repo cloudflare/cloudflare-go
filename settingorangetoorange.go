@@ -34,11 +34,11 @@ func NewSettingOrangeToOrangeService(opts ...option.RequestOption) (r *SettingOr
 
 // Orange to Orange (O2O) allows zones on Cloudflare to CNAME to other zones also
 // on Cloudflare.
-func (r *SettingOrangeToOrangeService) Edit(ctx context.Context, zoneID string, body SettingOrangeToOrangeEditParams, opts ...option.RequestOption) (res *SettingOrangeToOrangeEditResponse, err error) {
+func (r *SettingOrangeToOrangeService) Edit(ctx context.Context, params SettingOrangeToOrangeEditParams, opts ...option.RequestOption) (res *SettingOrangeToOrangeEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingOrangeToOrangeEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/orange_to_orange", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/orange_to_orange", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +48,11 @@ func (r *SettingOrangeToOrangeService) Edit(ctx context.Context, zoneID string, 
 
 // Orange to Orange (O2O) allows zones on Cloudflare to CNAME to other zones also
 // on Cloudflare.
-func (r *SettingOrangeToOrangeService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingOrangeToOrangeGetResponse, err error) {
+func (r *SettingOrangeToOrangeService) Get(ctx context.Context, query SettingOrangeToOrangeGetParams, opts ...option.RequestOption) (res *SettingOrangeToOrangeGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingOrangeToOrangeGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/orange_to_orange", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/orange_to_orange", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -169,6 +169,8 @@ const (
 )
 
 type SettingOrangeToOrangeEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Orange to Orange (O2O) allows zones on Cloudflare to CNAME to other zones also
 	// on Cloudflare.
 	Value param.Field[SettingOrangeToOrangeEditParamsValue] `json:"value,required"`
@@ -277,6 +279,11 @@ type settingOrangeToOrangeEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingOrangeToOrangeEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingOrangeToOrangeGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingOrangeToOrangeGetResponseEnvelope struct {

@@ -32,11 +32,11 @@ func NewWorkerFilterService(opts ...option.RequestOption) (r *WorkerFilterServic
 }
 
 // Create Filter
-func (r *WorkerFilterService) New(ctx context.Context, zoneID string, body WorkerFilterNewParams, opts ...option.RequestOption) (res *WorkerFilterNewResponse, err error) {
+func (r *WorkerFilterService) New(ctx context.Context, params WorkerFilterNewParams, opts ...option.RequestOption) (res *WorkerFilterNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerFilterNewResponseEnvelope
-	path := fmt.Sprintf("zones/%s/workers/filters", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/workers/filters", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -45,11 +45,11 @@ func (r *WorkerFilterService) New(ctx context.Context, zoneID string, body Worke
 }
 
 // Update Filter
-func (r *WorkerFilterService) Update(ctx context.Context, zoneID string, filterID string, body WorkerFilterUpdateParams, opts ...option.RequestOption) (res *WorkerFilterUpdateResponse, err error) {
+func (r *WorkerFilterService) Update(ctx context.Context, filterID string, params WorkerFilterUpdateParams, opts ...option.RequestOption) (res *WorkerFilterUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerFilterUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/workers/filters/%s", zoneID, filterID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/workers/filters/%s", params.ZoneID, filterID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -58,11 +58,11 @@ func (r *WorkerFilterService) Update(ctx context.Context, zoneID string, filterI
 }
 
 // List Filters
-func (r *WorkerFilterService) List(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *[]WorkerFilterListResponse, err error) {
+func (r *WorkerFilterService) List(ctx context.Context, query WorkerFilterListParams, opts ...option.RequestOption) (res *[]WorkerFilterListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerFilterListResponseEnvelope
-	path := fmt.Sprintf("zones/%s/workers/filters", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/workers/filters", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -71,11 +71,11 @@ func (r *WorkerFilterService) List(ctx context.Context, zoneID string, opts ...o
 }
 
 // Delete Filter
-func (r *WorkerFilterService) Delete(ctx context.Context, zoneID string, filterID string, opts ...option.RequestOption) (res *WorkerFilterDeleteResponse, err error) {
+func (r *WorkerFilterService) Delete(ctx context.Context, filterID string, body WorkerFilterDeleteParams, opts ...option.RequestOption) (res *WorkerFilterDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerFilterDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/workers/filters/%s", zoneID, filterID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/workers/filters/%s", body.ZoneID, filterID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -164,6 +164,8 @@ func (r *WorkerFilterDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type WorkerFilterNewParams struct {
+	// Identifier
+	ZoneID  param.Field[string] `path:"zone_id,required"`
 	Enabled param.Field[bool]   `json:"enabled,required"`
 	Pattern param.Field[string] `json:"pattern,required"`
 }
@@ -242,6 +244,8 @@ const (
 )
 
 type WorkerFilterUpdateParams struct {
+	// Identifier
+	ZoneID  param.Field[string] `path:"zone_id,required"`
 	Enabled param.Field[bool]   `json:"enabled,required"`
 	Pattern param.Field[string] `json:"pattern,required"`
 }
@@ -319,6 +323,11 @@ const (
 	WorkerFilterUpdateResponseEnvelopeSuccessTrue WorkerFilterUpdateResponseEnvelopeSuccess = true
 )
 
+type WorkerFilterListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type WorkerFilterListResponseEnvelope struct {
 	Errors   []WorkerFilterListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []WorkerFilterListResponseEnvelopeMessages `json:"messages,required"`
@@ -387,6 +396,11 @@ type WorkerFilterListResponseEnvelopeSuccess bool
 const (
 	WorkerFilterListResponseEnvelopeSuccessTrue WorkerFilterListResponseEnvelopeSuccess = true
 )
+
+type WorkerFilterDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type WorkerFilterDeleteResponseEnvelope struct {
 	Errors   []WorkerFilterDeleteResponseEnvelopeErrors   `json:"errors,required"`

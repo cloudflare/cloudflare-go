@@ -29,15 +29,12 @@ func TestWorkerQueueNew(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Workers.Queues.New(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.WorkerQueueNewParams{
-			Body: cloudflare.F[any](map[string]interface{}{
-				"queue_name": "example-queue",
-			}),
-		},
-	)
+	_, err := client.Workers.Queues.New(context.TODO(), cloudflare.WorkerQueueNewParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Body: cloudflare.F[any](map[string]interface{}{
+			"queue_name": "example-queue",
+		}),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -65,9 +62,9 @@ func TestWorkerQueueUpdate(t *testing.T) {
 	)
 	_, err := client.Workers.Queues.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"example-queue",
 		cloudflare.WorkerQueueUpdateParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Body: cloudflare.F[any](map[string]interface{}{
 				"queue_name": "renamed-example-queue",
 			}),
@@ -98,7 +95,9 @@ func TestWorkerQueueList(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Workers.Queues.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Workers.Queues.List(context.TODO(), cloudflare.WorkerQueueListParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -126,8 +125,10 @@ func TestWorkerQueueDelete(t *testing.T) {
 	)
 	_, err := client.Workers.Queues.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"example-queue",
+		cloudflare.WorkerQueueDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -156,8 +157,10 @@ func TestWorkerQueueGet(t *testing.T) {
 	)
 	_, err := client.Workers.Queues.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"example-queue",
+		cloudflare.WorkerQueueGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

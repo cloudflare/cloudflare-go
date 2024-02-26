@@ -36,11 +36,11 @@ func NewSettingMirageService(opts ...option.RequestOption) (r *SettingMirageServ
 // Refer to our
 // [blog post](http://blog.cloudflare.com/mirage2-solving-mobile-speed) for more
 // information.
-func (r *SettingMirageService) Edit(ctx context.Context, zoneID string, body SettingMirageEditParams, opts ...option.RequestOption) (res *SettingMirageEditResponse, err error) {
+func (r *SettingMirageService) Edit(ctx context.Context, params SettingMirageEditParams, opts ...option.RequestOption) (res *SettingMirageEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingMirageEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/mirage", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/mirage", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -52,11 +52,11 @@ func (r *SettingMirageService) Edit(ctx context.Context, zoneID string, body Set
 // Refer to our
 // [blog post](http://blog.cloudflare.com/mirage2-solving-mobile-speed) for more
 // information.
-func (r *SettingMirageService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingMirageGetResponse, err error) {
+func (r *SettingMirageService) Get(ctx context.Context, query SettingMirageGetParams, opts ...option.RequestOption) (res *SettingMirageGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingMirageGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/mirage", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/mirage", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -177,6 +177,8 @@ const (
 )
 
 type SettingMirageEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the zone setting.
 	Value param.Field[SettingMirageEditParamsValue] `json:"value,required"`
 }
@@ -257,6 +259,11 @@ type settingMirageEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingMirageEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingMirageGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingMirageGetResponseEnvelope struct {

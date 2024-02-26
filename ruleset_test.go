@@ -31,7 +31,7 @@ func TestRulesetNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Rulesets.New(context.TODO(), cloudflare.RulesetNewParams{
 		AccountID: cloudflare.F("string"),
-		ZoneID:    cloudflare.F("abf9b32d38c5f572afde3336ec0ce302"),
+		ZoneID:    cloudflare.F("string"),
 		Kind:      cloudflare.F(cloudflare.RulesetNewParamsKindRoot),
 		Name:      cloudflare.F("My ruleset"),
 		Phase:     cloudflare.F(cloudflare.RulesetNewParamsPhaseHTTPRequestFirewallCustom),
@@ -119,7 +119,7 @@ func TestRulesetUpdateWithOptionalParams(t *testing.T) {
 		"2f2feab2026849078ba485f918791bdc",
 		cloudflare.RulesetUpdateParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("abf9b32d38c5f572afde3336ec0ce302"),
+			ZoneID:    cloudflare.F("string"),
 			ID:        cloudflare.F("2f2feab2026849078ba485f918791bdc"),
 			Rules: cloudflare.F([]cloudflare.RulesetUpdateParamsRule{cloudflare.RulesetUpdateParamsRulesRulesetsBlockRule(cloudflare.RulesetUpdateParamsRulesRulesetsBlockRule{
 				Action: cloudflare.F(cloudflare.RulesetUpdateParamsRulesRulesetsBlockRuleActionBlock),
@@ -206,7 +206,7 @@ func TestRulesetList(t *testing.T) {
 	)
 	_, err := client.Rulesets.List(context.TODO(), cloudflare.RulesetListParams{
 		AccountID: cloudflare.F("string"),
-		ZoneID:    cloudflare.F("abf9b32d38c5f572afde3336ec0ce302"),
+		ZoneID:    cloudflare.F("string"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -238,7 +238,7 @@ func TestRulesetDelete(t *testing.T) {
 		"2f2feab2026849078ba485f918791bdc",
 		cloudflare.RulesetDeleteParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("abf9b32d38c5f572afde3336ec0ce302"),
+			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {
@@ -271,7 +271,7 @@ func TestRulesetGet(t *testing.T) {
 		"2f2feab2026849078ba485f918791bdc",
 		cloudflare.RulesetGetParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("abf9b32d38c5f572afde3336ec0ce302"),
+			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {

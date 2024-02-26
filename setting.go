@@ -135,11 +135,11 @@ func NewSettingService(opts ...option.RequestOption) (r *SettingService) {
 }
 
 // Available settings for your user in relation to a zone.
-func (r *SettingService) List(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *[]SettingListResponse, err error) {
+func (r *SettingService) List(ctx context.Context, query SettingListParams, opts ...option.RequestOption) (res *[]SettingListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingListResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -148,11 +148,11 @@ func (r *SettingService) List(ctx context.Context, zoneID string, opts ...option
 }
 
 // Edit settings for a zone.
-func (r *SettingService) Edit(ctx context.Context, zoneID string, body SettingEditParams, opts ...option.RequestOption) (res *[]SettingEditResponse, err error) {
+func (r *SettingService) Edit(ctx context.Context, params SettingEditParams, opts ...option.RequestOption) (res *[]SettingEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -6842,6 +6842,11 @@ const (
 	SettingEditResponseZonesWebsocketsEditableFalse SettingEditResponseZonesWebsocketsEditable = false
 )
 
+type SettingListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type SettingListResponseEnvelope struct {
 	Errors   []SettingListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SettingListResponseEnvelopeMessages `json:"messages,required"`
@@ -6905,6 +6910,8 @@ func (r *SettingListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err er
 }
 
 type SettingEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// One or more zone setting objects. Must contain an ID and a value.
 	Items param.Field[[]SettingEditParamsItem] `json:"items,required"`
 }

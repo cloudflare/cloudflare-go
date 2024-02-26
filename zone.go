@@ -75,11 +75,11 @@ func (r *ZoneService) ListAutoPaging(ctx context.Context, query ZoneListParams, 
 }
 
 // Deletes an existing zone.
-func (r *ZoneService) Delete(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *ZoneDeleteResponse, err error) {
+func (r *ZoneService) Delete(ctx context.Context, body ZoneDeleteParams, opts ...option.RequestOption) (res *ZoneDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s", body.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -88,11 +88,11 @@ func (r *ZoneService) Delete(ctx context.Context, zoneID string, opts ...option.
 }
 
 // Edits a zone. Only one zone property can be changed at a time.
-func (r *ZoneService) Edit(ctx context.Context, zoneID string, body ZoneEditParams, opts ...option.RequestOption) (res *ZoneEditResponse, err error) {
+func (r *ZoneService) Edit(ctx context.Context, params ZoneEditParams, opts ...option.RequestOption) (res *ZoneEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -101,11 +101,11 @@ func (r *ZoneService) Edit(ctx context.Context, zoneID string, body ZoneEditPara
 }
 
 // Zone Details
-func (r *ZoneService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *ZoneGetResponse, err error) {
+func (r *ZoneService) Get(ctx context.Context, query ZoneGetParams, opts ...option.RequestOption) (res *ZoneGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -884,6 +884,11 @@ const (
 	ZoneListParamsStatusMoved        ZoneListParamsStatus = "moved"
 )
 
+type ZoneDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type ZoneDeleteResponseEnvelope struct {
 	Errors   []ZoneDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZoneDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -947,6 +952,8 @@ func (r *ZoneDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err err
 }
 
 type ZoneEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// (Deprecated) Please use the `/zones/{zone_id}/subscription` API to update a
 	// zone's plan. Changing this value will create/cancel associated subscriptions. To
 	// view available plans for this zone, see Zone Plans.
@@ -1049,6 +1056,11 @@ type zoneEditResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type ZoneGetResponseEnvelope struct {

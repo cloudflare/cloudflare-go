@@ -33,11 +33,11 @@ func NewSettingH2PrioritizationService(opts ...option.RequestOption) (r *Setting
 }
 
 // Gets HTTP/2 Edge Prioritization setting.
-func (r *SettingH2PrioritizationService) Edit(ctx context.Context, zoneID string, body SettingH2PrioritizationEditParams, opts ...option.RequestOption) (res *SettingH2PrioritizationEditResponse, err error) {
+func (r *SettingH2PrioritizationService) Edit(ctx context.Context, params SettingH2PrioritizationEditParams, opts ...option.RequestOption) (res *SettingH2PrioritizationEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingH2PrioritizationEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/h2_prioritization", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/h2_prioritization", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -46,11 +46,11 @@ func (r *SettingH2PrioritizationService) Edit(ctx context.Context, zoneID string
 }
 
 // Gets HTTP/2 Edge Prioritization setting.
-func (r *SettingH2PrioritizationService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingH2PrioritizationGetResponse, err error) {
+func (r *SettingH2PrioritizationService) Get(ctx context.Context, query SettingH2PrioritizationGetParams, opts ...option.RequestOption) (res *SettingH2PrioritizationGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingH2PrioritizationGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/h2_prioritization", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/h2_prioritization", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -171,6 +171,8 @@ const (
 )
 
 type SettingH2PrioritizationEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// HTTP/2 Edge Prioritization optimises the delivery of resources served through
 	// HTTP/2 to improve page load performance. It also supports fine control of
 	// content delivery when used in conjunction with Workers.
@@ -283,6 +285,11 @@ type settingH2PrioritizationEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingH2PrioritizationEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingH2PrioritizationGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingH2PrioritizationGetResponseEnvelope struct {

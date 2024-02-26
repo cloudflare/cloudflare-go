@@ -31,9 +31,9 @@ func TestTunnelManagementNew(t *testing.T) {
 	)
 	_, err := client.Tunnels.Management.New(
 		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
 		"f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
 		cloudflare.TunnelManagementNewParams{
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 			Resources: cloudflare.F([]cloudflare.TunnelManagementNewParamsResource{cloudflare.TunnelManagementNewParamsResourceLogs}),
 		},
 	)

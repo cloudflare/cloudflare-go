@@ -9,6 +9,7 @@ import (
 	"reflect"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
@@ -34,11 +35,11 @@ func NewAddressAddressMapAccountService(opts ...option.RequestOption) (r *Addres
 }
 
 // Add an account as a member of a particular address map.
-func (r *AddressAddressMapAccountService) Update(ctx context.Context, accountID string, addressMapID string, opts ...option.RequestOption) (res *AddressAddressMapAccountUpdateResponse, err error) {
+func (r *AddressAddressMapAccountService) Update(ctx context.Context, addressMapID string, body AddressAddressMapAccountUpdateParams, opts ...option.RequestOption) (res *AddressAddressMapAccountUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressAddressMapAccountUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/accounts/:account_id", accountID, addressMapID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/accounts/:account_id", body.AccountID, addressMapID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -47,11 +48,11 @@ func (r *AddressAddressMapAccountService) Update(ctx context.Context, accountID 
 }
 
 // Remove an account as a member of a particular address map.
-func (r *AddressAddressMapAccountService) Delete(ctx context.Context, accountID string, addressMapID string, opts ...option.RequestOption) (res *AddressAddressMapAccountDeleteResponse, err error) {
+func (r *AddressAddressMapAccountService) Delete(ctx context.Context, addressMapID string, body AddressAddressMapAccountDeleteParams, opts ...option.RequestOption) (res *AddressAddressMapAccountDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressAddressMapAccountDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/accounts/:account_id", accountID, addressMapID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/accounts/:account_id", body.AccountID, addressMapID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -101,6 +102,11 @@ func init() {
 type AddressAddressMapAccountDeleteResponseArray []interface{}
 
 func (r AddressAddressMapAccountDeleteResponseArray) ImplementsAddressAddressMapAccountDeleteResponse() {
+}
+
+type AddressAddressMapAccountUpdateParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type AddressAddressMapAccountUpdateResponseEnvelope struct {
@@ -200,6 +206,11 @@ type addressAddressMapAccountUpdateResponseEnvelopeResultInfoJSON struct {
 
 func (r *AddressAddressMapAccountUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type AddressAddressMapAccountDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type AddressAddressMapAccountDeleteResponseEnvelope struct {

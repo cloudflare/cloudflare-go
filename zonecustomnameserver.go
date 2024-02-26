@@ -39,11 +39,11 @@ func NewZoneCustomNameserverService(opts ...option.RequestOption) (r *ZoneCustom
 // If you would like new zones in the account to use account custom nameservers by
 // default, use PUT /accounts/:identifier to set the account setting
 // use_account_custom_ns_by_default to true.
-func (r *ZoneCustomNameserverService) Update(ctx context.Context, zoneID string, body ZoneCustomNameserverUpdateParams, opts ...option.RequestOption) (res *ZoneCustomNameserverUpdateResponse, err error) {
+func (r *ZoneCustomNameserverService) Update(ctx context.Context, params ZoneCustomNameserverUpdateParams, opts ...option.RequestOption) (res *ZoneCustomNameserverUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneCustomNameserverUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/custom_ns", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/custom_ns", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -52,11 +52,11 @@ func (r *ZoneCustomNameserverService) Update(ctx context.Context, zoneID string,
 }
 
 // Get metadata for account-level custom nameservers on a zone.
-func (r *ZoneCustomNameserverService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *ZoneCustomNameserverGetResponse, err error) {
+func (r *ZoneCustomNameserverService) Get(ctx context.Context, query ZoneCustomNameserverGetParams, opts ...option.RequestOption) (res *ZoneCustomNameserverGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneCustomNameserverGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/custom_ns", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/custom_ns", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -107,6 +107,8 @@ type ZoneCustomNameserverGetResponseArray []interface{}
 func (r ZoneCustomNameserverGetResponseArray) ImplementsZoneCustomNameserverGetResponse() {}
 
 type ZoneCustomNameserverUpdateParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Whether zone uses account-level custom nameservers.
 	Enabled param.Field[bool] `json:"enabled"`
 	// The number of the name server set to assign to the zone.
@@ -213,6 +215,11 @@ type zoneCustomNameserverUpdateResponseEnvelopeResultInfoJSON struct {
 
 func (r *ZoneCustomNameserverUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneCustomNameserverGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type ZoneCustomNameserverGetResponseEnvelope struct {

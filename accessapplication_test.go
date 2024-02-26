@@ -32,7 +32,7 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Access.Applications.New(context.TODO(), cloudflare.AccessApplicationNewParams{
 		AccountID:                cloudflare.F("string"),
-		ZoneID:                   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ZoneID:                   cloudflare.F("string"),
 		AllowAuthenticateViaWARP: cloudflare.F(true),
 		AllowedIdps:              cloudflare.F([]string{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
 		AppLauncherVisible:       cloudflare.F[any](map[string]interface{}{}),
@@ -113,7 +113,7 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 		shared.UnionString("023e105f4ecef8ad9ca31a8372d0c353"),
 		cloudflare.AccessApplicationUpdateParams{
 			AccountID:                cloudflare.F("string"),
-			ZoneID:                   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID:                   cloudflare.F("string"),
 			AllowAuthenticateViaWARP: cloudflare.F(true),
 			AllowedIdps:              cloudflare.F([]string{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
 			AppLauncherVisible:       cloudflare.F[any](map[string]interface{}{}),
@@ -192,7 +192,7 @@ func TestAccessApplicationList(t *testing.T) {
 	)
 	_, err := client.Access.Applications.List(context.TODO(), cloudflare.AccessApplicationListParams{
 		AccountID: cloudflare.F("string"),
-		ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ZoneID:    cloudflare.F("string"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -224,7 +224,7 @@ func TestAccessApplicationDelete(t *testing.T) {
 		shared.UnionString("023e105f4ecef8ad9ca31a8372d0c353"),
 		cloudflare.AccessApplicationDeleteParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {
@@ -257,7 +257,7 @@ func TestAccessApplicationGet(t *testing.T) {
 		shared.UnionString("023e105f4ecef8ad9ca31a8372d0c353"),
 		cloudflare.AccessApplicationGetParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {
@@ -290,7 +290,7 @@ func TestAccessApplicationRevokeTokens(t *testing.T) {
 		shared.UnionString("023e105f4ecef8ad9ca31a8372d0c353"),
 		cloudflare.AccessApplicationRevokeTokensParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {

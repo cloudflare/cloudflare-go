@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -32,11 +33,11 @@ func NewGatewayListItemService(opts ...option.RequestOption) (r *GatewayListItem
 }
 
 // Fetches all items in a single Zero Trust list.
-func (r *GatewayListItemService) List(ctx context.Context, accountID interface{}, listID string, opts ...option.RequestOption) (res *[][]GatewayListItemListResponse, err error) {
+func (r *GatewayListItemService) List(ctx context.Context, listID string, query GatewayListItemListParams, opts ...option.RequestOption) (res *[][]GatewayListItemListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayListItemListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/lists/%s/items", accountID, listID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/gateway/lists/%s/items", query.AccountID, listID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -62,6 +63,10 @@ type gatewayListItemListResponseJSON struct {
 
 func (r *GatewayListItemListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type GatewayListItemListParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
 
 type GatewayListItemListResponseEnvelope struct {

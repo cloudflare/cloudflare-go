@@ -29,14 +29,11 @@ func TestWorkerRouteNewWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Workers.Routes.New(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.WorkerRouteNewParams{
-			Pattern: cloudflare.F("example.net/*"),
-			Script:  cloudflare.F("this-is_my_script-01"),
-		},
-	)
+	_, err := client.Workers.Routes.New(context.TODO(), cloudflare.WorkerRouteNewParams{
+		ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Pattern: cloudflare.F("example.net/*"),
+		Script:  cloudflare.F("this-is_my_script-01"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -65,8 +62,8 @@ func TestWorkerRouteUpdateWithOptionalParams(t *testing.T) {
 	_, err := client.Workers.Routes.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.WorkerRouteUpdateParams{
+			ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Pattern: cloudflare.F("example.net/*"),
 			Script:  cloudflare.F("this-is_my_script-01"),
 		},
@@ -96,7 +93,9 @@ func TestWorkerRouteList(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Workers.Routes.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Workers.Routes.List(context.TODO(), cloudflare.WorkerRouteListParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -125,7 +124,9 @@ func TestWorkerRouteDelete(t *testing.T) {
 	_, err := client.Workers.Routes.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.WorkerRouteDeleteParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -155,7 +156,9 @@ func TestWorkerRouteGet(t *testing.T) {
 	_, err := client.Workers.Routes.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.WorkerRouteGetParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

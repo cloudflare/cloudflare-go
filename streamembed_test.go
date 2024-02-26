@@ -31,8 +31,10 @@ func TestStreamEmbedList(t *testing.T) {
 	)
 	_, err := client.Stream.Embeds.List(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"ea95132c15732412d22c1476fa83f27a",
+		cloudflare.StreamEmbedListParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

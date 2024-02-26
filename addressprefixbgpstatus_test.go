@@ -32,8 +32,8 @@ func TestAddressPrefixBGPStatusEdit(t *testing.T) {
 	_, err := client.Addresses.Prefixes.BGPs.Statuses.Edit(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.AddressPrefixBGPStatusEditParams{
+			AccountID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Advertised: cloudflare.F(true),
 		},
 	)
@@ -65,7 +65,9 @@ func TestAddressPrefixBGPStatusGet(t *testing.T) {
 	_, err := client.Addresses.Prefixes.BGPs.Statuses.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.AddressPrefixBGPStatusGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

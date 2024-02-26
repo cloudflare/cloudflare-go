@@ -35,9 +35,9 @@ func TestWorkerScriptUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Workers.Scripts.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"this-is_my_script-01",
 		cloudflare.WorkerScriptUpdateParams{
+			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			RollbackTo:  cloudflare.F("f174e90a-fafe-4643-bbbc-4a0ed4fc8415"),
 			AnyPartName: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
 			Message:     cloudflare.F("string"),
@@ -125,7 +125,9 @@ func TestWorkerScriptList(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Workers.Scripts.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Workers.Scripts.List(context.TODO(), cloudflare.WorkerScriptListParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -153,10 +155,10 @@ func TestWorkerScriptDeleteWithOptionalParams(t *testing.T) {
 	)
 	err := client.Workers.Scripts.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"this-is_my_script-01",
 		cloudflare.WorkerScriptDeleteParams{
-			Force: cloudflare.F(true),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Force:     cloudflare.F(true),
 		},
 	)
 	if err != nil {
@@ -185,8 +187,10 @@ func TestWorkerScriptGet(t *testing.T) {
 	)
 	resp, err := client.Workers.Scripts.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"this-is_my_script-01",
+		cloudflare.WorkerScriptGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -34,11 +35,11 @@ func NewSettingAdvancedDDOSService(opts ...option.RequestOption) (r *SettingAdva
 // Advanced protection from Distributed Denial of Service (DDoS) attacks on your
 // website. This is an uneditable value that is 'on' in the case of Business and
 // Enterprise zones.
-func (r *SettingAdvancedDDOSService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingAdvancedDDOSGetResponse, err error) {
+func (r *SettingAdvancedDDOSService) Get(ctx context.Context, query SettingAdvancedDDOSGetParams, opts ...option.RequestOption) (res *SettingAdvancedDDOSGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingAdvancedDDOSGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/advanced_ddos", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/advanced_ddos", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -100,6 +101,11 @@ const (
 	SettingAdvancedDDOSGetResponseEditableTrue  SettingAdvancedDDOSGetResponseEditable = true
 	SettingAdvancedDDOSGetResponseEditableFalse SettingAdvancedDDOSGetResponseEditable = false
 )
+
+type SettingAdvancedDDOSGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type SettingAdvancedDDOSGetResponseEnvelope struct {
 	Errors   []SettingAdvancedDDOSGetResponseEnvelopeErrors   `json:"errors,required"`

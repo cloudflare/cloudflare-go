@@ -35,11 +35,11 @@ func NewStreamAudioTrackService(opts ...option.RequestOption) (r *StreamAudioTra
 }
 
 // Adds an additional audio track to a video using the provided audio track URL.
-func (r *StreamAudioTrackService) New(ctx context.Context, accountID string, identifier string, body StreamAudioTrackNewParams, opts ...option.RequestOption) (res *StreamAudioTrackNewResponse, err error) {
+func (r *StreamAudioTrackService) New(ctx context.Context, identifier string, params StreamAudioTrackNewParams, opts ...option.RequestOption) (res *StreamAudioTrackNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamAudioTrackNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/%s/audio/copy", accountID, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/%s/audio/copy", params.AccountID, identifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -49,11 +49,11 @@ func (r *StreamAudioTrackService) New(ctx context.Context, accountID string, ide
 
 // Lists additional audio tracks on a video. Note this API will not return
 // information for audio attached to the video upload.
-func (r *StreamAudioTrackService) List(ctx context.Context, accountID string, identifier string, opts ...option.RequestOption) (res *[]StreamAudioTrackListResponse, err error) {
+func (r *StreamAudioTrackService) List(ctx context.Context, identifier string, query StreamAudioTrackListParams, opts ...option.RequestOption) (res *[]StreamAudioTrackListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamAudioTrackListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/%s/audio", accountID, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/%s/audio", query.AccountID, identifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -63,11 +63,11 @@ func (r *StreamAudioTrackService) List(ctx context.Context, accountID string, id
 
 // Deletes additional audio tracks on a video. Deleting a default audio track is
 // not allowed. You must assign another audio track as default prior to deletion.
-func (r *StreamAudioTrackService) Delete(ctx context.Context, accountID string, identifier string, audioIdentifier string, opts ...option.RequestOption) (res *StreamAudioTrackDeleteResponse, err error) {
+func (r *StreamAudioTrackService) Delete(ctx context.Context, identifier string, audioIdentifier string, body StreamAudioTrackDeleteParams, opts ...option.RequestOption) (res *StreamAudioTrackDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamAudioTrackDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/%s/audio/%s", accountID, identifier, audioIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/%s/audio/%s", body.AccountID, identifier, audioIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -78,11 +78,11 @@ func (r *StreamAudioTrackService) Delete(ctx context.Context, accountID string, 
 // Edits additional audio tracks on a video. Editing the default status of an audio
 // track to `true` will mark all other audio tracks on the video default status to
 // `false`.
-func (r *StreamAudioTrackService) Edit(ctx context.Context, accountID string, identifier string, audioIdentifier string, body StreamAudioTrackEditParams, opts ...option.RequestOption) (res *StreamAudioTrackEditResponse, err error) {
+func (r *StreamAudioTrackService) Edit(ctx context.Context, identifier string, audioIdentifier string, params StreamAudioTrackEditParams, opts ...option.RequestOption) (res *StreamAudioTrackEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamAudioTrackEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/%s/audio/%s", accountID, identifier, audioIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/%s/audio/%s", params.AccountID, identifier, audioIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -219,6 +219,8 @@ const (
 )
 
 type StreamAudioTrackNewParams struct {
+	// The account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
 	// A string to uniquely identify the track amongst other audio track labels for the
 	// specified video.
 	Label param.Field[string] `json:"label,required"`
@@ -301,6 +303,11 @@ const (
 	StreamAudioTrackNewResponseEnvelopeSuccessTrue StreamAudioTrackNewResponseEnvelopeSuccess = true
 )
 
+type StreamAudioTrackListParams struct {
+	// The account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type StreamAudioTrackListResponseEnvelope struct {
 	Errors   []StreamAudioTrackListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []StreamAudioTrackListResponseEnvelopeMessages `json:"messages,required"`
@@ -369,6 +376,11 @@ type StreamAudioTrackListResponseEnvelopeSuccess bool
 const (
 	StreamAudioTrackListResponseEnvelopeSuccessTrue StreamAudioTrackListResponseEnvelopeSuccess = true
 )
+
+type StreamAudioTrackDeleteParams struct {
+	// The account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type StreamAudioTrackDeleteResponseEnvelope struct {
 	Errors   []StreamAudioTrackDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -440,6 +452,8 @@ const (
 )
 
 type StreamAudioTrackEditParams struct {
+	// The account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Denotes whether the audio track will be played by default in a player.
 	Default param.Field[bool] `json:"default"`
 	// A string to uniquely identify the track amongst other audio track labels for the

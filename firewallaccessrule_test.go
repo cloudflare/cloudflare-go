@@ -31,7 +31,7 @@ func TestFirewallAccessRuleNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Firewalls.AccessRules.New(context.TODO(), cloudflare.FirewallAccessRuleNewParams{
 		AccountID: cloudflare.F("string"),
-		ZoneID:    cloudflare.F[any](map[string]interface{}{}),
+		ZoneID:    cloudflare.F("string"),
 		Configuration: cloudflare.F[cloudflare.FirewallAccessRuleNewParamsConfiguration](cloudflare.FirewallAccessRuleNewParamsConfigurationLegacyJhsIPConfiguration(cloudflare.FirewallAccessRuleNewParamsConfigurationLegacyJhsIPConfiguration{
 			Target: cloudflare.F(cloudflare.FirewallAccessRuleNewParamsConfigurationLegacyJhsIPConfigurationTargetIP),
 			Value:  cloudflare.F("198.51.100.4"),
@@ -66,7 +66,7 @@ func TestFirewallAccessRuleListWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Firewalls.AccessRules.List(context.TODO(), cloudflare.FirewallAccessRuleListParams{
 		AccountID: cloudflare.F("string"),
-		ZoneID:    cloudflare.F[any](map[string]interface{}{}),
+		ZoneID:    cloudflare.F("string"),
 		Direction: cloudflare.F(cloudflare.FirewallAccessRuleListParamsDirectionDesc),
 		EgsPagination: cloudflare.F(cloudflare.FirewallAccessRuleListParamsEgsPagination{
 			Json: cloudflare.F(cloudflare.FirewallAccessRuleListParamsEgsPaginationJson{
@@ -115,7 +115,7 @@ func TestFirewallAccessRuleDelete(t *testing.T) {
 		map[string]interface{}{},
 		cloudflare.FirewallAccessRuleDeleteParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F[any](map[string]interface{}{}),
+			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {
@@ -186,7 +186,7 @@ func TestFirewallAccessRuleGet(t *testing.T) {
 		map[string]interface{}{},
 		cloudflare.FirewallAccessRuleGetParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F[any](map[string]interface{}{}),
+			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {

@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -30,10 +31,15 @@ func NewPCAPDownloadService(opts ...option.RequestOption) (r *PCAPDownloadServic
 }
 
 // Download PCAP information into a file. Response is a binary PCAP file.
-func (r *PCAPDownloadService) Get(ctx context.Context, accountID string, pcapID string, opts ...option.RequestOption) (res *http.Response, err error) {
+func (r *PCAPDownloadService) Get(ctx context.Context, pcapID string, query PCAPDownloadGetParams, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "application/vnd.tcpdump.pcap")}, opts...)
-	path := fmt.Sprintf("accounts/%s/pcaps/%s/download", accountID, pcapID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/pcaps/%s/download", query.AccountID, pcapID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
+}
+
+type PCAPDownloadGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }

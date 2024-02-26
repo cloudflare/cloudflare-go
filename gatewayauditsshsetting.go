@@ -33,11 +33,11 @@ func NewGatewayAuditSSHSettingService(opts ...option.RequestOption) (r *GatewayA
 }
 
 // Updates Zero Trust Audit SSH settings.
-func (r *GatewayAuditSSHSettingService) Update(ctx context.Context, accountID interface{}, body GatewayAuditSSHSettingUpdateParams, opts ...option.RequestOption) (res *GatewayAuditSSHSettingUpdateResponse, err error) {
+func (r *GatewayAuditSSHSettingService) Update(ctx context.Context, params GatewayAuditSSHSettingUpdateParams, opts ...option.RequestOption) (res *GatewayAuditSSHSettingUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayAuditSSHSettingUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/audit_ssh_settings", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/gateway/audit_ssh_settings", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -46,11 +46,11 @@ func (r *GatewayAuditSSHSettingService) Update(ctx context.Context, accountID in
 }
 
 // Get all Zero Trust Audit SSH settings for an account.
-func (r *GatewayAuditSSHSettingService) Get(ctx context.Context, accountID interface{}, opts ...option.RequestOption) (res *GatewayAuditSSHSettingGetResponse, err error) {
+func (r *GatewayAuditSSHSettingService) Get(ctx context.Context, query GatewayAuditSSHSettingGetParams, opts ...option.RequestOption) (res *GatewayAuditSSHSettingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayAuditSSHSettingGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/gateway/audit_ssh_settings", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/gateway/audit_ssh_settings", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -109,6 +109,7 @@ func (r *GatewayAuditSSHSettingGetResponse) UnmarshalJSON(data []byte) (err erro
 }
 
 type GatewayAuditSSHSettingUpdateParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// SSH encryption public key
 	PublicKey param.Field[string] `json:"public_key,required"`
 	// Seed ID
@@ -187,6 +188,10 @@ type GatewayAuditSSHSettingUpdateResponseEnvelopeSuccess bool
 const (
 	GatewayAuditSSHSettingUpdateResponseEnvelopeSuccessTrue GatewayAuditSSHSettingUpdateResponseEnvelopeSuccess = true
 )
+
+type GatewayAuditSSHSettingGetParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
 
 type GatewayAuditSSHSettingGetResponseEnvelope struct {
 	Errors   []GatewayAuditSSHSettingGetResponseEnvelopeErrors   `json:"errors,required"`

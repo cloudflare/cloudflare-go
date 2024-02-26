@@ -30,27 +30,24 @@ func TestDNSFirewallNewWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.DNS.Firewall.New(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.DNSFirewallNewParams{
-			Name:        cloudflare.F("My Awesome DNS Firewall cluster"),
-			UpstreamIPs: cloudflare.F([]cloudflare.DNSFirewallNewParamsUpstreamIP{shared.UnionString("192.0.2.1"), shared.UnionString("198.51.100.1"), shared.UnionString("2001:DB8:100::CF")}),
-			AttackMitigation: cloudflare.F(cloudflare.DNSFirewallNewParamsAttackMitigation{
-				Enabled:                   cloudflare.F(true),
-				OnlyWhenOriginUnhealthy:   cloudflare.F[any](map[string]interface{}{}),
-				OnlyWhenUpstreamUnhealthy: cloudflare.F(false),
-			}),
-			DeprecateAnyRequests: cloudflare.F(true),
-			EcsFallback:          cloudflare.F(false),
-			MaximumCacheTTL:      cloudflare.F(900.000000),
-			MinimumCacheTTL:      cloudflare.F(60.000000),
-			NegativeCacheTTL:     cloudflare.F(900.000000),
-			OriginIPs:            cloudflare.F[any](map[string]interface{}{}),
-			Ratelimit:            cloudflare.F(600.000000),
-			Retries:              cloudflare.F(2.000000),
-		},
-	)
+	_, err := client.DNS.Firewall.New(context.TODO(), cloudflare.DNSFirewallNewParams{
+		AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Name:        cloudflare.F("My Awesome DNS Firewall cluster"),
+		UpstreamIPs: cloudflare.F([]cloudflare.DNSFirewallNewParamsUpstreamIP{shared.UnionString("192.0.2.1"), shared.UnionString("198.51.100.1"), shared.UnionString("2001:DB8:100::CF")}),
+		AttackMitigation: cloudflare.F(cloudflare.DNSFirewallNewParamsAttackMitigation{
+			Enabled:                   cloudflare.F(true),
+			OnlyWhenOriginUnhealthy:   cloudflare.F[any](map[string]interface{}{}),
+			OnlyWhenUpstreamUnhealthy: cloudflare.F(false),
+		}),
+		DeprecateAnyRequests: cloudflare.F(true),
+		EcsFallback:          cloudflare.F(false),
+		MaximumCacheTTL:      cloudflare.F(900.000000),
+		MinimumCacheTTL:      cloudflare.F(60.000000),
+		NegativeCacheTTL:     cloudflare.F(900.000000),
+		OriginIPs:            cloudflare.F[any](map[string]interface{}{}),
+		Ratelimit:            cloudflare.F(600.000000),
+		Retries:              cloudflare.F(2.000000),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -76,14 +73,11 @@ func TestDNSFirewallListWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.DNS.Firewall.List(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.DNSFirewallListParams{
-			Page:    cloudflare.F(1.000000),
-			PerPage: cloudflare.F(1.000000),
-		},
-	)
+	_, err := client.DNS.Firewall.List(context.TODO(), cloudflare.DNSFirewallListParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Page:      cloudflare.F(1.000000),
+		PerPage:   cloudflare.F(1.000000),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -112,7 +106,9 @@ func TestDNSFirewallDelete(t *testing.T) {
 	_, err := client.DNS.Firewall.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.DNSFirewallDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -142,8 +138,8 @@ func TestDNSFirewallEditWithOptionalParams(t *testing.T) {
 	_, err := client.DNS.Firewall.Edit(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.DNSFirewallEditParams{
+			AccountID:            cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			DeprecateAnyRequests: cloudflare.F(true),
 			DNSFirewallIPs:       cloudflare.F([]cloudflare.DNSFirewallEditParamsDNSFirewallIP{shared.UnionString("203.0.113.1"), shared.UnionString("203.0.113.254"), shared.UnionString("2001:DB8:AB::CF"), shared.UnionString("2001:DB8:CD::CF")}),
 			EcsFallback:          cloudflare.F(false),
@@ -190,7 +186,9 @@ func TestDNSFirewallGet(t *testing.T) {
 	_, err := client.DNS.Firewall.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.DNSFirewallGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

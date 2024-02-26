@@ -31,8 +31,10 @@ func TestLoadBalancerPoolReferenceList(t *testing.T) {
 	)
 	_, err := client.LoadBalancers.Pools.References.List(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"17b5962d775c646f3f9725cbc7a53df4",
+		cloudflare.LoadBalancerPoolReferenceListParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

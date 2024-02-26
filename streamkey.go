@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
@@ -36,11 +37,11 @@ func NewStreamKeyService(opts ...option.RequestOption) (r *StreamKeyService) {
 // Creates an RSA private key in PEM and JWK formats. Key files are only displayed
 // once after creation. Keys are created, used, and deleted independently of
 // videos, and every key can sign any video.
-func (r *StreamKeyService) New(ctx context.Context, accountID string, opts ...option.RequestOption) (res *StreamKeyNewResponse, err error) {
+func (r *StreamKeyService) New(ctx context.Context, body StreamKeyNewParams, opts ...option.RequestOption) (res *StreamKeyNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamKeyNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/keys", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/keys", body.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -49,11 +50,11 @@ func (r *StreamKeyService) New(ctx context.Context, accountID string, opts ...op
 }
 
 // Lists the video ID and creation date and time when a signing key was created.
-func (r *StreamKeyService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]StreamKeyListResponse, err error) {
+func (r *StreamKeyService) List(ctx context.Context, query StreamKeyListParams, opts ...option.RequestOption) (res *[]StreamKeyListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamKeyListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/keys", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/keys", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -62,11 +63,11 @@ func (r *StreamKeyService) List(ctx context.Context, accountID string, opts ...o
 }
 
 // Deletes signing keys and revokes all signed URLs generated with the key.
-func (r *StreamKeyService) Delete(ctx context.Context, accountID string, identifier string, opts ...option.RequestOption) (res *StreamKeyDeleteResponse, err error) {
+func (r *StreamKeyService) Delete(ctx context.Context, identifier string, body StreamKeyDeleteParams, opts ...option.RequestOption) (res *StreamKeyDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamKeyDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/keys/%s", accountID, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/keys/%s", body.AccountID, identifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -138,6 +139,11 @@ func init() {
 	)
 }
 
+type StreamKeyNewParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type StreamKeyNewResponseEnvelope struct {
 	Errors   []StreamKeyNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []StreamKeyNewResponseEnvelopeMessages `json:"messages,required"`
@@ -207,6 +213,11 @@ const (
 	StreamKeyNewResponseEnvelopeSuccessTrue StreamKeyNewResponseEnvelopeSuccess = true
 )
 
+type StreamKeyListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type StreamKeyListResponseEnvelope struct {
 	Errors   []StreamKeyListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []StreamKeyListResponseEnvelopeMessages `json:"messages,required"`
@@ -275,6 +286,11 @@ type StreamKeyListResponseEnvelopeSuccess bool
 const (
 	StreamKeyListResponseEnvelopeSuccessTrue StreamKeyListResponseEnvelopeSuccess = true
 )
+
+type StreamKeyDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type StreamKeyDeleteResponseEnvelope struct {
 	Errors   []StreamKeyDeleteResponseEnvelopeErrors   `json:"errors,required"`

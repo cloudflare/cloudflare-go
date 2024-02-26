@@ -35,11 +35,11 @@ func NewSettingWebsocketService(opts ...option.RequestOption) (r *SettingWebsock
 // Changes Websockets setting. For more information about Websockets, please refer
 // to
 // [Using Cloudflare with WebSockets](https://support.cloudflare.com/hc/en-us/articles/200169466-Using-Cloudflare-with-WebSockets).
-func (r *SettingWebsocketService) Edit(ctx context.Context, zoneID string, body SettingWebsocketEditParams, opts ...option.RequestOption) (res *SettingWebsocketEditResponse, err error) {
+func (r *SettingWebsocketService) Edit(ctx context.Context, params SettingWebsocketEditParams, opts ...option.RequestOption) (res *SettingWebsocketEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingWebsocketEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/websockets", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/websockets", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -49,11 +49,11 @@ func (r *SettingWebsocketService) Edit(ctx context.Context, zoneID string, body 
 
 // Gets Websockets setting. For more information about Websockets, please refer to
 // [Using Cloudflare with WebSockets](https://support.cloudflare.com/hc/en-us/articles/200169466-Using-Cloudflare-with-WebSockets).
-func (r *SettingWebsocketService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingWebsocketGetResponse, err error) {
+func (r *SettingWebsocketService) Get(ctx context.Context, query SettingWebsocketGetParams, opts ...option.RequestOption) (res *SettingWebsocketGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingWebsocketGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/websockets", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/websockets", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -180,6 +180,8 @@ const (
 )
 
 type SettingWebsocketEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the zone setting.
 	Value param.Field[SettingWebsocketEditParamsValue] `json:"value,required"`
 }
@@ -263,6 +265,11 @@ type settingWebsocketEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingWebsocketEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingWebsocketGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingWebsocketGetResponseEnvelope struct {

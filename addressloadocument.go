@@ -34,11 +34,11 @@ func NewAddressLOADocumentService(opts ...option.RequestOption) (r *AddressLOADo
 }
 
 // Submit LOA document (pdf format) under the account.
-func (r *AddressLOADocumentService) New(ctx context.Context, accountID string, body AddressLOADocumentNewParams, opts ...option.RequestOption) (res *AddressLOADocumentNewResponse, err error) {
+func (r *AddressLOADocumentService) New(ctx context.Context, params AddressLOADocumentNewParams, opts ...option.RequestOption) (res *AddressLOADocumentNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressLOADocumentNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/loa_documents", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/addressing/loa_documents", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -65,6 +65,8 @@ func (r *AddressLOADocumentNewResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type AddressLOADocumentNewParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// LOA document to upload.
 	LOADocument param.Field[string] `json:"loa_document,required"`
 }

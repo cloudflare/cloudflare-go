@@ -34,11 +34,11 @@ func NewZoneHoldService(opts ...option.RequestOption) (r *ZoneHoldService) {
 
 // Enforce a zone hold on the zone, blocking the creation and activation of zones
 // with this zone's hostname.
-func (r *ZoneHoldService) New(ctx context.Context, zoneID string, body ZoneHoldNewParams, opts ...option.RequestOption) (res *ZoneHoldNewResponse, err error) {
+func (r *ZoneHoldService) New(ctx context.Context, params ZoneHoldNewParams, opts ...option.RequestOption) (res *ZoneHoldNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneHoldNewResponseEnvelope
-	path := fmt.Sprintf("zones/%s/hold", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/hold", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +48,11 @@ func (r *ZoneHoldService) New(ctx context.Context, zoneID string, body ZoneHoldN
 
 // Stop enforcement of a zone hold on the zone, permanently or temporarily,
 // allowing the creation and activation of zones with this zone's hostname.
-func (r *ZoneHoldService) Delete(ctx context.Context, zoneID string, body ZoneHoldDeleteParams, opts ...option.RequestOption) (res *ZoneHoldDeleteResponse, err error) {
+func (r *ZoneHoldService) Delete(ctx context.Context, params ZoneHoldDeleteParams, opts ...option.RequestOption) (res *ZoneHoldDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneHoldDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/hold", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/hold", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -62,11 +62,11 @@ func (r *ZoneHoldService) Delete(ctx context.Context, zoneID string, body ZoneHo
 
 // Retrieve whether the zone is subject to a zone hold, and metadata about the
 // hold.
-func (r *ZoneHoldService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *ZoneHoldGetResponse, err error) {
+func (r *ZoneHoldService) Get(ctx context.Context, query ZoneHoldGetParams, opts ...option.RequestOption) (res *ZoneHoldGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneHoldGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/hold", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/hold", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -138,6 +138,8 @@ func (r *ZoneHoldGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type ZoneHoldNewParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// If provided, the zone hold will extend to block any subdomain of the given zone,
 	// as well as SSL4SaaS Custom Hostnames. For example, a zone hold on a zone with
 	// the hostname 'example.com' and include_subdomains=true will block 'example.com',
@@ -223,6 +225,8 @@ const (
 )
 
 type ZoneHoldDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// If `hold_after` is provided, the hold will be temporarily disabled, then
 	// automatically re-enabled by the system at the time specified in this
 	// RFC3339-formatted timestamp. Otherwise, the hold will be disabled indefinitely.
@@ -252,6 +256,11 @@ type zoneHoldDeleteResponseEnvelopeJSON struct {
 
 func (r *ZoneHoldDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneHoldGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type ZoneHoldGetResponseEnvelope struct {

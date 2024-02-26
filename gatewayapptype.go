@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -33,11 +34,11 @@ func NewGatewayAppTypeService(opts ...option.RequestOption) (r *GatewayAppTypeSe
 }
 
 // Fetches all application and application type mappings.
-func (r *GatewayAppTypeService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]GatewayAppTypeListResponse, err error) {
+func (r *GatewayAppTypeService) List(ctx context.Context, query GatewayAppTypeListParams, opts ...option.RequestOption) (res *[]GatewayAppTypeListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayAppTypeListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/gateway/app_types", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/gateway/app_types", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -114,6 +115,11 @@ func (r *GatewayAppTypeListResponseZeroTrustGatewayApplicationType) UnmarshalJSO
 }
 
 func (r GatewayAppTypeListResponseZeroTrustGatewayApplicationType) implementsGatewayAppTypeListResponse() {
+}
+
+type GatewayAppTypeListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type GatewayAppTypeListResponseEnvelope struct {

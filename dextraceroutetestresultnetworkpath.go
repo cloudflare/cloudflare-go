@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -33,11 +34,11 @@ func NewDEXTracerouteTestResultNetworkPathService(opts ...option.RequestOption) 
 
 // Get a breakdown of hops and performance metrics for a specific traceroute test
 // run
-func (r *DEXTracerouteTestResultNetworkPathService) List(ctx context.Context, accountID string, testResultID string, opts ...option.RequestOption) (res *DEXTracerouteTestResultNetworkPathListResponse, err error) {
+func (r *DEXTracerouteTestResultNetworkPathService) List(ctx context.Context, testResultID string, query DEXTracerouteTestResultNetworkPathListParams, opts ...option.RequestOption) (res *DEXTracerouteTestResultNetworkPathListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DEXTracerouteTestResultNetworkPathListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/dex/traceroute-test-results/%s/network-path", accountID, testResultID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/dex/traceroute-test-results/%s/network-path", query.AccountID, testResultID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -141,6 +142,10 @@ const (
 	DEXTracerouteTestResultNetworkPathListResponseHopsMileClientToCfIngress DEXTracerouteTestResultNetworkPathListResponseHopsMile = "client-to-cf-ingress"
 	DEXTracerouteTestResultNetworkPathListResponseHopsMileClientToIsp       DEXTracerouteTestResultNetworkPathListResponseHopsMile = "client-to-isp"
 )
+
+type DEXTracerouteTestResultNetworkPathListParams struct {
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type DEXTracerouteTestResultNetworkPathListResponseEnvelope struct {
 	Errors   []DEXTracerouteTestResultNetworkPathListResponseEnvelopeErrors   `json:"errors,required"`

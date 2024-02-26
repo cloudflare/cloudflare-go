@@ -35,11 +35,11 @@ func NewCustomHostnameFallbackOriginService(opts ...option.RequestOption) (r *Cu
 }
 
 // Update Fallback Origin for Custom Hostnames
-func (r *CustomHostnameFallbackOriginService) Update(ctx context.Context, zoneID string, body CustomHostnameFallbackOriginUpdateParams, opts ...option.RequestOption) (res *CustomHostnameFallbackOriginUpdateResponse, err error) {
+func (r *CustomHostnameFallbackOriginService) Update(ctx context.Context, params CustomHostnameFallbackOriginUpdateParams, opts ...option.RequestOption) (res *CustomHostnameFallbackOriginUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomHostnameFallbackOriginUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/custom_hostnames/fallback_origin", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/custom_hostnames/fallback_origin", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +48,11 @@ func (r *CustomHostnameFallbackOriginService) Update(ctx context.Context, zoneID
 }
 
 // Delete Fallback Origin for Custom Hostnames
-func (r *CustomHostnameFallbackOriginService) Delete(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *CustomHostnameFallbackOriginDeleteResponse, err error) {
+func (r *CustomHostnameFallbackOriginService) Delete(ctx context.Context, body CustomHostnameFallbackOriginDeleteParams, opts ...option.RequestOption) (res *CustomHostnameFallbackOriginDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomHostnameFallbackOriginDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/custom_hostnames/fallback_origin", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/custom_hostnames/fallback_origin", body.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -61,11 +61,11 @@ func (r *CustomHostnameFallbackOriginService) Delete(ctx context.Context, zoneID
 }
 
 // Get Fallback Origin for Custom Hostnames
-func (r *CustomHostnameFallbackOriginService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *CustomHostnameFallbackOriginGetResponse, err error) {
+func (r *CustomHostnameFallbackOriginService) Get(ctx context.Context, query CustomHostnameFallbackOriginGetParams, opts ...option.RequestOption) (res *CustomHostnameFallbackOriginGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomHostnameFallbackOriginGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/custom_hostnames/fallback_origin", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/custom_hostnames/fallback_origin", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -125,6 +125,8 @@ func init() {
 }
 
 type CustomHostnameFallbackOriginUpdateParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Your origin hostname that requests to your custom hostnames will be sent to.
 	Origin param.Field[string] `json:"origin,required"`
 }
@@ -204,6 +206,11 @@ const (
 	CustomHostnameFallbackOriginUpdateResponseEnvelopeSuccessTrue CustomHostnameFallbackOriginUpdateResponseEnvelopeSuccess = true
 )
 
+type CustomHostnameFallbackOriginDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type CustomHostnameFallbackOriginDeleteResponseEnvelope struct {
 	Errors   []CustomHostnameFallbackOriginDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []CustomHostnameFallbackOriginDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -274,6 +281,11 @@ type CustomHostnameFallbackOriginDeleteResponseEnvelopeSuccess bool
 const (
 	CustomHostnameFallbackOriginDeleteResponseEnvelopeSuccessTrue CustomHostnameFallbackOriginDeleteResponseEnvelopeSuccess = true
 )
+
+type CustomHostnameFallbackOriginGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type CustomHostnameFallbackOriginGetResponseEnvelope struct {
 	Errors   []CustomHostnameFallbackOriginGetResponseEnvelopeErrors   `json:"errors,required"`

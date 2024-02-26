@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -36,11 +37,11 @@ func NewDLPProfileService(opts ...option.RequestOption) (r *DLPProfileService) {
 }
 
 // Lists all DLP profiles in an account.
-func (r *DLPProfileService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]DLPProfileListResponse, err error) {
+func (r *DLPProfileService) List(ctx context.Context, query DLPProfileListParams, opts ...option.RequestOption) (res *[]DLPProfileListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPProfileListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/dlp/profiles", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/dlp/profiles", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -49,11 +50,11 @@ func (r *DLPProfileService) List(ctx context.Context, accountID string, opts ...
 }
 
 // Fetches a DLP profile by ID. Supports both predefined and custom profiles
-func (r *DLPProfileService) Get(ctx context.Context, accountID string, profileID string, opts ...option.RequestOption) (res *DLPProfileGetResponse, err error) {
+func (r *DLPProfileService) Get(ctx context.Context, profileID string, query DLPProfileGetParams, opts ...option.RequestOption) (res *DLPProfileGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPProfileGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/dlp/profiles/%s", accountID, profileID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/dlp/profiles/%s", query.AccountID, profileID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -591,6 +592,11 @@ const (
 	DLPProfileGetResponseDLPIntegrationProfileTypeIntegration DLPProfileGetResponseDLPIntegrationProfileType = "integration"
 )
 
+type DLPProfileListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type DLPProfileListResponseEnvelope struct {
 	Errors   []DLPProfileListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DLPProfileListResponseEnvelopeMessages `json:"messages,required"`
@@ -687,6 +693,11 @@ type dlpProfileListResponseEnvelopeResultInfoJSON struct {
 
 func (r *DLPProfileListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type DLPProfileGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type DLPProfileGetResponseEnvelope struct {

@@ -31,10 +31,10 @@ func TestPageProjectDeploymentNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Pages.Projects.Deployments.New(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"this-is-my-project-01",
 		cloudflare.PageProjectDeploymentNewParams{
-			Branch: cloudflare.F("staging"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Branch:    cloudflare.F("staging"),
 		},
 	)
 	if err != nil {
@@ -64,8 +64,10 @@ func TestPageProjectDeploymentList(t *testing.T) {
 	)
 	_, err := client.Pages.Projects.Deployments.List(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"this-is-my-project-01",
+		cloudflare.PageProjectDeploymentListParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -94,9 +96,11 @@ func TestPageProjectDeploymentDelete(t *testing.T) {
 	)
 	_, err := client.Pages.Projects.Deployments.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"this-is-my-project-01",
 		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.PageProjectDeploymentDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -125,9 +129,11 @@ func TestPageProjectDeploymentGet(t *testing.T) {
 	)
 	_, err := client.Pages.Projects.Deployments.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"this-is-my-project-01",
 		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.PageProjectDeploymentGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -156,9 +162,11 @@ func TestPageProjectDeploymentRetry(t *testing.T) {
 	)
 	_, err := client.Pages.Projects.Deployments.Retry(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"this-is-my-project-01",
 		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.PageProjectDeploymentRetryParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -187,9 +195,11 @@ func TestPageProjectDeploymentRollback(t *testing.T) {
 	)
 	_, err := client.Pages.Projects.Deployments.Rollback(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"this-is-my-project-01",
 		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.PageProjectDeploymentRollbackParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

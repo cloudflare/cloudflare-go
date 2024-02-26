@@ -33,11 +33,11 @@ func NewSettingPseudoIPV4Service(opts ...option.RequestOption) (r *SettingPseudo
 }
 
 // Value of the Pseudo IPv4 setting.
-func (r *SettingPseudoIPV4Service) Edit(ctx context.Context, zoneID string, body SettingPseudoIPV4EditParams, opts ...option.RequestOption) (res *SettingPseudoIPV4EditResponse, err error) {
+func (r *SettingPseudoIPV4Service) Edit(ctx context.Context, params SettingPseudoIPV4EditParams, opts ...option.RequestOption) (res *SettingPseudoIPV4EditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingPseudoIPV4EditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/pseudo_ipv4", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/pseudo_ipv4", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -46,11 +46,11 @@ func (r *SettingPseudoIPV4Service) Edit(ctx context.Context, zoneID string, body
 }
 
 // Value of the Pseudo IPv4 setting.
-func (r *SettingPseudoIPV4Service) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingPseudoIPV4GetResponse, err error) {
+func (r *SettingPseudoIPV4Service) Get(ctx context.Context, query SettingPseudoIPV4GetParams, opts ...option.RequestOption) (res *SettingPseudoIPV4GetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingPseudoIPV4GetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/pseudo_ipv4", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/pseudo_ipv4", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -167,6 +167,8 @@ const (
 )
 
 type SettingPseudoIPV4EditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the Pseudo IPv4 setting.
 	Value param.Field[SettingPseudoIPV4EditParamsValue] `json:"value,required"`
 }
@@ -245,6 +247,11 @@ type settingPseudoIPV4EditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingPseudoIPV4EditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingPseudoIPV4GetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingPseudoIPV4GetResponseEnvelope struct {

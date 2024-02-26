@@ -40,11 +40,11 @@ func NewFirewallWAFPackageRuleService(opts ...option.RequestOption) (r *Firewall
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *FirewallWAFPackageRuleService) Edit(ctx context.Context, zoneID string, packageID string, ruleID string, body FirewallWAFPackageRuleEditParams, opts ...option.RequestOption) (res *FirewallWAFPackageRuleEditResponse, err error) {
+func (r *FirewallWAFPackageRuleService) Edit(ctx context.Context, packageID string, ruleID string, params FirewallWAFPackageRuleEditParams, opts ...option.RequestOption) (res *FirewallWAFPackageRuleEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FirewallWAFPackageRuleEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/firewall/waf/packages/%s/rules/%s", zoneID, packageID, ruleID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/firewall/waf/packages/%s/rules/%s", params.ZoneID, packageID, ruleID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -56,11 +56,11 @@ func (r *FirewallWAFPackageRuleService) Edit(ctx context.Context, zoneID string,
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *FirewallWAFPackageRuleService) Get(ctx context.Context, zoneID string, packageID string, ruleID string, opts ...option.RequestOption) (res *FirewallWAFPackageRuleGetResponse, err error) {
+func (r *FirewallWAFPackageRuleService) Get(ctx context.Context, packageID string, ruleID string, query FirewallWAFPackageRuleGetParams, opts ...option.RequestOption) (res *FirewallWAFPackageRuleGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FirewallWAFPackageRuleGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/firewall/waf/packages/%s/rules/%s", zoneID, packageID, ruleID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/firewall/waf/packages/%s/rules/%s", query.ZoneID, packageID, ruleID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -72,11 +72,11 @@ func (r *FirewallWAFPackageRuleService) Get(ctx context.Context, zoneID string, 
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *FirewallWAFPackageRuleService) WAFRulesListWAFRules(ctx context.Context, zoneID string, packageID string, query FirewallWAFPackageRuleWAFRulesListWAFRulesParams, opts ...option.RequestOption) (res *[]FirewallWAFPackageRuleWAFRulesListWAFRulesResponse, err error) {
+func (r *FirewallWAFPackageRuleService) WAFRulesListWAFRules(ctx context.Context, packageID string, params FirewallWAFPackageRuleWAFRulesListWAFRulesParams, opts ...option.RequestOption) (res *[]FirewallWAFPackageRuleWAFRulesListWAFRulesResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FirewallWAFPackageRuleWAFRulesListWAFRulesResponseEnvelope
-	path := fmt.Sprintf("zones/%s/firewall/waf/packages/%s/rules", zoneID, packageID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("zones/%s/firewall/waf/packages/%s/rules", params.ZoneID, packageID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -695,6 +695,8 @@ const (
 )
 
 type FirewallWAFPackageRuleEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The mode/action of the rule when triggered. You must use a value from the
 	// `allowed_modes` array of the current rule.
 	Mode param.Field[FirewallWAFPackageRuleEditParamsMode] `json:"mode"`
@@ -791,6 +793,11 @@ const (
 	FirewallWAFPackageRuleEditResponseEnvelopeSuccessTrue FirewallWAFPackageRuleEditResponseEnvelopeSuccess = true
 )
 
+type FirewallWAFPackageRuleGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type FirewallWAFPackageRuleGetResponseEnvelope struct {
 	Errors   []FirewallWAFPackageRuleGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []FirewallWAFPackageRuleGetResponseEnvelopeMessages `json:"messages,required"`
@@ -861,6 +868,8 @@ const (
 )
 
 type FirewallWAFPackageRuleWAFRulesListWAFRulesParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The direction used to sort returned rules.
 	Direction param.Field[FirewallWAFPackageRuleWAFRulesListWAFRulesParamsDirection] `query:"direction"`
 	// When set to `all`, all the search requirements must match. When set to `any`,

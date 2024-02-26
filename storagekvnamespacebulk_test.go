@@ -31,9 +31,9 @@ func TestStorageKVNamespaceBulkUpdate(t *testing.T) {
 	)
 	_, err := client.Storage.KV.Namespaces.Bulk.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"0f2ac74b498b48028cb68387c421e279",
 		cloudflare.StorageKVNamespaceBulkUpdateParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Body: cloudflare.F([]cloudflare.StorageKVNamespaceBulkUpdateParamsBody{{
 				Base64:        cloudflare.F(true),
 				Expiration:    cloudflare.F(1578435000.000000),
@@ -91,10 +91,10 @@ func TestStorageKVNamespaceBulkDelete(t *testing.T) {
 	)
 	_, err := client.Storage.KV.Namespaces.Bulk.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"0f2ac74b498b48028cb68387c421e279",
 		cloudflare.StorageKVNamespaceBulkDeleteParams{
-			Body: cloudflare.F([]string{"My-Key", "My-Key", "My-Key"}),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Body:      cloudflare.F([]string{"My-Key", "My-Key", "My-Key"}),
 		},
 	)
 	if err != nil {

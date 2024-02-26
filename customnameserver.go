@@ -35,11 +35,11 @@ func NewCustomNameserverService(opts ...option.RequestOption) (r *CustomNameserv
 }
 
 // Add Account Custom Nameserver
-func (r *CustomNameserverService) New(ctx context.Context, accountID string, body CustomNameserverNewParams, opts ...option.RequestOption) (res *CustomNameserverNewResponse, err error) {
+func (r *CustomNameserverService) New(ctx context.Context, params CustomNameserverNewParams, opts ...option.RequestOption) (res *CustomNameserverNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomNameserverNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/custom_ns", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/custom_ns", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +48,11 @@ func (r *CustomNameserverService) New(ctx context.Context, accountID string, bod
 }
 
 // List an account's custom nameservers.
-func (r *CustomNameserverService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]CustomNameserverListResponse, err error) {
+func (r *CustomNameserverService) List(ctx context.Context, query CustomNameserverListParams, opts ...option.RequestOption) (res *[]CustomNameserverListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomNameserverListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/custom_ns", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/custom_ns", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -61,11 +61,11 @@ func (r *CustomNameserverService) List(ctx context.Context, accountID string, op
 }
 
 // Delete Account Custom Nameserver
-func (r *CustomNameserverService) Delete(ctx context.Context, accountID string, customNsID string, opts ...option.RequestOption) (res *CustomNameserverDeleteResponse, err error) {
+func (r *CustomNameserverService) Delete(ctx context.Context, customNsID string, body CustomNameserverDeleteParams, opts ...option.RequestOption) (res *CustomNameserverDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomNameserverDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/custom_ns/%s", accountID, customNsID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/custom_ns/%s", body.AccountID, customNsID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -74,11 +74,11 @@ func (r *CustomNameserverService) Delete(ctx context.Context, accountID string, 
 }
 
 // Get Eligible Zones for Account Custom Nameservers
-func (r *CustomNameserverService) Availabilty(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]string, err error) {
+func (r *CustomNameserverService) Availabilty(ctx context.Context, query CustomNameserverAvailabiltyParams, opts ...option.RequestOption) (res *[]string, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomNameserverAvailabiltyResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/custom_ns/availability", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/custom_ns/availability", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -87,11 +87,11 @@ func (r *CustomNameserverService) Availabilty(ctx context.Context, accountID str
 }
 
 // Verify Account Custom Nameserver Glue Records
-func (r *CustomNameserverService) Verify(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]CustomNameserverVerifyResponse, err error) {
+func (r *CustomNameserverService) Verify(ctx context.Context, body CustomNameserverVerifyParams, opts ...option.RequestOption) (res *[]CustomNameserverVerifyResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomNameserverVerifyResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/custom_ns/verify", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/custom_ns/verify", body.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -328,6 +328,8 @@ const (
 )
 
 type CustomNameserverNewParams struct {
+	// Account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The FQDN of the name server.
 	NsName param.Field[string] `json:"ns_name,required" format:"hostname"`
 	// The number of the set that this name server belongs to.
@@ -407,6 +409,11 @@ type CustomNameserverNewResponseEnvelopeSuccess bool
 const (
 	CustomNameserverNewResponseEnvelopeSuccessTrue CustomNameserverNewResponseEnvelopeSuccess = true
 )
+
+type CustomNameserverListParams struct {
+	// Account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type CustomNameserverListResponseEnvelope struct {
 	Errors   []CustomNameserverListResponseEnvelopeErrors   `json:"errors,required"`
@@ -504,6 +511,11 @@ type customNameserverListResponseEnvelopeResultInfoJSON struct {
 
 func (r *CustomNameserverListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type CustomNameserverDeleteParams struct {
+	// Account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type CustomNameserverDeleteResponseEnvelope struct {
@@ -604,6 +616,11 @@ func (r *CustomNameserverDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type CustomNameserverAvailabiltyParams struct {
+	// Account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type CustomNameserverAvailabiltyResponseEnvelope struct {
 	Errors   []CustomNameserverAvailabiltyResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []CustomNameserverAvailabiltyResponseEnvelopeMessages `json:"messages,required"`
@@ -700,6 +717,11 @@ type customNameserverAvailabiltyResponseEnvelopeResultInfoJSON struct {
 
 func (r *CustomNameserverAvailabiltyResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type CustomNameserverVerifyParams struct {
+	// Account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type CustomNameserverVerifyResponseEnvelope struct {

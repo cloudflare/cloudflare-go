@@ -9,6 +9,7 @@ import (
 	"reflect"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
@@ -34,7 +35,7 @@ func NewAddressAddressMapZoneService(opts ...option.RequestOption) (r *AddressAd
 }
 
 // Add a zone as a member of a particular address map.
-func (r *AddressAddressMapZoneService) Update(ctx context.Context, accountID string, addressMapID string, zoneID string, opts ...option.RequestOption) (res *AddressAddressMapZoneUpdateResponse, err error) {
+func (r *AddressAddressMapZoneService) Update(ctx context.Context, addressMapID string, body AddressAddressMapZoneUpdateParams, opts ...option.RequestOption) (res *AddressAddressMapZoneUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressAddressMapZoneUpdateResponseEnvelope
 	var accountOrZone string
@@ -46,8 +47,8 @@ func (r *AddressAddressMapZoneService) Update(ctx context.Context, accountID str
 		accountOrZone = "zones"
 		accountOrZoneID = body.ZoneID
 	}
-	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/zones/%s", accountOrZone, addressMapID, accountOrZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/zones/%s", accountOrZoneID, accountOrZone, addressMapID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -56,7 +57,7 @@ func (r *AddressAddressMapZoneService) Update(ctx context.Context, accountID str
 }
 
 // Remove a zone as a member of a particular address map.
-func (r *AddressAddressMapZoneService) Delete(ctx context.Context, accountID string, addressMapID string, zoneID string, opts ...option.RequestOption) (res *AddressAddressMapZoneDeleteResponse, err error) {
+func (r *AddressAddressMapZoneService) Delete(ctx context.Context, addressMapID string, body AddressAddressMapZoneDeleteParams, opts ...option.RequestOption) (res *AddressAddressMapZoneDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressAddressMapZoneDeleteResponseEnvelope
 	var accountOrZone string
@@ -68,8 +69,8 @@ func (r *AddressAddressMapZoneService) Delete(ctx context.Context, accountID str
 		accountOrZone = "zones"
 		accountOrZoneID = body.ZoneID
 	}
-	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/zones/%s", accountOrZone, addressMapID, accountOrZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/zones/%s", accountOrZoneID, accountOrZone, addressMapID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -118,6 +119,13 @@ func init() {
 type AddressAddressMapZoneDeleteResponseArray []interface{}
 
 func (r AddressAddressMapZoneDeleteResponseArray) ImplementsAddressAddressMapZoneDeleteResponse() {}
+
+type AddressAddressMapZoneUpdateParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type AddressAddressMapZoneUpdateResponseEnvelope struct {
 	Errors   []AddressAddressMapZoneUpdateResponseEnvelopeErrors   `json:"errors,required"`
@@ -215,6 +223,13 @@ type addressAddressMapZoneUpdateResponseEnvelopeResultInfoJSON struct {
 
 func (r *AddressAddressMapZoneUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type AddressAddressMapZoneDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type AddressAddressMapZoneDeleteResponseEnvelope struct {

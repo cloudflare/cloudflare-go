@@ -33,11 +33,11 @@ func NewSettingSecurityHeaderService(opts ...option.RequestOption) (r *SettingSe
 }
 
 // Cloudflare security header for a zone.
-func (r *SettingSecurityHeaderService) Edit(ctx context.Context, zoneID string, body SettingSecurityHeaderEditParams, opts ...option.RequestOption) (res *SettingSecurityHeaderEditResponse, err error) {
+func (r *SettingSecurityHeaderService) Edit(ctx context.Context, params SettingSecurityHeaderEditParams, opts ...option.RequestOption) (res *SettingSecurityHeaderEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingSecurityHeaderEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/security_header", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/security_header", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -46,11 +46,11 @@ func (r *SettingSecurityHeaderService) Edit(ctx context.Context, zoneID string, 
 }
 
 // Cloudflare security header for a zone.
-func (r *SettingSecurityHeaderService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingSecurityHeaderGetResponse, err error) {
+func (r *SettingSecurityHeaderService) Get(ctx context.Context, query SettingSecurityHeaderGetParams, opts ...option.RequestOption) (res *SettingSecurityHeaderGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingSecurityHeaderGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/security_header", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/security_header", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -245,7 +245,9 @@ const (
 )
 
 type SettingSecurityHeaderEditParams struct {
-	Value param.Field[SettingSecurityHeaderEditParamsValue] `json:"value,required"`
+	// Identifier
+	ZoneID param.Field[string]                               `path:"zone_id,required"`
+	Value  param.Field[SettingSecurityHeaderEditParamsValue] `json:"value,required"`
 }
 
 func (r SettingSecurityHeaderEditParams) MarshalJSON() (data []byte, err error) {
@@ -338,6 +340,11 @@ type settingSecurityHeaderEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingSecurityHeaderEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingSecurityHeaderGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingSecurityHeaderGetResponseEnvelope struct {

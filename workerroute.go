@@ -35,11 +35,11 @@ func NewWorkerRouteService(opts ...option.RequestOption) (r *WorkerRouteService)
 }
 
 // Creates a route that maps a URL pattern to a Worker.
-func (r *WorkerRouteService) New(ctx context.Context, zoneID string, body WorkerRouteNewParams, opts ...option.RequestOption) (res *WorkerRouteNewResponse, err error) {
+func (r *WorkerRouteService) New(ctx context.Context, params WorkerRouteNewParams, opts ...option.RequestOption) (res *WorkerRouteNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerRouteNewResponseEnvelope
-	path := fmt.Sprintf("zones/%s/workers/routes", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/workers/routes", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +48,11 @@ func (r *WorkerRouteService) New(ctx context.Context, zoneID string, body Worker
 }
 
 // Updates the URL pattern or Worker associated with a route.
-func (r *WorkerRouteService) Update(ctx context.Context, zoneID string, routeID string, body WorkerRouteUpdateParams, opts ...option.RequestOption) (res *WorkerRouteUpdateResponse, err error) {
+func (r *WorkerRouteService) Update(ctx context.Context, routeID string, params WorkerRouteUpdateParams, opts ...option.RequestOption) (res *WorkerRouteUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerRouteUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/workers/routes/%s", zoneID, routeID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/workers/routes/%s", params.ZoneID, routeID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -61,11 +61,11 @@ func (r *WorkerRouteService) Update(ctx context.Context, zoneID string, routeID 
 }
 
 // Returns routes for a zone.
-func (r *WorkerRouteService) List(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *[]WorkerRouteListResponse, err error) {
+func (r *WorkerRouteService) List(ctx context.Context, query WorkerRouteListParams, opts ...option.RequestOption) (res *[]WorkerRouteListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerRouteListResponseEnvelope
-	path := fmt.Sprintf("zones/%s/workers/routes", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/workers/routes", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -74,11 +74,11 @@ func (r *WorkerRouteService) List(ctx context.Context, zoneID string, opts ...op
 }
 
 // Deletes a route.
-func (r *WorkerRouteService) Delete(ctx context.Context, zoneID string, routeID string, opts ...option.RequestOption) (res *WorkerRouteDeleteResponse, err error) {
+func (r *WorkerRouteService) Delete(ctx context.Context, routeID string, body WorkerRouteDeleteParams, opts ...option.RequestOption) (res *WorkerRouteDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerRouteDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/workers/routes/%s", zoneID, routeID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/workers/routes/%s", body.ZoneID, routeID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -87,11 +87,11 @@ func (r *WorkerRouteService) Delete(ctx context.Context, zoneID string, routeID 
 }
 
 // Returns information about a route, including URL pattern and Worker.
-func (r *WorkerRouteService) Get(ctx context.Context, zoneID string, routeID string, opts ...option.RequestOption) (res *WorkerRouteGetResponse, err error) {
+func (r *WorkerRouteService) Get(ctx context.Context, routeID string, query WorkerRouteGetParams, opts ...option.RequestOption) (res *WorkerRouteGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerRouteGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/workers/routes/%s", zoneID, routeID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/workers/routes/%s", query.ZoneID, routeID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -201,6 +201,8 @@ func (r *WorkerRouteGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type WorkerRouteNewParams struct {
+	// Identifier
+	ZoneID  param.Field[string] `path:"zone_id,required"`
 	Pattern param.Field[string] `json:"pattern,required"`
 	// Name of the script, used in URLs and route configuration.
 	Script param.Field[string] `json:"script"`
@@ -280,6 +282,8 @@ const (
 )
 
 type WorkerRouteUpdateParams struct {
+	// Identifier
+	ZoneID  param.Field[string] `path:"zone_id,required"`
 	Pattern param.Field[string] `json:"pattern,required"`
 	// Name of the script, used in URLs and route configuration.
 	Script param.Field[string] `json:"script"`
@@ -358,6 +362,11 @@ const (
 	WorkerRouteUpdateResponseEnvelopeSuccessTrue WorkerRouteUpdateResponseEnvelopeSuccess = true
 )
 
+type WorkerRouteListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type WorkerRouteListResponseEnvelope struct {
 	Errors   []WorkerRouteListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []WorkerRouteListResponseEnvelopeMessages `json:"messages,required"`
@@ -427,6 +436,11 @@ const (
 	WorkerRouteListResponseEnvelopeSuccessTrue WorkerRouteListResponseEnvelopeSuccess = true
 )
 
+type WorkerRouteDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type WorkerRouteDeleteResponseEnvelope struct {
 	Errors   []WorkerRouteDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []WorkerRouteDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -495,6 +509,11 @@ type WorkerRouteDeleteResponseEnvelopeSuccess bool
 const (
 	WorkerRouteDeleteResponseEnvelopeSuccessTrue WorkerRouteDeleteResponseEnvelopeSuccess = true
 )
+
+type WorkerRouteGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type WorkerRouteGetResponseEnvelope struct {
 	Errors   []WorkerRouteGetResponseEnvelopeErrors   `json:"errors,required"`

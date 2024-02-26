@@ -29,28 +29,25 @@ func TestPageruleNewWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Pagerules.New(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.PageruleNewParams{
-			Actions: cloudflare.F([]cloudflare.PageruleNewParamsAction{{
-				Name: cloudflare.F(cloudflare.PageruleNewParamsActionsNameForwardURL),
-				Value: cloudflare.F(cloudflare.PageruleNewParamsActionsValue{
-					Type: cloudflare.F(cloudflare.PageruleNewParamsActionsValueTypeTemporary),
-					URL:  cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
-				}),
-			}}),
-			Targets: cloudflare.F([]cloudflare.PageruleNewParamsTarget{{
-				Constraint: cloudflare.F(cloudflare.PageruleNewParamsTargetsConstraint{
-					Operator: cloudflare.F(cloudflare.PageruleNewParamsTargetsConstraintOperatorMatches),
-					Value:    cloudflare.F("*example.com/images/*"),
-				}),
-				Target: cloudflare.F(cloudflare.PageruleNewParamsTargetsTargetURL),
-			}}),
-			Priority: cloudflare.F(int64(0)),
-			Status:   cloudflare.F(cloudflare.PageruleNewParamsStatusActive),
-		},
-	)
+	_, err := client.Pagerules.New(context.TODO(), cloudflare.PageruleNewParams{
+		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Actions: cloudflare.F([]cloudflare.PageruleNewParamsAction{{
+			Name: cloudflare.F(cloudflare.PageruleNewParamsActionsNameForwardURL),
+			Value: cloudflare.F(cloudflare.PageruleNewParamsActionsValue{
+				Type: cloudflare.F(cloudflare.PageruleNewParamsActionsValueTypeTemporary),
+				URL:  cloudflare.F("http://www.example.com/somewhere/$1/astring/$2/anotherstring/$3"),
+			}),
+		}}),
+		Targets: cloudflare.F([]cloudflare.PageruleNewParamsTarget{{
+			Constraint: cloudflare.F(cloudflare.PageruleNewParamsTargetsConstraint{
+				Operator: cloudflare.F(cloudflare.PageruleNewParamsTargetsConstraintOperatorMatches),
+				Value:    cloudflare.F("*example.com/images/*"),
+			}),
+			Target: cloudflare.F(cloudflare.PageruleNewParamsTargetsTargetURL),
+		}}),
+		Priority: cloudflare.F(int64(0)),
+		Status:   cloudflare.F(cloudflare.PageruleNewParamsStatusActive),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -79,8 +76,8 @@ func TestPageruleUpdateWithOptionalParams(t *testing.T) {
 	_, err := client.Pagerules.Update(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.PageruleUpdateParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Actions: cloudflare.F([]cloudflare.PageruleUpdateParamsAction{{
 				Name: cloudflare.F(cloudflare.PageruleUpdateParamsActionsNameForwardURL),
 				Value: cloudflare.F(cloudflare.PageruleUpdateParamsActionsValue{
@@ -124,16 +121,13 @@ func TestPageruleListWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Pagerules.List(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.PageruleListParams{
-			Direction: cloudflare.F(cloudflare.PageruleListParamsDirectionDesc),
-			Match:     cloudflare.F(cloudflare.PageruleListParamsMatchAny),
-			Order:     cloudflare.F(cloudflare.PageruleListParamsOrderStatus),
-			Status:    cloudflare.F(cloudflare.PageruleListParamsStatusActive),
-		},
-	)
+	_, err := client.Pagerules.List(context.TODO(), cloudflare.PageruleListParams{
+		ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Direction: cloudflare.F(cloudflare.PageruleListParamsDirectionDesc),
+		Match:     cloudflare.F(cloudflare.PageruleListParamsMatchAny),
+		Order:     cloudflare.F(cloudflare.PageruleListParamsOrderStatus),
+		Status:    cloudflare.F(cloudflare.PageruleListParamsStatusActive),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -162,7 +156,9 @@ func TestPageruleDelete(t *testing.T) {
 	_, err := client.Pagerules.Delete(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.PageruleDeleteParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -192,8 +188,8 @@ func TestPageruleEditWithOptionalParams(t *testing.T) {
 	_, err := client.Pagerules.Edit(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.PageruleEditParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Actions: cloudflare.F([]cloudflare.PageruleEditParamsAction{{
 				Name: cloudflare.F(cloudflare.PageruleEditParamsActionsNameForwardURL),
 				Value: cloudflare.F(cloudflare.PageruleEditParamsActionsValue{
@@ -240,7 +236,9 @@ func TestPageruleGet(t *testing.T) {
 	_, err := client.Pagerules.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.PageruleGetParams{
+			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

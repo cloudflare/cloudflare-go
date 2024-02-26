@@ -37,11 +37,11 @@ func NewLoadBalancerMonitorService(opts ...option.RequestOption) (r *LoadBalance
 }
 
 // Create a configured monitor.
-func (r *LoadBalancerMonitorService) New(ctx context.Context, accountID string, body LoadBalancerMonitorNewParams, opts ...option.RequestOption) (res *LoadBalancerMonitorNewResponse, err error) {
+func (r *LoadBalancerMonitorService) New(ctx context.Context, params LoadBalancerMonitorNewParams, opts ...option.RequestOption) (res *LoadBalancerMonitorNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerMonitorNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/load_balancers/monitors", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/load_balancers/monitors", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -50,11 +50,11 @@ func (r *LoadBalancerMonitorService) New(ctx context.Context, accountID string, 
 }
 
 // Modify a configured monitor.
-func (r *LoadBalancerMonitorService) Update(ctx context.Context, accountID string, monitorID string, body LoadBalancerMonitorUpdateParams, opts ...option.RequestOption) (res *LoadBalancerMonitorUpdateResponse, err error) {
+func (r *LoadBalancerMonitorService) Update(ctx context.Context, monitorID string, params LoadBalancerMonitorUpdateParams, opts ...option.RequestOption) (res *LoadBalancerMonitorUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerMonitorUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s", accountID, monitorID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s", params.AccountID, monitorID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -63,11 +63,11 @@ func (r *LoadBalancerMonitorService) Update(ctx context.Context, accountID strin
 }
 
 // List configured monitors for an account.
-func (r *LoadBalancerMonitorService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]LoadBalancerMonitorListResponse, err error) {
+func (r *LoadBalancerMonitorService) List(ctx context.Context, query LoadBalancerMonitorListParams, opts ...option.RequestOption) (res *[]LoadBalancerMonitorListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerMonitorListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/load_balancers/monitors", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/load_balancers/monitors", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -76,11 +76,11 @@ func (r *LoadBalancerMonitorService) List(ctx context.Context, accountID string,
 }
 
 // Delete a configured monitor.
-func (r *LoadBalancerMonitorService) Delete(ctx context.Context, accountID string, monitorID string, opts ...option.RequestOption) (res *LoadBalancerMonitorDeleteResponse, err error) {
+func (r *LoadBalancerMonitorService) Delete(ctx context.Context, monitorID string, body LoadBalancerMonitorDeleteParams, opts ...option.RequestOption) (res *LoadBalancerMonitorDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerMonitorDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s", accountID, monitorID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s", body.AccountID, monitorID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -89,11 +89,11 @@ func (r *LoadBalancerMonitorService) Delete(ctx context.Context, accountID strin
 }
 
 // Apply changes to an existing monitor, overwriting the supplied properties.
-func (r *LoadBalancerMonitorService) Edit(ctx context.Context, accountID string, monitorID string, body LoadBalancerMonitorEditParams, opts ...option.RequestOption) (res *LoadBalancerMonitorEditResponse, err error) {
+func (r *LoadBalancerMonitorService) Edit(ctx context.Context, monitorID string, params LoadBalancerMonitorEditParams, opts ...option.RequestOption) (res *LoadBalancerMonitorEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerMonitorEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s", accountID, monitorID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s", params.AccountID, monitorID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -102,11 +102,11 @@ func (r *LoadBalancerMonitorService) Edit(ctx context.Context, accountID string,
 }
 
 // List a single configured monitor for an account.
-func (r *LoadBalancerMonitorService) Get(ctx context.Context, accountID string, monitorID string, opts ...option.RequestOption) (res *LoadBalancerMonitorGetResponse, err error) {
+func (r *LoadBalancerMonitorService) Get(ctx context.Context, monitorID string, query LoadBalancerMonitorGetParams, opts ...option.RequestOption) (res *LoadBalancerMonitorGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerMonitorGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s", accountID, monitorID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s", query.AccountID, monitorID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -627,6 +627,8 @@ const (
 )
 
 type LoadBalancerMonitorNewParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The expected HTTP response code or code range of the health check. This
 	// parameter is only valid for HTTP and HTTPS monitors.
 	ExpectedCodes param.Field[string] `json:"expected_codes,required"`
@@ -765,6 +767,8 @@ const (
 )
 
 type LoadBalancerMonitorUpdateParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The expected HTTP response code or code range of the health check. This
 	// parameter is only valid for HTTP and HTTPS monitors.
 	ExpectedCodes param.Field[string] `json:"expected_codes,required"`
@@ -902,6 +906,11 @@ const (
 	LoadBalancerMonitorUpdateResponseEnvelopeSuccessTrue LoadBalancerMonitorUpdateResponseEnvelopeSuccess = true
 )
 
+type LoadBalancerMonitorListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type LoadBalancerMonitorListResponseEnvelope struct {
 	Errors   []LoadBalancerMonitorListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []LoadBalancerMonitorListResponseEnvelopeMessages `json:"messages,required"`
@@ -1000,6 +1009,11 @@ func (r *LoadBalancerMonitorListResponseEnvelopeResultInfo) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type LoadBalancerMonitorDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type LoadBalancerMonitorDeleteResponseEnvelope struct {
 	Errors   []LoadBalancerMonitorDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []LoadBalancerMonitorDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -1070,6 +1084,8 @@ const (
 )
 
 type LoadBalancerMonitorEditParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The expected HTTP response code or code range of the health check. This
 	// parameter is only valid for HTTP and HTTPS monitors.
 	ExpectedCodes param.Field[string] `json:"expected_codes,required"`
@@ -1206,6 +1222,11 @@ type LoadBalancerMonitorEditResponseEnvelopeSuccess bool
 const (
 	LoadBalancerMonitorEditResponseEnvelopeSuccessTrue LoadBalancerMonitorEditResponseEnvelopeSuccess = true
 )
+
+type LoadBalancerMonitorGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type LoadBalancerMonitorGetResponseEnvelope struct {
 	Errors   []LoadBalancerMonitorGetResponseEnvelopeErrors   `json:"errors,required"`

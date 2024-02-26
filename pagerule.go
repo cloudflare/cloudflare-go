@@ -39,11 +39,11 @@ func NewPageruleService(opts ...option.RequestOption) (r *PageruleService) {
 }
 
 // Creates a new Page Rule.
-func (r *PageruleService) New(ctx context.Context, zoneID string, body PageruleNewParams, opts ...option.RequestOption) (res *PageruleNewResponse, err error) {
+func (r *PageruleService) New(ctx context.Context, params PageruleNewParams, opts ...option.RequestOption) (res *PageruleNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageruleNewResponseEnvelope
-	path := fmt.Sprintf("zones/%s/pagerules", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/pagerules", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -53,11 +53,11 @@ func (r *PageruleService) New(ctx context.Context, zoneID string, body PageruleN
 
 // Replaces the configuration of an existing Page Rule. The configuration of the
 // updated Page Rule will exactly match the data passed in the API request.
-func (r *PageruleService) Update(ctx context.Context, zoneID string, pageruleID string, body PageruleUpdateParams, opts ...option.RequestOption) (res *PageruleUpdateResponse, err error) {
+func (r *PageruleService) Update(ctx context.Context, pageruleID string, params PageruleUpdateParams, opts ...option.RequestOption) (res *PageruleUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageruleUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/pagerules/%s", zoneID, pageruleID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/pagerules/%s", params.ZoneID, pageruleID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -66,11 +66,11 @@ func (r *PageruleService) Update(ctx context.Context, zoneID string, pageruleID 
 }
 
 // Fetches Page Rules in a zone.
-func (r *PageruleService) List(ctx context.Context, zoneID string, query PageruleListParams, opts ...option.RequestOption) (res *[]PageruleListResponse, err error) {
+func (r *PageruleService) List(ctx context.Context, params PageruleListParams, opts ...option.RequestOption) (res *[]PageruleListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageruleListResponseEnvelope
-	path := fmt.Sprintf("zones/%s/pagerules", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("zones/%s/pagerules", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -79,11 +79,11 @@ func (r *PageruleService) List(ctx context.Context, zoneID string, query Pagerul
 }
 
 // Deletes an existing Page Rule.
-func (r *PageruleService) Delete(ctx context.Context, zoneID string, pageruleID string, opts ...option.RequestOption) (res *PageruleDeleteResponse, err error) {
+func (r *PageruleService) Delete(ctx context.Context, pageruleID string, body PageruleDeleteParams, opts ...option.RequestOption) (res *PageruleDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageruleDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/pagerules/%s", zoneID, pageruleID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/pagerules/%s", body.ZoneID, pageruleID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -92,11 +92,11 @@ func (r *PageruleService) Delete(ctx context.Context, zoneID string, pageruleID 
 }
 
 // Updates one or more fields of an existing Page Rule.
-func (r *PageruleService) Edit(ctx context.Context, zoneID string, pageruleID string, body PageruleEditParams, opts ...option.RequestOption) (res *PageruleEditResponse, err error) {
+func (r *PageruleService) Edit(ctx context.Context, pageruleID string, params PageruleEditParams, opts ...option.RequestOption) (res *PageruleEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageruleEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/pagerules/%s", zoneID, pageruleID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/pagerules/%s", params.ZoneID, pageruleID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -105,11 +105,11 @@ func (r *PageruleService) Edit(ctx context.Context, zoneID string, pageruleID st
 }
 
 // Fetches the details of a Page Rule.
-func (r *PageruleService) Get(ctx context.Context, zoneID string, pageruleID string, opts ...option.RequestOption) (res *PageruleGetResponse, err error) {
+func (r *PageruleService) Get(ctx context.Context, pageruleID string, query PageruleGetParams, opts ...option.RequestOption) (res *PageruleGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageruleGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/pagerules/%s", zoneID, pageruleID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/pagerules/%s", query.ZoneID, pageruleID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -372,6 +372,8 @@ func init() {
 }
 
 type PageruleNewParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The set of actions to perform if the targets of this rule match the request.
 	// Actions can redirect to another URL or override settings, but not both.
 	Actions param.Field[[]PageruleNewParamsAction] `json:"actions,required"`
@@ -549,6 +551,8 @@ const (
 )
 
 type PageruleUpdateParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The set of actions to perform if the targets of this rule match the request.
 	// Actions can redirect to another URL or override settings, but not both.
 	Actions param.Field[[]PageruleUpdateParamsAction] `json:"actions,required"`
@@ -726,6 +730,8 @@ const (
 )
 
 type PageruleListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The direction used to sort returned Page Rules.
 	Direction param.Field[PageruleListParamsDirection] `query:"direction"`
 	// When set to `all`, all the search requirements must match. When set to `any`,
@@ -847,6 +853,11 @@ const (
 	PageruleListResponseEnvelopeSuccessTrue PageruleListResponseEnvelopeSuccess = true
 )
 
+type PageruleDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type PageruleDeleteResponseEnvelope struct {
 	Errors   []PageruleDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []PageruleDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -917,6 +928,8 @@ const (
 )
 
 type PageruleEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The set of actions to perform if the targets of this rule match the request.
 	// Actions can redirect to another URL or override settings, but not both.
 	Actions param.Field[[]PageruleEditParamsAction] `json:"actions"`
@@ -1092,6 +1105,11 @@ type PageruleEditResponseEnvelopeSuccess bool
 const (
 	PageruleEditResponseEnvelopeSuccessTrue PageruleEditResponseEnvelopeSuccess = true
 )
+
+type PageruleGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type PageruleGetResponseEnvelope struct {
 	Errors   []PageruleGetResponseEnvelopeErrors   `json:"errors,required"`

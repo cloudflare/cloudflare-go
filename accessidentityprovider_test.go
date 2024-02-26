@@ -31,7 +31,7 @@ func TestAccessIdentityProviderNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Access.IdentityProviders.New(context.TODO(), cloudflare.AccessIdentityProviderNewParams{
 		AccountID: cloudflare.F("string"),
-		ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ZoneID:    cloudflare.F("string"),
 		Config: cloudflare.F(cloudflare.AccessIdentityProviderNewParamsConfig{
 			ClientID:                 cloudflare.F("<your client id>"),
 			ClientSecret:             cloudflare.F("<your client secret>"),
@@ -108,7 +108,7 @@ func TestAccessIdentityProviderUpdateWithOptionalParams(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.AccessIdentityProviderUpdateParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID:    cloudflare.F("string"),
 			Config: cloudflare.F(cloudflare.AccessIdentityProviderUpdateParamsConfig{
 				ClientID:                 cloudflare.F("<your client id>"),
 				ClientSecret:             cloudflare.F("<your client secret>"),
@@ -183,7 +183,7 @@ func TestAccessIdentityProviderList(t *testing.T) {
 	)
 	_, err := client.Access.IdentityProviders.List(context.TODO(), cloudflare.AccessIdentityProviderListParams{
 		AccountID: cloudflare.F("string"),
-		ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ZoneID:    cloudflare.F("string"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -215,7 +215,7 @@ func TestAccessIdentityProviderDelete(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.AccessIdentityProviderDeleteParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {
@@ -248,7 +248,7 @@ func TestAccessIdentityProviderGet(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.AccessIdentityProviderGetParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {

@@ -33,11 +33,11 @@ func NewAddressPrefixDelegationService(opts ...option.RequestOption) (r *Address
 }
 
 // Create a new account delegation for a given IP prefix.
-func (r *AddressPrefixDelegationService) New(ctx context.Context, accountID string, prefixID string, body AddressPrefixDelegationNewParams, opts ...option.RequestOption) (res *AddressPrefixDelegationNewResponse, err error) {
+func (r *AddressPrefixDelegationService) New(ctx context.Context, prefixID string, params AddressPrefixDelegationNewParams, opts ...option.RequestOption) (res *AddressPrefixDelegationNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressPrefixDelegationNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/delegations", accountID, prefixID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/delegations", params.AccountID, prefixID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -46,11 +46,11 @@ func (r *AddressPrefixDelegationService) New(ctx context.Context, accountID stri
 }
 
 // List all delegations for a given account IP prefix.
-func (r *AddressPrefixDelegationService) List(ctx context.Context, accountID string, prefixID string, opts ...option.RequestOption) (res *[]AddressPrefixDelegationListResponse, err error) {
+func (r *AddressPrefixDelegationService) List(ctx context.Context, prefixID string, query AddressPrefixDelegationListParams, opts ...option.RequestOption) (res *[]AddressPrefixDelegationListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressPrefixDelegationListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/delegations", accountID, prefixID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/delegations", query.AccountID, prefixID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -59,11 +59,11 @@ func (r *AddressPrefixDelegationService) List(ctx context.Context, accountID str
 }
 
 // Delete an account delegation for a given IP prefix.
-func (r *AddressPrefixDelegationService) Delete(ctx context.Context, accountID string, prefixID string, delegationID string, opts ...option.RequestOption) (res *AddressPrefixDelegationDeleteResponse, err error) {
+func (r *AddressPrefixDelegationService) Delete(ctx context.Context, prefixID string, delegationID string, body AddressPrefixDelegationDeleteParams, opts ...option.RequestOption) (res *AddressPrefixDelegationDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressPrefixDelegationDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/delegations/%s", accountID, prefixID, delegationID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/delegations/%s", body.AccountID, prefixID, delegationID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -152,6 +152,8 @@ func (r *AddressPrefixDelegationDeleteResponse) UnmarshalJSON(data []byte) (err 
 }
 
 type AddressPrefixDelegationNewParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
 	Cidr param.Field[string] `json:"cidr,required"`
 	// Account identifier for the account to which prefix is being delegated.
@@ -230,6 +232,11 @@ type AddressPrefixDelegationNewResponseEnvelopeSuccess bool
 const (
 	AddressPrefixDelegationNewResponseEnvelopeSuccessTrue AddressPrefixDelegationNewResponseEnvelopeSuccess = true
 )
+
+type AddressPrefixDelegationListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type AddressPrefixDelegationListResponseEnvelope struct {
 	Errors   []AddressPrefixDelegationListResponseEnvelopeErrors   `json:"errors,required"`
@@ -327,6 +334,11 @@ type addressPrefixDelegationListResponseEnvelopeResultInfoJSON struct {
 
 func (r *AddressPrefixDelegationListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type AddressPrefixDelegationDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type AddressPrefixDelegationDeleteResponseEnvelope struct {

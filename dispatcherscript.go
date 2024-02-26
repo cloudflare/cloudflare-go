@@ -39,11 +39,11 @@ func NewDispatcherScriptService(opts ...option.RequestOption) (r *DispatcherScri
 }
 
 // Upload a worker module to a Workers for Platforms namespace.
-func (r *DispatcherScriptService) Update(ctx context.Context, accountID string, dispatchNamespace string, scriptName string, body DispatcherScriptUpdateParams, opts ...option.RequestOption) (res *DispatcherScriptUpdateResponse, err error) {
+func (r *DispatcherScriptService) Update(ctx context.Context, dispatchNamespace string, scriptName string, params DispatcherScriptUpdateParams, opts ...option.RequestOption) (res *DispatcherScriptUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DispatcherScriptUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s", accountID, dispatchNamespace, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s", params.AccountID, dispatchNamespace, scriptName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -53,20 +53,20 @@ func (r *DispatcherScriptService) Update(ctx context.Context, accountID string, 
 
 // Delete a worker from a Workers for Platforms namespace. This call has no
 // response body on a successful delete.
-func (r *DispatcherScriptService) Delete(ctx context.Context, accountID string, dispatchNamespace string, scriptName string, body DispatcherScriptDeleteParams, opts ...option.RequestOption) (err error) {
+func (r *DispatcherScriptService) Delete(ctx context.Context, dispatchNamespace string, scriptName string, params DispatcherScriptDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
-	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s", accountID, dispatchNamespace, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, nil, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s", params.AccountID, dispatchNamespace, scriptName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, params, nil, opts...)
 	return
 }
 
 // Fetch information about a script uploaded to a Workers for Platforms namespace.
-func (r *DispatcherScriptService) Get(ctx context.Context, accountID string, dispatchNamespace string, scriptName string, opts ...option.RequestOption) (res *DispatcherScriptGetResponse, err error) {
+func (r *DispatcherScriptService) Get(ctx context.Context, dispatchNamespace string, scriptName string, query DispatcherScriptGetParams, opts ...option.RequestOption) (res *DispatcherScriptGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DispatcherScriptGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s", accountID, dispatchNamespace, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s", query.AccountID, dispatchNamespace, scriptName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -236,6 +236,8 @@ func (r *DispatcherScriptGetResponseScriptTailConsumer) UnmarshalJSON(data []byt
 }
 
 type DispatcherScriptUpdateParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// A module comprising a Worker script, often a javascript file. Multiple modules
 	// may be provided as separate named parts, but at least one module must be present
 	// and referenced in the metadata as `main_module` or `body_part` by part name.
@@ -518,6 +520,8 @@ const (
 )
 
 type DispatcherScriptDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// If set to true, delete will not be stopped by associated service binding,
 	// durable object, or other binding. Any of these associated bindings/durable
 	// objects will be deleted along with the script.
@@ -531,6 +535,11 @@ func (r DispatcherScriptDeleteParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
+}
+
+type DispatcherScriptGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type DispatcherScriptGetResponseEnvelope struct {

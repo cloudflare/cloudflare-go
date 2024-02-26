@@ -38,10 +38,10 @@ func NewWorkersForPlatformDispatchNamespaceScriptContentService(opts ...option.R
 }
 
 // Put script content for a script uploaded to a Workers for Platforms namespace.
-func (r *WorkersForPlatformDispatchNamespaceScriptContentService) Update(ctx context.Context, accountID string, dispatchNamespace string, scriptName string, params WorkersForPlatformDispatchNamespaceScriptContentUpdateParams, opts ...option.RequestOption) (res *WorkersForPlatformDispatchNamespaceScriptContentUpdateResponse, err error) {
+func (r *WorkersForPlatformDispatchNamespaceScriptContentService) Update(ctx context.Context, dispatchNamespace string, scriptName string, params WorkersForPlatformDispatchNamespaceScriptContentUpdateParams, opts ...option.RequestOption) (res *WorkersForPlatformDispatchNamespaceScriptContentUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/content", accountID, dispatchNamespace, scriptName)
+	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/content", params.AccountID, dispatchNamespace, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -52,11 +52,11 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentService) Update(ctx con
 
 // Fetch script content from a script uploaded to a Workers for Platforms
 // namespace.
-func (r *WorkersForPlatformDispatchNamespaceScriptContentService) Get(ctx context.Context, accountID string, dispatchNamespace string, scriptName string, opts ...option.RequestOption) (res *http.Response, err error) {
+func (r *WorkersForPlatformDispatchNamespaceScriptContentService) Get(ctx context.Context, dispatchNamespace string, scriptName string, query WorkersForPlatformDispatchNamespaceScriptContentGetParams, opts ...option.RequestOption) (res *http.Response, err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "string")}, opts...)
-	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/content", accountID, dispatchNamespace, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/content", query.AccountID, dispatchNamespace, scriptName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
@@ -130,6 +130,8 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseTailConsu
 }
 
 type WorkersForPlatformDispatchNamespaceScriptContentUpdateParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// A module comprising a Worker script, often a javascript file. Multiple modules
 	// may be provided as separate named parts, but at least one module must be
 	// present. This should be referenced either in the metadata as `main_module`
@@ -243,3 +245,8 @@ type WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeSucce
 const (
 	WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeSuccessTrue WorkersForPlatformDispatchNamespaceScriptContentUpdateResponseEnvelopeSuccess = true
 )
+
+type WorkersForPlatformDispatchNamespaceScriptContentGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}

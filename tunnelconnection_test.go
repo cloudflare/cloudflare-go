@@ -31,8 +31,10 @@ func TestTunnelConnectionList(t *testing.T) {
 	)
 	_, err := client.Tunnels.Connections.List(
 		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
 		"f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
+		cloudflare.TunnelConnectionListParams{
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -61,10 +63,10 @@ func TestTunnelConnectionDelete(t *testing.T) {
 	)
 	_, err := client.Tunnels.Connections.Delete(
 		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
 		"f70ff985-a4ef-4643-bbbc-4a0ed4fc8415",
 		cloudflare.TunnelConnectionDeleteParams{
-			Body: cloudflare.F[any](map[string]interface{}{}),
+			AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
+			Body:      cloudflare.F[any](map[string]interface{}{}),
 		},
 	)
 	if err != nil {

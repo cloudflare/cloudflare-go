@@ -9,6 +9,7 @@ import (
 	"reflect"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
@@ -33,11 +34,11 @@ func NewRoleService(opts ...option.RequestOption) (r *RoleService) {
 }
 
 // Get all available roles for an account.
-func (r *RoleService) List(ctx context.Context, accountID interface{}, opts ...option.RequestOption) (res *[]RoleListResponse, err error) {
+func (r *RoleService) List(ctx context.Context, query RoleListParams, opts ...option.RequestOption) (res *[]RoleListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RoleListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/roles", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/roles", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -46,11 +47,11 @@ func (r *RoleService) List(ctx context.Context, accountID interface{}, opts ...o
 }
 
 // Get information about a specific role for an account.
-func (r *RoleService) Get(ctx context.Context, accountID interface{}, roleID interface{}, opts ...option.RequestOption) (res *RoleGetResponse, err error) {
+func (r *RoleService) Get(ctx context.Context, roleID interface{}, query RoleGetParams, opts ...option.RequestOption) (res *RoleGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RoleGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/roles/%v", accountID, roleID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/roles/%v", query.AccountID, roleID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -99,6 +100,10 @@ func init() {
 			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
 	)
+}
+
+type RoleListParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
 
 type RoleListResponseEnvelope struct {
@@ -197,6 +202,10 @@ type roleListResponseEnvelopeResultInfoJSON struct {
 
 func (r *RoleListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type RoleGetParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
 
 type RoleGetResponseEnvelope struct {

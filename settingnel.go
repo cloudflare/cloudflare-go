@@ -34,11 +34,11 @@ func NewSettingNELService(opts ...option.RequestOption) (r *SettingNELService) {
 // Automatically optimize image loading for website visitors on mobile devices.
 // Refer to our [blog post](http://blog.cloudflare.com/nel-solving-mobile-speed)
 // for more information.
-func (r *SettingNELService) Edit(ctx context.Context, zoneID string, body SettingNELEditParams, opts ...option.RequestOption) (res *SettingNELEditResponse, err error) {
+func (r *SettingNELService) Edit(ctx context.Context, params SettingNELEditParams, opts ...option.RequestOption) (res *SettingNELEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingNELEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/nel", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/nel", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -47,11 +47,11 @@ func (r *SettingNELService) Edit(ctx context.Context, zoneID string, body Settin
 }
 
 // Enable Network Error Logging reporting on your zone. (Beta)
-func (r *SettingNELService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingNELGetResponse, err error) {
+func (r *SettingNELService) Get(ctx context.Context, query SettingNELGetParams, opts ...option.RequestOption) (res *SettingNELGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingNELGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/nel", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/nel", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -186,6 +186,8 @@ const (
 )
 
 type SettingNELEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Enable Network Error Logging reporting on your zone. (Beta)
 	Value param.Field[SettingNELEditParamsValue] `json:"value,required"`
 }
@@ -292,6 +294,11 @@ type settingNELEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingNELEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingNELGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingNELGetResponseEnvelope struct {

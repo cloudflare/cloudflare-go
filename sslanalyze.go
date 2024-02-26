@@ -35,11 +35,11 @@ func NewSSLAnalyzeService(opts ...option.RequestOption) (r *SSLAnalyzeService) {
 
 // Returns the set of hostnames, the signature algorithm, and the expiration date
 // of the certificate.
-func (r *SSLAnalyzeService) New(ctx context.Context, zoneID string, body SSLAnalyzeNewParams, opts ...option.RequestOption) (res *SSLAnalyzeNewResponse, err error) {
+func (r *SSLAnalyzeService) New(ctx context.Context, params SSLAnalyzeNewParams, opts ...option.RequestOption) (res *SSLAnalyzeNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SSLAnalyzeNewResponseEnvelope
-	path := fmt.Sprintf("zones/%s/ssl/analyze", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/ssl/analyze", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -64,6 +64,8 @@ func init() {
 }
 
 type SSLAnalyzeNewParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// A ubiquitous bundle has the highest probability of being verified everywhere,
 	// even by clients using outdated or unusual trust stores. An optimal bundle uses
 	// the shortest chain and newest intermediates. And the force bundle verifies the

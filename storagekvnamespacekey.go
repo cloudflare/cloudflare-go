@@ -34,11 +34,11 @@ func NewStorageKVNamespaceKeyService(opts ...option.RequestOption) (r *StorageKV
 }
 
 // Lists a namespace's keys.
-func (r *StorageKVNamespaceKeyService) List(ctx context.Context, accountID string, namespaceID string, query StorageKVNamespaceKeyListParams, opts ...option.RequestOption) (res *[]StorageKVNamespaceKeyListResponse, err error) {
+func (r *StorageKVNamespaceKeyService) List(ctx context.Context, namespaceID string, params StorageKVNamespaceKeyListParams, opts ...option.RequestOption) (res *[]StorageKVNamespaceKeyListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StorageKVNamespaceKeyListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/keys", accountID, namespaceID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/keys", params.AccountID, namespaceID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -75,6 +75,8 @@ func (r *StorageKVNamespaceKeyListResponse) UnmarshalJSON(data []byte) (err erro
 }
 
 type StorageKVNamespaceKeyListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Opaque token indicating the position from which to continue when requesting the
 	// next set of records if the amount of list results was limited by the limit
 	// parameter. A valid value for the cursor can be obtained from the `cursors`

@@ -32,11 +32,11 @@ func NewZerotrustConnectivitySettingService(opts ...option.RequestOption) (r *Ze
 }
 
 // Updates the Zero Trust Connectivity Settings for the given account.
-func (r *ZerotrustConnectivitySettingService) Edit(ctx context.Context, accountID string, body ZerotrustConnectivitySettingEditParams, opts ...option.RequestOption) (res *ZerotrustConnectivitySettingEditResponse, err error) {
+func (r *ZerotrustConnectivitySettingService) Edit(ctx context.Context, params ZerotrustConnectivitySettingEditParams, opts ...option.RequestOption) (res *ZerotrustConnectivitySettingEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZerotrustConnectivitySettingEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/zerotrust/connectivity_settings", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/zerotrust/connectivity_settings", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -45,11 +45,11 @@ func (r *ZerotrustConnectivitySettingService) Edit(ctx context.Context, accountI
 }
 
 // Gets the Zero Trust Connectivity Settings for the given account.
-func (r *ZerotrustConnectivitySettingService) Get(ctx context.Context, accountID string, opts ...option.RequestOption) (res *ZerotrustConnectivitySettingGetResponse, err error) {
+func (r *ZerotrustConnectivitySettingService) Get(ctx context.Context, query ZerotrustConnectivitySettingGetParams, opts ...option.RequestOption) (res *ZerotrustConnectivitySettingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZerotrustConnectivitySettingGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/zerotrust/connectivity_settings", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/zerotrust/connectivity_settings", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -100,6 +100,8 @@ func (r *ZerotrustConnectivitySettingGetResponse) UnmarshalJSON(data []byte) (er
 }
 
 type ZerotrustConnectivitySettingEditParams struct {
+	// Cloudflare account ID
+	AccountID param.Field[string] `path:"account_id,required"`
 	// A flag to enable the ICMP proxy for the account network.
 	IcmpProxyEnabled param.Field[bool] `json:"icmp_proxy_enabled"`
 	// A flag to enable WARP to WARP traffic.
@@ -179,6 +181,11 @@ type ZerotrustConnectivitySettingEditResponseEnvelopeSuccess bool
 const (
 	ZerotrustConnectivitySettingEditResponseEnvelopeSuccessTrue ZerotrustConnectivitySettingEditResponseEnvelopeSuccess = true
 )
+
+type ZerotrustConnectivitySettingGetParams struct {
+	// Cloudflare account ID
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type ZerotrustConnectivitySettingGetResponseEnvelope struct {
 	Errors   []ZerotrustConnectivitySettingGetResponseEnvelopeErrors   `json:"errors,required"`

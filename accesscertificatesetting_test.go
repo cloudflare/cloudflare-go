@@ -31,7 +31,7 @@ func TestAccessCertificateSettingUpdate(t *testing.T) {
 	)
 	_, err := client.Access.Certificates.Settings.Update(context.TODO(), cloudflare.AccessCertificateSettingUpdateParams{
 		AccountID: cloudflare.F("string"),
-		ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ZoneID:    cloudflare.F("string"),
 		Settings: cloudflare.F([]cloudflare.AccessCertificateSettingUpdateParamsSetting{{
 			ChinaNetwork:                cloudflare.F(false),
 			ClientCertificateForwarding: cloudflare.F(true),
@@ -73,7 +73,7 @@ func TestAccessCertificateSettingList(t *testing.T) {
 	)
 	_, err := client.Access.Certificates.Settings.List(context.TODO(), cloudflare.AccessCertificateSettingListParams{
 		AccountID: cloudflare.F("string"),
-		ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ZoneID:    cloudflare.F("string"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

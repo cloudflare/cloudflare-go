@@ -36,11 +36,11 @@ func NewTunnelManagementService(opts ...option.RequestOption) (r *TunnelManageme
 
 // Gets a management token used to access the management resources (i.e. Streaming
 // Logs) of a tunnel.
-func (r *TunnelManagementService) New(ctx context.Context, accountID string, tunnelID string, body TunnelManagementNewParams, opts ...option.RequestOption) (res *TunnelManagementNewResponse, err error) {
+func (r *TunnelManagementService) New(ctx context.Context, tunnelID string, params TunnelManagementNewParams, opts ...option.RequestOption) (res *TunnelManagementNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TunnelManagementNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/management", accountID, tunnelID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/management", params.AccountID, tunnelID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -70,6 +70,8 @@ type TunnelManagementNewResponseArray []interface{}
 func (r TunnelManagementNewResponseArray) ImplementsTunnelManagementNewResponse() {}
 
 type TunnelManagementNewParams struct {
+	// Cloudflare account ID
+	AccountID param.Field[string]                              `path:"account_id,required"`
 	Resources param.Field[[]TunnelManagementNewParamsResource] `json:"resources,required"`
 }
 

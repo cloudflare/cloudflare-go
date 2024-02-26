@@ -29,15 +29,12 @@ func TestGatewayProxyEndpointNewWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Gateways.ProxyEndpoints.New(
-		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
-		cloudflare.GatewayProxyEndpointNewParams{
-			IPs:       cloudflare.F([]string{"192.0.2.1/32", "192.0.2.1/32", "192.0.2.1/32"}),
-			Name:      cloudflare.F("Devops team"),
-			Subdomain: cloudflare.F("oli3n9zkz5.proxy.cloudflare-gateway.com"),
-		},
-	)
+	_, err := client.Gateways.ProxyEndpoints.New(context.TODO(), cloudflare.GatewayProxyEndpointNewParams{
+		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		IPs:       cloudflare.F([]string{"192.0.2.1/32", "192.0.2.1/32", "192.0.2.1/32"}),
+		Name:      cloudflare.F("Devops team"),
+		Subdomain: cloudflare.F("oli3n9zkz5.proxy.cloudflare-gateway.com"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -63,7 +60,9 @@ func TestGatewayProxyEndpointList(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Gateways.ProxyEndpoints.List(context.TODO(), "699d98642c564d2e855e9661899b7252")
+	_, err := client.Gateways.ProxyEndpoints.List(context.TODO(), cloudflare.GatewayProxyEndpointListParams{
+		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -91,8 +90,10 @@ func TestGatewayProxyEndpointDelete(t *testing.T) {
 	)
 	_, err := client.Gateways.ProxyEndpoints.Delete(
 		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
 		"ed35569b41ce4d1facfe683550f54086",
+		cloudflare.GatewayProxyEndpointDeleteParams{
+			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -121,9 +122,9 @@ func TestGatewayProxyEndpointEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Gateways.ProxyEndpoints.Edit(
 		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
 		"ed35569b41ce4d1facfe683550f54086",
 		cloudflare.GatewayProxyEndpointEditParams{
+			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
 			IPs:       cloudflare.F([]string{"192.0.2.1/32", "192.0.2.1/32", "192.0.2.1/32"}),
 			Name:      cloudflare.F("Devops team"),
 			Subdomain: cloudflare.F("oli3n9zkz5.proxy.cloudflare-gateway.com"),
@@ -156,8 +157,10 @@ func TestGatewayProxyEndpointGet(t *testing.T) {
 	)
 	_, err := client.Gateways.ProxyEndpoints.Get(
 		context.TODO(),
-		"699d98642c564d2e855e9661899b7252",
 		"ed35569b41ce4d1facfe683550f54086",
+		cloudflare.GatewayProxyEndpointGetParams{
+			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

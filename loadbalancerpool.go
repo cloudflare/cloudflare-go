@@ -39,11 +39,11 @@ func NewLoadBalancerPoolService(opts ...option.RequestOption) (r *LoadBalancerPo
 }
 
 // Create a new pool.
-func (r *LoadBalancerPoolService) New(ctx context.Context, accountID string, body LoadBalancerPoolNewParams, opts ...option.RequestOption) (res *LoadBalancerPoolNewResponse, err error) {
+func (r *LoadBalancerPoolService) New(ctx context.Context, params LoadBalancerPoolNewParams, opts ...option.RequestOption) (res *LoadBalancerPoolNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerPoolNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/load_balancers/pools", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/load_balancers/pools", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -52,11 +52,11 @@ func (r *LoadBalancerPoolService) New(ctx context.Context, accountID string, bod
 }
 
 // Modify a configured pool.
-func (r *LoadBalancerPoolService) Update(ctx context.Context, accountID string, poolID string, body LoadBalancerPoolUpdateParams, opts ...option.RequestOption) (res *LoadBalancerPoolUpdateResponse, err error) {
+func (r *LoadBalancerPoolService) Update(ctx context.Context, poolID string, params LoadBalancerPoolUpdateParams, opts ...option.RequestOption) (res *LoadBalancerPoolUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerPoolUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s", accountID, poolID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s", params.AccountID, poolID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -65,11 +65,11 @@ func (r *LoadBalancerPoolService) Update(ctx context.Context, accountID string, 
 }
 
 // List configured pools.
-func (r *LoadBalancerPoolService) List(ctx context.Context, accountID string, query LoadBalancerPoolListParams, opts ...option.RequestOption) (res *[]LoadBalancerPoolListResponse, err error) {
+func (r *LoadBalancerPoolService) List(ctx context.Context, params LoadBalancerPoolListParams, opts ...option.RequestOption) (res *[]LoadBalancerPoolListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerPoolListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/load_balancers/pools", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/load_balancers/pools", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -78,11 +78,11 @@ func (r *LoadBalancerPoolService) List(ctx context.Context, accountID string, qu
 }
 
 // Delete a configured pool.
-func (r *LoadBalancerPoolService) Delete(ctx context.Context, accountID string, poolID string, opts ...option.RequestOption) (res *LoadBalancerPoolDeleteResponse, err error) {
+func (r *LoadBalancerPoolService) Delete(ctx context.Context, poolID string, body LoadBalancerPoolDeleteParams, opts ...option.RequestOption) (res *LoadBalancerPoolDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerPoolDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s", accountID, poolID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s", body.AccountID, poolID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -91,11 +91,11 @@ func (r *LoadBalancerPoolService) Delete(ctx context.Context, accountID string, 
 }
 
 // Apply changes to an existing pool, overwriting the supplied properties.
-func (r *LoadBalancerPoolService) Edit(ctx context.Context, accountID string, poolID string, body LoadBalancerPoolEditParams, opts ...option.RequestOption) (res *LoadBalancerPoolEditResponse, err error) {
+func (r *LoadBalancerPoolService) Edit(ctx context.Context, poolID string, params LoadBalancerPoolEditParams, opts ...option.RequestOption) (res *LoadBalancerPoolEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerPoolEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s", accountID, poolID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s", params.AccountID, poolID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -104,11 +104,11 @@ func (r *LoadBalancerPoolService) Edit(ctx context.Context, accountID string, po
 }
 
 // Fetch a single configured pool.
-func (r *LoadBalancerPoolService) Get(ctx context.Context, accountID string, poolID string, opts ...option.RequestOption) (res *LoadBalancerPoolGetResponse, err error) {
+func (r *LoadBalancerPoolService) Get(ctx context.Context, poolID string, query LoadBalancerPoolGetParams, opts ...option.RequestOption) (res *LoadBalancerPoolGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerPoolGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s", accountID, poolID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s", query.AccountID, poolID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -1914,6 +1914,8 @@ func (r *LoadBalancerPoolGetResponseOriginsHeader) UnmarshalJSON(data []byte) (e
 }
 
 type LoadBalancerPoolNewParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// A short name (tag) for the pool. Only alphanumeric characters, hyphens, and
 	// underscores are allowed.
 	Name param.Field[string] `json:"name,required"`
@@ -2203,6 +2205,8 @@ const (
 )
 
 type LoadBalancerPoolUpdateParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// A short name (tag) for the pool. Only alphanumeric characters, hyphens, and
 	// underscores are allowed.
 	Name param.Field[string] `json:"name,required"`
@@ -2519,6 +2523,8 @@ const (
 )
 
 type LoadBalancerPoolListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The ID of the Monitor to use for checking the health of origins within this
 	// pool.
 	Monitor param.Field[interface{}] `query:"monitor"`
@@ -2631,6 +2637,11 @@ func (r *LoadBalancerPoolListResponseEnvelopeResultInfo) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type LoadBalancerPoolDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type LoadBalancerPoolDeleteResponseEnvelope struct {
 	Errors   []LoadBalancerPoolDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []LoadBalancerPoolDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -2701,6 +2712,8 @@ const (
 )
 
 type LoadBalancerPoolEditParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// A list of regions from which to run health checks. Null means every Cloudflare
 	// data center.
 	CheckRegions param.Field[[]LoadBalancerPoolEditParamsCheckRegion] `json:"check_regions"`
@@ -3015,6 +3028,11 @@ type LoadBalancerPoolEditResponseEnvelopeSuccess bool
 const (
 	LoadBalancerPoolEditResponseEnvelopeSuccessTrue LoadBalancerPoolEditResponseEnvelopeSuccess = true
 )
+
+type LoadBalancerPoolGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type LoadBalancerPoolGetResponseEnvelope struct {
 	Errors   []LoadBalancerPoolGetResponseEnvelopeErrors   `json:"errors,required"`

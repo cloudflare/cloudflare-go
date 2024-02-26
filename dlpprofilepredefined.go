@@ -32,19 +32,19 @@ func NewDLPProfilePredefinedService(opts ...option.RequestOption) (r *DLPProfile
 }
 
 // Updates a DLP predefined profile. Only supports enabling/disabling entries.
-func (r *DLPProfilePredefinedService) Update(ctx context.Context, accountID string, profileID string, body DLPProfilePredefinedUpdateParams, opts ...option.RequestOption) (res *DLPProfilePredefinedUpdateResponse, err error) {
+func (r *DLPProfilePredefinedService) Update(ctx context.Context, profileID string, params DLPProfilePredefinedUpdateParams, opts ...option.RequestOption) (res *DLPProfilePredefinedUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	path := fmt.Sprintf("accounts/%s/dlp/profiles/predefined/%s", accountID, profileID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/dlp/profiles/predefined/%s", params.AccountID, profileID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
 	return
 }
 
 // Fetches a predefined DLP profile.
-func (r *DLPProfilePredefinedService) Get(ctx context.Context, accountID string, profileID string, opts ...option.RequestOption) (res *DLPProfilePredefinedGetResponse, err error) {
+func (r *DLPProfilePredefinedService) Get(ctx context.Context, profileID string, query DLPProfilePredefinedGetParams, opts ...option.RequestOption) (res *DLPProfilePredefinedGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPProfilePredefinedGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/dlp/profiles/predefined/%s", accountID, profileID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/dlp/profiles/predefined/%s", query.AccountID, profileID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -183,6 +183,8 @@ const (
 )
 
 type DLPProfilePredefinedUpdateParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Related DLP policies will trigger when the match count exceeds the number set.
 	AllowedMatchCount param.Field[float64] `json:"allowed_match_count"`
 	// The entries for this profile.
@@ -200,6 +202,11 @@ type DLPProfilePredefinedUpdateParamsEntry struct {
 
 func (r DLPProfilePredefinedUpdateParamsEntry) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type DLPProfilePredefinedGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type DLPProfilePredefinedGetResponseEnvelope struct {

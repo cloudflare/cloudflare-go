@@ -33,10 +33,10 @@ func NewStreamDirectUploadService(opts ...option.RequestOption) (r *StreamDirect
 }
 
 // Creates a direct upload that allows video uploads without an API key.
-func (r *StreamDirectUploadService) New(ctx context.Context, accountID string, params StreamDirectUploadNewParams, opts ...option.RequestOption) (res *StreamDirectUploadNewResponse, err error) {
+func (r *StreamDirectUploadService) New(ctx context.Context, params StreamDirectUploadNewParams, opts ...option.RequestOption) (res *StreamDirectUploadNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamDirectUploadNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/direct_upload", accountID)
+	path := fmt.Sprintf("accounts/%s/stream/direct_upload", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -133,6 +133,8 @@ func (r *StreamDirectUploadNewResponseWatermark) UnmarshalJSON(data []byte) (err
 }
 
 type StreamDirectUploadNewParams struct {
+	// The account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The maximum duration in seconds for a video upload. Can be set for a video that
 	// is not yet uploaded to limit its duration. Uploads that exceed the specified
 	// duration will fail during processing. A value of `-1` means the value is

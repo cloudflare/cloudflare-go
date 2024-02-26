@@ -42,11 +42,11 @@ func NewAddressAddressMapService(opts ...option.RequestOption) (r *AddressAddres
 }
 
 // Create a new address map under the account.
-func (r *AddressAddressMapService) New(ctx context.Context, accountID string, body AddressAddressMapNewParams, opts ...option.RequestOption) (res *AddressAddressMapNewResponse, err error) {
+func (r *AddressAddressMapService) New(ctx context.Context, params AddressAddressMapNewParams, opts ...option.RequestOption) (res *AddressAddressMapNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressAddressMapNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/address_maps", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/addressing/address_maps", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -55,11 +55,11 @@ func (r *AddressAddressMapService) New(ctx context.Context, accountID string, bo
 }
 
 // List all address maps owned by the account.
-func (r *AddressAddressMapService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]AddressAddressMapListResponse, err error) {
+func (r *AddressAddressMapService) List(ctx context.Context, query AddressAddressMapListParams, opts ...option.RequestOption) (res *[]AddressAddressMapListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressAddressMapListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/address_maps", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/addressing/address_maps", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -69,11 +69,11 @@ func (r *AddressAddressMapService) List(ctx context.Context, accountID string, o
 
 // Delete a particular address map owned by the account. An Address Map must be
 // disabled before it can be deleted.
-func (r *AddressAddressMapService) Delete(ctx context.Context, accountID string, addressMapID string, opts ...option.RequestOption) (res *AddressAddressMapDeleteResponse, err error) {
+func (r *AddressAddressMapService) Delete(ctx context.Context, addressMapID string, body AddressAddressMapDeleteParams, opts ...option.RequestOption) (res *AddressAddressMapDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressAddressMapDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s", accountID, addressMapID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s", body.AccountID, addressMapID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -82,11 +82,11 @@ func (r *AddressAddressMapService) Delete(ctx context.Context, accountID string,
 }
 
 // Modify properties of an address map owned by the account.
-func (r *AddressAddressMapService) Edit(ctx context.Context, accountID string, addressMapID string, body AddressAddressMapEditParams, opts ...option.RequestOption) (res *AddressAddressMapEditResponse, err error) {
+func (r *AddressAddressMapService) Edit(ctx context.Context, addressMapID string, params AddressAddressMapEditParams, opts ...option.RequestOption) (res *AddressAddressMapEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressAddressMapEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s", accountID, addressMapID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s", params.AccountID, addressMapID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -95,11 +95,11 @@ func (r *AddressAddressMapService) Edit(ctx context.Context, accountID string, a
 }
 
 // Show a particular address map owned by the account.
-func (r *AddressAddressMapService) Get(ctx context.Context, accountID string, addressMapID string, opts ...option.RequestOption) (res *AddressAddressMapGetResponse, err error) {
+func (r *AddressAddressMapService) Get(ctx context.Context, addressMapID string, query AddressAddressMapGetParams, opts ...option.RequestOption) (res *AddressAddressMapGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressAddressMapGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s", accountID, addressMapID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s", query.AccountID, addressMapID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -431,6 +431,8 @@ const (
 )
 
 type AddressAddressMapNewParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// An optional description field which may be used to describe the types of IPs or
 	// zones on the map.
 	Description param.Field[string] `json:"description"`
@@ -511,6 +513,11 @@ type AddressAddressMapNewResponseEnvelopeSuccess bool
 const (
 	AddressAddressMapNewResponseEnvelopeSuccessTrue AddressAddressMapNewResponseEnvelopeSuccess = true
 )
+
+type AddressAddressMapListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type AddressAddressMapListResponseEnvelope struct {
 	Errors   []AddressAddressMapListResponseEnvelopeErrors   `json:"errors,required"`
@@ -608,6 +615,11 @@ type addressAddressMapListResponseEnvelopeResultInfoJSON struct {
 
 func (r *AddressAddressMapListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type AddressAddressMapDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type AddressAddressMapDeleteResponseEnvelope struct {
@@ -709,6 +721,8 @@ func (r *AddressAddressMapDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data [
 }
 
 type AddressAddressMapEditParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// If you have legacy TLS clients which do not send the TLS server name indicator,
 	// then you can specify one default SNI on the map. If Cloudflare receives a TLS
 	// handshake from a client without an SNI, it will respond with the default SNI on
@@ -795,6 +809,11 @@ type AddressAddressMapEditResponseEnvelopeSuccess bool
 const (
 	AddressAddressMapEditResponseEnvelopeSuccessTrue AddressAddressMapEditResponseEnvelopeSuccess = true
 )
+
+type AddressAddressMapGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type AddressAddressMapGetResponseEnvelope struct {
 	Errors   []AddressAddressMapGetResponseEnvelopeErrors   `json:"errors,required"`

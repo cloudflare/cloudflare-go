@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -31,11 +32,11 @@ func NewImageV1StatService(opts ...option.RequestOption) (r *ImageV1StatService)
 }
 
 // Fetch usage statistics details for Cloudflare Images.
-func (r *ImageV1StatService) Get(ctx context.Context, accountID string, opts ...option.RequestOption) (res *ImageV1StatGetResponse, err error) {
+func (r *ImageV1StatService) Get(ctx context.Context, query ImageV1StatGetParams, opts ...option.RequestOption) (res *ImageV1StatGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ImageV1StatGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/images/v1/stats", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/images/v1/stats", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -79,6 +80,11 @@ type imageV1StatGetResponseCountJSON struct {
 
 func (r *ImageV1StatGetResponseCount) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type ImageV1StatGetParams struct {
+	// Account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type ImageV1StatGetResponseEnvelope struct {

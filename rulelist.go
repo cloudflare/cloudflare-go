@@ -35,11 +35,11 @@ func NewRuleListService(opts ...option.RequestOption) (r *RuleListService) {
 }
 
 // Creates a new list of the specified type.
-func (r *RuleListService) New(ctx context.Context, accountID string, body RuleListNewParams, opts ...option.RequestOption) (res *[]RuleListNewResponse, err error) {
+func (r *RuleListService) New(ctx context.Context, params RuleListNewParams, opts ...option.RequestOption) (res *[]RuleListNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleListNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/rules/lists", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/rules/lists", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +48,11 @@ func (r *RuleListService) New(ctx context.Context, accountID string, body RuleLi
 }
 
 // Updates the description of a list.
-func (r *RuleListService) Update(ctx context.Context, accountID string, listID string, body RuleListUpdateParams, opts ...option.RequestOption) (res *[]RuleListUpdateResponse, err error) {
+func (r *RuleListService) Update(ctx context.Context, listID string, params RuleListUpdateParams, opts ...option.RequestOption) (res *[]RuleListUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleListUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/rules/lists/%s", accountID, listID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/rules/lists/%s", params.AccountID, listID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -61,11 +61,11 @@ func (r *RuleListService) Update(ctx context.Context, accountID string, listID s
 }
 
 // Fetches all lists in the account.
-func (r *RuleListService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]RuleListListResponse, err error) {
+func (r *RuleListService) List(ctx context.Context, query RuleListListParams, opts ...option.RequestOption) (res *[]RuleListListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleListListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/rules/lists", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/rules/lists", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -74,11 +74,11 @@ func (r *RuleListService) List(ctx context.Context, accountID string, opts ...op
 }
 
 // Deletes a specific list and all its items.
-func (r *RuleListService) Delete(ctx context.Context, accountID string, listID string, opts ...option.RequestOption) (res *RuleListDeleteResponse, err error) {
+func (r *RuleListService) Delete(ctx context.Context, listID string, body RuleListDeleteParams, opts ...option.RequestOption) (res *RuleListDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleListDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/rules/lists/%s", accountID, listID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/rules/lists/%s", body.AccountID, listID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -87,11 +87,11 @@ func (r *RuleListService) Delete(ctx context.Context, accountID string, listID s
 }
 
 // Fetches the details of a list.
-func (r *RuleListService) Get(ctx context.Context, accountID string, listID string, opts ...option.RequestOption) (res *[]RuleListGetResponse, err error) {
+func (r *RuleListService) Get(ctx context.Context, listID string, query RuleListGetParams, opts ...option.RequestOption) (res *[]RuleListGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleListGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/rules/lists/%s", accountID, listID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/rules/lists/%s", query.AccountID, listID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -175,6 +175,8 @@ func (r *RuleListDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 type RuleListGetResponse = interface{}
 
 type RuleListNewParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The type of the list. Each type supports specific list items (IP addresses,
 	// ASNs, hostnames or redirects).
 	Kind param.Field[RuleListNewParamsKind] `json:"kind,required"`
@@ -269,6 +271,8 @@ const (
 )
 
 type RuleListUpdateParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// An informative summary of the list.
 	Description param.Field[string] `json:"description"`
 }
@@ -346,6 +350,11 @@ const (
 	RuleListUpdateResponseEnvelopeSuccessTrue RuleListUpdateResponseEnvelopeSuccess = true
 )
 
+type RuleListListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type RuleListListResponseEnvelope struct {
 	Errors   []RuleListListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RuleListListResponseEnvelopeMessages `json:"messages,required"`
@@ -415,6 +424,11 @@ const (
 	RuleListListResponseEnvelopeSuccessTrue RuleListListResponseEnvelopeSuccess = true
 )
 
+type RuleListDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type RuleListDeleteResponseEnvelope struct {
 	Errors   []RuleListDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RuleListDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -483,6 +497,11 @@ type RuleListDeleteResponseEnvelopeSuccess bool
 const (
 	RuleListDeleteResponseEnvelopeSuccessTrue RuleListDeleteResponseEnvelopeSuccess = true
 )
+
+type RuleListGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type RuleListGetResponseEnvelope struct {
 	Errors   []RuleListGetResponseEnvelopeErrors   `json:"errors,required"`

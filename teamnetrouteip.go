@@ -35,11 +35,11 @@ func NewTeamnetRouteIPService(opts ...option.RequestOption) (r *TeamnetRouteIPSe
 }
 
 // Fetches routes that contain the given IP address.
-func (r *TeamnetRouteIPService) Get(ctx context.Context, accountID string, ip string, query TeamnetRouteIPGetParams, opts ...option.RequestOption) (res *TeamnetRouteIPGetResponse, err error) {
+func (r *TeamnetRouteIPService) Get(ctx context.Context, ip string, params TeamnetRouteIPGetParams, opts ...option.RequestOption) (res *TeamnetRouteIPGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TeamnetRouteIPGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/teamnet/routes/ip/%s", accountID, ip)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/teamnet/routes/ip/%s", params.AccountID, ip)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -107,6 +107,8 @@ const (
 )
 
 type TeamnetRouteIPGetParams struct {
+	// Cloudflare account ID
+	AccountID param.Field[string] `path:"account_id,required"`
 	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks
 	// are configured, the route is assigned to the default virtual network of the
 	// account.

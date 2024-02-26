@@ -37,10 +37,10 @@ func NewWorkerScriptContentService(opts ...option.RequestOption) (r *WorkerScrip
 }
 
 // Put script content without touching config or metadata
-func (r *WorkerScriptContentService) Update(ctx context.Context, accountID string, scriptName string, params WorkerScriptContentUpdateParams, opts ...option.RequestOption) (res *WorkerScriptContentUpdateResponse, err error) {
+func (r *WorkerScriptContentService) Update(ctx context.Context, scriptName string, params WorkerScriptContentUpdateParams, opts ...option.RequestOption) (res *WorkerScriptContentUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerScriptContentUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/content", accountID, scriptName)
+	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/content", params.AccountID, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -117,6 +117,8 @@ func (r *WorkerScriptContentUpdateResponseTailConsumer) UnmarshalJSON(data []byt
 }
 
 type WorkerScriptContentUpdateParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// A module comprising a Worker script, often a javascript file. Multiple modules
 	// may be provided as separate named parts, but at least one module must be
 	// present. This should be referenced either in the metadata as `main_module`

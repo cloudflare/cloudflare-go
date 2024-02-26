@@ -44,11 +44,11 @@ func NewDNSRecordService(opts ...option.RequestOption) (r *DNSRecordService) {
 //   - NS records cannot exist on the same name as any other record type.
 //   - Domain names are always represented in Punycode, even if Unicode characters
 //     were used when creating the record.
-func (r *DNSRecordService) New(ctx context.Context, zoneID string, body DNSRecordNewParams, opts ...option.RequestOption) (res *DNSRecordNewResponse, err error) {
+func (r *DNSRecordService) New(ctx context.Context, params DNSRecordNewParams, opts ...option.RequestOption) (res *DNSRecordNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DNSRecordNewResponseEnvelope
-	path := fmt.Sprintf("zones/%s/dns_records", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/dns_records", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -62,11 +62,11 @@ func (r *DNSRecordService) New(ctx context.Context, zoneID string, body DNSRecor
 //   - NS records cannot exist on the same name as any other record type.
 //   - Domain names are always represented in Punycode, even if Unicode characters
 //     were used when creating the record.
-func (r *DNSRecordService) Update(ctx context.Context, zoneID string, dnsRecordID string, body DNSRecordUpdateParams, opts ...option.RequestOption) (res *DNSRecordUpdateResponse, err error) {
+func (r *DNSRecordService) Update(ctx context.Context, dnsRecordID string, params DNSRecordUpdateParams, opts ...option.RequestOption) (res *DNSRecordUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DNSRecordUpdateResponseEnvelope
-	path := fmt.Sprintf("zones/%s/dns_records/%s", zoneID, dnsRecordID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/dns_records/%s", params.ZoneID, dnsRecordID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -75,12 +75,12 @@ func (r *DNSRecordService) Update(ctx context.Context, zoneID string, dnsRecordI
 }
 
 // List, search, sort, and filter a zones' DNS records.
-func (r *DNSRecordService) List(ctx context.Context, zoneID string, query DNSRecordListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[DNSRecordListResponse], err error) {
+func (r *DNSRecordService) List(ctx context.Context, params DNSRecordListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[DNSRecordListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	path := fmt.Sprintf("zones/%s/dns_records", zoneID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	path := fmt.Sprintf("zones/%s/dns_records", params.ZoneID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -93,16 +93,16 @@ func (r *DNSRecordService) List(ctx context.Context, zoneID string, query DNSRec
 }
 
 // List, search, sort, and filter a zones' DNS records.
-func (r *DNSRecordService) ListAutoPaging(ctx context.Context, zoneID string, query DNSRecordListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[DNSRecordListResponse] {
-	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneID, query, opts...))
+func (r *DNSRecordService) ListAutoPaging(ctx context.Context, params DNSRecordListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[DNSRecordListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Delete DNS Record
-func (r *DNSRecordService) Delete(ctx context.Context, zoneID string, dnsRecordID string, opts ...option.RequestOption) (res *DNSRecordDeleteResponse, err error) {
+func (r *DNSRecordService) Delete(ctx context.Context, dnsRecordID string, body DNSRecordDeleteParams, opts ...option.RequestOption) (res *DNSRecordDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DNSRecordDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/dns_records/%s", zoneID, dnsRecordID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/dns_records/%s", body.ZoneID, dnsRecordID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -116,11 +116,11 @@ func (r *DNSRecordService) Delete(ctx context.Context, zoneID string, dnsRecordI
 //   - NS records cannot exist on the same name as any other record type.
 //   - Domain names are always represented in Punycode, even if Unicode characters
 //     were used when creating the record.
-func (r *DNSRecordService) Edit(ctx context.Context, zoneID string, dnsRecordID string, body DNSRecordEditParams, opts ...option.RequestOption) (res *DNSRecordEditResponse, err error) {
+func (r *DNSRecordService) Edit(ctx context.Context, dnsRecordID string, params DNSRecordEditParams, opts ...option.RequestOption) (res *DNSRecordEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DNSRecordEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/dns_records/%s", zoneID, dnsRecordID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/dns_records/%s", params.ZoneID, dnsRecordID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -135,20 +135,20 @@ func (r *DNSRecordService) Edit(ctx context.Context, zoneID string, dnsRecordID 
 // See
 // [the documentation](https://developers.cloudflare.com/dns/manage-dns-records/how-to/import-and-export/ "Import and export records")
 // for more information.
-func (r *DNSRecordService) Export(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *string, err error) {
+func (r *DNSRecordService) Export(ctx context.Context, query DNSRecordExportParams, opts ...option.RequestOption) (res *string, err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "text/plain")}, opts...)
-	path := fmt.Sprintf("zones/%s/dns_records/export", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("zones/%s/dns_records/export", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
 // DNS Record Details
-func (r *DNSRecordService) Get(ctx context.Context, zoneID string, dnsRecordID string, opts ...option.RequestOption) (res *DNSRecordGetResponse, err error) {
+func (r *DNSRecordService) Get(ctx context.Context, dnsRecordID string, query DNSRecordGetParams, opts ...option.RequestOption) (res *DNSRecordGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DNSRecordGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/dns_records/%s", zoneID, dnsRecordID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/dns_records/%s", query.ZoneID, dnsRecordID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -164,11 +164,11 @@ func (r *DNSRecordService) Get(ctx context.Context, zoneID string, dnsRecordID s
 // See
 // [the documentation](https://developers.cloudflare.com/dns/manage-dns-records/how-to/import-and-export/ "Import and export records")
 // for more information.
-func (r *DNSRecordService) Import(ctx context.Context, zoneID string, body DNSRecordImportParams, opts ...option.RequestOption) (res *DNSRecordImportResponse, err error) {
+func (r *DNSRecordService) Import(ctx context.Context, params DNSRecordImportParams, opts ...option.RequestOption) (res *DNSRecordImportResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DNSRecordImportResponseEnvelope
-	path := fmt.Sprintf("zones/%s/dns_records/import", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/dns_records/import", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -178,11 +178,11 @@ func (r *DNSRecordService) Import(ctx context.Context, zoneID string, body DNSRe
 
 // Scan for common DNS records on your domain and automatically add them to your
 // zone. Useful if you haven't updated your nameservers yet.
-func (r *DNSRecordService) Scan(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *DNSRecordScanResponse, err error) {
+func (r *DNSRecordService) Scan(ctx context.Context, body DNSRecordScanParams, opts ...option.RequestOption) (res *DNSRecordScanResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DNSRecordScanResponseEnvelope
-	path := fmt.Sprintf("zones/%s/dns_records/scan", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/dns_records/scan", body.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -14741,6 +14741,8 @@ func (r *DNSRecordScanResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type DNSRecordNewParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
@@ -14979,6 +14981,8 @@ const (
 )
 
 type DNSRecordUpdateParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
@@ -15217,6 +15221,8 @@ const (
 )
 
 type DNSRecordListParams struct {
+	// Identifier
+	ZoneID  param.Field[string]                     `path:"zone_id,required"`
 	Comment param.Field[DNSRecordListParamsComment] `query:"comment"`
 	// DNS record content.
 	Content param.Field[string] `query:"content"`
@@ -15386,6 +15392,11 @@ const (
 	DNSRecordListParamsTypeUri    DNSRecordListParamsType = "URI"
 )
 
+type DNSRecordDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type DNSRecordDeleteResponseEnvelope struct {
 	Result DNSRecordDeleteResponse             `json:"result"`
 	JSON   dnsRecordDeleteResponseEnvelopeJSON `json:"-"`
@@ -15404,6 +15415,8 @@ func (r *DNSRecordDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 }
 
 type DNSRecordEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
 	// Record type.
@@ -15641,6 +15654,16 @@ const (
 	DNSRecordEditResponseEnvelopeSuccessTrue DNSRecordEditResponseEnvelopeSuccess = true
 )
 
+type DNSRecordExportParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
+type DNSRecordGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
 type DNSRecordGetResponseEnvelope struct {
 	Errors   []DNSRecordGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DNSRecordGetResponseEnvelopeMessages `json:"messages,required"`
@@ -15711,6 +15734,8 @@ const (
 )
 
 type DNSRecordImportParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// BIND config to import.
 	//
 	// **Tip:** When using cURL, a file can be uploaded using
@@ -15820,6 +15845,11 @@ type dnsRecordImportResponseEnvelopeTimingJSON struct {
 
 func (r *DNSRecordImportResponseEnvelopeTiming) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type DNSRecordScanParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type DNSRecordScanResponseEnvelope struct {

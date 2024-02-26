@@ -34,11 +34,11 @@ func NewSettingPrefetchPreloadService(opts ...option.RequestOption) (r *SettingP
 
 // Cloudflare will prefetch any URLs that are included in the response headers.
 // This is limited to Enterprise Zones.
-func (r *SettingPrefetchPreloadService) Edit(ctx context.Context, zoneID string, body SettingPrefetchPreloadEditParams, opts ...option.RequestOption) (res *SettingPrefetchPreloadEditResponse, err error) {
+func (r *SettingPrefetchPreloadService) Edit(ctx context.Context, params SettingPrefetchPreloadEditParams, opts ...option.RequestOption) (res *SettingPrefetchPreloadEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingPrefetchPreloadEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/prefetch_preload", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/prefetch_preload", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +48,11 @@ func (r *SettingPrefetchPreloadService) Edit(ctx context.Context, zoneID string,
 
 // Cloudflare will prefetch any URLs that are included in the response headers.
 // This is limited to Enterprise Zones.
-func (r *SettingPrefetchPreloadService) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingPrefetchPreloadGetResponse, err error) {
+func (r *SettingPrefetchPreloadService) Get(ctx context.Context, query SettingPrefetchPreloadGetParams, opts ...option.RequestOption) (res *SettingPrefetchPreloadGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingPrefetchPreloadGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/prefetch_preload", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/prefetch_preload", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -169,6 +169,8 @@ const (
 )
 
 type SettingPrefetchPreloadEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the zone setting.
 	Value param.Field[SettingPrefetchPreloadEditParamsValue] `json:"value,required"`
 }
@@ -247,6 +249,11 @@ type settingPrefetchPreloadEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingPrefetchPreloadEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingPrefetchPreloadGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingPrefetchPreloadGetResponseEnvelope struct {

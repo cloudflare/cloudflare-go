@@ -35,11 +35,11 @@ func NewIntelDomainHistoryService(opts ...option.RequestOption) (r *IntelDomainH
 }
 
 // Get Domain History
-func (r *IntelDomainHistoryService) List(ctx context.Context, accountID string, query IntelDomainHistoryListParams, opts ...option.RequestOption) (res *[]IntelDomainHistoryListResponse, err error) {
+func (r *IntelDomainHistoryService) List(ctx context.Context, params IntelDomainHistoryListParams, opts ...option.RequestOption) (res *[]IntelDomainHistoryListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IntelDomainHistoryListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/intel/domain-history", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/intel/domain-history", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -88,7 +88,9 @@ func (r *IntelDomainHistoryListResponseCategorization) UnmarshalJSON(data []byte
 }
 
 type IntelDomainHistoryListParams struct {
-	Domain param.Field[interface{}] `query:"domain"`
+	// Identifier
+	AccountID param.Field[string]      `path:"account_id,required"`
+	Domain    param.Field[interface{}] `query:"domain"`
 }
 
 // URLQuery serializes [IntelDomainHistoryListParams]'s query parameters as

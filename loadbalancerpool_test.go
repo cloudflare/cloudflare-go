@@ -29,67 +29,64 @@ func TestLoadBalancerPoolNewWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.LoadBalancers.Pools.New(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.LoadBalancerPoolNewParams{
-			Name: cloudflare.F("primary-dc-1"),
-			Origins: cloudflare.F([]cloudflare.LoadBalancerPoolNewParamsOrigin{{
-				Address: cloudflare.F("0.0.0.0"),
-				Enabled: cloudflare.F(true),
-				Header: cloudflare.F(cloudflare.LoadBalancerPoolNewParamsOriginsHeader{
-					Host: cloudflare.F([]string{"example.com", "example.com", "example.com"}),
-				}),
-				Name:             cloudflare.F("app-server-1"),
-				VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),
-				Weight:           cloudflare.F(0.600000),
-			}, {
-				Address: cloudflare.F("0.0.0.0"),
-				Enabled: cloudflare.F(true),
-				Header: cloudflare.F(cloudflare.LoadBalancerPoolNewParamsOriginsHeader{
-					Host: cloudflare.F([]string{"example.com", "example.com", "example.com"}),
-				}),
-				Name:             cloudflare.F("app-server-1"),
-				VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),
-				Weight:           cloudflare.F(0.600000),
-			}, {
-				Address: cloudflare.F("0.0.0.0"),
-				Enabled: cloudflare.F(true),
-				Header: cloudflare.F(cloudflare.LoadBalancerPoolNewParamsOriginsHeader{
-					Host: cloudflare.F([]string{"example.com", "example.com", "example.com"}),
-				}),
-				Name:             cloudflare.F("app-server-1"),
-				VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),
-				Weight:           cloudflare.F(0.600000),
-			}}),
-			Description: cloudflare.F("Primary data center - Provider XYZ"),
-			Enabled:     cloudflare.F(false),
-			Latitude:    cloudflare.F(0.000000),
-			LoadShedding: cloudflare.F(cloudflare.LoadBalancerPoolNewParamsLoadShedding{
-				DefaultPercent: cloudflare.F(0.000000),
-				DefaultPolicy:  cloudflare.F(cloudflare.LoadBalancerPoolNewParamsLoadSheddingDefaultPolicyRandom),
-				SessionPercent: cloudflare.F(0.000000),
-				SessionPolicy:  cloudflare.F(cloudflare.LoadBalancerPoolNewParamsLoadSheddingSessionPolicyHash),
+	_, err := client.LoadBalancers.Pools.New(context.TODO(), cloudflare.LoadBalancerPoolNewParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Name:      cloudflare.F("primary-dc-1"),
+		Origins: cloudflare.F([]cloudflare.LoadBalancerPoolNewParamsOrigin{{
+			Address: cloudflare.F("0.0.0.0"),
+			Enabled: cloudflare.F(true),
+			Header: cloudflare.F(cloudflare.LoadBalancerPoolNewParamsOriginsHeader{
+				Host: cloudflare.F([]string{"example.com", "example.com", "example.com"}),
 			}),
-			Longitude:         cloudflare.F(0.000000),
-			MinimumOrigins:    cloudflare.F(int64(0)),
-			Monitor:           cloudflare.F[any](map[string]interface{}{}),
-			NotificationEmail: cloudflare.F("someone@example.com,sometwo@example.com"),
-			NotificationFilter: cloudflare.F(cloudflare.LoadBalancerPoolNewParamsNotificationFilter{
-				Origin: cloudflare.F(cloudflare.LoadBalancerPoolNewParamsNotificationFilterOrigin{
-					Disable: cloudflare.F(true),
-					Healthy: cloudflare.F(true),
-				}),
-				Pool: cloudflare.F(cloudflare.LoadBalancerPoolNewParamsNotificationFilterPool{
-					Disable: cloudflare.F(true),
-					Healthy: cloudflare.F(false),
-				}),
+			Name:             cloudflare.F("app-server-1"),
+			VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),
+			Weight:           cloudflare.F(0.600000),
+		}, {
+			Address: cloudflare.F("0.0.0.0"),
+			Enabled: cloudflare.F(true),
+			Header: cloudflare.F(cloudflare.LoadBalancerPoolNewParamsOriginsHeader{
+				Host: cloudflare.F([]string{"example.com", "example.com", "example.com"}),
 			}),
-			OriginSteering: cloudflare.F(cloudflare.LoadBalancerPoolNewParamsOriginSteering{
-				Policy: cloudflare.F(cloudflare.LoadBalancerPoolNewParamsOriginSteeringPolicyRandom),
+			Name:             cloudflare.F("app-server-1"),
+			VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),
+			Weight:           cloudflare.F(0.600000),
+		}, {
+			Address: cloudflare.F("0.0.0.0"),
+			Enabled: cloudflare.F(true),
+			Header: cloudflare.F(cloudflare.LoadBalancerPoolNewParamsOriginsHeader{
+				Host: cloudflare.F([]string{"example.com", "example.com", "example.com"}),
 			}),
-		},
-	)
+			Name:             cloudflare.F("app-server-1"),
+			VirtualNetworkID: cloudflare.F("a5624d4e-044a-4ff0-b3e1-e2465353d4b4"),
+			Weight:           cloudflare.F(0.600000),
+		}}),
+		Description: cloudflare.F("Primary data center - Provider XYZ"),
+		Enabled:     cloudflare.F(false),
+		Latitude:    cloudflare.F(0.000000),
+		LoadShedding: cloudflare.F(cloudflare.LoadBalancerPoolNewParamsLoadShedding{
+			DefaultPercent: cloudflare.F(0.000000),
+			DefaultPolicy:  cloudflare.F(cloudflare.LoadBalancerPoolNewParamsLoadSheddingDefaultPolicyRandom),
+			SessionPercent: cloudflare.F(0.000000),
+			SessionPolicy:  cloudflare.F(cloudflare.LoadBalancerPoolNewParamsLoadSheddingSessionPolicyHash),
+		}),
+		Longitude:         cloudflare.F(0.000000),
+		MinimumOrigins:    cloudflare.F(int64(0)),
+		Monitor:           cloudflare.F[any](map[string]interface{}{}),
+		NotificationEmail: cloudflare.F("someone@example.com,sometwo@example.com"),
+		NotificationFilter: cloudflare.F(cloudflare.LoadBalancerPoolNewParamsNotificationFilter{
+			Origin: cloudflare.F(cloudflare.LoadBalancerPoolNewParamsNotificationFilterOrigin{
+				Disable: cloudflare.F(true),
+				Healthy: cloudflare.F(true),
+			}),
+			Pool: cloudflare.F(cloudflare.LoadBalancerPoolNewParamsNotificationFilterPool{
+				Disable: cloudflare.F(true),
+				Healthy: cloudflare.F(false),
+			}),
+		}),
+		OriginSteering: cloudflare.F(cloudflare.LoadBalancerPoolNewParamsOriginSteering{
+			Policy: cloudflare.F(cloudflare.LoadBalancerPoolNewParamsOriginSteeringPolicyRandom),
+		}),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -117,10 +114,10 @@ func TestLoadBalancerPoolUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.LoadBalancers.Pools.Update(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"17b5962d775c646f3f9725cbc7a53df4",
 		cloudflare.LoadBalancerPoolUpdateParams{
-			Name: cloudflare.F("primary-dc-1"),
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Name:      cloudflare.F("primary-dc-1"),
 			Origins: cloudflare.F([]cloudflare.LoadBalancerPoolUpdateParamsOrigin{{
 				Address: cloudflare.F("0.0.0.0"),
 				Enabled: cloudflare.F(true),
@@ -203,13 +200,10 @@ func TestLoadBalancerPoolListWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.LoadBalancers.Pools.List(
-		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.LoadBalancerPoolListParams{
-			Monitor: cloudflare.F[any](map[string]interface{}{}),
-		},
-	)
+	_, err := client.LoadBalancers.Pools.List(context.TODO(), cloudflare.LoadBalancerPoolListParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Monitor:   cloudflare.F[any](map[string]interface{}{}),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -237,8 +231,10 @@ func TestLoadBalancerPoolDelete(t *testing.T) {
 	)
 	_, err := client.LoadBalancers.Pools.Delete(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"17b5962d775c646f3f9725cbc7a53df4",
+		cloudflare.LoadBalancerPoolDeleteParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -267,9 +263,9 @@ func TestLoadBalancerPoolEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.LoadBalancers.Pools.Edit(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"17b5962d775c646f3f9725cbc7a53df4",
 		cloudflare.LoadBalancerPoolEditParams{
+			AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			CheckRegions: cloudflare.F([]cloudflare.LoadBalancerPoolEditParamsCheckRegion{cloudflare.LoadBalancerPoolEditParamsCheckRegionWeu, cloudflare.LoadBalancerPoolEditParamsCheckRegionEnam}),
 			Description:  cloudflare.F("Primary data center - Provider XYZ"),
 			Enabled:      cloudflare.F(false),
@@ -355,8 +351,10 @@ func TestLoadBalancerPoolGet(t *testing.T) {
 	)
 	_, err := client.LoadBalancers.Pools.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"17b5962d775c646f3f9725cbc7a53df4",
+		cloudflare.LoadBalancerPoolGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

@@ -36,11 +36,11 @@ func NewAlertingV3PolicyService(opts ...option.RequestOption) (r *AlertingV3Poli
 }
 
 // Creates a new Notification policy.
-func (r *AlertingV3PolicyService) New(ctx context.Context, accountID string, body AlertingV3PolicyNewParams, opts ...option.RequestOption) (res *AlertingV3PolicyNewResponse, err error) {
+func (r *AlertingV3PolicyService) New(ctx context.Context, params AlertingV3PolicyNewParams, opts ...option.RequestOption) (res *AlertingV3PolicyNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AlertingV3PolicyNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/alerting/v3/policies", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/alerting/v3/policies", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -49,11 +49,11 @@ func (r *AlertingV3PolicyService) New(ctx context.Context, accountID string, bod
 }
 
 // Update a Notification policy.
-func (r *AlertingV3PolicyService) Update(ctx context.Context, accountID string, policyID string, body AlertingV3PolicyUpdateParams, opts ...option.RequestOption) (res *AlertingV3PolicyUpdateResponse, err error) {
+func (r *AlertingV3PolicyService) Update(ctx context.Context, policyID string, params AlertingV3PolicyUpdateParams, opts ...option.RequestOption) (res *AlertingV3PolicyUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AlertingV3PolicyUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/alerting/v3/policies/%s", accountID, policyID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/alerting/v3/policies/%s", params.AccountID, policyID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -62,11 +62,11 @@ func (r *AlertingV3PolicyService) Update(ctx context.Context, accountID string, 
 }
 
 // Get a list of all Notification policies.
-func (r *AlertingV3PolicyService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]AlertingV3PolicyListResponse, err error) {
+func (r *AlertingV3PolicyService) List(ctx context.Context, query AlertingV3PolicyListParams, opts ...option.RequestOption) (res *[]AlertingV3PolicyListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AlertingV3PolicyListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/alerting/v3/policies", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/alerting/v3/policies", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -75,11 +75,11 @@ func (r *AlertingV3PolicyService) List(ctx context.Context, accountID string, op
 }
 
 // Delete a Notification policy.
-func (r *AlertingV3PolicyService) Delete(ctx context.Context, accountID string, policyID string, opts ...option.RequestOption) (res *AlertingV3PolicyDeleteResponse, err error) {
+func (r *AlertingV3PolicyService) Delete(ctx context.Context, policyID string, body AlertingV3PolicyDeleteParams, opts ...option.RequestOption) (res *AlertingV3PolicyDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AlertingV3PolicyDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/alerting/v3/policies/%s", accountID, policyID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/alerting/v3/policies/%s", body.AccountID, policyID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -88,11 +88,11 @@ func (r *AlertingV3PolicyService) Delete(ctx context.Context, accountID string, 
 }
 
 // Get details for a single policy.
-func (r *AlertingV3PolicyService) Get(ctx context.Context, accountID string, policyID string, opts ...option.RequestOption) (res *AlertingV3PolicyGetResponse, err error) {
+func (r *AlertingV3PolicyService) Get(ctx context.Context, policyID string, query AlertingV3PolicyGetParams, opts ...option.RequestOption) (res *AlertingV3PolicyGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AlertingV3PolicyGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/alerting/v3/policies/%s", accountID, policyID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/alerting/v3/policies/%s", query.AccountID, policyID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -774,6 +774,8 @@ func init() {
 }
 
 type AlertingV3PolicyNewParams struct {
+	// The account id
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Refers to which event will trigger a Notification dispatch. You can use the
 	// endpoint to get available alert types which then will give you a list of
 	// possible values.
@@ -1058,6 +1060,8 @@ const (
 )
 
 type AlertingV3PolicyUpdateParams struct {
+	// The account id
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Refers to which event will trigger a Notification dispatch. You can use the
 	// endpoint to get available alert types which then will give you a list of
 	// possible values.
@@ -1341,6 +1345,11 @@ const (
 	AlertingV3PolicyUpdateResponseEnvelopeSuccessTrue AlertingV3PolicyUpdateResponseEnvelopeSuccess = true
 )
 
+type AlertingV3PolicyListParams struct {
+	// The account id
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type AlertingV3PolicyListResponseEnvelope struct {
 	Errors   []AlertingV3PolicyListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AlertingV3PolicyListResponseEnvelopeMessages `json:"messages,required"`
@@ -1439,6 +1448,11 @@ func (r *AlertingV3PolicyListResponseEnvelopeResultInfo) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type AlertingV3PolicyDeleteParams struct {
+	// The account id
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type AlertingV3PolicyDeleteResponseEnvelope struct {
 	Errors   []AlertingV3PolicyDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AlertingV3PolicyDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -1535,6 +1549,11 @@ type alertingV3PolicyDeleteResponseEnvelopeResultInfoJSON struct {
 
 func (r *AlertingV3PolicyDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type AlertingV3PolicyGetParams struct {
+	// The account id
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type AlertingV3PolicyGetResponseEnvelope struct {

@@ -31,9 +31,9 @@ func TestLoadBalancerPoolHealthNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.LoadBalancers.Pools.Health.New(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"17b5962d775c646f3f9725cbc7a53df4",
 		cloudflare.LoadBalancerPoolHealthNewParams{
+			AccountID:       cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			ExpectedCodes:   cloudflare.F("2xx"),
 			AllowInsecure:   cloudflare.F(true),
 			ConsecutiveDown: cloudflare.F(int64(0)),
@@ -86,8 +86,10 @@ func TestLoadBalancerPoolHealthGet(t *testing.T) {
 	)
 	_, err := client.LoadBalancers.Pools.Health.Get(
 		context.TODO(),
-		"023e105f4ecef8ad9ca31a8372d0c353",
 		"17b5962d775c646f3f9725cbc7a53df4",
+		cloudflare.LoadBalancerPoolHealthGetParams{
+			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		},
 	)
 	if err != nil {
 		var apierr *cloudflare.Error

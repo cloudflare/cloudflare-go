@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -31,11 +32,11 @@ func NewWorkerDeploymentsByScriptService(opts ...option.RequestOption) (r *Worke
 }
 
 // List Deployments
-func (r *WorkerDeploymentsByScriptService) List(ctx context.Context, accountID string, scriptID string, opts ...option.RequestOption) (res *WorkerDeploymentsByScriptListResponse, err error) {
+func (r *WorkerDeploymentsByScriptService) List(ctx context.Context, scriptID string, query WorkerDeploymentsByScriptListParams, opts ...option.RequestOption) (res *WorkerDeploymentsByScriptListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerDeploymentsByScriptListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/deployments/by-script/%s", accountID, scriptID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/deployments/by-script/%s", query.AccountID, scriptID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -44,11 +45,11 @@ func (r *WorkerDeploymentsByScriptService) List(ctx context.Context, accountID s
 }
 
 // Get Deployment Detail
-func (r *WorkerDeploymentsByScriptService) Detail(ctx context.Context, accountID string, scriptID string, deploymentID string, opts ...option.RequestOption) (res *WorkerDeploymentsByScriptDetailResponse, err error) {
+func (r *WorkerDeploymentsByScriptService) Detail(ctx context.Context, scriptID string, deploymentID string, query WorkerDeploymentsByScriptDetailParams, opts ...option.RequestOption) (res *WorkerDeploymentsByScriptDetailResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerDeploymentsByScriptDetailResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/deployments/by-script/%s/detail/%s", accountID, scriptID, deploymentID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/workers/deployments/by-script/%s/detail/%s", query.AccountID, scriptID, deploymentID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -96,6 +97,11 @@ type workerDeploymentsByScriptDetailResponseJSON struct {
 
 func (r *WorkerDeploymentsByScriptDetailResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type WorkerDeploymentsByScriptListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type WorkerDeploymentsByScriptListResponseEnvelope struct {
@@ -166,6 +172,11 @@ type WorkerDeploymentsByScriptListResponseEnvelopeSuccess bool
 const (
 	WorkerDeploymentsByScriptListResponseEnvelopeSuccessTrue WorkerDeploymentsByScriptListResponseEnvelopeSuccess = true
 )
+
+type WorkerDeploymentsByScriptDetailParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type WorkerDeploymentsByScriptDetailResponseEnvelope struct {
 	Errors   []WorkerDeploymentsByScriptDetailResponseEnvelopeErrors   `json:"errors,required"`

@@ -32,11 +32,11 @@ func NewDLPPayloadLogService(opts ...option.RequestOption) (r *DLPPayloadLogServ
 }
 
 // Updates the DLP payload log settings for this account.
-func (r *DLPPayloadLogService) Update(ctx context.Context, accountID string, body DLPPayloadLogUpdateParams, opts ...option.RequestOption) (res *DLPPayloadLogUpdateResponse, err error) {
+func (r *DLPPayloadLogService) Update(ctx context.Context, params DLPPayloadLogUpdateParams, opts ...option.RequestOption) (res *DLPPayloadLogUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPPayloadLogUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/dlp/payload_log", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/dlp/payload_log", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -45,11 +45,11 @@ func (r *DLPPayloadLogService) Update(ctx context.Context, accountID string, bod
 }
 
 // Gets the current DLP payload log settings for this account.
-func (r *DLPPayloadLogService) Get(ctx context.Context, accountID string, opts ...option.RequestOption) (res *DLPPayloadLogGetResponse, err error) {
+func (r *DLPPayloadLogService) Get(ctx context.Context, query DLPPayloadLogGetParams, opts ...option.RequestOption) (res *DLPPayloadLogGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPPayloadLogGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/dlp/payload_log", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/dlp/payload_log", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -92,6 +92,8 @@ func (r *DLPPayloadLogGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type DLPPayloadLogUpdateParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The public key to use when encrypting extracted payloads, as a base64 string
 	PublicKey param.Field[string] `json:"public_key,required"`
 }
@@ -168,6 +170,11 @@ type DLPPayloadLogUpdateResponseEnvelopeSuccess bool
 const (
 	DLPPayloadLogUpdateResponseEnvelopeSuccessTrue DLPPayloadLogUpdateResponseEnvelopeSuccess = true
 )
+
+type DLPPayloadLogGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type DLPPayloadLogGetResponseEnvelope struct {
 	Errors   []DLPPayloadLogGetResponseEnvelopeErrors   `json:"errors,required"`

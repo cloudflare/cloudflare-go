@@ -40,11 +40,11 @@ func NewAddressPrefixService(opts ...option.RequestOption) (r *AddressPrefixServ
 }
 
 // Add a new prefix under the account.
-func (r *AddressPrefixService) New(ctx context.Context, accountID string, body AddressPrefixNewParams, opts ...option.RequestOption) (res *AddressPrefixNewResponse, err error) {
+func (r *AddressPrefixService) New(ctx context.Context, params AddressPrefixNewParams, opts ...option.RequestOption) (res *AddressPrefixNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressPrefixNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/prefixes", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/addressing/prefixes", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -53,11 +53,11 @@ func (r *AddressPrefixService) New(ctx context.Context, accountID string, body A
 }
 
 // List all prefixes owned by the account.
-func (r *AddressPrefixService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]AddressPrefixListResponse, err error) {
+func (r *AddressPrefixService) List(ctx context.Context, query AddressPrefixListParams, opts ...option.RequestOption) (res *[]AddressPrefixListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressPrefixListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/prefixes", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/addressing/prefixes", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -66,11 +66,11 @@ func (r *AddressPrefixService) List(ctx context.Context, accountID string, opts 
 }
 
 // Delete an unapproved prefix owned by the account.
-func (r *AddressPrefixService) Delete(ctx context.Context, accountID string, prefixID string, opts ...option.RequestOption) (res *AddressPrefixDeleteResponse, err error) {
+func (r *AddressPrefixService) Delete(ctx context.Context, prefixID string, body AddressPrefixDeleteParams, opts ...option.RequestOption) (res *AddressPrefixDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressPrefixDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s", accountID, prefixID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s", body.AccountID, prefixID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -79,11 +79,11 @@ func (r *AddressPrefixService) Delete(ctx context.Context, accountID string, pre
 }
 
 // Modify the description for a prefix owned by the account.
-func (r *AddressPrefixService) Edit(ctx context.Context, accountID string, prefixID string, body AddressPrefixEditParams, opts ...option.RequestOption) (res *AddressPrefixEditResponse, err error) {
+func (r *AddressPrefixService) Edit(ctx context.Context, prefixID string, params AddressPrefixEditParams, opts ...option.RequestOption) (res *AddressPrefixEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressPrefixEditResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s", accountID, prefixID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s", params.AccountID, prefixID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -92,11 +92,11 @@ func (r *AddressPrefixService) Edit(ctx context.Context, accountID string, prefi
 }
 
 // List a particular prefix owned by the account.
-func (r *AddressPrefixService) Get(ctx context.Context, accountID string, prefixID string, opts ...option.RequestOption) (res *AddressPrefixGetResponse, err error) {
+func (r *AddressPrefixService) Get(ctx context.Context, prefixID string, query AddressPrefixGetParams, opts ...option.RequestOption) (res *AddressPrefixGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressPrefixGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s", accountID, prefixID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s", query.AccountID, prefixID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -350,6 +350,8 @@ func (r *AddressPrefixGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type AddressPrefixNewParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Autonomous System Number (ASN) the prefix will be advertised under.
 	ASN param.Field[int64] `json:"asn,required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
@@ -430,6 +432,11 @@ type AddressPrefixNewResponseEnvelopeSuccess bool
 const (
 	AddressPrefixNewResponseEnvelopeSuccessTrue AddressPrefixNewResponseEnvelopeSuccess = true
 )
+
+type AddressPrefixListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type AddressPrefixListResponseEnvelope struct {
 	Errors   []AddressPrefixListResponseEnvelopeErrors   `json:"errors,required"`
@@ -527,6 +534,11 @@ type addressPrefixListResponseEnvelopeResultInfoJSON struct {
 
 func (r *AddressPrefixListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type AddressPrefixDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 }
 
 type AddressPrefixDeleteResponseEnvelope struct {
@@ -628,6 +640,8 @@ func (r *AddressPrefixDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data []byt
 }
 
 type AddressPrefixEditParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Description of the prefix.
 	Description param.Field[string] `json:"description,required"`
 }
@@ -704,6 +718,11 @@ type AddressPrefixEditResponseEnvelopeSuccess bool
 const (
 	AddressPrefixEditResponseEnvelopeSuccessTrue AddressPrefixEditResponseEnvelopeSuccess = true
 )
+
+type AddressPrefixGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type AddressPrefixGetResponseEnvelope struct {
 	Errors   []AddressPrefixGetResponseEnvelopeErrors   `json:"errors,required"`

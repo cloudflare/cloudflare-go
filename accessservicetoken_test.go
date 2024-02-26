@@ -31,7 +31,7 @@ func TestAccessServiceTokenNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Access.ServiceTokens.New(context.TODO(), cloudflare.AccessServiceTokenNewParams{
 		AccountID: cloudflare.F("string"),
-		ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ZoneID:    cloudflare.F("string"),
 		Name:      cloudflare.F("CI/CD token"),
 		Duration:  cloudflare.F("60m"),
 	})
@@ -65,7 +65,7 @@ func TestAccessServiceTokenUpdateWithOptionalParams(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.AccessServiceTokenUpdateParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID:    cloudflare.F("string"),
 			Duration:  cloudflare.F("60m"),
 			Name:      cloudflare.F("CI/CD token"),
 		},
@@ -97,7 +97,7 @@ func TestAccessServiceTokenList(t *testing.T) {
 	)
 	_, err := client.Access.ServiceTokens.List(context.TODO(), cloudflare.AccessServiceTokenListParams{
 		AccountID: cloudflare.F("string"),
-		ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ZoneID:    cloudflare.F("string"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -129,7 +129,7 @@ func TestAccessServiceTokenDelete(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.AccessServiceTokenDeleteParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {

@@ -33,11 +33,11 @@ func NewSettingHTTP3Service(opts ...option.RequestOption) (r *SettingHTTP3Servic
 }
 
 // Value of the HTTP3 setting.
-func (r *SettingHTTP3Service) Edit(ctx context.Context, zoneID string, body SettingHTTP3EditParams, opts ...option.RequestOption) (res *SettingHTTP3EditResponse, err error) {
+func (r *SettingHTTP3Service) Edit(ctx context.Context, params SettingHTTP3EditParams, opts ...option.RequestOption) (res *SettingHTTP3EditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingHTTP3EditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/http3", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/http3", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -46,11 +46,11 @@ func (r *SettingHTTP3Service) Edit(ctx context.Context, zoneID string, body Sett
 }
 
 // Value of the HTTP3 setting.
-func (r *SettingHTTP3Service) Get(ctx context.Context, zoneID string, opts ...option.RequestOption) (res *SettingHTTP3GetResponse, err error) {
+func (r *SettingHTTP3Service) Get(ctx context.Context, query SettingHTTP3GetParams, opts ...option.RequestOption) (res *SettingHTTP3GetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingHTTP3GetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings/http3", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/settings/http3", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -165,6 +165,8 @@ const (
 )
 
 type SettingHTTP3EditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Value of the HTTP3 setting.
 	Value param.Field[SettingHTTP3EditParamsValue] `json:"value,required"`
 }
@@ -242,6 +244,11 @@ type settingHTTP3EditResponseEnvelopeMessagesJSON struct {
 
 func (r *SettingHTTP3EditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type SettingHTTP3GetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
 type SettingHTTP3GetResponseEnvelope struct {

@@ -32,11 +32,11 @@ func NewDeviceNetworkService(opts ...option.RequestOption) (r *DeviceNetworkServ
 }
 
 // Creates a new device managed network.
-func (r *DeviceNetworkService) New(ctx context.Context, accountID interface{}, body DeviceNetworkNewParams, opts ...option.RequestOption) (res *DeviceNetworkNewResponse, err error) {
+func (r *DeviceNetworkService) New(ctx context.Context, params DeviceNetworkNewParams, opts ...option.RequestOption) (res *DeviceNetworkNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceNetworkNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/networks", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/devices/networks", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -45,11 +45,11 @@ func (r *DeviceNetworkService) New(ctx context.Context, accountID interface{}, b
 }
 
 // Updates a configured device managed network.
-func (r *DeviceNetworkService) Update(ctx context.Context, accountID interface{}, networkID string, body DeviceNetworkUpdateParams, opts ...option.RequestOption) (res *DeviceNetworkUpdateResponse, err error) {
+func (r *DeviceNetworkService) Update(ctx context.Context, networkID string, params DeviceNetworkUpdateParams, opts ...option.RequestOption) (res *DeviceNetworkUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceNetworkUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/networks/%s", accountID, networkID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/devices/networks/%s", params.AccountID, networkID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -58,11 +58,11 @@ func (r *DeviceNetworkService) Update(ctx context.Context, accountID interface{}
 }
 
 // Fetches a list of managed networks for an account.
-func (r *DeviceNetworkService) List(ctx context.Context, accountID interface{}, opts ...option.RequestOption) (res *[]DeviceNetworkListResponse, err error) {
+func (r *DeviceNetworkService) List(ctx context.Context, query DeviceNetworkListParams, opts ...option.RequestOption) (res *[]DeviceNetworkListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceNetworkListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/networks", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/devices/networks", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -72,11 +72,11 @@ func (r *DeviceNetworkService) List(ctx context.Context, accountID interface{}, 
 
 // Deletes a device managed network and fetches a list of the remaining device
 // managed networks for an account.
-func (r *DeviceNetworkService) Delete(ctx context.Context, accountID interface{}, networkID string, opts ...option.RequestOption) (res *[]DeviceNetworkDeleteResponse, err error) {
+func (r *DeviceNetworkService) Delete(ctx context.Context, networkID string, body DeviceNetworkDeleteParams, opts ...option.RequestOption) (res *[]DeviceNetworkDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceNetworkDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/networks/%s", accountID, networkID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/devices/networks/%s", body.AccountID, networkID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -85,11 +85,11 @@ func (r *DeviceNetworkService) Delete(ctx context.Context, accountID interface{}
 }
 
 // Fetches details for a single managed network.
-func (r *DeviceNetworkService) Get(ctx context.Context, accountID interface{}, networkID string, opts ...option.RequestOption) (res *DeviceNetworkGetResponse, err error) {
+func (r *DeviceNetworkService) Get(ctx context.Context, networkID string, query DeviceNetworkGetParams, opts ...option.RequestOption) (res *DeviceNetworkGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DeviceNetworkGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/devices/networks/%s", accountID, networkID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%v/devices/networks/%s", query.AccountID, networkID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -403,6 +403,7 @@ const (
 )
 
 type DeviceNetworkNewParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// The configuration object containing information for the WARP client to detect
 	// the managed network.
 	Config param.Field[DeviceNetworkNewParamsConfig] `json:"config,required"`
@@ -509,6 +510,7 @@ const (
 )
 
 type DeviceNetworkUpdateParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// The configuration object containing information for the WARP client to detect
 	// the managed network.
 	Config param.Field[DeviceNetworkUpdateParamsConfig] `json:"config"`
@@ -614,6 +616,10 @@ const (
 	DeviceNetworkUpdateResponseEnvelopeSuccessTrue DeviceNetworkUpdateResponseEnvelopeSuccess = true
 )
 
+type DeviceNetworkListParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
+
 type DeviceNetworkListResponseEnvelope struct {
 	Errors   []DeviceNetworkListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DeviceNetworkListResponseEnvelopeMessages `json:"messages,required"`
@@ -712,6 +718,10 @@ func (r *DeviceNetworkListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type DeviceNetworkDeleteParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
+}
+
 type DeviceNetworkDeleteResponseEnvelope struct {
 	Errors   []DeviceNetworkDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DeviceNetworkDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -808,6 +818,10 @@ type deviceNetworkDeleteResponseEnvelopeResultInfoJSON struct {
 
 func (r *DeviceNetworkDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type DeviceNetworkGetParams struct {
+	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
 
 type DeviceNetworkGetResponseEnvelope struct {

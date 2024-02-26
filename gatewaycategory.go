@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
@@ -31,11 +32,11 @@ func NewGatewayCategoryService(opts ...option.RequestOption) (r *GatewayCategory
 }
 
 // Fetches a list of all categories.
-func (r *GatewayCategoryService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]GatewayCategoryListResponse, err error) {
+func (r *GatewayCategoryService) List(ctx context.Context, query GatewayCategoryListParams, opts ...option.RequestOption) (res *[]GatewayCategoryListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayCategoryListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/gateway/categories", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/gateway/categories", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -139,6 +140,11 @@ const (
 	GatewayCategoryListResponseSubcategoriesClassRemovalPending GatewayCategoryListResponseSubcategoriesClass = "removalPending"
 	GatewayCategoryListResponseSubcategoriesClassNoBlock        GatewayCategoryListResponseSubcategoriesClass = "noBlock"
 )
+
+type GatewayCategoryListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type GatewayCategoryListResponseEnvelope struct {
 	Errors   []GatewayCategoryListResponseEnvelopeErrors   `json:"errors,required"`

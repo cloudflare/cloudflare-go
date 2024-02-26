@@ -40,11 +40,11 @@ func NewCustomCertificateService(opts ...option.RequestOption) (r *CustomCertifi
 }
 
 // Upload a new SSL certificate for a zone.
-func (r *CustomCertificateService) New(ctx context.Context, zoneID string, body CustomCertificateNewParams, opts ...option.RequestOption) (res *CustomCertificateNewResponse, err error) {
+func (r *CustomCertificateService) New(ctx context.Context, params CustomCertificateNewParams, opts ...option.RequestOption) (res *CustomCertificateNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomCertificateNewResponseEnvelope
-	path := fmt.Sprintf("zones/%s/custom_certificates", zoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/custom_certificates", params.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -55,12 +55,12 @@ func (r *CustomCertificateService) New(ctx context.Context, zoneID string, body 
 // List, search, and filter all of your custom SSL certificates. The higher
 // priority will break ties across overlapping 'legacy_custom' certificates, but
 // 'legacy_custom' certificates will always supercede 'sni_custom' certificates.
-func (r *CustomCertificateService) List(ctx context.Context, zoneID string, query CustomCertificateListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[CustomCertificateListResponse], err error) {
+func (r *CustomCertificateService) List(ctx context.Context, params CustomCertificateListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[CustomCertificateListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	path := fmt.Sprintf("zones/%s/custom_certificates", zoneID)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	path := fmt.Sprintf("zones/%s/custom_certificates", params.ZoneID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -75,16 +75,16 @@ func (r *CustomCertificateService) List(ctx context.Context, zoneID string, quer
 // List, search, and filter all of your custom SSL certificates. The higher
 // priority will break ties across overlapping 'legacy_custom' certificates, but
 // 'legacy_custom' certificates will always supercede 'sni_custom' certificates.
-func (r *CustomCertificateService) ListAutoPaging(ctx context.Context, zoneID string, query CustomCertificateListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[CustomCertificateListResponse] {
-	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneID, query, opts...))
+func (r *CustomCertificateService) ListAutoPaging(ctx context.Context, params CustomCertificateListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[CustomCertificateListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Remove a SSL certificate from a zone.
-func (r *CustomCertificateService) Delete(ctx context.Context, zoneID string, customCertificateID string, opts ...option.RequestOption) (res *CustomCertificateDeleteResponse, err error) {
+func (r *CustomCertificateService) Delete(ctx context.Context, customCertificateID string, body CustomCertificateDeleteParams, opts ...option.RequestOption) (res *CustomCertificateDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomCertificateDeleteResponseEnvelope
-	path := fmt.Sprintf("zones/%s/custom_certificates/%s", zoneID, customCertificateID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/custom_certificates/%s", body.ZoneID, customCertificateID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -95,11 +95,11 @@ func (r *CustomCertificateService) Delete(ctx context.Context, zoneID string, cu
 // Upload a new private key and/or PEM/CRT for the SSL certificate. Note: PATCHing
 // a configuration for sni_custom certificates will result in a new resource id
 // being returned, and the previous one being deleted.
-func (r *CustomCertificateService) Edit(ctx context.Context, zoneID string, customCertificateID string, body CustomCertificateEditParams, opts ...option.RequestOption) (res *CustomCertificateEditResponse, err error) {
+func (r *CustomCertificateService) Edit(ctx context.Context, customCertificateID string, params CustomCertificateEditParams, opts ...option.RequestOption) (res *CustomCertificateEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomCertificateEditResponseEnvelope
-	path := fmt.Sprintf("zones/%s/custom_certificates/%s", zoneID, customCertificateID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	path := fmt.Sprintf("zones/%s/custom_certificates/%s", params.ZoneID, customCertificateID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -108,11 +108,11 @@ func (r *CustomCertificateService) Edit(ctx context.Context, zoneID string, cust
 }
 
 // SSL Configuration Details
-func (r *CustomCertificateService) Get(ctx context.Context, zoneID string, customCertificateID string, opts ...option.RequestOption) (res *CustomCertificateGetResponse, err error) {
+func (r *CustomCertificateService) Get(ctx context.Context, customCertificateID string, query CustomCertificateGetParams, opts ...option.RequestOption) (res *CustomCertificateGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomCertificateGetResponseEnvelope
-	path := fmt.Sprintf("zones/%s/custom_certificates/%s", zoneID, customCertificateID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("zones/%s/custom_certificates/%s", query.ZoneID, customCertificateID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -397,6 +397,8 @@ func init() {
 }
 
 type CustomCertificateNewParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The zone's SSL certificate or certificate and the intermediate(s).
 	Certificate param.Field[string] `json:"certificate,required"`
 	// The zone's private key.
@@ -547,6 +549,8 @@ const (
 )
 
 type CustomCertificateListParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Whether to match all search requirements or at least one (any).
 	Match param.Field[CustomCertificateListParamsMatch] `query:"match"`
 	// Page number of paginated results.
@@ -571,6 +575,11 @@ const (
 	CustomCertificateListParamsMatchAny CustomCertificateListParamsMatch = "any"
 	CustomCertificateListParamsMatchAll CustomCertificateListParamsMatch = "all"
 )
+
+type CustomCertificateDeleteParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type CustomCertificateDeleteResponseEnvelope struct {
 	Errors   []CustomCertificateDeleteResponseEnvelopeErrors   `json:"errors,required"`
@@ -642,6 +651,8 @@ const (
 )
 
 type CustomCertificateEditParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// A ubiquitous bundle has the highest probability of being verified everywhere,
 	// even by clients using outdated or unusual trust stores. An optimal bundle uses
 	// the shortest chain and newest intermediates. And the force bundle verifies the
@@ -778,6 +789,11 @@ type CustomCertificateEditResponseEnvelopeSuccess bool
 const (
 	CustomCertificateEditResponseEnvelopeSuccessTrue CustomCertificateEditResponseEnvelopeSuccess = true
 )
+
+type CustomCertificateGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
 
 type CustomCertificateGetResponseEnvelope struct {
 	Errors   []CustomCertificateGetResponseEnvelopeErrors   `json:"errors,required"`

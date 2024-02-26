@@ -41,11 +41,11 @@ func NewImageV2Service(opts ...option.RequestOption) (r *ImageV2Service) {
 // List up to 10000 images with one request. Use the optional parameters below to
 // get a specific range of images. Endpoint returns continuation_token if more
 // images are present.
-func (r *ImageV2Service) List(ctx context.Context, accountID string, query ImageV2ListParams, opts ...option.RequestOption) (res *ImageV2ListResponse, err error) {
+func (r *ImageV2Service) List(ctx context.Context, params ImageV2ListParams, opts ...option.RequestOption) (res *ImageV2ListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ImageV2ListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/images/v2", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/images/v2", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -137,6 +137,8 @@ func init() {
 }
 
 type ImageV2ListParams struct {
+	// Account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Continuation token for a next page. List images V2 returns continuation_token
 	ContinuationToken param.Field[string] `query:"continuation_token"`
 	// Number of items per page.

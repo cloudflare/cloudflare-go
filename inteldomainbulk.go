@@ -34,11 +34,11 @@ func NewIntelDomainBulkService(opts ...option.RequestOption) (r *IntelDomainBulk
 }
 
 // Get Multiple Domain Details
-func (r *IntelDomainBulkService) Get(ctx context.Context, accountID string, query IntelDomainBulkGetParams, opts ...option.RequestOption) (res *[]IntelDomainBulkGetResponse, err error) {
+func (r *IntelDomainBulkService) Get(ctx context.Context, params IntelDomainBulkGetParams, opts ...option.RequestOption) (res *[]IntelDomainBulkGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IntelDomainBulkGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/intel/domain/bulk", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/intel/domain/bulk", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -172,6 +172,8 @@ func (r *IntelDomainBulkGetResponseInheritedRiskType) UnmarshalJSON(data []byte)
 }
 
 type IntelDomainBulkGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Accepts multiple values, i.e. `?domain=cloudflare.com&domain=example.com`.
 	Domain param.Field[interface{}] `query:"domain"`
 }

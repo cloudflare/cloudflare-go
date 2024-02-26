@@ -35,11 +35,11 @@ func NewStreamWebhookService(opts ...option.RequestOption) (r *StreamWebhookServ
 }
 
 // Creates a webhook notification.
-func (r *StreamWebhookService) Update(ctx context.Context, accountID string, body StreamWebhookUpdateParams, opts ...option.RequestOption) (res *StreamWebhookUpdateResponse, err error) {
+func (r *StreamWebhookService) Update(ctx context.Context, params StreamWebhookUpdateParams, opts ...option.RequestOption) (res *StreamWebhookUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamWebhookUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/webhook", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/webhook", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,11 +48,11 @@ func (r *StreamWebhookService) Update(ctx context.Context, accountID string, bod
 }
 
 // Deletes a webhook.
-func (r *StreamWebhookService) Delete(ctx context.Context, accountID string, opts ...option.RequestOption) (res *StreamWebhookDeleteResponse, err error) {
+func (r *StreamWebhookService) Delete(ctx context.Context, body StreamWebhookDeleteParams, opts ...option.RequestOption) (res *StreamWebhookDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamWebhookDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/webhook", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/webhook", body.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -61,11 +61,11 @@ func (r *StreamWebhookService) Delete(ctx context.Context, accountID string, opt
 }
 
 // Retrieves a list of webhooks.
-func (r *StreamWebhookService) Get(ctx context.Context, accountID string, opts ...option.RequestOption) (res *StreamWebhookGetResponse, err error) {
+func (r *StreamWebhookService) Get(ctx context.Context, query StreamWebhookGetParams, opts ...option.RequestOption) (res *StreamWebhookGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamWebhookGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/webhook", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/webhook", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -122,6 +122,8 @@ func init() {
 }
 
 type StreamWebhookUpdateParams struct {
+	// The account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
 	// The URL where webhooks will be sent.
 	NotificationURL param.Field[string] `json:"notificationUrl,required" format:"uri"`
 }
@@ -199,6 +201,11 @@ const (
 	StreamWebhookUpdateResponseEnvelopeSuccessTrue StreamWebhookUpdateResponseEnvelopeSuccess = true
 )
 
+type StreamWebhookDeleteParams struct {
+	// The account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
 type StreamWebhookDeleteResponseEnvelope struct {
 	Errors   []StreamWebhookDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []StreamWebhookDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -267,6 +274,11 @@ type StreamWebhookDeleteResponseEnvelopeSuccess bool
 const (
 	StreamWebhookDeleteResponseEnvelopeSuccessTrue StreamWebhookDeleteResponseEnvelopeSuccess = true
 )
+
+type StreamWebhookGetParams struct {
+	// The account identifier tag.
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type StreamWebhookGetResponseEnvelope struct {
 	Errors   []StreamWebhookGetResponseEnvelopeErrors   `json:"errors,required"`

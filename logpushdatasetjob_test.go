@@ -34,7 +34,7 @@ func TestLogpushDatasetJobList(t *testing.T) {
 		"http_requests",
 		cloudflare.LogpushDatasetJobListParams{
 			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID:    cloudflare.F("string"),
 		},
 	)
 	if err != nil {

@@ -38,11 +38,11 @@ func NewStreamLiveInputService(opts ...option.RequestOption) (r *StreamLiveInput
 
 // Creates a live input, and returns credentials that you or your users can use to
 // stream live video to Cloudflare Stream.
-func (r *StreamLiveInputService) New(ctx context.Context, accountID string, body StreamLiveInputNewParams, opts ...option.RequestOption) (res *StreamLiveInputNewResponse, err error) {
+func (r *StreamLiveInputService) New(ctx context.Context, params StreamLiveInputNewParams, opts ...option.RequestOption) (res *StreamLiveInputNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamLiveInputNewResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/live_inputs", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/live_inputs", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -51,11 +51,11 @@ func (r *StreamLiveInputService) New(ctx context.Context, accountID string, body
 }
 
 // Updates a specified live input.
-func (r *StreamLiveInputService) Update(ctx context.Context, accountID string, liveInputIdentifier string, body StreamLiveInputUpdateParams, opts ...option.RequestOption) (res *StreamLiveInputUpdateResponse, err error) {
+func (r *StreamLiveInputService) Update(ctx context.Context, liveInputIdentifier string, params StreamLiveInputUpdateParams, opts ...option.RequestOption) (res *StreamLiveInputUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamLiveInputUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s", accountID, liveInputIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s", params.AccountID, liveInputIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -65,11 +65,11 @@ func (r *StreamLiveInputService) Update(ctx context.Context, accountID string, l
 
 // Lists the live inputs created for an account. To get the credentials needed to
 // stream to a specific live input, request a single live input.
-func (r *StreamLiveInputService) List(ctx context.Context, accountID string, query StreamLiveInputListParams, opts ...option.RequestOption) (res *StreamLiveInputListResponse, err error) {
+func (r *StreamLiveInputService) List(ctx context.Context, params StreamLiveInputListParams, opts ...option.RequestOption) (res *StreamLiveInputListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamLiveInputListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/live_inputs", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/live_inputs", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -79,20 +79,20 @@ func (r *StreamLiveInputService) List(ctx context.Context, accountID string, que
 
 // Prevents a live input from being streamed to and makes the live input
 // inaccessible to any future API calls.
-func (r *StreamLiveInputService) Delete(ctx context.Context, accountID string, liveInputIdentifier string, opts ...option.RequestOption) (err error) {
+func (r *StreamLiveInputService) Delete(ctx context.Context, liveInputIdentifier string, body StreamLiveInputDeleteParams, opts ...option.RequestOption) (err error) {
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
-	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s", accountID, liveInputIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s", body.AccountID, liveInputIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, nil, opts...)
 	return
 }
 
 // Retrieves details of an existing live input.
-func (r *StreamLiveInputService) Get(ctx context.Context, accountID string, liveInputIdentifier string, opts ...option.RequestOption) (res *StreamLiveInputGetResponse, err error) {
+func (r *StreamLiveInputService) Get(ctx context.Context, liveInputIdentifier string, query StreamLiveInputGetParams, opts ...option.RequestOption) (res *StreamLiveInputGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamLiveInputGetResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s", accountID, liveInputIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s", query.AccountID, liveInputIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -927,6 +927,8 @@ func (r *StreamLiveInputGetResponseWebRtcPlayback) UnmarshalJSON(data []byte) (e
 }
 
 type StreamLiveInputNewParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Sets the creator ID asssociated with this live input.
 	DefaultCreator param.Field[string] `json:"defaultCreator"`
 	// Indicates the number of days after which the live inputs recordings will be
@@ -1055,6 +1057,8 @@ const (
 )
 
 type StreamLiveInputUpdateParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Sets the creator ID asssociated with this live input.
 	DefaultCreator param.Field[string] `json:"defaultCreator"`
 	// Indicates the number of days after which the live inputs recordings will be
@@ -1183,6 +1187,8 @@ const (
 )
 
 type StreamLiveInputListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Includes the total number of videos associated with the submitted query
 	// parameters.
 	IncludeCounts param.Field[bool] `query:"include_counts"`
@@ -1265,6 +1271,16 @@ type StreamLiveInputListResponseEnvelopeSuccess bool
 const (
 	StreamLiveInputListResponseEnvelopeSuccessTrue StreamLiveInputListResponseEnvelopeSuccess = true
 )
+
+type StreamLiveInputDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type StreamLiveInputGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
 
 type StreamLiveInputGetResponseEnvelope struct {
 	Errors   []StreamLiveInputGetResponseEnvelopeErrors   `json:"errors,required"`
