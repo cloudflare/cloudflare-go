@@ -3858,6 +3858,41 @@ Methods:
 - <code title="patch /accounts/{account_id}/pages/projects/{project_name}/domains/{domain_name}">client.Pages.Projects.Domains.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#PageProjectDomainService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID <a href="https://pkg.go.dev/builtin#string">string</a>, projectName <a href="https://pkg.go.dev/builtin#string">string</a>, domainName <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#PageProjectDomainEditResponse">PageProjectDomainEditResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /accounts/{account_id}/pages/projects/{project_name}/domains/{domain_name}">client.Pages.Projects.Domains.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#PageProjectDomainService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID <a href="https://pkg.go.dev/builtin#string">string</a>, projectName <a href="https://pkg.go.dev/builtin#string">string</a>, domainName <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#PageProjectDomainGetResponse">PageProjectDomainGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
+# PCAPs
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#PCAPNewResponse">PCAPNewResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#PCAPListResponse">PCAPListResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#PCAPGetResponse">PCAPGetResponse</a>
+
+Methods:
+
+- <code title="post /accounts/{account_id}/pcaps">client.PCAPs.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#PCAPService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#PCAPNewParams">PCAPNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#PCAPNewResponse">PCAPNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/pcaps">client.PCAPs.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#PCAPService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID <a href="https://pkg.go.dev/builtin#string">string</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#PCAPListResponse">PCAPListResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/pcaps/{pcap_id}">client.PCAPs.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#PCAPService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID <a href="https://pkg.go.dev/builtin#string">string</a>, pcapID <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#PCAPGetResponse">PCAPGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+## Ownerships
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#PCAPOwnershipNewResponse">PCAPOwnershipNewResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#PCAPOwnershipGetResponse">PCAPOwnershipGetResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#PCAPOwnershipValidateResponse">PCAPOwnershipValidateResponse</a>
+
+Methods:
+
+- <code title="post /accounts/{account_id}/pcaps/ownership">client.PCAPs.Ownerships.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#PCAPOwnershipService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#PCAPOwnershipNewParams">PCAPOwnershipNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#PCAPOwnershipNewResponse">PCAPOwnershipNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="delete /accounts/{account_id}/pcaps/ownership/{ownership_id}">client.PCAPs.Ownerships.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#PCAPOwnershipService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID <a href="https://pkg.go.dev/builtin#string">string</a>, ownershipID <a href="https://pkg.go.dev/builtin#string">string</a>) <a href="https://pkg.go.dev/builtin#error">error</a></code>
+- <code title="get /accounts/{account_id}/pcaps/ownership">client.PCAPs.Ownerships.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#PCAPOwnershipService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID <a href="https://pkg.go.dev/builtin#string">string</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#PCAPOwnershipGetResponse">PCAPOwnershipGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="post /accounts/{account_id}/pcaps/ownership/validate">client.PCAPs.Ownerships.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#PCAPOwnershipService.Validate">Validate</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#PCAPOwnershipValidateParams">PCAPOwnershipValidateParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#PCAPOwnershipValidateResponse">PCAPOwnershipValidateResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
+## Downloads
+
+Methods:
+
+- <code title="get /accounts/{account_id}/pcaps/{pcap_id}/download">client.PCAPs.Downloads.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#PCAPDownloadService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID <a href="https://pkg.go.dev/builtin#string">string</a>, pcapID <a href="https://pkg.go.dev/builtin#string">string</a>) (http.Response, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 # Registrar
 
 ## Domains
@@ -3880,6 +3915,7 @@ Methods:
 
 Response Types:
 
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#WyxwHh0jTrace">WyxwHh0jTrace</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RequestTracerTraceNewResponse">RequestTracerTraceNewResponse</a>
 
 Methods:
