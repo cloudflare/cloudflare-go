@@ -3973,7 +3973,6 @@ Methods:
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#WyxwHh0jTrace">WyxwHh0jTrace</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RequestTracerTraceNewResponse">RequestTracerTraceNewResponse</a>
 
 Methods:
