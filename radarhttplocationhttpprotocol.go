@@ -200,8 +200,6 @@ type RadarHTTPLocationHTTPProtocolGetParams struct {
 	DeviceType param.Field[[]RadarHTTPLocationHTTPProtocolGetParamsDeviceType] `query:"deviceType"`
 	// Format results are returned in.
 	Format param.Field[RadarHTTPLocationHTTPProtocolGetParamsFormat] `query:"format"`
-	// Filter for http protocol.
-	HTTPProtocol param.Field[[]RadarHTTPLocationHTTPProtocolGetParamsHTTPProtocol] `query:"httpProtocol"`
 	// Filter for ip version.
 	IPVersion param.Field[[]RadarHTTPLocationHTTPProtocolGetParamsIPVersion] `query:"ipVersion"`
 	// Limit the number of objects in the response.
