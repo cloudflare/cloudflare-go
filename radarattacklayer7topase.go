@@ -183,6 +183,10 @@ func (r *RadarAttackLayer7TopAseOriginResponseTop0) UnmarshalJSON(data []byte) (
 }
 
 type RadarAttackLayer7TopAseOriginParams struct {
+	// Array of comma separated list of continents (alpha-2 continent codes). Start
+	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
+	// Europe, but includes results from North America.
+	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous

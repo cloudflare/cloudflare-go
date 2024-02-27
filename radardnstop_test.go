@@ -33,6 +33,7 @@ func TestRadarDNSTopAsesWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.DNS.Top.Ases(context.TODO(), cloudflare.RadarDNSTopAsesParams{
 		Domain:    cloudflare.F([]string{"string", "string", "string"}),
 		ASN:       cloudflare.F([]string{"string", "string", "string"}),
+		Continent: cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange: cloudflare.F([]cloudflare.RadarDNSTopAsesParamsDateRange{cloudflare.RadarDNSTopAsesParamsDateRange1d, cloudflare.RadarDNSTopAsesParamsDateRange2d, cloudflare.RadarDNSTopAsesParamsDateRange7d}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -69,6 +70,7 @@ func TestRadarDNSTopLocationsWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.DNS.Top.Locations(context.TODO(), cloudflare.RadarDNSTopLocationsParams{
 		Domain:    cloudflare.F([]string{"string", "string", "string"}),
 		ASN:       cloudflare.F([]string{"string", "string", "string"}),
+		Continent: cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange: cloudflare.F([]cloudflare.RadarDNSTopLocationsParamsDateRange{cloudflare.RadarDNSTopLocationsParamsDateRange1d, cloudflare.RadarDNSTopLocationsParamsDateRange2d, cloudflare.RadarDNSTopLocationsParamsDateRange7d}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),

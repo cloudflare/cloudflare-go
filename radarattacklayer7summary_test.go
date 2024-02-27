@@ -32,6 +32,7 @@ func TestRadarAttackLayer7SummaryGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Attacks.Layer7.Summary.Get(context.TODO(), cloudflare.RadarAttackLayer7SummaryGetParams{
 		ASN:       cloudflare.F([]string{"string", "string", "string"}),
+		Continent: cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange: cloudflare.F([]cloudflare.RadarAttackLayer7SummaryGetParamsDateRange{cloudflare.RadarAttackLayer7SummaryGetParamsDateRange1d, cloudflare.RadarAttackLayer7SummaryGetParamsDateRange2d, cloudflare.RadarAttackLayer7SummaryGetParamsDateRange7d}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -66,6 +67,7 @@ func TestRadarAttackLayer7SummaryHTTPMethodWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Attacks.Layer7.Summary.HTTPMethod(context.TODO(), cloudflare.RadarAttackLayer7SummaryHTTPMethodParams{
 		ASN:               cloudflare.F([]string{"string", "string", "string"}),
+		Continent:         cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:           cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:         cloudflare.F([]cloudflare.RadarAttackLayer7SummaryHTTPMethodParamsDateRange{cloudflare.RadarAttackLayer7SummaryHTTPMethodParamsDateRange1d, cloudflare.RadarAttackLayer7SummaryHTTPMethodParamsDateRange2d, cloudflare.RadarAttackLayer7SummaryHTTPMethodParamsDateRange7d}),
 		DateStart:         cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -103,6 +105,7 @@ func TestRadarAttackLayer7SummaryHTTPVersionWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Attacks.Layer7.Summary.HTTPVersion(context.TODO(), cloudflare.RadarAttackLayer7SummaryHTTPVersionParams{
 		ASN:               cloudflare.F([]string{"string", "string", "string"}),
+		Continent:         cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:           cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:         cloudflare.F([]cloudflare.RadarAttackLayer7SummaryHTTPVersionParamsDateRange{cloudflare.RadarAttackLayer7SummaryHTTPVersionParamsDateRange1d, cloudflare.RadarAttackLayer7SummaryHTTPVersionParamsDateRange2d, cloudflare.RadarAttackLayer7SummaryHTTPVersionParamsDateRange7d}),
 		DateStart:         cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -140,6 +143,7 @@ func TestRadarAttackLayer7SummaryIPVersionWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Attacks.Layer7.Summary.IPVersion(context.TODO(), cloudflare.RadarAttackLayer7SummaryIPVersionParams{
 		ASN:               cloudflare.F([]string{"string", "string", "string"}),
+		Continent:         cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:           cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:         cloudflare.F([]cloudflare.RadarAttackLayer7SummaryIPVersionParamsDateRange{cloudflare.RadarAttackLayer7SummaryIPVersionParamsDateRange1d, cloudflare.RadarAttackLayer7SummaryIPVersionParamsDateRange2d, cloudflare.RadarAttackLayer7SummaryIPVersionParamsDateRange7d}),
 		DateStart:         cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -177,6 +181,7 @@ func TestRadarAttackLayer7SummaryManagedRulesWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Attacks.Layer7.Summary.ManagedRules(context.TODO(), cloudflare.RadarAttackLayer7SummaryManagedRulesParams{
 		ASN:               cloudflare.F([]string{"string", "string", "string"}),
+		Continent:         cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:           cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:         cloudflare.F([]cloudflare.RadarAttackLayer7SummaryManagedRulesParamsDateRange{cloudflare.RadarAttackLayer7SummaryManagedRulesParamsDateRange1d, cloudflare.RadarAttackLayer7SummaryManagedRulesParamsDateRange2d, cloudflare.RadarAttackLayer7SummaryManagedRulesParamsDateRange7d}),
 		DateStart:         cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -215,6 +220,7 @@ func TestRadarAttackLayer7SummaryMitigationProductWithOptionalParams(t *testing.
 	)
 	_, err := client.Radar.Attacks.Layer7.Summary.MitigationProduct(context.TODO(), cloudflare.RadarAttackLayer7SummaryMitigationProductParams{
 		ASN:         cloudflare.F([]string{"string", "string", "string"}),
+		Continent:   cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:   cloudflare.F([]cloudflare.RadarAttackLayer7SummaryMitigationProductParamsDateRange{cloudflare.RadarAttackLayer7SummaryMitigationProductParamsDateRange1d, cloudflare.RadarAttackLayer7SummaryMitigationProductParamsDateRange2d, cloudflare.RadarAttackLayer7SummaryMitigationProductParamsDateRange7d}),
 		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),

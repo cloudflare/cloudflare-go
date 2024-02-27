@@ -32,6 +32,7 @@ func TestRadarAttackLayer3TimeseriesGroupBitrateWithOptionalParams(t *testing.T)
 	)
 	_, err := client.Radar.Attacks.Layer3.TimeseriesGroups.Bitrate(context.TODO(), cloudflare.RadarAttackLayer3TimeseriesGroupBitrateParams{
 		AggInterval:   cloudflare.F(cloudflare.RadarAttackLayer3TimeseriesGroupBitrateParamsAggInterval1h),
+		Continent:     cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:     cloudflare.F([]cloudflare.RadarAttackLayer3TimeseriesGroupBitrateParamsDateRange{cloudflare.RadarAttackLayer3TimeseriesGroupBitrateParamsDateRange1d, cloudflare.RadarAttackLayer3TimeseriesGroupBitrateParamsDateRange2d, cloudflare.RadarAttackLayer3TimeseriesGroupBitrateParamsDateRange7d}),
 		DateStart:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -70,6 +71,7 @@ func TestRadarAttackLayer3TimeseriesGroupDurationWithOptionalParams(t *testing.T
 	)
 	_, err := client.Radar.Attacks.Layer3.TimeseriesGroups.Duration(context.TODO(), cloudflare.RadarAttackLayer3TimeseriesGroupDurationParams{
 		AggInterval:   cloudflare.F(cloudflare.RadarAttackLayer3TimeseriesGroupDurationParamsAggInterval1h),
+		Continent:     cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:     cloudflare.F([]cloudflare.RadarAttackLayer3TimeseriesGroupDurationParamsDateRange{cloudflare.RadarAttackLayer3TimeseriesGroupDurationParamsDateRange1d, cloudflare.RadarAttackLayer3TimeseriesGroupDurationParamsDateRange2d, cloudflare.RadarAttackLayer3TimeseriesGroupDurationParamsDateRange7d}),
 		DateStart:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -109,6 +111,7 @@ func TestRadarAttackLayer3TimeseriesGroupGetWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.Attacks.Layer3.TimeseriesGroups.Get(context.TODO(), cloudflare.RadarAttackLayer3TimeseriesGroupGetParams{
 		AggInterval: cloudflare.F(cloudflare.RadarAttackLayer3TimeseriesGroupGetParamsAggInterval1h),
 		ASN:         cloudflare.F([]string{"string", "string", "string"}),
+		Continent:   cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:   cloudflare.F([]cloudflare.RadarAttackLayer3TimeseriesGroupGetParamsDateRange{cloudflare.RadarAttackLayer3TimeseriesGroupGetParamsDateRange1d, cloudflare.RadarAttackLayer3TimeseriesGroupGetParamsDateRange2d, cloudflare.RadarAttackLayer3TimeseriesGroupGetParamsDateRange7d}),
 		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -143,6 +146,7 @@ func TestRadarAttackLayer3TimeseriesGroupIndustryWithOptionalParams(t *testing.T
 	)
 	_, err := client.Radar.Attacks.Layer3.TimeseriesGroups.Industry(context.TODO(), cloudflare.RadarAttackLayer3TimeseriesGroupIndustryParams{
 		AggInterval:   cloudflare.F(cloudflare.RadarAttackLayer3TimeseriesGroupIndustryParamsAggInterval1h),
+		Continent:     cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:     cloudflare.F([]cloudflare.RadarAttackLayer3TimeseriesGroupIndustryParamsDateRange{cloudflare.RadarAttackLayer3TimeseriesGroupIndustryParamsDateRange1d, cloudflare.RadarAttackLayer3TimeseriesGroupIndustryParamsDateRange2d, cloudflare.RadarAttackLayer3TimeseriesGroupIndustryParamsDateRange7d}),
 		DateStart:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -181,6 +185,7 @@ func TestRadarAttackLayer3TimeseriesGroupIPVersionWithOptionalParams(t *testing.
 	)
 	_, err := client.Radar.Attacks.Layer3.TimeseriesGroups.IPVersion(context.TODO(), cloudflare.RadarAttackLayer3TimeseriesGroupIPVersionParams{
 		AggInterval:   cloudflare.F(cloudflare.RadarAttackLayer3TimeseriesGroupIPVersionParamsAggInterval1h),
+		Continent:     cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:     cloudflare.F([]cloudflare.RadarAttackLayer3TimeseriesGroupIPVersionParamsDateRange{cloudflare.RadarAttackLayer3TimeseriesGroupIPVersionParamsDateRange1d, cloudflare.RadarAttackLayer3TimeseriesGroupIPVersionParamsDateRange2d, cloudflare.RadarAttackLayer3TimeseriesGroupIPVersionParamsDateRange7d}),
 		DateStart:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -218,6 +223,7 @@ func TestRadarAttackLayer3TimeseriesGroupProtocolWithOptionalParams(t *testing.T
 	)
 	_, err := client.Radar.Attacks.Layer3.TimeseriesGroups.Protocol(context.TODO(), cloudflare.RadarAttackLayer3TimeseriesGroupProtocolParams{
 		AggInterval:   cloudflare.F(cloudflare.RadarAttackLayer3TimeseriesGroupProtocolParamsAggInterval1h),
+		Continent:     cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:     cloudflare.F([]cloudflare.RadarAttackLayer3TimeseriesGroupProtocolParamsDateRange{cloudflare.RadarAttackLayer3TimeseriesGroupProtocolParamsDateRange1d, cloudflare.RadarAttackLayer3TimeseriesGroupProtocolParamsDateRange2d, cloudflare.RadarAttackLayer3TimeseriesGroupProtocolParamsDateRange7d}),
 		DateStart:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -255,6 +261,7 @@ func TestRadarAttackLayer3TimeseriesGroupVectorWithOptionalParams(t *testing.T) 
 	)
 	_, err := client.Radar.Attacks.Layer3.TimeseriesGroups.Vector(context.TODO(), cloudflare.RadarAttackLayer3TimeseriesGroupVectorParams{
 		AggInterval:   cloudflare.F(cloudflare.RadarAttackLayer3TimeseriesGroupVectorParamsAggInterval1h),
+		Continent:     cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:     cloudflare.F([]cloudflare.RadarAttackLayer3TimeseriesGroupVectorParamsDateRange{cloudflare.RadarAttackLayer3TimeseriesGroupVectorParamsDateRange1d, cloudflare.RadarAttackLayer3TimeseriesGroupVectorParamsDateRange2d, cloudflare.RadarAttackLayer3TimeseriesGroupVectorParamsDateRange7d}),
 		DateStart:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -294,6 +301,7 @@ func TestRadarAttackLayer3TimeseriesGroupVerticalWithOptionalParams(t *testing.T
 	)
 	_, err := client.Radar.Attacks.Layer3.TimeseriesGroups.Vertical(context.TODO(), cloudflare.RadarAttackLayer3TimeseriesGroupVerticalParams{
 		AggInterval:   cloudflare.F(cloudflare.RadarAttackLayer3TimeseriesGroupVerticalParamsAggInterval1h),
+		Continent:     cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:     cloudflare.F([]cloudflare.RadarAttackLayer3TimeseriesGroupVerticalParamsDateRange{cloudflare.RadarAttackLayer3TimeseriesGroupVerticalParamsDateRange1d, cloudflare.RadarAttackLayer3TimeseriesGroupVerticalParamsDateRange2d, cloudflare.RadarAttackLayer3TimeseriesGroupVerticalParamsDateRange7d}),
 		DateStart:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
