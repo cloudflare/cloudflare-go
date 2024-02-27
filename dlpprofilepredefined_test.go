@@ -35,6 +35,12 @@ func TestDLPProfilePredefinedUpdateWithOptionalParams(t *testing.T) {
 		cloudflare.DLPProfilePredefinedUpdateParams{
 			AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			AllowedMatchCount: cloudflare.F(5.000000),
+			ContextAwareness: cloudflare.F(cloudflare.DLPProfilePredefinedUpdateParamsContextAwareness{
+				Enabled: cloudflare.F(true),
+				Skip: cloudflare.F(cloudflare.DLPProfilePredefinedUpdateParamsContextAwarenessSkip{
+					Files: cloudflare.F(true),
+				}),
+			}),
 			Entries: cloudflare.F([]cloudflare.DLPProfilePredefinedUpdateParamsEntry{{
 				Enabled: cloudflare.F(true),
 			}, {
