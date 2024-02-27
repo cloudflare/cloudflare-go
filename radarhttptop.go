@@ -327,10 +327,6 @@ type RadarHTTPTopBrowserFamiliesParams struct {
 	// Filter for bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]RadarHTTPTopBrowserFamiliesParamsBotClass] `query:"botClass"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
-	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
@@ -486,10 +482,6 @@ type RadarHTTPTopBrowsersParams struct {
 	// Filter for bot class. Refer to
 	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
 	BotClass param.Field[[]RadarHTTPTopBrowsersParamsBotClass] `query:"botClass"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
-	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous

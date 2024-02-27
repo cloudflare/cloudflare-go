@@ -32,7 +32,6 @@ func TestRadarHTTPSummaryBotClassWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.HTTP.Summary.BotClass(context.TODO(), cloudflare.RadarHTTPSummaryBotClassParams{
 		ASN:          cloudflare.F([]string{"string", "string", "string"}),
-		Continent:    cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:      cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:    cloudflare.F([]cloudflare.RadarHTTPSummaryBotClassParamsDateRange{cloudflare.RadarHTTPSummaryBotClassParamsDateRange1d, cloudflare.RadarHTTPSummaryBotClassParamsDateRange2d, cloudflare.RadarHTTPSummaryBotClassParamsDateRange7d}),
 		DateStart:    cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -74,7 +73,6 @@ func TestRadarHTTPSummaryDeviceTypeWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.HTTP.Summary.DeviceType(context.TODO(), cloudflare.RadarHTTPSummaryDeviceTypeParams{
 		ASN:          cloudflare.F([]string{"string", "string", "string"}),
 		BotClass:     cloudflare.F([]cloudflare.RadarHTTPSummaryDeviceTypeParamsBotClass{cloudflare.RadarHTTPSummaryDeviceTypeParamsBotClassLikelyAutomated, cloudflare.RadarHTTPSummaryDeviceTypeParamsBotClassLikelyHuman}),
-		Continent:    cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:      cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:    cloudflare.F([]cloudflare.RadarHTTPSummaryDeviceTypeParamsDateRange{cloudflare.RadarHTTPSummaryDeviceTypeParamsDateRange1d, cloudflare.RadarHTTPSummaryDeviceTypeParamsDateRange2d, cloudflare.RadarHTTPSummaryDeviceTypeParamsDateRange7d}),
 		DateStart:    cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -115,7 +113,6 @@ func TestRadarHTTPSummaryHTTPProtocolWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.HTTP.Summary.HTTPProtocol(context.TODO(), cloudflare.RadarHTTPSummaryHTTPProtocolParams{
 		ASN:         cloudflare.F([]string{"string", "string", "string"}),
 		BotClass:    cloudflare.F([]cloudflare.RadarHTTPSummaryHTTPProtocolParamsBotClass{cloudflare.RadarHTTPSummaryHTTPProtocolParamsBotClassLikelyAutomated, cloudflare.RadarHTTPSummaryHTTPProtocolParamsBotClassLikelyHuman}),
-		Continent:   cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:   cloudflare.F([]cloudflare.RadarHTTPSummaryHTTPProtocolParamsDateRange{cloudflare.RadarHTTPSummaryHTTPProtocolParamsDateRange1d, cloudflare.RadarHTTPSummaryHTTPProtocolParamsDateRange2d, cloudflare.RadarHTTPSummaryHTTPProtocolParamsDateRange7d}),
 		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -156,7 +153,6 @@ func TestRadarHTTPSummaryHTTPVersionWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.HTTP.Summary.HTTPVersion(context.TODO(), cloudflare.RadarHTTPSummaryHTTPVersionParams{
 		ASN:          cloudflare.F([]string{"string", "string", "string"}),
 		BotClass:     cloudflare.F([]cloudflare.RadarHTTPSummaryHTTPVersionParamsBotClass{cloudflare.RadarHTTPSummaryHTTPVersionParamsBotClassLikelyAutomated, cloudflare.RadarHTTPSummaryHTTPVersionParamsBotClassLikelyHuman}),
-		Continent:    cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:      cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:    cloudflare.F([]cloudflare.RadarHTTPSummaryHTTPVersionParamsDateRange{cloudflare.RadarHTTPSummaryHTTPVersionParamsDateRange1d, cloudflare.RadarHTTPSummaryHTTPVersionParamsDateRange2d, cloudflare.RadarHTTPSummaryHTTPVersionParamsDateRange7d}),
 		DateStart:    cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -197,7 +193,6 @@ func TestRadarHTTPSummaryIPVersionWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.HTTP.Summary.IPVersion(context.TODO(), cloudflare.RadarHTTPSummaryIPVersionParams{
 		ASN:          cloudflare.F([]string{"string", "string", "string"}),
 		BotClass:     cloudflare.F([]cloudflare.RadarHTTPSummaryIPVersionParamsBotClass{cloudflare.RadarHTTPSummaryIPVersionParamsBotClassLikelyAutomated, cloudflare.RadarHTTPSummaryIPVersionParamsBotClassLikelyHuman}),
-		Continent:    cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:      cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:    cloudflare.F([]cloudflare.RadarHTTPSummaryIPVersionParamsDateRange{cloudflare.RadarHTTPSummaryIPVersionParamsDateRange1d, cloudflare.RadarHTTPSummaryIPVersionParamsDateRange2d, cloudflare.RadarHTTPSummaryIPVersionParamsDateRange7d}),
 		DateStart:    cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -238,7 +233,6 @@ func TestRadarHTTPSummaryOSWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.HTTP.Summary.OS(context.TODO(), cloudflare.RadarHTTPSummaryOSParams{
 		ASN:          cloudflare.F([]string{"string", "string", "string"}),
 		BotClass:     cloudflare.F([]cloudflare.RadarHTTPSummaryOSParamsBotClass{cloudflare.RadarHTTPSummaryOSParamsBotClassLikelyAutomated, cloudflare.RadarHTTPSummaryOSParamsBotClassLikelyHuman}),
-		Continent:    cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:      cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:    cloudflare.F([]cloudflare.RadarHTTPSummaryOSParamsDateRange{cloudflare.RadarHTTPSummaryOSParamsDateRange1d, cloudflare.RadarHTTPSummaryOSParamsDateRange2d, cloudflare.RadarHTTPSummaryOSParamsDateRange7d}),
 		DateStart:    cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -279,7 +273,6 @@ func TestRadarHTTPSummaryTLSVersionWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.HTTP.Summary.TLSVersion(context.TODO(), cloudflare.RadarHTTPSummaryTLSVersionParams{
 		ASN:          cloudflare.F([]string{"string", "string", "string"}),
 		BotClass:     cloudflare.F([]cloudflare.RadarHTTPSummaryTLSVersionParamsBotClass{cloudflare.RadarHTTPSummaryTLSVersionParamsBotClassLikelyAutomated, cloudflare.RadarHTTPSummaryTLSVersionParamsBotClassLikelyHuman}),
-		Continent:    cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:      cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:    cloudflare.F([]cloudflare.RadarHTTPSummaryTLSVersionParamsDateRange{cloudflare.RadarHTTPSummaryTLSVersionParamsDateRange1d, cloudflare.RadarHTTPSummaryTLSVersionParamsDateRange2d, cloudflare.RadarHTTPSummaryTLSVersionParamsDateRange7d}),
 		DateStart:    cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),

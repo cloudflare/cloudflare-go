@@ -33,7 +33,6 @@ func TestRadarHTTPTopBrowserFamiliesWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.HTTP.Top.BrowserFamilies(context.TODO(), cloudflare.RadarHTTPTopBrowserFamiliesParams{
 		ASN:          cloudflare.F([]string{"string", "string", "string"}),
 		BotClass:     cloudflare.F([]cloudflare.RadarHTTPTopBrowserFamiliesParamsBotClass{cloudflare.RadarHTTPTopBrowserFamiliesParamsBotClassLikelyAutomated, cloudflare.RadarHTTPTopBrowserFamiliesParamsBotClassLikelyHuman}),
-		Continent:    cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:      cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:    cloudflare.F([]cloudflare.RadarHTTPTopBrowserFamiliesParamsDateRange{cloudflare.RadarHTTPTopBrowserFamiliesParamsDateRange1d, cloudflare.RadarHTTPTopBrowserFamiliesParamsDateRange2d, cloudflare.RadarHTTPTopBrowserFamiliesParamsDateRange7d}),
 		DateStart:    cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -76,7 +75,6 @@ func TestRadarHTTPTopBrowsersWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.HTTP.Top.Browsers(context.TODO(), cloudflare.RadarHTTPTopBrowsersParams{
 		ASN:          cloudflare.F([]string{"string", "string", "string"}),
 		BotClass:     cloudflare.F([]cloudflare.RadarHTTPTopBrowsersParamsBotClass{cloudflare.RadarHTTPTopBrowsersParamsBotClassLikelyAutomated, cloudflare.RadarHTTPTopBrowsersParamsBotClassLikelyHuman}),
-		Continent:    cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:      cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:    cloudflare.F([]cloudflare.RadarHTTPTopBrowsersParamsDateRange{cloudflare.RadarHTTPTopBrowsersParamsDateRange1d, cloudflare.RadarHTTPTopBrowsersParamsDateRange2d, cloudflare.RadarHTTPTopBrowsersParamsDateRange7d}),
 		DateStart:    cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),

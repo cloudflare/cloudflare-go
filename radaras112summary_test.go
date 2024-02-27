@@ -32,7 +32,6 @@ func TestRadarAs112SummaryDNSSECWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.As112.Summary.DNSSEC(context.TODO(), cloudflare.RadarAs112SummaryDNSSECParams{
 		ASN:       cloudflare.F([]string{"string", "string", "string"}),
-		Continent: cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange: cloudflare.F([]cloudflare.RadarAs112SummaryDNSSECParamsDateRange{cloudflare.RadarAs112SummaryDNSSECParamsDateRange1d, cloudflare.RadarAs112SummaryDNSSECParamsDateRange2d, cloudflare.RadarAs112SummaryDNSSECParamsDateRange7d}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -67,7 +66,6 @@ func TestRadarAs112SummaryEdnsWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.As112.Summary.Edns(context.TODO(), cloudflare.RadarAs112SummaryEdnsParams{
 		ASN:       cloudflare.F([]string{"string", "string", "string"}),
-		Continent: cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange: cloudflare.F([]cloudflare.RadarAs112SummaryEdnsParamsDateRange{cloudflare.RadarAs112SummaryEdnsParamsDateRange1d, cloudflare.RadarAs112SummaryEdnsParamsDateRange2d, cloudflare.RadarAs112SummaryEdnsParamsDateRange7d}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -102,7 +100,6 @@ func TestRadarAs112SummaryIPVersionWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.As112.Summary.IPVersion(context.TODO(), cloudflare.RadarAs112SummaryIPVersionParams{
 		ASN:       cloudflare.F([]string{"string", "string", "string"}),
-		Continent: cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange: cloudflare.F([]cloudflare.RadarAs112SummaryIPVersionParamsDateRange{cloudflare.RadarAs112SummaryIPVersionParamsDateRange1d, cloudflare.RadarAs112SummaryIPVersionParamsDateRange2d, cloudflare.RadarAs112SummaryIPVersionParamsDateRange7d}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -137,7 +134,6 @@ func TestRadarAs112SummaryProtocolWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.As112.Summary.Protocol(context.TODO(), cloudflare.RadarAs112SummaryProtocolParams{
 		ASN:       cloudflare.F([]string{"string", "string", "string"}),
-		Continent: cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange: cloudflare.F([]cloudflare.RadarAs112SummaryProtocolParamsDateRange{cloudflare.RadarAs112SummaryProtocolParamsDateRange1d, cloudflare.RadarAs112SummaryProtocolParamsDateRange2d, cloudflare.RadarAs112SummaryProtocolParamsDateRange7d}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -172,7 +168,6 @@ func TestRadarAs112SummaryQueryTypeWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.As112.Summary.QueryType(context.TODO(), cloudflare.RadarAs112SummaryQueryTypeParams{
 		ASN:       cloudflare.F([]string{"string", "string", "string"}),
-		Continent: cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange: cloudflare.F([]cloudflare.RadarAs112SummaryQueryTypeParamsDateRange{cloudflare.RadarAs112SummaryQueryTypeParamsDateRange1d, cloudflare.RadarAs112SummaryQueryTypeParamsDateRange2d, cloudflare.RadarAs112SummaryQueryTypeParamsDateRange7d}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -207,7 +202,6 @@ func TestRadarAs112SummaryResponseCodesWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.As112.Summary.ResponseCodes(context.TODO(), cloudflare.RadarAs112SummaryResponseCodesParams{
 		ASN:       cloudflare.F([]string{"string", "string", "string"}),
-		Continent: cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange: cloudflare.F([]cloudflare.RadarAs112SummaryResponseCodesParamsDateRange{cloudflare.RadarAs112SummaryResponseCodesParamsDateRange1d, cloudflare.RadarAs112SummaryResponseCodesParamsDateRange2d, cloudflare.RadarAs112SummaryResponseCodesParamsDateRange7d}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),

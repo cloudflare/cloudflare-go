@@ -1062,6 +1062,10 @@ func (r *RadarEmailSecuritySummaryThreatCategoryResponseSummary0) UnmarshalJSON(
 }
 
 type RadarEmailSecuritySummaryARCParams struct {
+	// Array of comma separated list of ASNs, start with `-` to exclude from results.
+	// For example, `-174, 3356` excludes results from AS174, but includes results from
+	// AS3356.
+	ASN param.Field[[]string] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
@@ -1076,12 +1080,14 @@ type RadarEmailSecuritySummaryARCParams struct {
 	DMARC param.Field[[]RadarEmailSecuritySummaryARCParamsDMARC] `query:"dmarc"`
 	// Format results are returned in.
 	Format param.Field[RadarEmailSecuritySummaryARCParamsFormat] `query:"format"`
+	// Array of comma separated list of locations (alpha-2 country codes). Start with
+	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
+	// but includes results from PT.
+	Location param.Field[[]string] `query:"location"`
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Filter for spf.
 	SPF param.Field[[]RadarEmailSecuritySummaryARCParamsSPF] `query:"spf"`
-	// Filter for tls version.
-	TLSVersion param.Field[[]RadarEmailSecuritySummaryARCParamsTLSVersion] `query:"tlsVersion"`
 }
 
 // URLQuery serializes [RadarEmailSecuritySummaryARCParams]'s query parameters as
@@ -1145,15 +1151,6 @@ const (
 	RadarEmailSecuritySummaryARCParamsSPFFail RadarEmailSecuritySummaryARCParamsSPF = "FAIL"
 )
 
-type RadarEmailSecuritySummaryARCParamsTLSVersion string
-
-const (
-	RadarEmailSecuritySummaryARCParamsTLSVersionTlSv1_0 RadarEmailSecuritySummaryARCParamsTLSVersion = "TLSv1_0"
-	RadarEmailSecuritySummaryARCParamsTLSVersionTlSv1_1 RadarEmailSecuritySummaryARCParamsTLSVersion = "TLSv1_1"
-	RadarEmailSecuritySummaryARCParamsTLSVersionTlSv1_2 RadarEmailSecuritySummaryARCParamsTLSVersion = "TLSv1_2"
-	RadarEmailSecuritySummaryARCParamsTLSVersionTlSv1_3 RadarEmailSecuritySummaryARCParamsTLSVersion = "TLSv1_3"
-)
-
 type RadarEmailSecuritySummaryARCResponseEnvelope struct {
 	Result  RadarEmailSecuritySummaryARCResponse             `json:"result,required"`
 	Success bool                                             `json:"success,required"`
@@ -1176,6 +1173,10 @@ func (r *RadarEmailSecuritySummaryARCResponseEnvelope) UnmarshalJSON(data []byte
 type RadarEmailSecuritySummaryDKIMParams struct {
 	// Filter for arc (Authenticated Received Chain).
 	ARC param.Field[[]RadarEmailSecuritySummaryDKIMParamsARC] `query:"arc"`
+	// Array of comma separated list of ASNs, start with `-` to exclude from results.
+	// For example, `-174, 3356` excludes results from AS174, but includes results from
+	// AS3356.
+	ASN param.Field[[]string] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
@@ -1188,12 +1189,14 @@ type RadarEmailSecuritySummaryDKIMParams struct {
 	DMARC param.Field[[]RadarEmailSecuritySummaryDKIMParamsDMARC] `query:"dmarc"`
 	// Format results are returned in.
 	Format param.Field[RadarEmailSecuritySummaryDKIMParamsFormat] `query:"format"`
+	// Array of comma separated list of locations (alpha-2 country codes). Start with
+	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
+	// but includes results from PT.
+	Location param.Field[[]string] `query:"location"`
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Filter for spf.
 	SPF param.Field[[]RadarEmailSecuritySummaryDKIMParamsSPF] `query:"spf"`
-	// Filter for tls version.
-	TLSVersion param.Field[[]RadarEmailSecuritySummaryDKIMParamsTLSVersion] `query:"tlsVersion"`
 }
 
 // URLQuery serializes [RadarEmailSecuritySummaryDKIMParams]'s query parameters as
@@ -1257,15 +1260,6 @@ const (
 	RadarEmailSecuritySummaryDKIMParamsSPFFail RadarEmailSecuritySummaryDKIMParamsSPF = "FAIL"
 )
 
-type RadarEmailSecuritySummaryDKIMParamsTLSVersion string
-
-const (
-	RadarEmailSecuritySummaryDKIMParamsTLSVersionTlSv1_0 RadarEmailSecuritySummaryDKIMParamsTLSVersion = "TLSv1_0"
-	RadarEmailSecuritySummaryDKIMParamsTLSVersionTlSv1_1 RadarEmailSecuritySummaryDKIMParamsTLSVersion = "TLSv1_1"
-	RadarEmailSecuritySummaryDKIMParamsTLSVersionTlSv1_2 RadarEmailSecuritySummaryDKIMParamsTLSVersion = "TLSv1_2"
-	RadarEmailSecuritySummaryDKIMParamsTLSVersionTlSv1_3 RadarEmailSecuritySummaryDKIMParamsTLSVersion = "TLSv1_3"
-)
-
 type RadarEmailSecuritySummaryDKIMResponseEnvelope struct {
 	Result  RadarEmailSecuritySummaryDKIMResponse             `json:"result,required"`
 	Success bool                                              `json:"success,required"`
@@ -1288,6 +1282,10 @@ func (r *RadarEmailSecuritySummaryDKIMResponseEnvelope) UnmarshalJSON(data []byt
 type RadarEmailSecuritySummaryDMARCParams struct {
 	// Filter for arc (Authenticated Received Chain).
 	ARC param.Field[[]RadarEmailSecuritySummaryDMARCParamsARC] `query:"arc"`
+	// Array of comma separated list of ASNs, start with `-` to exclude from results.
+	// For example, `-174, 3356` excludes results from AS174, but includes results from
+	// AS3356.
+	ASN param.Field[[]string] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
@@ -1300,12 +1298,14 @@ type RadarEmailSecuritySummaryDMARCParams struct {
 	DKIM param.Field[[]RadarEmailSecuritySummaryDMARCParamsDKIM] `query:"dkim"`
 	// Format results are returned in.
 	Format param.Field[RadarEmailSecuritySummaryDMARCParamsFormat] `query:"format"`
+	// Array of comma separated list of locations (alpha-2 country codes). Start with
+	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
+	// but includes results from PT.
+	Location param.Field[[]string] `query:"location"`
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Filter for spf.
 	SPF param.Field[[]RadarEmailSecuritySummaryDMARCParamsSPF] `query:"spf"`
-	// Filter for tls version.
-	TLSVersion param.Field[[]RadarEmailSecuritySummaryDMARCParamsTLSVersion] `query:"tlsVersion"`
 }
 
 // URLQuery serializes [RadarEmailSecuritySummaryDMARCParams]'s query parameters as
@@ -1369,15 +1369,6 @@ const (
 	RadarEmailSecuritySummaryDMARCParamsSPFFail RadarEmailSecuritySummaryDMARCParamsSPF = "FAIL"
 )
 
-type RadarEmailSecuritySummaryDMARCParamsTLSVersion string
-
-const (
-	RadarEmailSecuritySummaryDMARCParamsTLSVersionTlSv1_0 RadarEmailSecuritySummaryDMARCParamsTLSVersion = "TLSv1_0"
-	RadarEmailSecuritySummaryDMARCParamsTLSVersionTlSv1_1 RadarEmailSecuritySummaryDMARCParamsTLSVersion = "TLSv1_1"
-	RadarEmailSecuritySummaryDMARCParamsTLSVersionTlSv1_2 RadarEmailSecuritySummaryDMARCParamsTLSVersion = "TLSv1_2"
-	RadarEmailSecuritySummaryDMARCParamsTLSVersionTlSv1_3 RadarEmailSecuritySummaryDMARCParamsTLSVersion = "TLSv1_3"
-)
-
 type RadarEmailSecuritySummaryDMARCResponseEnvelope struct {
 	Result  RadarEmailSecuritySummaryDMARCResponse             `json:"result,required"`
 	Success bool                                               `json:"success,required"`
@@ -1400,6 +1391,10 @@ func (r *RadarEmailSecuritySummaryDMARCResponseEnvelope) UnmarshalJSON(data []by
 type RadarEmailSecuritySummaryMaliciousParams struct {
 	// Filter for arc (Authenticated Received Chain).
 	ARC param.Field[[]RadarEmailSecuritySummaryMaliciousParamsARC] `query:"arc"`
+	// Array of comma separated list of ASNs, start with `-` to exclude from results.
+	// For example, `-174, 3356` excludes results from AS174, but includes results from
+	// AS3356.
+	ASN param.Field[[]string] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
@@ -1414,12 +1409,14 @@ type RadarEmailSecuritySummaryMaliciousParams struct {
 	DMARC param.Field[[]RadarEmailSecuritySummaryMaliciousParamsDMARC] `query:"dmarc"`
 	// Format results are returned in.
 	Format param.Field[RadarEmailSecuritySummaryMaliciousParamsFormat] `query:"format"`
+	// Array of comma separated list of locations (alpha-2 country codes). Start with
+	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
+	// but includes results from PT.
+	Location param.Field[[]string] `query:"location"`
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Filter for spf.
 	SPF param.Field[[]RadarEmailSecuritySummaryMaliciousParamsSPF] `query:"spf"`
-	// Filter for tls version.
-	TLSVersion param.Field[[]RadarEmailSecuritySummaryMaliciousParamsTLSVersion] `query:"tlsVersion"`
 }
 
 // URLQuery serializes [RadarEmailSecuritySummaryMaliciousParams]'s query
@@ -1491,15 +1488,6 @@ const (
 	RadarEmailSecuritySummaryMaliciousParamsSPFFail RadarEmailSecuritySummaryMaliciousParamsSPF = "FAIL"
 )
 
-type RadarEmailSecuritySummaryMaliciousParamsTLSVersion string
-
-const (
-	RadarEmailSecuritySummaryMaliciousParamsTLSVersionTlSv1_0 RadarEmailSecuritySummaryMaliciousParamsTLSVersion = "TLSv1_0"
-	RadarEmailSecuritySummaryMaliciousParamsTLSVersionTlSv1_1 RadarEmailSecuritySummaryMaliciousParamsTLSVersion = "TLSv1_1"
-	RadarEmailSecuritySummaryMaliciousParamsTLSVersionTlSv1_2 RadarEmailSecuritySummaryMaliciousParamsTLSVersion = "TLSv1_2"
-	RadarEmailSecuritySummaryMaliciousParamsTLSVersionTlSv1_3 RadarEmailSecuritySummaryMaliciousParamsTLSVersion = "TLSv1_3"
-)
-
 type RadarEmailSecuritySummaryMaliciousResponseEnvelope struct {
 	Result  RadarEmailSecuritySummaryMaliciousResponse             `json:"result,required"`
 	Success bool                                                   `json:"success,required"`
@@ -1522,6 +1510,10 @@ func (r *RadarEmailSecuritySummaryMaliciousResponseEnvelope) UnmarshalJSON(data 
 type RadarEmailSecuritySummarySpamParams struct {
 	// Filter for arc (Authenticated Received Chain).
 	ARC param.Field[[]RadarEmailSecuritySummarySpamParamsARC] `query:"arc"`
+	// Array of comma separated list of ASNs, start with `-` to exclude from results.
+	// For example, `-174, 3356` excludes results from AS174, but includes results from
+	// AS3356.
+	ASN param.Field[[]string] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
@@ -1536,12 +1528,14 @@ type RadarEmailSecuritySummarySpamParams struct {
 	DMARC param.Field[[]RadarEmailSecuritySummarySpamParamsDMARC] `query:"dmarc"`
 	// Format results are returned in.
 	Format param.Field[RadarEmailSecuritySummarySpamParamsFormat] `query:"format"`
+	// Array of comma separated list of locations (alpha-2 country codes). Start with
+	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
+	// but includes results from PT.
+	Location param.Field[[]string] `query:"location"`
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Filter for spf.
 	SPF param.Field[[]RadarEmailSecuritySummarySpamParamsSPF] `query:"spf"`
-	// Filter for tls version.
-	TLSVersion param.Field[[]RadarEmailSecuritySummarySpamParamsTLSVersion] `query:"tlsVersion"`
 }
 
 // URLQuery serializes [RadarEmailSecuritySummarySpamParams]'s query parameters as
@@ -1613,15 +1607,6 @@ const (
 	RadarEmailSecuritySummarySpamParamsSPFFail RadarEmailSecuritySummarySpamParamsSPF = "FAIL"
 )
 
-type RadarEmailSecuritySummarySpamParamsTLSVersion string
-
-const (
-	RadarEmailSecuritySummarySpamParamsTLSVersionTlSv1_0 RadarEmailSecuritySummarySpamParamsTLSVersion = "TLSv1_0"
-	RadarEmailSecuritySummarySpamParamsTLSVersionTlSv1_1 RadarEmailSecuritySummarySpamParamsTLSVersion = "TLSv1_1"
-	RadarEmailSecuritySummarySpamParamsTLSVersionTlSv1_2 RadarEmailSecuritySummarySpamParamsTLSVersion = "TLSv1_2"
-	RadarEmailSecuritySummarySpamParamsTLSVersionTlSv1_3 RadarEmailSecuritySummarySpamParamsTLSVersion = "TLSv1_3"
-)
-
 type RadarEmailSecuritySummarySpamResponseEnvelope struct {
 	Result  RadarEmailSecuritySummarySpamResponse             `json:"result,required"`
 	Success bool                                              `json:"success,required"`
@@ -1644,6 +1629,10 @@ func (r *RadarEmailSecuritySummarySpamResponseEnvelope) UnmarshalJSON(data []byt
 type RadarEmailSecuritySummarySPFParams struct {
 	// Filter for arc (Authenticated Received Chain).
 	ARC param.Field[[]RadarEmailSecuritySummarySPFParamsARC] `query:"arc"`
+	// Array of comma separated list of ASNs, start with `-` to exclude from results.
+	// For example, `-174, 3356` excludes results from AS174, but includes results from
+	// AS3356.
+	ASN param.Field[[]string] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
@@ -1658,10 +1647,12 @@ type RadarEmailSecuritySummarySPFParams struct {
 	DMARC param.Field[[]RadarEmailSecuritySummarySPFParamsDMARC] `query:"dmarc"`
 	// Format results are returned in.
 	Format param.Field[RadarEmailSecuritySummarySPFParamsFormat] `query:"format"`
+	// Array of comma separated list of locations (alpha-2 country codes). Start with
+	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
+	// but includes results from PT.
+	Location param.Field[[]string] `query:"location"`
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
-	// Filter for tls version.
-	TLSVersion param.Field[[]RadarEmailSecuritySummarySPFParamsTLSVersion] `query:"tlsVersion"`
 }
 
 // URLQuery serializes [RadarEmailSecuritySummarySPFParams]'s query parameters as
@@ -1725,15 +1716,6 @@ const (
 	RadarEmailSecuritySummarySPFParamsFormatCsv  RadarEmailSecuritySummarySPFParamsFormat = "CSV"
 )
 
-type RadarEmailSecuritySummarySPFParamsTLSVersion string
-
-const (
-	RadarEmailSecuritySummarySPFParamsTLSVersionTlSv1_0 RadarEmailSecuritySummarySPFParamsTLSVersion = "TLSv1_0"
-	RadarEmailSecuritySummarySPFParamsTLSVersionTlSv1_1 RadarEmailSecuritySummarySPFParamsTLSVersion = "TLSv1_1"
-	RadarEmailSecuritySummarySPFParamsTLSVersionTlSv1_2 RadarEmailSecuritySummarySPFParamsTLSVersion = "TLSv1_2"
-	RadarEmailSecuritySummarySPFParamsTLSVersionTlSv1_3 RadarEmailSecuritySummarySPFParamsTLSVersion = "TLSv1_3"
-)
-
 type RadarEmailSecuritySummarySPFResponseEnvelope struct {
 	Result  RadarEmailSecuritySummarySPFResponse             `json:"result,required"`
 	Success bool                                             `json:"success,required"`
@@ -1756,6 +1738,10 @@ func (r *RadarEmailSecuritySummarySPFResponseEnvelope) UnmarshalJSON(data []byte
 type RadarEmailSecuritySummaryThreatCategoryParams struct {
 	// Filter for arc (Authenticated Received Chain).
 	ARC param.Field[[]RadarEmailSecuritySummaryThreatCategoryParamsARC] `query:"arc"`
+	// Array of comma separated list of ASNs, start with `-` to exclude from results.
+	// For example, `-174, 3356` excludes results from AS174, but includes results from
+	// AS3356.
+	ASN param.Field[[]string] `query:"asn"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
@@ -1770,12 +1756,14 @@ type RadarEmailSecuritySummaryThreatCategoryParams struct {
 	DMARC param.Field[[]RadarEmailSecuritySummaryThreatCategoryParamsDMARC] `query:"dmarc"`
 	// Format results are returned in.
 	Format param.Field[RadarEmailSecuritySummaryThreatCategoryParamsFormat] `query:"format"`
+	// Array of comma separated list of locations (alpha-2 country codes). Start with
+	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
+	// but includes results from PT.
+	Location param.Field[[]string] `query:"location"`
 	// Array of names that will be used to name the series in responses.
 	Name param.Field[[]string] `query:"name"`
 	// Filter for spf.
 	SPF param.Field[[]RadarEmailSecuritySummaryThreatCategoryParamsSPF] `query:"spf"`
-	// Filter for tls version.
-	TLSVersion param.Field[[]RadarEmailSecuritySummaryThreatCategoryParamsTLSVersion] `query:"tlsVersion"`
 }
 
 // URLQuery serializes [RadarEmailSecuritySummaryThreatCategoryParams]'s query
@@ -1845,15 +1833,6 @@ const (
 	RadarEmailSecuritySummaryThreatCategoryParamsSPFPass RadarEmailSecuritySummaryThreatCategoryParamsSPF = "PASS"
 	RadarEmailSecuritySummaryThreatCategoryParamsSPFNone RadarEmailSecuritySummaryThreatCategoryParamsSPF = "NONE"
 	RadarEmailSecuritySummaryThreatCategoryParamsSPFFail RadarEmailSecuritySummaryThreatCategoryParamsSPF = "FAIL"
-)
-
-type RadarEmailSecuritySummaryThreatCategoryParamsTLSVersion string
-
-const (
-	RadarEmailSecuritySummaryThreatCategoryParamsTLSVersionTlSv1_0 RadarEmailSecuritySummaryThreatCategoryParamsTLSVersion = "TLSv1_0"
-	RadarEmailSecuritySummaryThreatCategoryParamsTLSVersionTlSv1_1 RadarEmailSecuritySummaryThreatCategoryParamsTLSVersion = "TLSv1_1"
-	RadarEmailSecuritySummaryThreatCategoryParamsTLSVersionTlSv1_2 RadarEmailSecuritySummaryThreatCategoryParamsTLSVersion = "TLSv1_2"
-	RadarEmailSecuritySummaryThreatCategoryParamsTLSVersionTlSv1_3 RadarEmailSecuritySummaryThreatCategoryParamsTLSVersion = "TLSv1_3"
 )
 
 type RadarEmailSecuritySummaryThreatCategoryResponseEnvelope struct {

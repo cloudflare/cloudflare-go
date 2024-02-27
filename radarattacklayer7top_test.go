@@ -32,7 +32,6 @@ func TestRadarAttackLayer7TopAttacksWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Attacks.Layer7.Top.Attacks(context.TODO(), cloudflare.RadarAttackLayer7TopAttacksParams{
 		ASN:              cloudflare.F([]string{"string", "string", "string"}),
-		Continent:        cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:          cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:        cloudflare.F([]cloudflare.RadarAttackLayer7TopAttacksParamsDateRange{cloudflare.RadarAttackLayer7TopAttacksParamsDateRange1d, cloudflare.RadarAttackLayer7TopAttacksParamsDateRange2d, cloudflare.RadarAttackLayer7TopAttacksParamsDateRange7d}),
 		DateStart:        cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -71,7 +70,6 @@ func TestRadarAttackLayer7TopIndustryWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Attacks.Layer7.Top.Industry(context.TODO(), cloudflare.RadarAttackLayer7TopIndustryParams{
 		ASN:       cloudflare.F([]string{"string", "string", "string"}),
-		Continent: cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange: cloudflare.F([]cloudflare.RadarAttackLayer7TopIndustryParamsDateRange{cloudflare.RadarAttackLayer7TopIndustryParamsDateRange1d, cloudflare.RadarAttackLayer7TopIndustryParamsDateRange2d, cloudflare.RadarAttackLayer7TopIndustryParamsDateRange7d}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -107,7 +105,6 @@ func TestRadarAttackLayer7TopVerticalWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Attacks.Layer7.Top.Vertical(context.TODO(), cloudflare.RadarAttackLayer7TopVerticalParams{
 		ASN:       cloudflare.F([]string{"string", "string", "string"}),
-		Continent: cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange: cloudflare.F([]cloudflare.RadarAttackLayer7TopVerticalParamsDateRange{cloudflare.RadarAttackLayer7TopVerticalParamsDateRange1d, cloudflare.RadarAttackLayer7TopVerticalParamsDateRange2d, cloudflare.RadarAttackLayer7TopVerticalParamsDateRange7d}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),

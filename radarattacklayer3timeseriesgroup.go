@@ -572,10 +572,6 @@ type RadarAttackLayer3TimeseriesGroupBitrateParams struct {
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[RadarAttackLayer3TimeseriesGroupBitrateParamsAggInterval] `query:"aggInterval"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
-	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
@@ -712,10 +708,6 @@ type RadarAttackLayer3TimeseriesGroupDurationParams struct {
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[RadarAttackLayer3TimeseriesGroupDurationParamsAggInterval] `query:"aggInterval"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
-	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
@@ -856,10 +848,6 @@ type RadarAttackLayer3TimeseriesGroupGetParams struct {
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
 	ASN param.Field[[]string] `query:"asn"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
-	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
@@ -951,10 +939,6 @@ type RadarAttackLayer3TimeseriesGroupIndustryParams struct {
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[RadarAttackLayer3TimeseriesGroupIndustryParamsAggInterval] `query:"aggInterval"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
-	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
@@ -1083,10 +1067,6 @@ type RadarAttackLayer3TimeseriesGroupIPVersionParams struct {
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[RadarAttackLayer3TimeseriesGroupIPVersionParamsAggInterval] `query:"aggInterval"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
-	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
@@ -1214,10 +1194,6 @@ type RadarAttackLayer3TimeseriesGroupProtocolParams struct {
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[RadarAttackLayer3TimeseriesGroupProtocolParamsAggInterval] `query:"aggInterval"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
-	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
@@ -1343,10 +1319,6 @@ type RadarAttackLayer3TimeseriesGroupVectorParams struct {
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[RadarAttackLayer3TimeseriesGroupVectorParamsAggInterval] `query:"aggInterval"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
-	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
@@ -1485,10 +1457,6 @@ type RadarAttackLayer3TimeseriesGroupVerticalParams struct {
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
 	AggInterval param.Field[RadarAttackLayer3TimeseriesGroupVerticalParamsAggInterval] `query:"aggInterval"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
-	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous

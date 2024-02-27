@@ -36,7 +36,6 @@ func TestRadarHTTPLocationDeviceTypeGetWithOptionalParams(t *testing.T) {
 		cloudflare.RadarHTTPLocationDeviceTypeGetParams{
 			ASN:          cloudflare.F([]string{"string", "string", "string"}),
 			BotClass:     cloudflare.F([]cloudflare.RadarHTTPLocationDeviceTypeGetParamsBotClass{cloudflare.RadarHTTPLocationDeviceTypeGetParamsBotClassLikelyAutomated, cloudflare.RadarHTTPLocationDeviceTypeGetParamsBotClassLikelyHuman}),
-			Continent:    cloudflare.F([]string{"string", "string", "string"}),
 			DateEnd:      cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 			DateRange:    cloudflare.F([]cloudflare.RadarHTTPLocationDeviceTypeGetParamsDateRange{cloudflare.RadarHTTPLocationDeviceTypeGetParamsDateRange1d, cloudflare.RadarHTTPLocationDeviceTypeGetParamsDateRange2d, cloudflare.RadarHTTPLocationDeviceTypeGetParamsDateRange7d}),
 			DateStart:    cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),

@@ -36,7 +36,6 @@ func TestRadarHTTPLocationTLSVersionGetWithOptionalParams(t *testing.T) {
 		cloudflare.RadarHTTPLocationTLSVersionGetParams{
 			ASN:          cloudflare.F([]string{"string", "string", "string"}),
 			BotClass:     cloudflare.F([]cloudflare.RadarHTTPLocationTLSVersionGetParamsBotClass{cloudflare.RadarHTTPLocationTLSVersionGetParamsBotClassLikelyAutomated, cloudflare.RadarHTTPLocationTLSVersionGetParamsBotClassLikelyHuman}),
-			Continent:    cloudflare.F([]string{"string", "string", "string"}),
 			DateEnd:      cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 			DateRange:    cloudflare.F([]cloudflare.RadarHTTPLocationTLSVersionGetParamsDateRange{cloudflare.RadarHTTPLocationTLSVersionGetParamsDateRange1d, cloudflare.RadarHTTPLocationTLSVersionGetParamsDateRange2d, cloudflare.RadarHTTPLocationTLSVersionGetParamsDateRange7d}),
 			DateStart:    cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),

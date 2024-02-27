@@ -5464,31 +5464,143 @@ Methods:
 
 ##### Ases
 
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopAseGetResponse">RadarEmailSecurityTopAseGetResponse</a>
+
+Methods:
+
+- <code title="get /radar/email/security/top/ases">client.Radar.Email.Security.Top.Ases.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopAseService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopAseGetParams">RadarEmailSecurityTopAseGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopAseGetResponse">RadarEmailSecurityTopAseGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ###### ARC
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopAseARCGetResponse">RadarEmailSecurityTopAseARCGetResponse</a>
+
+Methods:
+
+- <code title="get /radar/email/security/top/ases/arc/{arc}">client.Radar.Email.Security.Top.Ases.ARC.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopAseARCService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, arc <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopAseARCGetParamsARC">RadarEmailSecurityTopAseARCGetParamsARC</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopAseARCGetParams">RadarEmailSecurityTopAseARCGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopAseARCGetResponse">RadarEmailSecurityTopAseARCGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ###### DKIM
 
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopAseDKIMGetResponse">RadarEmailSecurityTopAseDKIMGetResponse</a>
+
+Methods:
+
+- <code title="get /radar/email/security/top/ases/dkim/{dkim}">client.Radar.Email.Security.Top.Ases.DKIM.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopAseDKIMService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, dkim <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopAseDKIMGetParamsDKIM">RadarEmailSecurityTopAseDKIMGetParamsDKIM</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopAseDKIMGetParams">RadarEmailSecurityTopAseDKIMGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopAseDKIMGetResponse">RadarEmailSecurityTopAseDKIMGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ###### DMARC
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopAseDMARCGetResponse">RadarEmailSecurityTopAseDMARCGetResponse</a>
+
+Methods:
+
+- <code title="get /radar/email/security/top/ases/dmarc/{dmarc}">client.Radar.Email.Security.Top.Ases.DMARC.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopAseDMARCService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, dmarc <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopAseDMARCGetParamsDMARC">RadarEmailSecurityTopAseDMARCGetParamsDMARC</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopAseDMARCGetParams">RadarEmailSecurityTopAseDMARCGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopAseDMARCGetResponse">RadarEmailSecurityTopAseDMARCGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ###### Malicious
 
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopAseMaliciousGetResponse">RadarEmailSecurityTopAseMaliciousGetResponse</a>
+
+Methods:
+
+- <code title="get /radar/email/security/top/ases/malicious/{malicious}">client.Radar.Email.Security.Top.Ases.Malicious.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopAseMaliciousService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, malicious <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopAseMaliciousGetParamsMalicious">RadarEmailSecurityTopAseMaliciousGetParamsMalicious</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopAseMaliciousGetParams">RadarEmailSecurityTopAseMaliciousGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopAseMaliciousGetResponse">RadarEmailSecurityTopAseMaliciousGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ###### Spam
 
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopAseSpamGetResponse">RadarEmailSecurityTopAseSpamGetResponse</a>
+
+Methods:
+
+- <code title="get /radar/email/security/top/ases/spam/{spam}">client.Radar.Email.Security.Top.Ases.Spam.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopAseSpamService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, spam <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopAseSpamGetParamsSpam">RadarEmailSecurityTopAseSpamGetParamsSpam</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopAseSpamGetParams">RadarEmailSecurityTopAseSpamGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopAseSpamGetResponse">RadarEmailSecurityTopAseSpamGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ###### SPF
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopAseSPFGetResponse">RadarEmailSecurityTopAseSPFGetResponse</a>
+
+Methods:
+
+- <code title="get /radar/email/security/top/ases/spf/{spf}">client.Radar.Email.Security.Top.Ases.SPF.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopAseSPFService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, spf <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopAseSPFGetParamsSPF">RadarEmailSecurityTopAseSPFGetParamsSPF</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopAseSPFGetParams">RadarEmailSecurityTopAseSPFGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopAseSPFGetResponse">RadarEmailSecurityTopAseSPFGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ##### Locations
 
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopLocationGetResponse">RadarEmailSecurityTopLocationGetResponse</a>
+
+Methods:
+
+- <code title="get /radar/email/security/top/locations">client.Radar.Email.Security.Top.Locations.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopLocationService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopLocationGetParams">RadarEmailSecurityTopLocationGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopLocationGetResponse">RadarEmailSecurityTopLocationGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ###### ARC
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopLocationARCGetResponse">RadarEmailSecurityTopLocationARCGetResponse</a>
+
+Methods:
+
+- <code title="get /radar/email/security/top/locations/arc/{arc}">client.Radar.Email.Security.Top.Locations.ARC.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopLocationARCService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, arc <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopLocationARCGetParamsARC">RadarEmailSecurityTopLocationARCGetParamsARC</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopLocationARCGetParams">RadarEmailSecurityTopLocationARCGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopLocationARCGetResponse">RadarEmailSecurityTopLocationARCGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ###### DKIM
 
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopLocationDKIMGetResponse">RadarEmailSecurityTopLocationDKIMGetResponse</a>
+
+Methods:
+
+- <code title="get /radar/email/security/top/locations/dkim/{dkim}">client.Radar.Email.Security.Top.Locations.DKIM.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopLocationDKIMService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, dkim <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopLocationDKIMGetParamsDKIM">RadarEmailSecurityTopLocationDKIMGetParamsDKIM</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopLocationDKIMGetParams">RadarEmailSecurityTopLocationDKIMGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopLocationDKIMGetResponse">RadarEmailSecurityTopLocationDKIMGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ###### DMARC
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopLocationDMARCGetResponse">RadarEmailSecurityTopLocationDMARCGetResponse</a>
+
+Methods:
+
+- <code title="get /radar/email/security/top/locations/dmarc/{dmarc}">client.Radar.Email.Security.Top.Locations.DMARC.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopLocationDMARCService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, dmarc <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopLocationDMARCGetParamsDMARC">RadarEmailSecurityTopLocationDMARCGetParamsDMARC</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopLocationDMARCGetParams">RadarEmailSecurityTopLocationDMARCGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopLocationDMARCGetResponse">RadarEmailSecurityTopLocationDMARCGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ###### Malicious
 
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopLocationMaliciousGetResponse">RadarEmailSecurityTopLocationMaliciousGetResponse</a>
+
+Methods:
+
+- <code title="get /radar/email/security/top/locations/malicious/{malicious}">client.Radar.Email.Security.Top.Locations.Malicious.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopLocationMaliciousService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, malicious <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopLocationMaliciousGetParamsMalicious">RadarEmailSecurityTopLocationMaliciousGetParamsMalicious</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopLocationMaliciousGetParams">RadarEmailSecurityTopLocationMaliciousGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopLocationMaliciousGetResponse">RadarEmailSecurityTopLocationMaliciousGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ###### Spam
 
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopLocationSpamGetResponse">RadarEmailSecurityTopLocationSpamGetResponse</a>
+
+Methods:
+
+- <code title="get /radar/email/security/top/locations/spam/{spam}">client.Radar.Email.Security.Top.Locations.Spam.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopLocationSpamService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, spam <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopLocationSpamGetParamsSpam">RadarEmailSecurityTopLocationSpamGetParamsSpam</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopLocationSpamGetParams">RadarEmailSecurityTopLocationSpamGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopLocationSpamGetResponse">RadarEmailSecurityTopLocationSpamGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 ###### SPF
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopLocationSPFGetResponse">RadarEmailSecurityTopLocationSPFGetResponse</a>
+
+Methods:
+
+- <code title="get /radar/email/security/top/locations/spf/{spf}">client.Radar.Email.Security.Top.Locations.SPF.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopLocationSPFService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, spf <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopLocationSPFGetParamsSPF">RadarEmailSecurityTopLocationSPFGetParamsSPF</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopLocationSPFGetParams">RadarEmailSecurityTopLocationSPFGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RadarEmailSecurityTopLocationSPFGetResponse">RadarEmailSecurityTopLocationSPFGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 #### Summary
 

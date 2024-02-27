@@ -195,10 +195,6 @@ type RadarAttackLayer7TimeseriesParams struct {
 	ASN param.Field[[]string] `query:"asn"`
 	// Array of L7 attack types.
 	Attack param.Field[[]RadarAttackLayer7TimeseriesParamsAttack] `query:"attack"`
-	// Array of comma separated list of continents (alpha-2 continent codes). Start
-	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
-	// Europe, but includes results from North America.
-	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous

@@ -31,7 +31,6 @@ func TestRadarAttackLayer3SummaryBitrateWithOptionalParams(t *testing.T) {
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.Attacks.Layer3.Summary.Bitrate(context.TODO(), cloudflare.RadarAttackLayer3SummaryBitrateParams{
-		Continent: cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange: cloudflare.F([]cloudflare.RadarAttackLayer3SummaryBitrateParamsDateRange{cloudflare.RadarAttackLayer3SummaryBitrateParamsDateRange1d, cloudflare.RadarAttackLayer3SummaryBitrateParamsDateRange2d, cloudflare.RadarAttackLayer3SummaryBitrateParamsDateRange7d}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -68,7 +67,6 @@ func TestRadarAttackLayer3SummaryDurationWithOptionalParams(t *testing.T) {
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.Attacks.Layer3.Summary.Duration(context.TODO(), cloudflare.RadarAttackLayer3SummaryDurationParams{
-		Continent: cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange: cloudflare.F([]cloudflare.RadarAttackLayer3SummaryDurationParamsDateRange{cloudflare.RadarAttackLayer3SummaryDurationParamsDateRange1d, cloudflare.RadarAttackLayer3SummaryDurationParamsDateRange2d, cloudflare.RadarAttackLayer3SummaryDurationParamsDateRange7d}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -106,7 +104,6 @@ func TestRadarAttackLayer3SummaryGetWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Attacks.Layer3.Summary.Get(context.TODO(), cloudflare.RadarAttackLayer3SummaryGetParams{
 		ASN:       cloudflare.F([]string{"string", "string", "string"}),
-		Continent: cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange: cloudflare.F([]cloudflare.RadarAttackLayer3SummaryGetParamsDateRange{cloudflare.RadarAttackLayer3SummaryGetParamsDateRange1d, cloudflare.RadarAttackLayer3SummaryGetParamsDateRange2d, cloudflare.RadarAttackLayer3SummaryGetParamsDateRange7d}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -140,7 +137,6 @@ func TestRadarAttackLayer3SummaryIPVersionWithOptionalParams(t *testing.T) {
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.Attacks.Layer3.Summary.IPVersion(context.TODO(), cloudflare.RadarAttackLayer3SummaryIPVersionParams{
-		Continent: cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange: cloudflare.F([]cloudflare.RadarAttackLayer3SummaryIPVersionParamsDateRange{cloudflare.RadarAttackLayer3SummaryIPVersionParamsDateRange1d, cloudflare.RadarAttackLayer3SummaryIPVersionParamsDateRange2d, cloudflare.RadarAttackLayer3SummaryIPVersionParamsDateRange7d}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -176,7 +172,6 @@ func TestRadarAttackLayer3SummaryProtocolWithOptionalParams(t *testing.T) {
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.Attacks.Layer3.Summary.Protocol(context.TODO(), cloudflare.RadarAttackLayer3SummaryProtocolParams{
-		Continent: cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange: cloudflare.F([]cloudflare.RadarAttackLayer3SummaryProtocolParamsDateRange{cloudflare.RadarAttackLayer3SummaryProtocolParamsDateRange1d, cloudflare.RadarAttackLayer3SummaryProtocolParamsDateRange2d, cloudflare.RadarAttackLayer3SummaryProtocolParamsDateRange7d}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -212,7 +207,6 @@ func TestRadarAttackLayer3SummaryVectorWithOptionalParams(t *testing.T) {
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.Attacks.Layer3.Summary.Vector(context.TODO(), cloudflare.RadarAttackLayer3SummaryVectorParams{
-		Continent: cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange: cloudflare.F([]cloudflare.RadarAttackLayer3SummaryVectorParamsDateRange{cloudflare.RadarAttackLayer3SummaryVectorParamsDateRange1d, cloudflare.RadarAttackLayer3SummaryVectorParamsDateRange2d, cloudflare.RadarAttackLayer3SummaryVectorParamsDateRange7d}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),

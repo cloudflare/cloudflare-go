@@ -33,7 +33,6 @@ func TestRadarHTTPLocationGetWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.HTTP.Locations.Get(context.TODO(), cloudflare.RadarHTTPLocationGetParams{
 		ASN:          cloudflare.F([]string{"string", "string", "string"}),
 		BotClass:     cloudflare.F([]cloudflare.RadarHTTPLocationGetParamsBotClass{cloudflare.RadarHTTPLocationGetParamsBotClassLikelyAutomated, cloudflare.RadarHTTPLocationGetParamsBotClassLikelyHuman}),
-		Continent:    cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:      cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:    cloudflare.F([]cloudflare.RadarHTTPLocationGetParamsDateRange{cloudflare.RadarHTTPLocationGetParamsDateRange1d, cloudflare.RadarHTTPLocationGetParamsDateRange2d, cloudflare.RadarHTTPLocationGetParamsDateRange7d}),
 		DateStart:    cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
