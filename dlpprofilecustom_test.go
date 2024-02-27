@@ -33,13 +33,7 @@ func TestDLPProfileCustomNew(t *testing.T) {
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Profiles: cloudflare.F([]cloudflare.DLPProfileCustomNewParamsProfile{{
 			AllowedMatchCount: cloudflare.F(5.000000),
-			ContextAwareness: cloudflare.F(cloudflare.DLPProfileCustomNewParamsProfilesContextAwareness{
-				Enabled: cloudflare.F(true),
-				Skip: cloudflare.F(cloudflare.DLPProfileCustomNewParamsProfilesContextAwarenessSkip{
-					Files: cloudflare.F(true),
-				}),
-			}),
-			Description: cloudflare.F("A standard CVV card number"),
+			Description:       cloudflare.F("A standard CVV card number"),
 			Entries: cloudflare.F([]cloudflare.DLPProfileCustomNewParamsProfilesEntry{{
 				Enabled: cloudflare.F(true),
 				Name:    cloudflare.F("Credit card (Visa)"),
@@ -65,13 +59,7 @@ func TestDLPProfileCustomNew(t *testing.T) {
 			Name: cloudflare.F("Generic CVV Card Number"),
 		}, {
 			AllowedMatchCount: cloudflare.F(5.000000),
-			ContextAwareness: cloudflare.F(cloudflare.DLPProfileCustomNewParamsProfilesContextAwareness{
-				Enabled: cloudflare.F(true),
-				Skip: cloudflare.F(cloudflare.DLPProfileCustomNewParamsProfilesContextAwarenessSkip{
-					Files: cloudflare.F(true),
-				}),
-			}),
-			Description: cloudflare.F("A standard CVV card number"),
+			Description:       cloudflare.F("A standard CVV card number"),
 			Entries: cloudflare.F([]cloudflare.DLPProfileCustomNewParamsProfilesEntry{{
 				Enabled: cloudflare.F(true),
 				Name:    cloudflare.F("Credit card (Visa)"),
@@ -97,13 +85,7 @@ func TestDLPProfileCustomNew(t *testing.T) {
 			Name: cloudflare.F("Generic CVV Card Number"),
 		}, {
 			AllowedMatchCount: cloudflare.F(5.000000),
-			ContextAwareness: cloudflare.F(cloudflare.DLPProfileCustomNewParamsProfilesContextAwareness{
-				Enabled: cloudflare.F(true),
-				Skip: cloudflare.F(cloudflare.DLPProfileCustomNewParamsProfilesContextAwarenessSkip{
-					Files: cloudflare.F(true),
-				}),
-			}),
-			Description: cloudflare.F("A standard CVV card number"),
+			Description:       cloudflare.F("A standard CVV card number"),
 			Entries: cloudflare.F([]cloudflare.DLPProfileCustomNewParamsProfilesEntry{{
 				Enabled: cloudflare.F(true),
 				Name:    cloudflare.F("Credit card (Visa)"),
@@ -160,13 +142,7 @@ func TestDLPProfileCustomUpdateWithOptionalParams(t *testing.T) {
 		cloudflare.DLPProfileCustomUpdateParams{
 			AccountID:         cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			AllowedMatchCount: cloudflare.F(5.000000),
-			ContextAwareness: cloudflare.F(cloudflare.DLPProfileCustomUpdateParamsContextAwareness{
-				Enabled: cloudflare.F(true),
-				Skip: cloudflare.F(cloudflare.DLPProfileCustomUpdateParamsContextAwarenessSkip{
-					Files: cloudflare.F(true),
-				}),
-			}),
-			Description: cloudflare.F("A standard CVV card number"),
+			Description:       cloudflare.F("A standard CVV card number"),
 			Entries: cloudflare.F([]cloudflare.DLPProfileCustomUpdateParamsEntry{{
 				Enabled: cloudflare.F(true),
 				Name:    cloudflare.F("Credit card (Visa)"),
