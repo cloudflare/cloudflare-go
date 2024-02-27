@@ -36,6 +36,7 @@ func TestRadarHTTPAseIPVersionGetWithOptionalParams(t *testing.T) {
 		cloudflare.RadarHTTPAseIPVersionGetParams{
 			ASN:          cloudflare.F([]string{"string", "string", "string"}),
 			BotClass:     cloudflare.F([]cloudflare.RadarHTTPAseIPVersionGetParamsBotClass{cloudflare.RadarHTTPAseIPVersionGetParamsBotClassLikelyAutomated, cloudflare.RadarHTTPAseIPVersionGetParamsBotClassLikelyHuman}),
+			Continent:    cloudflare.F([]string{"string", "string", "string"}),
 			DateEnd:      cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 			DateRange:    cloudflare.F([]cloudflare.RadarHTTPAseIPVersionGetParamsDateRange{cloudflare.RadarHTTPAseIPVersionGetParamsDateRange1d, cloudflare.RadarHTTPAseIPVersionGetParamsDateRange2d, cloudflare.RadarHTTPAseIPVersionGetParamsDateRange7d}),
 			DateStart:    cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),

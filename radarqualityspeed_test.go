@@ -33,6 +33,7 @@ func TestRadarQualitySpeedHistogramWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.Quality.Speed.Histogram(context.TODO(), cloudflare.RadarQualitySpeedHistogramParams{
 		ASN:         cloudflare.F([]string{"string", "string", "string"}),
 		BucketSize:  cloudflare.F(int64(0)),
+		Continent:   cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		Format:      cloudflare.F(cloudflare.RadarQualitySpeedHistogramParamsFormatJson),
 		Location:    cloudflare.F([]string{"string", "string", "string"}),
@@ -65,11 +66,12 @@ func TestRadarQualitySpeedSummaryWithOptionalParams(t *testing.T) {
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.Quality.Speed.Summary(context.TODO(), cloudflare.RadarQualitySpeedSummaryParams{
-		ASN:      cloudflare.F([]string{"string", "string", "string"}),
-		DateEnd:  cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		Format:   cloudflare.F(cloudflare.RadarQualitySpeedSummaryParamsFormatJson),
-		Location: cloudflare.F([]string{"string", "string", "string"}),
-		Name:     cloudflare.F([]string{"string", "string", "string"}),
+		ASN:       cloudflare.F([]string{"string", "string", "string"}),
+		Continent: cloudflare.F([]string{"string", "string", "string"}),
+		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
+		Format:    cloudflare.F(cloudflare.RadarQualitySpeedSummaryParamsFormatJson),
+		Location:  cloudflare.F([]string{"string", "string", "string"}),
+		Name:      cloudflare.F([]string{"string", "string", "string"}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

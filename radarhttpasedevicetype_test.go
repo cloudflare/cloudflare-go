@@ -36,6 +36,7 @@ func TestRadarHTTPAseDeviceTypeGetWithOptionalParams(t *testing.T) {
 		cloudflare.RadarHTTPAseDeviceTypeGetParams{
 			ASN:          cloudflare.F([]string{"string", "string", "string"}),
 			BotClass:     cloudflare.F([]cloudflare.RadarHTTPAseDeviceTypeGetParamsBotClass{cloudflare.RadarHTTPAseDeviceTypeGetParamsBotClassLikelyAutomated, cloudflare.RadarHTTPAseDeviceTypeGetParamsBotClassLikelyHuman}),
+			Continent:    cloudflare.F([]string{"string", "string", "string"}),
 			DateEnd:      cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 			DateRange:    cloudflare.F([]cloudflare.RadarHTTPAseDeviceTypeGetParamsDateRange{cloudflare.RadarHTTPAseDeviceTypeGetParamsDateRange1d, cloudflare.RadarHTTPAseDeviceTypeGetParamsDateRange2d, cloudflare.RadarHTTPAseDeviceTypeGetParamsDateRange7d}),
 			DateStart:    cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),

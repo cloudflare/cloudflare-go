@@ -467,6 +467,10 @@ func (r *RadarAttackLayer3TopVerticalResponseTop0) UnmarshalJSON(data []byte) (e
 }
 
 type RadarAttackLayer3TopAttacksParams struct {
+	// Array of comma separated list of continents (alpha-2 continent codes). Start
+	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
+	// Europe, but includes results from North America.
+	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
@@ -581,6 +585,10 @@ func (r *RadarAttackLayer3TopAttacksResponseEnvelope) UnmarshalJSON(data []byte)
 }
 
 type RadarAttackLayer3TopIndustryParams struct {
+	// Array of comma separated list of continents (alpha-2 continent codes). Start
+	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
+	// Europe, but includes results from North America.
+	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous
@@ -678,6 +686,10 @@ func (r *RadarAttackLayer3TopIndustryResponseEnvelope) UnmarshalJSON(data []byte
 }
 
 type RadarAttackLayer3TopVerticalParams struct {
+	// Array of comma separated list of continents (alpha-2 continent codes). Start
+	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
+	// Europe, but includes results from North America.
+	Continent param.Field[[]string] `query:"continent"`
 	// End of the date range (inclusive).
 	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
 	// For example, use `7d` and `7dControl` to compare this week with the previous

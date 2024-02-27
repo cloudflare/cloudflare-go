@@ -33,6 +33,7 @@ func TestRadarAttackLayer3TimeseriesWithOptionalParams(t *testing.T) {
 	_, err := client.Radar.Attacks.Layer3.Timeseries(context.TODO(), cloudflare.RadarAttackLayer3TimeseriesParams{
 		AggInterval:   cloudflare.F(cloudflare.RadarAttackLayer3TimeseriesParamsAggInterval1h),
 		ASN:           cloudflare.F([]string{"string", "string", "string"}),
+		Continent:     cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:       cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange:     cloudflare.F([]cloudflare.RadarAttackLayer3TimeseriesParamsDateRange{cloudflare.RadarAttackLayer3TimeseriesParamsDateRange1d, cloudflare.RadarAttackLayer3TimeseriesParamsDateRange2d, cloudflare.RadarAttackLayer3TimeseriesParamsDateRange7d}),
 		DateStart:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),

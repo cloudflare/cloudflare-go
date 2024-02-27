@@ -32,6 +32,7 @@ func TestRadarNetflowTopAsesWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Netflows.Top.Ases(context.TODO(), cloudflare.RadarNetflowTopAsesParams{
 		ASN:       cloudflare.F([]string{"string", "string", "string"}),
+		Continent: cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange: cloudflare.F([]cloudflare.RadarNetflowTopAsesParamsDateRange{cloudflare.RadarNetflowTopAsesParamsDateRange1d, cloudflare.RadarNetflowTopAsesParamsDateRange2d, cloudflare.RadarNetflowTopAsesParamsDateRange7d}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -67,6 +68,7 @@ func TestRadarNetflowTopLocationsWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.Netflows.Top.Locations(context.TODO(), cloudflare.RadarNetflowTopLocationsParams{
 		ASN:       cloudflare.F([]string{"string", "string", "string"}),
+		Continent: cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange: cloudflare.F([]cloudflare.RadarNetflowTopLocationsParamsDateRange{cloudflare.RadarNetflowTopLocationsParamsDateRange1d, cloudflare.RadarNetflowTopLocationsParamsDateRange2d, cloudflare.RadarNetflowTopLocationsParamsDateRange7d}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),

@@ -32,6 +32,7 @@ func TestRadarVerifiedBotTopBotsWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.VerifiedBots.Top.Bots(context.TODO(), cloudflare.RadarVerifiedBotTopBotsParams{
 		ASN:       cloudflare.F([]string{"string", "string", "string"}),
+		Continent: cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange: cloudflare.F([]cloudflare.RadarVerifiedBotTopBotsParamsDateRange{cloudflare.RadarVerifiedBotTopBotsParamsDateRange1d, cloudflare.RadarVerifiedBotTopBotsParamsDateRange2d, cloudflare.RadarVerifiedBotTopBotsParamsDateRange7d}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -67,6 +68,7 @@ func TestRadarVerifiedBotTopCategoriesWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Radar.VerifiedBots.Top.Categories(context.TODO(), cloudflare.RadarVerifiedBotTopCategoriesParams{
 		ASN:       cloudflare.F([]string{"string", "string", "string"}),
+		Continent: cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
 		DateRange: cloudflare.F([]cloudflare.RadarVerifiedBotTopCategoriesParamsDateRange{cloudflare.RadarVerifiedBotTopCategoriesParamsDateRange1d, cloudflare.RadarVerifiedBotTopCategoriesParamsDateRange2d, cloudflare.RadarVerifiedBotTopCategoriesParamsDateRange7d}),
 		DateStart: cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
