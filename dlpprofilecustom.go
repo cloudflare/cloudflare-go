@@ -86,8 +86,11 @@ type DLPProfileCustomNewResponse struct {
 	// The ID for this profile
 	ID string `json:"id"`
 	// Related DLP policies will trigger when the match count exceeds the number set.
-	AllowedMatchCount float64   `json:"allowed_match_count"`
-	CreatedAt         time.Time `json:"created_at" format:"date-time"`
+	AllowedMatchCount float64 `json:"allowed_match_count"`
+	// Scan the context of predefined entries to only return matches surrounded by
+	// keywords.
+	ContextAwareness DLPProfileCustomNewResponseContextAwareness `json:"context_awareness"`
+	CreatedAt        time.Time                                   `json:"created_at" format:"date-time"`
 	// The description of the profile.
 	Description string `json:"description"`
 	// The entries for this profile.
@@ -105,6 +108,7 @@ type DLPProfileCustomNewResponse struct {
 type dlpProfileCustomNewResponseJSON struct {
 	ID                apijson.Field
 	AllowedMatchCount apijson.Field
+	ContextAwareness  apijson.Field
 	CreatedAt         apijson.Field
 	Description       apijson.Field
 	Entries           apijson.Field
@@ -116,6 +120,49 @@ type dlpProfileCustomNewResponseJSON struct {
 }
 
 func (r *DLPProfileCustomNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Scan the context of predefined entries to only return matches surrounded by
+// keywords.
+type DLPProfileCustomNewResponseContextAwareness struct {
+	// If true, scan the context of predefined entries to only return matches
+	// surrounded by keywords.
+	Enabled bool `json:"enabled,required"`
+	// Content types to exclude from context analysis and return all matches.
+	Skip DLPProfileCustomNewResponseContextAwarenessSkip `json:"skip,required"`
+	JSON dlpProfileCustomNewResponseContextAwarenessJSON `json:"-"`
+}
+
+// dlpProfileCustomNewResponseContextAwarenessJSON contains the JSON metadata for
+// the struct [DLPProfileCustomNewResponseContextAwareness]
+type dlpProfileCustomNewResponseContextAwarenessJSON struct {
+	Enabled     apijson.Field
+	Skip        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPProfileCustomNewResponseContextAwareness) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Content types to exclude from context analysis and return all matches.
+type DLPProfileCustomNewResponseContextAwarenessSkip struct {
+	// If the content type is a file, skip context analysis and return all matches.
+	Files bool                                                `json:"files,required"`
+	JSON  dlpProfileCustomNewResponseContextAwarenessSkipJSON `json:"-"`
+}
+
+// dlpProfileCustomNewResponseContextAwarenessSkipJSON contains the JSON metadata
+// for the struct [DLPProfileCustomNewResponseContextAwarenessSkip]
+type dlpProfileCustomNewResponseContextAwarenessSkipJSON struct {
+	Files       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPProfileCustomNewResponseContextAwarenessSkip) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -196,8 +243,11 @@ type DLPProfileCustomUpdateResponse struct {
 	// The ID for this profile
 	ID string `json:"id"`
 	// Related DLP policies will trigger when the match count exceeds the number set.
-	AllowedMatchCount float64   `json:"allowed_match_count"`
-	CreatedAt         time.Time `json:"created_at" format:"date-time"`
+	AllowedMatchCount float64 `json:"allowed_match_count"`
+	// Scan the context of predefined entries to only return matches surrounded by
+	// keywords.
+	ContextAwareness DLPProfileCustomUpdateResponseContextAwareness `json:"context_awareness"`
+	CreatedAt        time.Time                                      `json:"created_at" format:"date-time"`
 	// The description of the profile.
 	Description string `json:"description"`
 	// The entries for this profile.
@@ -215,6 +265,7 @@ type DLPProfileCustomUpdateResponse struct {
 type dlpProfileCustomUpdateResponseJSON struct {
 	ID                apijson.Field
 	AllowedMatchCount apijson.Field
+	ContextAwareness  apijson.Field
 	CreatedAt         apijson.Field
 	Description       apijson.Field
 	Entries           apijson.Field
@@ -226,6 +277,49 @@ type dlpProfileCustomUpdateResponseJSON struct {
 }
 
 func (r *DLPProfileCustomUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Scan the context of predefined entries to only return matches surrounded by
+// keywords.
+type DLPProfileCustomUpdateResponseContextAwareness struct {
+	// If true, scan the context of predefined entries to only return matches
+	// surrounded by keywords.
+	Enabled bool `json:"enabled,required"`
+	// Content types to exclude from context analysis and return all matches.
+	Skip DLPProfileCustomUpdateResponseContextAwarenessSkip `json:"skip,required"`
+	JSON dlpProfileCustomUpdateResponseContextAwarenessJSON `json:"-"`
+}
+
+// dlpProfileCustomUpdateResponseContextAwarenessJSON contains the JSON metadata
+// for the struct [DLPProfileCustomUpdateResponseContextAwareness]
+type dlpProfileCustomUpdateResponseContextAwarenessJSON struct {
+	Enabled     apijson.Field
+	Skip        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPProfileCustomUpdateResponseContextAwareness) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Content types to exclude from context analysis and return all matches.
+type DLPProfileCustomUpdateResponseContextAwarenessSkip struct {
+	// If the content type is a file, skip context analysis and return all matches.
+	Files bool                                                   `json:"files,required"`
+	JSON  dlpProfileCustomUpdateResponseContextAwarenessSkipJSON `json:"-"`
+}
+
+// dlpProfileCustomUpdateResponseContextAwarenessSkipJSON contains the JSON
+// metadata for the struct [DLPProfileCustomUpdateResponseContextAwarenessSkip]
+type dlpProfileCustomUpdateResponseContextAwarenessSkipJSON struct {
+	Files       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPProfileCustomUpdateResponseContextAwarenessSkip) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -323,8 +417,11 @@ type DLPProfileCustomGetResponse struct {
 	// The ID for this profile
 	ID string `json:"id"`
 	// Related DLP policies will trigger when the match count exceeds the number set.
-	AllowedMatchCount float64   `json:"allowed_match_count"`
-	CreatedAt         time.Time `json:"created_at" format:"date-time"`
+	AllowedMatchCount float64 `json:"allowed_match_count"`
+	// Scan the context of predefined entries to only return matches surrounded by
+	// keywords.
+	ContextAwareness DLPProfileCustomGetResponseContextAwareness `json:"context_awareness"`
+	CreatedAt        time.Time                                   `json:"created_at" format:"date-time"`
 	// The description of the profile.
 	Description string `json:"description"`
 	// The entries for this profile.
@@ -342,6 +439,7 @@ type DLPProfileCustomGetResponse struct {
 type dlpProfileCustomGetResponseJSON struct {
 	ID                apijson.Field
 	AllowedMatchCount apijson.Field
+	ContextAwareness  apijson.Field
 	CreatedAt         apijson.Field
 	Description       apijson.Field
 	Entries           apijson.Field
@@ -353,6 +451,49 @@ type dlpProfileCustomGetResponseJSON struct {
 }
 
 func (r *DLPProfileCustomGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Scan the context of predefined entries to only return matches surrounded by
+// keywords.
+type DLPProfileCustomGetResponseContextAwareness struct {
+	// If true, scan the context of predefined entries to only return matches
+	// surrounded by keywords.
+	Enabled bool `json:"enabled,required"`
+	// Content types to exclude from context analysis and return all matches.
+	Skip DLPProfileCustomGetResponseContextAwarenessSkip `json:"skip,required"`
+	JSON dlpProfileCustomGetResponseContextAwarenessJSON `json:"-"`
+}
+
+// dlpProfileCustomGetResponseContextAwarenessJSON contains the JSON metadata for
+// the struct [DLPProfileCustomGetResponseContextAwareness]
+type dlpProfileCustomGetResponseContextAwarenessJSON struct {
+	Enabled     apijson.Field
+	Skip        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPProfileCustomGetResponseContextAwareness) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Content types to exclude from context analysis and return all matches.
+type DLPProfileCustomGetResponseContextAwarenessSkip struct {
+	// If the content type is a file, skip context analysis and return all matches.
+	Files bool                                                `json:"files,required"`
+	JSON  dlpProfileCustomGetResponseContextAwarenessSkipJSON `json:"-"`
+}
+
+// dlpProfileCustomGetResponseContextAwarenessSkipJSON contains the JSON metadata
+// for the struct [DLPProfileCustomGetResponseContextAwarenessSkip]
+type dlpProfileCustomGetResponseContextAwarenessSkipJSON struct {
+	Files       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPProfileCustomGetResponseContextAwarenessSkip) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -442,6 +583,9 @@ func (r DLPProfileCustomNewParams) MarshalJSON() (data []byte, err error) {
 type DLPProfileCustomNewParamsProfile struct {
 	// Related DLP policies will trigger when the match count exceeds the number set.
 	AllowedMatchCount param.Field[float64] `json:"allowed_match_count"`
+	// Scan the context of predefined entries to only return matches surrounded by
+	// keywords.
+	ContextAwareness param.Field[DLPProfileCustomNewParamsProfilesContextAwareness] `json:"context_awareness"`
 	// The description of the profile.
 	Description param.Field[string] `json:"description"`
 	// The entries for this profile.
@@ -451,6 +595,30 @@ type DLPProfileCustomNewParamsProfile struct {
 }
 
 func (r DLPProfileCustomNewParamsProfile) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Scan the context of predefined entries to only return matches surrounded by
+// keywords.
+type DLPProfileCustomNewParamsProfilesContextAwareness struct {
+	// If true, scan the context of predefined entries to only return matches
+	// surrounded by keywords.
+	Enabled param.Field[bool] `json:"enabled,required"`
+	// Content types to exclude from context analysis and return all matches.
+	Skip param.Field[DLPProfileCustomNewParamsProfilesContextAwarenessSkip] `json:"skip,required"`
+}
+
+func (r DLPProfileCustomNewParamsProfilesContextAwareness) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Content types to exclude from context analysis and return all matches.
+type DLPProfileCustomNewParamsProfilesContextAwarenessSkip struct {
+	// If the content type is a file, skip context analysis and return all matches.
+	Files param.Field[bool] `json:"files,required"`
+}
+
+func (r DLPProfileCustomNewParamsProfilesContextAwarenessSkip) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
@@ -592,6 +760,9 @@ type DLPProfileCustomUpdateParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Related DLP policies will trigger when the match count exceeds the number set.
 	AllowedMatchCount param.Field[float64] `json:"allowed_match_count"`
+	// Scan the context of predefined entries to only return matches surrounded by
+	// keywords.
+	ContextAwareness param.Field[DLPProfileCustomUpdateParamsContextAwareness] `json:"context_awareness"`
 	// The description of the profile.
 	Description param.Field[string] `json:"description"`
 	// The custom entries for this profile. Array elements with IDs are modifying the
@@ -606,6 +777,30 @@ type DLPProfileCustomUpdateParams struct {
 }
 
 func (r DLPProfileCustomUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Scan the context of predefined entries to only return matches surrounded by
+// keywords.
+type DLPProfileCustomUpdateParamsContextAwareness struct {
+	// If true, scan the context of predefined entries to only return matches
+	// surrounded by keywords.
+	Enabled param.Field[bool] `json:"enabled,required"`
+	// Content types to exclude from context analysis and return all matches.
+	Skip param.Field[DLPProfileCustomUpdateParamsContextAwarenessSkip] `json:"skip,required"`
+}
+
+func (r DLPProfileCustomUpdateParamsContextAwareness) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Content types to exclude from context analysis and return all matches.
+type DLPProfileCustomUpdateParamsContextAwarenessSkip struct {
+	// If the content type is a file, skip context analysis and return all matches.
+	Files param.Field[bool] `json:"files,required"`
+}
+
+func (r DLPProfileCustomUpdateParamsContextAwarenessSkip) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
