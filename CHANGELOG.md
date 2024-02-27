@@ -1,4 +1,6 @@
-## 0.89.0 (Unreleased)
+## 0.90.0 (Unreleased)
+
+## 0.89.0 (February 28th, 2024)
 
 NOTES:
 
@@ -12,7 +14,7 @@ BUG FIXES:
 
 * registrar: Fix request method to call domain list endpoint from POST to GET ([#1506](https://github.com/cloudflare/cloudflare-go/issues/1506))
 
-## 0.88.0 (February 14th, 2023)
+## 0.88.0 (February 14th, 2024)
 
 ENHANCEMENTS:
 
