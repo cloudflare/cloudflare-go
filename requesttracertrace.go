@@ -44,12 +44,14 @@ func (r *RequestTracerTraceService) New(ctx context.Context, accountIdentifier s
 	return
 }
 
+type JjJoFrd1Trace []JjJoFrd1Trace
+
 // Trace result with an origin status code
 type RequestTracerTraceNewResponse struct {
 	// HTTP Status code of zone response
-	StatusCode int64                                `json:"status_code"`
-	Trace      []RequestTracerTraceNewResponseTrace `json:"trace"`
-	JSON       requestTracerTraceNewResponseJSON    `json:"-"`
+	StatusCode int64                             `json:"status_code"`
+	Trace      JjJoFrd1Trace                     `json:"trace"`
+	JSON       requestTracerTraceNewResponseJSON `json:"-"`
 }
 
 // requestTracerTraceNewResponseJSON contains the JSON metadata for the struct
@@ -62,96 +64,6 @@ type requestTracerTraceNewResponseJSON struct {
 }
 
 func (r *RequestTracerTraceNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// List of steps acting on request/response
-type RequestTracerTraceNewResponseTrace struct {
-	// If step type is rule, then action performed by this rule
-	Action string `json:"action"`
-	// If step type is rule, then action parameters of this rule as JSON
-	ActionParameters interface{} `json:"action_parameters"`
-	// If step type is rule or ruleset, the description of this entity
-	Description string `json:"description"`
-	// If step type is rule, then expression used to match for this rule
-	Expression string `json:"expression"`
-	// If step type is ruleset, then kind of this ruleset
-	Kind string `json:"kind"`
-	// Whether tracing step affected tracing request/response
-	Matched bool `json:"matched"`
-	// If step type is ruleset, then name of this ruleset
-	Name string `json:"name"`
-	// Tracing step identifying name
-	StepName string                                    `json:"step_name"`
-	Trace    []RequestTracerTraceNewResponseTraceTrace `json:"trace"`
-	// Tracing step type
-	Type string                                 `json:"type"`
-	JSON requestTracerTraceNewResponseTraceJSON `json:"-"`
-}
-
-// requestTracerTraceNewResponseTraceJSON contains the JSON metadata for the struct
-// [RequestTracerTraceNewResponseTrace]
-type requestTracerTraceNewResponseTraceJSON struct {
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Description      apijson.Field
-	Expression       apijson.Field
-	Kind             apijson.Field
-	Matched          apijson.Field
-	Name             apijson.Field
-	StepName         apijson.Field
-	Trace            apijson.Field
-	Type             apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RequestTracerTraceNewResponseTrace) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// List of steps acting on request/response
-type RequestTracerTraceNewResponseTraceTrace struct {
-	// If step type is rule, then action performed by this rule
-	Action string `json:"action"`
-	// If step type is rule, then action parameters of this rule as JSON
-	ActionParameters interface{} `json:"action_parameters"`
-	// If step type is rule or ruleset, the description of this entity
-	Description string `json:"description"`
-	// If step type is rule, then expression used to match for this rule
-	Expression string `json:"expression"`
-	// If step type is ruleset, then kind of this ruleset
-	Kind string `json:"kind"`
-	// Whether tracing step affected tracing request/response
-	Matched bool `json:"matched"`
-	// If step type is ruleset, then name of this ruleset
-	Name string `json:"name"`
-	// Tracing step identifying name
-	StepName string      `json:"step_name"`
-	Trace    interface{} `json:"trace"`
-	// Tracing step type
-	Type string                                      `json:"type"`
-	JSON requestTracerTraceNewResponseTraceTraceJSON `json:"-"`
-}
-
-// requestTracerTraceNewResponseTraceTraceJSON contains the JSON metadata for the
-// struct [RequestTracerTraceNewResponseTraceTrace]
-type requestTracerTraceNewResponseTraceTraceJSON struct {
-	Action           apijson.Field
-	ActionParameters apijson.Field
-	Description      apijson.Field
-	Expression       apijson.Field
-	Kind             apijson.Field
-	Matched          apijson.Field
-	Name             apijson.Field
-	StepName         apijson.Field
-	Trace            apijson.Field
-	Type             apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *RequestTracerTraceNewResponseTraceTrace) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

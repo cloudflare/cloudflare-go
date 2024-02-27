@@ -6,21 +6,21 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-// ZerotrustService contains methods and other services that help with interacting
+// ZeroTrustService contains methods and other services that help with interacting
 // with the cloudflare API. Note, unlike clients, this service does not read
 // variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewZerotrustService] method instead.
-type ZerotrustService struct {
+// service directly, and instead use the [NewZeroTrustService] method instead.
+type ZeroTrustService struct {
 	Options              []option.RequestOption
-	ConnectivitySettings *ZerotrustConnectivitySettingService
+	ConnectivitySettings *ZeroTrustConnectivitySettingService
 }
 
-// NewZerotrustService generates a new service that applies the given options to
+// NewZeroTrustService generates a new service that applies the given options to
 // each request. These options are applied after the parent client's options (if
 // there is one), and before any request-specific options.
-func NewZerotrustService(opts ...option.RequestOption) (r *ZerotrustService) {
-	r = &ZerotrustService{}
+func NewZeroTrustService(opts ...option.RequestOption) (r *ZeroTrustService) {
+	r = &ZeroTrustService{}
 	r.Options = opts
-	r.ConnectivitySettings = NewZerotrustConnectivitySettingService(opts...)
+	r.ConnectivitySettings = NewZeroTrustConnectivitySettingService(opts...)
 	return
 }

@@ -24,7 +24,7 @@ import (
 // instead.
 type AddressPrefixService struct {
 	Options     []option.RequestOption
-	BGPs        *AddressPrefixBGPService
+	BGP         *AddressPrefixBGPService
 	Delegations *AddressPrefixDelegationService
 }
 
@@ -34,7 +34,7 @@ type AddressPrefixService struct {
 func NewAddressPrefixService(opts ...option.RequestOption) (r *AddressPrefixService) {
 	r = &AddressPrefixService{}
 	r.Options = opts
-	r.BGPs = NewAddressPrefixBGPService(opts...)
+	r.BGP = NewAddressPrefixBGPService(opts...)
 	r.Delegations = NewAddressPrefixDelegationService(opts...)
 	return
 }

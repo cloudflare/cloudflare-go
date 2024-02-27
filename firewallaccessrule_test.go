@@ -29,7 +29,7 @@ func TestFirewallAccessRuleNewWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Firewalls.AccessRules.New(context.TODO(), cloudflare.FirewallAccessRuleNewParams{
+	_, err := client.Firewall.AccessRules.New(context.TODO(), cloudflare.FirewallAccessRuleNewParams{
 		AccountID: cloudflare.F("string"),
 		ZoneID:    cloudflare.F("string"),
 		Configuration: cloudflare.F[cloudflare.FirewallAccessRuleNewParamsConfiguration](cloudflare.FirewallAccessRuleNewParamsConfigurationLegacyJhsIPConfiguration(cloudflare.FirewallAccessRuleNewParamsConfigurationLegacyJhsIPConfiguration{
@@ -64,7 +64,7 @@ func TestFirewallAccessRuleListWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Firewalls.AccessRules.List(context.TODO(), cloudflare.FirewallAccessRuleListParams{
+	_, err := client.Firewall.AccessRules.List(context.TODO(), cloudflare.FirewallAccessRuleListParams{
 		AccountID: cloudflare.F("string"),
 		ZoneID:    cloudflare.F("string"),
 		Direction: cloudflare.F(cloudflare.FirewallAccessRuleListParamsDirectionDesc),
@@ -110,7 +110,7 @@ func TestFirewallAccessRuleDelete(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Firewalls.AccessRules.Delete(
+	_, err := client.Firewall.AccessRules.Delete(
 		context.TODO(),
 		map[string]interface{}{},
 		cloudflare.FirewallAccessRuleDeleteParams{
@@ -143,7 +143,7 @@ func TestFirewallAccessRuleEditWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Firewalls.AccessRules.Edit(
+	_, err := client.Firewall.AccessRules.Edit(
 		context.TODO(),
 		map[string]interface{}{},
 		cloudflare.FirewallAccessRuleEditParams{
@@ -181,7 +181,7 @@ func TestFirewallAccessRuleGet(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Firewalls.AccessRules.Get(
+	_, err := client.Firewall.AccessRules.Get(
 		context.TODO(),
 		map[string]interface{}{},
 		cloudflare.FirewallAccessRuleGetParams{

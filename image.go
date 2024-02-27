@@ -12,8 +12,8 @@ import (
 // directly, and instead use the [NewImageService] method instead.
 type ImageService struct {
 	Options []option.RequestOption
-	V1s     *ImageV1Service
-	V2s     *ImageV2Service
+	V1      *ImageV1Service
+	V2      *ImageV2Service
 }
 
 // NewImageService generates a new service that applies the given options to each
@@ -22,7 +22,7 @@ type ImageService struct {
 func NewImageService(opts ...option.RequestOption) (r *ImageService) {
 	r = &ImageService{}
 	r.Options = opts
-	r.V1s = NewImageV1Service(opts...)
-	r.V2s = NewImageV2Service(opts...)
+	r.V1 = NewImageV1Service(opts...)
+	r.V2 = NewImageV2Service(opts...)
 	return
 }

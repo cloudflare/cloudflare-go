@@ -20,16 +20,15 @@ import (
 // from the environment automatically. You should not instantiate this service
 // directly, and instead use the [NewUserService] method instead.
 type UserService struct {
-	Options                []option.RequestOption
-	AuditLogs              *UserAuditLogService
-	Billing                *UserBillingService
-	Firewall               *UserFirewallService
-	Invites                *UserInviteService
-	LoadBalancers          *UserLoadBalancerService
-	LoadBalancingAnalytics *UserLoadBalancingAnalyticService
-	Organizations          *UserOrganizationService
-	Subscriptions          *UserSubscriptionService
-	Tokens                 *UserTokenService
+	Options       []option.RequestOption
+	AuditLogs     *UserAuditLogService
+	Billing       *UserBillingService
+	Firewall      *UserFirewallService
+	Invites       *UserInviteService
+	LoadBalancers *UserLoadBalancerService
+	Organizations *UserOrganizationService
+	Subscriptions *UserSubscriptionService
+	Tokens        *UserTokenService
 }
 
 // NewUserService generates a new service that applies the given options to each
@@ -43,7 +42,6 @@ func NewUserService(opts ...option.RequestOption) (r *UserService) {
 	r.Firewall = NewUserFirewallService(opts...)
 	r.Invites = NewUserInviteService(opts...)
 	r.LoadBalancers = NewUserLoadBalancerService(opts...)
-	r.LoadBalancingAnalytics = NewUserLoadBalancingAnalyticService(opts...)
 	r.Organizations = NewUserOrganizationService(opts...)
 	r.Subscriptions = NewUserSubscriptionService(opts...)
 	r.Tokens = NewUserTokenService(opts...)

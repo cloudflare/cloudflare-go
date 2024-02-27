@@ -26,7 +26,7 @@ type TunnelService struct {
 	Options        []option.RequestOption
 	Configurations *TunnelConfigurationService
 	Connections    *TunnelConnectionService
-	Tokens         *TunnelTokenService
+	Token          *TunnelTokenService
 	Connectors     *TunnelConnectorService
 	Management     *TunnelManagementService
 }
@@ -39,7 +39,7 @@ func NewTunnelService(opts ...option.RequestOption) (r *TunnelService) {
 	r.Options = opts
 	r.Configurations = NewTunnelConfigurationService(opts...)
 	r.Connections = NewTunnelConnectionService(opts...)
-	r.Tokens = NewTunnelTokenService(opts...)
+	r.Token = NewTunnelTokenService(opts...)
 	r.Connectors = NewTunnelConnectorService(opts...)
 	r.Management = NewTunnelManagementService(opts...)
 	return

@@ -21,7 +21,6 @@ type Client struct {
 	Zones                       *ZoneService
 	LoadBalancers               *LoadBalancerService
 	Access                      *AccessService
-	DNSAnalytics                *DNSAnalyticService
 	Cache                       *CacheService
 	SSL                         *SSLService
 	Subscriptions               *SubscriptionService
@@ -38,7 +37,7 @@ type Client struct {
 	DNSSEC                      *DNSSECService
 	Emails                      *EmailService
 	Filters                     *FilterService
-	Firewalls                   *FirewallService
+	Firewall                    *FirewallService
 	Healthchecks                *HealthcheckService
 	KeylessCertificates         *KeylessCertificateService
 	Logpush                     *LogpushService
@@ -47,11 +46,10 @@ type Client struct {
 	Pagerules                   *PageruleService
 	RateLimits                  *RateLimitService
 	SecondaryDNS                *SecondaryDNSService
-	Settings                    *SettingService
 	WaitingRooms                *WaitingRoomService
 	Web3                        *Web3Service
 	Workers                     *WorkerService
-	ActivationChecks            *ActivationCheckService
+	KV                          *KVService
 	ManagedHeaders              *ManagedHeaderService
 	PageShield                  *PageShieldService
 	Rulesets                    *RulesetService
@@ -66,8 +64,7 @@ type Client struct {
 	DLP                         *DLPService
 	Images                      *ImageService
 	Intel                       *IntelService
-	Magics                      *MagicService
-	AccountMembers              *AccountMemberService
+	MagicTransit                *MagicTransitService
 	MNMs                        *MNMService
 	MTLSCertificates            *MTLSCertificateService
 	Pages                       *PageService
@@ -78,7 +75,6 @@ type Client struct {
 	Rules                       *RuleService
 	Storage                     *StorageService
 	Stream                      *StreamService
-	Teamnets                    *TeamnetService
 	Gateways                    *GatewayService
 	Alerting                    *AlertingService
 	Devices                     *DeviceService
@@ -89,10 +85,7 @@ type Client struct {
 	WARPConnector               *WARPConnectorService
 	Dispatchers                 *DispatcherService
 	WorkersForPlatforms         *WorkersForPlatformService
-	WorkerDomains               *WorkerDomainService
-	WorkerScripts               *WorkerScriptService
-	Zerotrust                   *ZerotrustService
-	Addressing                  *AddressingService
+	ZeroTrust                   *ZeroTrustService
 	Challenges                  *ChallengeService
 	Hyperdrive                  *HyperdriveService
 	RUM                         *RUMService
@@ -101,7 +94,6 @@ type Client struct {
 	Radar                       *RadarService
 	BotManagement               *BotManagementService
 	OriginPostQuantumEncryption *OriginPostQuantumEncryptionService
-	Firewall                    *FirewallService
 	Speed                       *SpeedService
 	DcvDelegation               *DcvDelegationService
 	Hostnames                   *HostnameService
@@ -141,7 +133,6 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Zones = NewZoneService(opts...)
 	r.LoadBalancers = NewLoadBalancerService(opts...)
 	r.Access = NewAccessService(opts...)
-	r.DNSAnalytics = NewDNSAnalyticService(opts...)
 	r.Cache = NewCacheService(opts...)
 	r.SSL = NewSSLService(opts...)
 	r.Subscriptions = NewSubscriptionService(opts...)
@@ -158,7 +149,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.DNSSEC = NewDNSSECService(opts...)
 	r.Emails = NewEmailService(opts...)
 	r.Filters = NewFilterService(opts...)
-	r.Firewalls = NewFirewallService(opts...)
+	r.Firewall = NewFirewallService(opts...)
 	r.Healthchecks = NewHealthcheckService(opts...)
 	r.KeylessCertificates = NewKeylessCertificateService(opts...)
 	r.Logpush = NewLogpushService(opts...)
@@ -167,11 +158,10 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Pagerules = NewPageruleService(opts...)
 	r.RateLimits = NewRateLimitService(opts...)
 	r.SecondaryDNS = NewSecondaryDNSService(opts...)
-	r.Settings = NewSettingService(opts...)
 	r.WaitingRooms = NewWaitingRoomService(opts...)
 	r.Web3 = NewWeb3Service(opts...)
 	r.Workers = NewWorkerService(opts...)
-	r.ActivationChecks = NewActivationCheckService(opts...)
+	r.KV = NewKVService(opts...)
 	r.ManagedHeaders = NewManagedHeaderService(opts...)
 	r.PageShield = NewPageShieldService(opts...)
 	r.Rulesets = NewRulesetService(opts...)
@@ -186,8 +176,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.DLP = NewDLPService(opts...)
 	r.Images = NewImageService(opts...)
 	r.Intel = NewIntelService(opts...)
-	r.Magics = NewMagicService(opts...)
-	r.AccountMembers = NewAccountMemberService(opts...)
+	r.MagicTransit = NewMagicTransitService(opts...)
 	r.MNMs = NewMNMService(opts...)
 	r.MTLSCertificates = NewMTLSCertificateService(opts...)
 	r.Pages = NewPageService(opts...)
@@ -198,7 +187,6 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Rules = NewRuleService(opts...)
 	r.Storage = NewStorageService(opts...)
 	r.Stream = NewStreamService(opts...)
-	r.Teamnets = NewTeamnetService(opts...)
 	r.Gateways = NewGatewayService(opts...)
 	r.Alerting = NewAlertingService(opts...)
 	r.Devices = NewDeviceService(opts...)
@@ -209,10 +197,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.WARPConnector = NewWARPConnectorService(opts...)
 	r.Dispatchers = NewDispatcherService(opts...)
 	r.WorkersForPlatforms = NewWorkersForPlatformService(opts...)
-	r.WorkerDomains = NewWorkerDomainService(opts...)
-	r.WorkerScripts = NewWorkerScriptService(opts...)
-	r.Zerotrust = NewZerotrustService(opts...)
-	r.Addressing = NewAddressingService(opts...)
+	r.ZeroTrust = NewZeroTrustService(opts...)
 	r.Challenges = NewChallengeService(opts...)
 	r.Hyperdrive = NewHyperdriveService(opts...)
 	r.RUM = NewRUMService(opts...)
@@ -221,7 +206,6 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Radar = NewRadarService(opts...)
 	r.BotManagement = NewBotManagementService(opts...)
 	r.OriginPostQuantumEncryption = NewOriginPostQuantumEncryptionService(opts...)
-	r.Firewall = NewFirewallService(opts...)
 	r.Speed = NewSpeedService(opts...)
 	r.DcvDelegation = NewDcvDelegationService(opts...)
 	r.Hostnames = NewHostnameService(opts...)

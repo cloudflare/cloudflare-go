@@ -23,8 +23,11 @@ import (
 // directly, and instead use the [NewZoneService] method instead.
 type ZoneService struct {
 	Options           []option.RequestOption
+	ActivationCheck   *ZoneActivationCheckService
+	Settings          *ZoneSettingService
 	CustomNameservers *ZoneCustomNameserverService
 	Holds             *ZoneHoldService
+	Workers           *ZoneWorkerService
 }
 
 // NewZoneService generates a new service that applies the given options to each
@@ -33,8 +36,11 @@ type ZoneService struct {
 func NewZoneService(opts ...option.RequestOption) (r *ZoneService) {
 	r = &ZoneService{}
 	r.Options = opts
+	r.ActivationCheck = NewZoneActivationCheckService(opts...)
+	r.Settings = NewZoneSettingService(opts...)
 	r.CustomNameservers = NewZoneCustomNameserverService(opts...)
 	r.Holds = NewZoneHoldService(opts...)
+	r.Workers = NewZoneWorkerService(opts...)
 	return
 }
 

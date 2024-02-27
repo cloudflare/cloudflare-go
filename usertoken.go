@@ -26,7 +26,7 @@ import (
 type UserTokenService struct {
 	Options          []option.RequestOption
 	PermissionGroups *UserTokenPermissionGroupService
-	Values           *UserTokenValueService
+	Value            *UserTokenValueService
 }
 
 // NewUserTokenService generates a new service that applies the given options to
@@ -36,7 +36,7 @@ func NewUserTokenService(opts ...option.RequestOption) (r *UserTokenService) {
 	r = &UserTokenService{}
 	r.Options = opts
 	r.PermissionGroups = NewUserTokenPermissionGroupService(opts...)
-	r.Values = NewUserTokenValueService(opts...)
+	r.Value = NewUserTokenValueService(opts...)
 	return
 }
 

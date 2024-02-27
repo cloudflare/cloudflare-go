@@ -13,6 +13,8 @@ import (
 // instead.
 type AddressPrefixBGPService struct {
 	Options  []option.RequestOption
+	Bindings *AddressPrefixBGPBindingService
+	Prefixes *AddressPrefixBGPPrefixService
 	Statuses *AddressPrefixBGPStatusService
 }
 
@@ -22,6 +24,8 @@ type AddressPrefixBGPService struct {
 func NewAddressPrefixBGPService(opts ...option.RequestOption) (r *AddressPrefixBGPService) {
 	r = &AddressPrefixBGPService{}
 	r.Options = opts
+	r.Bindings = NewAddressPrefixBGPBindingService(opts...)
+	r.Prefixes = NewAddressPrefixBGPPrefixService(opts...)
 	r.Statuses = NewAddressPrefixBGPStatusService(opts...)
 	return
 }

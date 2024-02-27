@@ -12,10 +12,11 @@ import (
 // this service directly, and instead use the [NewUserLoadBalancerService] method
 // instead.
 type UserLoadBalancerService struct {
-	Options  []option.RequestOption
-	Monitors *UserLoadBalancerMonitorService
-	Pools    *UserLoadBalancerPoolService
-	Preview  *UserLoadBalancerPreviewService
+	Options   []option.RequestOption
+	Monitors  *UserLoadBalancerMonitorService
+	Pools     *UserLoadBalancerPoolService
+	Preview   *UserLoadBalancerPreviewService
+	Analytics *UserLoadBalancerAnalyticsService
 }
 
 // NewUserLoadBalancerService generates a new service that applies the given
@@ -27,5 +28,6 @@ func NewUserLoadBalancerService(opts ...option.RequestOption) (r *UserLoadBalanc
 	r.Monitors = NewUserLoadBalancerMonitorService(opts...)
 	r.Pools = NewUserLoadBalancerPoolService(opts...)
 	r.Preview = NewUserLoadBalancerPreviewService(opts...)
+	r.Analytics = NewUserLoadBalancerAnalyticsService(opts...)
 	return
 }

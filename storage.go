@@ -13,7 +13,6 @@ import (
 type StorageService struct {
 	Options   []option.RequestOption
 	Analytics *StorageAnalyticsService
-	KV        *StorageKVService
 }
 
 // NewStorageService generates a new service that applies the given options to each
@@ -23,6 +22,5 @@ func NewStorageService(opts ...option.RequestOption) (r *StorageService) {
 	r = &StorageService{}
 	r.Options = opts
 	r.Analytics = NewStorageAnalyticsService(opts...)
-	r.KV = NewStorageKVService(opts...)
 	return
 }

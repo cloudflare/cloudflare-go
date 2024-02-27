@@ -12,6 +12,7 @@ import (
 // service directly, and instead use the [NewAddressService] method instead.
 type AddressService struct {
 	Options      []option.RequestOption
+	Services     *AddressServiceService
 	AddressMaps  *AddressAddressMapService
 	LOADocuments *AddressLOADocumentService
 	Prefixes     *AddressPrefixService
@@ -23,6 +24,7 @@ type AddressService struct {
 func NewAddressService(opts ...option.RequestOption) (r *AddressService) {
 	r = &AddressService{}
 	r.Options = opts
+	r.Services = NewAddressServiceService(opts...)
 	r.AddressMaps = NewAddressAddressMapService(opts...)
 	r.LOADocuments = NewAddressLOADocumentService(opts...)
 	r.Prefixes = NewAddressPrefixService(opts...)

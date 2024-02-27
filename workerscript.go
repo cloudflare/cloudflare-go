@@ -31,6 +31,9 @@ type WorkerScriptService struct {
 	Schedules  *WorkerScriptScheduleService
 	Tail       *WorkerScriptTailService
 	UsageModel *WorkerScriptUsageModelService
+	Content    *WorkerScriptContentService
+	ContentV2  *WorkerScriptContentV2Service
+	Settings   *WorkerScriptSettingService
 }
 
 // NewWorkerScriptService generates a new service that applies the given options to
@@ -43,6 +46,9 @@ func NewWorkerScriptService(opts ...option.RequestOption) (r *WorkerScriptServic
 	r.Schedules = NewWorkerScriptScheduleService(opts...)
 	r.Tail = NewWorkerScriptTailService(opts...)
 	r.UsageModel = NewWorkerScriptUsageModelService(opts...)
+	r.Content = NewWorkerScriptContentService(opts...)
+	r.ContentV2 = NewWorkerScriptContentV2Service(opts...)
+	r.Settings = NewWorkerScriptSettingService(opts...)
 	return
 }
 

@@ -24,6 +24,7 @@ func (UnionString) ImplementsUserTokenUpdateResponse()                          
 func (UnionString) ImplementsUserTokenGetResponse()                                               {}
 func (UnionString) ImplementsZoneCustomNameserverUpdateResponse()                                 {}
 func (UnionString) ImplementsZoneCustomNameserverGetResponse()                                    {}
+func (UnionString) ImplementsZoneWorkerScriptUpdateResponse()                                     {}
 func (UnionString) ImplementsLoadBalancerPoolHealthGetResponse()                                  {}
 func (UnionString) ImplementsLoadBalancerRegionListResponse()                                     {}
 func (UnionString) ImplementsLoadBalancerRegionGetResponse()                                      {}
@@ -101,7 +102,12 @@ func (UnionString) ImplementsWorkerRouteNewResponse()                           
 func (UnionString) ImplementsWorkerRouteDeleteResponse()                                          {}
 func (UnionString) ImplementsWorkerQueueDeleteResponse()                                          {}
 func (UnionString) ImplementsWorkerQueueConsumerDeleteResponse()                                  {}
-func (UnionString) ImplementsWorkerScriptUpdateResponse()                                         {}
+func (UnionString) ImplementsKVNamespaceUpdateResponse()                                          {}
+func (UnionString) ImplementsKVNamespaceDeleteResponse()                                          {}
+func (UnionString) ImplementsKVNamespaceBulkUpdateResponse()                                      {}
+func (UnionString) ImplementsKVNamespaceBulkDeleteResponse()                                      {}
+func (UnionString) ImplementsKVNamespaceValueUpdateResponse()                                     {}
+func (UnionString) ImplementsKVNamespaceValueDeleteResponse()                                     {}
 func (UnionString) ImplementsSpectrumAnalyticsEventBytimeGetResponse()                            {}
 func (UnionString) ImplementsSpectrumAnalyticsEventSummaryGetResponse()                           {}
 func (UnionString) ImplementsSpectrumAppNewResponseOriginPort()                                   {}
@@ -117,6 +123,7 @@ func (UnionString) ImplementsAddressAddressMapIPDeleteResponse()                
 func (UnionString) ImplementsAddressAddressMapZoneUpdateResponse()                                {}
 func (UnionString) ImplementsAddressAddressMapZoneDeleteResponse()                                {}
 func (UnionString) ImplementsAddressPrefixDeleteResponse()                                        {}
+func (UnionString) ImplementsAddressPrefixBGPBindingDeleteResponse()                              {}
 func (UnionString) ImplementsAuditLogListResponse()                                               {}
 func (UnionString) ImplementsBillingProfileGetResponse()                                          {}
 func (UnionString) ImplementsTunnelConfigurationUpdateResponse()                                  {}
@@ -144,12 +151,6 @@ func (UnionString) ImplementsRegistrarDomainUpdateResponse()                    
 func (UnionString) ImplementsRegistrarDomainGetResponse()                                         {}
 func (UnionString) ImplementsRoleGetResponse()                                                    {}
 func (UnionString) ImplementsRuleListItemGetResponse()                                            {}
-func (UnionString) ImplementsStorageKVNamespaceUpdateResponse()                                   {}
-func (UnionString) ImplementsStorageKVNamespaceDeleteResponse()                                   {}
-func (UnionString) ImplementsStorageKVNamespaceBulkUpdateResponse()                               {}
-func (UnionString) ImplementsStorageKVNamespaceBulkDeleteResponse()                               {}
-func (UnionString) ImplementsStorageKVNamespaceValueUpdateResponse()                              {}
-func (UnionString) ImplementsStorageKVNamespaceValueDeleteResponse()                              {}
 func (UnionString) ImplementsStreamAudioTrackDeleteResponse()                                     {}
 func (UnionString) ImplementsStreamKeyDeleteResponse()                                            {}
 func (UnionString) ImplementsStreamWatermarkNewResponse()                                         {}
@@ -163,9 +164,6 @@ func (UnionString) ImplementsStreamCaptionDeleteResponse()                      
 func (UnionString) ImplementsStreamDownloadNewResponse()                                          {}
 func (UnionString) ImplementsStreamDownloadListResponse()                                         {}
 func (UnionString) ImplementsStreamDownloadDeleteResponse()                                       {}
-func (UnionString) ImplementsTeamnetVirtualNetworkNewResponse()                                   {}
-func (UnionString) ImplementsTeamnetVirtualNetworkDeleteResponse()                                {}
-func (UnionString) ImplementsTeamnetVirtualNetworkEditResponse()                                  {}
 func (UnionString) ImplementsGatewayListDeleteResponse()                                          {}
 func (UnionString) ImplementsGatewayLocationDeleteResponse()                                      {}
 func (UnionString) ImplementsGatewayProxyEndpointDeleteResponse()                                 {}
@@ -184,8 +182,10 @@ func (UnionString) ImplementsDevicePostureIntegrationDeleteResponse()           
 func (UnionString) ImplementsDeviceRevokeNewResponse()                                            {}
 func (UnionString) ImplementsDeviceUnrevokeNewResponse()                                          {}
 func (UnionString) ImplementsD1DatabaseDeleteResponse()                                           {}
+func (UnionString) ImplementsTeamnetVirtualNetworkNewResponse()                                   {}
+func (UnionString) ImplementsTeamnetVirtualNetworkDeleteResponse()                                {}
+func (UnionString) ImplementsTeamnetVirtualNetworkEditResponse()                                  {}
 func (UnionString) ImplementsWARPConnectorTokenResponse()                                         {}
-func (UnionString) ImplementsAddressingPrefixBindingDeleteResponse()                              {}
 func (UnionString) ImplementsHyperdriveConfigDeleteResponse()                                     {}
 func (UnionString) ImplementsVectorizeIndexDeleteResponse()                                       {}
 func (UnionString) ImplementsRadarRankingTimeseriesGroupsResponseSerie0()                         {}

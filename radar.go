@@ -23,7 +23,6 @@ type RadarService struct {
 	ConnectionTampering *RadarConnectionTamperingService
 	Email               *RadarEmailService
 	Attacks             *RadarAttackService
-	Emails              *RadarEmailService
 	Entities            *RadarEntityService
 	HTTP                *RadarHTTPService
 	Quality             *RadarQualityService
@@ -48,7 +47,6 @@ func NewRadarService(opts ...option.RequestOption) (r *RadarService) {
 	r.ConnectionTampering = NewRadarConnectionTamperingService(opts...)
 	r.Email = NewRadarEmailService(opts...)
 	r.Attacks = NewRadarAttackService(opts...)
-	r.Emails = NewRadarEmailService(opts...)
 	r.Entities = NewRadarEntityService(opts...)
 	r.HTTP = NewRadarHTTPService(opts...)
 	r.Quality = NewRadarQualityService(opts...)

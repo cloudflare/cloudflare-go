@@ -11,9 +11,8 @@ import (
 // from the environment automatically. You should not instantiate this service
 // directly, and instead use the [NewD1Service] method instead.
 type D1Service struct {
-	Options   []option.RequestOption
-	Databases *D1DatabaseService
-	Database  *D1DatabaseService
+	Options  []option.RequestOption
+	Database *D1DatabaseService
 }
 
 // NewD1Service generates a new service that applies the given options to each
@@ -22,7 +21,6 @@ type D1Service struct {
 func NewD1Service(opts ...option.RequestOption) (r *D1Service) {
 	r = &D1Service{}
 	r.Options = opts
-	r.Databases = NewD1DatabaseService(opts...)
 	r.Database = NewD1DatabaseService(opts...)
 	return
 }

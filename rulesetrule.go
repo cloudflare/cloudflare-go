@@ -2281,24 +2281,24 @@ func (r RulesetRuleNewParams) MarshalJSON() (data []byte, err error) {
 
 // An object configuring where the rule will be placed.
 //
-// Satisfied by [RulesetRuleNewParamsPositionObject],
-// [RulesetRuleNewParamsPositionObject], [RulesetRuleNewParamsPositionObject].
+// Satisfied by [RulesetRuleNewParamsPositionPosition],
+// [RulesetRuleNewParamsPositionPosition], [RulesetRuleNewParamsPositionPosition].
 type RulesetRuleNewParamsPosition interface {
 	implementsRulesetRuleNewParamsPosition()
 }
 
 // An object configuring where the rule will be placed.
-type RulesetRuleNewParamsPositionObject struct {
+type RulesetRuleNewParamsPositionPosition struct {
 	// The ID of another rule to place the rule before. An empty value causes the rule
 	// to be placed at the top.
 	Before param.Field[string] `json:"before"`
 }
 
-func (r RulesetRuleNewParamsPositionObject) MarshalJSON() (data []byte, err error) {
+func (r RulesetRuleNewParamsPositionPosition) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RulesetRuleNewParamsPositionObject) implementsRulesetRuleNewParamsPosition() {}
+func (r RulesetRuleNewParamsPositionPosition) implementsRulesetRuleNewParamsPosition() {}
 
 // A response object.
 type RulesetRuleNewResponseEnvelope struct {
@@ -2566,24 +2566,25 @@ func (r RulesetRuleEditParams) MarshalJSON() (data []byte, err error) {
 
 // An object configuring where the rule will be placed.
 //
-// Satisfied by [RulesetRuleEditParamsPositionObject],
-// [RulesetRuleEditParamsPositionObject], [RulesetRuleEditParamsPositionObject].
+// Satisfied by [RulesetRuleEditParamsPositionPosition],
+// [RulesetRuleEditParamsPositionPosition],
+// [RulesetRuleEditParamsPositionPosition].
 type RulesetRuleEditParamsPosition interface {
 	implementsRulesetRuleEditParamsPosition()
 }
 
 // An object configuring where the rule will be placed.
-type RulesetRuleEditParamsPositionObject struct {
+type RulesetRuleEditParamsPositionPosition struct {
 	// The ID of another rule to place the rule before. An empty value causes the rule
 	// to be placed at the top.
 	Before param.Field[string] `json:"before"`
 }
 
-func (r RulesetRuleEditParamsPositionObject) MarshalJSON() (data []byte, err error) {
+func (r RulesetRuleEditParamsPositionPosition) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r RulesetRuleEditParamsPositionObject) implementsRulesetRuleEditParamsPosition() {}
+func (r RulesetRuleEditParamsPositionPosition) implementsRulesetRuleEditParamsPosition() {}
 
 // A response object.
 type RulesetRuleEditResponseEnvelope struct {

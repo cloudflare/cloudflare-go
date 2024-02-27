@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestZerotrustConnectivitySettingEditWithOptionalParams(t *testing.T) {
+func TestZeroTrustConnectivitySettingEditWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,7 +29,7 @@ func TestZerotrustConnectivitySettingEditWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Zerotrust.ConnectivitySettings.Edit(context.TODO(), cloudflare.ZerotrustConnectivitySettingEditParams{
+	_, err := client.ZeroTrust.ConnectivitySettings.Edit(context.TODO(), cloudflare.ZeroTrustConnectivitySettingEditParams{
 		AccountID:          cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		IcmpProxyEnabled:   cloudflare.F(true),
 		OfframpWARPEnabled: cloudflare.F(true),
@@ -43,7 +43,7 @@ func TestZerotrustConnectivitySettingEditWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestZerotrustConnectivitySettingGet(t *testing.T) {
+func TestZeroTrustConnectivitySettingGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -59,7 +59,7 @@ func TestZerotrustConnectivitySettingGet(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Zerotrust.ConnectivitySettings.Get(context.TODO(), cloudflare.ZerotrustConnectivitySettingGetParams{
+	_, err := client.ZeroTrust.ConnectivitySettings.Get(context.TODO(), cloudflare.ZeroTrustConnectivitySettingGetParams{
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 	})
 	if err != nil {

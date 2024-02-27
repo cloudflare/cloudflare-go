@@ -11,20 +11,18 @@ import (
 // variables from the environment automatically. You should not instantiate this
 // service directly, and instead use the [NewWorkerService] method instead.
 type WorkerService struct {
-	Options             []option.RequestOption
-	AI                  *WorkerAIService
-	Scripts             *WorkerScriptService
-	Filters             *WorkerFilterService
-	Routes              *WorkerRouteService
-	AccountSettings     *WorkerAccountSettingService
-	Deployments         *WorkerDeploymentService
-	Domains             *WorkerDomainService
-	DurableObjects      *WorkerDurableObjectService
-	Queues              *WorkerQueueService
-	Subdomains          *WorkerSubdomainService
-	DeploymentsByScript *WorkerDeploymentsByScriptService
-	Services            *WorkerServiceService
-	Script              *WorkerScriptService
+	Options         []option.RequestOption
+	AI              *WorkerAIService
+	Scripts         *WorkerScriptService
+	Filters         *WorkerFilterService
+	Routes          *WorkerRouteService
+	AccountSettings *WorkerAccountSettingService
+	Deployments     *WorkerDeploymentService
+	Domains         *WorkerDomainService
+	DurableObjects  *WorkerDurableObjectService
+	Queues          *WorkerQueueService
+	Subdomains      *WorkerSubdomainService
+	Services        *WorkerServiceService
 }
 
 // NewWorkerService generates a new service that applies the given options to each
@@ -43,8 +41,6 @@ func NewWorkerService(opts ...option.RequestOption) (r *WorkerService) {
 	r.DurableObjects = NewWorkerDurableObjectService(opts...)
 	r.Queues = NewWorkerQueueService(opts...)
 	r.Subdomains = NewWorkerSubdomainService(opts...)
-	r.DeploymentsByScript = NewWorkerDeploymentsByScriptService(opts...)
 	r.Services = NewWorkerServiceService(opts...)
-	r.Script = NewWorkerScriptService(opts...)
 	return
 }

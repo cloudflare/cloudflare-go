@@ -24,6 +24,7 @@ import (
 // service directly, and instead use the [NewAccountService] method instead.
 type AccountService struct {
 	Options []option.RequestOption
+	Members *AccountMemberService
 }
 
 // NewAccountService generates a new service that applies the given options to each
@@ -32,6 +33,7 @@ type AccountService struct {
 func NewAccountService(opts ...option.RequestOption) (r *AccountService) {
 	r = &AccountService{}
 	r.Options = opts
+	r.Members = NewAccountMemberService(opts...)
 	return
 }
 
