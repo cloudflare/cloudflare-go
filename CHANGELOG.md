@@ -1,5 +1,9 @@
 ## 0.90.0 (Unreleased)
 
+ENHANCEMENTS:
+
+* dlp: add support for Context Awareness in DLP profiles ([#1497](https://github.com/cloudflare/cloudflare-go/issues/1497))
+
 ## 0.89.0 (February 28th, 2024)
 
 NOTES:
