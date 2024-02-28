@@ -4082,6 +4082,7 @@ Methods:
 
 Response Types:
 
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#HhgJaXcvTrace">HhgJaXcvTrace</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#RequestTracerTraceNewResponse">RequestTracerTraceNewResponse</a>
 
 Methods:
@@ -5074,6 +5075,16 @@ Methods:
 - <code title="patch /accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/settings">client.WorkersForPlatforms.Dispatch.Namespaces.Scripts.Settings.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#WorkersForPlatformDispatchNamespaceScriptSettingService.Edit">Edit</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, dispatchNamespace <a href="https://pkg.go.dev/builtin#string">string</a>, scriptName <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#WorkersForPlatformDispatchNamespaceScriptSettingEditParams">WorkersForPlatformDispatchNamespaceScriptSettingEditParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#WorkersForPlatformDispatchNamespaceScriptSettingEditResponse">WorkersForPlatformDispatchNamespaceScriptSettingEditResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/settings">client.WorkersForPlatforms.Dispatch.Namespaces.Scripts.Settings.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#WorkersForPlatformDispatchNamespaceScriptSettingService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, dispatchNamespace <a href="https://pkg.go.dev/builtin#string">string</a>, scriptName <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#WorkersForPlatformDispatchNamespaceScriptSettingGetParams">WorkersForPlatformDispatchNamespaceScriptSettingGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#WorkersForPlatformDispatchNamespaceScriptSettingGetResponse">WorkersForPlatformDispatchNamespaceScriptSettingGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
+##### Bindings
+
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#WorkersForPlatformDispatchNamespaceScriptBindingGetResponse">WorkersForPlatformDispatchNamespaceScriptBindingGetResponse</a>
+
+Methods:
+
+- <code title="get /accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/bindings">client.WorkersForPlatforms.Dispatch.Namespaces.Scripts.Bindings.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#WorkersForPlatformDispatchNamespaceScriptBindingService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, dispatchNamespace <a href="https://pkg.go.dev/builtin#string">string</a>, scriptName <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#WorkersForPlatformDispatchNamespaceScriptBindingGetParams">WorkersForPlatformDispatchNamespaceScriptBindingGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#WorkersForPlatformDispatchNamespaceScriptBindingGetResponse">WorkersForPlatformDispatchNamespaceScriptBindingGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+
 # ZeroTrust
 
 ## ConnectivitySettings
@@ -5459,36 +5470,6 @@ Methods:
 ## Email
 
 ### Security
-
-#### Top
-
-##### Ases
-
-###### ARC
-
-###### DKIM
-
-###### DMARC
-
-###### Malicious
-
-###### Spam
-
-###### SPF
-
-##### Locations
-
-###### ARC
-
-###### DKIM
-
-###### DMARC
-
-###### Malicious
-
-###### Spam
-
-###### SPF
 
 #### Summary
 

@@ -15,6 +15,7 @@ type WorkersForPlatformDispatchNamespaceScriptService struct {
 	Options  []option.RequestOption
 	Content  *WorkersForPlatformDispatchNamespaceScriptContentService
 	Settings *WorkersForPlatformDispatchNamespaceScriptSettingService
+	Bindings *WorkersForPlatformDispatchNamespaceScriptBindingService
 }
 
 // NewWorkersForPlatformDispatchNamespaceScriptService generates a new service that
@@ -26,5 +27,6 @@ func NewWorkersForPlatformDispatchNamespaceScriptService(opts ...option.RequestO
 	r.Options = opts
 	r.Content = NewWorkersForPlatformDispatchNamespaceScriptContentService(opts...)
 	r.Settings = NewWorkersForPlatformDispatchNamespaceScriptSettingService(opts...)
+	r.Bindings = NewWorkersForPlatformDispatchNamespaceScriptBindingService(opts...)
 	return
 }

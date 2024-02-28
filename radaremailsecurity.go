@@ -13,7 +13,6 @@ import (
 // instead.
 type RadarEmailSecurityService struct {
 	Options          []option.RequestOption
-	Top              *RadarEmailSecurityTopService
 	Summary          *RadarEmailSecuritySummaryService
 	TimeseriesGroups *RadarEmailSecurityTimeseriesGroupService
 }
@@ -24,7 +23,6 @@ type RadarEmailSecurityService struct {
 func NewRadarEmailSecurityService(opts ...option.RequestOption) (r *RadarEmailSecurityService) {
 	r = &RadarEmailSecurityService{}
 	r.Options = opts
-	r.Top = NewRadarEmailSecurityTopService(opts...)
 	r.Summary = NewRadarEmailSecuritySummaryService(opts...)
 	r.TimeseriesGroups = NewRadarEmailSecurityTimeseriesGroupService(opts...)
 	return
