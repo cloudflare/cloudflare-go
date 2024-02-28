@@ -12,6 +12,7 @@ import (
 // service directly, and instead use the [NewRadarEmailService] method instead.
 type RadarEmailService struct {
 	Options  []option.RequestOption
+	Routing  *RadarEmailRoutingService
 	Security *RadarEmailSecurityService
 }
 
@@ -21,6 +22,7 @@ type RadarEmailService struct {
 func NewRadarEmailService(opts ...option.RequestOption) (r *RadarEmailService) {
 	r = &RadarEmailService{}
 	r.Options = opts
+	r.Routing = NewRadarEmailRoutingService(opts...)
 	r.Security = NewRadarEmailSecurityService(opts...)
 	return
 }

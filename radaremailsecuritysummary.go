@@ -111,11 +111,37 @@ func (r *RadarEmailSecuritySummaryService) SPF(ctx context.Context, query RadarE
 	return
 }
 
+// Proportion of emails categorized as either spoof or legitimate (non-spoof).
+func (r *RadarEmailSecuritySummaryService) Spoof(ctx context.Context, query RadarEmailSecuritySummarySpoofParams, opts ...option.RequestOption) (res *RadarEmailSecuritySummarySpoofResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env RadarEmailSecuritySummarySpoofResponseEnvelope
+	path := "radar/email/security/summary/spoof"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Percentage distribution of emails classified in Threat Categories.
 func (r *RadarEmailSecuritySummaryService) ThreatCategory(ctx context.Context, query RadarEmailSecuritySummaryThreatCategoryParams, opts ...option.RequestOption) (res *RadarEmailSecuritySummaryThreatCategoryResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RadarEmailSecuritySummaryThreatCategoryResponseEnvelope
 	path := "radar/email/security/summary/threat_category"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Percentage distribution of emails classified per TLS Version.
+func (r *RadarEmailSecuritySummaryService) TLSVersion(ctx context.Context, query RadarEmailSecuritySummaryTLSVersionParams, opts ...option.RequestOption) (res *RadarEmailSecuritySummaryTLSVersionResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env RadarEmailSecuritySummaryTLSVersionResponseEnvelope
+	path := "radar/email/security/summary/tls_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
@@ -923,6 +949,138 @@ func (r *RadarEmailSecuritySummarySPFResponseSummary0) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type RadarEmailSecuritySummarySpoofResponse struct {
+	Meta     RadarEmailSecuritySummarySpoofResponseMeta     `json:"meta,required"`
+	Summary0 RadarEmailSecuritySummarySpoofResponseSummary0 `json:"summary_0,required"`
+	JSON     radarEmailSecuritySummarySpoofResponseJSON     `json:"-"`
+}
+
+// radarEmailSecuritySummarySpoofResponseJSON contains the JSON metadata for the
+// struct [RadarEmailSecuritySummarySpoofResponse]
+type radarEmailSecuritySummarySpoofResponseJSON struct {
+	Meta        apijson.Field
+	Summary0    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarEmailSecuritySummarySpoofResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarEmailSecuritySummarySpoofResponseMeta struct {
+	DateRange      []RadarEmailSecuritySummarySpoofResponseMetaDateRange    `json:"dateRange,required"`
+	LastUpdated    string                                                   `json:"lastUpdated,required"`
+	Normalization  string                                                   `json:"normalization,required"`
+	ConfidenceInfo RadarEmailSecuritySummarySpoofResponseMetaConfidenceInfo `json:"confidenceInfo"`
+	JSON           radarEmailSecuritySummarySpoofResponseMetaJSON           `json:"-"`
+}
+
+// radarEmailSecuritySummarySpoofResponseMetaJSON contains the JSON metadata for
+// the struct [RadarEmailSecuritySummarySpoofResponseMeta]
+type radarEmailSecuritySummarySpoofResponseMetaJSON struct {
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	ConfidenceInfo apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RadarEmailSecuritySummarySpoofResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarEmailSecuritySummarySpoofResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                               `json:"startTime,required" format:"date-time"`
+	JSON      radarEmailSecuritySummarySpoofResponseMetaDateRangeJSON `json:"-"`
+}
+
+// radarEmailSecuritySummarySpoofResponseMetaDateRangeJSON contains the JSON
+// metadata for the struct [RadarEmailSecuritySummarySpoofResponseMetaDateRange]
+type radarEmailSecuritySummarySpoofResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarEmailSecuritySummarySpoofResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarEmailSecuritySummarySpoofResponseMetaConfidenceInfo struct {
+	Annotations []RadarEmailSecuritySummarySpoofResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                                `json:"level"`
+	JSON        radarEmailSecuritySummarySpoofResponseMetaConfidenceInfoJSON         `json:"-"`
+}
+
+// radarEmailSecuritySummarySpoofResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct
+// [RadarEmailSecuritySummarySpoofResponseMetaConfidenceInfo]
+type radarEmailSecuritySummarySpoofResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarEmailSecuritySummarySpoofResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarEmailSecuritySummarySpoofResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                                 `json:"dataSource,required"`
+	Description     string                                                                 `json:"description,required"`
+	EventType       string                                                                 `json:"eventType,required"`
+	IsInstantaneous interface{}                                                            `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                              `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                                 `json:"linkedUrl"`
+	StartTime       time.Time                                                              `json:"startTime" format:"date-time"`
+	JSON            radarEmailSecuritySummarySpoofResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// radarEmailSecuritySummarySpoofResponseMetaConfidenceInfoAnnotationJSON contains
+// the JSON metadata for the struct
+// [RadarEmailSecuritySummarySpoofResponseMetaConfidenceInfoAnnotation]
+type radarEmailSecuritySummarySpoofResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *RadarEmailSecuritySummarySpoofResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarEmailSecuritySummarySpoofResponseSummary0 struct {
+	NotSpoof string                                             `json:"NOT_SPOOF,required"`
+	Spoof    string                                             `json:"SPOOF,required"`
+	JSON     radarEmailSecuritySummarySpoofResponseSummary0JSON `json:"-"`
+}
+
+// radarEmailSecuritySummarySpoofResponseSummary0JSON contains the JSON metadata
+// for the struct [RadarEmailSecuritySummarySpoofResponseSummary0]
+type radarEmailSecuritySummarySpoofResponseSummary0JSON struct {
+	NotSpoof    apijson.Field
+	Spoof       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarEmailSecuritySummarySpoofResponseSummary0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type RadarEmailSecuritySummaryThreatCategoryResponse struct {
 	Meta     RadarEmailSecuritySummaryThreatCategoryResponseMeta     `json:"meta,required"`
 	Summary0 RadarEmailSecuritySummaryThreatCategoryResponseSummary0 `json:"summary_0,required"`
@@ -1058,6 +1216,143 @@ type radarEmailSecuritySummaryThreatCategoryResponseSummary0JSON struct {
 }
 
 func (r *RadarEmailSecuritySummaryThreatCategoryResponseSummary0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarEmailSecuritySummaryTLSVersionResponse struct {
+	Meta     RadarEmailSecuritySummaryTLSVersionResponseMeta     `json:"meta,required"`
+	Summary0 RadarEmailSecuritySummaryTLSVersionResponseSummary0 `json:"summary_0,required"`
+	JSON     radarEmailSecuritySummaryTLSVersionResponseJSON     `json:"-"`
+}
+
+// radarEmailSecuritySummaryTLSVersionResponseJSON contains the JSON metadata for
+// the struct [RadarEmailSecuritySummaryTLSVersionResponse]
+type radarEmailSecuritySummaryTLSVersionResponseJSON struct {
+	Meta        apijson.Field
+	Summary0    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarEmailSecuritySummaryTLSVersionResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarEmailSecuritySummaryTLSVersionResponseMeta struct {
+	DateRange      []RadarEmailSecuritySummaryTLSVersionResponseMetaDateRange    `json:"dateRange,required"`
+	LastUpdated    string                                                        `json:"lastUpdated,required"`
+	Normalization  string                                                        `json:"normalization,required"`
+	ConfidenceInfo RadarEmailSecuritySummaryTLSVersionResponseMetaConfidenceInfo `json:"confidenceInfo"`
+	JSON           radarEmailSecuritySummaryTLSVersionResponseMetaJSON           `json:"-"`
+}
+
+// radarEmailSecuritySummaryTLSVersionResponseMetaJSON contains the JSON metadata
+// for the struct [RadarEmailSecuritySummaryTLSVersionResponseMeta]
+type radarEmailSecuritySummaryTLSVersionResponseMetaJSON struct {
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	Normalization  apijson.Field
+	ConfidenceInfo apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *RadarEmailSecuritySummaryTLSVersionResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarEmailSecuritySummaryTLSVersionResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                                    `json:"startTime,required" format:"date-time"`
+	JSON      radarEmailSecuritySummaryTLSVersionResponseMetaDateRangeJSON `json:"-"`
+}
+
+// radarEmailSecuritySummaryTLSVersionResponseMetaDateRangeJSON contains the JSON
+// metadata for the struct
+// [RadarEmailSecuritySummaryTLSVersionResponseMetaDateRange]
+type radarEmailSecuritySummaryTLSVersionResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarEmailSecuritySummaryTLSVersionResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarEmailSecuritySummaryTLSVersionResponseMetaConfidenceInfo struct {
+	Annotations []RadarEmailSecuritySummaryTLSVersionResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                                     `json:"level"`
+	JSON        radarEmailSecuritySummaryTLSVersionResponseMetaConfidenceInfoJSON         `json:"-"`
+}
+
+// radarEmailSecuritySummaryTLSVersionResponseMetaConfidenceInfoJSON contains the
+// JSON metadata for the struct
+// [RadarEmailSecuritySummaryTLSVersionResponseMetaConfidenceInfo]
+type radarEmailSecuritySummaryTLSVersionResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarEmailSecuritySummaryTLSVersionResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarEmailSecuritySummaryTLSVersionResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                                      `json:"dataSource,required"`
+	Description     string                                                                      `json:"description,required"`
+	EventType       string                                                                      `json:"eventType,required"`
+	IsInstantaneous interface{}                                                                 `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                                   `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                                      `json:"linkedUrl"`
+	StartTime       time.Time                                                                   `json:"startTime" format:"date-time"`
+	JSON            radarEmailSecuritySummaryTLSVersionResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// radarEmailSecuritySummaryTLSVersionResponseMetaConfidenceInfoAnnotationJSON
+// contains the JSON metadata for the struct
+// [RadarEmailSecuritySummaryTLSVersionResponseMetaConfidenceInfoAnnotation]
+type radarEmailSecuritySummaryTLSVersionResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *RadarEmailSecuritySummaryTLSVersionResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarEmailSecuritySummaryTLSVersionResponseSummary0 struct {
+	TLS1_0 string                                                  `json:"TLS 1.0,required"`
+	TLS1_1 string                                                  `json:"TLS 1.1,required"`
+	TLS1_2 string                                                  `json:"TLS 1.2,required"`
+	TLS1_3 string                                                  `json:"TLS 1.3,required"`
+	JSON   radarEmailSecuritySummaryTLSVersionResponseSummary0JSON `json:"-"`
+}
+
+// radarEmailSecuritySummaryTLSVersionResponseSummary0JSON contains the JSON
+// metadata for the struct [RadarEmailSecuritySummaryTLSVersionResponseSummary0]
+type radarEmailSecuritySummaryTLSVersionResponseSummary0JSON struct {
+	TLS1_0      apijson.Field
+	TLS1_1      apijson.Field
+	TLS1_2      apijson.Field
+	TLS1_3      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarEmailSecuritySummaryTLSVersionResponseSummary0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1753,6 +2048,128 @@ func (r *RadarEmailSecuritySummarySPFResponseEnvelope) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type RadarEmailSecuritySummarySpoofParams struct {
+	// Filter for arc (Authenticated Received Chain).
+	ARC param.Field[[]RadarEmailSecuritySummarySpoofParamsARC] `query:"arc"`
+	// End of the date range (inclusive).
+	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
+	// For example, use `7d` and `7dControl` to compare this week with the previous
+	// week. Use this parameter or set specific start and end dates (`dateStart` and
+	// `dateEnd` parameters).
+	DateRange param.Field[[]RadarEmailSecuritySummarySpoofParamsDateRange] `query:"dateRange"`
+	// Array of datetimes to filter the start of a series.
+	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
+	// Filter for dkim.
+	DKIM param.Field[[]RadarEmailSecuritySummarySpoofParamsDKIM] `query:"dkim"`
+	// Filter for dmarc.
+	DMARC param.Field[[]RadarEmailSecuritySummarySpoofParamsDMARC] `query:"dmarc"`
+	// Format results are returned in.
+	Format param.Field[RadarEmailSecuritySummarySpoofParamsFormat] `query:"format"`
+	// Array of names that will be used to name the series in responses.
+	Name param.Field[[]string] `query:"name"`
+	// Filter for spf.
+	SPF param.Field[[]RadarEmailSecuritySummarySpoofParamsSPF] `query:"spf"`
+	// Filter for tls version.
+	TLSVersion param.Field[[]RadarEmailSecuritySummarySpoofParamsTLSVersion] `query:"tlsVersion"`
+}
+
+// URLQuery serializes [RadarEmailSecuritySummarySpoofParams]'s query parameters as
+// `url.Values`.
+func (r RadarEmailSecuritySummarySpoofParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+type RadarEmailSecuritySummarySpoofParamsARC string
+
+const (
+	RadarEmailSecuritySummarySpoofParamsARCPass RadarEmailSecuritySummarySpoofParamsARC = "PASS"
+	RadarEmailSecuritySummarySpoofParamsARCNone RadarEmailSecuritySummarySpoofParamsARC = "NONE"
+	RadarEmailSecuritySummarySpoofParamsARCFail RadarEmailSecuritySummarySpoofParamsARC = "FAIL"
+)
+
+type RadarEmailSecuritySummarySpoofParamsDateRange string
+
+const (
+	RadarEmailSecuritySummarySpoofParamsDateRange1d         RadarEmailSecuritySummarySpoofParamsDateRange = "1d"
+	RadarEmailSecuritySummarySpoofParamsDateRange2d         RadarEmailSecuritySummarySpoofParamsDateRange = "2d"
+	RadarEmailSecuritySummarySpoofParamsDateRange7d         RadarEmailSecuritySummarySpoofParamsDateRange = "7d"
+	RadarEmailSecuritySummarySpoofParamsDateRange14d        RadarEmailSecuritySummarySpoofParamsDateRange = "14d"
+	RadarEmailSecuritySummarySpoofParamsDateRange28d        RadarEmailSecuritySummarySpoofParamsDateRange = "28d"
+	RadarEmailSecuritySummarySpoofParamsDateRange12w        RadarEmailSecuritySummarySpoofParamsDateRange = "12w"
+	RadarEmailSecuritySummarySpoofParamsDateRange24w        RadarEmailSecuritySummarySpoofParamsDateRange = "24w"
+	RadarEmailSecuritySummarySpoofParamsDateRange52w        RadarEmailSecuritySummarySpoofParamsDateRange = "52w"
+	RadarEmailSecuritySummarySpoofParamsDateRange1dControl  RadarEmailSecuritySummarySpoofParamsDateRange = "1dControl"
+	RadarEmailSecuritySummarySpoofParamsDateRange2dControl  RadarEmailSecuritySummarySpoofParamsDateRange = "2dControl"
+	RadarEmailSecuritySummarySpoofParamsDateRange7dControl  RadarEmailSecuritySummarySpoofParamsDateRange = "7dControl"
+	RadarEmailSecuritySummarySpoofParamsDateRange14dControl RadarEmailSecuritySummarySpoofParamsDateRange = "14dControl"
+	RadarEmailSecuritySummarySpoofParamsDateRange28dControl RadarEmailSecuritySummarySpoofParamsDateRange = "28dControl"
+	RadarEmailSecuritySummarySpoofParamsDateRange12wControl RadarEmailSecuritySummarySpoofParamsDateRange = "12wControl"
+	RadarEmailSecuritySummarySpoofParamsDateRange24wControl RadarEmailSecuritySummarySpoofParamsDateRange = "24wControl"
+)
+
+type RadarEmailSecuritySummarySpoofParamsDKIM string
+
+const (
+	RadarEmailSecuritySummarySpoofParamsDKIMPass RadarEmailSecuritySummarySpoofParamsDKIM = "PASS"
+	RadarEmailSecuritySummarySpoofParamsDKIMNone RadarEmailSecuritySummarySpoofParamsDKIM = "NONE"
+	RadarEmailSecuritySummarySpoofParamsDKIMFail RadarEmailSecuritySummarySpoofParamsDKIM = "FAIL"
+)
+
+type RadarEmailSecuritySummarySpoofParamsDMARC string
+
+const (
+	RadarEmailSecuritySummarySpoofParamsDMARCPass RadarEmailSecuritySummarySpoofParamsDMARC = "PASS"
+	RadarEmailSecuritySummarySpoofParamsDMARCNone RadarEmailSecuritySummarySpoofParamsDMARC = "NONE"
+	RadarEmailSecuritySummarySpoofParamsDMARCFail RadarEmailSecuritySummarySpoofParamsDMARC = "FAIL"
+)
+
+// Format results are returned in.
+type RadarEmailSecuritySummarySpoofParamsFormat string
+
+const (
+	RadarEmailSecuritySummarySpoofParamsFormatJson RadarEmailSecuritySummarySpoofParamsFormat = "JSON"
+	RadarEmailSecuritySummarySpoofParamsFormatCsv  RadarEmailSecuritySummarySpoofParamsFormat = "CSV"
+)
+
+type RadarEmailSecuritySummarySpoofParamsSPF string
+
+const (
+	RadarEmailSecuritySummarySpoofParamsSPFPass RadarEmailSecuritySummarySpoofParamsSPF = "PASS"
+	RadarEmailSecuritySummarySpoofParamsSPFNone RadarEmailSecuritySummarySpoofParamsSPF = "NONE"
+	RadarEmailSecuritySummarySpoofParamsSPFFail RadarEmailSecuritySummarySpoofParamsSPF = "FAIL"
+)
+
+type RadarEmailSecuritySummarySpoofParamsTLSVersion string
+
+const (
+	RadarEmailSecuritySummarySpoofParamsTLSVersionTlSv1_0 RadarEmailSecuritySummarySpoofParamsTLSVersion = "TLSv1_0"
+	RadarEmailSecuritySummarySpoofParamsTLSVersionTlSv1_1 RadarEmailSecuritySummarySpoofParamsTLSVersion = "TLSv1_1"
+	RadarEmailSecuritySummarySpoofParamsTLSVersionTlSv1_2 RadarEmailSecuritySummarySpoofParamsTLSVersion = "TLSv1_2"
+	RadarEmailSecuritySummarySpoofParamsTLSVersionTlSv1_3 RadarEmailSecuritySummarySpoofParamsTLSVersion = "TLSv1_3"
+)
+
+type RadarEmailSecuritySummarySpoofResponseEnvelope struct {
+	Result  RadarEmailSecuritySummarySpoofResponse             `json:"result,required"`
+	Success bool                                               `json:"success,required"`
+	JSON    radarEmailSecuritySummarySpoofResponseEnvelopeJSON `json:"-"`
+}
+
+// radarEmailSecuritySummarySpoofResponseEnvelopeJSON contains the JSON metadata
+// for the struct [RadarEmailSecuritySummarySpoofResponseEnvelope]
+type radarEmailSecuritySummarySpoofResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarEmailSecuritySummarySpoofResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type RadarEmailSecuritySummaryThreatCategoryParams struct {
 	// Filter for arc (Authenticated Received Chain).
 	ARC param.Field[[]RadarEmailSecuritySummaryThreatCategoryParamsARC] `query:"arc"`
@@ -1873,5 +2290,116 @@ type radarEmailSecuritySummaryThreatCategoryResponseEnvelopeJSON struct {
 }
 
 func (r *RadarEmailSecuritySummaryThreatCategoryResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarEmailSecuritySummaryTLSVersionParams struct {
+	// Filter for arc (Authenticated Received Chain).
+	ARC param.Field[[]RadarEmailSecuritySummaryTLSVersionParamsARC] `query:"arc"`
+	// End of the date range (inclusive).
+	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
+	// For example, use `7d` and `7dControl` to compare this week with the previous
+	// week. Use this parameter or set specific start and end dates (`dateStart` and
+	// `dateEnd` parameters).
+	DateRange param.Field[[]RadarEmailSecuritySummaryTLSVersionParamsDateRange] `query:"dateRange"`
+	// Array of datetimes to filter the start of a series.
+	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
+	// Filter for dkim.
+	DKIM param.Field[[]RadarEmailSecuritySummaryTLSVersionParamsDKIM] `query:"dkim"`
+	// Filter for dmarc.
+	DMARC param.Field[[]RadarEmailSecuritySummaryTLSVersionParamsDMARC] `query:"dmarc"`
+	// Format results are returned in.
+	Format param.Field[RadarEmailSecuritySummaryTLSVersionParamsFormat] `query:"format"`
+	// Array of names that will be used to name the series in responses.
+	Name param.Field[[]string] `query:"name"`
+	// Filter for spf.
+	SPF param.Field[[]RadarEmailSecuritySummaryTLSVersionParamsSPF] `query:"spf"`
+}
+
+// URLQuery serializes [RadarEmailSecuritySummaryTLSVersionParams]'s query
+// parameters as `url.Values`.
+func (r RadarEmailSecuritySummaryTLSVersionParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+type RadarEmailSecuritySummaryTLSVersionParamsARC string
+
+const (
+	RadarEmailSecuritySummaryTLSVersionParamsARCPass RadarEmailSecuritySummaryTLSVersionParamsARC = "PASS"
+	RadarEmailSecuritySummaryTLSVersionParamsARCNone RadarEmailSecuritySummaryTLSVersionParamsARC = "NONE"
+	RadarEmailSecuritySummaryTLSVersionParamsARCFail RadarEmailSecuritySummaryTLSVersionParamsARC = "FAIL"
+)
+
+type RadarEmailSecuritySummaryTLSVersionParamsDateRange string
+
+const (
+	RadarEmailSecuritySummaryTLSVersionParamsDateRange1d         RadarEmailSecuritySummaryTLSVersionParamsDateRange = "1d"
+	RadarEmailSecuritySummaryTLSVersionParamsDateRange2d         RadarEmailSecuritySummaryTLSVersionParamsDateRange = "2d"
+	RadarEmailSecuritySummaryTLSVersionParamsDateRange7d         RadarEmailSecuritySummaryTLSVersionParamsDateRange = "7d"
+	RadarEmailSecuritySummaryTLSVersionParamsDateRange14d        RadarEmailSecuritySummaryTLSVersionParamsDateRange = "14d"
+	RadarEmailSecuritySummaryTLSVersionParamsDateRange28d        RadarEmailSecuritySummaryTLSVersionParamsDateRange = "28d"
+	RadarEmailSecuritySummaryTLSVersionParamsDateRange12w        RadarEmailSecuritySummaryTLSVersionParamsDateRange = "12w"
+	RadarEmailSecuritySummaryTLSVersionParamsDateRange24w        RadarEmailSecuritySummaryTLSVersionParamsDateRange = "24w"
+	RadarEmailSecuritySummaryTLSVersionParamsDateRange52w        RadarEmailSecuritySummaryTLSVersionParamsDateRange = "52w"
+	RadarEmailSecuritySummaryTLSVersionParamsDateRange1dControl  RadarEmailSecuritySummaryTLSVersionParamsDateRange = "1dControl"
+	RadarEmailSecuritySummaryTLSVersionParamsDateRange2dControl  RadarEmailSecuritySummaryTLSVersionParamsDateRange = "2dControl"
+	RadarEmailSecuritySummaryTLSVersionParamsDateRange7dControl  RadarEmailSecuritySummaryTLSVersionParamsDateRange = "7dControl"
+	RadarEmailSecuritySummaryTLSVersionParamsDateRange14dControl RadarEmailSecuritySummaryTLSVersionParamsDateRange = "14dControl"
+	RadarEmailSecuritySummaryTLSVersionParamsDateRange28dControl RadarEmailSecuritySummaryTLSVersionParamsDateRange = "28dControl"
+	RadarEmailSecuritySummaryTLSVersionParamsDateRange12wControl RadarEmailSecuritySummaryTLSVersionParamsDateRange = "12wControl"
+	RadarEmailSecuritySummaryTLSVersionParamsDateRange24wControl RadarEmailSecuritySummaryTLSVersionParamsDateRange = "24wControl"
+)
+
+type RadarEmailSecuritySummaryTLSVersionParamsDKIM string
+
+const (
+	RadarEmailSecuritySummaryTLSVersionParamsDKIMPass RadarEmailSecuritySummaryTLSVersionParamsDKIM = "PASS"
+	RadarEmailSecuritySummaryTLSVersionParamsDKIMNone RadarEmailSecuritySummaryTLSVersionParamsDKIM = "NONE"
+	RadarEmailSecuritySummaryTLSVersionParamsDKIMFail RadarEmailSecuritySummaryTLSVersionParamsDKIM = "FAIL"
+)
+
+type RadarEmailSecuritySummaryTLSVersionParamsDMARC string
+
+const (
+	RadarEmailSecuritySummaryTLSVersionParamsDMARCPass RadarEmailSecuritySummaryTLSVersionParamsDMARC = "PASS"
+	RadarEmailSecuritySummaryTLSVersionParamsDMARCNone RadarEmailSecuritySummaryTLSVersionParamsDMARC = "NONE"
+	RadarEmailSecuritySummaryTLSVersionParamsDMARCFail RadarEmailSecuritySummaryTLSVersionParamsDMARC = "FAIL"
+)
+
+// Format results are returned in.
+type RadarEmailSecuritySummaryTLSVersionParamsFormat string
+
+const (
+	RadarEmailSecuritySummaryTLSVersionParamsFormatJson RadarEmailSecuritySummaryTLSVersionParamsFormat = "JSON"
+	RadarEmailSecuritySummaryTLSVersionParamsFormatCsv  RadarEmailSecuritySummaryTLSVersionParamsFormat = "CSV"
+)
+
+type RadarEmailSecuritySummaryTLSVersionParamsSPF string
+
+const (
+	RadarEmailSecuritySummaryTLSVersionParamsSPFPass RadarEmailSecuritySummaryTLSVersionParamsSPF = "PASS"
+	RadarEmailSecuritySummaryTLSVersionParamsSPFNone RadarEmailSecuritySummaryTLSVersionParamsSPF = "NONE"
+	RadarEmailSecuritySummaryTLSVersionParamsSPFFail RadarEmailSecuritySummaryTLSVersionParamsSPF = "FAIL"
+)
+
+type RadarEmailSecuritySummaryTLSVersionResponseEnvelope struct {
+	Result  RadarEmailSecuritySummaryTLSVersionResponse             `json:"result,required"`
+	Success bool                                                    `json:"success,required"`
+	JSON    radarEmailSecuritySummaryTLSVersionResponseEnvelopeJSON `json:"-"`
+}
+
+// radarEmailSecuritySummaryTLSVersionResponseEnvelopeJSON contains the JSON
+// metadata for the struct [RadarEmailSecuritySummaryTLSVersionResponseEnvelope]
+type radarEmailSecuritySummaryTLSVersionResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarEmailSecuritySummaryTLSVersionResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

@@ -238,6 +238,44 @@ func TestRadarEmailSecurityTimeseriesGroupSPFWithOptionalParams(t *testing.T) {
 	}
 }
 
+func TestRadarEmailSecurityTimeseriesGroupSpoofWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
+	)
+	_, err := client.Radar.Email.Security.TimeseriesGroups.Spoof(context.TODO(), cloudflare.RadarEmailSecurityTimeseriesGroupSpoofParams{
+		AggInterval: cloudflare.F(cloudflare.RadarEmailSecurityTimeseriesGroupSpoofParamsAggInterval1h),
+		ARC:         cloudflare.F([]cloudflare.RadarEmailSecurityTimeseriesGroupSpoofParamsARC{cloudflare.RadarEmailSecurityTimeseriesGroupSpoofParamsARCPass, cloudflare.RadarEmailSecurityTimeseriesGroupSpoofParamsARCNone, cloudflare.RadarEmailSecurityTimeseriesGroupSpoofParamsARCFail}),
+		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
+		DateRange:   cloudflare.F([]cloudflare.RadarEmailSecurityTimeseriesGroupSpoofParamsDateRange{cloudflare.RadarEmailSecurityTimeseriesGroupSpoofParamsDateRange1d, cloudflare.RadarEmailSecurityTimeseriesGroupSpoofParamsDateRange2d, cloudflare.RadarEmailSecurityTimeseriesGroupSpoofParamsDateRange7d}),
+		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
+		DKIM:        cloudflare.F([]cloudflare.RadarEmailSecurityTimeseriesGroupSpoofParamsDKIM{cloudflare.RadarEmailSecurityTimeseriesGroupSpoofParamsDKIMPass, cloudflare.RadarEmailSecurityTimeseriesGroupSpoofParamsDKIMNone, cloudflare.RadarEmailSecurityTimeseriesGroupSpoofParamsDKIMFail}),
+		DMARC:       cloudflare.F([]cloudflare.RadarEmailSecurityTimeseriesGroupSpoofParamsDMARC{cloudflare.RadarEmailSecurityTimeseriesGroupSpoofParamsDMARCPass, cloudflare.RadarEmailSecurityTimeseriesGroupSpoofParamsDMARCNone, cloudflare.RadarEmailSecurityTimeseriesGroupSpoofParamsDMARCFail}),
+		Format:      cloudflare.F(cloudflare.RadarEmailSecurityTimeseriesGroupSpoofParamsFormatJson),
+		Name:        cloudflare.F([]string{"string", "string", "string"}),
+		SPF:         cloudflare.F([]cloudflare.RadarEmailSecurityTimeseriesGroupSpoofParamsSPF{cloudflare.RadarEmailSecurityTimeseriesGroupSpoofParamsSPFPass, cloudflare.RadarEmailSecurityTimeseriesGroupSpoofParamsSPFNone, cloudflare.RadarEmailSecurityTimeseriesGroupSpoofParamsSPFFail}),
+		TLSVersion:  cloudflare.F([]cloudflare.RadarEmailSecurityTimeseriesGroupSpoofParamsTLSVersion{cloudflare.RadarEmailSecurityTimeseriesGroupSpoofParamsTLSVersionTlSv1_0, cloudflare.RadarEmailSecurityTimeseriesGroupSpoofParamsTLSVersionTlSv1_1, cloudflare.RadarEmailSecurityTimeseriesGroupSpoofParamsTLSVersionTlSv1_2}),
+	})
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
 func TestRadarEmailSecurityTimeseriesGroupThreatCategoryWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
@@ -266,6 +304,43 @@ func TestRadarEmailSecurityTimeseriesGroupThreatCategoryWithOptionalParams(t *te
 		Name:        cloudflare.F([]string{"string", "string", "string"}),
 		SPF:         cloudflare.F([]cloudflare.RadarEmailSecurityTimeseriesGroupThreatCategoryParamsSPF{cloudflare.RadarEmailSecurityTimeseriesGroupThreatCategoryParamsSPFPass, cloudflare.RadarEmailSecurityTimeseriesGroupThreatCategoryParamsSPFNone, cloudflare.RadarEmailSecurityTimeseriesGroupThreatCategoryParamsSPFFail}),
 		TLSVersion:  cloudflare.F([]cloudflare.RadarEmailSecurityTimeseriesGroupThreatCategoryParamsTLSVersion{cloudflare.RadarEmailSecurityTimeseriesGroupThreatCategoryParamsTLSVersionTlSv1_0, cloudflare.RadarEmailSecurityTimeseriesGroupThreatCategoryParamsTLSVersionTlSv1_1, cloudflare.RadarEmailSecurityTimeseriesGroupThreatCategoryParamsTLSVersionTlSv1_2}),
+	})
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestRadarEmailSecurityTimeseriesGroupTLSVersionWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
+	)
+	_, err := client.Radar.Email.Security.TimeseriesGroups.TLSVersion(context.TODO(), cloudflare.RadarEmailSecurityTimeseriesGroupTLSVersionParams{
+		AggInterval: cloudflare.F(cloudflare.RadarEmailSecurityTimeseriesGroupTLSVersionParamsAggInterval1h),
+		ARC:         cloudflare.F([]cloudflare.RadarEmailSecurityTimeseriesGroupTLSVersionParamsARC{cloudflare.RadarEmailSecurityTimeseriesGroupTLSVersionParamsARCPass, cloudflare.RadarEmailSecurityTimeseriesGroupTLSVersionParamsARCNone, cloudflare.RadarEmailSecurityTimeseriesGroupTLSVersionParamsARCFail}),
+		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
+		DateRange:   cloudflare.F([]cloudflare.RadarEmailSecurityTimeseriesGroupTLSVersionParamsDateRange{cloudflare.RadarEmailSecurityTimeseriesGroupTLSVersionParamsDateRange1d, cloudflare.RadarEmailSecurityTimeseriesGroupTLSVersionParamsDateRange2d, cloudflare.RadarEmailSecurityTimeseriesGroupTLSVersionParamsDateRange7d}),
+		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
+		DKIM:        cloudflare.F([]cloudflare.RadarEmailSecurityTimeseriesGroupTLSVersionParamsDKIM{cloudflare.RadarEmailSecurityTimeseriesGroupTLSVersionParamsDKIMPass, cloudflare.RadarEmailSecurityTimeseriesGroupTLSVersionParamsDKIMNone, cloudflare.RadarEmailSecurityTimeseriesGroupTLSVersionParamsDKIMFail}),
+		DMARC:       cloudflare.F([]cloudflare.RadarEmailSecurityTimeseriesGroupTLSVersionParamsDMARC{cloudflare.RadarEmailSecurityTimeseriesGroupTLSVersionParamsDMARCPass, cloudflare.RadarEmailSecurityTimeseriesGroupTLSVersionParamsDMARCNone, cloudflare.RadarEmailSecurityTimeseriesGroupTLSVersionParamsDMARCFail}),
+		Format:      cloudflare.F(cloudflare.RadarEmailSecurityTimeseriesGroupTLSVersionParamsFormatJson),
+		Name:        cloudflare.F([]string{"string", "string", "string"}),
+		SPF:         cloudflare.F([]cloudflare.RadarEmailSecurityTimeseriesGroupTLSVersionParamsSPF{cloudflare.RadarEmailSecurityTimeseriesGroupTLSVersionParamsSPFPass, cloudflare.RadarEmailSecurityTimeseriesGroupTLSVersionParamsSPFNone, cloudflare.RadarEmailSecurityTimeseriesGroupTLSVersionParamsSPFFail}),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

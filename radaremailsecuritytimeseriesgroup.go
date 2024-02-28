@@ -111,11 +111,37 @@ func (r *RadarEmailSecurityTimeseriesGroupService) SPF(ctx context.Context, quer
 	return
 }
 
+// Percentage distribution of emails classified as SPOOF over time.
+func (r *RadarEmailSecurityTimeseriesGroupService) Spoof(ctx context.Context, query RadarEmailSecurityTimeseriesGroupSpoofParams, opts ...option.RequestOption) (res *RadarEmailSecurityTimeseriesGroupSpoofResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env RadarEmailSecurityTimeseriesGroupSpoofResponseEnvelope
+	path := "radar/email/security/timeseries_groups/spoof"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // Percentage distribution of emails classified in Threat Categories over time.
 func (r *RadarEmailSecurityTimeseriesGroupService) ThreatCategory(ctx context.Context, query RadarEmailSecurityTimeseriesGroupThreatCategoryParams, opts ...option.RequestOption) (res *RadarEmailSecurityTimeseriesGroupThreatCategoryResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RadarEmailSecurityTimeseriesGroupThreatCategoryResponseEnvelope
 	path := "radar/email/security/timeseries_groups/threat_category"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Percentage distribution of emails classified per TLS Version over time.
+func (r *RadarEmailSecurityTimeseriesGroupService) TLSVersion(ctx context.Context, query RadarEmailSecurityTimeseriesGroupTLSVersionParams, opts ...option.RequestOption) (res *RadarEmailSecurityTimeseriesGroupTLSVersionResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env RadarEmailSecurityTimeseriesGroupTLSVersionResponseEnvelope
+	path := "radar/email/security/timeseries_groups/tls_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
@@ -361,6 +387,44 @@ func (r *RadarEmailSecurityTimeseriesGroupSPFResponseSerie0) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type RadarEmailSecurityTimeseriesGroupSpoofResponse struct {
+	Meta   interface{}                                          `json:"meta,required"`
+	Serie0 RadarEmailSecurityTimeseriesGroupSpoofResponseSerie0 `json:"serie_0,required"`
+	JSON   radarEmailSecurityTimeseriesGroupSpoofResponseJSON   `json:"-"`
+}
+
+// radarEmailSecurityTimeseriesGroupSpoofResponseJSON contains the JSON metadata
+// for the struct [RadarEmailSecurityTimeseriesGroupSpoofResponse]
+type radarEmailSecurityTimeseriesGroupSpoofResponseJSON struct {
+	Meta        apijson.Field
+	Serie0      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarEmailSecurityTimeseriesGroupSpoofResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarEmailSecurityTimeseriesGroupSpoofResponseSerie0 struct {
+	NotSpoof []string                                                 `json:"NOT_SPOOF,required"`
+	Spoof    []string                                                 `json:"SPOOF,required"`
+	JSON     radarEmailSecurityTimeseriesGroupSpoofResponseSerie0JSON `json:"-"`
+}
+
+// radarEmailSecurityTimeseriesGroupSpoofResponseSerie0JSON contains the JSON
+// metadata for the struct [RadarEmailSecurityTimeseriesGroupSpoofResponseSerie0]
+type radarEmailSecurityTimeseriesGroupSpoofResponseSerie0JSON struct {
+	NotSpoof    apijson.Field
+	Spoof       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarEmailSecurityTimeseriesGroupSpoofResponseSerie0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type RadarEmailSecurityTimeseriesGroupThreatCategoryResponse struct {
 	Meta   interface{}                                                   `json:"meta,required"`
 	Serie0 RadarEmailSecurityTimeseriesGroupThreatCategoryResponseSerie0 `json:"serie_0,required"`
@@ -402,6 +466,49 @@ type radarEmailSecurityTimeseriesGroupThreatCategoryResponseSerie0JSON struct {
 }
 
 func (r *RadarEmailSecurityTimeseriesGroupThreatCategoryResponseSerie0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarEmailSecurityTimeseriesGroupTLSVersionResponse struct {
+	Meta   interface{}                                               `json:"meta,required"`
+	Serie0 RadarEmailSecurityTimeseriesGroupTLSVersionResponseSerie0 `json:"serie_0,required"`
+	JSON   radarEmailSecurityTimeseriesGroupTLSVersionResponseJSON   `json:"-"`
+}
+
+// radarEmailSecurityTimeseriesGroupTLSVersionResponseJSON contains the JSON
+// metadata for the struct [RadarEmailSecurityTimeseriesGroupTLSVersionResponse]
+type radarEmailSecurityTimeseriesGroupTLSVersionResponseJSON struct {
+	Meta        apijson.Field
+	Serie0      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarEmailSecurityTimeseriesGroupTLSVersionResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarEmailSecurityTimeseriesGroupTLSVersionResponseSerie0 struct {
+	TLS1_0 []string                                                      `json:"TLS 1.0,required"`
+	TLS1_1 []string                                                      `json:"TLS 1.1,required"`
+	TLS1_2 []string                                                      `json:"TLS 1.2,required"`
+	TLS1_3 []string                                                      `json:"TLS 1.3,required"`
+	JSON   radarEmailSecurityTimeseriesGroupTLSVersionResponseSerie0JSON `json:"-"`
+}
+
+// radarEmailSecurityTimeseriesGroupTLSVersionResponseSerie0JSON contains the JSON
+// metadata for the struct
+// [RadarEmailSecurityTimeseriesGroupTLSVersionResponseSerie0]
+type radarEmailSecurityTimeseriesGroupTLSVersionResponseSerie0JSON struct {
+	TLS1_0      apijson.Field
+	TLS1_1      apijson.Field
+	TLS1_2      apijson.Field
+	TLS1_3      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarEmailSecurityTimeseriesGroupTLSVersionResponseSerie0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1194,6 +1301,144 @@ func (r *RadarEmailSecurityTimeseriesGroupSPFResponseEnvelope) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type RadarEmailSecurityTimeseriesGroupSpoofParams struct {
+	// Aggregation interval results should be returned in (for example, in 15 minutes
+	// or 1 hour intervals). Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval param.Field[RadarEmailSecurityTimeseriesGroupSpoofParamsAggInterval] `query:"aggInterval"`
+	// Filter for arc (Authenticated Received Chain).
+	ARC param.Field[[]RadarEmailSecurityTimeseriesGroupSpoofParamsARC] `query:"arc"`
+	// End of the date range (inclusive).
+	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
+	// For example, use `7d` and `7dControl` to compare this week with the previous
+	// week. Use this parameter or set specific start and end dates (`dateStart` and
+	// `dateEnd` parameters).
+	DateRange param.Field[[]RadarEmailSecurityTimeseriesGroupSpoofParamsDateRange] `query:"dateRange"`
+	// Array of datetimes to filter the start of a series.
+	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
+	// Filter for dkim.
+	DKIM param.Field[[]RadarEmailSecurityTimeseriesGroupSpoofParamsDKIM] `query:"dkim"`
+	// Filter for dmarc.
+	DMARC param.Field[[]RadarEmailSecurityTimeseriesGroupSpoofParamsDMARC] `query:"dmarc"`
+	// Format results are returned in.
+	Format param.Field[RadarEmailSecurityTimeseriesGroupSpoofParamsFormat] `query:"format"`
+	// Array of names that will be used to name the series in responses.
+	Name param.Field[[]string] `query:"name"`
+	// Filter for spf.
+	SPF param.Field[[]RadarEmailSecurityTimeseriesGroupSpoofParamsSPF] `query:"spf"`
+	// Filter for tls version.
+	TLSVersion param.Field[[]RadarEmailSecurityTimeseriesGroupSpoofParamsTLSVersion] `query:"tlsVersion"`
+}
+
+// URLQuery serializes [RadarEmailSecurityTimeseriesGroupSpoofParams]'s query
+// parameters as `url.Values`.
+func (r RadarEmailSecurityTimeseriesGroupSpoofParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+// Aggregation interval results should be returned in (for example, in 15 minutes
+// or 1 hour intervals). Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type RadarEmailSecurityTimeseriesGroupSpoofParamsAggInterval string
+
+const (
+	RadarEmailSecurityTimeseriesGroupSpoofParamsAggInterval15m RadarEmailSecurityTimeseriesGroupSpoofParamsAggInterval = "15m"
+	RadarEmailSecurityTimeseriesGroupSpoofParamsAggInterval1h  RadarEmailSecurityTimeseriesGroupSpoofParamsAggInterval = "1h"
+	RadarEmailSecurityTimeseriesGroupSpoofParamsAggInterval1d  RadarEmailSecurityTimeseriesGroupSpoofParamsAggInterval = "1d"
+	RadarEmailSecurityTimeseriesGroupSpoofParamsAggInterval1w  RadarEmailSecurityTimeseriesGroupSpoofParamsAggInterval = "1w"
+)
+
+type RadarEmailSecurityTimeseriesGroupSpoofParamsARC string
+
+const (
+	RadarEmailSecurityTimeseriesGroupSpoofParamsARCPass RadarEmailSecurityTimeseriesGroupSpoofParamsARC = "PASS"
+	RadarEmailSecurityTimeseriesGroupSpoofParamsARCNone RadarEmailSecurityTimeseriesGroupSpoofParamsARC = "NONE"
+	RadarEmailSecurityTimeseriesGroupSpoofParamsARCFail RadarEmailSecurityTimeseriesGroupSpoofParamsARC = "FAIL"
+)
+
+type RadarEmailSecurityTimeseriesGroupSpoofParamsDateRange string
+
+const (
+	RadarEmailSecurityTimeseriesGroupSpoofParamsDateRange1d         RadarEmailSecurityTimeseriesGroupSpoofParamsDateRange = "1d"
+	RadarEmailSecurityTimeseriesGroupSpoofParamsDateRange2d         RadarEmailSecurityTimeseriesGroupSpoofParamsDateRange = "2d"
+	RadarEmailSecurityTimeseriesGroupSpoofParamsDateRange7d         RadarEmailSecurityTimeseriesGroupSpoofParamsDateRange = "7d"
+	RadarEmailSecurityTimeseriesGroupSpoofParamsDateRange14d        RadarEmailSecurityTimeseriesGroupSpoofParamsDateRange = "14d"
+	RadarEmailSecurityTimeseriesGroupSpoofParamsDateRange28d        RadarEmailSecurityTimeseriesGroupSpoofParamsDateRange = "28d"
+	RadarEmailSecurityTimeseriesGroupSpoofParamsDateRange12w        RadarEmailSecurityTimeseriesGroupSpoofParamsDateRange = "12w"
+	RadarEmailSecurityTimeseriesGroupSpoofParamsDateRange24w        RadarEmailSecurityTimeseriesGroupSpoofParamsDateRange = "24w"
+	RadarEmailSecurityTimeseriesGroupSpoofParamsDateRange52w        RadarEmailSecurityTimeseriesGroupSpoofParamsDateRange = "52w"
+	RadarEmailSecurityTimeseriesGroupSpoofParamsDateRange1dControl  RadarEmailSecurityTimeseriesGroupSpoofParamsDateRange = "1dControl"
+	RadarEmailSecurityTimeseriesGroupSpoofParamsDateRange2dControl  RadarEmailSecurityTimeseriesGroupSpoofParamsDateRange = "2dControl"
+	RadarEmailSecurityTimeseriesGroupSpoofParamsDateRange7dControl  RadarEmailSecurityTimeseriesGroupSpoofParamsDateRange = "7dControl"
+	RadarEmailSecurityTimeseriesGroupSpoofParamsDateRange14dControl RadarEmailSecurityTimeseriesGroupSpoofParamsDateRange = "14dControl"
+	RadarEmailSecurityTimeseriesGroupSpoofParamsDateRange28dControl RadarEmailSecurityTimeseriesGroupSpoofParamsDateRange = "28dControl"
+	RadarEmailSecurityTimeseriesGroupSpoofParamsDateRange12wControl RadarEmailSecurityTimeseriesGroupSpoofParamsDateRange = "12wControl"
+	RadarEmailSecurityTimeseriesGroupSpoofParamsDateRange24wControl RadarEmailSecurityTimeseriesGroupSpoofParamsDateRange = "24wControl"
+)
+
+type RadarEmailSecurityTimeseriesGroupSpoofParamsDKIM string
+
+const (
+	RadarEmailSecurityTimeseriesGroupSpoofParamsDKIMPass RadarEmailSecurityTimeseriesGroupSpoofParamsDKIM = "PASS"
+	RadarEmailSecurityTimeseriesGroupSpoofParamsDKIMNone RadarEmailSecurityTimeseriesGroupSpoofParamsDKIM = "NONE"
+	RadarEmailSecurityTimeseriesGroupSpoofParamsDKIMFail RadarEmailSecurityTimeseriesGroupSpoofParamsDKIM = "FAIL"
+)
+
+type RadarEmailSecurityTimeseriesGroupSpoofParamsDMARC string
+
+const (
+	RadarEmailSecurityTimeseriesGroupSpoofParamsDMARCPass RadarEmailSecurityTimeseriesGroupSpoofParamsDMARC = "PASS"
+	RadarEmailSecurityTimeseriesGroupSpoofParamsDMARCNone RadarEmailSecurityTimeseriesGroupSpoofParamsDMARC = "NONE"
+	RadarEmailSecurityTimeseriesGroupSpoofParamsDMARCFail RadarEmailSecurityTimeseriesGroupSpoofParamsDMARC = "FAIL"
+)
+
+// Format results are returned in.
+type RadarEmailSecurityTimeseriesGroupSpoofParamsFormat string
+
+const (
+	RadarEmailSecurityTimeseriesGroupSpoofParamsFormatJson RadarEmailSecurityTimeseriesGroupSpoofParamsFormat = "JSON"
+	RadarEmailSecurityTimeseriesGroupSpoofParamsFormatCsv  RadarEmailSecurityTimeseriesGroupSpoofParamsFormat = "CSV"
+)
+
+type RadarEmailSecurityTimeseriesGroupSpoofParamsSPF string
+
+const (
+	RadarEmailSecurityTimeseriesGroupSpoofParamsSPFPass RadarEmailSecurityTimeseriesGroupSpoofParamsSPF = "PASS"
+	RadarEmailSecurityTimeseriesGroupSpoofParamsSPFNone RadarEmailSecurityTimeseriesGroupSpoofParamsSPF = "NONE"
+	RadarEmailSecurityTimeseriesGroupSpoofParamsSPFFail RadarEmailSecurityTimeseriesGroupSpoofParamsSPF = "FAIL"
+)
+
+type RadarEmailSecurityTimeseriesGroupSpoofParamsTLSVersion string
+
+const (
+	RadarEmailSecurityTimeseriesGroupSpoofParamsTLSVersionTlSv1_0 RadarEmailSecurityTimeseriesGroupSpoofParamsTLSVersion = "TLSv1_0"
+	RadarEmailSecurityTimeseriesGroupSpoofParamsTLSVersionTlSv1_1 RadarEmailSecurityTimeseriesGroupSpoofParamsTLSVersion = "TLSv1_1"
+	RadarEmailSecurityTimeseriesGroupSpoofParamsTLSVersionTlSv1_2 RadarEmailSecurityTimeseriesGroupSpoofParamsTLSVersion = "TLSv1_2"
+	RadarEmailSecurityTimeseriesGroupSpoofParamsTLSVersionTlSv1_3 RadarEmailSecurityTimeseriesGroupSpoofParamsTLSVersion = "TLSv1_3"
+)
+
+type RadarEmailSecurityTimeseriesGroupSpoofResponseEnvelope struct {
+	Result  RadarEmailSecurityTimeseriesGroupSpoofResponse             `json:"result,required"`
+	Success bool                                                       `json:"success,required"`
+	JSON    radarEmailSecurityTimeseriesGroupSpoofResponseEnvelopeJSON `json:"-"`
+}
+
+// radarEmailSecurityTimeseriesGroupSpoofResponseEnvelopeJSON contains the JSON
+// metadata for the struct [RadarEmailSecurityTimeseriesGroupSpoofResponseEnvelope]
+type radarEmailSecurityTimeseriesGroupSpoofResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarEmailSecurityTimeseriesGroupSpoofResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type RadarEmailSecurityTimeseriesGroupThreatCategoryParams struct {
 	// Aggregation interval results should be returned in (for example, in 15 minutes
 	// or 1 hour intervals). Refer to
@@ -1330,5 +1575,133 @@ type radarEmailSecurityTimeseriesGroupThreatCategoryResponseEnvelopeJSON struct 
 }
 
 func (r *RadarEmailSecurityTimeseriesGroupThreatCategoryResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarEmailSecurityTimeseriesGroupTLSVersionParams struct {
+	// Aggregation interval results should be returned in (for example, in 15 minutes
+	// or 1 hour intervals). Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval param.Field[RadarEmailSecurityTimeseriesGroupTLSVersionParamsAggInterval] `query:"aggInterval"`
+	// Filter for arc (Authenticated Received Chain).
+	ARC param.Field[[]RadarEmailSecurityTimeseriesGroupTLSVersionParamsARC] `query:"arc"`
+	// End of the date range (inclusive).
+	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
+	// For example, use `7d` and `7dControl` to compare this week with the previous
+	// week. Use this parameter or set specific start and end dates (`dateStart` and
+	// `dateEnd` parameters).
+	DateRange param.Field[[]RadarEmailSecurityTimeseriesGroupTLSVersionParamsDateRange] `query:"dateRange"`
+	// Array of datetimes to filter the start of a series.
+	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
+	// Filter for dkim.
+	DKIM param.Field[[]RadarEmailSecurityTimeseriesGroupTLSVersionParamsDKIM] `query:"dkim"`
+	// Filter for dmarc.
+	DMARC param.Field[[]RadarEmailSecurityTimeseriesGroupTLSVersionParamsDMARC] `query:"dmarc"`
+	// Format results are returned in.
+	Format param.Field[RadarEmailSecurityTimeseriesGroupTLSVersionParamsFormat] `query:"format"`
+	// Array of names that will be used to name the series in responses.
+	Name param.Field[[]string] `query:"name"`
+	// Filter for spf.
+	SPF param.Field[[]RadarEmailSecurityTimeseriesGroupTLSVersionParamsSPF] `query:"spf"`
+}
+
+// URLQuery serializes [RadarEmailSecurityTimeseriesGroupTLSVersionParams]'s query
+// parameters as `url.Values`.
+func (r RadarEmailSecurityTimeseriesGroupTLSVersionParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+// Aggregation interval results should be returned in (for example, in 15 minutes
+// or 1 hour intervals). Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type RadarEmailSecurityTimeseriesGroupTLSVersionParamsAggInterval string
+
+const (
+	RadarEmailSecurityTimeseriesGroupTLSVersionParamsAggInterval15m RadarEmailSecurityTimeseriesGroupTLSVersionParamsAggInterval = "15m"
+	RadarEmailSecurityTimeseriesGroupTLSVersionParamsAggInterval1h  RadarEmailSecurityTimeseriesGroupTLSVersionParamsAggInterval = "1h"
+	RadarEmailSecurityTimeseriesGroupTLSVersionParamsAggInterval1d  RadarEmailSecurityTimeseriesGroupTLSVersionParamsAggInterval = "1d"
+	RadarEmailSecurityTimeseriesGroupTLSVersionParamsAggInterval1w  RadarEmailSecurityTimeseriesGroupTLSVersionParamsAggInterval = "1w"
+)
+
+type RadarEmailSecurityTimeseriesGroupTLSVersionParamsARC string
+
+const (
+	RadarEmailSecurityTimeseriesGroupTLSVersionParamsARCPass RadarEmailSecurityTimeseriesGroupTLSVersionParamsARC = "PASS"
+	RadarEmailSecurityTimeseriesGroupTLSVersionParamsARCNone RadarEmailSecurityTimeseriesGroupTLSVersionParamsARC = "NONE"
+	RadarEmailSecurityTimeseriesGroupTLSVersionParamsARCFail RadarEmailSecurityTimeseriesGroupTLSVersionParamsARC = "FAIL"
+)
+
+type RadarEmailSecurityTimeseriesGroupTLSVersionParamsDateRange string
+
+const (
+	RadarEmailSecurityTimeseriesGroupTLSVersionParamsDateRange1d         RadarEmailSecurityTimeseriesGroupTLSVersionParamsDateRange = "1d"
+	RadarEmailSecurityTimeseriesGroupTLSVersionParamsDateRange2d         RadarEmailSecurityTimeseriesGroupTLSVersionParamsDateRange = "2d"
+	RadarEmailSecurityTimeseriesGroupTLSVersionParamsDateRange7d         RadarEmailSecurityTimeseriesGroupTLSVersionParamsDateRange = "7d"
+	RadarEmailSecurityTimeseriesGroupTLSVersionParamsDateRange14d        RadarEmailSecurityTimeseriesGroupTLSVersionParamsDateRange = "14d"
+	RadarEmailSecurityTimeseriesGroupTLSVersionParamsDateRange28d        RadarEmailSecurityTimeseriesGroupTLSVersionParamsDateRange = "28d"
+	RadarEmailSecurityTimeseriesGroupTLSVersionParamsDateRange12w        RadarEmailSecurityTimeseriesGroupTLSVersionParamsDateRange = "12w"
+	RadarEmailSecurityTimeseriesGroupTLSVersionParamsDateRange24w        RadarEmailSecurityTimeseriesGroupTLSVersionParamsDateRange = "24w"
+	RadarEmailSecurityTimeseriesGroupTLSVersionParamsDateRange52w        RadarEmailSecurityTimeseriesGroupTLSVersionParamsDateRange = "52w"
+	RadarEmailSecurityTimeseriesGroupTLSVersionParamsDateRange1dControl  RadarEmailSecurityTimeseriesGroupTLSVersionParamsDateRange = "1dControl"
+	RadarEmailSecurityTimeseriesGroupTLSVersionParamsDateRange2dControl  RadarEmailSecurityTimeseriesGroupTLSVersionParamsDateRange = "2dControl"
+	RadarEmailSecurityTimeseriesGroupTLSVersionParamsDateRange7dControl  RadarEmailSecurityTimeseriesGroupTLSVersionParamsDateRange = "7dControl"
+	RadarEmailSecurityTimeseriesGroupTLSVersionParamsDateRange14dControl RadarEmailSecurityTimeseriesGroupTLSVersionParamsDateRange = "14dControl"
+	RadarEmailSecurityTimeseriesGroupTLSVersionParamsDateRange28dControl RadarEmailSecurityTimeseriesGroupTLSVersionParamsDateRange = "28dControl"
+	RadarEmailSecurityTimeseriesGroupTLSVersionParamsDateRange12wControl RadarEmailSecurityTimeseriesGroupTLSVersionParamsDateRange = "12wControl"
+	RadarEmailSecurityTimeseriesGroupTLSVersionParamsDateRange24wControl RadarEmailSecurityTimeseriesGroupTLSVersionParamsDateRange = "24wControl"
+)
+
+type RadarEmailSecurityTimeseriesGroupTLSVersionParamsDKIM string
+
+const (
+	RadarEmailSecurityTimeseriesGroupTLSVersionParamsDKIMPass RadarEmailSecurityTimeseriesGroupTLSVersionParamsDKIM = "PASS"
+	RadarEmailSecurityTimeseriesGroupTLSVersionParamsDKIMNone RadarEmailSecurityTimeseriesGroupTLSVersionParamsDKIM = "NONE"
+	RadarEmailSecurityTimeseriesGroupTLSVersionParamsDKIMFail RadarEmailSecurityTimeseriesGroupTLSVersionParamsDKIM = "FAIL"
+)
+
+type RadarEmailSecurityTimeseriesGroupTLSVersionParamsDMARC string
+
+const (
+	RadarEmailSecurityTimeseriesGroupTLSVersionParamsDMARCPass RadarEmailSecurityTimeseriesGroupTLSVersionParamsDMARC = "PASS"
+	RadarEmailSecurityTimeseriesGroupTLSVersionParamsDMARCNone RadarEmailSecurityTimeseriesGroupTLSVersionParamsDMARC = "NONE"
+	RadarEmailSecurityTimeseriesGroupTLSVersionParamsDMARCFail RadarEmailSecurityTimeseriesGroupTLSVersionParamsDMARC = "FAIL"
+)
+
+// Format results are returned in.
+type RadarEmailSecurityTimeseriesGroupTLSVersionParamsFormat string
+
+const (
+	RadarEmailSecurityTimeseriesGroupTLSVersionParamsFormatJson RadarEmailSecurityTimeseriesGroupTLSVersionParamsFormat = "JSON"
+	RadarEmailSecurityTimeseriesGroupTLSVersionParamsFormatCsv  RadarEmailSecurityTimeseriesGroupTLSVersionParamsFormat = "CSV"
+)
+
+type RadarEmailSecurityTimeseriesGroupTLSVersionParamsSPF string
+
+const (
+	RadarEmailSecurityTimeseriesGroupTLSVersionParamsSPFPass RadarEmailSecurityTimeseriesGroupTLSVersionParamsSPF = "PASS"
+	RadarEmailSecurityTimeseriesGroupTLSVersionParamsSPFNone RadarEmailSecurityTimeseriesGroupTLSVersionParamsSPF = "NONE"
+	RadarEmailSecurityTimeseriesGroupTLSVersionParamsSPFFail RadarEmailSecurityTimeseriesGroupTLSVersionParamsSPF = "FAIL"
+)
+
+type RadarEmailSecurityTimeseriesGroupTLSVersionResponseEnvelope struct {
+	Result  RadarEmailSecurityTimeseriesGroupTLSVersionResponse             `json:"result,required"`
+	Success bool                                                            `json:"success,required"`
+	JSON    radarEmailSecurityTimeseriesGroupTLSVersionResponseEnvelopeJSON `json:"-"`
+}
+
+// radarEmailSecurityTimeseriesGroupTLSVersionResponseEnvelopeJSON contains the
+// JSON metadata for the struct
+// [RadarEmailSecurityTimeseriesGroupTLSVersionResponseEnvelope]
+type radarEmailSecurityTimeseriesGroupTLSVersionResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarEmailSecurityTimeseriesGroupTLSVersionResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

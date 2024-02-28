@@ -6,6 +6,7 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
@@ -63,6 +64,20 @@ func (r *RadarBGPRouteService) Stats(ctx context.Context, query RadarBGPRouteSta
 	opts = append(r.Options[:], opts...)
 	var env RadarBGPRouteStatsResponseEnvelope
 	path := "radar/bgp/routes/stats"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Gets time-series data for the announced IP space count, represented as the
+// number of IPv4 /24s and IPv6 /48s, for a given ASN.
+func (r *RadarBGPRouteService) Timeseries(ctx context.Context, query RadarBGPRouteTimeseriesParams, opts ...option.RequestOption) (res *RadarBGPRouteTimeseriesResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env RadarBGPRouteTimeseriesResponseEnvelope
+	path := "radar/bgp/routes/timeseries"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
@@ -305,6 +320,103 @@ func (r *RadarBGPRouteStatsResponseStats) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type RadarBGPRouteTimeseriesResponse struct {
+	Meta          RadarBGPRouteTimeseriesResponseMeta          `json:"meta,required"`
+	SerieIPV4_24s RadarBGPRouteTimeseriesResponseSerieIPV4_24s `json:"serie_ipv4_24s,required"`
+	SerieIPV6_48s RadarBGPRouteTimeseriesResponseSerieIPV6_48s `json:"serie_ipv6_48s,required"`
+	JSON          radarBGPRouteTimeseriesResponseJSON          `json:"-"`
+}
+
+// radarBGPRouteTimeseriesResponseJSON contains the JSON metadata for the struct
+// [RadarBGPRouteTimeseriesResponse]
+type radarBGPRouteTimeseriesResponseJSON struct {
+	Meta          apijson.Field
+	SerieIPV4_24s apijson.Field
+	SerieIPV6_48s apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *RadarBGPRouteTimeseriesResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarBGPRouteTimeseriesResponseMeta struct {
+	DateRange []RadarBGPRouteTimeseriesResponseMetaDateRange `json:"dateRange,required"`
+	JSON      radarBGPRouteTimeseriesResponseMetaJSON        `json:"-"`
+}
+
+// radarBGPRouteTimeseriesResponseMetaJSON contains the JSON metadata for the
+// struct [RadarBGPRouteTimeseriesResponseMeta]
+type radarBGPRouteTimeseriesResponseMetaJSON struct {
+	DateRange   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarBGPRouteTimeseriesResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarBGPRouteTimeseriesResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                        `json:"startTime,required" format:"date-time"`
+	JSON      radarBGPRouteTimeseriesResponseMetaDateRangeJSON `json:"-"`
+}
+
+// radarBGPRouteTimeseriesResponseMetaDateRangeJSON contains the JSON metadata for
+// the struct [RadarBGPRouteTimeseriesResponseMetaDateRange]
+type radarBGPRouteTimeseriesResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarBGPRouteTimeseriesResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarBGPRouteTimeseriesResponseSerieIPV4_24s struct {
+	Timestamps []time.Time                                      `json:"timestamps,required" format:"date-time"`
+	Values     []int64                                          `json:"values,required"`
+	JSON       radarBGPRouteTimeseriesResponseSerieIPV4_24sJSON `json:"-"`
+}
+
+// radarBGPRouteTimeseriesResponseSerieIPV4_24sJSON contains the JSON metadata for
+// the struct [RadarBGPRouteTimeseriesResponseSerieIPV4_24s]
+type radarBGPRouteTimeseriesResponseSerieIPV4_24sJSON struct {
+	Timestamps  apijson.Field
+	Values      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarBGPRouteTimeseriesResponseSerieIPV4_24s) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarBGPRouteTimeseriesResponseSerieIPV6_48s struct {
+	Timestamps []time.Time                                      `json:"timestamps,required" format:"date-time"`
+	Values     []int64                                          `json:"values,required"`
+	JSON       radarBGPRouteTimeseriesResponseSerieIPV6_48sJSON `json:"-"`
+}
+
+// radarBGPRouteTimeseriesResponseSerieIPV6_48sJSON contains the JSON metadata for
+// the struct [RadarBGPRouteTimeseriesResponseSerieIPV6_48s]
+type radarBGPRouteTimeseriesResponseSerieIPV6_48sJSON struct {
+	Timestamps  apijson.Field
+	Values      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarBGPRouteTimeseriesResponseSerieIPV6_48s) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type RadarBGPRouteMoasParams struct {
 	// Format results are returned in.
 	Format param.Field[RadarBGPRouteMoasParamsFormat] `query:"format"`
@@ -450,5 +562,77 @@ type radarBGPRouteStatsResponseEnvelopeJSON struct {
 }
 
 func (r *RadarBGPRouteStatsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RadarBGPRouteTimeseriesParams struct {
+	// Single ASN as integer.
+	ASN param.Field[int64] `query:"asn"`
+	// End of the date range (inclusive).
+	DateEnd param.Field[time.Time] `query:"dateEnd" format:"date-time"`
+	// Shorthand date ranges for the last X days - use when you don't need specific
+	// start and end dates.
+	DateRange param.Field[RadarBGPRouteTimeseriesParamsDateRange] `query:"dateRange"`
+	// Start of the date range (inclusive).
+	DateStart param.Field[time.Time] `query:"dateStart" format:"date-time"`
+	// Format results are returned in.
+	Format param.Field[RadarBGPRouteTimeseriesParamsFormat] `query:"format"`
+}
+
+// URLQuery serializes [RadarBGPRouteTimeseriesParams]'s query parameters as
+// `url.Values`.
+func (r RadarBGPRouteTimeseriesParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+// Shorthand date ranges for the last X days - use when you don't need specific
+// start and end dates.
+type RadarBGPRouteTimeseriesParamsDateRange string
+
+const (
+	RadarBGPRouteTimeseriesParamsDateRange1d         RadarBGPRouteTimeseriesParamsDateRange = "1d"
+	RadarBGPRouteTimeseriesParamsDateRange2d         RadarBGPRouteTimeseriesParamsDateRange = "2d"
+	RadarBGPRouteTimeseriesParamsDateRange7d         RadarBGPRouteTimeseriesParamsDateRange = "7d"
+	RadarBGPRouteTimeseriesParamsDateRange14d        RadarBGPRouteTimeseriesParamsDateRange = "14d"
+	RadarBGPRouteTimeseriesParamsDateRange28d        RadarBGPRouteTimeseriesParamsDateRange = "28d"
+	RadarBGPRouteTimeseriesParamsDateRange12w        RadarBGPRouteTimeseriesParamsDateRange = "12w"
+	RadarBGPRouteTimeseriesParamsDateRange24w        RadarBGPRouteTimeseriesParamsDateRange = "24w"
+	RadarBGPRouteTimeseriesParamsDateRange52w        RadarBGPRouteTimeseriesParamsDateRange = "52w"
+	RadarBGPRouteTimeseriesParamsDateRange1dControl  RadarBGPRouteTimeseriesParamsDateRange = "1dControl"
+	RadarBGPRouteTimeseriesParamsDateRange2dControl  RadarBGPRouteTimeseriesParamsDateRange = "2dControl"
+	RadarBGPRouteTimeseriesParamsDateRange7dControl  RadarBGPRouteTimeseriesParamsDateRange = "7dControl"
+	RadarBGPRouteTimeseriesParamsDateRange14dControl RadarBGPRouteTimeseriesParamsDateRange = "14dControl"
+	RadarBGPRouteTimeseriesParamsDateRange28dControl RadarBGPRouteTimeseriesParamsDateRange = "28dControl"
+	RadarBGPRouteTimeseriesParamsDateRange12wControl RadarBGPRouteTimeseriesParamsDateRange = "12wControl"
+	RadarBGPRouteTimeseriesParamsDateRange24wControl RadarBGPRouteTimeseriesParamsDateRange = "24wControl"
+)
+
+// Format results are returned in.
+type RadarBGPRouteTimeseriesParamsFormat string
+
+const (
+	RadarBGPRouteTimeseriesParamsFormatJson RadarBGPRouteTimeseriesParamsFormat = "JSON"
+	RadarBGPRouteTimeseriesParamsFormatCsv  RadarBGPRouteTimeseriesParamsFormat = "CSV"
+)
+
+type RadarBGPRouteTimeseriesResponseEnvelope struct {
+	Result  RadarBGPRouteTimeseriesResponse             `json:"result,required"`
+	Success bool                                        `json:"success,required"`
+	JSON    radarBGPRouteTimeseriesResponseEnvelopeJSON `json:"-"`
+}
+
+// radarBGPRouteTimeseriesResponseEnvelopeJSON contains the JSON metadata for the
+// struct [RadarBGPRouteTimeseriesResponseEnvelope]
+type radarBGPRouteTimeseriesResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RadarBGPRouteTimeseriesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
