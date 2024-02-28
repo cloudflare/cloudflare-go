@@ -35,17 +35,30 @@ type DLPEntry struct {
 	UpdatedAt *time.Time  `json:"updated_at,omitempty"`
 }
 
+// Content types to exclude from context analysis and return all matches.
+type DLPContextAwarenessSkip struct {
+	// Return all matches, regardless of context analysis result, if the data is a file.
+	Files *bool `json:"files,omitempty"`
+}
+
+// Scan the context of predefined entries to only return matches surrounded by keywords.
+type DLPContextAwareness struct {
+	Enabled *bool                   `json:"enabled,omitempty"`
+	Skip    DLPContextAwarenessSkip `json:"skip"`
+}
+
 // DLPProfile represents a DLP Profile, which contains a set
 // of entries.
 type DLPProfile struct {
-	ID                string `json:"id,omitempty"`
-	Name              string `json:"name,omitempty"`
-	Type              string `json:"type,omitempty"`
-	Description       string `json:"description,omitempty"`
-	AllowedMatchCount int    `json:"allowed_match_count"`
+	ID                string              `json:"id,omitempty"`
+	Name              string              `json:"name,omitempty"`
+	Type              string              `json:"type,omitempty"`
+	Description       string              `json:"description,omitempty"`
+	AllowedMatchCount int                 `json:"allowed_match_count"`
+	ContextAwareness  DLPContextAwareness `json:"context_awareness,omitempty"`
 
 	// The following fields are omitted for predefined DLP
-	// profiles
+	// profiles.
 	Entries   []DLPEntry `json:"entries,omitempty"`
 	CreatedAt *time.Time `json:"created_at,omitempty"`
 	UpdatedAt *time.Time `json:"updated_at,omitempty"`
