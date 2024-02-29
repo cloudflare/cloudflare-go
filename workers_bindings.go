@@ -49,7 +49,8 @@ const (
 )
 
 type ListWorkerBindingsParams struct {
-	ScriptName string
+	ScriptName        string
+	DispatchNamespace *string
 }
 
 // WorkerBindingListItem a struct representing an individual binding in a list of bindings.
@@ -426,9 +427,9 @@ func (b WorkerD1DatabaseBinding) serialize(bindingName string) (workerBindingMet
 	}
 
 	return workerBindingMeta{
-		"name":        bindingName,
-		"type":        b.Type(),
-		"id": b.DatabaseID,
+		"name": bindingName,
+		"type": b.Type(),
+		"id":   b.DatabaseID,
 	}, nil, nil
 }
 
@@ -468,6 +469,9 @@ func (api *API) ListWorkerBindings(ctx context.Context, rc *ResourceContainer, p
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s/bindings", rc.Identifier, params.ScriptName)
+	if params.DispatchNamespace != nil && *params.DispatchNamespace != "" {
+		uri = fmt.Sprintf("/accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/bindings", rc.Identifier, *params.DispatchNamespace, params.ScriptName)
+	}
 
 	var jsonRes struct {
 		Response
