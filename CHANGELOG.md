@@ -1,6 +1,24 @@
-## 0.89.0 (Unreleased)
+## 0.90.0 (Unreleased)
 
-## 0.88.0 (February 14th, 2023)
+ENHANCEMENTS:
+
+* dlp: add support for Context Awareness in DLP profiles ([#1497](https://github.com/cloudflare/cloudflare-go/issues/1497))
+
+## 0.89.0 (February 28th, 2024)
+
+NOTES:
+
+* zaraz: replace deprecated neoEvents with Actions on Zaraz Config tools schema ([#1490](https://github.com/cloudflare/cloudflare-go/issues/1490))
+
+ENHANCEMENTS:
+
+* magic-transit: Adds IPsec tunnel healthcheck direction & rate parameters ([#1503](https://github.com/cloudflare/cloudflare-go/issues/1503))
+
+BUG FIXES:
+
+* registrar: Fix request method to call domain list endpoint from POST to GET ([#1506](https://github.com/cloudflare/cloudflare-go/issues/1506))
+
+## 0.88.0 (February 14th, 2024)
 
 ENHANCEMENTS:
 
