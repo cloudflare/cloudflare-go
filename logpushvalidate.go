@@ -112,14 +112,14 @@ func (r *LogpushValidateOriginResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type LogpushValidateDestinationParams struct {
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Uniquely identifies a resource (such as an s3 bucket) where data will be pushed.
 	// Additional configuration parameters supported by the destination may be
 	// included.
 	DestinationConf param.Field[string] `json:"destination_conf,required" format:"uri"`
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id"`
 }
 
 func (r LogpushValidateDestinationParams) MarshalJSON() (data []byte, err error) {
@@ -196,16 +196,16 @@ const (
 )
 
 type LogpushValidateOriginParams struct {
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
 	// This field is deprecated. Use `output_options` instead. Configuration string. It
 	// specifies things like requested fields and timestamp formats. If migrating from
 	// the logpull api, copy the url (full url or just the query string) of your call
 	// here, and logpush will keep on making this call for you, setting start and end
 	// times appropriately.
 	LogpullOptions param.Field[string] `json:"logpull_options,required" format:"uri-reference"`
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id"`
 }
 
 func (r LogpushValidateOriginParams) MarshalJSON() (data []byte, err error) {

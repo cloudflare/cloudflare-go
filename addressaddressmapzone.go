@@ -47,7 +47,7 @@ func (r *AddressAddressMapZoneService) Update(ctx context.Context, addressMapID 
 		accountOrZone = "zones"
 		accountOrZoneID = body.ZoneID
 	}
-	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/zones/%s", accountOrZoneID, accountOrZone, addressMapID)
+	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/zones/%s", accountOrZone, addressMapID, accountOrZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
@@ -69,7 +69,7 @@ func (r *AddressAddressMapZoneService) Delete(ctx context.Context, addressMapID 
 		accountOrZone = "zones"
 		accountOrZoneID = body.ZoneID
 	}
-	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/zones/%s", accountOrZoneID, accountOrZone, addressMapID)
+	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/zones/%s", accountOrZone, addressMapID, accountOrZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return

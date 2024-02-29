@@ -33,9 +33,7 @@ func TestRulesetPhaseUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		cloudflare.RulesetPhaseUpdateParamsRulesetPhaseHTTPRequestFirewallCustom,
 		cloudflare.RulesetPhaseUpdateParams{
-			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("string"),
-			ID:        cloudflare.F("2f2feab2026849078ba485f918791bdc"),
+			ID: cloudflare.F("2f2feab2026849078ba485f918791bdc"),
 			Rules: cloudflare.F([]cloudflare.RulesetPhaseUpdateParamsRule{cloudflare.RulesetPhaseUpdateParamsRulesRulesetsBlockRule(cloudflare.RulesetPhaseUpdateParamsRulesRulesetsBlockRule{
 				Action: cloudflare.F(cloudflare.RulesetPhaseUpdateParamsRulesRulesetsBlockRuleActionBlock),
 				ActionParameters: cloudflare.F(cloudflare.RulesetPhaseUpdateParamsRulesRulesetsBlockRuleActionParameters{
@@ -88,6 +86,8 @@ func TestRulesetPhaseUpdateWithOptionalParams(t *testing.T) {
 				}),
 				Ref: cloudflare.F("my_ref"),
 			})}),
+			AccountID:   cloudflare.F("string"),
+			ZoneID:      cloudflare.F("string"),
 			Description: cloudflare.F("My ruleset to execute managed rulesets"),
 			Kind:        cloudflare.F(cloudflare.RulesetPhaseUpdateParamsKindRoot),
 			Name:        cloudflare.F("My ruleset"),
@@ -103,7 +103,7 @@ func TestRulesetPhaseUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestRulesetPhaseGet(t *testing.T) {
+func TestRulesetPhaseGetWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {

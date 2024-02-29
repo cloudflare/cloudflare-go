@@ -114,14 +114,14 @@ func (r *LogpushOwnershipValidateResponse) UnmarshalJSON(data []byte) (err error
 }
 
 type LogpushOwnershipNewParams struct {
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Uniquely identifies a resource (such as an s3 bucket) where data will be pushed.
 	// Additional configuration parameters supported by the destination may be
 	// included.
 	DestinationConf param.Field[string] `json:"destination_conf,required" format:"uri"`
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id"`
 }
 
 func (r LogpushOwnershipNewParams) MarshalJSON() (data []byte, err error) {
@@ -198,16 +198,16 @@ const (
 )
 
 type LogpushOwnershipValidateParams struct {
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Uniquely identifies a resource (such as an s3 bucket) where data will be pushed.
 	// Additional configuration parameters supported by the destination may be
 	// included.
 	DestinationConf param.Field[string] `json:"destination_conf,required" format:"uri"`
 	// Ownership challenge token to prove destination ownership.
 	OwnershipChallenge param.Field[string] `json:"ownership_challenge,required"`
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id"`
 }
 
 func (r LogpushOwnershipValidateParams) MarshalJSON() (data []byte, err error) {

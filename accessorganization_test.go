@@ -30,10 +30,10 @@ func TestAccessOrganizationNewWithOptionalParams(t *testing.T) {
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Access.Organizations.New(context.TODO(), cloudflare.AccessOrganizationNewParams{
-		AccountID:                cloudflare.F("string"),
-		ZoneID:                   cloudflare.F("string"),
 		AuthDomain:               cloudflare.F("test.cloudflareaccess.com"),
 		Name:                     cloudflare.F("Widget Corps Internal Applications"),
+		AccountID:                cloudflare.F("string"),
+		ZoneID:                   cloudflare.F("string"),
 		AllowAuthenticateViaWARP: cloudflare.F(true),
 		AutoRedirectToIdentity:   cloudflare.F(true),
 		IsUiReadOnly:             cloudflare.F(true),
@@ -107,7 +107,7 @@ func TestAccessOrganizationUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestAccessOrganizationList(t *testing.T) {
+func TestAccessOrganizationListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -136,7 +136,7 @@ func TestAccessOrganizationList(t *testing.T) {
 	}
 }
 
-func TestAccessOrganizationRevokeUsers(t *testing.T) {
+func TestAccessOrganizationRevokeUsersWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -153,9 +153,9 @@ func TestAccessOrganizationRevokeUsers(t *testing.T) {
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Access.Organizations.RevokeUsers(context.TODO(), cloudflare.AccessOrganizationRevokeUsersParams{
+		Email:     cloudflare.F("test@example.com"),
 		AccountID: cloudflare.F("string"),
 		ZoneID:    cloudflare.F("string"),
-		Email:     cloudflare.F("test@example.com"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

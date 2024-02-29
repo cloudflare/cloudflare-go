@@ -295,14 +295,14 @@ func (r *AccessCertificateGetResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 type AccessCertificateNewParams struct {
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The certificate content.
 	Certificate param.Field[string] `json:"certificate,required"`
 	// The name of the certificate.
 	Name param.Field[string] `json:"name,required"`
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id"`
 	// The hostnames of the applications that will use this certificate.
 	AssociatedHostnames param.Field[[]string] `json:"associated_hostnames"`
 }
@@ -381,12 +381,12 @@ const (
 )
 
 type AccessCertificateUpdateParams struct {
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The hostnames of the applications that will use this certificate.
 	AssociatedHostnames param.Field[[]string] `json:"associated_hostnames,required"`
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id"`
 	// The name of the certificate.
 	Name param.Field[string] `json:"name"`
 }
@@ -466,9 +466,9 @@ const (
 
 type AccessCertificateListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id"`
 }
 
 type AccessCertificateListResponseEnvelope struct {
@@ -571,9 +571,9 @@ func (r *AccessCertificateListResponseEnvelopeResultInfo) UnmarshalJSON(data []b
 
 type AccessCertificateDeleteParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id"`
 }
 
 type AccessCertificateDeleteResponseEnvelope struct {
@@ -647,9 +647,9 @@ const (
 
 type AccessCertificateGetParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id"`
 }
 
 type AccessCertificateGetResponseEnvelope struct {

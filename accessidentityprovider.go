@@ -7511,17 +7511,17 @@ func (r *AccessIdentityProviderGetResponseAccessOnetimepinScimConfig) UnmarshalJ
 }
 
 type AccessIdentityProviderNewParams struct {
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string]                                `path:"zone_id,required"`
 	Config param.Field[AccessIdentityProviderNewParamsConfig] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
 	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type       param.Field[AccessIdentityProviderNewParamsType]       `json:"type,required"`
+	Type param.Field[AccessIdentityProviderNewParamsType] `json:"type,required"`
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID     param.Field[string]                                    `path:"zone_id"`
 	ScimConfig param.Field[AccessIdentityProviderNewParamsScimConfig] `json:"scim_config"`
 }
 
@@ -7716,17 +7716,17 @@ const (
 )
 
 type AccessIdentityProviderUpdateParams struct {
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string]                                   `path:"zone_id,required"`
 	Config param.Field[AccessIdentityProviderUpdateParamsConfig] `json:"config,required"`
 	// The name of the identity provider, shown to users on the login page.
 	Name param.Field[string] `json:"name,required"`
 	// The type of identity provider. To determine the value for a specific provider,
 	// refer to our
 	// [developer documentation](https://developers.cloudflare.com/cloudflare-one/identity/idp-integration/).
-	Type       param.Field[AccessIdentityProviderUpdateParamsType]       `json:"type,required"`
+	Type param.Field[AccessIdentityProviderUpdateParamsType] `json:"type,required"`
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID     param.Field[string]                                       `path:"zone_id"`
 	ScimConfig param.Field[AccessIdentityProviderUpdateParamsScimConfig] `json:"scim_config"`
 }
 
@@ -7922,9 +7922,9 @@ const (
 
 type AccessIdentityProviderListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id"`
 }
 
 type AccessIdentityProviderListResponseEnvelope struct {
@@ -8027,9 +8027,9 @@ func (r *AccessIdentityProviderListResponseEnvelopeResultInfo) UnmarshalJSON(dat
 
 type AccessIdentityProviderDeleteParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id"`
 }
 
 type AccessIdentityProviderDeleteResponseEnvelope struct {
@@ -8103,9 +8103,9 @@ const (
 
 type AccessIdentityProviderGetParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id"`
 }
 
 type AccessIdentityProviderGetResponseEnvelope struct {

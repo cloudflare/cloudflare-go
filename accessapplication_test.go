@@ -174,7 +174,7 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestAccessApplicationList(t *testing.T) {
+func TestAccessApplicationListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -203,7 +203,7 @@ func TestAccessApplicationList(t *testing.T) {
 	}
 }
 
-func TestAccessApplicationDelete(t *testing.T) {
+func TestAccessApplicationDeleteWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -236,7 +236,7 @@ func TestAccessApplicationDelete(t *testing.T) {
 	}
 }
 
-func TestAccessApplicationGet(t *testing.T) {
+func TestAccessApplicationGetWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -269,7 +269,7 @@ func TestAccessApplicationGet(t *testing.T) {
 	}
 }
 
-func TestAccessApplicationRevokeTokens(t *testing.T) {
+func TestAccessApplicationRevokeTokensWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {

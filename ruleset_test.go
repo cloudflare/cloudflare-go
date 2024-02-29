@@ -30,11 +30,9 @@ func TestRulesetNewWithOptionalParams(t *testing.T) {
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Rulesets.New(context.TODO(), cloudflare.RulesetNewParams{
-		AccountID: cloudflare.F("string"),
-		ZoneID:    cloudflare.F("string"),
-		Kind:      cloudflare.F(cloudflare.RulesetNewParamsKindRoot),
-		Name:      cloudflare.F("My ruleset"),
-		Phase:     cloudflare.F(cloudflare.RulesetNewParamsPhaseHTTPRequestFirewallCustom),
+		Kind:  cloudflare.F(cloudflare.RulesetNewParamsKindRoot),
+		Name:  cloudflare.F("My ruleset"),
+		Phase: cloudflare.F(cloudflare.RulesetNewParamsPhaseHTTPRequestFirewallCustom),
 		Rules: cloudflare.F([]cloudflare.RulesetNewParamsRule{cloudflare.RulesetNewParamsRulesRulesetsBlockRule(cloudflare.RulesetNewParamsRulesRulesetsBlockRule{
 			Action: cloudflare.F(cloudflare.RulesetNewParamsRulesRulesetsBlockRuleActionBlock),
 			ActionParameters: cloudflare.F(cloudflare.RulesetNewParamsRulesRulesetsBlockRuleActionParameters{
@@ -87,6 +85,8 @@ func TestRulesetNewWithOptionalParams(t *testing.T) {
 			}),
 			Ref: cloudflare.F("my_ref"),
 		})}),
+		AccountID:   cloudflare.F("string"),
+		ZoneID:      cloudflare.F("string"),
 		Description: cloudflare.F("My ruleset to execute managed rulesets"),
 	})
 	if err != nil {
@@ -118,9 +118,7 @@ func TestRulesetUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"2f2feab2026849078ba485f918791bdc",
 		cloudflare.RulesetUpdateParams{
-			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("string"),
-			ID:        cloudflare.F("2f2feab2026849078ba485f918791bdc"),
+			ID: cloudflare.F("2f2feab2026849078ba485f918791bdc"),
 			Rules: cloudflare.F([]cloudflare.RulesetUpdateParamsRule{cloudflare.RulesetUpdateParamsRulesRulesetsBlockRule(cloudflare.RulesetUpdateParamsRulesRulesetsBlockRule{
 				Action: cloudflare.F(cloudflare.RulesetUpdateParamsRulesRulesetsBlockRuleActionBlock),
 				ActionParameters: cloudflare.F(cloudflare.RulesetUpdateParamsRulesRulesetsBlockRuleActionParameters{
@@ -173,6 +171,8 @@ func TestRulesetUpdateWithOptionalParams(t *testing.T) {
 				}),
 				Ref: cloudflare.F("my_ref"),
 			})}),
+			AccountID:   cloudflare.F("string"),
+			ZoneID:      cloudflare.F("string"),
 			Description: cloudflare.F("My ruleset to execute managed rulesets"),
 			Kind:        cloudflare.F(cloudflare.RulesetUpdateParamsKindRoot),
 			Name:        cloudflare.F("My ruleset"),
@@ -188,7 +188,7 @@ func TestRulesetUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestRulesetList(t *testing.T) {
+func TestRulesetListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -217,7 +217,7 @@ func TestRulesetList(t *testing.T) {
 	}
 }
 
-func TestRulesetDelete(t *testing.T) {
+func TestRulesetDeleteWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -250,7 +250,7 @@ func TestRulesetDelete(t *testing.T) {
 	}
 }
 
-func TestRulesetGet(t *testing.T) {
+func TestRulesetGetWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {

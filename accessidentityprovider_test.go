@@ -30,8 +30,6 @@ func TestAccessIdentityProviderNewWithOptionalParams(t *testing.T) {
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Access.IdentityProviders.New(context.TODO(), cloudflare.AccessIdentityProviderNewParams{
-		AccountID: cloudflare.F("string"),
-		ZoneID:    cloudflare.F("string"),
 		Config: cloudflare.F(cloudflare.AccessIdentityProviderNewParamsConfig{
 			ClientID:                 cloudflare.F("<your client id>"),
 			ClientSecret:             cloudflare.F("<your client secret>"),
@@ -68,8 +66,10 @@ func TestAccessIdentityProviderNewWithOptionalParams(t *testing.T) {
 			SignRequest:    cloudflare.F(true),
 			SSOTargetURL:   cloudflare.F("https://edgeaccess.org/idp/saml/login"),
 		}),
-		Name: cloudflare.F("Widget Corps IDP"),
-		Type: cloudflare.F(cloudflare.AccessIdentityProviderNewParamsTypeOnetimepin),
+		Name:      cloudflare.F("Widget Corps IDP"),
+		Type:      cloudflare.F(cloudflare.AccessIdentityProviderNewParamsTypeOnetimepin),
+		AccountID: cloudflare.F("string"),
+		ZoneID:    cloudflare.F("string"),
 		ScimConfig: cloudflare.F(cloudflare.AccessIdentityProviderNewParamsScimConfig{
 			Enabled:                cloudflare.F(true),
 			GroupMemberDeprovision: cloudflare.F(true),
@@ -107,8 +107,6 @@ func TestAccessIdentityProviderUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.AccessIdentityProviderUpdateParams{
-			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("string"),
 			Config: cloudflare.F(cloudflare.AccessIdentityProviderUpdateParamsConfig{
 				ClientID:                 cloudflare.F("<your client id>"),
 				ClientSecret:             cloudflare.F("<your client secret>"),
@@ -145,8 +143,10 @@ func TestAccessIdentityProviderUpdateWithOptionalParams(t *testing.T) {
 				SignRequest:    cloudflare.F(true),
 				SSOTargetURL:   cloudflare.F("https://edgeaccess.org/idp/saml/login"),
 			}),
-			Name: cloudflare.F("Widget Corps IDP"),
-			Type: cloudflare.F(cloudflare.AccessIdentityProviderUpdateParamsTypeOnetimepin),
+			Name:      cloudflare.F("Widget Corps IDP"),
+			Type:      cloudflare.F(cloudflare.AccessIdentityProviderUpdateParamsTypeOnetimepin),
+			AccountID: cloudflare.F("string"),
+			ZoneID:    cloudflare.F("string"),
 			ScimConfig: cloudflare.F(cloudflare.AccessIdentityProviderUpdateParamsScimConfig{
 				Enabled:                cloudflare.F(true),
 				GroupMemberDeprovision: cloudflare.F(true),
@@ -165,7 +165,7 @@ func TestAccessIdentityProviderUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestAccessIdentityProviderList(t *testing.T) {
+func TestAccessIdentityProviderListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -194,7 +194,7 @@ func TestAccessIdentityProviderList(t *testing.T) {
 	}
 }
 
-func TestAccessIdentityProviderDelete(t *testing.T) {
+func TestAccessIdentityProviderDeleteWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -227,7 +227,7 @@ func TestAccessIdentityProviderDelete(t *testing.T) {
 	}
 }
 
-func TestAccessIdentityProviderGet(t *testing.T) {
+func TestAccessIdentityProviderGetWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {

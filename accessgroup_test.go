@@ -30,8 +30,6 @@ func TestAccessGroupNewWithOptionalParams(t *testing.T) {
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Access.Groups.New(context.TODO(), cloudflare.AccessGroupNewParams{
-		AccountID: cloudflare.F("string"),
-		ZoneID:    cloudflare.F("string"),
 		Include: cloudflare.F([]cloudflare.AccessGroupNewParamsInclude{cloudflare.AccessGroupNewParamsIncludeAccessEmailRule(cloudflare.AccessGroupNewParamsIncludeAccessEmailRule{
 			Email: cloudflare.F(cloudflare.AccessGroupNewParamsIncludeAccessEmailRuleEmail{
 				Email: cloudflare.F("test@example.com"),
@@ -45,7 +43,9 @@ func TestAccessGroupNewWithOptionalParams(t *testing.T) {
 				Email: cloudflare.F("test@example.com"),
 			}),
 		})}),
-		Name: cloudflare.F("Allow devs"),
+		Name:      cloudflare.F("Allow devs"),
+		AccountID: cloudflare.F("string"),
+		ZoneID:    cloudflare.F("string"),
 		Exclude: cloudflare.F([]cloudflare.AccessGroupNewParamsExclude{cloudflare.AccessGroupNewParamsExcludeAccessEmailRule(cloudflare.AccessGroupNewParamsExcludeAccessEmailRule{
 			Email: cloudflare.F(cloudflare.AccessGroupNewParamsExcludeAccessEmailRuleEmail{
 				Email: cloudflare.F("test@example.com"),
@@ -103,8 +103,6 @@ func TestAccessGroupUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.AccessGroupUpdateParams{
-			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("string"),
 			Include: cloudflare.F([]cloudflare.AccessGroupUpdateParamsInclude{cloudflare.AccessGroupUpdateParamsIncludeAccessEmailRule(cloudflare.AccessGroupUpdateParamsIncludeAccessEmailRule{
 				Email: cloudflare.F(cloudflare.AccessGroupUpdateParamsIncludeAccessEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
@@ -118,7 +116,9 @@ func TestAccessGroupUpdateWithOptionalParams(t *testing.T) {
 					Email: cloudflare.F("test@example.com"),
 				}),
 			})}),
-			Name: cloudflare.F("Allow devs"),
+			Name:      cloudflare.F("Allow devs"),
+			AccountID: cloudflare.F("string"),
+			ZoneID:    cloudflare.F("string"),
 			Exclude: cloudflare.F([]cloudflare.AccessGroupUpdateParamsExclude{cloudflare.AccessGroupUpdateParamsExcludeAccessEmailRule(cloudflare.AccessGroupUpdateParamsExcludeAccessEmailRule{
 				Email: cloudflare.F(cloudflare.AccessGroupUpdateParamsExcludeAccessEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
@@ -157,7 +157,7 @@ func TestAccessGroupUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestAccessGroupList(t *testing.T) {
+func TestAccessGroupListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -186,7 +186,7 @@ func TestAccessGroupList(t *testing.T) {
 	}
 }
 
-func TestAccessGroupDelete(t *testing.T) {
+func TestAccessGroupDeleteWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -219,7 +219,7 @@ func TestAccessGroupDelete(t *testing.T) {
 	}
 }
 
-func TestAccessGroupGet(t *testing.T) {
+func TestAccessGroupGetWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {

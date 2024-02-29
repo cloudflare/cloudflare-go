@@ -130,11 +130,11 @@ func (r *AccessCertificateSettingListResponse) UnmarshalJSON(data []byte) (err e
 }
 
 type AccessCertificateSettingUpdateParams struct {
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID   param.Field[string]                                        `path:"zone_id,required"`
 	Settings param.Field[[]AccessCertificateSettingUpdateParamsSetting] `json:"settings,required"`
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id"`
 }
 
 func (r AccessCertificateSettingUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -258,9 +258,9 @@ func (r *AccessCertificateSettingUpdateResponseEnvelopeResultInfo) UnmarshalJSON
 
 type AccessCertificateSettingListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id"`
 }
 
 type AccessCertificateSettingListResponseEnvelope struct {

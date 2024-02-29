@@ -30,10 +30,10 @@ func TestAccessCertificateNewWithOptionalParams(t *testing.T) {
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Access.Certificates.New(context.TODO(), cloudflare.AccessCertificateNewParams{
-		AccountID:           cloudflare.F("string"),
-		ZoneID:              cloudflare.F("string"),
 		Certificate:         cloudflare.F("-----BEGIN CERTIFICATE-----\nMIIGAjCCA+qgAwIBAgIJAI7kymlF7CWT...N4RI7KKB7nikiuUf8vhULKy5IX10\nDrUtmu/B\n-----END CERTIFICATE-----"),
 		Name:                cloudflare.F("Allow devs"),
+		AccountID:           cloudflare.F("string"),
+		ZoneID:              cloudflare.F("string"),
 		AssociatedHostnames: cloudflare.F([]string{"admin.example.com", "admin.example.com", "admin.example.com"}),
 	})
 	if err != nil {
@@ -65,9 +65,9 @@ func TestAccessCertificateUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.AccessCertificateUpdateParams{
+			AssociatedHostnames: cloudflare.F([]string{"admin.example.com", "admin.example.com", "admin.example.com"}),
 			AccountID:           cloudflare.F("string"),
 			ZoneID:              cloudflare.F("string"),
-			AssociatedHostnames: cloudflare.F([]string{"admin.example.com", "admin.example.com", "admin.example.com"}),
 			Name:                cloudflare.F("Allow devs"),
 		},
 	)
@@ -80,7 +80,7 @@ func TestAccessCertificateUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestAccessCertificateList(t *testing.T) {
+func TestAccessCertificateListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -109,7 +109,7 @@ func TestAccessCertificateList(t *testing.T) {
 	}
 }
 
-func TestAccessCertificateDelete(t *testing.T) {
+func TestAccessCertificateDeleteWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -142,7 +142,7 @@ func TestAccessCertificateDelete(t *testing.T) {
 	}
 }
 
-func TestAccessCertificateGet(t *testing.T) {
+func TestAccessCertificateGetWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {

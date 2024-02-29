@@ -30,14 +30,14 @@ func TestFirewallAccessRuleNewWithOptionalParams(t *testing.T) {
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Firewall.AccessRules.New(context.TODO(), cloudflare.FirewallAccessRuleNewParams{
-		AccountID: cloudflare.F("string"),
-		ZoneID:    cloudflare.F("string"),
 		Configuration: cloudflare.F[cloudflare.FirewallAccessRuleNewParamsConfiguration](cloudflare.FirewallAccessRuleNewParamsConfigurationLegacyJhsIPConfiguration(cloudflare.FirewallAccessRuleNewParamsConfigurationLegacyJhsIPConfiguration{
 			Target: cloudflare.F(cloudflare.FirewallAccessRuleNewParamsConfigurationLegacyJhsIPConfigurationTargetIP),
 			Value:  cloudflare.F("198.51.100.4"),
 		})),
-		Mode:  cloudflare.F(cloudflare.FirewallAccessRuleNewParamsModeChallenge),
-		Notes: cloudflare.F("This rule is enabled because of an event that occurred on date X."),
+		Mode:      cloudflare.F(cloudflare.FirewallAccessRuleNewParamsModeChallenge),
+		AccountID: cloudflare.F("string"),
+		ZoneID:    cloudflare.F("string"),
+		Notes:     cloudflare.F("This rule is enabled because of an event that occurred on date X."),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -94,7 +94,7 @@ func TestFirewallAccessRuleListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestFirewallAccessRuleDelete(t *testing.T) {
+func TestFirewallAccessRuleDeleteWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -147,14 +147,14 @@ func TestFirewallAccessRuleEditWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		map[string]interface{}{},
 		cloudflare.FirewallAccessRuleEditParams{
-			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("string"),
 			Configuration: cloudflare.F[cloudflare.FirewallAccessRuleEditParamsConfiguration](cloudflare.FirewallAccessRuleEditParamsConfigurationLegacyJhsIPConfiguration(cloudflare.FirewallAccessRuleEditParamsConfigurationLegacyJhsIPConfiguration{
 				Target: cloudflare.F(cloudflare.FirewallAccessRuleEditParamsConfigurationLegacyJhsIPConfigurationTargetIP),
 				Value:  cloudflare.F("198.51.100.4"),
 			})),
-			Mode:  cloudflare.F(cloudflare.FirewallAccessRuleEditParamsModeChallenge),
-			Notes: cloudflare.F("This rule is enabled because of an event that occurred on date X."),
+			Mode:      cloudflare.F(cloudflare.FirewallAccessRuleEditParamsModeChallenge),
+			AccountID: cloudflare.F("string"),
+			ZoneID:    cloudflare.F("string"),
+			Notes:     cloudflare.F("This rule is enabled because of an event that occurred on date X."),
 		},
 	)
 	if err != nil {
@@ -166,7 +166,7 @@ func TestFirewallAccessRuleEditWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestFirewallAccessRuleGet(t *testing.T) {
+func TestFirewallAccessRuleGetWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {

@@ -33,9 +33,7 @@ func TestAccessApplicationPolicyNewWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.AccessApplicationPolicyNewParams{
-			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("string"),
-			Decision:  cloudflare.F(cloudflare.AccessApplicationPolicyNewParamsDecisionAllow),
+			Decision: cloudflare.F(cloudflare.AccessApplicationPolicyNewParamsDecisionAllow),
 			Include: cloudflare.F([]cloudflare.AccessApplicationPolicyNewParamsInclude{cloudflare.AccessApplicationPolicyNewParamsIncludeAccessEmailRule(cloudflare.AccessApplicationPolicyNewParamsIncludeAccessEmailRule{
 				Email: cloudflare.F(cloudflare.AccessApplicationPolicyNewParamsIncludeAccessEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
@@ -49,7 +47,9 @@ func TestAccessApplicationPolicyNewWithOptionalParams(t *testing.T) {
 					Email: cloudflare.F("test@example.com"),
 				}),
 			})}),
-			Name: cloudflare.F("Allow devs"),
+			Name:      cloudflare.F("Allow devs"),
+			AccountID: cloudflare.F("string"),
+			ZoneID:    cloudflare.F("string"),
 			ApprovalGroups: cloudflare.F([]cloudflare.AccessApplicationPolicyNewParamsApprovalGroup{{
 				ApprovalsNeeded: cloudflare.F(1.000000),
 				EmailAddresses:  cloudflare.F([]interface{}{"test1@cloudflare.com", "test2@cloudflare.com"}),
@@ -123,9 +123,7 @@ func TestAccessApplicationPolicyUpdateWithOptionalParams(t *testing.T) {
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		cloudflare.AccessApplicationPolicyUpdateParams{
-			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("string"),
-			Decision:  cloudflare.F(cloudflare.AccessApplicationPolicyUpdateParamsDecisionAllow),
+			Decision: cloudflare.F(cloudflare.AccessApplicationPolicyUpdateParamsDecisionAllow),
 			Include: cloudflare.F([]cloudflare.AccessApplicationPolicyUpdateParamsInclude{cloudflare.AccessApplicationPolicyUpdateParamsIncludeAccessEmailRule(cloudflare.AccessApplicationPolicyUpdateParamsIncludeAccessEmailRule{
 				Email: cloudflare.F(cloudflare.AccessApplicationPolicyUpdateParamsIncludeAccessEmailRuleEmail{
 					Email: cloudflare.F("test@example.com"),
@@ -139,7 +137,9 @@ func TestAccessApplicationPolicyUpdateWithOptionalParams(t *testing.T) {
 					Email: cloudflare.F("test@example.com"),
 				}),
 			})}),
-			Name: cloudflare.F("Allow devs"),
+			Name:      cloudflare.F("Allow devs"),
+			AccountID: cloudflare.F("string"),
+			ZoneID:    cloudflare.F("string"),
 			ApprovalGroups: cloudflare.F([]cloudflare.AccessApplicationPolicyUpdateParamsApprovalGroup{{
 				ApprovalsNeeded: cloudflare.F(1.000000),
 				EmailAddresses:  cloudflare.F([]interface{}{"test1@cloudflare.com", "test2@cloudflare.com"}),
@@ -192,7 +192,7 @@ func TestAccessApplicationPolicyUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestAccessApplicationPolicyList(t *testing.T) {
+func TestAccessApplicationPolicyListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -225,7 +225,7 @@ func TestAccessApplicationPolicyList(t *testing.T) {
 	}
 }
 
-func TestAccessApplicationPolicyDelete(t *testing.T) {
+func TestAccessApplicationPolicyDeleteWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -259,7 +259,7 @@ func TestAccessApplicationPolicyDelete(t *testing.T) {
 	}
 }
 
-func TestAccessApplicationPolicyGet(t *testing.T) {
+func TestAccessApplicationPolicyGetWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {

@@ -38,7 +38,7 @@ func NewAddressAddressMapAccountService(opts ...option.RequestOption) (r *Addres
 func (r *AddressAddressMapAccountService) Update(ctx context.Context, addressMapID string, body AddressAddressMapAccountUpdateParams, opts ...option.RequestOption) (res *AddressAddressMapAccountUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressAddressMapAccountUpdateResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/accounts/:account_id", body.AccountID, addressMapID)
+	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/accounts/%s", body.AccountID, addressMapID, body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
 	if err != nil {
 		return
@@ -51,7 +51,7 @@ func (r *AddressAddressMapAccountService) Update(ctx context.Context, addressMap
 func (r *AddressAddressMapAccountService) Delete(ctx context.Context, addressMapID string, body AddressAddressMapAccountDeleteParams, opts ...option.RequestOption) (res *AddressAddressMapAccountDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressAddressMapAccountDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/accounts/:account_id", body.AccountID, addressMapID)
+	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/accounts/%s", body.AccountID, addressMapID, body.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return

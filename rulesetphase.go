@@ -1534,14 +1534,14 @@ func (r *RulesetPhaseGetResponseRulesRulesetsSkipRuleLogging) UnmarshalJSON(data
 }
 
 type RulesetPhaseUpdateParams struct {
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The unique ID of the ruleset.
 	ID param.Field[string] `json:"id,required"`
 	// The list of rules in the ruleset.
 	Rules param.Field[[]RulesetPhaseUpdateParamsRule] `json:"rules,required"`
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id"`
 	// An informative description of the ruleset.
 	Description param.Field[string] `json:"description"`
 	// The kind of the ruleset.
@@ -2132,9 +2132,9 @@ const (
 
 type RulesetPhaseGetParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id"`
 }
 
 // The phase of the ruleset.

@@ -2277,9 +2277,9 @@ func (r *RulesetRuleEditResponseRulesRulesetsSkipRuleLogging) UnmarshalJSON(data
 
 type RulesetRuleNewParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id"`
 	// An object configuring where the rule will be placed.
 	Position param.Field[RulesetRuleNewParamsPosition] `json:"position"`
 }
@@ -2434,9 +2434,9 @@ const (
 
 type RulesetRuleDeleteParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id"`
 }
 
 // A response object.
@@ -2564,9 +2564,9 @@ const (
 
 type RulesetRuleEditParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id"`
 	// An object configuring where the rule will be placed.
 	Position param.Field[RulesetRuleEditParamsPosition] `json:"position"`
 }

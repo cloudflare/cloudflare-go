@@ -9836,10 +9836,6 @@ func (r *AccessApplicationPolicyGetResponseRequireAccessDevicePostureRuleDeviceP
 }
 
 type AccessApplicationPolicyNewParams struct {
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The action Access will take if a user matches this policy.
 	Decision param.Field[AccessApplicationPolicyNewParamsDecision] `json:"decision,required"`
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
@@ -9847,6 +9843,10 @@ type AccessApplicationPolicyNewParams struct {
 	Include param.Field[[]AccessApplicationPolicyNewParamsInclude] `json:"include,required"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name,required"`
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]AccessApplicationPolicyNewParamsApprovalGroup] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -11211,10 +11211,6 @@ const (
 )
 
 type AccessApplicationPolicyUpdateParams struct {
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The action Access will take if a user matches this policy.
 	Decision param.Field[AccessApplicationPolicyUpdateParamsDecision] `json:"decision,required"`
 	// Rules evaluated with an OR logical operator. A user needs to meet only one of
@@ -11222,6 +11218,10 @@ type AccessApplicationPolicyUpdateParams struct {
 	Include param.Field[[]AccessApplicationPolicyUpdateParamsInclude] `json:"include,required"`
 	// The name of the Access policy.
 	Name param.Field[string] `json:"name,required"`
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id"`
 	// Administrators who can approve a temporary authentication request.
 	ApprovalGroups param.Field[[]AccessApplicationPolicyUpdateParamsApprovalGroup] `json:"approval_groups"`
 	// Requires the user to request access from an administrator at the start of each
@@ -12587,9 +12587,9 @@ const (
 
 type AccessApplicationPolicyListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id"`
 }
 
 type AccessApplicationPolicyListResponseEnvelope struct {
@@ -12692,9 +12692,9 @@ func (r *AccessApplicationPolicyListResponseEnvelopeResultInfo) UnmarshalJSON(da
 
 type AccessApplicationPolicyDeleteParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id"`
 }
 
 type AccessApplicationPolicyDeleteResponseEnvelope struct {
@@ -12768,9 +12768,9 @@ const (
 
 type AccessApplicationPolicyGetParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id"`
 }
 
 type AccessApplicationPolicyGetResponseEnvelope struct {

@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestLogpushValidateDestination(t *testing.T) {
+func TestLogpushValidateDestinationWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -30,9 +30,9 @@ func TestLogpushValidateDestination(t *testing.T) {
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Logpush.Validate.Destination(context.TODO(), cloudflare.LogpushValidateDestinationParams{
+		DestinationConf: cloudflare.F("s3://mybucket/logs?region=us-west-2"),
 		AccountID:       cloudflare.F("string"),
 		ZoneID:          cloudflare.F("string"),
-		DestinationConf: cloudflare.F("s3://mybucket/logs?region=us-west-2"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -43,7 +43,7 @@ func TestLogpushValidateDestination(t *testing.T) {
 	}
 }
 
-func TestLogpushValidateOrigin(t *testing.T) {
+func TestLogpushValidateOriginWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -60,9 +60,9 @@ func TestLogpushValidateOrigin(t *testing.T) {
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Logpush.Validate.Origin(context.TODO(), cloudflare.LogpushValidateOriginParams{
+		LogpullOptions: cloudflare.F("fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339"),
 		AccountID:      cloudflare.F("string"),
 		ZoneID:         cloudflare.F("string"),
-		LogpullOptions: cloudflare.F("fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

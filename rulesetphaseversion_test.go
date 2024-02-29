@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestRulesetPhaseVersionList(t *testing.T) {
+func TestRulesetPhaseVersionListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -46,7 +46,7 @@ func TestRulesetPhaseVersionList(t *testing.T) {
 	}
 }
 
-func TestRulesetPhaseVersionGet(t *testing.T) {
+func TestRulesetPhaseVersionGetWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {

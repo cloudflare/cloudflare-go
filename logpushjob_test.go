@@ -30,9 +30,9 @@ func TestLogpushJobNewWithOptionalParams(t *testing.T) {
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Logpush.Jobs.New(context.TODO(), cloudflare.LogpushJobNewParams{
+		DestinationConf: cloudflare.F("s3://mybucket/logs?region=us-west-2"),
 		AccountID:       cloudflare.F("string"),
 		ZoneID:          cloudflare.F("string"),
-		DestinationConf: cloudflare.F("s3://mybucket/logs?region=us-west-2"),
 		Dataset:         cloudflare.F("http_requests"),
 		Enabled:         cloudflare.F(false),
 		Frequency:       cloudflare.F(cloudflare.LogpushJobNewParamsFrequencyHigh),
@@ -115,7 +115,7 @@ func TestLogpushJobUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestLogpushJobList(t *testing.T) {
+func TestLogpushJobListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -144,7 +144,7 @@ func TestLogpushJobList(t *testing.T) {
 	}
 }
 
-func TestLogpushJobDelete(t *testing.T) {
+func TestLogpushJobDeleteWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -177,7 +177,7 @@ func TestLogpushJobDelete(t *testing.T) {
 	}
 }
 
-func TestLogpushJobGet(t *testing.T) {
+func TestLogpushJobGetWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {

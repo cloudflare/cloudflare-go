@@ -361,12 +361,12 @@ func (r *AccessServiceTokenRotateResponse) UnmarshalJSON(data []byte) (err error
 }
 
 type AccessServiceTokenNewParams struct {
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The name of the service token.
 	Name param.Field[string] `json:"name,required"`
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id"`
 	// The duration for how long the service token will be valid. Must be in the format
 	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
 	// default is 1 year in hours (8760h).
@@ -448,9 +448,9 @@ const (
 
 type AccessServiceTokenUpdateParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id"`
 	// The duration for how long the service token will be valid. Must be in the format
 	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
 	// default is 1 year in hours (8760h).
@@ -534,9 +534,9 @@ const (
 
 type AccessServiceTokenListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id"`
 }
 
 type AccessServiceTokenListResponseEnvelope struct {
@@ -639,9 +639,9 @@ func (r *AccessServiceTokenListResponseEnvelopeResultInfo) UnmarshalJSON(data []
 
 type AccessServiceTokenDeleteParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id"`
 }
 
 type AccessServiceTokenDeleteResponseEnvelope struct {

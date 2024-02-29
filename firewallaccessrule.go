@@ -240,14 +240,14 @@ func init() {
 }
 
 type FirewallAccessRuleNewParams struct {
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The rule configuration.
 	Configuration param.Field[FirewallAccessRuleNewParamsConfiguration] `json:"configuration,required"`
 	// The action to apply to a matched request.
 	Mode param.Field[FirewallAccessRuleNewParamsMode] `json:"mode,required"`
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id"`
 	// An informative summary of the rule, typically used as a reminder or explanation.
 	Notes param.Field[string] `json:"notes"`
 }
@@ -467,9 +467,9 @@ const (
 
 type FirewallAccessRuleListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id"`
 	// The direction used to sort returned rules.
 	Direction     param.Field[FirewallAccessRuleListParamsDirection]     `query:"direction"`
 	EgsPagination param.Field[FirewallAccessRuleListParamsEgsPagination] `query:"egs-pagination"`
@@ -598,9 +598,9 @@ const (
 
 type FirewallAccessRuleDeleteParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id"`
 }
 
 type FirewallAccessRuleDeleteResponseEnvelope struct {
@@ -673,14 +673,14 @@ const (
 )
 
 type FirewallAccessRuleEditParams struct {
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The rule configuration.
 	Configuration param.Field[FirewallAccessRuleEditParamsConfiguration] `json:"configuration,required"`
 	// The action to apply to a matched request.
 	Mode param.Field[FirewallAccessRuleEditParamsMode] `json:"mode,required"`
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id"`
 	// An informative summary of the rule, typically used as a reminder or explanation.
 	Notes param.Field[string] `json:"notes"`
 }
@@ -901,9 +901,9 @@ const (
 
 type FirewallAccessRuleGetParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id"`
 }
 
 type FirewallAccessRuleGetResponseEnvelope struct {

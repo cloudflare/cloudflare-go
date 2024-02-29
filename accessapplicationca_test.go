@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestAccessApplicationCANew(t *testing.T) {
+func TestAccessApplicationCANewWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -46,7 +46,7 @@ func TestAccessApplicationCANew(t *testing.T) {
 	}
 }
 
-func TestAccessApplicationCAList(t *testing.T) {
+func TestAccessApplicationCAListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -75,7 +75,7 @@ func TestAccessApplicationCAList(t *testing.T) {
 	}
 }
 
-func TestAccessApplicationCADelete(t *testing.T) {
+func TestAccessApplicationCADeleteWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -108,7 +108,7 @@ func TestAccessApplicationCADelete(t *testing.T) {
 	}
 }
 
-func TestAccessApplicationCAGet(t *testing.T) {
+func TestAccessApplicationCAGetWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {

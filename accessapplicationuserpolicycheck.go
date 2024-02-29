@@ -159,9 +159,9 @@ func (r *AccessApplicationUserPolicyCheckListResponseUserIdentityGeo) UnmarshalJ
 
 type AccessApplicationUserPolicyCheckListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id"`
 }
 
 // Identifier

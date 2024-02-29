@@ -2394,10 +2394,6 @@ func (r *RulesetGetResponseRulesRulesetsSkipRuleLogging) UnmarshalJSON(data []by
 }
 
 type RulesetNewParams struct {
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The kind of the ruleset.
 	Kind param.Field[RulesetNewParamsKind] `json:"kind,required"`
 	// The human-readable name of the ruleset.
@@ -2406,6 +2402,10 @@ type RulesetNewParams struct {
 	Phase param.Field[RulesetNewParamsPhase] `json:"phase,required"`
 	// The list of rules in the ruleset.
 	Rules param.Field[[]RulesetNewParamsRule] `json:"rules,required"`
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id"`
 	// An informative description of the ruleset.
 	Description param.Field[string] `json:"description"`
 }
@@ -2959,14 +2959,14 @@ const (
 )
 
 type RulesetUpdateParams struct {
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The unique ID of the ruleset.
 	ID param.Field[string] `json:"id,required"`
 	// The list of rules in the ruleset.
 	Rules param.Field[[]RulesetUpdateParamsRule] `json:"rules,required"`
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id"`
 	// An informative description of the ruleset.
 	Description param.Field[string] `json:"description"`
 	// The kind of the ruleset.
@@ -3528,9 +3528,9 @@ const (
 
 type RulesetListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id"`
 }
 
 // A response object.
@@ -3658,16 +3658,16 @@ const (
 
 type RulesetDeleteParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id"`
 }
 
 type RulesetGetParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id,required"`
+	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string] `path:"zone_id"`
 }
 
 // A response object.
