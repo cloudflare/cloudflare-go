@@ -104,7 +104,8 @@ func TestRulesetRuleEditWithOptionalParams(t *testing.T) {
 		"2f2feab2026849078ba485f918791bdc",
 		"3a03d665bac047339bb530ecb439a90d",
 		cloudflare.RulesetRuleEditParams{
-			AccountID: cloudflare.F("abf9b32d38c5f572afde3336ec0ce302"),
+			AccountID: cloudflare.F("string"),
+			ZoneID:    cloudflare.F("string"),
 			Position: cloudflare.F[cloudflare.RulesetRuleEditParamsPosition](cloudflare.RulesetRuleEditParamsPositionPosition(cloudflare.RulesetRuleEditParamsPositionPosition{
 				Before: cloudflare.F("da5e8e506c8e7877fe06cdf4c41add54"),
 			})),

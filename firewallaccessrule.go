@@ -128,7 +128,16 @@ func (r *FirewallAccessRuleService) Delete(ctx context.Context, identifier inter
 func (r *FirewallAccessRuleService) Edit(ctx context.Context, identifier interface{}, params FirewallAccessRuleEditParams, opts ...option.RequestOption) (res *FirewallAccessRuleEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FirewallAccessRuleEditResponseEnvelope
-	path := fmt.Sprintf("%v/%v/firewall/access_rules/rules/:identifier", params.AccountIdentifier, identifier)
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if params.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = params.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = params.ZoneID
+	}
+	path := fmt.Sprintf("%s/%s/firewall/access_rules/rules/%v", accountOrZone, accountOrZoneID, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -664,7 +673,10 @@ const (
 )
 
 type FirewallAccessRuleEditParams struct {
-	AccountIdentifier param.Field[interface{}] `path:"account_identifier,required"`
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// The rule configuration.
 	Configuration param.Field[FirewallAccessRuleEditParamsConfiguration] `json:"configuration,required"`
 	// The action to apply to a matched request.

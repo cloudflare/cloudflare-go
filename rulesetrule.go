@@ -83,7 +83,16 @@ func (r *RulesetRuleService) Delete(ctx context.Context, rulesetID string, ruleI
 func (r *RulesetRuleService) Edit(ctx context.Context, rulesetID string, ruleID string, params RulesetRuleEditParams, opts ...option.RequestOption) (res *RulesetRuleEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RulesetRuleEditResponseEnvelope
-	path := fmt.Sprintf("%s/%s/rulesets/%s/rules/:rule_id", params.AccountID, rulesetID, ruleID)
+	var accountOrZone string
+	var accountOrZoneID param.Field[string]
+	if params.AccountID.Present {
+		accountOrZone = "accounts"
+		accountOrZoneID = params.AccountID
+	} else {
+		accountOrZone = "zones"
+		accountOrZoneID = params.ZoneID
+	}
+	path := fmt.Sprintf("%s/%s/rulesets/%s/rules/%s", accountOrZone, accountOrZoneID, rulesetID, ruleID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
 	if err != nil {
 		return
@@ -2554,8 +2563,10 @@ const (
 )
 
 type RulesetRuleEditParams struct {
-	// The unique ID of the account.
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id,required"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id,required"`
 	// An object configuring where the rule will be placed.
 	Position param.Field[RulesetRuleEditParamsPosition] `json:"position"`
 }

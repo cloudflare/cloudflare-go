@@ -147,7 +147,8 @@ func TestFirewallAccessRuleEditWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		map[string]interface{}{},
 		cloudflare.FirewallAccessRuleEditParams{
-			AccountIdentifier: cloudflare.F[any](map[string]interface{}{}),
+			AccountID: cloudflare.F("string"),
+			ZoneID:    cloudflare.F("string"),
 			Configuration: cloudflare.F[cloudflare.FirewallAccessRuleEditParamsConfiguration](cloudflare.FirewallAccessRuleEditParamsConfigurationLegacyJhsIPConfiguration(cloudflare.FirewallAccessRuleEditParamsConfigurationLegacyJhsIPConfiguration{
 				Target: cloudflare.F(cloudflare.FirewallAccessRuleEditParamsConfigurationLegacyJhsIPConfigurationTargetIP),
 				Value:  cloudflare.F("198.51.100.4"),
