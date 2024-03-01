@@ -20,7 +20,6 @@ type Client struct {
 	User                        *UserService
 	Zones                       *ZoneService
 	LoadBalancers               *LoadBalancerService
-	Access                      *AccessService
 	Cache                       *CacheService
 	SSL                         *SSLService
 	Subscriptions               *SubscriptionService
@@ -50,22 +49,22 @@ type Client struct {
 	Web3                        *Web3Service
 	Workers                     *WorkerService
 	KV                          *KVService
+	DurableObjects              *DurableObjectService
+	Queues                      *QueueService
 	ManagedHeaders              *ManagedHeaderService
 	PageShield                  *PageShieldService
 	Rulesets                    *RulesetService
 	URLNormalizations           *URLNormalizationService
 	Spectrum                    *SpectrumService
-	Addresses                   *AddressService
+	Addressing                  *AddressingService
 	AuditLogs                   *AuditLogService
 	Billing                     *BillingService
 	BrandProtection             *BrandProtectionService
-	Tunnels                     *TunnelService
 	Diagnostics                 *DiagnosticService
-	DLP                         *DLPService
 	Images                      *ImageService
 	Intel                       *IntelService
 	MagicTransit                *MagicTransitService
-	MNMs                        *MNMService
+	MagicNetworkMonitoring      *MagicNetworkMonitoringService
 	MTLSCertificates            *MTLSCertificateService
 	Pages                       *PageService
 	PCAPs                       *PCAPService
@@ -75,15 +74,11 @@ type Client struct {
 	Rules                       *RuleService
 	Storage                     *StorageService
 	Stream                      *StreamService
-	Gateways                    *GatewayService
 	Alerting                    *AlertingService
 	Devices                     *DeviceService
 	D1                          *D1Service
-	DEX                         *DEXService
 	R2                          *R2Service
-	Teamnet                     *TeamnetService
 	WARPConnector               *WARPConnectorService
-	Dispatchers                 *DispatcherService
 	WorkersForPlatforms         *WorkersForPlatformService
 	ZeroTrust                   *ZeroTrustService
 	Challenges                  *ChallengeService
@@ -132,7 +127,6 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.User = NewUserService(opts...)
 	r.Zones = NewZoneService(opts...)
 	r.LoadBalancers = NewLoadBalancerService(opts...)
-	r.Access = NewAccessService(opts...)
 	r.Cache = NewCacheService(opts...)
 	r.SSL = NewSSLService(opts...)
 	r.Subscriptions = NewSubscriptionService(opts...)
@@ -162,22 +156,22 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Web3 = NewWeb3Service(opts...)
 	r.Workers = NewWorkerService(opts...)
 	r.KV = NewKVService(opts...)
+	r.DurableObjects = NewDurableObjectService(opts...)
+	r.Queues = NewQueueService(opts...)
 	r.ManagedHeaders = NewManagedHeaderService(opts...)
 	r.PageShield = NewPageShieldService(opts...)
 	r.Rulesets = NewRulesetService(opts...)
 	r.URLNormalizations = NewURLNormalizationService(opts...)
 	r.Spectrum = NewSpectrumService(opts...)
-	r.Addresses = NewAddressService(opts...)
+	r.Addressing = NewAddressingService(opts...)
 	r.AuditLogs = NewAuditLogService(opts...)
 	r.Billing = NewBillingService(opts...)
 	r.BrandProtection = NewBrandProtectionService(opts...)
-	r.Tunnels = NewTunnelService(opts...)
 	r.Diagnostics = NewDiagnosticService(opts...)
-	r.DLP = NewDLPService(opts...)
 	r.Images = NewImageService(opts...)
 	r.Intel = NewIntelService(opts...)
 	r.MagicTransit = NewMagicTransitService(opts...)
-	r.MNMs = NewMNMService(opts...)
+	r.MagicNetworkMonitoring = NewMagicNetworkMonitoringService(opts...)
 	r.MTLSCertificates = NewMTLSCertificateService(opts...)
 	r.Pages = NewPageService(opts...)
 	r.PCAPs = NewPCAPService(opts...)
@@ -187,15 +181,11 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Rules = NewRuleService(opts...)
 	r.Storage = NewStorageService(opts...)
 	r.Stream = NewStreamService(opts...)
-	r.Gateways = NewGatewayService(opts...)
 	r.Alerting = NewAlertingService(opts...)
 	r.Devices = NewDeviceService(opts...)
 	r.D1 = NewD1Service(opts...)
-	r.DEX = NewDEXService(opts...)
 	r.R2 = NewR2Service(opts...)
-	r.Teamnet = NewTeamnetService(opts...)
 	r.WARPConnector = NewWARPConnectorService(opts...)
-	r.Dispatchers = NewDispatcherService(opts...)
 	r.WorkersForPlatforms = NewWorkersForPlatformService(opts...)
 	r.ZeroTrust = NewZeroTrustService(opts...)
 	r.Challenges = NewChallengeService(opts...)

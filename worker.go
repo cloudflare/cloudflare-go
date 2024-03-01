@@ -12,6 +12,7 @@ import (
 // service directly, and instead use the [NewWorkerService] method instead.
 type WorkerService struct {
 	Options         []option.RequestOption
+	Dispatch        *WorkerDispatchService
 	AI              *WorkerAIService
 	Scripts         *WorkerScriptService
 	Filters         *WorkerFilterService
@@ -19,8 +20,6 @@ type WorkerService struct {
 	AccountSettings *WorkerAccountSettingService
 	Deployments     *WorkerDeploymentService
 	Domains         *WorkerDomainService
-	DurableObjects  *WorkerDurableObjectService
-	Queues          *WorkerQueueService
 	Subdomains      *WorkerSubdomainService
 	Services        *WorkerServiceService
 }
@@ -31,6 +30,7 @@ type WorkerService struct {
 func NewWorkerService(opts ...option.RequestOption) (r *WorkerService) {
 	r = &WorkerService{}
 	r.Options = opts
+	r.Dispatch = NewWorkerDispatchService(opts...)
 	r.AI = NewWorkerAIService(opts...)
 	r.Scripts = NewWorkerScriptService(opts...)
 	r.Filters = NewWorkerFilterService(opts...)
@@ -38,8 +38,6 @@ func NewWorkerService(opts ...option.RequestOption) (r *WorkerService) {
 	r.AccountSettings = NewWorkerAccountSettingService(opts...)
 	r.Deployments = NewWorkerDeploymentService(opts...)
 	r.Domains = NewWorkerDomainService(opts...)
-	r.DurableObjects = NewWorkerDurableObjectService(opts...)
-	r.Queues = NewWorkerQueueService(opts...)
 	r.Subdomains = NewWorkerSubdomainService(opts...)
 	r.Services = NewWorkerServiceService(opts...)
 	return
