@@ -6,22 +6,22 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-// DcvDelegationService contains methods and other services that help with
+// DCVDelegationService contains methods and other services that help with
 // interacting with the cloudflare API. Note, unlike clients, this service does not
 // read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewDcvDelegationService] method
+// this service directly, and instead use the [NewDCVDelegationService] method
 // instead.
-type DcvDelegationService struct {
+type DCVDelegationService struct {
 	Options []option.RequestOption
-	UUID    *DcvDelegationUUIDService
+	UUID    *DCVDelegationUUIDService
 }
 
-// NewDcvDelegationService generates a new service that applies the given options
+// NewDCVDelegationService generates a new service that applies the given options
 // to each request. These options are applied after the parent client's options (if
 // there is one), and before any request-specific options.
-func NewDcvDelegationService(opts ...option.RequestOption) (r *DcvDelegationService) {
-	r = &DcvDelegationService{}
+func NewDCVDelegationService(opts ...option.RequestOption) (r *DCVDelegationService) {
+	r = &DCVDelegationService{}
 	r.Options = opts
-	r.UUID = NewDcvDelegationUUIDService(opts...)
+	r.UUID = NewDCVDelegationUUIDService(opts...)
 	return
 }

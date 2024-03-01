@@ -19,7 +19,7 @@ type RadarService struct {
 	Netflows            *RadarNetflowService
 	Search              *RadarSearchService
 	VerifiedBots        *RadarVerifiedBotService
-	As112               *RadarAs112Service
+	AS112               *RadarAS112Service
 	ConnectionTampering *RadarConnectionTamperingService
 	Email               *RadarEmailService
 	Attacks             *RadarAttackService
@@ -43,7 +43,7 @@ func NewRadarService(opts ...option.RequestOption) (r *RadarService) {
 	r.Netflows = NewRadarNetflowService(opts...)
 	r.Search = NewRadarSearchService(opts...)
 	r.VerifiedBots = NewRadarVerifiedBotService(opts...)
-	r.As112 = NewRadarAs112Service(opts...)
+	r.AS112 = NewRadarAS112Service(opts...)
 	r.ConnectionTampering = NewRadarConnectionTamperingService(opts...)
 	r.Email = NewRadarEmailService(opts...)
 	r.Attacks = NewRadarAttackService(opts...)

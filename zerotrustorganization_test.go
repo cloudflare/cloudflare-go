@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestZeroTrustAccessOrganizationNewWithOptionalParams(t *testing.T) {
+func TestZeroTrustOrganizationNewWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,7 +29,7 @@ func TestZeroTrustAccessOrganizationNewWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.ZeroTrust.Access.Organizations.New(context.TODO(), cloudflare.ZeroTrustAccessOrganizationNewParams{
+	_, err := client.ZeroTrust.Organizations.New(context.TODO(), cloudflare.ZeroTrustOrganizationNewParams{
 		AuthDomain:               cloudflare.F("test.cloudflareaccess.com"),
 		Name:                     cloudflare.F("Widget Corps Internal Applications"),
 		AccountID:                cloudflare.F("string"),
@@ -37,7 +37,7 @@ func TestZeroTrustAccessOrganizationNewWithOptionalParams(t *testing.T) {
 		AllowAuthenticateViaWARP: cloudflare.F(true),
 		AutoRedirectToIdentity:   cloudflare.F(true),
 		IsUiReadOnly:             cloudflare.F(true),
-		LoginDesign: cloudflare.F(cloudflare.ZeroTrustAccessOrganizationNewParamsLoginDesign{
+		LoginDesign: cloudflare.F(cloudflare.ZeroTrustOrganizationNewParamsLoginDesign{
 			BackgroundColor: cloudflare.F("#c5ed1b"),
 			FooterText:      cloudflare.F("This is an example description."),
 			HeaderText:      cloudflare.F("This is an example description."),
@@ -58,7 +58,7 @@ func TestZeroTrustAccessOrganizationNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestZeroTrustAccessOrganizationUpdateWithOptionalParams(t *testing.T) {
+func TestZeroTrustOrganizationUpdateWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -74,18 +74,18 @@ func TestZeroTrustAccessOrganizationUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.ZeroTrust.Access.Organizations.Update(context.TODO(), cloudflare.ZeroTrustAccessOrganizationUpdateParams{
+	_, err := client.ZeroTrust.Organizations.Update(context.TODO(), cloudflare.ZeroTrustOrganizationUpdateParams{
 		AccountID:                cloudflare.F("string"),
 		ZoneID:                   cloudflare.F("string"),
 		AllowAuthenticateViaWARP: cloudflare.F(true),
 		AuthDomain:               cloudflare.F("test.cloudflareaccess.com"),
 		AutoRedirectToIdentity:   cloudflare.F(true),
-		CustomPages: cloudflare.F(cloudflare.ZeroTrustAccessOrganizationUpdateParamsCustomPages{
+		CustomPages: cloudflare.F(cloudflare.ZeroTrustOrganizationUpdateParamsCustomPages{
 			Forbidden:      cloudflare.F("699d98642c564d2e855e9661899b7252"),
 			IdentityDenied: cloudflare.F("699d98642c564d2e855e9661899b7252"),
 		}),
 		IsUiReadOnly: cloudflare.F(true),
-		LoginDesign: cloudflare.F(cloudflare.ZeroTrustAccessOrganizationUpdateParamsLoginDesign{
+		LoginDesign: cloudflare.F(cloudflare.ZeroTrustOrganizationUpdateParamsLoginDesign{
 			BackgroundColor: cloudflare.F("#c5ed1b"),
 			FooterText:      cloudflare.F("This is an example description."),
 			HeaderText:      cloudflare.F("This is an example description."),
@@ -107,7 +107,7 @@ func TestZeroTrustAccessOrganizationUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestZeroTrustAccessOrganizationListWithOptionalParams(t *testing.T) {
+func TestZeroTrustOrganizationListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -123,7 +123,7 @@ func TestZeroTrustAccessOrganizationListWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.ZeroTrust.Access.Organizations.List(context.TODO(), cloudflare.ZeroTrustAccessOrganizationListParams{
+	_, err := client.ZeroTrust.Organizations.List(context.TODO(), cloudflare.ZeroTrustOrganizationListParams{
 		AccountID: cloudflare.F("string"),
 		ZoneID:    cloudflare.F("string"),
 	})
@@ -136,7 +136,7 @@ func TestZeroTrustAccessOrganizationListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestZeroTrustAccessOrganizationRevokeUsersWithOptionalParams(t *testing.T) {
+func TestZeroTrustOrganizationRevokeUsersWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -152,7 +152,7 @@ func TestZeroTrustAccessOrganizationRevokeUsersWithOptionalParams(t *testing.T) 
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.ZeroTrust.Access.Organizations.RevokeUsers(context.TODO(), cloudflare.ZeroTrustAccessOrganizationRevokeUsersParams{
+	_, err := client.ZeroTrust.Organizations.RevokeUsers(context.TODO(), cloudflare.ZeroTrustOrganizationRevokeUsersParams{
 		Email:     cloudflare.F("test@example.com"),
 		AccountID: cloudflare.F("string"),
 		ZoneID:    cloudflare.F("string"),

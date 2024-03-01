@@ -12,20 +12,17 @@ import (
 // this service directly, and instead use the [NewZeroTrustAccessService] method
 // instead.
 type ZeroTrustAccessService struct {
-	Options           []option.RequestOption
-	Applications      *ZeroTrustAccessApplicationService
-	Certificates      *ZeroTrustAccessCertificateService
-	Groups            *ZeroTrustAccessGroupService
-	IdentityProviders *ZeroTrustAccessIdentityProviderService
-	Organizations     *ZeroTrustAccessOrganizationService
-	ServiceTokens     *ZeroTrustAccessServiceTokenService
-	Bookmarks         *ZeroTrustAccessBookmarkService
-	Keys              *ZeroTrustAccessKeyService
-	Logs              *ZeroTrustAccessLogService
-	Seats             *ZeroTrustAccessSeatService
-	Users             *ZeroTrustAccessUserService
-	CustomPages       *ZeroTrustAccessCustomPageService
-	Tags              *ZeroTrustAccessTagService
+	Options       []option.RequestOption
+	Applications  *ZeroTrustAccessApplicationService
+	Certificates  *ZeroTrustAccessCertificateService
+	Groups        *ZeroTrustAccessGroupService
+	ServiceTokens *ZeroTrustAccessServiceTokenService
+	Bookmarks     *ZeroTrustAccessBookmarkService
+	Keys          *ZeroTrustAccessKeyService
+	Logs          *ZeroTrustAccessLogService
+	Users         *ZeroTrustAccessUserService
+	CustomPages   *ZeroTrustAccessCustomPageService
+	Tags          *ZeroTrustAccessTagService
 }
 
 // NewZeroTrustAccessService generates a new service that applies the given options
@@ -37,13 +34,10 @@ func NewZeroTrustAccessService(opts ...option.RequestOption) (r *ZeroTrustAccess
 	r.Applications = NewZeroTrustAccessApplicationService(opts...)
 	r.Certificates = NewZeroTrustAccessCertificateService(opts...)
 	r.Groups = NewZeroTrustAccessGroupService(opts...)
-	r.IdentityProviders = NewZeroTrustAccessIdentityProviderService(opts...)
-	r.Organizations = NewZeroTrustAccessOrganizationService(opts...)
 	r.ServiceTokens = NewZeroTrustAccessServiceTokenService(opts...)
 	r.Bookmarks = NewZeroTrustAccessBookmarkService(opts...)
 	r.Keys = NewZeroTrustAccessKeyService(opts...)
 	r.Logs = NewZeroTrustAccessLogService(opts...)
-	r.Seats = NewZeroTrustAccessSeatService(opts...)
 	r.Users = NewZeroTrustAccessUserService(opts...)
 	r.CustomPages = NewZeroTrustAccessCustomPageService(opts...)
 	r.Tags = NewZeroTrustAccessTagService(opts...)

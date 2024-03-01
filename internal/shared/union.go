@@ -6,6 +6,7 @@ type UnionString string
 
 func (UnionString) ImplementsAccountUpdateResponse()                                              {}
 func (UnionString) ImplementsAccountGetResponse()                                                 {}
+func (UnionString) ImplementsAccountRoleGetResponse()                                             {}
 func (UnionString) ImplementsCertificateNewResponse()                                             {}
 func (UnionString) ImplementsCertificateGetResponse()                                             {}
 func (UnionString) ImplementsMembershipUpdateResponse()                                           {}
@@ -25,6 +26,8 @@ func (UnionString) ImplementsUserTokenGetResponse()                             
 func (UnionString) ImplementsZoneCustomNameserverUpdateResponse()                                 {}
 func (UnionString) ImplementsZoneCustomNameserverGetResponse()                                    {}
 func (UnionString) ImplementsZoneWorkerScriptUpdateResponse()                                     {}
+func (UnionString) ImplementsZoneSubscriptionNewResponse()                                        {}
+func (UnionString) ImplementsZoneSubscriptionGetResponse()                                        {}
 func (UnionString) ImplementsLoadBalancerPoolHealthGetResponse()                                  {}
 func (UnionString) ImplementsLoadBalancerRegionListResponse()                                     {}
 func (UnionString) ImplementsLoadBalancerRegionGetResponse()                                      {}
@@ -133,7 +136,6 @@ func (UnionString) ImplementsPageProjectDomainEditResponse()                    
 func (UnionString) ImplementsPageProjectDomainGetResponse()                                       {}
 func (UnionString) ImplementsRegistrarDomainUpdateResponse()                                      {}
 func (UnionString) ImplementsRegistrarDomainGetResponse()                                         {}
-func (UnionString) ImplementsRoleGetResponse()                                                    {}
 func (UnionString) ImplementsRuleListItemGetResponse()                                            {}
 func (UnionString) ImplementsStreamAudioTrackDeleteResponse()                                     {}
 func (UnionString) ImplementsStreamKeyDeleteResponse()                                            {}

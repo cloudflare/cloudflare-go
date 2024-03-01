@@ -15,28 +15,28 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-// RadarAs112TimeseriesGroupService contains methods and other services that help
+// RadarAS112TimeseriesGroupService contains methods and other services that help
 // with interacting with the cloudflare API. Note, unlike clients, this service
 // does not read variables from the environment automatically. You should not
 // instantiate this service directly, and instead use the
-// [NewRadarAs112TimeseriesGroupService] method instead.
-type RadarAs112TimeseriesGroupService struct {
+// [NewRadarAS112TimeseriesGroupService] method instead.
+type RadarAS112TimeseriesGroupService struct {
 	Options []option.RequestOption
 }
 
-// NewRadarAs112TimeseriesGroupService generates a new service that applies the
+// NewRadarAS112TimeseriesGroupService generates a new service that applies the
 // given options to each request. These options are applied after the parent
 // client's options (if there is one), and before any request-specific options.
-func NewRadarAs112TimeseriesGroupService(opts ...option.RequestOption) (r *RadarAs112TimeseriesGroupService) {
-	r = &RadarAs112TimeseriesGroupService{}
+func NewRadarAS112TimeseriesGroupService(opts ...option.RequestOption) (r *RadarAS112TimeseriesGroupService) {
+	r = &RadarAS112TimeseriesGroupService{}
 	r.Options = opts
 	return
 }
 
 // Percentage distribution of DNS AS112 queries by DNSSEC support over time.
-func (r *RadarAs112TimeseriesGroupService) DNSSEC(ctx context.Context, query RadarAs112TimeseriesGroupDNSSECParams, opts ...option.RequestOption) (res *RadarAs112TimeseriesGroupDNSSECResponse, err error) {
+func (r *RadarAS112TimeseriesGroupService) DNSSEC(ctx context.Context, query RadarAS112TimeseriesGroupDNSSECParams, opts ...option.RequestOption) (res *RadarAS112TimeseriesGroupDNSSECResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env RadarAs112TimeseriesGroupDNSSECResponseEnvelope
+	var env RadarAS112TimeseriesGroupDNSSECResponseEnvelope
 	path := "radar/as112/timeseries_groups/dnssec"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -47,9 +47,9 @@ func (r *RadarAs112TimeseriesGroupService) DNSSEC(ctx context.Context, query Rad
 }
 
 // Percentage distribution of AS112 DNS queries by EDNS support over time.
-func (r *RadarAs112TimeseriesGroupService) Edns(ctx context.Context, query RadarAs112TimeseriesGroupEdnsParams, opts ...option.RequestOption) (res *RadarAs112TimeseriesGroupEdnsResponse, err error) {
+func (r *RadarAS112TimeseriesGroupService) Edns(ctx context.Context, query RadarAS112TimeseriesGroupEdnsParams, opts ...option.RequestOption) (res *RadarAS112TimeseriesGroupEdnsResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env RadarAs112TimeseriesGroupEdnsResponseEnvelope
+	var env RadarAS112TimeseriesGroupEdnsResponseEnvelope
 	path := "radar/as112/timeseries_groups/edns"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -60,9 +60,9 @@ func (r *RadarAs112TimeseriesGroupService) Edns(ctx context.Context, query Radar
 }
 
 // Percentage distribution of AS112 DNS queries by IP Version over time.
-func (r *RadarAs112TimeseriesGroupService) IPVersion(ctx context.Context, query RadarAs112TimeseriesGroupIPVersionParams, opts ...option.RequestOption) (res *RadarAs112TimeseriesGroupIPVersionResponse, err error) {
+func (r *RadarAS112TimeseriesGroupService) IPVersion(ctx context.Context, query RadarAS112TimeseriesGroupIPVersionParams, opts ...option.RequestOption) (res *RadarAS112TimeseriesGroupIPVersionResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env RadarAs112TimeseriesGroupIPVersionResponseEnvelope
+	var env RadarAS112TimeseriesGroupIPVersionResponseEnvelope
 	path := "radar/as112/timeseries_groups/ip_version"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -73,9 +73,9 @@ func (r *RadarAs112TimeseriesGroupService) IPVersion(ctx context.Context, query 
 }
 
 // Percentage distribution of AS112 dns requests classified per Protocol over time.
-func (r *RadarAs112TimeseriesGroupService) Protocol(ctx context.Context, query RadarAs112TimeseriesGroupProtocolParams, opts ...option.RequestOption) (res *RadarAs112TimeseriesGroupProtocolResponse, err error) {
+func (r *RadarAS112TimeseriesGroupService) Protocol(ctx context.Context, query RadarAS112TimeseriesGroupProtocolParams, opts ...option.RequestOption) (res *RadarAS112TimeseriesGroupProtocolResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env RadarAs112TimeseriesGroupProtocolResponseEnvelope
+	var env RadarAS112TimeseriesGroupProtocolResponseEnvelope
 	path := "radar/as112/timeseries_groups/protocol"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -86,9 +86,9 @@ func (r *RadarAs112TimeseriesGroupService) Protocol(ctx context.Context, query R
 }
 
 // Percentage distribution of AS112 DNS queries by Query Type over time.
-func (r *RadarAs112TimeseriesGroupService) QueryType(ctx context.Context, query RadarAs112TimeseriesGroupQueryTypeParams, opts ...option.RequestOption) (res *RadarAs112TimeseriesGroupQueryTypeResponse, err error) {
+func (r *RadarAS112TimeseriesGroupService) QueryType(ctx context.Context, query RadarAS112TimeseriesGroupQueryTypeParams, opts ...option.RequestOption) (res *RadarAS112TimeseriesGroupQueryTypeResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env RadarAs112TimeseriesGroupQueryTypeResponseEnvelope
+	var env RadarAS112TimeseriesGroupQueryTypeResponseEnvelope
 	path := "radar/as112/timeseries_groups/query_type"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -100,9 +100,9 @@ func (r *RadarAs112TimeseriesGroupService) QueryType(ctx context.Context, query 
 
 // Percentage distribution of AS112 dns requests classified per Response Codes over
 // time.
-func (r *RadarAs112TimeseriesGroupService) ResponseCodes(ctx context.Context, query RadarAs112TimeseriesGroupResponseCodesParams, opts ...option.RequestOption) (res *RadarAs112TimeseriesGroupResponseCodesResponse, err error) {
+func (r *RadarAS112TimeseriesGroupService) ResponseCodes(ctx context.Context, query RadarAS112TimeseriesGroupResponseCodesParams, opts ...option.RequestOption) (res *RadarAS112TimeseriesGroupResponseCodesResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env RadarAs112TimeseriesGroupResponseCodesResponseEnvelope
+	var env RadarAS112TimeseriesGroupResponseCodesResponseEnvelope
 	path := "radar/as112/timeseries_groups/response_codes"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -112,189 +112,189 @@ func (r *RadarAs112TimeseriesGroupService) ResponseCodes(ctx context.Context, qu
 	return
 }
 
-type RadarAs112TimeseriesGroupDNSSECResponse struct {
+type RadarAS112TimeseriesGroupDNSSECResponse struct {
 	Meta   interface{}                                   `json:"meta,required"`
-	Serie0 RadarAs112TimeseriesGroupDNSSECResponseSerie0 `json:"serie_0,required"`
-	JSON   radarAs112TimeseriesGroupDNSSECResponseJSON   `json:"-"`
+	Serie0 RadarAS112TimeseriesGroupDNSSECResponseSerie0 `json:"serie_0,required"`
+	JSON   radarAS112TimeseriesGroupDNSSECResponseJSON   `json:"-"`
 }
 
-// radarAs112TimeseriesGroupDNSSECResponseJSON contains the JSON metadata for the
-// struct [RadarAs112TimeseriesGroupDNSSECResponse]
-type radarAs112TimeseriesGroupDNSSECResponseJSON struct {
+// radarAS112TimeseriesGroupDNSSECResponseJSON contains the JSON metadata for the
+// struct [RadarAS112TimeseriesGroupDNSSECResponse]
+type radarAS112TimeseriesGroupDNSSECResponseJSON struct {
 	Meta        apijson.Field
 	Serie0      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAs112TimeseriesGroupDNSSECResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TimeseriesGroupDNSSECResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TimeseriesGroupDNSSECResponseSerie0 struct {
+type RadarAS112TimeseriesGroupDNSSECResponseSerie0 struct {
 	NotSupported []string                                          `json:"NOT_SUPPORTED,required"`
 	Supported    []string                                          `json:"SUPPORTED,required"`
-	JSON         radarAs112TimeseriesGroupDNSSECResponseSerie0JSON `json:"-"`
+	JSON         radarAS112TimeseriesGroupDNSSECResponseSerie0JSON `json:"-"`
 }
 
-// radarAs112TimeseriesGroupDNSSECResponseSerie0JSON contains the JSON metadata for
-// the struct [RadarAs112TimeseriesGroupDNSSECResponseSerie0]
-type radarAs112TimeseriesGroupDNSSECResponseSerie0JSON struct {
+// radarAS112TimeseriesGroupDNSSECResponseSerie0JSON contains the JSON metadata for
+// the struct [RadarAS112TimeseriesGroupDNSSECResponseSerie0]
+type radarAS112TimeseriesGroupDNSSECResponseSerie0JSON struct {
 	NotSupported apijson.Field
 	Supported    apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *RadarAs112TimeseriesGroupDNSSECResponseSerie0) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TimeseriesGroupDNSSECResponseSerie0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TimeseriesGroupEdnsResponse struct {
+type RadarAS112TimeseriesGroupEdnsResponse struct {
 	Meta   interface{}                                 `json:"meta,required"`
-	Serie0 RadarAs112TimeseriesGroupEdnsResponseSerie0 `json:"serie_0,required"`
-	JSON   radarAs112TimeseriesGroupEdnsResponseJSON   `json:"-"`
+	Serie0 RadarAS112TimeseriesGroupEdnsResponseSerie0 `json:"serie_0,required"`
+	JSON   radarAS112TimeseriesGroupEdnsResponseJSON   `json:"-"`
 }
 
-// radarAs112TimeseriesGroupEdnsResponseJSON contains the JSON metadata for the
-// struct [RadarAs112TimeseriesGroupEdnsResponse]
-type radarAs112TimeseriesGroupEdnsResponseJSON struct {
+// radarAS112TimeseriesGroupEdnsResponseJSON contains the JSON metadata for the
+// struct [RadarAS112TimeseriesGroupEdnsResponse]
+type radarAS112TimeseriesGroupEdnsResponseJSON struct {
 	Meta        apijson.Field
 	Serie0      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAs112TimeseriesGroupEdnsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TimeseriesGroupEdnsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TimeseriesGroupEdnsResponseSerie0 struct {
+type RadarAS112TimeseriesGroupEdnsResponseSerie0 struct {
 	NotSupported []string                                        `json:"NOT_SUPPORTED,required"`
 	Supported    []string                                        `json:"SUPPORTED,required"`
-	JSON         radarAs112TimeseriesGroupEdnsResponseSerie0JSON `json:"-"`
+	JSON         radarAS112TimeseriesGroupEdnsResponseSerie0JSON `json:"-"`
 }
 
-// radarAs112TimeseriesGroupEdnsResponseSerie0JSON contains the JSON metadata for
-// the struct [RadarAs112TimeseriesGroupEdnsResponseSerie0]
-type radarAs112TimeseriesGroupEdnsResponseSerie0JSON struct {
+// radarAS112TimeseriesGroupEdnsResponseSerie0JSON contains the JSON metadata for
+// the struct [RadarAS112TimeseriesGroupEdnsResponseSerie0]
+type radarAS112TimeseriesGroupEdnsResponseSerie0JSON struct {
 	NotSupported apijson.Field
 	Supported    apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *RadarAs112TimeseriesGroupEdnsResponseSerie0) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TimeseriesGroupEdnsResponseSerie0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TimeseriesGroupIPVersionResponse struct {
+type RadarAS112TimeseriesGroupIPVersionResponse struct {
 	Meta   interface{}                                      `json:"meta,required"`
-	Serie0 RadarAs112TimeseriesGroupIPVersionResponseSerie0 `json:"serie_0,required"`
-	JSON   radarAs112TimeseriesGroupIPVersionResponseJSON   `json:"-"`
+	Serie0 RadarAS112TimeseriesGroupIPVersionResponseSerie0 `json:"serie_0,required"`
+	JSON   radarAS112TimeseriesGroupIPVersionResponseJSON   `json:"-"`
 }
 
-// radarAs112TimeseriesGroupIPVersionResponseJSON contains the JSON metadata for
-// the struct [RadarAs112TimeseriesGroupIPVersionResponse]
-type radarAs112TimeseriesGroupIPVersionResponseJSON struct {
+// radarAS112TimeseriesGroupIPVersionResponseJSON contains the JSON metadata for
+// the struct [RadarAS112TimeseriesGroupIPVersionResponse]
+type radarAS112TimeseriesGroupIPVersionResponseJSON struct {
 	Meta        apijson.Field
 	Serie0      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAs112TimeseriesGroupIPVersionResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TimeseriesGroupIPVersionResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TimeseriesGroupIPVersionResponseSerie0 struct {
+type RadarAS112TimeseriesGroupIPVersionResponseSerie0 struct {
 	IPv4 []string                                             `json:"IPv4,required"`
 	IPv6 []string                                             `json:"IPv6,required"`
-	JSON radarAs112TimeseriesGroupIPVersionResponseSerie0JSON `json:"-"`
+	JSON radarAS112TimeseriesGroupIPVersionResponseSerie0JSON `json:"-"`
 }
 
-// radarAs112TimeseriesGroupIPVersionResponseSerie0JSON contains the JSON metadata
-// for the struct [RadarAs112TimeseriesGroupIPVersionResponseSerie0]
-type radarAs112TimeseriesGroupIPVersionResponseSerie0JSON struct {
+// radarAS112TimeseriesGroupIPVersionResponseSerie0JSON contains the JSON metadata
+// for the struct [RadarAS112TimeseriesGroupIPVersionResponseSerie0]
+type radarAS112TimeseriesGroupIPVersionResponseSerie0JSON struct {
 	IPv4        apijson.Field
 	IPv6        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAs112TimeseriesGroupIPVersionResponseSerie0) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TimeseriesGroupIPVersionResponseSerie0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TimeseriesGroupProtocolResponse struct {
+type RadarAS112TimeseriesGroupProtocolResponse struct {
 	Meta   interface{}                                     `json:"meta,required"`
-	Serie0 RadarAs112TimeseriesGroupProtocolResponseSerie0 `json:"serie_0,required"`
-	JSON   radarAs112TimeseriesGroupProtocolResponseJSON   `json:"-"`
+	Serie0 RadarAS112TimeseriesGroupProtocolResponseSerie0 `json:"serie_0,required"`
+	JSON   radarAS112TimeseriesGroupProtocolResponseJSON   `json:"-"`
 }
 
-// radarAs112TimeseriesGroupProtocolResponseJSON contains the JSON metadata for the
-// struct [RadarAs112TimeseriesGroupProtocolResponse]
-type radarAs112TimeseriesGroupProtocolResponseJSON struct {
+// radarAS112TimeseriesGroupProtocolResponseJSON contains the JSON metadata for the
+// struct [RadarAS112TimeseriesGroupProtocolResponse]
+type radarAS112TimeseriesGroupProtocolResponseJSON struct {
 	Meta        apijson.Field
 	Serie0      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAs112TimeseriesGroupProtocolResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TimeseriesGroupProtocolResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TimeseriesGroupProtocolResponseSerie0 struct {
+type RadarAS112TimeseriesGroupProtocolResponseSerie0 struct {
 	Tcp  []string                                            `json:"tcp,required"`
 	Udp  []string                                            `json:"udp,required"`
-	JSON radarAs112TimeseriesGroupProtocolResponseSerie0JSON `json:"-"`
+	JSON radarAS112TimeseriesGroupProtocolResponseSerie0JSON `json:"-"`
 }
 
-// radarAs112TimeseriesGroupProtocolResponseSerie0JSON contains the JSON metadata
-// for the struct [RadarAs112TimeseriesGroupProtocolResponseSerie0]
-type radarAs112TimeseriesGroupProtocolResponseSerie0JSON struct {
+// radarAS112TimeseriesGroupProtocolResponseSerie0JSON contains the JSON metadata
+// for the struct [RadarAS112TimeseriesGroupProtocolResponseSerie0]
+type radarAS112TimeseriesGroupProtocolResponseSerie0JSON struct {
 	Tcp         apijson.Field
 	Udp         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAs112TimeseriesGroupProtocolResponseSerie0) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TimeseriesGroupProtocolResponseSerie0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TimeseriesGroupQueryTypeResponse struct {
+type RadarAS112TimeseriesGroupQueryTypeResponse struct {
 	Meta   interface{}                                      `json:"meta,required"`
-	Serie0 RadarAs112TimeseriesGroupQueryTypeResponseSerie0 `json:"serie_0,required"`
-	JSON   radarAs112TimeseriesGroupQueryTypeResponseJSON   `json:"-"`
+	Serie0 RadarAS112TimeseriesGroupQueryTypeResponseSerie0 `json:"serie_0,required"`
+	JSON   radarAS112TimeseriesGroupQueryTypeResponseJSON   `json:"-"`
 }
 
-// radarAs112TimeseriesGroupQueryTypeResponseJSON contains the JSON metadata for
-// the struct [RadarAs112TimeseriesGroupQueryTypeResponse]
-type radarAs112TimeseriesGroupQueryTypeResponseJSON struct {
+// radarAS112TimeseriesGroupQueryTypeResponseJSON contains the JSON metadata for
+// the struct [RadarAS112TimeseriesGroupQueryTypeResponse]
+type radarAS112TimeseriesGroupQueryTypeResponseJSON struct {
 	Meta        apijson.Field
 	Serie0      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAs112TimeseriesGroupQueryTypeResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TimeseriesGroupQueryTypeResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TimeseriesGroupQueryTypeResponseSerie0 struct {
+type RadarAS112TimeseriesGroupQueryTypeResponseSerie0 struct {
 	A    []string                                             `json:"A,required"`
 	Aaaa []string                                             `json:"AAAA,required"`
 	Ptr  []string                                             `json:"PTR,required"`
 	Soa  []string                                             `json:"SOA,required"`
 	Srv  []string                                             `json:"SRV,required"`
-	JSON radarAs112TimeseriesGroupQueryTypeResponseSerie0JSON `json:"-"`
+	JSON radarAS112TimeseriesGroupQueryTypeResponseSerie0JSON `json:"-"`
 }
 
-// radarAs112TimeseriesGroupQueryTypeResponseSerie0JSON contains the JSON metadata
-// for the struct [RadarAs112TimeseriesGroupQueryTypeResponseSerie0]
-type radarAs112TimeseriesGroupQueryTypeResponseSerie0JSON struct {
+// radarAS112TimeseriesGroupQueryTypeResponseSerie0JSON contains the JSON metadata
+// for the struct [RadarAS112TimeseriesGroupQueryTypeResponseSerie0]
+type radarAS112TimeseriesGroupQueryTypeResponseSerie0JSON struct {
 	A           apijson.Field
 	Aaaa        apijson.Field
 	Ptr         apijson.Field
@@ -304,53 +304,53 @@ type radarAs112TimeseriesGroupQueryTypeResponseSerie0JSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAs112TimeseriesGroupQueryTypeResponseSerie0) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TimeseriesGroupQueryTypeResponseSerie0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TimeseriesGroupResponseCodesResponse struct {
+type RadarAS112TimeseriesGroupResponseCodesResponse struct {
 	Meta   interface{}                                          `json:"meta,required"`
-	Serie0 RadarAs112TimeseriesGroupResponseCodesResponseSerie0 `json:"serie_0,required"`
-	JSON   radarAs112TimeseriesGroupResponseCodesResponseJSON   `json:"-"`
+	Serie0 RadarAS112TimeseriesGroupResponseCodesResponseSerie0 `json:"serie_0,required"`
+	JSON   radarAS112TimeseriesGroupResponseCodesResponseJSON   `json:"-"`
 }
 
-// radarAs112TimeseriesGroupResponseCodesResponseJSON contains the JSON metadata
-// for the struct [RadarAs112TimeseriesGroupResponseCodesResponse]
-type radarAs112TimeseriesGroupResponseCodesResponseJSON struct {
+// radarAS112TimeseriesGroupResponseCodesResponseJSON contains the JSON metadata
+// for the struct [RadarAS112TimeseriesGroupResponseCodesResponse]
+type radarAS112TimeseriesGroupResponseCodesResponseJSON struct {
 	Meta        apijson.Field
 	Serie0      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAs112TimeseriesGroupResponseCodesResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TimeseriesGroupResponseCodesResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TimeseriesGroupResponseCodesResponseSerie0 struct {
+type RadarAS112TimeseriesGroupResponseCodesResponseSerie0 struct {
 	Noerror  []string                                                 `json:"NOERROR,required"`
 	Nxdomain []string                                                 `json:"NXDOMAIN,required"`
-	JSON     radarAs112TimeseriesGroupResponseCodesResponseSerie0JSON `json:"-"`
+	JSON     radarAS112TimeseriesGroupResponseCodesResponseSerie0JSON `json:"-"`
 }
 
-// radarAs112TimeseriesGroupResponseCodesResponseSerie0JSON contains the JSON
-// metadata for the struct [RadarAs112TimeseriesGroupResponseCodesResponseSerie0]
-type radarAs112TimeseriesGroupResponseCodesResponseSerie0JSON struct {
+// radarAS112TimeseriesGroupResponseCodesResponseSerie0JSON contains the JSON
+// metadata for the struct [RadarAS112TimeseriesGroupResponseCodesResponseSerie0]
+type radarAS112TimeseriesGroupResponseCodesResponseSerie0JSON struct {
 	Noerror     apijson.Field
 	Nxdomain    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAs112TimeseriesGroupResponseCodesResponseSerie0) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TimeseriesGroupResponseCodesResponseSerie0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TimeseriesGroupDNSSECParams struct {
+type RadarAS112TimeseriesGroupDNSSECParams struct {
 	// Aggregation interval results should be returned in (for example, in 15 minutes
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval param.Field[RadarAs112TimeseriesGroupDNSSECParamsAggInterval] `query:"aggInterval"`
+	AggInterval param.Field[RadarAS112TimeseriesGroupDNSSECParamsAggInterval] `query:"aggInterval"`
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
@@ -364,11 +364,11 @@ type RadarAs112TimeseriesGroupDNSSECParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]RadarAs112TimeseriesGroupDNSSECParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]RadarAS112TimeseriesGroupDNSSECParamsDateRange] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
-	Format param.Field[RadarAs112TimeseriesGroupDNSSECParamsFormat] `query:"format"`
+	Format param.Field[RadarAS112TimeseriesGroupDNSSECParamsFormat] `query:"format"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
 	// but includes results from PT.
@@ -377,9 +377,9 @@ type RadarAs112TimeseriesGroupDNSSECParams struct {
 	Name param.Field[[]string] `query:"name"`
 }
 
-// URLQuery serializes [RadarAs112TimeseriesGroupDNSSECParams]'s query parameters
+// URLQuery serializes [RadarAS112TimeseriesGroupDNSSECParams]'s query parameters
 // as `url.Values`.
-func (r RadarAs112TimeseriesGroupDNSSECParams) URLQuery() (v url.Values) {
+func (r RadarAS112TimeseriesGroupDNSSECParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
@@ -389,67 +389,67 @@ func (r RadarAs112TimeseriesGroupDNSSECParams) URLQuery() (v url.Values) {
 // Aggregation interval results should be returned in (for example, in 15 minutes
 // or 1 hour intervals). Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-type RadarAs112TimeseriesGroupDNSSECParamsAggInterval string
+type RadarAS112TimeseriesGroupDNSSECParamsAggInterval string
 
 const (
-	RadarAs112TimeseriesGroupDNSSECParamsAggInterval15m RadarAs112TimeseriesGroupDNSSECParamsAggInterval = "15m"
-	RadarAs112TimeseriesGroupDNSSECParamsAggInterval1h  RadarAs112TimeseriesGroupDNSSECParamsAggInterval = "1h"
-	RadarAs112TimeseriesGroupDNSSECParamsAggInterval1d  RadarAs112TimeseriesGroupDNSSECParamsAggInterval = "1d"
-	RadarAs112TimeseriesGroupDNSSECParamsAggInterval1w  RadarAs112TimeseriesGroupDNSSECParamsAggInterval = "1w"
+	RadarAS112TimeseriesGroupDNSSECParamsAggInterval15m RadarAS112TimeseriesGroupDNSSECParamsAggInterval = "15m"
+	RadarAS112TimeseriesGroupDNSSECParamsAggInterval1h  RadarAS112TimeseriesGroupDNSSECParamsAggInterval = "1h"
+	RadarAS112TimeseriesGroupDNSSECParamsAggInterval1d  RadarAS112TimeseriesGroupDNSSECParamsAggInterval = "1d"
+	RadarAS112TimeseriesGroupDNSSECParamsAggInterval1w  RadarAS112TimeseriesGroupDNSSECParamsAggInterval = "1w"
 )
 
-type RadarAs112TimeseriesGroupDNSSECParamsDateRange string
+type RadarAS112TimeseriesGroupDNSSECParamsDateRange string
 
 const (
-	RadarAs112TimeseriesGroupDNSSECParamsDateRange1d         RadarAs112TimeseriesGroupDNSSECParamsDateRange = "1d"
-	RadarAs112TimeseriesGroupDNSSECParamsDateRange2d         RadarAs112TimeseriesGroupDNSSECParamsDateRange = "2d"
-	RadarAs112TimeseriesGroupDNSSECParamsDateRange7d         RadarAs112TimeseriesGroupDNSSECParamsDateRange = "7d"
-	RadarAs112TimeseriesGroupDNSSECParamsDateRange14d        RadarAs112TimeseriesGroupDNSSECParamsDateRange = "14d"
-	RadarAs112TimeseriesGroupDNSSECParamsDateRange28d        RadarAs112TimeseriesGroupDNSSECParamsDateRange = "28d"
-	RadarAs112TimeseriesGroupDNSSECParamsDateRange12w        RadarAs112TimeseriesGroupDNSSECParamsDateRange = "12w"
-	RadarAs112TimeseriesGroupDNSSECParamsDateRange24w        RadarAs112TimeseriesGroupDNSSECParamsDateRange = "24w"
-	RadarAs112TimeseriesGroupDNSSECParamsDateRange52w        RadarAs112TimeseriesGroupDNSSECParamsDateRange = "52w"
-	RadarAs112TimeseriesGroupDNSSECParamsDateRange1dControl  RadarAs112TimeseriesGroupDNSSECParamsDateRange = "1dControl"
-	RadarAs112TimeseriesGroupDNSSECParamsDateRange2dControl  RadarAs112TimeseriesGroupDNSSECParamsDateRange = "2dControl"
-	RadarAs112TimeseriesGroupDNSSECParamsDateRange7dControl  RadarAs112TimeseriesGroupDNSSECParamsDateRange = "7dControl"
-	RadarAs112TimeseriesGroupDNSSECParamsDateRange14dControl RadarAs112TimeseriesGroupDNSSECParamsDateRange = "14dControl"
-	RadarAs112TimeseriesGroupDNSSECParamsDateRange28dControl RadarAs112TimeseriesGroupDNSSECParamsDateRange = "28dControl"
-	RadarAs112TimeseriesGroupDNSSECParamsDateRange12wControl RadarAs112TimeseriesGroupDNSSECParamsDateRange = "12wControl"
-	RadarAs112TimeseriesGroupDNSSECParamsDateRange24wControl RadarAs112TimeseriesGroupDNSSECParamsDateRange = "24wControl"
+	RadarAS112TimeseriesGroupDNSSECParamsDateRange1d         RadarAS112TimeseriesGroupDNSSECParamsDateRange = "1d"
+	RadarAS112TimeseriesGroupDNSSECParamsDateRange2d         RadarAS112TimeseriesGroupDNSSECParamsDateRange = "2d"
+	RadarAS112TimeseriesGroupDNSSECParamsDateRange7d         RadarAS112TimeseriesGroupDNSSECParamsDateRange = "7d"
+	RadarAS112TimeseriesGroupDNSSECParamsDateRange14d        RadarAS112TimeseriesGroupDNSSECParamsDateRange = "14d"
+	RadarAS112TimeseriesGroupDNSSECParamsDateRange28d        RadarAS112TimeseriesGroupDNSSECParamsDateRange = "28d"
+	RadarAS112TimeseriesGroupDNSSECParamsDateRange12w        RadarAS112TimeseriesGroupDNSSECParamsDateRange = "12w"
+	RadarAS112TimeseriesGroupDNSSECParamsDateRange24w        RadarAS112TimeseriesGroupDNSSECParamsDateRange = "24w"
+	RadarAS112TimeseriesGroupDNSSECParamsDateRange52w        RadarAS112TimeseriesGroupDNSSECParamsDateRange = "52w"
+	RadarAS112TimeseriesGroupDNSSECParamsDateRange1dControl  RadarAS112TimeseriesGroupDNSSECParamsDateRange = "1dControl"
+	RadarAS112TimeseriesGroupDNSSECParamsDateRange2dControl  RadarAS112TimeseriesGroupDNSSECParamsDateRange = "2dControl"
+	RadarAS112TimeseriesGroupDNSSECParamsDateRange7dControl  RadarAS112TimeseriesGroupDNSSECParamsDateRange = "7dControl"
+	RadarAS112TimeseriesGroupDNSSECParamsDateRange14dControl RadarAS112TimeseriesGroupDNSSECParamsDateRange = "14dControl"
+	RadarAS112TimeseriesGroupDNSSECParamsDateRange28dControl RadarAS112TimeseriesGroupDNSSECParamsDateRange = "28dControl"
+	RadarAS112TimeseriesGroupDNSSECParamsDateRange12wControl RadarAS112TimeseriesGroupDNSSECParamsDateRange = "12wControl"
+	RadarAS112TimeseriesGroupDNSSECParamsDateRange24wControl RadarAS112TimeseriesGroupDNSSECParamsDateRange = "24wControl"
 )
 
 // Format results are returned in.
-type RadarAs112TimeseriesGroupDNSSECParamsFormat string
+type RadarAS112TimeseriesGroupDNSSECParamsFormat string
 
 const (
-	RadarAs112TimeseriesGroupDNSSECParamsFormatJson RadarAs112TimeseriesGroupDNSSECParamsFormat = "JSON"
-	RadarAs112TimeseriesGroupDNSSECParamsFormatCsv  RadarAs112TimeseriesGroupDNSSECParamsFormat = "CSV"
+	RadarAS112TimeseriesGroupDNSSECParamsFormatJson RadarAS112TimeseriesGroupDNSSECParamsFormat = "JSON"
+	RadarAS112TimeseriesGroupDNSSECParamsFormatCsv  RadarAS112TimeseriesGroupDNSSECParamsFormat = "CSV"
 )
 
-type RadarAs112TimeseriesGroupDNSSECResponseEnvelope struct {
-	Result  RadarAs112TimeseriesGroupDNSSECResponse             `json:"result,required"`
+type RadarAS112TimeseriesGroupDNSSECResponseEnvelope struct {
+	Result  RadarAS112TimeseriesGroupDNSSECResponse             `json:"result,required"`
 	Success bool                                                `json:"success,required"`
-	JSON    radarAs112TimeseriesGroupDNSSECResponseEnvelopeJSON `json:"-"`
+	JSON    radarAS112TimeseriesGroupDNSSECResponseEnvelopeJSON `json:"-"`
 }
 
-// radarAs112TimeseriesGroupDNSSECResponseEnvelopeJSON contains the JSON metadata
-// for the struct [RadarAs112TimeseriesGroupDNSSECResponseEnvelope]
-type radarAs112TimeseriesGroupDNSSECResponseEnvelopeJSON struct {
+// radarAS112TimeseriesGroupDNSSECResponseEnvelopeJSON contains the JSON metadata
+// for the struct [RadarAS112TimeseriesGroupDNSSECResponseEnvelope]
+type radarAS112TimeseriesGroupDNSSECResponseEnvelopeJSON struct {
 	Result      apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAs112TimeseriesGroupDNSSECResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TimeseriesGroupDNSSECResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TimeseriesGroupEdnsParams struct {
+type RadarAS112TimeseriesGroupEdnsParams struct {
 	// Aggregation interval results should be returned in (for example, in 15 minutes
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval param.Field[RadarAs112TimeseriesGroupEdnsParamsAggInterval] `query:"aggInterval"`
+	AggInterval param.Field[RadarAS112TimeseriesGroupEdnsParamsAggInterval] `query:"aggInterval"`
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
@@ -463,11 +463,11 @@ type RadarAs112TimeseriesGroupEdnsParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]RadarAs112TimeseriesGroupEdnsParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]RadarAS112TimeseriesGroupEdnsParamsDateRange] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
-	Format param.Field[RadarAs112TimeseriesGroupEdnsParamsFormat] `query:"format"`
+	Format param.Field[RadarAS112TimeseriesGroupEdnsParamsFormat] `query:"format"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
 	// but includes results from PT.
@@ -476,9 +476,9 @@ type RadarAs112TimeseriesGroupEdnsParams struct {
 	Name param.Field[[]string] `query:"name"`
 }
 
-// URLQuery serializes [RadarAs112TimeseriesGroupEdnsParams]'s query parameters as
+// URLQuery serializes [RadarAS112TimeseriesGroupEdnsParams]'s query parameters as
 // `url.Values`.
-func (r RadarAs112TimeseriesGroupEdnsParams) URLQuery() (v url.Values) {
+func (r RadarAS112TimeseriesGroupEdnsParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
@@ -488,67 +488,67 @@ func (r RadarAs112TimeseriesGroupEdnsParams) URLQuery() (v url.Values) {
 // Aggregation interval results should be returned in (for example, in 15 minutes
 // or 1 hour intervals). Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-type RadarAs112TimeseriesGroupEdnsParamsAggInterval string
+type RadarAS112TimeseriesGroupEdnsParamsAggInterval string
 
 const (
-	RadarAs112TimeseriesGroupEdnsParamsAggInterval15m RadarAs112TimeseriesGroupEdnsParamsAggInterval = "15m"
-	RadarAs112TimeseriesGroupEdnsParamsAggInterval1h  RadarAs112TimeseriesGroupEdnsParamsAggInterval = "1h"
-	RadarAs112TimeseriesGroupEdnsParamsAggInterval1d  RadarAs112TimeseriesGroupEdnsParamsAggInterval = "1d"
-	RadarAs112TimeseriesGroupEdnsParamsAggInterval1w  RadarAs112TimeseriesGroupEdnsParamsAggInterval = "1w"
+	RadarAS112TimeseriesGroupEdnsParamsAggInterval15m RadarAS112TimeseriesGroupEdnsParamsAggInterval = "15m"
+	RadarAS112TimeseriesGroupEdnsParamsAggInterval1h  RadarAS112TimeseriesGroupEdnsParamsAggInterval = "1h"
+	RadarAS112TimeseriesGroupEdnsParamsAggInterval1d  RadarAS112TimeseriesGroupEdnsParamsAggInterval = "1d"
+	RadarAS112TimeseriesGroupEdnsParamsAggInterval1w  RadarAS112TimeseriesGroupEdnsParamsAggInterval = "1w"
 )
 
-type RadarAs112TimeseriesGroupEdnsParamsDateRange string
+type RadarAS112TimeseriesGroupEdnsParamsDateRange string
 
 const (
-	RadarAs112TimeseriesGroupEdnsParamsDateRange1d         RadarAs112TimeseriesGroupEdnsParamsDateRange = "1d"
-	RadarAs112TimeseriesGroupEdnsParamsDateRange2d         RadarAs112TimeseriesGroupEdnsParamsDateRange = "2d"
-	RadarAs112TimeseriesGroupEdnsParamsDateRange7d         RadarAs112TimeseriesGroupEdnsParamsDateRange = "7d"
-	RadarAs112TimeseriesGroupEdnsParamsDateRange14d        RadarAs112TimeseriesGroupEdnsParamsDateRange = "14d"
-	RadarAs112TimeseriesGroupEdnsParamsDateRange28d        RadarAs112TimeseriesGroupEdnsParamsDateRange = "28d"
-	RadarAs112TimeseriesGroupEdnsParamsDateRange12w        RadarAs112TimeseriesGroupEdnsParamsDateRange = "12w"
-	RadarAs112TimeseriesGroupEdnsParamsDateRange24w        RadarAs112TimeseriesGroupEdnsParamsDateRange = "24w"
-	RadarAs112TimeseriesGroupEdnsParamsDateRange52w        RadarAs112TimeseriesGroupEdnsParamsDateRange = "52w"
-	RadarAs112TimeseriesGroupEdnsParamsDateRange1dControl  RadarAs112TimeseriesGroupEdnsParamsDateRange = "1dControl"
-	RadarAs112TimeseriesGroupEdnsParamsDateRange2dControl  RadarAs112TimeseriesGroupEdnsParamsDateRange = "2dControl"
-	RadarAs112TimeseriesGroupEdnsParamsDateRange7dControl  RadarAs112TimeseriesGroupEdnsParamsDateRange = "7dControl"
-	RadarAs112TimeseriesGroupEdnsParamsDateRange14dControl RadarAs112TimeseriesGroupEdnsParamsDateRange = "14dControl"
-	RadarAs112TimeseriesGroupEdnsParamsDateRange28dControl RadarAs112TimeseriesGroupEdnsParamsDateRange = "28dControl"
-	RadarAs112TimeseriesGroupEdnsParamsDateRange12wControl RadarAs112TimeseriesGroupEdnsParamsDateRange = "12wControl"
-	RadarAs112TimeseriesGroupEdnsParamsDateRange24wControl RadarAs112TimeseriesGroupEdnsParamsDateRange = "24wControl"
+	RadarAS112TimeseriesGroupEdnsParamsDateRange1d         RadarAS112TimeseriesGroupEdnsParamsDateRange = "1d"
+	RadarAS112TimeseriesGroupEdnsParamsDateRange2d         RadarAS112TimeseriesGroupEdnsParamsDateRange = "2d"
+	RadarAS112TimeseriesGroupEdnsParamsDateRange7d         RadarAS112TimeseriesGroupEdnsParamsDateRange = "7d"
+	RadarAS112TimeseriesGroupEdnsParamsDateRange14d        RadarAS112TimeseriesGroupEdnsParamsDateRange = "14d"
+	RadarAS112TimeseriesGroupEdnsParamsDateRange28d        RadarAS112TimeseriesGroupEdnsParamsDateRange = "28d"
+	RadarAS112TimeseriesGroupEdnsParamsDateRange12w        RadarAS112TimeseriesGroupEdnsParamsDateRange = "12w"
+	RadarAS112TimeseriesGroupEdnsParamsDateRange24w        RadarAS112TimeseriesGroupEdnsParamsDateRange = "24w"
+	RadarAS112TimeseriesGroupEdnsParamsDateRange52w        RadarAS112TimeseriesGroupEdnsParamsDateRange = "52w"
+	RadarAS112TimeseriesGroupEdnsParamsDateRange1dControl  RadarAS112TimeseriesGroupEdnsParamsDateRange = "1dControl"
+	RadarAS112TimeseriesGroupEdnsParamsDateRange2dControl  RadarAS112TimeseriesGroupEdnsParamsDateRange = "2dControl"
+	RadarAS112TimeseriesGroupEdnsParamsDateRange7dControl  RadarAS112TimeseriesGroupEdnsParamsDateRange = "7dControl"
+	RadarAS112TimeseriesGroupEdnsParamsDateRange14dControl RadarAS112TimeseriesGroupEdnsParamsDateRange = "14dControl"
+	RadarAS112TimeseriesGroupEdnsParamsDateRange28dControl RadarAS112TimeseriesGroupEdnsParamsDateRange = "28dControl"
+	RadarAS112TimeseriesGroupEdnsParamsDateRange12wControl RadarAS112TimeseriesGroupEdnsParamsDateRange = "12wControl"
+	RadarAS112TimeseriesGroupEdnsParamsDateRange24wControl RadarAS112TimeseriesGroupEdnsParamsDateRange = "24wControl"
 )
 
 // Format results are returned in.
-type RadarAs112TimeseriesGroupEdnsParamsFormat string
+type RadarAS112TimeseriesGroupEdnsParamsFormat string
 
 const (
-	RadarAs112TimeseriesGroupEdnsParamsFormatJson RadarAs112TimeseriesGroupEdnsParamsFormat = "JSON"
-	RadarAs112TimeseriesGroupEdnsParamsFormatCsv  RadarAs112TimeseriesGroupEdnsParamsFormat = "CSV"
+	RadarAS112TimeseriesGroupEdnsParamsFormatJson RadarAS112TimeseriesGroupEdnsParamsFormat = "JSON"
+	RadarAS112TimeseriesGroupEdnsParamsFormatCsv  RadarAS112TimeseriesGroupEdnsParamsFormat = "CSV"
 )
 
-type RadarAs112TimeseriesGroupEdnsResponseEnvelope struct {
-	Result  RadarAs112TimeseriesGroupEdnsResponse             `json:"result,required"`
+type RadarAS112TimeseriesGroupEdnsResponseEnvelope struct {
+	Result  RadarAS112TimeseriesGroupEdnsResponse             `json:"result,required"`
 	Success bool                                              `json:"success,required"`
-	JSON    radarAs112TimeseriesGroupEdnsResponseEnvelopeJSON `json:"-"`
+	JSON    radarAS112TimeseriesGroupEdnsResponseEnvelopeJSON `json:"-"`
 }
 
-// radarAs112TimeseriesGroupEdnsResponseEnvelopeJSON contains the JSON metadata for
-// the struct [RadarAs112TimeseriesGroupEdnsResponseEnvelope]
-type radarAs112TimeseriesGroupEdnsResponseEnvelopeJSON struct {
+// radarAS112TimeseriesGroupEdnsResponseEnvelopeJSON contains the JSON metadata for
+// the struct [RadarAS112TimeseriesGroupEdnsResponseEnvelope]
+type radarAS112TimeseriesGroupEdnsResponseEnvelopeJSON struct {
 	Result      apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAs112TimeseriesGroupEdnsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TimeseriesGroupEdnsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TimeseriesGroupIPVersionParams struct {
+type RadarAS112TimeseriesGroupIPVersionParams struct {
 	// Aggregation interval results should be returned in (for example, in 15 minutes
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval param.Field[RadarAs112TimeseriesGroupIPVersionParamsAggInterval] `query:"aggInterval"`
+	AggInterval param.Field[RadarAS112TimeseriesGroupIPVersionParamsAggInterval] `query:"aggInterval"`
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
@@ -562,11 +562,11 @@ type RadarAs112TimeseriesGroupIPVersionParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]RadarAs112TimeseriesGroupIPVersionParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]RadarAS112TimeseriesGroupIPVersionParamsDateRange] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
-	Format param.Field[RadarAs112TimeseriesGroupIPVersionParamsFormat] `query:"format"`
+	Format param.Field[RadarAS112TimeseriesGroupIPVersionParamsFormat] `query:"format"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
 	// but includes results from PT.
@@ -575,9 +575,9 @@ type RadarAs112TimeseriesGroupIPVersionParams struct {
 	Name param.Field[[]string] `query:"name"`
 }
 
-// URLQuery serializes [RadarAs112TimeseriesGroupIPVersionParams]'s query
+// URLQuery serializes [RadarAS112TimeseriesGroupIPVersionParams]'s query
 // parameters as `url.Values`.
-func (r RadarAs112TimeseriesGroupIPVersionParams) URLQuery() (v url.Values) {
+func (r RadarAS112TimeseriesGroupIPVersionParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
@@ -587,67 +587,67 @@ func (r RadarAs112TimeseriesGroupIPVersionParams) URLQuery() (v url.Values) {
 // Aggregation interval results should be returned in (for example, in 15 minutes
 // or 1 hour intervals). Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-type RadarAs112TimeseriesGroupIPVersionParamsAggInterval string
+type RadarAS112TimeseriesGroupIPVersionParamsAggInterval string
 
 const (
-	RadarAs112TimeseriesGroupIPVersionParamsAggInterval15m RadarAs112TimeseriesGroupIPVersionParamsAggInterval = "15m"
-	RadarAs112TimeseriesGroupIPVersionParamsAggInterval1h  RadarAs112TimeseriesGroupIPVersionParamsAggInterval = "1h"
-	RadarAs112TimeseriesGroupIPVersionParamsAggInterval1d  RadarAs112TimeseriesGroupIPVersionParamsAggInterval = "1d"
-	RadarAs112TimeseriesGroupIPVersionParamsAggInterval1w  RadarAs112TimeseriesGroupIPVersionParamsAggInterval = "1w"
+	RadarAS112TimeseriesGroupIPVersionParamsAggInterval15m RadarAS112TimeseriesGroupIPVersionParamsAggInterval = "15m"
+	RadarAS112TimeseriesGroupIPVersionParamsAggInterval1h  RadarAS112TimeseriesGroupIPVersionParamsAggInterval = "1h"
+	RadarAS112TimeseriesGroupIPVersionParamsAggInterval1d  RadarAS112TimeseriesGroupIPVersionParamsAggInterval = "1d"
+	RadarAS112TimeseriesGroupIPVersionParamsAggInterval1w  RadarAS112TimeseriesGroupIPVersionParamsAggInterval = "1w"
 )
 
-type RadarAs112TimeseriesGroupIPVersionParamsDateRange string
+type RadarAS112TimeseriesGroupIPVersionParamsDateRange string
 
 const (
-	RadarAs112TimeseriesGroupIPVersionParamsDateRange1d         RadarAs112TimeseriesGroupIPVersionParamsDateRange = "1d"
-	RadarAs112TimeseriesGroupIPVersionParamsDateRange2d         RadarAs112TimeseriesGroupIPVersionParamsDateRange = "2d"
-	RadarAs112TimeseriesGroupIPVersionParamsDateRange7d         RadarAs112TimeseriesGroupIPVersionParamsDateRange = "7d"
-	RadarAs112TimeseriesGroupIPVersionParamsDateRange14d        RadarAs112TimeseriesGroupIPVersionParamsDateRange = "14d"
-	RadarAs112TimeseriesGroupIPVersionParamsDateRange28d        RadarAs112TimeseriesGroupIPVersionParamsDateRange = "28d"
-	RadarAs112TimeseriesGroupIPVersionParamsDateRange12w        RadarAs112TimeseriesGroupIPVersionParamsDateRange = "12w"
-	RadarAs112TimeseriesGroupIPVersionParamsDateRange24w        RadarAs112TimeseriesGroupIPVersionParamsDateRange = "24w"
-	RadarAs112TimeseriesGroupIPVersionParamsDateRange52w        RadarAs112TimeseriesGroupIPVersionParamsDateRange = "52w"
-	RadarAs112TimeseriesGroupIPVersionParamsDateRange1dControl  RadarAs112TimeseriesGroupIPVersionParamsDateRange = "1dControl"
-	RadarAs112TimeseriesGroupIPVersionParamsDateRange2dControl  RadarAs112TimeseriesGroupIPVersionParamsDateRange = "2dControl"
-	RadarAs112TimeseriesGroupIPVersionParamsDateRange7dControl  RadarAs112TimeseriesGroupIPVersionParamsDateRange = "7dControl"
-	RadarAs112TimeseriesGroupIPVersionParamsDateRange14dControl RadarAs112TimeseriesGroupIPVersionParamsDateRange = "14dControl"
-	RadarAs112TimeseriesGroupIPVersionParamsDateRange28dControl RadarAs112TimeseriesGroupIPVersionParamsDateRange = "28dControl"
-	RadarAs112TimeseriesGroupIPVersionParamsDateRange12wControl RadarAs112TimeseriesGroupIPVersionParamsDateRange = "12wControl"
-	RadarAs112TimeseriesGroupIPVersionParamsDateRange24wControl RadarAs112TimeseriesGroupIPVersionParamsDateRange = "24wControl"
+	RadarAS112TimeseriesGroupIPVersionParamsDateRange1d         RadarAS112TimeseriesGroupIPVersionParamsDateRange = "1d"
+	RadarAS112TimeseriesGroupIPVersionParamsDateRange2d         RadarAS112TimeseriesGroupIPVersionParamsDateRange = "2d"
+	RadarAS112TimeseriesGroupIPVersionParamsDateRange7d         RadarAS112TimeseriesGroupIPVersionParamsDateRange = "7d"
+	RadarAS112TimeseriesGroupIPVersionParamsDateRange14d        RadarAS112TimeseriesGroupIPVersionParamsDateRange = "14d"
+	RadarAS112TimeseriesGroupIPVersionParamsDateRange28d        RadarAS112TimeseriesGroupIPVersionParamsDateRange = "28d"
+	RadarAS112TimeseriesGroupIPVersionParamsDateRange12w        RadarAS112TimeseriesGroupIPVersionParamsDateRange = "12w"
+	RadarAS112TimeseriesGroupIPVersionParamsDateRange24w        RadarAS112TimeseriesGroupIPVersionParamsDateRange = "24w"
+	RadarAS112TimeseriesGroupIPVersionParamsDateRange52w        RadarAS112TimeseriesGroupIPVersionParamsDateRange = "52w"
+	RadarAS112TimeseriesGroupIPVersionParamsDateRange1dControl  RadarAS112TimeseriesGroupIPVersionParamsDateRange = "1dControl"
+	RadarAS112TimeseriesGroupIPVersionParamsDateRange2dControl  RadarAS112TimeseriesGroupIPVersionParamsDateRange = "2dControl"
+	RadarAS112TimeseriesGroupIPVersionParamsDateRange7dControl  RadarAS112TimeseriesGroupIPVersionParamsDateRange = "7dControl"
+	RadarAS112TimeseriesGroupIPVersionParamsDateRange14dControl RadarAS112TimeseriesGroupIPVersionParamsDateRange = "14dControl"
+	RadarAS112TimeseriesGroupIPVersionParamsDateRange28dControl RadarAS112TimeseriesGroupIPVersionParamsDateRange = "28dControl"
+	RadarAS112TimeseriesGroupIPVersionParamsDateRange12wControl RadarAS112TimeseriesGroupIPVersionParamsDateRange = "12wControl"
+	RadarAS112TimeseriesGroupIPVersionParamsDateRange24wControl RadarAS112TimeseriesGroupIPVersionParamsDateRange = "24wControl"
 )
 
 // Format results are returned in.
-type RadarAs112TimeseriesGroupIPVersionParamsFormat string
+type RadarAS112TimeseriesGroupIPVersionParamsFormat string
 
 const (
-	RadarAs112TimeseriesGroupIPVersionParamsFormatJson RadarAs112TimeseriesGroupIPVersionParamsFormat = "JSON"
-	RadarAs112TimeseriesGroupIPVersionParamsFormatCsv  RadarAs112TimeseriesGroupIPVersionParamsFormat = "CSV"
+	RadarAS112TimeseriesGroupIPVersionParamsFormatJson RadarAS112TimeseriesGroupIPVersionParamsFormat = "JSON"
+	RadarAS112TimeseriesGroupIPVersionParamsFormatCsv  RadarAS112TimeseriesGroupIPVersionParamsFormat = "CSV"
 )
 
-type RadarAs112TimeseriesGroupIPVersionResponseEnvelope struct {
-	Result  RadarAs112TimeseriesGroupIPVersionResponse             `json:"result,required"`
+type RadarAS112TimeseriesGroupIPVersionResponseEnvelope struct {
+	Result  RadarAS112TimeseriesGroupIPVersionResponse             `json:"result,required"`
 	Success bool                                                   `json:"success,required"`
-	JSON    radarAs112TimeseriesGroupIPVersionResponseEnvelopeJSON `json:"-"`
+	JSON    radarAS112TimeseriesGroupIPVersionResponseEnvelopeJSON `json:"-"`
 }
 
-// radarAs112TimeseriesGroupIPVersionResponseEnvelopeJSON contains the JSON
-// metadata for the struct [RadarAs112TimeseriesGroupIPVersionResponseEnvelope]
-type radarAs112TimeseriesGroupIPVersionResponseEnvelopeJSON struct {
+// radarAS112TimeseriesGroupIPVersionResponseEnvelopeJSON contains the JSON
+// metadata for the struct [RadarAS112TimeseriesGroupIPVersionResponseEnvelope]
+type radarAS112TimeseriesGroupIPVersionResponseEnvelopeJSON struct {
 	Result      apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAs112TimeseriesGroupIPVersionResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TimeseriesGroupIPVersionResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TimeseriesGroupProtocolParams struct {
+type RadarAS112TimeseriesGroupProtocolParams struct {
 	// Aggregation interval results should be returned in (for example, in 15 minutes
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval param.Field[RadarAs112TimeseriesGroupProtocolParamsAggInterval] `query:"aggInterval"`
+	AggInterval param.Field[RadarAS112TimeseriesGroupProtocolParamsAggInterval] `query:"aggInterval"`
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
@@ -661,11 +661,11 @@ type RadarAs112TimeseriesGroupProtocolParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]RadarAs112TimeseriesGroupProtocolParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]RadarAS112TimeseriesGroupProtocolParamsDateRange] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
-	Format param.Field[RadarAs112TimeseriesGroupProtocolParamsFormat] `query:"format"`
+	Format param.Field[RadarAS112TimeseriesGroupProtocolParamsFormat] `query:"format"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
 	// but includes results from PT.
@@ -674,9 +674,9 @@ type RadarAs112TimeseriesGroupProtocolParams struct {
 	Name param.Field[[]string] `query:"name"`
 }
 
-// URLQuery serializes [RadarAs112TimeseriesGroupProtocolParams]'s query parameters
+// URLQuery serializes [RadarAS112TimeseriesGroupProtocolParams]'s query parameters
 // as `url.Values`.
-func (r RadarAs112TimeseriesGroupProtocolParams) URLQuery() (v url.Values) {
+func (r RadarAS112TimeseriesGroupProtocolParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
@@ -686,67 +686,67 @@ func (r RadarAs112TimeseriesGroupProtocolParams) URLQuery() (v url.Values) {
 // Aggregation interval results should be returned in (for example, in 15 minutes
 // or 1 hour intervals). Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-type RadarAs112TimeseriesGroupProtocolParamsAggInterval string
+type RadarAS112TimeseriesGroupProtocolParamsAggInterval string
 
 const (
-	RadarAs112TimeseriesGroupProtocolParamsAggInterval15m RadarAs112TimeseriesGroupProtocolParamsAggInterval = "15m"
-	RadarAs112TimeseriesGroupProtocolParamsAggInterval1h  RadarAs112TimeseriesGroupProtocolParamsAggInterval = "1h"
-	RadarAs112TimeseriesGroupProtocolParamsAggInterval1d  RadarAs112TimeseriesGroupProtocolParamsAggInterval = "1d"
-	RadarAs112TimeseriesGroupProtocolParamsAggInterval1w  RadarAs112TimeseriesGroupProtocolParamsAggInterval = "1w"
+	RadarAS112TimeseriesGroupProtocolParamsAggInterval15m RadarAS112TimeseriesGroupProtocolParamsAggInterval = "15m"
+	RadarAS112TimeseriesGroupProtocolParamsAggInterval1h  RadarAS112TimeseriesGroupProtocolParamsAggInterval = "1h"
+	RadarAS112TimeseriesGroupProtocolParamsAggInterval1d  RadarAS112TimeseriesGroupProtocolParamsAggInterval = "1d"
+	RadarAS112TimeseriesGroupProtocolParamsAggInterval1w  RadarAS112TimeseriesGroupProtocolParamsAggInterval = "1w"
 )
 
-type RadarAs112TimeseriesGroupProtocolParamsDateRange string
+type RadarAS112TimeseriesGroupProtocolParamsDateRange string
 
 const (
-	RadarAs112TimeseriesGroupProtocolParamsDateRange1d         RadarAs112TimeseriesGroupProtocolParamsDateRange = "1d"
-	RadarAs112TimeseriesGroupProtocolParamsDateRange2d         RadarAs112TimeseriesGroupProtocolParamsDateRange = "2d"
-	RadarAs112TimeseriesGroupProtocolParamsDateRange7d         RadarAs112TimeseriesGroupProtocolParamsDateRange = "7d"
-	RadarAs112TimeseriesGroupProtocolParamsDateRange14d        RadarAs112TimeseriesGroupProtocolParamsDateRange = "14d"
-	RadarAs112TimeseriesGroupProtocolParamsDateRange28d        RadarAs112TimeseriesGroupProtocolParamsDateRange = "28d"
-	RadarAs112TimeseriesGroupProtocolParamsDateRange12w        RadarAs112TimeseriesGroupProtocolParamsDateRange = "12w"
-	RadarAs112TimeseriesGroupProtocolParamsDateRange24w        RadarAs112TimeseriesGroupProtocolParamsDateRange = "24w"
-	RadarAs112TimeseriesGroupProtocolParamsDateRange52w        RadarAs112TimeseriesGroupProtocolParamsDateRange = "52w"
-	RadarAs112TimeseriesGroupProtocolParamsDateRange1dControl  RadarAs112TimeseriesGroupProtocolParamsDateRange = "1dControl"
-	RadarAs112TimeseriesGroupProtocolParamsDateRange2dControl  RadarAs112TimeseriesGroupProtocolParamsDateRange = "2dControl"
-	RadarAs112TimeseriesGroupProtocolParamsDateRange7dControl  RadarAs112TimeseriesGroupProtocolParamsDateRange = "7dControl"
-	RadarAs112TimeseriesGroupProtocolParamsDateRange14dControl RadarAs112TimeseriesGroupProtocolParamsDateRange = "14dControl"
-	RadarAs112TimeseriesGroupProtocolParamsDateRange28dControl RadarAs112TimeseriesGroupProtocolParamsDateRange = "28dControl"
-	RadarAs112TimeseriesGroupProtocolParamsDateRange12wControl RadarAs112TimeseriesGroupProtocolParamsDateRange = "12wControl"
-	RadarAs112TimeseriesGroupProtocolParamsDateRange24wControl RadarAs112TimeseriesGroupProtocolParamsDateRange = "24wControl"
+	RadarAS112TimeseriesGroupProtocolParamsDateRange1d         RadarAS112TimeseriesGroupProtocolParamsDateRange = "1d"
+	RadarAS112TimeseriesGroupProtocolParamsDateRange2d         RadarAS112TimeseriesGroupProtocolParamsDateRange = "2d"
+	RadarAS112TimeseriesGroupProtocolParamsDateRange7d         RadarAS112TimeseriesGroupProtocolParamsDateRange = "7d"
+	RadarAS112TimeseriesGroupProtocolParamsDateRange14d        RadarAS112TimeseriesGroupProtocolParamsDateRange = "14d"
+	RadarAS112TimeseriesGroupProtocolParamsDateRange28d        RadarAS112TimeseriesGroupProtocolParamsDateRange = "28d"
+	RadarAS112TimeseriesGroupProtocolParamsDateRange12w        RadarAS112TimeseriesGroupProtocolParamsDateRange = "12w"
+	RadarAS112TimeseriesGroupProtocolParamsDateRange24w        RadarAS112TimeseriesGroupProtocolParamsDateRange = "24w"
+	RadarAS112TimeseriesGroupProtocolParamsDateRange52w        RadarAS112TimeseriesGroupProtocolParamsDateRange = "52w"
+	RadarAS112TimeseriesGroupProtocolParamsDateRange1dControl  RadarAS112TimeseriesGroupProtocolParamsDateRange = "1dControl"
+	RadarAS112TimeseriesGroupProtocolParamsDateRange2dControl  RadarAS112TimeseriesGroupProtocolParamsDateRange = "2dControl"
+	RadarAS112TimeseriesGroupProtocolParamsDateRange7dControl  RadarAS112TimeseriesGroupProtocolParamsDateRange = "7dControl"
+	RadarAS112TimeseriesGroupProtocolParamsDateRange14dControl RadarAS112TimeseriesGroupProtocolParamsDateRange = "14dControl"
+	RadarAS112TimeseriesGroupProtocolParamsDateRange28dControl RadarAS112TimeseriesGroupProtocolParamsDateRange = "28dControl"
+	RadarAS112TimeseriesGroupProtocolParamsDateRange12wControl RadarAS112TimeseriesGroupProtocolParamsDateRange = "12wControl"
+	RadarAS112TimeseriesGroupProtocolParamsDateRange24wControl RadarAS112TimeseriesGroupProtocolParamsDateRange = "24wControl"
 )
 
 // Format results are returned in.
-type RadarAs112TimeseriesGroupProtocolParamsFormat string
+type RadarAS112TimeseriesGroupProtocolParamsFormat string
 
 const (
-	RadarAs112TimeseriesGroupProtocolParamsFormatJson RadarAs112TimeseriesGroupProtocolParamsFormat = "JSON"
-	RadarAs112TimeseriesGroupProtocolParamsFormatCsv  RadarAs112TimeseriesGroupProtocolParamsFormat = "CSV"
+	RadarAS112TimeseriesGroupProtocolParamsFormatJson RadarAS112TimeseriesGroupProtocolParamsFormat = "JSON"
+	RadarAS112TimeseriesGroupProtocolParamsFormatCsv  RadarAS112TimeseriesGroupProtocolParamsFormat = "CSV"
 )
 
-type RadarAs112TimeseriesGroupProtocolResponseEnvelope struct {
-	Result  RadarAs112TimeseriesGroupProtocolResponse             `json:"result,required"`
+type RadarAS112TimeseriesGroupProtocolResponseEnvelope struct {
+	Result  RadarAS112TimeseriesGroupProtocolResponse             `json:"result,required"`
 	Success bool                                                  `json:"success,required"`
-	JSON    radarAs112TimeseriesGroupProtocolResponseEnvelopeJSON `json:"-"`
+	JSON    radarAS112TimeseriesGroupProtocolResponseEnvelopeJSON `json:"-"`
 }
 
-// radarAs112TimeseriesGroupProtocolResponseEnvelopeJSON contains the JSON metadata
-// for the struct [RadarAs112TimeseriesGroupProtocolResponseEnvelope]
-type radarAs112TimeseriesGroupProtocolResponseEnvelopeJSON struct {
+// radarAS112TimeseriesGroupProtocolResponseEnvelopeJSON contains the JSON metadata
+// for the struct [RadarAS112TimeseriesGroupProtocolResponseEnvelope]
+type radarAS112TimeseriesGroupProtocolResponseEnvelopeJSON struct {
 	Result      apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAs112TimeseriesGroupProtocolResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TimeseriesGroupProtocolResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TimeseriesGroupQueryTypeParams struct {
+type RadarAS112TimeseriesGroupQueryTypeParams struct {
 	// Aggregation interval results should be returned in (for example, in 15 minutes
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval param.Field[RadarAs112TimeseriesGroupQueryTypeParamsAggInterval] `query:"aggInterval"`
+	AggInterval param.Field[RadarAS112TimeseriesGroupQueryTypeParamsAggInterval] `query:"aggInterval"`
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
@@ -760,11 +760,11 @@ type RadarAs112TimeseriesGroupQueryTypeParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]RadarAs112TimeseriesGroupQueryTypeParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]RadarAS112TimeseriesGroupQueryTypeParamsDateRange] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
-	Format param.Field[RadarAs112TimeseriesGroupQueryTypeParamsFormat] `query:"format"`
+	Format param.Field[RadarAS112TimeseriesGroupQueryTypeParamsFormat] `query:"format"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
 	// but includes results from PT.
@@ -773,9 +773,9 @@ type RadarAs112TimeseriesGroupQueryTypeParams struct {
 	Name param.Field[[]string] `query:"name"`
 }
 
-// URLQuery serializes [RadarAs112TimeseriesGroupQueryTypeParams]'s query
+// URLQuery serializes [RadarAS112TimeseriesGroupQueryTypeParams]'s query
 // parameters as `url.Values`.
-func (r RadarAs112TimeseriesGroupQueryTypeParams) URLQuery() (v url.Values) {
+func (r RadarAS112TimeseriesGroupQueryTypeParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
@@ -785,67 +785,67 @@ func (r RadarAs112TimeseriesGroupQueryTypeParams) URLQuery() (v url.Values) {
 // Aggregation interval results should be returned in (for example, in 15 minutes
 // or 1 hour intervals). Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-type RadarAs112TimeseriesGroupQueryTypeParamsAggInterval string
+type RadarAS112TimeseriesGroupQueryTypeParamsAggInterval string
 
 const (
-	RadarAs112TimeseriesGroupQueryTypeParamsAggInterval15m RadarAs112TimeseriesGroupQueryTypeParamsAggInterval = "15m"
-	RadarAs112TimeseriesGroupQueryTypeParamsAggInterval1h  RadarAs112TimeseriesGroupQueryTypeParamsAggInterval = "1h"
-	RadarAs112TimeseriesGroupQueryTypeParamsAggInterval1d  RadarAs112TimeseriesGroupQueryTypeParamsAggInterval = "1d"
-	RadarAs112TimeseriesGroupQueryTypeParamsAggInterval1w  RadarAs112TimeseriesGroupQueryTypeParamsAggInterval = "1w"
+	RadarAS112TimeseriesGroupQueryTypeParamsAggInterval15m RadarAS112TimeseriesGroupQueryTypeParamsAggInterval = "15m"
+	RadarAS112TimeseriesGroupQueryTypeParamsAggInterval1h  RadarAS112TimeseriesGroupQueryTypeParamsAggInterval = "1h"
+	RadarAS112TimeseriesGroupQueryTypeParamsAggInterval1d  RadarAS112TimeseriesGroupQueryTypeParamsAggInterval = "1d"
+	RadarAS112TimeseriesGroupQueryTypeParamsAggInterval1w  RadarAS112TimeseriesGroupQueryTypeParamsAggInterval = "1w"
 )
 
-type RadarAs112TimeseriesGroupQueryTypeParamsDateRange string
+type RadarAS112TimeseriesGroupQueryTypeParamsDateRange string
 
 const (
-	RadarAs112TimeseriesGroupQueryTypeParamsDateRange1d         RadarAs112TimeseriesGroupQueryTypeParamsDateRange = "1d"
-	RadarAs112TimeseriesGroupQueryTypeParamsDateRange2d         RadarAs112TimeseriesGroupQueryTypeParamsDateRange = "2d"
-	RadarAs112TimeseriesGroupQueryTypeParamsDateRange7d         RadarAs112TimeseriesGroupQueryTypeParamsDateRange = "7d"
-	RadarAs112TimeseriesGroupQueryTypeParamsDateRange14d        RadarAs112TimeseriesGroupQueryTypeParamsDateRange = "14d"
-	RadarAs112TimeseriesGroupQueryTypeParamsDateRange28d        RadarAs112TimeseriesGroupQueryTypeParamsDateRange = "28d"
-	RadarAs112TimeseriesGroupQueryTypeParamsDateRange12w        RadarAs112TimeseriesGroupQueryTypeParamsDateRange = "12w"
-	RadarAs112TimeseriesGroupQueryTypeParamsDateRange24w        RadarAs112TimeseriesGroupQueryTypeParamsDateRange = "24w"
-	RadarAs112TimeseriesGroupQueryTypeParamsDateRange52w        RadarAs112TimeseriesGroupQueryTypeParamsDateRange = "52w"
-	RadarAs112TimeseriesGroupQueryTypeParamsDateRange1dControl  RadarAs112TimeseriesGroupQueryTypeParamsDateRange = "1dControl"
-	RadarAs112TimeseriesGroupQueryTypeParamsDateRange2dControl  RadarAs112TimeseriesGroupQueryTypeParamsDateRange = "2dControl"
-	RadarAs112TimeseriesGroupQueryTypeParamsDateRange7dControl  RadarAs112TimeseriesGroupQueryTypeParamsDateRange = "7dControl"
-	RadarAs112TimeseriesGroupQueryTypeParamsDateRange14dControl RadarAs112TimeseriesGroupQueryTypeParamsDateRange = "14dControl"
-	RadarAs112TimeseriesGroupQueryTypeParamsDateRange28dControl RadarAs112TimeseriesGroupQueryTypeParamsDateRange = "28dControl"
-	RadarAs112TimeseriesGroupQueryTypeParamsDateRange12wControl RadarAs112TimeseriesGroupQueryTypeParamsDateRange = "12wControl"
-	RadarAs112TimeseriesGroupQueryTypeParamsDateRange24wControl RadarAs112TimeseriesGroupQueryTypeParamsDateRange = "24wControl"
+	RadarAS112TimeseriesGroupQueryTypeParamsDateRange1d         RadarAS112TimeseriesGroupQueryTypeParamsDateRange = "1d"
+	RadarAS112TimeseriesGroupQueryTypeParamsDateRange2d         RadarAS112TimeseriesGroupQueryTypeParamsDateRange = "2d"
+	RadarAS112TimeseriesGroupQueryTypeParamsDateRange7d         RadarAS112TimeseriesGroupQueryTypeParamsDateRange = "7d"
+	RadarAS112TimeseriesGroupQueryTypeParamsDateRange14d        RadarAS112TimeseriesGroupQueryTypeParamsDateRange = "14d"
+	RadarAS112TimeseriesGroupQueryTypeParamsDateRange28d        RadarAS112TimeseriesGroupQueryTypeParamsDateRange = "28d"
+	RadarAS112TimeseriesGroupQueryTypeParamsDateRange12w        RadarAS112TimeseriesGroupQueryTypeParamsDateRange = "12w"
+	RadarAS112TimeseriesGroupQueryTypeParamsDateRange24w        RadarAS112TimeseriesGroupQueryTypeParamsDateRange = "24w"
+	RadarAS112TimeseriesGroupQueryTypeParamsDateRange52w        RadarAS112TimeseriesGroupQueryTypeParamsDateRange = "52w"
+	RadarAS112TimeseriesGroupQueryTypeParamsDateRange1dControl  RadarAS112TimeseriesGroupQueryTypeParamsDateRange = "1dControl"
+	RadarAS112TimeseriesGroupQueryTypeParamsDateRange2dControl  RadarAS112TimeseriesGroupQueryTypeParamsDateRange = "2dControl"
+	RadarAS112TimeseriesGroupQueryTypeParamsDateRange7dControl  RadarAS112TimeseriesGroupQueryTypeParamsDateRange = "7dControl"
+	RadarAS112TimeseriesGroupQueryTypeParamsDateRange14dControl RadarAS112TimeseriesGroupQueryTypeParamsDateRange = "14dControl"
+	RadarAS112TimeseriesGroupQueryTypeParamsDateRange28dControl RadarAS112TimeseriesGroupQueryTypeParamsDateRange = "28dControl"
+	RadarAS112TimeseriesGroupQueryTypeParamsDateRange12wControl RadarAS112TimeseriesGroupQueryTypeParamsDateRange = "12wControl"
+	RadarAS112TimeseriesGroupQueryTypeParamsDateRange24wControl RadarAS112TimeseriesGroupQueryTypeParamsDateRange = "24wControl"
 )
 
 // Format results are returned in.
-type RadarAs112TimeseriesGroupQueryTypeParamsFormat string
+type RadarAS112TimeseriesGroupQueryTypeParamsFormat string
 
 const (
-	RadarAs112TimeseriesGroupQueryTypeParamsFormatJson RadarAs112TimeseriesGroupQueryTypeParamsFormat = "JSON"
-	RadarAs112TimeseriesGroupQueryTypeParamsFormatCsv  RadarAs112TimeseriesGroupQueryTypeParamsFormat = "CSV"
+	RadarAS112TimeseriesGroupQueryTypeParamsFormatJson RadarAS112TimeseriesGroupQueryTypeParamsFormat = "JSON"
+	RadarAS112TimeseriesGroupQueryTypeParamsFormatCsv  RadarAS112TimeseriesGroupQueryTypeParamsFormat = "CSV"
 )
 
-type RadarAs112TimeseriesGroupQueryTypeResponseEnvelope struct {
-	Result  RadarAs112TimeseriesGroupQueryTypeResponse             `json:"result,required"`
+type RadarAS112TimeseriesGroupQueryTypeResponseEnvelope struct {
+	Result  RadarAS112TimeseriesGroupQueryTypeResponse             `json:"result,required"`
 	Success bool                                                   `json:"success,required"`
-	JSON    radarAs112TimeseriesGroupQueryTypeResponseEnvelopeJSON `json:"-"`
+	JSON    radarAS112TimeseriesGroupQueryTypeResponseEnvelopeJSON `json:"-"`
 }
 
-// radarAs112TimeseriesGroupQueryTypeResponseEnvelopeJSON contains the JSON
-// metadata for the struct [RadarAs112TimeseriesGroupQueryTypeResponseEnvelope]
-type radarAs112TimeseriesGroupQueryTypeResponseEnvelopeJSON struct {
+// radarAS112TimeseriesGroupQueryTypeResponseEnvelopeJSON contains the JSON
+// metadata for the struct [RadarAS112TimeseriesGroupQueryTypeResponseEnvelope]
+type radarAS112TimeseriesGroupQueryTypeResponseEnvelopeJSON struct {
 	Result      apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAs112TimeseriesGroupQueryTypeResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TimeseriesGroupQueryTypeResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TimeseriesGroupResponseCodesParams struct {
+type RadarAS112TimeseriesGroupResponseCodesParams struct {
 	// Aggregation interval results should be returned in (for example, in 15 minutes
 	// or 1 hour intervals). Refer to
 	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-	AggInterval param.Field[RadarAs112TimeseriesGroupResponseCodesParamsAggInterval] `query:"aggInterval"`
+	AggInterval param.Field[RadarAS112TimeseriesGroupResponseCodesParamsAggInterval] `query:"aggInterval"`
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
@@ -859,11 +859,11 @@ type RadarAs112TimeseriesGroupResponseCodesParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]RadarAs112TimeseriesGroupResponseCodesParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]RadarAS112TimeseriesGroupResponseCodesParamsDateRange] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
-	Format param.Field[RadarAs112TimeseriesGroupResponseCodesParamsFormat] `query:"format"`
+	Format param.Field[RadarAS112TimeseriesGroupResponseCodesParamsFormat] `query:"format"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
 	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
 	// but includes results from PT.
@@ -872,9 +872,9 @@ type RadarAs112TimeseriesGroupResponseCodesParams struct {
 	Name param.Field[[]string] `query:"name"`
 }
 
-// URLQuery serializes [RadarAs112TimeseriesGroupResponseCodesParams]'s query
+// URLQuery serializes [RadarAS112TimeseriesGroupResponseCodesParams]'s query
 // parameters as `url.Values`.
-func (r RadarAs112TimeseriesGroupResponseCodesParams) URLQuery() (v url.Values) {
+func (r RadarAS112TimeseriesGroupResponseCodesParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
@@ -884,58 +884,58 @@ func (r RadarAs112TimeseriesGroupResponseCodesParams) URLQuery() (v url.Values) 
 // Aggregation interval results should be returned in (for example, in 15 minutes
 // or 1 hour intervals). Refer to
 // [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
-type RadarAs112TimeseriesGroupResponseCodesParamsAggInterval string
+type RadarAS112TimeseriesGroupResponseCodesParamsAggInterval string
 
 const (
-	RadarAs112TimeseriesGroupResponseCodesParamsAggInterval15m RadarAs112TimeseriesGroupResponseCodesParamsAggInterval = "15m"
-	RadarAs112TimeseriesGroupResponseCodesParamsAggInterval1h  RadarAs112TimeseriesGroupResponseCodesParamsAggInterval = "1h"
-	RadarAs112TimeseriesGroupResponseCodesParamsAggInterval1d  RadarAs112TimeseriesGroupResponseCodesParamsAggInterval = "1d"
-	RadarAs112TimeseriesGroupResponseCodesParamsAggInterval1w  RadarAs112TimeseriesGroupResponseCodesParamsAggInterval = "1w"
+	RadarAS112TimeseriesGroupResponseCodesParamsAggInterval15m RadarAS112TimeseriesGroupResponseCodesParamsAggInterval = "15m"
+	RadarAS112TimeseriesGroupResponseCodesParamsAggInterval1h  RadarAS112TimeseriesGroupResponseCodesParamsAggInterval = "1h"
+	RadarAS112TimeseriesGroupResponseCodesParamsAggInterval1d  RadarAS112TimeseriesGroupResponseCodesParamsAggInterval = "1d"
+	RadarAS112TimeseriesGroupResponseCodesParamsAggInterval1w  RadarAS112TimeseriesGroupResponseCodesParamsAggInterval = "1w"
 )
 
-type RadarAs112TimeseriesGroupResponseCodesParamsDateRange string
+type RadarAS112TimeseriesGroupResponseCodesParamsDateRange string
 
 const (
-	RadarAs112TimeseriesGroupResponseCodesParamsDateRange1d         RadarAs112TimeseriesGroupResponseCodesParamsDateRange = "1d"
-	RadarAs112TimeseriesGroupResponseCodesParamsDateRange2d         RadarAs112TimeseriesGroupResponseCodesParamsDateRange = "2d"
-	RadarAs112TimeseriesGroupResponseCodesParamsDateRange7d         RadarAs112TimeseriesGroupResponseCodesParamsDateRange = "7d"
-	RadarAs112TimeseriesGroupResponseCodesParamsDateRange14d        RadarAs112TimeseriesGroupResponseCodesParamsDateRange = "14d"
-	RadarAs112TimeseriesGroupResponseCodesParamsDateRange28d        RadarAs112TimeseriesGroupResponseCodesParamsDateRange = "28d"
-	RadarAs112TimeseriesGroupResponseCodesParamsDateRange12w        RadarAs112TimeseriesGroupResponseCodesParamsDateRange = "12w"
-	RadarAs112TimeseriesGroupResponseCodesParamsDateRange24w        RadarAs112TimeseriesGroupResponseCodesParamsDateRange = "24w"
-	RadarAs112TimeseriesGroupResponseCodesParamsDateRange52w        RadarAs112TimeseriesGroupResponseCodesParamsDateRange = "52w"
-	RadarAs112TimeseriesGroupResponseCodesParamsDateRange1dControl  RadarAs112TimeseriesGroupResponseCodesParamsDateRange = "1dControl"
-	RadarAs112TimeseriesGroupResponseCodesParamsDateRange2dControl  RadarAs112TimeseriesGroupResponseCodesParamsDateRange = "2dControl"
-	RadarAs112TimeseriesGroupResponseCodesParamsDateRange7dControl  RadarAs112TimeseriesGroupResponseCodesParamsDateRange = "7dControl"
-	RadarAs112TimeseriesGroupResponseCodesParamsDateRange14dControl RadarAs112TimeseriesGroupResponseCodesParamsDateRange = "14dControl"
-	RadarAs112TimeseriesGroupResponseCodesParamsDateRange28dControl RadarAs112TimeseriesGroupResponseCodesParamsDateRange = "28dControl"
-	RadarAs112TimeseriesGroupResponseCodesParamsDateRange12wControl RadarAs112TimeseriesGroupResponseCodesParamsDateRange = "12wControl"
-	RadarAs112TimeseriesGroupResponseCodesParamsDateRange24wControl RadarAs112TimeseriesGroupResponseCodesParamsDateRange = "24wControl"
+	RadarAS112TimeseriesGroupResponseCodesParamsDateRange1d         RadarAS112TimeseriesGroupResponseCodesParamsDateRange = "1d"
+	RadarAS112TimeseriesGroupResponseCodesParamsDateRange2d         RadarAS112TimeseriesGroupResponseCodesParamsDateRange = "2d"
+	RadarAS112TimeseriesGroupResponseCodesParamsDateRange7d         RadarAS112TimeseriesGroupResponseCodesParamsDateRange = "7d"
+	RadarAS112TimeseriesGroupResponseCodesParamsDateRange14d        RadarAS112TimeseriesGroupResponseCodesParamsDateRange = "14d"
+	RadarAS112TimeseriesGroupResponseCodesParamsDateRange28d        RadarAS112TimeseriesGroupResponseCodesParamsDateRange = "28d"
+	RadarAS112TimeseriesGroupResponseCodesParamsDateRange12w        RadarAS112TimeseriesGroupResponseCodesParamsDateRange = "12w"
+	RadarAS112TimeseriesGroupResponseCodesParamsDateRange24w        RadarAS112TimeseriesGroupResponseCodesParamsDateRange = "24w"
+	RadarAS112TimeseriesGroupResponseCodesParamsDateRange52w        RadarAS112TimeseriesGroupResponseCodesParamsDateRange = "52w"
+	RadarAS112TimeseriesGroupResponseCodesParamsDateRange1dControl  RadarAS112TimeseriesGroupResponseCodesParamsDateRange = "1dControl"
+	RadarAS112TimeseriesGroupResponseCodesParamsDateRange2dControl  RadarAS112TimeseriesGroupResponseCodesParamsDateRange = "2dControl"
+	RadarAS112TimeseriesGroupResponseCodesParamsDateRange7dControl  RadarAS112TimeseriesGroupResponseCodesParamsDateRange = "7dControl"
+	RadarAS112TimeseriesGroupResponseCodesParamsDateRange14dControl RadarAS112TimeseriesGroupResponseCodesParamsDateRange = "14dControl"
+	RadarAS112TimeseriesGroupResponseCodesParamsDateRange28dControl RadarAS112TimeseriesGroupResponseCodesParamsDateRange = "28dControl"
+	RadarAS112TimeseriesGroupResponseCodesParamsDateRange12wControl RadarAS112TimeseriesGroupResponseCodesParamsDateRange = "12wControl"
+	RadarAS112TimeseriesGroupResponseCodesParamsDateRange24wControl RadarAS112TimeseriesGroupResponseCodesParamsDateRange = "24wControl"
 )
 
 // Format results are returned in.
-type RadarAs112TimeseriesGroupResponseCodesParamsFormat string
+type RadarAS112TimeseriesGroupResponseCodesParamsFormat string
 
 const (
-	RadarAs112TimeseriesGroupResponseCodesParamsFormatJson RadarAs112TimeseriesGroupResponseCodesParamsFormat = "JSON"
-	RadarAs112TimeseriesGroupResponseCodesParamsFormatCsv  RadarAs112TimeseriesGroupResponseCodesParamsFormat = "CSV"
+	RadarAS112TimeseriesGroupResponseCodesParamsFormatJson RadarAS112TimeseriesGroupResponseCodesParamsFormat = "JSON"
+	RadarAS112TimeseriesGroupResponseCodesParamsFormatCsv  RadarAS112TimeseriesGroupResponseCodesParamsFormat = "CSV"
 )
 
-type RadarAs112TimeseriesGroupResponseCodesResponseEnvelope struct {
-	Result  RadarAs112TimeseriesGroupResponseCodesResponse             `json:"result,required"`
+type RadarAS112TimeseriesGroupResponseCodesResponseEnvelope struct {
+	Result  RadarAS112TimeseriesGroupResponseCodesResponse             `json:"result,required"`
 	Success bool                                                       `json:"success,required"`
-	JSON    radarAs112TimeseriesGroupResponseCodesResponseEnvelopeJSON `json:"-"`
+	JSON    radarAS112TimeseriesGroupResponseCodesResponseEnvelopeJSON `json:"-"`
 }
 
-// radarAs112TimeseriesGroupResponseCodesResponseEnvelopeJSON contains the JSON
-// metadata for the struct [RadarAs112TimeseriesGroupResponseCodesResponseEnvelope]
-type radarAs112TimeseriesGroupResponseCodesResponseEnvelopeJSON struct {
+// radarAS112TimeseriesGroupResponseCodesResponseEnvelopeJSON contains the JSON
+// metadata for the struct [RadarAS112TimeseriesGroupResponseCodesResponseEnvelope]
+type radarAS112TimeseriesGroupResponseCodesResponseEnvelopeJSON struct {
 	Result      apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAs112TimeseriesGroupResponseCodesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TimeseriesGroupResponseCodesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

@@ -16,28 +16,28 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-// RadarAs112TopService contains methods and other services that help with
+// RadarAS112TopService contains methods and other services that help with
 // interacting with the cloudflare API. Note, unlike clients, this service does not
 // read variables from the environment automatically. You should not instantiate
-// this service directly, and instead use the [NewRadarAs112TopService] method
+// this service directly, and instead use the [NewRadarAS112TopService] method
 // instead.
-type RadarAs112TopService struct {
+type RadarAS112TopService struct {
 	Options []option.RequestOption
 }
 
-// NewRadarAs112TopService generates a new service that applies the given options
+// NewRadarAS112TopService generates a new service that applies the given options
 // to each request. These options are applied after the parent client's options (if
 // there is one), and before any request-specific options.
-func NewRadarAs112TopService(opts ...option.RequestOption) (r *RadarAs112TopService) {
-	r = &RadarAs112TopService{}
+func NewRadarAS112TopService(opts ...option.RequestOption) (r *RadarAS112TopService) {
+	r = &RadarAS112TopService{}
 	r.Options = opts
 	return
 }
 
 // Get the top locations by DNS queries DNSSEC support to AS112.
-func (r *RadarAs112TopService) DNSSEC(ctx context.Context, dnssec RadarAs112TopDNSSECParamsDNSSEC, query RadarAs112TopDNSSECParams, opts ...option.RequestOption) (res *RadarAs112TopDNSSECResponse, err error) {
+func (r *RadarAS112TopService) DNSSEC(ctx context.Context, dnssec RadarAS112TopDNSSECParamsDNSSEC, query RadarAS112TopDNSSECParams, opts ...option.RequestOption) (res *RadarAS112TopDNSSECResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env RadarAs112TopDNSSECResponseEnvelope
+	var env RadarAS112TopDNSSECResponseEnvelope
 	path := fmt.Sprintf("radar/as112/top/locations/dnssec/%v", dnssec)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -48,9 +48,9 @@ func (r *RadarAs112TopService) DNSSEC(ctx context.Context, dnssec RadarAs112TopD
 }
 
 // Get the top locations, by DNS queries EDNS support to AS112.
-func (r *RadarAs112TopService) Edns(ctx context.Context, edns RadarAs112TopEdnsParamsEdns, query RadarAs112TopEdnsParams, opts ...option.RequestOption) (res *RadarAs112TopEdnsResponse, err error) {
+func (r *RadarAS112TopService) Edns(ctx context.Context, edns RadarAS112TopEdnsParamsEdns, query RadarAS112TopEdnsParams, opts ...option.RequestOption) (res *RadarAS112TopEdnsResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env RadarAs112TopEdnsResponseEnvelope
+	var env RadarAS112TopEdnsResponseEnvelope
 	path := fmt.Sprintf("radar/as112/top/locations/edns/%v", edns)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -61,9 +61,9 @@ func (r *RadarAs112TopService) Edns(ctx context.Context, edns RadarAs112TopEdnsP
 }
 
 // Get the top locations by DNS queries IP version to AS112.
-func (r *RadarAs112TopService) IPVersion(ctx context.Context, ipVersion RadarAs112TopIPVersionParamsIPVersion, query RadarAs112TopIPVersionParams, opts ...option.RequestOption) (res *RadarAs112TopIPVersionResponse, err error) {
+func (r *RadarAS112TopService) IPVersion(ctx context.Context, ipVersion RadarAS112TopIPVersionParamsIPVersion, query RadarAS112TopIPVersionParams, opts ...option.RequestOption) (res *RadarAS112TopIPVersionResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env RadarAs112TopIPVersionResponseEnvelope
+	var env RadarAS112TopIPVersionResponseEnvelope
 	path := fmt.Sprintf("radar/as112/top/locations/ip_version/%v", ipVersion)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -75,9 +75,9 @@ func (r *RadarAs112TopService) IPVersion(ctx context.Context, ipVersion RadarAs1
 
 // Get the top locations by AS112 DNS queries. Values are a percentage out of the
 // total queries.
-func (r *RadarAs112TopService) Locations(ctx context.Context, query RadarAs112TopLocationsParams, opts ...option.RequestOption) (res *RadarAs112TopLocationsResponse, err error) {
+func (r *RadarAS112TopService) Locations(ctx context.Context, query RadarAS112TopLocationsParams, opts ...option.RequestOption) (res *RadarAS112TopLocationsResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env RadarAs112TopLocationsResponseEnvelope
+	var env RadarAS112TopLocationsResponseEnvelope
 	path := "radar/as112/top/locations"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -87,35 +87,35 @@ func (r *RadarAs112TopService) Locations(ctx context.Context, query RadarAs112To
 	return
 }
 
-type RadarAs112TopDNSSECResponse struct {
-	Meta RadarAs112TopDNSSECResponseMeta   `json:"meta,required"`
-	Top0 []RadarAs112TopDNSSECResponseTop0 `json:"top_0,required"`
-	JSON radarAs112TopDNSSECResponseJSON   `json:"-"`
+type RadarAS112TopDNSSECResponse struct {
+	Meta RadarAS112TopDNSSECResponseMeta   `json:"meta,required"`
+	Top0 []RadarAS112TopDNSSECResponseTop0 `json:"top_0,required"`
+	JSON radarAS112TopDNSSECResponseJSON   `json:"-"`
 }
 
-// radarAs112TopDNSSECResponseJSON contains the JSON metadata for the struct
-// [RadarAs112TopDNSSECResponse]
-type radarAs112TopDNSSECResponseJSON struct {
+// radarAS112TopDNSSECResponseJSON contains the JSON metadata for the struct
+// [RadarAS112TopDNSSECResponse]
+type radarAS112TopDNSSECResponseJSON struct {
 	Meta        apijson.Field
 	Top0        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAs112TopDNSSECResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TopDNSSECResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TopDNSSECResponseMeta struct {
-	DateRange      []RadarAs112TopDNSSECResponseMetaDateRange    `json:"dateRange,required"`
+type RadarAS112TopDNSSECResponseMeta struct {
+	DateRange      []RadarAS112TopDNSSECResponseMetaDateRange    `json:"dateRange,required"`
 	LastUpdated    string                                        `json:"lastUpdated,required"`
-	ConfidenceInfo RadarAs112TopDNSSECResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           radarAs112TopDNSSECResponseMetaJSON           `json:"-"`
+	ConfidenceInfo RadarAS112TopDNSSECResponseMetaConfidenceInfo `json:"confidenceInfo"`
+	JSON           radarAS112TopDNSSECResponseMetaJSON           `json:"-"`
 }
 
-// radarAs112TopDNSSECResponseMetaJSON contains the JSON metadata for the struct
-// [RadarAs112TopDNSSECResponseMeta]
-type radarAs112TopDNSSECResponseMetaJSON struct {
+// radarAS112TopDNSSECResponseMetaJSON contains the JSON metadata for the struct
+// [RadarAS112TopDNSSECResponseMeta]
+type radarAS112TopDNSSECResponseMetaJSON struct {
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
 	ConfidenceInfo apijson.Field
@@ -123,51 +123,51 @@ type radarAs112TopDNSSECResponseMetaJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *RadarAs112TopDNSSECResponseMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TopDNSSECResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TopDNSSECResponseMetaDateRange struct {
+type RadarAS112TopDNSSECResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
 	// Adjusted start of date range.
 	StartTime time.Time                                    `json:"startTime,required" format:"date-time"`
-	JSON      radarAs112TopDNSSECResponseMetaDateRangeJSON `json:"-"`
+	JSON      radarAS112TopDNSSECResponseMetaDateRangeJSON `json:"-"`
 }
 
-// radarAs112TopDNSSECResponseMetaDateRangeJSON contains the JSON metadata for the
-// struct [RadarAs112TopDNSSECResponseMetaDateRange]
-type radarAs112TopDNSSECResponseMetaDateRangeJSON struct {
+// radarAS112TopDNSSECResponseMetaDateRangeJSON contains the JSON metadata for the
+// struct [RadarAS112TopDNSSECResponseMetaDateRange]
+type radarAS112TopDNSSECResponseMetaDateRangeJSON struct {
 	EndTime     apijson.Field
 	StartTime   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAs112TopDNSSECResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TopDNSSECResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TopDNSSECResponseMetaConfidenceInfo struct {
-	Annotations []RadarAs112TopDNSSECResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+type RadarAS112TopDNSSECResponseMetaConfidenceInfo struct {
+	Annotations []RadarAS112TopDNSSECResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                     `json:"level"`
-	JSON        radarAs112TopDNSSECResponseMetaConfidenceInfoJSON         `json:"-"`
+	JSON        radarAS112TopDNSSECResponseMetaConfidenceInfoJSON         `json:"-"`
 }
 
-// radarAs112TopDNSSECResponseMetaConfidenceInfoJSON contains the JSON metadata for
-// the struct [RadarAs112TopDNSSECResponseMetaConfidenceInfo]
-type radarAs112TopDNSSECResponseMetaConfidenceInfoJSON struct {
+// radarAS112TopDNSSECResponseMetaConfidenceInfoJSON contains the JSON metadata for
+// the struct [RadarAS112TopDNSSECResponseMetaConfidenceInfo]
+type radarAS112TopDNSSECResponseMetaConfidenceInfoJSON struct {
 	Annotations apijson.Field
 	Level       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAs112TopDNSSECResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TopDNSSECResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TopDNSSECResponseMetaConfidenceInfoAnnotation struct {
+type RadarAS112TopDNSSECResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                      `json:"dataSource,required"`
 	Description     string                                                      `json:"description,required"`
 	EventType       string                                                      `json:"eventType,required"`
@@ -175,13 +175,13 @@ type RadarAs112TopDNSSECResponseMetaConfidenceInfoAnnotation struct {
 	EndTime         time.Time                                                   `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                      `json:"linkedUrl"`
 	StartTime       time.Time                                                   `json:"startTime" format:"date-time"`
-	JSON            radarAs112TopDNSSECResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+	JSON            radarAS112TopDNSSECResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
-// radarAs112TopDNSSECResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// radarAS112TopDNSSECResponseMetaConfidenceInfoAnnotationJSON contains the JSON
 // metadata for the struct
-// [RadarAs112TopDNSSECResponseMetaConfidenceInfoAnnotation]
-type radarAs112TopDNSSECResponseMetaConfidenceInfoAnnotationJSON struct {
+// [RadarAS112TopDNSSECResponseMetaConfidenceInfoAnnotation]
+type radarAS112TopDNSSECResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
 	EventType       apijson.Field
@@ -193,20 +193,20 @@ type radarAs112TopDNSSECResponseMetaConfidenceInfoAnnotationJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *RadarAs112TopDNSSECResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TopDNSSECResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TopDNSSECResponseTop0 struct {
+type RadarAS112TopDNSSECResponseTop0 struct {
 	ClientCountryAlpha2 string                              `json:"clientCountryAlpha2,required"`
 	ClientCountryName   string                              `json:"clientCountryName,required"`
 	Value               string                              `json:"value,required"`
-	JSON                radarAs112TopDNSSECResponseTop0JSON `json:"-"`
+	JSON                radarAS112TopDNSSECResponseTop0JSON `json:"-"`
 }
 
-// radarAs112TopDNSSECResponseTop0JSON contains the JSON metadata for the struct
-// [RadarAs112TopDNSSECResponseTop0]
-type radarAs112TopDNSSECResponseTop0JSON struct {
+// radarAS112TopDNSSECResponseTop0JSON contains the JSON metadata for the struct
+// [RadarAS112TopDNSSECResponseTop0]
+type radarAS112TopDNSSECResponseTop0JSON struct {
 	ClientCountryAlpha2 apijson.Field
 	ClientCountryName   apijson.Field
 	Value               apijson.Field
@@ -214,39 +214,39 @@ type radarAs112TopDNSSECResponseTop0JSON struct {
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *RadarAs112TopDNSSECResponseTop0) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TopDNSSECResponseTop0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TopEdnsResponse struct {
-	Meta RadarAs112TopEdnsResponseMeta   `json:"meta,required"`
-	Top0 []RadarAs112TopEdnsResponseTop0 `json:"top_0,required"`
-	JSON radarAs112TopEdnsResponseJSON   `json:"-"`
+type RadarAS112TopEdnsResponse struct {
+	Meta RadarAS112TopEdnsResponseMeta   `json:"meta,required"`
+	Top0 []RadarAS112TopEdnsResponseTop0 `json:"top_0,required"`
+	JSON radarAS112TopEdnsResponseJSON   `json:"-"`
 }
 
-// radarAs112TopEdnsResponseJSON contains the JSON metadata for the struct
-// [RadarAs112TopEdnsResponse]
-type radarAs112TopEdnsResponseJSON struct {
+// radarAS112TopEdnsResponseJSON contains the JSON metadata for the struct
+// [RadarAS112TopEdnsResponse]
+type radarAS112TopEdnsResponseJSON struct {
 	Meta        apijson.Field
 	Top0        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAs112TopEdnsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TopEdnsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TopEdnsResponseMeta struct {
-	DateRange      []RadarAs112TopEdnsResponseMetaDateRange    `json:"dateRange,required"`
+type RadarAS112TopEdnsResponseMeta struct {
+	DateRange      []RadarAS112TopEdnsResponseMetaDateRange    `json:"dateRange,required"`
 	LastUpdated    string                                      `json:"lastUpdated,required"`
-	ConfidenceInfo RadarAs112TopEdnsResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           radarAs112TopEdnsResponseMetaJSON           `json:"-"`
+	ConfidenceInfo RadarAS112TopEdnsResponseMetaConfidenceInfo `json:"confidenceInfo"`
+	JSON           radarAS112TopEdnsResponseMetaJSON           `json:"-"`
 }
 
-// radarAs112TopEdnsResponseMetaJSON contains the JSON metadata for the struct
-// [RadarAs112TopEdnsResponseMeta]
-type radarAs112TopEdnsResponseMetaJSON struct {
+// radarAS112TopEdnsResponseMetaJSON contains the JSON metadata for the struct
+// [RadarAS112TopEdnsResponseMeta]
+type radarAS112TopEdnsResponseMetaJSON struct {
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
 	ConfidenceInfo apijson.Field
@@ -254,51 +254,51 @@ type radarAs112TopEdnsResponseMetaJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *RadarAs112TopEdnsResponseMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TopEdnsResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TopEdnsResponseMetaDateRange struct {
+type RadarAS112TopEdnsResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
 	// Adjusted start of date range.
 	StartTime time.Time                                  `json:"startTime,required" format:"date-time"`
-	JSON      radarAs112TopEdnsResponseMetaDateRangeJSON `json:"-"`
+	JSON      radarAS112TopEdnsResponseMetaDateRangeJSON `json:"-"`
 }
 
-// radarAs112TopEdnsResponseMetaDateRangeJSON contains the JSON metadata for the
-// struct [RadarAs112TopEdnsResponseMetaDateRange]
-type radarAs112TopEdnsResponseMetaDateRangeJSON struct {
+// radarAS112TopEdnsResponseMetaDateRangeJSON contains the JSON metadata for the
+// struct [RadarAS112TopEdnsResponseMetaDateRange]
+type radarAS112TopEdnsResponseMetaDateRangeJSON struct {
 	EndTime     apijson.Field
 	StartTime   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAs112TopEdnsResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TopEdnsResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TopEdnsResponseMetaConfidenceInfo struct {
-	Annotations []RadarAs112TopEdnsResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+type RadarAS112TopEdnsResponseMetaConfidenceInfo struct {
+	Annotations []RadarAS112TopEdnsResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                   `json:"level"`
-	JSON        radarAs112TopEdnsResponseMetaConfidenceInfoJSON         `json:"-"`
+	JSON        radarAS112TopEdnsResponseMetaConfidenceInfoJSON         `json:"-"`
 }
 
-// radarAs112TopEdnsResponseMetaConfidenceInfoJSON contains the JSON metadata for
-// the struct [RadarAs112TopEdnsResponseMetaConfidenceInfo]
-type radarAs112TopEdnsResponseMetaConfidenceInfoJSON struct {
+// radarAS112TopEdnsResponseMetaConfidenceInfoJSON contains the JSON metadata for
+// the struct [RadarAS112TopEdnsResponseMetaConfidenceInfo]
+type radarAS112TopEdnsResponseMetaConfidenceInfoJSON struct {
 	Annotations apijson.Field
 	Level       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAs112TopEdnsResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TopEdnsResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TopEdnsResponseMetaConfidenceInfoAnnotation struct {
+type RadarAS112TopEdnsResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                    `json:"dataSource,required"`
 	Description     string                                                    `json:"description,required"`
 	EventType       string                                                    `json:"eventType,required"`
@@ -306,12 +306,12 @@ type RadarAs112TopEdnsResponseMetaConfidenceInfoAnnotation struct {
 	EndTime         time.Time                                                 `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                    `json:"linkedUrl"`
 	StartTime       time.Time                                                 `json:"startTime" format:"date-time"`
-	JSON            radarAs112TopEdnsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+	JSON            radarAS112TopEdnsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
-// radarAs112TopEdnsResponseMetaConfidenceInfoAnnotationJSON contains the JSON
-// metadata for the struct [RadarAs112TopEdnsResponseMetaConfidenceInfoAnnotation]
-type radarAs112TopEdnsResponseMetaConfidenceInfoAnnotationJSON struct {
+// radarAS112TopEdnsResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct [RadarAS112TopEdnsResponseMetaConfidenceInfoAnnotation]
+type radarAS112TopEdnsResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
 	EventType       apijson.Field
@@ -323,20 +323,20 @@ type radarAs112TopEdnsResponseMetaConfidenceInfoAnnotationJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *RadarAs112TopEdnsResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TopEdnsResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TopEdnsResponseTop0 struct {
+type RadarAS112TopEdnsResponseTop0 struct {
 	ClientCountryAlpha2 string                            `json:"clientCountryAlpha2,required"`
 	ClientCountryName   string                            `json:"clientCountryName,required"`
 	Value               string                            `json:"value,required"`
-	JSON                radarAs112TopEdnsResponseTop0JSON `json:"-"`
+	JSON                radarAS112TopEdnsResponseTop0JSON `json:"-"`
 }
 
-// radarAs112TopEdnsResponseTop0JSON contains the JSON metadata for the struct
-// [RadarAs112TopEdnsResponseTop0]
-type radarAs112TopEdnsResponseTop0JSON struct {
+// radarAS112TopEdnsResponseTop0JSON contains the JSON metadata for the struct
+// [RadarAS112TopEdnsResponseTop0]
+type radarAS112TopEdnsResponseTop0JSON struct {
 	ClientCountryAlpha2 apijson.Field
 	ClientCountryName   apijson.Field
 	Value               apijson.Field
@@ -344,39 +344,39 @@ type radarAs112TopEdnsResponseTop0JSON struct {
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *RadarAs112TopEdnsResponseTop0) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TopEdnsResponseTop0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TopIPVersionResponse struct {
-	Meta RadarAs112TopIPVersionResponseMeta   `json:"meta,required"`
-	Top0 []RadarAs112TopIPVersionResponseTop0 `json:"top_0,required"`
-	JSON radarAs112TopIPVersionResponseJSON   `json:"-"`
+type RadarAS112TopIPVersionResponse struct {
+	Meta RadarAS112TopIPVersionResponseMeta   `json:"meta,required"`
+	Top0 []RadarAS112TopIPVersionResponseTop0 `json:"top_0,required"`
+	JSON radarAS112TopIPVersionResponseJSON   `json:"-"`
 }
 
-// radarAs112TopIPVersionResponseJSON contains the JSON metadata for the struct
-// [RadarAs112TopIPVersionResponse]
-type radarAs112TopIPVersionResponseJSON struct {
+// radarAS112TopIPVersionResponseJSON contains the JSON metadata for the struct
+// [RadarAS112TopIPVersionResponse]
+type radarAS112TopIPVersionResponseJSON struct {
 	Meta        apijson.Field
 	Top0        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAs112TopIPVersionResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TopIPVersionResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TopIPVersionResponseMeta struct {
-	DateRange      []RadarAs112TopIPVersionResponseMetaDateRange    `json:"dateRange,required"`
+type RadarAS112TopIPVersionResponseMeta struct {
+	DateRange      []RadarAS112TopIPVersionResponseMetaDateRange    `json:"dateRange,required"`
 	LastUpdated    string                                           `json:"lastUpdated,required"`
-	ConfidenceInfo RadarAs112TopIPVersionResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           radarAs112TopIPVersionResponseMetaJSON           `json:"-"`
+	ConfidenceInfo RadarAS112TopIPVersionResponseMetaConfidenceInfo `json:"confidenceInfo"`
+	JSON           radarAS112TopIPVersionResponseMetaJSON           `json:"-"`
 }
 
-// radarAs112TopIPVersionResponseMetaJSON contains the JSON metadata for the struct
-// [RadarAs112TopIPVersionResponseMeta]
-type radarAs112TopIPVersionResponseMetaJSON struct {
+// radarAS112TopIPVersionResponseMetaJSON contains the JSON metadata for the struct
+// [RadarAS112TopIPVersionResponseMeta]
+type radarAS112TopIPVersionResponseMetaJSON struct {
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
 	ConfidenceInfo apijson.Field
@@ -384,51 +384,51 @@ type radarAs112TopIPVersionResponseMetaJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *RadarAs112TopIPVersionResponseMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TopIPVersionResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TopIPVersionResponseMetaDateRange struct {
+type RadarAS112TopIPVersionResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
 	// Adjusted start of date range.
 	StartTime time.Time                                       `json:"startTime,required" format:"date-time"`
-	JSON      radarAs112TopIPVersionResponseMetaDateRangeJSON `json:"-"`
+	JSON      radarAS112TopIPVersionResponseMetaDateRangeJSON `json:"-"`
 }
 
-// radarAs112TopIPVersionResponseMetaDateRangeJSON contains the JSON metadata for
-// the struct [RadarAs112TopIPVersionResponseMetaDateRange]
-type radarAs112TopIPVersionResponseMetaDateRangeJSON struct {
+// radarAS112TopIPVersionResponseMetaDateRangeJSON contains the JSON metadata for
+// the struct [RadarAS112TopIPVersionResponseMetaDateRange]
+type radarAS112TopIPVersionResponseMetaDateRangeJSON struct {
 	EndTime     apijson.Field
 	StartTime   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAs112TopIPVersionResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TopIPVersionResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TopIPVersionResponseMetaConfidenceInfo struct {
-	Annotations []RadarAs112TopIPVersionResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+type RadarAS112TopIPVersionResponseMetaConfidenceInfo struct {
+	Annotations []RadarAS112TopIPVersionResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                        `json:"level"`
-	JSON        radarAs112TopIPVersionResponseMetaConfidenceInfoJSON         `json:"-"`
+	JSON        radarAS112TopIPVersionResponseMetaConfidenceInfoJSON         `json:"-"`
 }
 
-// radarAs112TopIPVersionResponseMetaConfidenceInfoJSON contains the JSON metadata
-// for the struct [RadarAs112TopIPVersionResponseMetaConfidenceInfo]
-type radarAs112TopIPVersionResponseMetaConfidenceInfoJSON struct {
+// radarAS112TopIPVersionResponseMetaConfidenceInfoJSON contains the JSON metadata
+// for the struct [RadarAS112TopIPVersionResponseMetaConfidenceInfo]
+type radarAS112TopIPVersionResponseMetaConfidenceInfoJSON struct {
 	Annotations apijson.Field
 	Level       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAs112TopIPVersionResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TopIPVersionResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TopIPVersionResponseMetaConfidenceInfoAnnotation struct {
+type RadarAS112TopIPVersionResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                         `json:"dataSource,required"`
 	Description     string                                                         `json:"description,required"`
 	EventType       string                                                         `json:"eventType,required"`
@@ -436,13 +436,13 @@ type RadarAs112TopIPVersionResponseMetaConfidenceInfoAnnotation struct {
 	EndTime         time.Time                                                      `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                         `json:"linkedUrl"`
 	StartTime       time.Time                                                      `json:"startTime" format:"date-time"`
-	JSON            radarAs112TopIPVersionResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+	JSON            radarAS112TopIPVersionResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
-// radarAs112TopIPVersionResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// radarAS112TopIPVersionResponseMetaConfidenceInfoAnnotationJSON contains the JSON
 // metadata for the struct
-// [RadarAs112TopIPVersionResponseMetaConfidenceInfoAnnotation]
-type radarAs112TopIPVersionResponseMetaConfidenceInfoAnnotationJSON struct {
+// [RadarAS112TopIPVersionResponseMetaConfidenceInfoAnnotation]
+type radarAS112TopIPVersionResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
 	EventType       apijson.Field
@@ -454,20 +454,20 @@ type radarAs112TopIPVersionResponseMetaConfidenceInfoAnnotationJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *RadarAs112TopIPVersionResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TopIPVersionResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TopIPVersionResponseTop0 struct {
+type RadarAS112TopIPVersionResponseTop0 struct {
 	ClientCountryAlpha2 string                                 `json:"clientCountryAlpha2,required"`
 	ClientCountryName   string                                 `json:"clientCountryName,required"`
 	Value               string                                 `json:"value,required"`
-	JSON                radarAs112TopIPVersionResponseTop0JSON `json:"-"`
+	JSON                radarAS112TopIPVersionResponseTop0JSON `json:"-"`
 }
 
-// radarAs112TopIPVersionResponseTop0JSON contains the JSON metadata for the struct
-// [RadarAs112TopIPVersionResponseTop0]
-type radarAs112TopIPVersionResponseTop0JSON struct {
+// radarAS112TopIPVersionResponseTop0JSON contains the JSON metadata for the struct
+// [RadarAS112TopIPVersionResponseTop0]
+type radarAS112TopIPVersionResponseTop0JSON struct {
 	ClientCountryAlpha2 apijson.Field
 	ClientCountryName   apijson.Field
 	Value               apijson.Field
@@ -475,39 +475,39 @@ type radarAs112TopIPVersionResponseTop0JSON struct {
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *RadarAs112TopIPVersionResponseTop0) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TopIPVersionResponseTop0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TopLocationsResponse struct {
-	Meta RadarAs112TopLocationsResponseMeta   `json:"meta,required"`
-	Top0 []RadarAs112TopLocationsResponseTop0 `json:"top_0,required"`
-	JSON radarAs112TopLocationsResponseJSON   `json:"-"`
+type RadarAS112TopLocationsResponse struct {
+	Meta RadarAS112TopLocationsResponseMeta   `json:"meta,required"`
+	Top0 []RadarAS112TopLocationsResponseTop0 `json:"top_0,required"`
+	JSON radarAS112TopLocationsResponseJSON   `json:"-"`
 }
 
-// radarAs112TopLocationsResponseJSON contains the JSON metadata for the struct
-// [RadarAs112TopLocationsResponse]
-type radarAs112TopLocationsResponseJSON struct {
+// radarAS112TopLocationsResponseJSON contains the JSON metadata for the struct
+// [RadarAS112TopLocationsResponse]
+type radarAS112TopLocationsResponseJSON struct {
 	Meta        apijson.Field
 	Top0        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAs112TopLocationsResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TopLocationsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TopLocationsResponseMeta struct {
-	DateRange      []RadarAs112TopLocationsResponseMetaDateRange    `json:"dateRange,required"`
+type RadarAS112TopLocationsResponseMeta struct {
+	DateRange      []RadarAS112TopLocationsResponseMetaDateRange    `json:"dateRange,required"`
 	LastUpdated    string                                           `json:"lastUpdated,required"`
-	ConfidenceInfo RadarAs112TopLocationsResponseMetaConfidenceInfo `json:"confidenceInfo"`
-	JSON           radarAs112TopLocationsResponseMetaJSON           `json:"-"`
+	ConfidenceInfo RadarAS112TopLocationsResponseMetaConfidenceInfo `json:"confidenceInfo"`
+	JSON           radarAS112TopLocationsResponseMetaJSON           `json:"-"`
 }
 
-// radarAs112TopLocationsResponseMetaJSON contains the JSON metadata for the struct
-// [RadarAs112TopLocationsResponseMeta]
-type radarAs112TopLocationsResponseMetaJSON struct {
+// radarAS112TopLocationsResponseMetaJSON contains the JSON metadata for the struct
+// [RadarAS112TopLocationsResponseMeta]
+type radarAS112TopLocationsResponseMetaJSON struct {
 	DateRange      apijson.Field
 	LastUpdated    apijson.Field
 	ConfidenceInfo apijson.Field
@@ -515,51 +515,51 @@ type radarAs112TopLocationsResponseMetaJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *RadarAs112TopLocationsResponseMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TopLocationsResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TopLocationsResponseMetaDateRange struct {
+type RadarAS112TopLocationsResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
 	// Adjusted start of date range.
 	StartTime time.Time                                       `json:"startTime,required" format:"date-time"`
-	JSON      radarAs112TopLocationsResponseMetaDateRangeJSON `json:"-"`
+	JSON      radarAS112TopLocationsResponseMetaDateRangeJSON `json:"-"`
 }
 
-// radarAs112TopLocationsResponseMetaDateRangeJSON contains the JSON metadata for
-// the struct [RadarAs112TopLocationsResponseMetaDateRange]
-type radarAs112TopLocationsResponseMetaDateRangeJSON struct {
+// radarAS112TopLocationsResponseMetaDateRangeJSON contains the JSON metadata for
+// the struct [RadarAS112TopLocationsResponseMetaDateRange]
+type radarAS112TopLocationsResponseMetaDateRangeJSON struct {
 	EndTime     apijson.Field
 	StartTime   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAs112TopLocationsResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TopLocationsResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TopLocationsResponseMetaConfidenceInfo struct {
-	Annotations []RadarAs112TopLocationsResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+type RadarAS112TopLocationsResponseMetaConfidenceInfo struct {
+	Annotations []RadarAS112TopLocationsResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                        `json:"level"`
-	JSON        radarAs112TopLocationsResponseMetaConfidenceInfoJSON         `json:"-"`
+	JSON        radarAS112TopLocationsResponseMetaConfidenceInfoJSON         `json:"-"`
 }
 
-// radarAs112TopLocationsResponseMetaConfidenceInfoJSON contains the JSON metadata
-// for the struct [RadarAs112TopLocationsResponseMetaConfidenceInfo]
-type radarAs112TopLocationsResponseMetaConfidenceInfoJSON struct {
+// radarAS112TopLocationsResponseMetaConfidenceInfoJSON contains the JSON metadata
+// for the struct [RadarAS112TopLocationsResponseMetaConfidenceInfo]
+type radarAS112TopLocationsResponseMetaConfidenceInfoJSON struct {
 	Annotations apijson.Field
 	Level       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAs112TopLocationsResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TopLocationsResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TopLocationsResponseMetaConfidenceInfoAnnotation struct {
+type RadarAS112TopLocationsResponseMetaConfidenceInfoAnnotation struct {
 	DataSource      string                                                         `json:"dataSource,required"`
 	Description     string                                                         `json:"description,required"`
 	EventType       string                                                         `json:"eventType,required"`
@@ -567,13 +567,13 @@ type RadarAs112TopLocationsResponseMetaConfidenceInfoAnnotation struct {
 	EndTime         time.Time                                                      `json:"endTime" format:"date-time"`
 	LinkedURL       string                                                         `json:"linkedUrl"`
 	StartTime       time.Time                                                      `json:"startTime" format:"date-time"`
-	JSON            radarAs112TopLocationsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+	JSON            radarAS112TopLocationsResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
 }
 
-// radarAs112TopLocationsResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// radarAS112TopLocationsResponseMetaConfidenceInfoAnnotationJSON contains the JSON
 // metadata for the struct
-// [RadarAs112TopLocationsResponseMetaConfidenceInfoAnnotation]
-type radarAs112TopLocationsResponseMetaConfidenceInfoAnnotationJSON struct {
+// [RadarAS112TopLocationsResponseMetaConfidenceInfoAnnotation]
+type radarAS112TopLocationsResponseMetaConfidenceInfoAnnotationJSON struct {
 	DataSource      apijson.Field
 	Description     apijson.Field
 	EventType       apijson.Field
@@ -585,20 +585,20 @@ type radarAs112TopLocationsResponseMetaConfidenceInfoAnnotationJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *RadarAs112TopLocationsResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TopLocationsResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TopLocationsResponseTop0 struct {
+type RadarAS112TopLocationsResponseTop0 struct {
 	ClientCountryAlpha2 string                                 `json:"clientCountryAlpha2,required"`
 	ClientCountryName   string                                 `json:"clientCountryName,required"`
 	Value               string                                 `json:"value,required"`
-	JSON                radarAs112TopLocationsResponseTop0JSON `json:"-"`
+	JSON                radarAS112TopLocationsResponseTop0JSON `json:"-"`
 }
 
-// radarAs112TopLocationsResponseTop0JSON contains the JSON metadata for the struct
-// [RadarAs112TopLocationsResponseTop0]
-type radarAs112TopLocationsResponseTop0JSON struct {
+// radarAS112TopLocationsResponseTop0JSON contains the JSON metadata for the struct
+// [RadarAS112TopLocationsResponseTop0]
+type radarAS112TopLocationsResponseTop0JSON struct {
 	ClientCountryAlpha2 apijson.Field
 	ClientCountryName   apijson.Field
 	Value               apijson.Field
@@ -606,11 +606,11 @@ type radarAs112TopLocationsResponseTop0JSON struct {
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *RadarAs112TopLocationsResponseTop0) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TopLocationsResponseTop0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TopDNSSECParams struct {
+type RadarAS112TopDNSSECParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
@@ -624,11 +624,11 @@ type RadarAs112TopDNSSECParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]RadarAs112TopDNSSECParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]RadarAS112TopDNSSECParamsDateRange] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
-	Format param.Field[RadarAs112TopDNSSECParamsFormat] `query:"format"`
+	Format param.Field[RadarAS112TopDNSSECParamsFormat] `query:"format"`
 	// Limit the number of objects in the response.
 	Limit param.Field[int64] `query:"limit"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
@@ -639,9 +639,9 @@ type RadarAs112TopDNSSECParams struct {
 	Name param.Field[[]string] `query:"name"`
 }
 
-// URLQuery serializes [RadarAs112TopDNSSECParams]'s query parameters as
+// URLQuery serializes [RadarAS112TopDNSSECParams]'s query parameters as
 // `url.Values`.
-func (r RadarAs112TopDNSSECParams) URLQuery() (v url.Values) {
+func (r RadarAS112TopDNSSECParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
@@ -649,61 +649,61 @@ func (r RadarAs112TopDNSSECParams) URLQuery() (v url.Values) {
 }
 
 // DNSSEC.
-type RadarAs112TopDNSSECParamsDNSSEC string
+type RadarAS112TopDNSSECParamsDNSSEC string
 
 const (
-	RadarAs112TopDNSSECParamsDNSSECSupported    RadarAs112TopDNSSECParamsDNSSEC = "SUPPORTED"
-	RadarAs112TopDNSSECParamsDNSSECNotSupported RadarAs112TopDNSSECParamsDNSSEC = "NOT_SUPPORTED"
+	RadarAS112TopDNSSECParamsDNSSECSupported    RadarAS112TopDNSSECParamsDNSSEC = "SUPPORTED"
+	RadarAS112TopDNSSECParamsDNSSECNotSupported RadarAS112TopDNSSECParamsDNSSEC = "NOT_SUPPORTED"
 )
 
-type RadarAs112TopDNSSECParamsDateRange string
+type RadarAS112TopDNSSECParamsDateRange string
 
 const (
-	RadarAs112TopDNSSECParamsDateRange1d         RadarAs112TopDNSSECParamsDateRange = "1d"
-	RadarAs112TopDNSSECParamsDateRange2d         RadarAs112TopDNSSECParamsDateRange = "2d"
-	RadarAs112TopDNSSECParamsDateRange7d         RadarAs112TopDNSSECParamsDateRange = "7d"
-	RadarAs112TopDNSSECParamsDateRange14d        RadarAs112TopDNSSECParamsDateRange = "14d"
-	RadarAs112TopDNSSECParamsDateRange28d        RadarAs112TopDNSSECParamsDateRange = "28d"
-	RadarAs112TopDNSSECParamsDateRange12w        RadarAs112TopDNSSECParamsDateRange = "12w"
-	RadarAs112TopDNSSECParamsDateRange24w        RadarAs112TopDNSSECParamsDateRange = "24w"
-	RadarAs112TopDNSSECParamsDateRange52w        RadarAs112TopDNSSECParamsDateRange = "52w"
-	RadarAs112TopDNSSECParamsDateRange1dControl  RadarAs112TopDNSSECParamsDateRange = "1dControl"
-	RadarAs112TopDNSSECParamsDateRange2dControl  RadarAs112TopDNSSECParamsDateRange = "2dControl"
-	RadarAs112TopDNSSECParamsDateRange7dControl  RadarAs112TopDNSSECParamsDateRange = "7dControl"
-	RadarAs112TopDNSSECParamsDateRange14dControl RadarAs112TopDNSSECParamsDateRange = "14dControl"
-	RadarAs112TopDNSSECParamsDateRange28dControl RadarAs112TopDNSSECParamsDateRange = "28dControl"
-	RadarAs112TopDNSSECParamsDateRange12wControl RadarAs112TopDNSSECParamsDateRange = "12wControl"
-	RadarAs112TopDNSSECParamsDateRange24wControl RadarAs112TopDNSSECParamsDateRange = "24wControl"
+	RadarAS112TopDNSSECParamsDateRange1d         RadarAS112TopDNSSECParamsDateRange = "1d"
+	RadarAS112TopDNSSECParamsDateRange2d         RadarAS112TopDNSSECParamsDateRange = "2d"
+	RadarAS112TopDNSSECParamsDateRange7d         RadarAS112TopDNSSECParamsDateRange = "7d"
+	RadarAS112TopDNSSECParamsDateRange14d        RadarAS112TopDNSSECParamsDateRange = "14d"
+	RadarAS112TopDNSSECParamsDateRange28d        RadarAS112TopDNSSECParamsDateRange = "28d"
+	RadarAS112TopDNSSECParamsDateRange12w        RadarAS112TopDNSSECParamsDateRange = "12w"
+	RadarAS112TopDNSSECParamsDateRange24w        RadarAS112TopDNSSECParamsDateRange = "24w"
+	RadarAS112TopDNSSECParamsDateRange52w        RadarAS112TopDNSSECParamsDateRange = "52w"
+	RadarAS112TopDNSSECParamsDateRange1dControl  RadarAS112TopDNSSECParamsDateRange = "1dControl"
+	RadarAS112TopDNSSECParamsDateRange2dControl  RadarAS112TopDNSSECParamsDateRange = "2dControl"
+	RadarAS112TopDNSSECParamsDateRange7dControl  RadarAS112TopDNSSECParamsDateRange = "7dControl"
+	RadarAS112TopDNSSECParamsDateRange14dControl RadarAS112TopDNSSECParamsDateRange = "14dControl"
+	RadarAS112TopDNSSECParamsDateRange28dControl RadarAS112TopDNSSECParamsDateRange = "28dControl"
+	RadarAS112TopDNSSECParamsDateRange12wControl RadarAS112TopDNSSECParamsDateRange = "12wControl"
+	RadarAS112TopDNSSECParamsDateRange24wControl RadarAS112TopDNSSECParamsDateRange = "24wControl"
 )
 
 // Format results are returned in.
-type RadarAs112TopDNSSECParamsFormat string
+type RadarAS112TopDNSSECParamsFormat string
 
 const (
-	RadarAs112TopDNSSECParamsFormatJson RadarAs112TopDNSSECParamsFormat = "JSON"
-	RadarAs112TopDNSSECParamsFormatCsv  RadarAs112TopDNSSECParamsFormat = "CSV"
+	RadarAS112TopDNSSECParamsFormatJson RadarAS112TopDNSSECParamsFormat = "JSON"
+	RadarAS112TopDNSSECParamsFormatCsv  RadarAS112TopDNSSECParamsFormat = "CSV"
 )
 
-type RadarAs112TopDNSSECResponseEnvelope struct {
-	Result  RadarAs112TopDNSSECResponse             `json:"result,required"`
+type RadarAS112TopDNSSECResponseEnvelope struct {
+	Result  RadarAS112TopDNSSECResponse             `json:"result,required"`
 	Success bool                                    `json:"success,required"`
-	JSON    radarAs112TopDNSSECResponseEnvelopeJSON `json:"-"`
+	JSON    radarAS112TopDNSSECResponseEnvelopeJSON `json:"-"`
 }
 
-// radarAs112TopDNSSECResponseEnvelopeJSON contains the JSON metadata for the
-// struct [RadarAs112TopDNSSECResponseEnvelope]
-type radarAs112TopDNSSECResponseEnvelopeJSON struct {
+// radarAS112TopDNSSECResponseEnvelopeJSON contains the JSON metadata for the
+// struct [RadarAS112TopDNSSECResponseEnvelope]
+type radarAS112TopDNSSECResponseEnvelopeJSON struct {
 	Result      apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAs112TopDNSSECResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TopDNSSECResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TopEdnsParams struct {
+type RadarAS112TopEdnsParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
@@ -717,11 +717,11 @@ type RadarAs112TopEdnsParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]RadarAs112TopEdnsParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]RadarAS112TopEdnsParamsDateRange] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
-	Format param.Field[RadarAs112TopEdnsParamsFormat] `query:"format"`
+	Format param.Field[RadarAS112TopEdnsParamsFormat] `query:"format"`
 	// Limit the number of objects in the response.
 	Limit param.Field[int64] `query:"limit"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
@@ -732,9 +732,9 @@ type RadarAs112TopEdnsParams struct {
 	Name param.Field[[]string] `query:"name"`
 }
 
-// URLQuery serializes [RadarAs112TopEdnsParams]'s query parameters as
+// URLQuery serializes [RadarAS112TopEdnsParams]'s query parameters as
 // `url.Values`.
-func (r RadarAs112TopEdnsParams) URLQuery() (v url.Values) {
+func (r RadarAS112TopEdnsParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
@@ -742,61 +742,61 @@ func (r RadarAs112TopEdnsParams) URLQuery() (v url.Values) {
 }
 
 // EDNS.
-type RadarAs112TopEdnsParamsEdns string
+type RadarAS112TopEdnsParamsEdns string
 
 const (
-	RadarAs112TopEdnsParamsEdnsSupported    RadarAs112TopEdnsParamsEdns = "SUPPORTED"
-	RadarAs112TopEdnsParamsEdnsNotSupported RadarAs112TopEdnsParamsEdns = "NOT_SUPPORTED"
+	RadarAS112TopEdnsParamsEdnsSupported    RadarAS112TopEdnsParamsEdns = "SUPPORTED"
+	RadarAS112TopEdnsParamsEdnsNotSupported RadarAS112TopEdnsParamsEdns = "NOT_SUPPORTED"
 )
 
-type RadarAs112TopEdnsParamsDateRange string
+type RadarAS112TopEdnsParamsDateRange string
 
 const (
-	RadarAs112TopEdnsParamsDateRange1d         RadarAs112TopEdnsParamsDateRange = "1d"
-	RadarAs112TopEdnsParamsDateRange2d         RadarAs112TopEdnsParamsDateRange = "2d"
-	RadarAs112TopEdnsParamsDateRange7d         RadarAs112TopEdnsParamsDateRange = "7d"
-	RadarAs112TopEdnsParamsDateRange14d        RadarAs112TopEdnsParamsDateRange = "14d"
-	RadarAs112TopEdnsParamsDateRange28d        RadarAs112TopEdnsParamsDateRange = "28d"
-	RadarAs112TopEdnsParamsDateRange12w        RadarAs112TopEdnsParamsDateRange = "12w"
-	RadarAs112TopEdnsParamsDateRange24w        RadarAs112TopEdnsParamsDateRange = "24w"
-	RadarAs112TopEdnsParamsDateRange52w        RadarAs112TopEdnsParamsDateRange = "52w"
-	RadarAs112TopEdnsParamsDateRange1dControl  RadarAs112TopEdnsParamsDateRange = "1dControl"
-	RadarAs112TopEdnsParamsDateRange2dControl  RadarAs112TopEdnsParamsDateRange = "2dControl"
-	RadarAs112TopEdnsParamsDateRange7dControl  RadarAs112TopEdnsParamsDateRange = "7dControl"
-	RadarAs112TopEdnsParamsDateRange14dControl RadarAs112TopEdnsParamsDateRange = "14dControl"
-	RadarAs112TopEdnsParamsDateRange28dControl RadarAs112TopEdnsParamsDateRange = "28dControl"
-	RadarAs112TopEdnsParamsDateRange12wControl RadarAs112TopEdnsParamsDateRange = "12wControl"
-	RadarAs112TopEdnsParamsDateRange24wControl RadarAs112TopEdnsParamsDateRange = "24wControl"
+	RadarAS112TopEdnsParamsDateRange1d         RadarAS112TopEdnsParamsDateRange = "1d"
+	RadarAS112TopEdnsParamsDateRange2d         RadarAS112TopEdnsParamsDateRange = "2d"
+	RadarAS112TopEdnsParamsDateRange7d         RadarAS112TopEdnsParamsDateRange = "7d"
+	RadarAS112TopEdnsParamsDateRange14d        RadarAS112TopEdnsParamsDateRange = "14d"
+	RadarAS112TopEdnsParamsDateRange28d        RadarAS112TopEdnsParamsDateRange = "28d"
+	RadarAS112TopEdnsParamsDateRange12w        RadarAS112TopEdnsParamsDateRange = "12w"
+	RadarAS112TopEdnsParamsDateRange24w        RadarAS112TopEdnsParamsDateRange = "24w"
+	RadarAS112TopEdnsParamsDateRange52w        RadarAS112TopEdnsParamsDateRange = "52w"
+	RadarAS112TopEdnsParamsDateRange1dControl  RadarAS112TopEdnsParamsDateRange = "1dControl"
+	RadarAS112TopEdnsParamsDateRange2dControl  RadarAS112TopEdnsParamsDateRange = "2dControl"
+	RadarAS112TopEdnsParamsDateRange7dControl  RadarAS112TopEdnsParamsDateRange = "7dControl"
+	RadarAS112TopEdnsParamsDateRange14dControl RadarAS112TopEdnsParamsDateRange = "14dControl"
+	RadarAS112TopEdnsParamsDateRange28dControl RadarAS112TopEdnsParamsDateRange = "28dControl"
+	RadarAS112TopEdnsParamsDateRange12wControl RadarAS112TopEdnsParamsDateRange = "12wControl"
+	RadarAS112TopEdnsParamsDateRange24wControl RadarAS112TopEdnsParamsDateRange = "24wControl"
 )
 
 // Format results are returned in.
-type RadarAs112TopEdnsParamsFormat string
+type RadarAS112TopEdnsParamsFormat string
 
 const (
-	RadarAs112TopEdnsParamsFormatJson RadarAs112TopEdnsParamsFormat = "JSON"
-	RadarAs112TopEdnsParamsFormatCsv  RadarAs112TopEdnsParamsFormat = "CSV"
+	RadarAS112TopEdnsParamsFormatJson RadarAS112TopEdnsParamsFormat = "JSON"
+	RadarAS112TopEdnsParamsFormatCsv  RadarAS112TopEdnsParamsFormat = "CSV"
 )
 
-type RadarAs112TopEdnsResponseEnvelope struct {
-	Result  RadarAs112TopEdnsResponse             `json:"result,required"`
+type RadarAS112TopEdnsResponseEnvelope struct {
+	Result  RadarAS112TopEdnsResponse             `json:"result,required"`
 	Success bool                                  `json:"success,required"`
-	JSON    radarAs112TopEdnsResponseEnvelopeJSON `json:"-"`
+	JSON    radarAS112TopEdnsResponseEnvelopeJSON `json:"-"`
 }
 
-// radarAs112TopEdnsResponseEnvelopeJSON contains the JSON metadata for the struct
-// [RadarAs112TopEdnsResponseEnvelope]
-type radarAs112TopEdnsResponseEnvelopeJSON struct {
+// radarAS112TopEdnsResponseEnvelopeJSON contains the JSON metadata for the struct
+// [RadarAS112TopEdnsResponseEnvelope]
+type radarAS112TopEdnsResponseEnvelopeJSON struct {
 	Result      apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAs112TopEdnsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TopEdnsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TopIPVersionParams struct {
+type RadarAS112TopIPVersionParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
@@ -810,11 +810,11 @@ type RadarAs112TopIPVersionParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]RadarAs112TopIPVersionParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]RadarAS112TopIPVersionParamsDateRange] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
-	Format param.Field[RadarAs112TopIPVersionParamsFormat] `query:"format"`
+	Format param.Field[RadarAS112TopIPVersionParamsFormat] `query:"format"`
 	// Limit the number of objects in the response.
 	Limit param.Field[int64] `query:"limit"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
@@ -825,9 +825,9 @@ type RadarAs112TopIPVersionParams struct {
 	Name param.Field[[]string] `query:"name"`
 }
 
-// URLQuery serializes [RadarAs112TopIPVersionParams]'s query parameters as
+// URLQuery serializes [RadarAS112TopIPVersionParams]'s query parameters as
 // `url.Values`.
-func (r RadarAs112TopIPVersionParams) URLQuery() (v url.Values) {
+func (r RadarAS112TopIPVersionParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
@@ -835,61 +835,61 @@ func (r RadarAs112TopIPVersionParams) URLQuery() (v url.Values) {
 }
 
 // IP Version.
-type RadarAs112TopIPVersionParamsIPVersion string
+type RadarAS112TopIPVersionParamsIPVersion string
 
 const (
-	RadarAs112TopIPVersionParamsIPVersionIPv4 RadarAs112TopIPVersionParamsIPVersion = "IPv4"
-	RadarAs112TopIPVersionParamsIPVersionIPv6 RadarAs112TopIPVersionParamsIPVersion = "IPv6"
+	RadarAS112TopIPVersionParamsIPVersionIPv4 RadarAS112TopIPVersionParamsIPVersion = "IPv4"
+	RadarAS112TopIPVersionParamsIPVersionIPv6 RadarAS112TopIPVersionParamsIPVersion = "IPv6"
 )
 
-type RadarAs112TopIPVersionParamsDateRange string
+type RadarAS112TopIPVersionParamsDateRange string
 
 const (
-	RadarAs112TopIPVersionParamsDateRange1d         RadarAs112TopIPVersionParamsDateRange = "1d"
-	RadarAs112TopIPVersionParamsDateRange2d         RadarAs112TopIPVersionParamsDateRange = "2d"
-	RadarAs112TopIPVersionParamsDateRange7d         RadarAs112TopIPVersionParamsDateRange = "7d"
-	RadarAs112TopIPVersionParamsDateRange14d        RadarAs112TopIPVersionParamsDateRange = "14d"
-	RadarAs112TopIPVersionParamsDateRange28d        RadarAs112TopIPVersionParamsDateRange = "28d"
-	RadarAs112TopIPVersionParamsDateRange12w        RadarAs112TopIPVersionParamsDateRange = "12w"
-	RadarAs112TopIPVersionParamsDateRange24w        RadarAs112TopIPVersionParamsDateRange = "24w"
-	RadarAs112TopIPVersionParamsDateRange52w        RadarAs112TopIPVersionParamsDateRange = "52w"
-	RadarAs112TopIPVersionParamsDateRange1dControl  RadarAs112TopIPVersionParamsDateRange = "1dControl"
-	RadarAs112TopIPVersionParamsDateRange2dControl  RadarAs112TopIPVersionParamsDateRange = "2dControl"
-	RadarAs112TopIPVersionParamsDateRange7dControl  RadarAs112TopIPVersionParamsDateRange = "7dControl"
-	RadarAs112TopIPVersionParamsDateRange14dControl RadarAs112TopIPVersionParamsDateRange = "14dControl"
-	RadarAs112TopIPVersionParamsDateRange28dControl RadarAs112TopIPVersionParamsDateRange = "28dControl"
-	RadarAs112TopIPVersionParamsDateRange12wControl RadarAs112TopIPVersionParamsDateRange = "12wControl"
-	RadarAs112TopIPVersionParamsDateRange24wControl RadarAs112TopIPVersionParamsDateRange = "24wControl"
+	RadarAS112TopIPVersionParamsDateRange1d         RadarAS112TopIPVersionParamsDateRange = "1d"
+	RadarAS112TopIPVersionParamsDateRange2d         RadarAS112TopIPVersionParamsDateRange = "2d"
+	RadarAS112TopIPVersionParamsDateRange7d         RadarAS112TopIPVersionParamsDateRange = "7d"
+	RadarAS112TopIPVersionParamsDateRange14d        RadarAS112TopIPVersionParamsDateRange = "14d"
+	RadarAS112TopIPVersionParamsDateRange28d        RadarAS112TopIPVersionParamsDateRange = "28d"
+	RadarAS112TopIPVersionParamsDateRange12w        RadarAS112TopIPVersionParamsDateRange = "12w"
+	RadarAS112TopIPVersionParamsDateRange24w        RadarAS112TopIPVersionParamsDateRange = "24w"
+	RadarAS112TopIPVersionParamsDateRange52w        RadarAS112TopIPVersionParamsDateRange = "52w"
+	RadarAS112TopIPVersionParamsDateRange1dControl  RadarAS112TopIPVersionParamsDateRange = "1dControl"
+	RadarAS112TopIPVersionParamsDateRange2dControl  RadarAS112TopIPVersionParamsDateRange = "2dControl"
+	RadarAS112TopIPVersionParamsDateRange7dControl  RadarAS112TopIPVersionParamsDateRange = "7dControl"
+	RadarAS112TopIPVersionParamsDateRange14dControl RadarAS112TopIPVersionParamsDateRange = "14dControl"
+	RadarAS112TopIPVersionParamsDateRange28dControl RadarAS112TopIPVersionParamsDateRange = "28dControl"
+	RadarAS112TopIPVersionParamsDateRange12wControl RadarAS112TopIPVersionParamsDateRange = "12wControl"
+	RadarAS112TopIPVersionParamsDateRange24wControl RadarAS112TopIPVersionParamsDateRange = "24wControl"
 )
 
 // Format results are returned in.
-type RadarAs112TopIPVersionParamsFormat string
+type RadarAS112TopIPVersionParamsFormat string
 
 const (
-	RadarAs112TopIPVersionParamsFormatJson RadarAs112TopIPVersionParamsFormat = "JSON"
-	RadarAs112TopIPVersionParamsFormatCsv  RadarAs112TopIPVersionParamsFormat = "CSV"
+	RadarAS112TopIPVersionParamsFormatJson RadarAS112TopIPVersionParamsFormat = "JSON"
+	RadarAS112TopIPVersionParamsFormatCsv  RadarAS112TopIPVersionParamsFormat = "CSV"
 )
 
-type RadarAs112TopIPVersionResponseEnvelope struct {
-	Result  RadarAs112TopIPVersionResponse             `json:"result,required"`
+type RadarAS112TopIPVersionResponseEnvelope struct {
+	Result  RadarAS112TopIPVersionResponse             `json:"result,required"`
 	Success bool                                       `json:"success,required"`
-	JSON    radarAs112TopIPVersionResponseEnvelopeJSON `json:"-"`
+	JSON    radarAS112TopIPVersionResponseEnvelopeJSON `json:"-"`
 }
 
-// radarAs112TopIPVersionResponseEnvelopeJSON contains the JSON metadata for the
-// struct [RadarAs112TopIPVersionResponseEnvelope]
-type radarAs112TopIPVersionResponseEnvelopeJSON struct {
+// radarAS112TopIPVersionResponseEnvelopeJSON contains the JSON metadata for the
+// struct [RadarAS112TopIPVersionResponseEnvelope]
+type radarAS112TopIPVersionResponseEnvelopeJSON struct {
 	Result      apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAs112TopIPVersionResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TopIPVersionResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RadarAs112TopLocationsParams struct {
+type RadarAS112TopLocationsParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
 	// AS3356.
@@ -903,11 +903,11 @@ type RadarAs112TopLocationsParams struct {
 	// For example, use `7d` and `7dControl` to compare this week with the previous
 	// week. Use this parameter or set specific start and end dates (`dateStart` and
 	// `dateEnd` parameters).
-	DateRange param.Field[[]RadarAs112TopLocationsParamsDateRange] `query:"dateRange"`
+	DateRange param.Field[[]RadarAS112TopLocationsParamsDateRange] `query:"dateRange"`
 	// Array of datetimes to filter the start of a series.
 	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
 	// Format results are returned in.
-	Format param.Field[RadarAs112TopLocationsParamsFormat] `query:"format"`
+	Format param.Field[RadarAS112TopLocationsParamsFormat] `query:"format"`
 	// Limit the number of objects in the response.
 	Limit param.Field[int64] `query:"limit"`
 	// Array of comma separated list of locations (alpha-2 country codes). Start with
@@ -918,58 +918,58 @@ type RadarAs112TopLocationsParams struct {
 	Name param.Field[[]string] `query:"name"`
 }
 
-// URLQuery serializes [RadarAs112TopLocationsParams]'s query parameters as
+// URLQuery serializes [RadarAS112TopLocationsParams]'s query parameters as
 // `url.Values`.
-func (r RadarAs112TopLocationsParams) URLQuery() (v url.Values) {
+func (r RadarAS112TopLocationsParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
 
-type RadarAs112TopLocationsParamsDateRange string
+type RadarAS112TopLocationsParamsDateRange string
 
 const (
-	RadarAs112TopLocationsParamsDateRange1d         RadarAs112TopLocationsParamsDateRange = "1d"
-	RadarAs112TopLocationsParamsDateRange2d         RadarAs112TopLocationsParamsDateRange = "2d"
-	RadarAs112TopLocationsParamsDateRange7d         RadarAs112TopLocationsParamsDateRange = "7d"
-	RadarAs112TopLocationsParamsDateRange14d        RadarAs112TopLocationsParamsDateRange = "14d"
-	RadarAs112TopLocationsParamsDateRange28d        RadarAs112TopLocationsParamsDateRange = "28d"
-	RadarAs112TopLocationsParamsDateRange12w        RadarAs112TopLocationsParamsDateRange = "12w"
-	RadarAs112TopLocationsParamsDateRange24w        RadarAs112TopLocationsParamsDateRange = "24w"
-	RadarAs112TopLocationsParamsDateRange52w        RadarAs112TopLocationsParamsDateRange = "52w"
-	RadarAs112TopLocationsParamsDateRange1dControl  RadarAs112TopLocationsParamsDateRange = "1dControl"
-	RadarAs112TopLocationsParamsDateRange2dControl  RadarAs112TopLocationsParamsDateRange = "2dControl"
-	RadarAs112TopLocationsParamsDateRange7dControl  RadarAs112TopLocationsParamsDateRange = "7dControl"
-	RadarAs112TopLocationsParamsDateRange14dControl RadarAs112TopLocationsParamsDateRange = "14dControl"
-	RadarAs112TopLocationsParamsDateRange28dControl RadarAs112TopLocationsParamsDateRange = "28dControl"
-	RadarAs112TopLocationsParamsDateRange12wControl RadarAs112TopLocationsParamsDateRange = "12wControl"
-	RadarAs112TopLocationsParamsDateRange24wControl RadarAs112TopLocationsParamsDateRange = "24wControl"
+	RadarAS112TopLocationsParamsDateRange1d         RadarAS112TopLocationsParamsDateRange = "1d"
+	RadarAS112TopLocationsParamsDateRange2d         RadarAS112TopLocationsParamsDateRange = "2d"
+	RadarAS112TopLocationsParamsDateRange7d         RadarAS112TopLocationsParamsDateRange = "7d"
+	RadarAS112TopLocationsParamsDateRange14d        RadarAS112TopLocationsParamsDateRange = "14d"
+	RadarAS112TopLocationsParamsDateRange28d        RadarAS112TopLocationsParamsDateRange = "28d"
+	RadarAS112TopLocationsParamsDateRange12w        RadarAS112TopLocationsParamsDateRange = "12w"
+	RadarAS112TopLocationsParamsDateRange24w        RadarAS112TopLocationsParamsDateRange = "24w"
+	RadarAS112TopLocationsParamsDateRange52w        RadarAS112TopLocationsParamsDateRange = "52w"
+	RadarAS112TopLocationsParamsDateRange1dControl  RadarAS112TopLocationsParamsDateRange = "1dControl"
+	RadarAS112TopLocationsParamsDateRange2dControl  RadarAS112TopLocationsParamsDateRange = "2dControl"
+	RadarAS112TopLocationsParamsDateRange7dControl  RadarAS112TopLocationsParamsDateRange = "7dControl"
+	RadarAS112TopLocationsParamsDateRange14dControl RadarAS112TopLocationsParamsDateRange = "14dControl"
+	RadarAS112TopLocationsParamsDateRange28dControl RadarAS112TopLocationsParamsDateRange = "28dControl"
+	RadarAS112TopLocationsParamsDateRange12wControl RadarAS112TopLocationsParamsDateRange = "12wControl"
+	RadarAS112TopLocationsParamsDateRange24wControl RadarAS112TopLocationsParamsDateRange = "24wControl"
 )
 
 // Format results are returned in.
-type RadarAs112TopLocationsParamsFormat string
+type RadarAS112TopLocationsParamsFormat string
 
 const (
-	RadarAs112TopLocationsParamsFormatJson RadarAs112TopLocationsParamsFormat = "JSON"
-	RadarAs112TopLocationsParamsFormatCsv  RadarAs112TopLocationsParamsFormat = "CSV"
+	RadarAS112TopLocationsParamsFormatJson RadarAS112TopLocationsParamsFormat = "JSON"
+	RadarAS112TopLocationsParamsFormatCsv  RadarAS112TopLocationsParamsFormat = "CSV"
 )
 
-type RadarAs112TopLocationsResponseEnvelope struct {
-	Result  RadarAs112TopLocationsResponse             `json:"result,required"`
+type RadarAS112TopLocationsResponseEnvelope struct {
+	Result  RadarAS112TopLocationsResponse             `json:"result,required"`
 	Success bool                                       `json:"success,required"`
-	JSON    radarAs112TopLocationsResponseEnvelopeJSON `json:"-"`
+	JSON    radarAS112TopLocationsResponseEnvelopeJSON `json:"-"`
 }
 
-// radarAs112TopLocationsResponseEnvelopeJSON contains the JSON metadata for the
-// struct [RadarAs112TopLocationsResponseEnvelope]
-type radarAs112TopLocationsResponseEnvelopeJSON struct {
+// radarAS112TopLocationsResponseEnvelopeJSON contains the JSON metadata for the
+// struct [RadarAS112TopLocationsResponseEnvelope]
+type radarAS112TopLocationsResponseEnvelopeJSON struct {
 	Result      apijson.Field
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RadarAs112TopLocationsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *RadarAS112TopLocationsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

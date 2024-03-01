@@ -28,6 +28,7 @@ type ZoneService struct {
 	CustomNameservers *ZoneCustomNameserverService
 	Holds             *ZoneHoldService
 	Workers           *ZoneWorkerService
+	Subscriptions     *ZoneSubscriptionService
 }
 
 // NewZoneService generates a new service that applies the given options to each
@@ -41,6 +42,7 @@ func NewZoneService(opts ...option.RequestOption) (r *ZoneService) {
 	r.CustomNameservers = NewZoneCustomNameserverService(opts...)
 	r.Holds = NewZoneHoldService(opts...)
 	r.Workers = NewZoneWorkerService(opts...)
+	r.Subscriptions = NewZoneSubscriptionService(opts...)
 	return
 }
 

@@ -15,7 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestWorkerDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
+func TestWorkersForPlatformDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -31,15 +31,15 @@ func TestWorkerDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Workers.Dispatch.Namespaces.Scripts.Update(
+	_, err := client.WorkersForPlatforms.Dispatch.Namespaces.Scripts.Update(
 		context.TODO(),
 		"my-dispatch-namespace",
 		"this-is_my_script-01",
-		cloudflare.WorkerDispatchNamespaceScriptUpdateParams{
+		cloudflare.WorkersForPlatformDispatchNamespaceScriptUpdateParams{
 			AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			AnyPartName: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
 			Message:     cloudflare.F("string"),
-			Metadata: cloudflare.F(cloudflare.WorkerDispatchNamespaceScriptUpdateParamsMetadata{
+			Metadata: cloudflare.F(cloudflare.WorkersForPlatformDispatchNamespaceScriptUpdateParamsMetadata{
 				Bindings:           cloudflare.F([]interface{}{map[string]interface{}{}, map[string]interface{}{}, map[string]interface{}{}}),
 				BodyPart:           cloudflare.F("worker.js"),
 				CompatibilityDate:  cloudflare.F("2023-07-25"),
@@ -47,12 +47,12 @@ func TestWorkerDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 				KeepBindings:       cloudflare.F([]string{"string", "string", "string"}),
 				Logpush:            cloudflare.F(false),
 				MainModule:         cloudflare.F("worker.js"),
-				Migrations: cloudflare.F[cloudflare.WorkerDispatchNamespaceScriptUpdateParamsMetadataMigrations](cloudflare.WorkerDispatchNamespaceScriptUpdateParamsMetadataMigrationsWorkersSingleStepMigrations(cloudflare.WorkerDispatchNamespaceScriptUpdateParamsMetadataMigrationsWorkersSingleStepMigrations{
+				Migrations: cloudflare.F[cloudflare.WorkersForPlatformDispatchNamespaceScriptUpdateParamsMetadataMigrations](cloudflare.WorkersForPlatformDispatchNamespaceScriptUpdateParamsMetadataMigrationsWorkersSingleStepMigrations(cloudflare.WorkersForPlatformDispatchNamespaceScriptUpdateParamsMetadataMigrationsWorkersSingleStepMigrations{
 					NewTag:         cloudflare.F("v2"),
 					OldTag:         cloudflare.F("v1"),
 					DeletedClasses: cloudflare.F([]string{"string", "string", "string"}),
 					NewClasses:     cloudflare.F([]string{"string", "string", "string"}),
-					RenamedClasses: cloudflare.F([]cloudflare.WorkerDispatchNamespaceScriptUpdateParamsMetadataMigrationsWorkersSingleStepMigrationsRenamedClass{{
+					RenamedClasses: cloudflare.F([]cloudflare.WorkersForPlatformDispatchNamespaceScriptUpdateParamsMetadataMigrationsWorkersSingleStepMigrationsRenamedClass{{
 						From: cloudflare.F("string"),
 						To:   cloudflare.F("string"),
 					}, {
@@ -62,7 +62,7 @@ func TestWorkerDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 						From: cloudflare.F("string"),
 						To:   cloudflare.F("string"),
 					}}),
-					TransferredClasses: cloudflare.F([]cloudflare.WorkerDispatchNamespaceScriptUpdateParamsMetadataMigrationsWorkersSingleStepMigrationsTransferredClass{{
+					TransferredClasses: cloudflare.F([]cloudflare.WorkersForPlatformDispatchNamespaceScriptUpdateParamsMetadataMigrationsWorkersSingleStepMigrationsTransferredClass{{
 						From:       cloudflare.F("string"),
 						FromScript: cloudflare.F("string"),
 						To:         cloudflare.F("string"),
@@ -76,11 +76,11 @@ func TestWorkerDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 						To:         cloudflare.F("string"),
 					}}),
 				})),
-				Placement: cloudflare.F(cloudflare.WorkerDispatchNamespaceScriptUpdateParamsMetadataPlacement{
-					Mode: cloudflare.F(cloudflare.WorkerDispatchNamespaceScriptUpdateParamsMetadataPlacementModeSmart),
+				Placement: cloudflare.F(cloudflare.WorkersForPlatformDispatchNamespaceScriptUpdateParamsMetadataPlacement{
+					Mode: cloudflare.F(cloudflare.WorkersForPlatformDispatchNamespaceScriptUpdateParamsMetadataPlacementModeSmart),
 				}),
 				Tags: cloudflare.F([]string{"string", "string", "string"}),
-				TailConsumers: cloudflare.F([]cloudflare.WorkerDispatchNamespaceScriptUpdateParamsMetadataTailConsumer{{
+				TailConsumers: cloudflare.F([]cloudflare.WorkersForPlatformDispatchNamespaceScriptUpdateParamsMetadataTailConsumer{{
 					Environment: cloudflare.F("production"),
 					Namespace:   cloudflare.F("my-namespace"),
 					Service:     cloudflare.F("my-log-consumer"),
@@ -93,7 +93,7 @@ func TestWorkerDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 					Namespace:   cloudflare.F("my-namespace"),
 					Service:     cloudflare.F("my-log-consumer"),
 				}}),
-				UsageModel:  cloudflare.F(cloudflare.WorkerDispatchNamespaceScriptUpdateParamsMetadataUsageModelBundled),
+				UsageModel:  cloudflare.F(cloudflare.WorkersForPlatformDispatchNamespaceScriptUpdateParamsMetadataUsageModelBundled),
 				VersionTags: cloudflare.F[any](map[string]interface{}{}),
 			}),
 		},
@@ -107,7 +107,7 @@ func TestWorkerDispatchNamespaceScriptUpdateWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestWorkerDispatchNamespaceScriptDeleteWithOptionalParams(t *testing.T) {
+func TestWorkersForPlatformDispatchNamespaceScriptDeleteWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -123,11 +123,11 @@ func TestWorkerDispatchNamespaceScriptDeleteWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	err := client.Workers.Dispatch.Namespaces.Scripts.Delete(
+	err := client.WorkersForPlatforms.Dispatch.Namespaces.Scripts.Delete(
 		context.TODO(),
 		"my-dispatch-namespace",
 		"this-is_my_script-01",
-		cloudflare.WorkerDispatchNamespaceScriptDeleteParams{
+		cloudflare.WorkersForPlatformDispatchNamespaceScriptDeleteParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Force:     cloudflare.F(true),
 		},
@@ -141,7 +141,7 @@ func TestWorkerDispatchNamespaceScriptDeleteWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestWorkerDispatchNamespaceScriptGet(t *testing.T) {
+func TestWorkersForPlatformDispatchNamespaceScriptGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -157,11 +157,11 @@ func TestWorkerDispatchNamespaceScriptGet(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Workers.Dispatch.Namespaces.Scripts.Get(
+	_, err := client.WorkersForPlatforms.Dispatch.Namespaces.Scripts.Get(
 		context.TODO(),
 		"my-dispatch-namespace",
 		"this-is_my_script-01",
-		cloudflare.WorkerDispatchNamespaceScriptGetParams{
+		cloudflare.WorkersForPlatformDispatchNamespaceScriptGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)

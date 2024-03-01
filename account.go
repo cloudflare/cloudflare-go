@@ -25,6 +25,7 @@ import (
 type AccountService struct {
 	Options []option.RequestOption
 	Members *AccountMemberService
+	Roles   *AccountRoleService
 }
 
 // NewAccountService generates a new service that applies the given options to each
@@ -34,6 +35,7 @@ func NewAccountService(opts ...option.RequestOption) (r *AccountService) {
 	r = &AccountService{}
 	r.Options = opts
 	r.Members = NewAccountMemberService(opts...)
+	r.Roles = NewAccountRoleService(opts...)
 	return
 }
 

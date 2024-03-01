@@ -12,6 +12,9 @@ import (
 // service directly, and instead use the [NewZeroTrustService] method instead.
 type ZeroTrustService struct {
 	Options              []option.RequestOption
+	IdentityProviders    *ZeroTrustIdentityProviderService
+	Organizations        *ZeroTrustOrganizationService
+	Seats                *ZeroTrustSeatService
 	Access               *ZeroTrustAccessService
 	DEX                  *ZeroTrustDEXService
 	Tunnels              *ZeroTrustTunnelService
@@ -27,6 +30,9 @@ type ZeroTrustService struct {
 func NewZeroTrustService(opts ...option.RequestOption) (r *ZeroTrustService) {
 	r = &ZeroTrustService{}
 	r.Options = opts
+	r.IdentityProviders = NewZeroTrustIdentityProviderService(opts...)
+	r.Organizations = NewZeroTrustOrganizationService(opts...)
+	r.Seats = NewZeroTrustSeatService(opts...)
 	r.Access = NewZeroTrustAccessService(opts...)
 	r.DEX = NewZeroTrustDEXService(opts...)
 	r.Tunnels = NewZeroTrustTunnelService(opts...)

@@ -21,9 +21,9 @@ import (
 // variables from the environment automatically. You should not instantiate this
 // service directly, and instead use the [NewSnippetService] method instead.
 type SnippetService struct {
-	Options      []option.RequestOption
-	Content      *SnippetContentService
-	SnippetRules *SnippetSnippetRuleService
+	Options []option.RequestOption
+	Content *SnippetContentService
+	Rules   *SnippetRuleService
 }
 
 // NewSnippetService generates a new service that applies the given options to each
@@ -33,7 +33,7 @@ func NewSnippetService(opts ...option.RequestOption) (r *SnippetService) {
 	r = &SnippetService{}
 	r.Options = opts
 	r.Content = NewSnippetContentService(opts...)
-	r.SnippetRules = NewSnippetSnippetRuleService(opts...)
+	r.Rules = NewSnippetRuleService(opts...)
 	return
 }
 

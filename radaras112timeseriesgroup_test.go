@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestRadarAs112TimeseriesGroupDNSSECWithOptionalParams(t *testing.T) {
+func TestRadarAS112TimeseriesGroupDNSSECWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -30,14 +30,14 @@ func TestRadarAs112TimeseriesGroupDNSSECWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Radar.As112.TimeseriesGroups.DNSSEC(context.TODO(), cloudflare.RadarAs112TimeseriesGroupDNSSECParams{
-		AggInterval: cloudflare.F(cloudflare.RadarAs112TimeseriesGroupDNSSECParamsAggInterval1h),
+	_, err := client.Radar.AS112.TimeseriesGroups.DNSSEC(context.TODO(), cloudflare.RadarAS112TimeseriesGroupDNSSECParams{
+		AggInterval: cloudflare.F(cloudflare.RadarAS112TimeseriesGroupDNSSECParamsAggInterval1h),
 		ASN:         cloudflare.F([]string{"string", "string", "string"}),
 		Continent:   cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:   cloudflare.F([]cloudflare.RadarAs112TimeseriesGroupDNSSECParamsDateRange{cloudflare.RadarAs112TimeseriesGroupDNSSECParamsDateRange1d, cloudflare.RadarAs112TimeseriesGroupDNSSECParamsDateRange2d, cloudflare.RadarAs112TimeseriesGroupDNSSECParamsDateRange7d}),
+		DateRange:   cloudflare.F([]cloudflare.RadarAS112TimeseriesGroupDNSSECParamsDateRange{cloudflare.RadarAS112TimeseriesGroupDNSSECParamsDateRange1d, cloudflare.RadarAS112TimeseriesGroupDNSSECParamsDateRange2d, cloudflare.RadarAS112TimeseriesGroupDNSSECParamsDateRange7d}),
 		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		Format:      cloudflare.F(cloudflare.RadarAs112TimeseriesGroupDNSSECParamsFormatJson),
+		Format:      cloudflare.F(cloudflare.RadarAS112TimeseriesGroupDNSSECParamsFormatJson),
 		Location:    cloudflare.F([]string{"string", "string", "string"}),
 		Name:        cloudflare.F([]string{"string", "string", "string"}),
 	})
@@ -50,7 +50,7 @@ func TestRadarAs112TimeseriesGroupDNSSECWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestRadarAs112TimeseriesGroupEdnsWithOptionalParams(t *testing.T) {
+func TestRadarAS112TimeseriesGroupEdnsWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -66,14 +66,14 @@ func TestRadarAs112TimeseriesGroupEdnsWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Radar.As112.TimeseriesGroups.Edns(context.TODO(), cloudflare.RadarAs112TimeseriesGroupEdnsParams{
-		AggInterval: cloudflare.F(cloudflare.RadarAs112TimeseriesGroupEdnsParamsAggInterval1h),
+	_, err := client.Radar.AS112.TimeseriesGroups.Edns(context.TODO(), cloudflare.RadarAS112TimeseriesGroupEdnsParams{
+		AggInterval: cloudflare.F(cloudflare.RadarAS112TimeseriesGroupEdnsParamsAggInterval1h),
 		ASN:         cloudflare.F([]string{"string", "string", "string"}),
 		Continent:   cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:   cloudflare.F([]cloudflare.RadarAs112TimeseriesGroupEdnsParamsDateRange{cloudflare.RadarAs112TimeseriesGroupEdnsParamsDateRange1d, cloudflare.RadarAs112TimeseriesGroupEdnsParamsDateRange2d, cloudflare.RadarAs112TimeseriesGroupEdnsParamsDateRange7d}),
+		DateRange:   cloudflare.F([]cloudflare.RadarAS112TimeseriesGroupEdnsParamsDateRange{cloudflare.RadarAS112TimeseriesGroupEdnsParamsDateRange1d, cloudflare.RadarAS112TimeseriesGroupEdnsParamsDateRange2d, cloudflare.RadarAS112TimeseriesGroupEdnsParamsDateRange7d}),
 		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		Format:      cloudflare.F(cloudflare.RadarAs112TimeseriesGroupEdnsParamsFormatJson),
+		Format:      cloudflare.F(cloudflare.RadarAS112TimeseriesGroupEdnsParamsFormatJson),
 		Location:    cloudflare.F([]string{"string", "string", "string"}),
 		Name:        cloudflare.F([]string{"string", "string", "string"}),
 	})
@@ -86,7 +86,7 @@ func TestRadarAs112TimeseriesGroupEdnsWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestRadarAs112TimeseriesGroupIPVersionWithOptionalParams(t *testing.T) {
+func TestRadarAS112TimeseriesGroupIPVersionWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -102,14 +102,14 @@ func TestRadarAs112TimeseriesGroupIPVersionWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Radar.As112.TimeseriesGroups.IPVersion(context.TODO(), cloudflare.RadarAs112TimeseriesGroupIPVersionParams{
-		AggInterval: cloudflare.F(cloudflare.RadarAs112TimeseriesGroupIPVersionParamsAggInterval1h),
+	_, err := client.Radar.AS112.TimeseriesGroups.IPVersion(context.TODO(), cloudflare.RadarAS112TimeseriesGroupIPVersionParams{
+		AggInterval: cloudflare.F(cloudflare.RadarAS112TimeseriesGroupIPVersionParamsAggInterval1h),
 		ASN:         cloudflare.F([]string{"string", "string", "string"}),
 		Continent:   cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:   cloudflare.F([]cloudflare.RadarAs112TimeseriesGroupIPVersionParamsDateRange{cloudflare.RadarAs112TimeseriesGroupIPVersionParamsDateRange1d, cloudflare.RadarAs112TimeseriesGroupIPVersionParamsDateRange2d, cloudflare.RadarAs112TimeseriesGroupIPVersionParamsDateRange7d}),
+		DateRange:   cloudflare.F([]cloudflare.RadarAS112TimeseriesGroupIPVersionParamsDateRange{cloudflare.RadarAS112TimeseriesGroupIPVersionParamsDateRange1d, cloudflare.RadarAS112TimeseriesGroupIPVersionParamsDateRange2d, cloudflare.RadarAS112TimeseriesGroupIPVersionParamsDateRange7d}),
 		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		Format:      cloudflare.F(cloudflare.RadarAs112TimeseriesGroupIPVersionParamsFormatJson),
+		Format:      cloudflare.F(cloudflare.RadarAS112TimeseriesGroupIPVersionParamsFormatJson),
 		Location:    cloudflare.F([]string{"string", "string", "string"}),
 		Name:        cloudflare.F([]string{"string", "string", "string"}),
 	})
@@ -122,7 +122,7 @@ func TestRadarAs112TimeseriesGroupIPVersionWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestRadarAs112TimeseriesGroupProtocolWithOptionalParams(t *testing.T) {
+func TestRadarAS112TimeseriesGroupProtocolWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -138,14 +138,14 @@ func TestRadarAs112TimeseriesGroupProtocolWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Radar.As112.TimeseriesGroups.Protocol(context.TODO(), cloudflare.RadarAs112TimeseriesGroupProtocolParams{
-		AggInterval: cloudflare.F(cloudflare.RadarAs112TimeseriesGroupProtocolParamsAggInterval1h),
+	_, err := client.Radar.AS112.TimeseriesGroups.Protocol(context.TODO(), cloudflare.RadarAS112TimeseriesGroupProtocolParams{
+		AggInterval: cloudflare.F(cloudflare.RadarAS112TimeseriesGroupProtocolParamsAggInterval1h),
 		ASN:         cloudflare.F([]string{"string", "string", "string"}),
 		Continent:   cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:   cloudflare.F([]cloudflare.RadarAs112TimeseriesGroupProtocolParamsDateRange{cloudflare.RadarAs112TimeseriesGroupProtocolParamsDateRange1d, cloudflare.RadarAs112TimeseriesGroupProtocolParamsDateRange2d, cloudflare.RadarAs112TimeseriesGroupProtocolParamsDateRange7d}),
+		DateRange:   cloudflare.F([]cloudflare.RadarAS112TimeseriesGroupProtocolParamsDateRange{cloudflare.RadarAS112TimeseriesGroupProtocolParamsDateRange1d, cloudflare.RadarAS112TimeseriesGroupProtocolParamsDateRange2d, cloudflare.RadarAS112TimeseriesGroupProtocolParamsDateRange7d}),
 		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		Format:      cloudflare.F(cloudflare.RadarAs112TimeseriesGroupProtocolParamsFormatJson),
+		Format:      cloudflare.F(cloudflare.RadarAS112TimeseriesGroupProtocolParamsFormatJson),
 		Location:    cloudflare.F([]string{"string", "string", "string"}),
 		Name:        cloudflare.F([]string{"string", "string", "string"}),
 	})
@@ -158,7 +158,7 @@ func TestRadarAs112TimeseriesGroupProtocolWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestRadarAs112TimeseriesGroupQueryTypeWithOptionalParams(t *testing.T) {
+func TestRadarAS112TimeseriesGroupQueryTypeWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -174,14 +174,14 @@ func TestRadarAs112TimeseriesGroupQueryTypeWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Radar.As112.TimeseriesGroups.QueryType(context.TODO(), cloudflare.RadarAs112TimeseriesGroupQueryTypeParams{
-		AggInterval: cloudflare.F(cloudflare.RadarAs112TimeseriesGroupQueryTypeParamsAggInterval1h),
+	_, err := client.Radar.AS112.TimeseriesGroups.QueryType(context.TODO(), cloudflare.RadarAS112TimeseriesGroupQueryTypeParams{
+		AggInterval: cloudflare.F(cloudflare.RadarAS112TimeseriesGroupQueryTypeParamsAggInterval1h),
 		ASN:         cloudflare.F([]string{"string", "string", "string"}),
 		Continent:   cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:   cloudflare.F([]cloudflare.RadarAs112TimeseriesGroupQueryTypeParamsDateRange{cloudflare.RadarAs112TimeseriesGroupQueryTypeParamsDateRange1d, cloudflare.RadarAs112TimeseriesGroupQueryTypeParamsDateRange2d, cloudflare.RadarAs112TimeseriesGroupQueryTypeParamsDateRange7d}),
+		DateRange:   cloudflare.F([]cloudflare.RadarAS112TimeseriesGroupQueryTypeParamsDateRange{cloudflare.RadarAS112TimeseriesGroupQueryTypeParamsDateRange1d, cloudflare.RadarAS112TimeseriesGroupQueryTypeParamsDateRange2d, cloudflare.RadarAS112TimeseriesGroupQueryTypeParamsDateRange7d}),
 		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		Format:      cloudflare.F(cloudflare.RadarAs112TimeseriesGroupQueryTypeParamsFormatJson),
+		Format:      cloudflare.F(cloudflare.RadarAS112TimeseriesGroupQueryTypeParamsFormatJson),
 		Location:    cloudflare.F([]string{"string", "string", "string"}),
 		Name:        cloudflare.F([]string{"string", "string", "string"}),
 	})
@@ -194,7 +194,7 @@ func TestRadarAs112TimeseriesGroupQueryTypeWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestRadarAs112TimeseriesGroupResponseCodesWithOptionalParams(t *testing.T) {
+func TestRadarAS112TimeseriesGroupResponseCodesWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -210,14 +210,14 @@ func TestRadarAs112TimeseriesGroupResponseCodesWithOptionalParams(t *testing.T) 
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Radar.As112.TimeseriesGroups.ResponseCodes(context.TODO(), cloudflare.RadarAs112TimeseriesGroupResponseCodesParams{
-		AggInterval: cloudflare.F(cloudflare.RadarAs112TimeseriesGroupResponseCodesParamsAggInterval1h),
+	_, err := client.Radar.AS112.TimeseriesGroups.ResponseCodes(context.TODO(), cloudflare.RadarAS112TimeseriesGroupResponseCodesParams{
+		AggInterval: cloudflare.F(cloudflare.RadarAS112TimeseriesGroupResponseCodesParamsAggInterval1h),
 		ASN:         cloudflare.F([]string{"string", "string", "string"}),
 		Continent:   cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:   cloudflare.F([]cloudflare.RadarAs112TimeseriesGroupResponseCodesParamsDateRange{cloudflare.RadarAs112TimeseriesGroupResponseCodesParamsDateRange1d, cloudflare.RadarAs112TimeseriesGroupResponseCodesParamsDateRange2d, cloudflare.RadarAs112TimeseriesGroupResponseCodesParamsDateRange7d}),
+		DateRange:   cloudflare.F([]cloudflare.RadarAS112TimeseriesGroupResponseCodesParamsDateRange{cloudflare.RadarAS112TimeseriesGroupResponseCodesParamsDateRange1d, cloudflare.RadarAS112TimeseriesGroupResponseCodesParamsDateRange2d, cloudflare.RadarAS112TimeseriesGroupResponseCodesParamsDateRange7d}),
 		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		Format:      cloudflare.F(cloudflare.RadarAs112TimeseriesGroupResponseCodesParamsFormatJson),
+		Format:      cloudflare.F(cloudflare.RadarAS112TimeseriesGroupResponseCodesParamsFormatJson),
 		Location:    cloudflare.F([]string{"string", "string", "string"}),
 		Name:        cloudflare.F([]string{"string", "string", "string"}),
 	})

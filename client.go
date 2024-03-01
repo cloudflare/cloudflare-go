@@ -54,7 +54,7 @@ type Client struct {
 	ManagedHeaders              *ManagedHeaderService
 	PageShield                  *PageShieldService
 	Rulesets                    *RulesetService
-	URLNormalizations           *URLNormalizationService
+	URLNormalization            *URLNormalizationService
 	Spectrum                    *SpectrumService
 	Addressing                  *AddressingService
 	AuditLogs                   *AuditLogService
@@ -70,7 +70,6 @@ type Client struct {
 	PCAPs                       *PCAPService
 	Registrar                   *RegistrarService
 	RequestTracers              *RequestTracerService
-	Roles                       *RoleService
 	Rules                       *RuleService
 	Storage                     *StorageService
 	Stream                      *StreamService
@@ -90,7 +89,7 @@ type Client struct {
 	BotManagement               *BotManagementService
 	OriginPostQuantumEncryption *OriginPostQuantumEncryptionService
 	Speed                       *SpeedService
-	DcvDelegation               *DcvDelegationService
+	DCVDelegation               *DCVDelegationService
 	Hostnames                   *HostnameService
 	Snippets                    *SnippetService
 	Calls                       *CallService
@@ -161,7 +160,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.ManagedHeaders = NewManagedHeaderService(opts...)
 	r.PageShield = NewPageShieldService(opts...)
 	r.Rulesets = NewRulesetService(opts...)
-	r.URLNormalizations = NewURLNormalizationService(opts...)
+	r.URLNormalization = NewURLNormalizationService(opts...)
 	r.Spectrum = NewSpectrumService(opts...)
 	r.Addressing = NewAddressingService(opts...)
 	r.AuditLogs = NewAuditLogService(opts...)
@@ -177,7 +176,6 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.PCAPs = NewPCAPService(opts...)
 	r.Registrar = NewRegistrarService(opts...)
 	r.RequestTracers = NewRequestTracerService(opts...)
-	r.Roles = NewRoleService(opts...)
 	r.Rules = NewRuleService(opts...)
 	r.Storage = NewStorageService(opts...)
 	r.Stream = NewStreamService(opts...)
@@ -197,7 +195,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.BotManagement = NewBotManagementService(opts...)
 	r.OriginPostQuantumEncryption = NewOriginPostQuantumEncryptionService(opts...)
 	r.Speed = NewSpeedService(opts...)
-	r.DcvDelegation = NewDcvDelegationService(opts...)
+	r.DCVDelegation = NewDCVDelegationService(opts...)
 	r.Hostnames = NewHostnameService(opts...)
 	r.Snippets = NewSnippetService(opts...)
 	r.Calls = NewCallService(opts...)

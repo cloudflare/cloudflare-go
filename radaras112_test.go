@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestRadarAs112TimeseriesWithOptionalParams(t *testing.T) {
+func TestRadarAS112TimeseriesWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -30,14 +30,14 @@ func TestRadarAs112TimeseriesWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Radar.As112.Timeseries(context.TODO(), cloudflare.RadarAs112TimeseriesParams{
-		AggInterval: cloudflare.F(cloudflare.RadarAs112TimeseriesParamsAggInterval1h),
+	_, err := client.Radar.AS112.Timeseries(context.TODO(), cloudflare.RadarAS112TimeseriesParams{
+		AggInterval: cloudflare.F(cloudflare.RadarAS112TimeseriesParamsAggInterval1h),
 		ASN:         cloudflare.F([]string{"string", "string", "string"}),
 		Continent:   cloudflare.F([]string{"string", "string", "string"}),
 		DateEnd:     cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		DateRange:   cloudflare.F([]cloudflare.RadarAs112TimeseriesParamsDateRange{cloudflare.RadarAs112TimeseriesParamsDateRange1d, cloudflare.RadarAs112TimeseriesParamsDateRange2d, cloudflare.RadarAs112TimeseriesParamsDateRange7d}),
+		DateRange:   cloudflare.F([]cloudflare.RadarAS112TimeseriesParamsDateRange{cloudflare.RadarAS112TimeseriesParamsDateRange1d, cloudflare.RadarAS112TimeseriesParamsDateRange2d, cloudflare.RadarAS112TimeseriesParamsDateRange7d}),
 		DateStart:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
-		Format:      cloudflare.F(cloudflare.RadarAs112TimeseriesParamsFormatJson),
+		Format:      cloudflare.F(cloudflare.RadarAS112TimeseriesParamsFormatJson),
 		Location:    cloudflare.F([]string{"string", "string", "string"}),
 		Name:        cloudflare.F([]string{"string", "string", "string"}),
 	})

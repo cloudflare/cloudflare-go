@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestWorkersForPlatformDispatchNamespaceScriptBindingGet(t *testing.T) {
+func TestZeroTrustSeatEdit(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,12 +29,20 @@ func TestWorkersForPlatformDispatchNamespaceScriptBindingGet(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.WorkersForPlatforms.Dispatch.Namespaces.Scripts.Bindings.Get(
+	_, err := client.ZeroTrust.Seats.Edit(
 		context.TODO(),
-		"my-dispatch-namespace",
-		"this-is_my_script-01",
-		cloudflare.WorkersForPlatformDispatchNamespaceScriptBindingGetParams{
-			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.ZeroTrustSeatEditParams{
+			Body: cloudflare.F([]cloudflare.ZeroTrustSeatEditParamsBody{{
+				AccessSeat:  cloudflare.F(false),
+				GatewaySeat: cloudflare.F(false),
+			}, {
+				AccessSeat:  cloudflare.F(false),
+				GatewaySeat: cloudflare.F(false),
+			}, {
+				AccessSeat:  cloudflare.F(false),
+				GatewaySeat: cloudflare.F(false),
+			}}),
 		},
 	)
 	if err != nil {
