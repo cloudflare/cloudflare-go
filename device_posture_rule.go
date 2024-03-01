@@ -198,6 +198,8 @@ type DevicePostureRuleInput struct {
 	IsActive         bool     `json:"is_active,omitempty"`
 	EidLastSeen      string   `json:"eid_last_seen,omitempty"`
 	RiskLevel        string   `json:"risk_level,omitempty"`
+	State            string   `json:"state,omitempty"`
+	LastSeen         string   `json:"last_seen,omitempty"`
 }
 
 // DevicePostureRuleListResponse represents the response from the list
