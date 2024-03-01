@@ -2,6 +2,7 @@
 
 ENHANCEMENTS:
 
+* device_posture_rule: support last_seen and state for crowdstrike_s2s posture rule ([#1509](https://github.com/cloudflare/cloudflare-go/issues/1509))
 * dlp: add support for Context Awareness in DLP profiles ([#1497](https://github.com/cloudflare/cloudflare-go/issues/1497))
 
 ## 0.89.0 (February 28th, 2024)
