@@ -48,29 +48,18 @@ func (r *IPService) List(ctx context.Context, query IPListParams, opts ...option
 	return
 }
 
-// Union satisfied by [IPListResponseAddressingIPs] or
-// [IPListResponseAddressingIPsJdcloud].
-type IPListResponse interface {
-	implementsIPListResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*IPListResponse)(nil)).Elem(), "")
-}
-
-type IPListResponseAddressingIPs struct {
+type IPs struct {
 	// A digest of the IP data. Useful for determining if the data has changed.
 	Etag string `json:"etag"`
 	// List of Cloudflare IPv4 CIDR addresses.
 	IPV4Cidrs []string `json:"ipv4_cidrs"`
 	// List of Cloudflare IPv6 CIDR addresses.
-	IPV6Cidrs []string                        `json:"ipv6_cidrs"`
-	JSON      ipListResponseAddressingIPsJSON `json:"-"`
+	IPV6Cidrs []string `json:"ipv6_cidrs"`
+	JSON      ipsJSON  `json:"-"`
 }
 
-// ipListResponseAddressingIPsJSON contains the JSON metadata for the struct
-// [IPListResponseAddressingIPs]
-type ipListResponseAddressingIPsJSON struct {
+// ipsJSON contains the JSON metadata for the struct [IPs]
+type ipsJSON struct {
 	Etag        apijson.Field
 	IPV4Cidrs   apijson.Field
 	IPV6Cidrs   apijson.Field
@@ -78,13 +67,13 @@ type ipListResponseAddressingIPsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IPListResponseAddressingIPs) UnmarshalJSON(data []byte) (err error) {
+func (r *IPs) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r IPListResponseAddressingIPs) implementsIPListResponse() {}
+func (r IPs) implementsIPListResponse() {}
 
-type IPListResponseAddressingIPsJdcloud struct {
+type JdcloudIPs struct {
 	// A digest of the IP data. Useful for determining if the data has changed.
 	Etag string `json:"etag"`
 	// List of Cloudflare IPv4 CIDR addresses.
@@ -92,13 +81,12 @@ type IPListResponseAddressingIPsJdcloud struct {
 	// List of Cloudflare IPv6 CIDR addresses.
 	IPV6Cidrs []string `json:"ipv6_cidrs"`
 	// List IPv4 and IPv6 CIDRs, only populated if `?networks=jdcloud` is used.
-	JdcloudCidrs []string                               `json:"jdcloud_cidrs"`
-	JSON         ipListResponseAddressingIPsJdcloudJSON `json:"-"`
+	JdcloudCidrs []string       `json:"jdcloud_cidrs"`
+	JSON         jdcloudIPsJSON `json:"-"`
 }
 
-// ipListResponseAddressingIPsJdcloudJSON contains the JSON metadata for the struct
-// [IPListResponseAddressingIPsJdcloud]
-type ipListResponseAddressingIPsJdcloudJSON struct {
+// jdcloudIPsJSON contains the JSON metadata for the struct [JdcloudIPs]
+type jdcloudIPsJSON struct {
 	Etag         apijson.Field
 	IPV4Cidrs    apijson.Field
 	IPV6Cidrs    apijson.Field
@@ -107,11 +95,20 @@ type ipListResponseAddressingIPsJdcloudJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *IPListResponseAddressingIPsJdcloud) UnmarshalJSON(data []byte) (err error) {
+func (r *JdcloudIPs) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r IPListResponseAddressingIPsJdcloud) implementsIPListResponse() {}
+func (r JdcloudIPs) implementsIPListResponse() {}
+
+// Union satisfied by [IPs] or [JdcloudIPs].
+type IPListResponse interface {
+	implementsIPListResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(reflect.TypeOf((*IPListResponse)(nil)).Elem(), "")
+}
 
 type IPListParams struct {
 	// Specified as `jdcloud` to list IPs used by JD Cloud data centers.

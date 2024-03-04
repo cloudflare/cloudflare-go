@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestRulesetRuleNewWithOptionalParams(t *testing.T) {
+func TestZeroTrustDevicePolicyIncludeUpdate(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,17 +29,22 @@ func TestRulesetRuleNewWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Rulesets.Rules.New(
-		context.TODO(),
-		"2f2feab2026849078ba485f918791bdc",
-		cloudflare.RulesetRuleNewParams{
-			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("string"),
-			Position: cloudflare.F[cloudflare.RulesetRuleNewParamsPosition](cloudflare.RulesetRuleNewParamsPositionBeforePosition(cloudflare.RulesetRuleNewParamsPositionBeforePosition{
-				Before: cloudflare.F("da5e8e506c8e7877fe06cdf4c41add54"),
-			})),
-		},
-	)
+	_, err := client.ZeroTrust.Devices.Policies.Includes.Update(context.TODO(), cloudflare.ZeroTrustDevicePolicyIncludeUpdateParams{
+		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		Body: cloudflare.F([]cloudflare.ZeroTrustDevicePolicyIncludeUpdateParamsBody{{
+			Address:     cloudflare.F("192.0.2.0/24"),
+			Description: cloudflare.F("Include testing domains from the tunnel"),
+			Host:        cloudflare.F("*.example.com"),
+		}, {
+			Address:     cloudflare.F("192.0.2.0/24"),
+			Description: cloudflare.F("Include testing domains from the tunnel"),
+			Host:        cloudflare.F("*.example.com"),
+		}, {
+			Address:     cloudflare.F("192.0.2.0/24"),
+			Description: cloudflare.F("Include testing domains from the tunnel"),
+			Host:        cloudflare.F("*.example.com"),
+		}}),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -49,7 +54,7 @@ func TestRulesetRuleNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestRulesetRuleDeleteWithOptionalParams(t *testing.T) {
+func TestZeroTrustDevicePolicyIncludeList(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -65,15 +70,9 @@ func TestRulesetRuleDeleteWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Rulesets.Rules.Delete(
-		context.TODO(),
-		"2f2feab2026849078ba485f918791bdc",
-		"3a03d665bac047339bb530ecb439a90d",
-		cloudflare.RulesetRuleDeleteParams{
-			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("string"),
-		},
-	)
+	_, err := client.ZeroTrust.Devices.Policies.Includes.List(context.TODO(), cloudflare.ZeroTrustDevicePolicyIncludeListParams{
+		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
@@ -83,7 +82,7 @@ func TestRulesetRuleDeleteWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestRulesetRuleEditWithOptionalParams(t *testing.T) {
+func TestZeroTrustDevicePolicyIncludeGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -99,16 +98,11 @@ func TestRulesetRuleEditWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Rulesets.Rules.Edit(
+	_, err := client.ZeroTrust.Devices.Policies.Includes.Get(
 		context.TODO(),
-		"2f2feab2026849078ba485f918791bdc",
-		"3a03d665bac047339bb530ecb439a90d",
-		cloudflare.RulesetRuleEditParams{
-			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("string"),
-			Position: cloudflare.F[cloudflare.RulesetRuleEditParamsPosition](cloudflare.RulesetRuleEditParamsPositionBeforePosition(cloudflare.RulesetRuleEditParamsPositionBeforePosition{
-				Before: cloudflare.F("da5e8e506c8e7877fe06cdf4c41add54"),
-			})),
+		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+		cloudflare.ZeroTrustDevicePolicyIncludeGetParams{
+			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
 		},
 	)
 	if err != nil {

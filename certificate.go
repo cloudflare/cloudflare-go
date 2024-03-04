@@ -52,7 +52,7 @@ func (r *CertificateService) New(ctx context.Context, body CertificateNewParams,
 // List all existing Origin CA certificates for a given zone. Use your Origin CA
 // Key as your User Service Key when calling this endpoint
 // ([see above](#requests)).
-func (r *CertificateService) List(ctx context.Context, query CertificateListParams, opts ...option.RequestOption) (res *[]CertificateListResponse, err error) {
+func (r *CertificateService) List(ctx context.Context, query CertificateListParams, opts ...option.RequestOption) (res *[]OriginCACertificate, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CertificateListResponseEnvelope
 	path := "certificates"
@@ -94,6 +94,67 @@ func (r *CertificateService) Get(ctx context.Context, certificateID string, opts
 	return
 }
 
+type OriginCACertificate struct {
+	// The Certificate Signing Request (CSR). Must be newline-encoded.
+	Csr string `json:"csr,required"`
+	// Array of hostnames or wildcard names (e.g., \*.example.com) bound to the
+	// certificate.
+	Hostnames []interface{} `json:"hostnames,required"`
+	// Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
+	// or "keyless-certificate" (for Keyless SSL servers).
+	RequestType OriginCACertificateRequestType `json:"request_type,required"`
+	// The number of days for which the certificate should be valid.
+	RequestedValidity OriginCACertificateRequestedValidity `json:"requested_validity,required"`
+	// Identifier
+	ID string `json:"id"`
+	// The Origin CA certificate. Will be newline-encoded.
+	Certificate string `json:"certificate"`
+	// When the certificate will expire.
+	ExpiresOn time.Time               `json:"expires_on" format:"date-time"`
+	JSON      originCACertificateJSON `json:"-"`
+}
+
+// originCACertificateJSON contains the JSON metadata for the struct
+// [OriginCACertificate]
+type originCACertificateJSON struct {
+	Csr               apijson.Field
+	Hostnames         apijson.Field
+	RequestType       apijson.Field
+	RequestedValidity apijson.Field
+	ID                apijson.Field
+	Certificate       apijson.Field
+	ExpiresOn         apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *OriginCACertificate) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
+// or "keyless-certificate" (for Keyless SSL servers).
+type OriginCACertificateRequestType string
+
+const (
+	OriginCACertificateRequestTypeOriginRsa          OriginCACertificateRequestType = "origin-rsa"
+	OriginCACertificateRequestTypeOriginEcc          OriginCACertificateRequestType = "origin-ecc"
+	OriginCACertificateRequestTypeKeylessCertificate OriginCACertificateRequestType = "keyless-certificate"
+)
+
+// The number of days for which the certificate should be valid.
+type OriginCACertificateRequestedValidity float64
+
+const (
+	OriginCACertificateRequestedValidity7    OriginCACertificateRequestedValidity = 7
+	OriginCACertificateRequestedValidity30   OriginCACertificateRequestedValidity = 30
+	OriginCACertificateRequestedValidity90   OriginCACertificateRequestedValidity = 90
+	OriginCACertificateRequestedValidity365  OriginCACertificateRequestedValidity = 365
+	OriginCACertificateRequestedValidity730  OriginCACertificateRequestedValidity = 730
+	OriginCACertificateRequestedValidity1095 OriginCACertificateRequestedValidity = 1095
+	OriginCACertificateRequestedValidity5475 OriginCACertificateRequestedValidity = 5475
+)
+
 // Union satisfied by [CertificateNewResponseUnknown] or [shared.UnionString].
 type CertificateNewResponse interface {
 	ImplementsCertificateNewResponse()
@@ -109,67 +170,6 @@ func init() {
 		},
 	)
 }
-
-type CertificateListResponse struct {
-	// The Certificate Signing Request (CSR). Must be newline-encoded.
-	Csr string `json:"csr,required"`
-	// Array of hostnames or wildcard names (e.g., \*.example.com) bound to the
-	// certificate.
-	Hostnames []interface{} `json:"hostnames,required"`
-	// Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
-	// or "keyless-certificate" (for Keyless SSL servers).
-	RequestType CertificateListResponseRequestType `json:"request_type,required"`
-	// The number of days for which the certificate should be valid.
-	RequestedValidity CertificateListResponseRequestedValidity `json:"requested_validity,required"`
-	// Identifier
-	ID string `json:"id"`
-	// The Origin CA certificate. Will be newline-encoded.
-	Certificate string `json:"certificate"`
-	// When the certificate will expire.
-	ExpiresOn time.Time                   `json:"expires_on" format:"date-time"`
-	JSON      certificateListResponseJSON `json:"-"`
-}
-
-// certificateListResponseJSON contains the JSON metadata for the struct
-// [CertificateListResponse]
-type certificateListResponseJSON struct {
-	Csr               apijson.Field
-	Hostnames         apijson.Field
-	RequestType       apijson.Field
-	RequestedValidity apijson.Field
-	ID                apijson.Field
-	Certificate       apijson.Field
-	ExpiresOn         apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *CertificateListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
-// or "keyless-certificate" (for Keyless SSL servers).
-type CertificateListResponseRequestType string
-
-const (
-	CertificateListResponseRequestTypeOriginRsa          CertificateListResponseRequestType = "origin-rsa"
-	CertificateListResponseRequestTypeOriginEcc          CertificateListResponseRequestType = "origin-ecc"
-	CertificateListResponseRequestTypeKeylessCertificate CertificateListResponseRequestType = "keyless-certificate"
-)
-
-// The number of days for which the certificate should be valid.
-type CertificateListResponseRequestedValidity float64
-
-const (
-	CertificateListResponseRequestedValidity7    CertificateListResponseRequestedValidity = 7
-	CertificateListResponseRequestedValidity30   CertificateListResponseRequestedValidity = 30
-	CertificateListResponseRequestedValidity90   CertificateListResponseRequestedValidity = 90
-	CertificateListResponseRequestedValidity365  CertificateListResponseRequestedValidity = 365
-	CertificateListResponseRequestedValidity730  CertificateListResponseRequestedValidity = 730
-	CertificateListResponseRequestedValidity1095 CertificateListResponseRequestedValidity = 1095
-	CertificateListResponseRequestedValidity5475 CertificateListResponseRequestedValidity = 5475
-)
 
 type CertificateDeleteResponse struct {
 	// Identifier
@@ -320,7 +320,7 @@ type CertificateListParams struct {
 type CertificateListResponseEnvelope struct {
 	Errors   []CertificateListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []CertificateListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []CertificateListResponse                 `json:"result,required,nullable"`
+	Result   []OriginCACertificate                     `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    CertificateListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo CertificateListResponseEnvelopeResultInfo `json:"result_info"`

@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/url"
 	"reflect"
+	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
@@ -87,6 +88,87 @@ func (r *AccountService) Get(ctx context.Context, query AccountGetParams, opts .
 	res = &env.Result
 	return
 }
+
+type Account struct {
+	// Identifier
+	ID string `json:"id,required"`
+	// Account name
+	Name string `json:"name,required"`
+	// Timestamp for the creation of the account
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// Account settings
+	Settings AccountSettings `json:"settings"`
+	JSON     accountJSON     `json:"-"`
+}
+
+// accountJSON contains the JSON metadata for the struct [Account]
+type accountJSON struct {
+	ID          apijson.Field
+	Name        apijson.Field
+	CreatedOn   apijson.Field
+	Settings    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *Account) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Account settings
+type AccountSettings struct {
+	// Specifies the default nameservers to be used for new zones added to this
+	// account.
+	//
+	// - `cloudflare.standard` for Cloudflare-branded nameservers
+	// - `custom.account` for account custom nameservers
+	// - `custom.tenant` for tenant custom nameservers
+	//
+	// See
+	// [Custom Nameservers](https://developers.cloudflare.com/dns/additional-options/custom-nameservers/)
+	// for more information.
+	DefaultNameservers AccountSettingsDefaultNameservers `json:"default_nameservers"`
+	// Indicates whether membership in this account requires that Two-Factor
+	// Authentication is enabled
+	EnforceTwofactor bool `json:"enforce_twofactor"`
+	// Indicates whether new zones should use the account-level custom nameservers by
+	// default.
+	//
+	// Deprecated in favor of `default_nameservers`.
+	UseAccountCustomNsByDefault bool                `json:"use_account_custom_ns_by_default"`
+	JSON                        accountSettingsJSON `json:"-"`
+}
+
+// accountSettingsJSON contains the JSON metadata for the struct [AccountSettings]
+type accountSettingsJSON struct {
+	DefaultNameservers          apijson.Field
+	EnforceTwofactor            apijson.Field
+	UseAccountCustomNsByDefault apijson.Field
+	raw                         string
+	ExtraFields                 map[string]apijson.Field
+}
+
+func (r *AccountSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Specifies the default nameservers to be used for new zones added to this
+// account.
+//
+// - `cloudflare.standard` for Cloudflare-branded nameservers
+// - `custom.account` for account custom nameservers
+// - `custom.tenant` for tenant custom nameservers
+//
+// See
+// [Custom Nameservers](https://developers.cloudflare.com/dns/additional-options/custom-nameservers/)
+// for more information.
+type AccountSettingsDefaultNameservers string
+
+const (
+	AccountSettingsDefaultNameserversCloudflareStandard AccountSettingsDefaultNameservers = "cloudflare.standard"
+	AccountSettingsDefaultNameserversCustomAccount      AccountSettingsDefaultNameservers = "custom.account"
+	AccountSettingsDefaultNameserversCustomTenant       AccountSettingsDefaultNameservers = "custom.tenant"
+)
 
 // Union satisfied by [AccountUpdateResponseUnknown] or [shared.UnionString].
 type AccountUpdateResponse interface {

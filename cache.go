@@ -18,11 +18,11 @@ import (
 // from the environment automatically. You should not instantiate this service
 // directly, and instead use the [NewCacheService] method instead.
 type CacheService struct {
-	Options                  []option.RequestOption
-	CacheReserve             *CacheCacheReserveService
-	TieredCacheSmartTopology *CacheTieredCacheSmartTopologyService
-	Variants                 *CacheVariantService
-	RegionalTieredCache      *CacheRegionalTieredCacheService
+	Options             []option.RequestOption
+	CacheReserve        *CacheCacheReserveService
+	SmartTieredCached   *CacheSmartTieredCachedService
+	Variants            *CacheVariantService
+	RegionalTieredCache *CacheRegionalTieredCacheService
 }
 
 // NewCacheService generates a new service that applies the given options to each
@@ -32,7 +32,7 @@ func NewCacheService(opts ...option.RequestOption) (r *CacheService) {
 	r = &CacheService{}
 	r.Options = opts
 	r.CacheReserve = NewCacheCacheReserveService(opts...)
-	r.TieredCacheSmartTopology = NewCacheTieredCacheSmartTopologyService(opts...)
+	r.SmartTieredCached = NewCacheSmartTieredCachedService(opts...)
 	r.Variants = NewCacheVariantService(opts...)
 	r.RegionalTieredCache = NewCacheRegionalTieredCacheService(opts...)
 	return

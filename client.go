@@ -34,7 +34,7 @@ type Client struct {
 	CustomNameservers           *CustomNameserverService
 	DNS                         *DNSService
 	DNSSEC                      *DNSSECService
-	Emails                      *EmailService
+	EmailRouting                *EmailRoutingService
 	Filters                     *FilterService
 	Firewall                    *FirewallService
 	Healthchecks                *HealthcheckService
@@ -74,7 +74,6 @@ type Client struct {
 	Storage                     *StorageService
 	Stream                      *StreamService
 	Alerting                    *AlertingService
-	Devices                     *DeviceService
 	D1                          *D1Service
 	R2                          *R2Service
 	WARPConnector               *WARPConnectorService
@@ -140,7 +139,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.CustomNameservers = NewCustomNameserverService(opts...)
 	r.DNS = NewDNSService(opts...)
 	r.DNSSEC = NewDNSSECService(opts...)
-	r.Emails = NewEmailService(opts...)
+	r.EmailRouting = NewEmailRoutingService(opts...)
 	r.Filters = NewFilterService(opts...)
 	r.Firewall = NewFirewallService(opts...)
 	r.Healthchecks = NewHealthcheckService(opts...)
@@ -180,7 +179,6 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r.Storage = NewStorageService(opts...)
 	r.Stream = NewStreamService(opts...)
 	r.Alerting = NewAlertingService(opts...)
-	r.Devices = NewDeviceService(opts...)
 	r.D1 = NewD1Service(opts...)
 	r.R2 = NewR2Service(opts...)
 	r.WARPConnector = NewWARPConnectorService(opts...)

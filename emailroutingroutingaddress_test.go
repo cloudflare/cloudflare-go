@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestRulesetRuleNewWithOptionalParams(t *testing.T) {
+func TestEmailRoutingRoutingAddressNew(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -29,15 +29,11 @@ func TestRulesetRuleNewWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Rulesets.Rules.New(
+	_, err := client.EmailRouting.Routing.Addresses.New(
 		context.TODO(),
-		"2f2feab2026849078ba485f918791bdc",
-		cloudflare.RulesetRuleNewParams{
-			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("string"),
-			Position: cloudflare.F[cloudflare.RulesetRuleNewParamsPosition](cloudflare.RulesetRuleNewParamsPositionBeforePosition(cloudflare.RulesetRuleNewParamsPositionBeforePosition{
-				Before: cloudflare.F("da5e8e506c8e7877fe06cdf4c41add54"),
-			})),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.EmailRoutingRoutingAddressNewParams{
+			Email: cloudflare.F("user@example.com"),
 		},
 	)
 	if err != nil {
@@ -49,7 +45,7 @@ func TestRulesetRuleNewWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestRulesetRuleDeleteWithOptionalParams(t *testing.T) {
+func TestEmailRoutingRoutingAddressDelete(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -65,13 +61,44 @@ func TestRulesetRuleDeleteWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Rulesets.Rules.Delete(
+	_, err := client.EmailRouting.Routing.Addresses.Delete(
 		context.TODO(),
-		"2f2feab2026849078ba485f918791bdc",
-		"3a03d665bac047339bb530ecb439a90d",
-		cloudflare.RulesetRuleDeleteParams{
-			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("string"),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		"ea95132c15732412d22c1476fa83f27a",
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestEmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
+		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
+	)
+	_, err := client.EmailRouting.Routing.Addresses.EmailRoutingDestinationAddressesListDestinationAddresses(
+		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		cloudflare.EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesParams{
+			Direction: cloudflare.F(cloudflare.EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesParamsDirectionAsc),
+			Page:      cloudflare.F(1.000000),
+			PerPage:   cloudflare.F(5.000000),
+			Verified:  cloudflare.F(cloudflare.EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesParamsVerifiedTrue),
 		},
 	)
 	if err != nil {
@@ -83,7 +110,7 @@ func TestRulesetRuleDeleteWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestRulesetRuleEditWithOptionalParams(t *testing.T) {
+func TestEmailRoutingRoutingAddressGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -99,17 +126,10 @@ func TestRulesetRuleEditWithOptionalParams(t *testing.T) {
 		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
 		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
-	_, err := client.Rulesets.Rules.Edit(
+	_, err := client.EmailRouting.Routing.Addresses.Get(
 		context.TODO(),
-		"2f2feab2026849078ba485f918791bdc",
-		"3a03d665bac047339bb530ecb439a90d",
-		cloudflare.RulesetRuleEditParams{
-			AccountID: cloudflare.F("string"),
-			ZoneID:    cloudflare.F("string"),
-			Position: cloudflare.F[cloudflare.RulesetRuleEditParamsPosition](cloudflare.RulesetRuleEditParamsPositionBeforePosition(cloudflare.RulesetRuleEditParamsPositionBeforePosition{
-				Before: cloudflare.F("da5e8e506c8e7877fe06cdf4c41add54"),
-			})),
-		},
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		"ea95132c15732412d22c1476fa83f27a",
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
