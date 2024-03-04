@@ -5,6 +5,10 @@ ENHANCEMENTS:
 * device_posture_rule: support last_seen and state for crowdstrike_s2s posture rule ([#1509](https://github.com/cloudflare/cloudflare-go/issues/1509))
 * dlp: add support for Context Awareness in DLP profiles ([#1497](https://github.com/cloudflare/cloudflare-go/issues/1497))
 
+BUG FIXES:
+
+* dlp: added optional ContextAwareness support ([#1510](https://github.com/cloudflare/cloudflare-go/issues/1510))
+
 DEPENDENCIES:
 
 * deps: bumps github.com/stretchr/testify from 1.8.4 to 1.9.0 ([#1511](https://github.com/cloudflare/cloudflare-go/issues/1511))
