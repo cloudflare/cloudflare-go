@@ -817,7 +817,7 @@ type AccountMemberListResponse struct {
 	// Member Name.
 	Name string `json:"name,required,nullable"`
 	// Roles assigned to this Member.
-	Roles []Role `json:"roles,required"`
+	Roles []AccountMemberListResponseRole `json:"roles,required"`
 	// A member's status in the organization.
 	Status AccountMemberListResponseStatus `json:"status,required"`
 	JSON   accountMemberListResponseJSON   `json:"-"`
@@ -836,6 +836,33 @@ type accountMemberListResponseJSON struct {
 }
 
 func (r *AccountMemberListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountMemberListResponseRole struct {
+	// Role identifier tag.
+	ID string `json:"id,required"`
+	// Description of role's permissions.
+	Description string `json:"description,required"`
+	// Role Name.
+	Name string `json:"name,required"`
+	// Access permissions for this User.
+	Permissions []string                          `json:"permissions,required"`
+	JSON        accountMemberListResponseRoleJSON `json:"-"`
+}
+
+// accountMemberListResponseRoleJSON contains the JSON metadata for the struct
+// [AccountMemberListResponseRole]
+type accountMemberListResponseRoleJSON struct {
+	ID          apijson.Field
+	Description apijson.Field
+	Name        apijson.Field
+	Permissions apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountMemberListResponseRole) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 

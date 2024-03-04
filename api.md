@@ -34,12 +34,12 @@ Methods:
 
 Response Types:
 
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#Role">Role</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AccountRoleListResponse">AccountRoleListResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AccountRoleGetResponse">AccountRoleGetResponse</a>
 
 Methods:
 
-- <code title="get /accounts/{account_id}/roles">client.Accounts.Roles.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AccountRoleService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AccountRoleListParams">AccountRoleListParams</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#Role">Role</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/roles">client.Accounts.Roles.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AccountRoleService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AccountRoleListParams">AccountRoleListParams</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AccountRoleListResponse">AccountRoleListResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /accounts/{account_id}/roles/{role_id}">client.Accounts.Roles.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AccountRoleService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, roleID interface{}, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AccountRoleGetParams">AccountRoleGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go">cloudflare</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-sdk-go#AccountRoleGetResponse">AccountRoleGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # Certificates

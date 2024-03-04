@@ -91,7 +91,7 @@ type UserInviteListResponse struct {
 	// Organization name.
 	OrganizationName string `json:"organization_name"`
 	// Roles to be assigned to this user.
-	Roles []Role `json:"roles"`
+	Roles []UserInviteListResponseRole `json:"roles"`
 	// Current status of the invitation.
 	Status UserInviteListResponseStatus `json:"status"`
 	JSON   userInviteListResponseJSON   `json:"-"`
@@ -115,6 +115,33 @@ type userInviteListResponseJSON struct {
 }
 
 func (r *UserInviteListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type UserInviteListResponseRole struct {
+	// Role identifier tag.
+	ID string `json:"id,required"`
+	// Description of role's permissions.
+	Description string `json:"description,required"`
+	// Role Name.
+	Name string `json:"name,required"`
+	// Access permissions for this User.
+	Permissions []string                       `json:"permissions,required"`
+	JSON        userInviteListResponseRoleJSON `json:"-"`
+}
+
+// userInviteListResponseRoleJSON contains the JSON metadata for the struct
+// [UserInviteListResponseRole]
+type userInviteListResponseRoleJSON struct {
+	ID          apijson.Field
+	Description apijson.Field
+	Name        apijson.Field
+	Permissions apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserInviteListResponseRole) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
