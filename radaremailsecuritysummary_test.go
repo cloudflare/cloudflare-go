@@ -25,10 +25,6 @@ func TestRadarEmailSecuritySummaryARCWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.Email.Security.Summary.ARC(context.TODO(), cloudflare.RadarEmailSecuritySummaryARCParams{
 		DateEnd:    cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -61,10 +57,6 @@ func TestRadarEmailSecuritySummaryDKIMWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.Email.Security.Summary.DKIM(context.TODO(), cloudflare.RadarEmailSecuritySummaryDKIMParams{
 		ARC:        cloudflare.F([]cloudflare.RadarEmailSecuritySummaryDKIMParamsARC{cloudflare.RadarEmailSecuritySummaryDKIMParamsARCPass, cloudflare.RadarEmailSecuritySummaryDKIMParamsARCNone, cloudflare.RadarEmailSecuritySummaryDKIMParamsARCFail}),
@@ -97,10 +89,6 @@ func TestRadarEmailSecuritySummaryDMARCWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.Email.Security.Summary.DMARC(context.TODO(), cloudflare.RadarEmailSecuritySummaryDMARCParams{
 		ARC:        cloudflare.F([]cloudflare.RadarEmailSecuritySummaryDMARCParamsARC{cloudflare.RadarEmailSecuritySummaryDMARCParamsARCPass, cloudflare.RadarEmailSecuritySummaryDMARCParamsARCNone, cloudflare.RadarEmailSecuritySummaryDMARCParamsARCFail}),
@@ -133,10 +121,6 @@ func TestRadarEmailSecuritySummaryMaliciousWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.Email.Security.Summary.Malicious(context.TODO(), cloudflare.RadarEmailSecuritySummaryMaliciousParams{
 		ARC:        cloudflare.F([]cloudflare.RadarEmailSecuritySummaryMaliciousParamsARC{cloudflare.RadarEmailSecuritySummaryMaliciousParamsARCPass, cloudflare.RadarEmailSecuritySummaryMaliciousParamsARCNone, cloudflare.RadarEmailSecuritySummaryMaliciousParamsARCFail}),
@@ -170,10 +154,6 @@ func TestRadarEmailSecuritySummarySpamWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.Email.Security.Summary.Spam(context.TODO(), cloudflare.RadarEmailSecuritySummarySpamParams{
 		ARC:        cloudflare.F([]cloudflare.RadarEmailSecuritySummarySpamParamsARC{cloudflare.RadarEmailSecuritySummarySpamParamsARCPass, cloudflare.RadarEmailSecuritySummarySpamParamsARCNone, cloudflare.RadarEmailSecuritySummarySpamParamsARCFail}),
@@ -207,10 +187,6 @@ func TestRadarEmailSecuritySummarySPFWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.Email.Security.Summary.SPF(context.TODO(), cloudflare.RadarEmailSecuritySummarySPFParams{
 		ARC:        cloudflare.F([]cloudflare.RadarEmailSecuritySummarySPFParamsARC{cloudflare.RadarEmailSecuritySummarySPFParamsARCPass, cloudflare.RadarEmailSecuritySummarySPFParamsARCNone, cloudflare.RadarEmailSecuritySummarySPFParamsARCFail}),
@@ -243,10 +219,6 @@ func TestRadarEmailSecuritySummarySpoofWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.Email.Security.Summary.Spoof(context.TODO(), cloudflare.RadarEmailSecuritySummarySpoofParams{
 		ARC:        cloudflare.F([]cloudflare.RadarEmailSecuritySummarySpoofParamsARC{cloudflare.RadarEmailSecuritySummarySpoofParamsARCPass, cloudflare.RadarEmailSecuritySummarySpoofParamsARCNone, cloudflare.RadarEmailSecuritySummarySpoofParamsARCFail}),
@@ -280,10 +252,6 @@ func TestRadarEmailSecuritySummaryThreatCategoryWithOptionalParams(t *testing.T)
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.Email.Security.Summary.ThreatCategory(context.TODO(), cloudflare.RadarEmailSecuritySummaryThreatCategoryParams{
 		ARC:        cloudflare.F([]cloudflare.RadarEmailSecuritySummaryThreatCategoryParamsARC{cloudflare.RadarEmailSecuritySummaryThreatCategoryParamsARCPass, cloudflare.RadarEmailSecuritySummaryThreatCategoryParamsARCNone, cloudflare.RadarEmailSecuritySummaryThreatCategoryParamsARCFail}),
@@ -317,10 +285,6 @@ func TestRadarEmailSecuritySummaryTLSVersionWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.Email.Security.Summary.TLSVersion(context.TODO(), cloudflare.RadarEmailSecuritySummaryTLSVersionParams{
 		ARC:       cloudflare.F([]cloudflare.RadarEmailSecuritySummaryTLSVersionParamsARC{cloudflare.RadarEmailSecuritySummaryTLSVersionParamsARCPass, cloudflare.RadarEmailSecuritySummaryTLSVersionParamsARCNone, cloudflare.RadarEmailSecuritySummaryTLSVersionParamsARCFail}),

@@ -25,10 +25,6 @@ func TestRadarAttackLayer3TimeseriesGroupBitrateWithOptionalParams(t *testing.T)
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.Attacks.Layer3.TimeseriesGroups.Bitrate(context.TODO(), cloudflare.RadarAttackLayer3TimeseriesGroupBitrateParams{
 		AggInterval:   cloudflare.F(cloudflare.RadarAttackLayer3TimeseriesGroupBitrateParamsAggInterval1h),
@@ -64,10 +60,6 @@ func TestRadarAttackLayer3TimeseriesGroupDurationWithOptionalParams(t *testing.T
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.Attacks.Layer3.TimeseriesGroups.Duration(context.TODO(), cloudflare.RadarAttackLayer3TimeseriesGroupDurationParams{
 		AggInterval:   cloudflare.F(cloudflare.RadarAttackLayer3TimeseriesGroupDurationParamsAggInterval1h),
@@ -103,10 +95,6 @@ func TestRadarAttackLayer3TimeseriesGroupGetWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.Attacks.Layer3.TimeseriesGroups.Get(context.TODO(), cloudflare.RadarAttackLayer3TimeseriesGroupGetParams{
 		AggInterval: cloudflare.F(cloudflare.RadarAttackLayer3TimeseriesGroupGetParamsAggInterval1h),
@@ -139,10 +127,6 @@ func TestRadarAttackLayer3TimeseriesGroupIndustryWithOptionalParams(t *testing.T
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.Attacks.Layer3.TimeseriesGroups.Industry(context.TODO(), cloudflare.RadarAttackLayer3TimeseriesGroupIndustryParams{
 		AggInterval:   cloudflare.F(cloudflare.RadarAttackLayer3TimeseriesGroupIndustryParamsAggInterval1h),
@@ -178,10 +162,6 @@ func TestRadarAttackLayer3TimeseriesGroupIPVersionWithOptionalParams(t *testing.
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.Attacks.Layer3.TimeseriesGroups.IPVersion(context.TODO(), cloudflare.RadarAttackLayer3TimeseriesGroupIPVersionParams{
 		AggInterval:   cloudflare.F(cloudflare.RadarAttackLayer3TimeseriesGroupIPVersionParamsAggInterval1h),
@@ -216,10 +196,6 @@ func TestRadarAttackLayer3TimeseriesGroupProtocolWithOptionalParams(t *testing.T
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.Attacks.Layer3.TimeseriesGroups.Protocol(context.TODO(), cloudflare.RadarAttackLayer3TimeseriesGroupProtocolParams{
 		AggInterval:   cloudflare.F(cloudflare.RadarAttackLayer3TimeseriesGroupProtocolParamsAggInterval1h),
@@ -254,10 +230,6 @@ func TestRadarAttackLayer3TimeseriesGroupVectorWithOptionalParams(t *testing.T) 
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.Attacks.Layer3.TimeseriesGroups.Vector(context.TODO(), cloudflare.RadarAttackLayer3TimeseriesGroupVectorParams{
 		AggInterval:   cloudflare.F(cloudflare.RadarAttackLayer3TimeseriesGroupVectorParamsAggInterval1h),
@@ -294,10 +266,6 @@ func TestRadarAttackLayer3TimeseriesGroupVerticalWithOptionalParams(t *testing.T
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.Attacks.Layer3.TimeseriesGroups.Vertical(context.TODO(), cloudflare.RadarAttackLayer3TimeseriesGroupVerticalParams{
 		AggInterval:   cloudflare.F(cloudflare.RadarAttackLayer3TimeseriesGroupVerticalParamsAggInterval1h),

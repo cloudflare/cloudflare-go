@@ -25,10 +25,6 @@ func TestRadarAS112TimeseriesGroupDNSSECWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.AS112.TimeseriesGroups.DNSSEC(context.TODO(), cloudflare.RadarAS112TimeseriesGroupDNSSECParams{
 		AggInterval: cloudflare.F(cloudflare.RadarAS112TimeseriesGroupDNSSECParamsAggInterval1h),
@@ -61,10 +57,6 @@ func TestRadarAS112TimeseriesGroupEdnsWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.AS112.TimeseriesGroups.Edns(context.TODO(), cloudflare.RadarAS112TimeseriesGroupEdnsParams{
 		AggInterval: cloudflare.F(cloudflare.RadarAS112TimeseriesGroupEdnsParamsAggInterval1h),
@@ -97,10 +89,6 @@ func TestRadarAS112TimeseriesGroupIPVersionWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.AS112.TimeseriesGroups.IPVersion(context.TODO(), cloudflare.RadarAS112TimeseriesGroupIPVersionParams{
 		AggInterval: cloudflare.F(cloudflare.RadarAS112TimeseriesGroupIPVersionParamsAggInterval1h),
@@ -133,10 +121,6 @@ func TestRadarAS112TimeseriesGroupProtocolWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.AS112.TimeseriesGroups.Protocol(context.TODO(), cloudflare.RadarAS112TimeseriesGroupProtocolParams{
 		AggInterval: cloudflare.F(cloudflare.RadarAS112TimeseriesGroupProtocolParamsAggInterval1h),
@@ -169,10 +153,6 @@ func TestRadarAS112TimeseriesGroupQueryTypeWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.AS112.TimeseriesGroups.QueryType(context.TODO(), cloudflare.RadarAS112TimeseriesGroupQueryTypeParams{
 		AggInterval: cloudflare.F(cloudflare.RadarAS112TimeseriesGroupQueryTypeParamsAggInterval1h),
@@ -205,10 +185,6 @@ func TestRadarAS112TimeseriesGroupResponseCodesWithOptionalParams(t *testing.T) 
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.AS112.TimeseriesGroups.ResponseCodes(context.TODO(), cloudflare.RadarAS112TimeseriesGroupResponseCodesParams{
 		AggInterval: cloudflare.F(cloudflare.RadarAS112TimeseriesGroupResponseCodesParamsAggInterval1h),

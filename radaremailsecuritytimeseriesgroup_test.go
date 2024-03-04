@@ -25,10 +25,6 @@ func TestRadarEmailSecurityTimeseriesGroupARCWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.Email.Security.TimeseriesGroups.ARC(context.TODO(), cloudflare.RadarEmailSecurityTimeseriesGroupARCParams{
 		AggInterval: cloudflare.F(cloudflare.RadarEmailSecurityTimeseriesGroupARCParamsAggInterval1h),
@@ -62,10 +58,6 @@ func TestRadarEmailSecurityTimeseriesGroupDKIMWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.Email.Security.TimeseriesGroups.DKIM(context.TODO(), cloudflare.RadarEmailSecurityTimeseriesGroupDKIMParams{
 		AggInterval: cloudflare.F(cloudflare.RadarEmailSecurityTimeseriesGroupDKIMParamsAggInterval1h),
@@ -99,10 +91,6 @@ func TestRadarEmailSecurityTimeseriesGroupDMARCWithOptionalParams(t *testing.T) 
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.Email.Security.TimeseriesGroups.DMARC(context.TODO(), cloudflare.RadarEmailSecurityTimeseriesGroupDMARCParams{
 		AggInterval: cloudflare.F(cloudflare.RadarEmailSecurityTimeseriesGroupDMARCParamsAggInterval1h),
@@ -136,10 +124,6 @@ func TestRadarEmailSecurityTimeseriesGroupMaliciousWithOptionalParams(t *testing
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.Email.Security.TimeseriesGroups.Malicious(context.TODO(), cloudflare.RadarEmailSecurityTimeseriesGroupMaliciousParams{
 		AggInterval: cloudflare.F(cloudflare.RadarEmailSecurityTimeseriesGroupMaliciousParamsAggInterval1h),
@@ -174,10 +158,6 @@ func TestRadarEmailSecurityTimeseriesGroupSpamWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.Email.Security.TimeseriesGroups.Spam(context.TODO(), cloudflare.RadarEmailSecurityTimeseriesGroupSpamParams{
 		AggInterval: cloudflare.F(cloudflare.RadarEmailSecurityTimeseriesGroupSpamParamsAggInterval1h),
@@ -212,10 +192,6 @@ func TestRadarEmailSecurityTimeseriesGroupSPFWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.Email.Security.TimeseriesGroups.SPF(context.TODO(), cloudflare.RadarEmailSecurityTimeseriesGroupSPFParams{
 		AggInterval: cloudflare.F(cloudflare.RadarEmailSecurityTimeseriesGroupSPFParamsAggInterval1h),
@@ -249,10 +225,6 @@ func TestRadarEmailSecurityTimeseriesGroupSpoofWithOptionalParams(t *testing.T) 
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.Email.Security.TimeseriesGroups.Spoof(context.TODO(), cloudflare.RadarEmailSecurityTimeseriesGroupSpoofParams{
 		AggInterval: cloudflare.F(cloudflare.RadarEmailSecurityTimeseriesGroupSpoofParamsAggInterval1h),
@@ -287,10 +259,6 @@ func TestRadarEmailSecurityTimeseriesGroupThreatCategoryWithOptionalParams(t *te
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.Email.Security.TimeseriesGroups.ThreatCategory(context.TODO(), cloudflare.RadarEmailSecurityTimeseriesGroupThreatCategoryParams{
 		AggInterval: cloudflare.F(cloudflare.RadarEmailSecurityTimeseriesGroupThreatCategoryParamsAggInterval1h),
@@ -325,10 +293,6 @@ func TestRadarEmailSecurityTimeseriesGroupTLSVersionWithOptionalParams(t *testin
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-		option.WithAPIToken("Sn3lZJTBX6kkg7OdcBUAxOO963GEIyGQqnFTOFYY"),
-		option.WithUserServiceKey("v1.0-144c9defac04969c7bfad8ef-631a41d003a32d25fe878081ef365c49503f7fada600da935e2851a1c7326084b85cbf6429c4b859de8475731dc92a9c329631e6d59e6c73da7b198497172b4cefe071d90d0f5d2719"),
 	)
 	_, err := client.Radar.Email.Security.TimeseriesGroups.TLSVersion(context.TODO(), cloudflare.RadarEmailSecurityTimeseriesGroupTLSVersionParams{
 		AggInterval: cloudflare.F(cloudflare.RadarEmailSecurityTimeseriesGroupTLSVersionParamsAggInterval1h),
