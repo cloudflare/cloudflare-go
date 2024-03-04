@@ -75,13 +75,7 @@ func TestDLPProfiles(t *testing.T) {
 					"updated_at": "2022-10-18T08:00:57Z",
 					"type": "custom",
 					"description": "just a custom profile example",
-					"allowed_match_count": 1,
-					"context_awareness": {
-						"enabled": false,
-						"skip": {
-							"files": false
-						}
-					}
+					"allowed_match_count": 1
 				}
 			]
 		}
@@ -98,7 +92,7 @@ func TestDLPProfiles(t *testing.T) {
 			Type:              "predefined",
 			Description:       "",
 			AllowedMatchCount: 0,
-			ContextAwareness: DLPContextAwareness{
+			ContextAwareness: &DLPContextAwareness{
 				Enabled: BoolPtr(true),
 				Skip: DLPContextAwarenessSkip{
 					Files: BoolPtr(true),
@@ -126,12 +120,7 @@ func TestDLPProfiles(t *testing.T) {
 			Type:              "custom",
 			Description:       "just a custom profile example",
 			AllowedMatchCount: 1,
-			ContextAwareness: DLPContextAwareness{
-				Enabled: BoolPtr(false),
-				Skip: DLPContextAwarenessSkip{
-					Files: BoolPtr(false),
-				},
-			},
+			// Omit ContextAwareness to test ContextAwareness optionality
 			Entries: []DLPEntry{
 				{
 					ID:        "ef79b054-12d4-4067-bb30-b85f6267b91c",
@@ -211,7 +200,7 @@ func TestGetDLPProfile(t *testing.T) {
 		Type:              "custom",
 		Description:       "just a custom profile example",
 		AllowedMatchCount: 42,
-		ContextAwareness: DLPContextAwareness{
+		ContextAwareness: &DLPContextAwareness{
 			Enabled: BoolPtr(false),
 			Skip: DLPContextAwarenessSkip{
 				Files: BoolPtr(false),
@@ -586,7 +575,7 @@ func TestUpdateDLPPredefinedProfile(t *testing.T) {
 		Type:              "predefined",
 		Description:       "example predefined profile",
 		AllowedMatchCount: 0,
-		ContextAwareness: DLPContextAwareness{
+		ContextAwareness: &DLPContextAwareness{
 			Enabled: BoolPtr(true),
 			Skip: DLPContextAwarenessSkip{
 				Files: BoolPtr(true),
