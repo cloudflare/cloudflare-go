@@ -56,7 +56,6 @@ type DLPProfile struct {
 	Description       string `json:"description,omitempty"`
 	AllowedMatchCount int    `json:"allowed_match_count"`
 
-	// Optional and can be omitted with a nil pointer
 	ContextAwareness *DLPContextAwareness `json:"context_awareness,omitempty"`
 
 	// The following fields are omitted for predefined DLP
