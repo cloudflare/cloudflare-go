@@ -4,6 +4,8 @@ ENHANCEMENTS:
 
 * device_posture_rule: support last_seen and state for crowdstrike_s2s posture rule ([#1509](https://github.com/cloudflare/cloudflare-go/issues/1509))
 * dlp: add support for Context Awareness in DLP profiles ([#1497](https://github.com/cloudflare/cloudflare-go/issues/1497))
+* workers: Add Workers for Platforms support for getting a Worker, content and bindings ([#1508](https://github.com/cloudflare/cloudflare-go/issues/1508))
+* workers_for_platforms: Add ability to list Workers for Platforms namespaces, get a namespace, create a new namespace or delete a namespace. ([#1508](https://github.com/cloudflare/cloudflare-go/issues/1508))
 
 BUG FIXES:
 
