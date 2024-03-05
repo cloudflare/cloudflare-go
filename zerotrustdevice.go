@@ -52,9 +52,9 @@ func NewZeroTrustDeviceService(opts ...option.RequestOption) (r *ZeroTrustDevice
 }
 
 // Fetches a list of enrolled devices.
-func (r *ZeroTrustDeviceService) DevicesListDevices(ctx context.Context, query ZeroTrustDeviceDevicesListDevicesParams, opts ...option.RequestOption) (res *[]ZeroTrustDeviceDevicesListDevicesResponse, err error) {
+func (r *ZeroTrustDeviceService) List(ctx context.Context, query ZeroTrustDeviceListParams, opts ...option.RequestOption) (res *[]ZeroTrustDeviceListResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env ZeroTrustDeviceDevicesListDevicesResponseEnvelope
+	var env ZeroTrustDeviceListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices", query.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -77,14 +77,14 @@ func (r *ZeroTrustDeviceService) Get(ctx context.Context, deviceID string, query
 	return
 }
 
-type ZeroTrustDeviceDevicesListDevicesResponse struct {
+type ZeroTrustDeviceListResponse struct {
 	// Device ID.
 	ID string `json:"id"`
 	// When the device was created.
 	Created time.Time `json:"created" format:"date-time"`
 	// True if the device was deleted.
-	Deleted    bool                                                `json:"deleted"`
-	DeviceType ZeroTrustDeviceDevicesListDevicesResponseDeviceType `json:"device_type"`
+	Deleted    bool                                  `json:"deleted"`
+	DeviceType ZeroTrustDeviceListResponseDeviceType `json:"device_type"`
 	// IPv4 or IPv6 address.
 	IP string `json:"ip"`
 	// The device's public key.
@@ -112,16 +112,16 @@ type ZeroTrustDeviceDevicesListDevicesResponse struct {
 	// The device serial number.
 	SerialNumber string `json:"serial_number"`
 	// When the device was updated.
-	Updated time.Time                                     `json:"updated" format:"date-time"`
-	User    ZeroTrustDeviceDevicesListDevicesResponseUser `json:"user"`
+	Updated time.Time                       `json:"updated" format:"date-time"`
+	User    ZeroTrustDeviceListResponseUser `json:"user"`
 	// The WARP client version.
-	Version string                                        `json:"version"`
-	JSON    zeroTrustDeviceDevicesListDevicesResponseJSON `json:"-"`
+	Version string                          `json:"version"`
+	JSON    zeroTrustDeviceListResponseJSON `json:"-"`
 }
 
-// zeroTrustDeviceDevicesListDevicesResponseJSON contains the JSON metadata for the
-// struct [ZeroTrustDeviceDevicesListDevicesResponse]
-type zeroTrustDeviceDevicesListDevicesResponseJSON struct {
+// zeroTrustDeviceListResponseJSON contains the JSON metadata for the struct
+// [ZeroTrustDeviceListResponse]
+type zeroTrustDeviceListResponseJSON struct {
 	ID               apijson.Field
 	Created          apijson.Field
 	Deleted          apijson.Field
@@ -146,33 +146,33 @@ type zeroTrustDeviceDevicesListDevicesResponseJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *ZeroTrustDeviceDevicesListDevicesResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustDeviceListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZeroTrustDeviceDevicesListDevicesResponseDeviceType string
+type ZeroTrustDeviceListResponseDeviceType string
 
 const (
-	ZeroTrustDeviceDevicesListDevicesResponseDeviceTypeWindows ZeroTrustDeviceDevicesListDevicesResponseDeviceType = "windows"
-	ZeroTrustDeviceDevicesListDevicesResponseDeviceTypeMac     ZeroTrustDeviceDevicesListDevicesResponseDeviceType = "mac"
-	ZeroTrustDeviceDevicesListDevicesResponseDeviceTypeLinux   ZeroTrustDeviceDevicesListDevicesResponseDeviceType = "linux"
-	ZeroTrustDeviceDevicesListDevicesResponseDeviceTypeAndroid ZeroTrustDeviceDevicesListDevicesResponseDeviceType = "android"
-	ZeroTrustDeviceDevicesListDevicesResponseDeviceTypeIos     ZeroTrustDeviceDevicesListDevicesResponseDeviceType = "ios"
+	ZeroTrustDeviceListResponseDeviceTypeWindows ZeroTrustDeviceListResponseDeviceType = "windows"
+	ZeroTrustDeviceListResponseDeviceTypeMac     ZeroTrustDeviceListResponseDeviceType = "mac"
+	ZeroTrustDeviceListResponseDeviceTypeLinux   ZeroTrustDeviceListResponseDeviceType = "linux"
+	ZeroTrustDeviceListResponseDeviceTypeAndroid ZeroTrustDeviceListResponseDeviceType = "android"
+	ZeroTrustDeviceListResponseDeviceTypeIos     ZeroTrustDeviceListResponseDeviceType = "ios"
 )
 
-type ZeroTrustDeviceDevicesListDevicesResponseUser struct {
+type ZeroTrustDeviceListResponseUser struct {
 	// UUID
 	ID string `json:"id"`
 	// The contact email address of the user.
 	Email string `json:"email"`
 	// The enrolled device user's name.
-	Name string                                            `json:"name"`
-	JSON zeroTrustDeviceDevicesListDevicesResponseUserJSON `json:"-"`
+	Name string                              `json:"name"`
+	JSON zeroTrustDeviceListResponseUserJSON `json:"-"`
 }
 
-// zeroTrustDeviceDevicesListDevicesResponseUserJSON contains the JSON metadata for
-// the struct [ZeroTrustDeviceDevicesListDevicesResponseUser]
-type zeroTrustDeviceDevicesListDevicesResponseUserJSON struct {
+// zeroTrustDeviceListResponseUserJSON contains the JSON metadata for the struct
+// [ZeroTrustDeviceListResponseUser]
+type zeroTrustDeviceListResponseUserJSON struct {
 	ID          apijson.Field
 	Email       apijson.Field
 	Name        apijson.Field
@@ -180,7 +180,7 @@ type zeroTrustDeviceDevicesListDevicesResponseUserJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZeroTrustDeviceDevicesListDevicesResponseUser) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustDeviceListResponseUser) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -200,23 +200,23 @@ func init() {
 	)
 }
 
-type ZeroTrustDeviceDevicesListDevicesParams struct {
+type ZeroTrustDeviceListParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
 
-type ZeroTrustDeviceDevicesListDevicesResponseEnvelope struct {
-	Errors   []ZeroTrustDeviceDevicesListDevicesResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ZeroTrustDeviceDevicesListDevicesResponseEnvelopeMessages `json:"messages,required"`
-	Result   []ZeroTrustDeviceDevicesListDevicesResponse                 `json:"result,required,nullable"`
+type ZeroTrustDeviceListResponseEnvelope struct {
+	Errors   []ZeroTrustDeviceListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ZeroTrustDeviceListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []ZeroTrustDeviceListResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful.
-	Success    ZeroTrustDeviceDevicesListDevicesResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo ZeroTrustDeviceDevicesListDevicesResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       zeroTrustDeviceDevicesListDevicesResponseEnvelopeJSON       `json:"-"`
+	Success    ZeroTrustDeviceListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo ZeroTrustDeviceListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       zeroTrustDeviceListResponseEnvelopeJSON       `json:"-"`
 }
 
-// zeroTrustDeviceDevicesListDevicesResponseEnvelopeJSON contains the JSON metadata
-// for the struct [ZeroTrustDeviceDevicesListDevicesResponseEnvelope]
-type zeroTrustDeviceDevicesListDevicesResponseEnvelopeJSON struct {
+// zeroTrustDeviceListResponseEnvelopeJSON contains the JSON metadata for the
+// struct [ZeroTrustDeviceListResponseEnvelope]
+type zeroTrustDeviceListResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -226,58 +226,56 @@ type zeroTrustDeviceDevicesListDevicesResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZeroTrustDeviceDevicesListDevicesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustDeviceListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZeroTrustDeviceDevicesListDevicesResponseEnvelopeErrors struct {
-	Code    int64                                                       `json:"code,required"`
-	Message string                                                      `json:"message,required"`
-	JSON    zeroTrustDeviceDevicesListDevicesResponseEnvelopeErrorsJSON `json:"-"`
+type ZeroTrustDeviceListResponseEnvelopeErrors struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    zeroTrustDeviceListResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// zeroTrustDeviceDevicesListDevicesResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct
-// [ZeroTrustDeviceDevicesListDevicesResponseEnvelopeErrors]
-type zeroTrustDeviceDevicesListDevicesResponseEnvelopeErrorsJSON struct {
+// zeroTrustDeviceListResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [ZeroTrustDeviceListResponseEnvelopeErrors]
+type zeroTrustDeviceListResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZeroTrustDeviceDevicesListDevicesResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustDeviceListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZeroTrustDeviceDevicesListDevicesResponseEnvelopeMessages struct {
-	Code    int64                                                         `json:"code,required"`
-	Message string                                                        `json:"message,required"`
-	JSON    zeroTrustDeviceDevicesListDevicesResponseEnvelopeMessagesJSON `json:"-"`
+type ZeroTrustDeviceListResponseEnvelopeMessages struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    zeroTrustDeviceListResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// zeroTrustDeviceDevicesListDevicesResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct
-// [ZeroTrustDeviceDevicesListDevicesResponseEnvelopeMessages]
-type zeroTrustDeviceDevicesListDevicesResponseEnvelopeMessagesJSON struct {
+// zeroTrustDeviceListResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [ZeroTrustDeviceListResponseEnvelopeMessages]
+type zeroTrustDeviceListResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZeroTrustDeviceDevicesListDevicesResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustDeviceListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful.
-type ZeroTrustDeviceDevicesListDevicesResponseEnvelopeSuccess bool
+type ZeroTrustDeviceListResponseEnvelopeSuccess bool
 
 const (
-	ZeroTrustDeviceDevicesListDevicesResponseEnvelopeSuccessTrue ZeroTrustDeviceDevicesListDevicesResponseEnvelopeSuccess = true
+	ZeroTrustDeviceListResponseEnvelopeSuccessTrue ZeroTrustDeviceListResponseEnvelopeSuccess = true
 )
 
-type ZeroTrustDeviceDevicesListDevicesResponseEnvelopeResultInfo struct {
+type ZeroTrustDeviceListResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -285,14 +283,13 @@ type ZeroTrustDeviceDevicesListDevicesResponseEnvelopeResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                                         `json:"total_count"`
-	JSON       zeroTrustDeviceDevicesListDevicesResponseEnvelopeResultInfoJSON `json:"-"`
+	TotalCount float64                                           `json:"total_count"`
+	JSON       zeroTrustDeviceListResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
-// zeroTrustDeviceDevicesListDevicesResponseEnvelopeResultInfoJSON contains the
-// JSON metadata for the struct
-// [ZeroTrustDeviceDevicesListDevicesResponseEnvelopeResultInfo]
-type zeroTrustDeviceDevicesListDevicesResponseEnvelopeResultInfoJSON struct {
+// zeroTrustDeviceListResponseEnvelopeResultInfoJSON contains the JSON metadata for
+// the struct [ZeroTrustDeviceListResponseEnvelopeResultInfo]
+type zeroTrustDeviceListResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -301,7 +298,7 @@ type zeroTrustDeviceDevicesListDevicesResponseEnvelopeResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZeroTrustDeviceDevicesListDevicesResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustDeviceListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
