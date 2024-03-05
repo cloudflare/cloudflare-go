@@ -12,8 +12,8 @@ import (
 // directly, and instead use the [NewLogService] method instead.
 type LogService struct {
 	Options  []option.RequestOption
-	Controls *LogControlService
-	Rayids   *LogRayidService
+	Control  *LogControlService
+	Rayid    *LogRayidService
 	Received *LogReceivedService
 }
 
@@ -23,8 +23,8 @@ type LogService struct {
 func NewLogService(opts ...option.RequestOption) (r *LogService) {
 	r = &LogService{}
 	r.Options = opts
-	r.Controls = NewLogControlService(opts...)
-	r.Rayids = NewLogRayidService(opts...)
+	r.Control = NewLogControlService(opts...)
+	r.Rayid = NewLogRayidService(opts...)
 	r.Received = NewLogReceivedService(opts...)
 	return
 }

@@ -20,8 +20,7 @@ import (
 // instantiate this service directly, and instead use the
 // [NewMagicTransitIPSECTunnelService] method instead.
 type MagicTransitIPSECTunnelService struct {
-	Options      []option.RequestOption
-	PSKGenerates *MagicTransitIPSECTunnelPSKGenerateService
+	Options []option.RequestOption
 }
 
 // NewMagicTransitIPSECTunnelService generates a new service that applies the given
@@ -30,7 +29,6 @@ type MagicTransitIPSECTunnelService struct {
 func NewMagicTransitIPSECTunnelService(opts ...option.RequestOption) (r *MagicTransitIPSECTunnelService) {
 	r = &MagicTransitIPSECTunnelService{}
 	r.Options = opts
-	r.PSKGenerates = NewMagicTransitIPSECTunnelPSKGenerateService(opts...)
 	return
 }
 
@@ -98,6 +96,23 @@ func (r *MagicTransitIPSECTunnelService) Get(ctx context.Context, accountIdentif
 	var env MagicTransitIPSECTunnelGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s", accountIdentifier, tunnelIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Generates a Pre Shared Key for a specific IPsec tunnel used in the IKE session.
+// Use `?validate_only=true` as an optional query parameter to only run validation
+// without persisting changes. After a PSK is generated, the PSK is immediately
+// persisted to Cloudflare's edge and cannot be retrieved later. Note the PSK in a
+// safe place.
+func (r *MagicTransitIPSECTunnelService) PSKGenerate(ctx context.Context, accountIdentifier string, tunnelIdentifier string, opts ...option.RequestOption) (res *MagicTransitIPSECTunnelPSKGenerateResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env MagicTransitIPSECTunnelPSKGenerateResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/magic/ipsec_tunnels/%s/psk_generate", accountIdentifier, tunnelIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -433,6 +448,49 @@ type magicTransitIPSECTunnelGetResponseJSON struct {
 }
 
 func (r *MagicTransitIPSECTunnelGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MagicTransitIPSECTunnelPSKGenerateResponse struct {
+	// Identifier
+	IPSECTunnelID string `json:"ipsec_tunnel_id"`
+	// A randomly generated or provided string for use in the IPsec tunnel.
+	PSK string `json:"psk"`
+	// The PSK metadata that includes when the PSK was generated.
+	PSKMetadata MagicTransitIPSECTunnelPSKGenerateResponsePSKMetadata `json:"psk_metadata"`
+	JSON        magicTransitIPSECTunnelPSKGenerateResponseJSON        `json:"-"`
+}
+
+// magicTransitIPSECTunnelPSKGenerateResponseJSON contains the JSON metadata for
+// the struct [MagicTransitIPSECTunnelPSKGenerateResponse]
+type magicTransitIPSECTunnelPSKGenerateResponseJSON struct {
+	IPSECTunnelID apijson.Field
+	PSK           apijson.Field
+	PSKMetadata   apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *MagicTransitIPSECTunnelPSKGenerateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The PSK metadata that includes when the PSK was generated.
+type MagicTransitIPSECTunnelPSKGenerateResponsePSKMetadata struct {
+	// The date and time the tunnel was last modified.
+	LastGeneratedOn time.Time                                                 `json:"last_generated_on" format:"date-time"`
+	JSON            magicTransitIPSECTunnelPSKGenerateResponsePSKMetadataJSON `json:"-"`
+}
+
+// magicTransitIPSECTunnelPSKGenerateResponsePSKMetadataJSON contains the JSON
+// metadata for the struct [MagicTransitIPSECTunnelPSKGenerateResponsePSKMetadata]
+type magicTransitIPSECTunnelPSKGenerateResponsePSKMetadataJSON struct {
+	LastGeneratedOn apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *MagicTransitIPSECTunnelPSKGenerateResponsePSKMetadata) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -941,4 +999,75 @@ type MagicTransitIPSECTunnelGetResponseEnvelopeSuccess bool
 
 const (
 	MagicTransitIPSECTunnelGetResponseEnvelopeSuccessTrue MagicTransitIPSECTunnelGetResponseEnvelopeSuccess = true
+)
+
+type MagicTransitIPSECTunnelPSKGenerateResponseEnvelope struct {
+	Errors   []MagicTransitIPSECTunnelPSKGenerateResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []MagicTransitIPSECTunnelPSKGenerateResponseEnvelopeMessages `json:"messages,required"`
+	Result   MagicTransitIPSECTunnelPSKGenerateResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success MagicTransitIPSECTunnelPSKGenerateResponseEnvelopeSuccess `json:"success,required"`
+	JSON    magicTransitIPSECTunnelPSKGenerateResponseEnvelopeJSON    `json:"-"`
+}
+
+// magicTransitIPSECTunnelPSKGenerateResponseEnvelopeJSON contains the JSON
+// metadata for the struct [MagicTransitIPSECTunnelPSKGenerateResponseEnvelope]
+type magicTransitIPSECTunnelPSKGenerateResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MagicTransitIPSECTunnelPSKGenerateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MagicTransitIPSECTunnelPSKGenerateResponseEnvelopeErrors struct {
+	Code    int64                                                        `json:"code,required"`
+	Message string                                                       `json:"message,required"`
+	JSON    magicTransitIPSECTunnelPSKGenerateResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// magicTransitIPSECTunnelPSKGenerateResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct
+// [MagicTransitIPSECTunnelPSKGenerateResponseEnvelopeErrors]
+type magicTransitIPSECTunnelPSKGenerateResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MagicTransitIPSECTunnelPSKGenerateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MagicTransitIPSECTunnelPSKGenerateResponseEnvelopeMessages struct {
+	Code    int64                                                          `json:"code,required"`
+	Message string                                                         `json:"message,required"`
+	JSON    magicTransitIPSECTunnelPSKGenerateResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// magicTransitIPSECTunnelPSKGenerateResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct
+// [MagicTransitIPSECTunnelPSKGenerateResponseEnvelopeMessages]
+type magicTransitIPSECTunnelPSKGenerateResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MagicTransitIPSECTunnelPSKGenerateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type MagicTransitIPSECTunnelPSKGenerateResponseEnvelopeSuccess bool
+
+const (
+	MagicTransitIPSECTunnelPSKGenerateResponseEnvelopeSuccessTrue MagicTransitIPSECTunnelPSKGenerateResponseEnvelopeSuccess = true
 )

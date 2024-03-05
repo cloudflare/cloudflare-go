@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestDNSFirewallAnalyticsReportListWithOptionalParams(t *testing.T) {
+func TestDNSFirewallAnalyticsReportGetWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -28,11 +28,11 @@ func TestDNSFirewallAnalyticsReportListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.DNS.Firewall.Analytics.Reports.List(
+	_, err := client.DNS.Firewall.Analytics.Reports.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.DNSFirewallAnalyticsReportListParams{
+		cloudflare.DNSFirewallAnalyticsReportGetParams{
 			Dimensions: cloudflare.F("queryType"),
 			Filters:    cloudflare.F("responseCode==NOERROR,queryType==A"),
 			Limit:      cloudflare.F(int64(100)),

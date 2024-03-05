@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestLogpushDatasetFieldListWithOptionalParams(t *testing.T) {
+func TestLogpushDatasetFieldGetWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -27,10 +27,10 @@ func TestLogpushDatasetFieldListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Logpush.Datasets.Fields.List(
+	_, err := client.Logpush.Datasets.Fields.Get(
 		context.TODO(),
 		"http_requests",
-		cloudflare.LogpushDatasetFieldListParams{
+		cloudflare.LogpushDatasetFieldGetParams{
 			AccountID: cloudflare.F("string"),
 			ZoneID:    cloudflare.F("string"),
 		},

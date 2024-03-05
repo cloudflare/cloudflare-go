@@ -11,9 +11,9 @@ import (
 // variables from the environment automatically. You should not instantiate this
 // service directly, and instead use the [NewLogControlService] method instead.
 type LogControlService struct {
-	Options    []option.RequestOption
-	Retentions *LogControlRetentionService
-	Cmb        *LogControlCmbService
+	Options   []option.RequestOption
+	Retention *LogControlRetentionService
+	Cmb       *LogControlCmbService
 }
 
 // NewLogControlService generates a new service that applies the given options to
@@ -22,7 +22,7 @@ type LogControlService struct {
 func NewLogControlService(opts ...option.RequestOption) (r *LogControlService) {
 	r = &LogControlService{}
 	r.Options = opts
-	r.Retentions = NewLogControlRetentionService(opts...)
+	r.Retention = NewLogControlRetentionService(opts...)
 	r.Cmb = NewLogControlCmbService(opts...)
 	return
 }

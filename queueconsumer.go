@@ -60,12 +60,12 @@ func (r *QueueConsumerService) Update(ctx context.Context, name string, consumer
 	return
 }
 
-// Returns the consumers for a queue.
-func (r *QueueConsumerService) List(ctx context.Context, name string, query QueueConsumerListParams, opts ...option.RequestOption) (res *[]QueueConsumerListResponse, err error) {
+// Deletes the consumer for a queue.
+func (r *QueueConsumerService) Delete(ctx context.Context, name string, consumerName string, body QueueConsumerDeleteParams, opts ...option.RequestOption) (res *QueueConsumerDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env QueueConsumerListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/queues/%s/consumers", query.AccountID, name)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	var env QueueConsumerDeleteResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/workers/queues/%s/consumers/%s", body.AccountID, name, consumerName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -73,12 +73,12 @@ func (r *QueueConsumerService) List(ctx context.Context, name string, query Queu
 	return
 }
 
-// Deletes the consumer for a queue.
-func (r *QueueConsumerService) Delete(ctx context.Context, name string, consumerName string, body QueueConsumerDeleteParams, opts ...option.RequestOption) (res *QueueConsumerDeleteResponse, err error) {
+// Returns the consumers for a queue.
+func (r *QueueConsumerService) Get(ctx context.Context, name string, query QueueConsumerGetParams, opts ...option.RequestOption) (res *[]QueueConsumerGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env QueueConsumerDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/queues/%s/consumers/%s", body.AccountID, name, consumerName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	var env QueueConsumerGetResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/workers/queues/%s/consumers", query.AccountID, name)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -182,52 +182,6 @@ func (r *QueueConsumerUpdateResponseSettings) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type QueueConsumerListResponse struct {
-	CreatedOn   interface{}                       `json:"created_on"`
-	Environment interface{}                       `json:"environment"`
-	QueueName   interface{}                       `json:"queue_name"`
-	Service     interface{}                       `json:"service"`
-	Settings    QueueConsumerListResponseSettings `json:"settings"`
-	JSON        queueConsumerListResponseJSON     `json:"-"`
-}
-
-// queueConsumerListResponseJSON contains the JSON metadata for the struct
-// [QueueConsumerListResponse]
-type queueConsumerListResponseJSON struct {
-	CreatedOn   apijson.Field
-	Environment apijson.Field
-	QueueName   apijson.Field
-	Service     apijson.Field
-	Settings    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *QueueConsumerListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type QueueConsumerListResponseSettings struct {
-	BatchSize     float64                               `json:"batch_size"`
-	MaxRetries    float64                               `json:"max_retries"`
-	MaxWaitTimeMs float64                               `json:"max_wait_time_ms"`
-	JSON          queueConsumerListResponseSettingsJSON `json:"-"`
-}
-
-// queueConsumerListResponseSettingsJSON contains the JSON metadata for the struct
-// [QueueConsumerListResponseSettings]
-type queueConsumerListResponseSettingsJSON struct {
-	BatchSize     apijson.Field
-	MaxRetries    apijson.Field
-	MaxWaitTimeMs apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *QueueConsumerListResponseSettings) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 // Union satisfied by [QueueConsumerDeleteResponseUnknown],
 // [QueueConsumerDeleteResponseArray] or [shared.UnionString].
 type QueueConsumerDeleteResponse interface {
@@ -248,6 +202,52 @@ func init() {
 type QueueConsumerDeleteResponseArray []interface{}
 
 func (r QueueConsumerDeleteResponseArray) ImplementsQueueConsumerDeleteResponse() {}
+
+type QueueConsumerGetResponse struct {
+	CreatedOn   interface{}                      `json:"created_on"`
+	Environment interface{}                      `json:"environment"`
+	QueueName   interface{}                      `json:"queue_name"`
+	Service     interface{}                      `json:"service"`
+	Settings    QueueConsumerGetResponseSettings `json:"settings"`
+	JSON        queueConsumerGetResponseJSON     `json:"-"`
+}
+
+// queueConsumerGetResponseJSON contains the JSON metadata for the struct
+// [QueueConsumerGetResponse]
+type queueConsumerGetResponseJSON struct {
+	CreatedOn   apijson.Field
+	Environment apijson.Field
+	QueueName   apijson.Field
+	Service     apijson.Field
+	Settings    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *QueueConsumerGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type QueueConsumerGetResponseSettings struct {
+	BatchSize     float64                              `json:"batch_size"`
+	MaxRetries    float64                              `json:"max_retries"`
+	MaxWaitTimeMs float64                              `json:"max_wait_time_ms"`
+	JSON          queueConsumerGetResponseSettingsJSON `json:"-"`
+}
+
+// queueConsumerGetResponseSettingsJSON contains the JSON metadata for the struct
+// [QueueConsumerGetResponseSettings]
+type queueConsumerGetResponseSettingsJSON struct {
+	BatchSize     apijson.Field
+	MaxRetries    apijson.Field
+	MaxWaitTimeMs apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *QueueConsumerGetResponseSettings) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type QueueConsumerNewParams struct {
 	// Identifier
@@ -465,73 +465,6 @@ func (r *QueueConsumerUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type QueueConsumerListParams struct {
-	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type QueueConsumerListResponseEnvelope struct {
-	Errors   []interface{}               `json:"errors,required,nullable"`
-	Messages []interface{}               `json:"messages,required,nullable"`
-	Result   []QueueConsumerListResponse `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    QueueConsumerListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo QueueConsumerListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       queueConsumerListResponseEnvelopeJSON       `json:"-"`
-}
-
-// queueConsumerListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [QueueConsumerListResponseEnvelope]
-type queueConsumerListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *QueueConsumerListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type QueueConsumerListResponseEnvelopeSuccess bool
-
-const (
-	QueueConsumerListResponseEnvelopeSuccessTrue QueueConsumerListResponseEnvelopeSuccess = true
-)
-
-type QueueConsumerListResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                         `json:"total_count"`
-	TotalPages interface{}                                     `json:"total_pages"`
-	JSON       queueConsumerListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// queueConsumerListResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [QueueConsumerListResponseEnvelopeResultInfo]
-type queueConsumerListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	TotalPages  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *QueueConsumerListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type QueueConsumerDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -632,5 +565,72 @@ type queueConsumerDeleteResponseEnvelopeResultInfoJSON struct {
 }
 
 func (r *QueueConsumerDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type QueueConsumerGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type QueueConsumerGetResponseEnvelope struct {
+	Errors   []interface{}              `json:"errors,required,nullable"`
+	Messages []interface{}              `json:"messages,required,nullable"`
+	Result   []QueueConsumerGetResponse `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success    QueueConsumerGetResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo QueueConsumerGetResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       queueConsumerGetResponseEnvelopeJSON       `json:"-"`
+}
+
+// queueConsumerGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [QueueConsumerGetResponseEnvelope]
+type queueConsumerGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *QueueConsumerGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type QueueConsumerGetResponseEnvelopeSuccess bool
+
+const (
+	QueueConsumerGetResponseEnvelopeSuccessTrue QueueConsumerGetResponseEnvelopeSuccess = true
+)
+
+type QueueConsumerGetResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                        `json:"total_count"`
+	TotalPages interface{}                                    `json:"total_pages"`
+	JSON       queueConsumerGetResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// queueConsumerGetResponseEnvelopeResultInfoJSON contains the JSON metadata for
+// the struct [QueueConsumerGetResponseEnvelopeResultInfo]
+type queueConsumerGetResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	TotalPages  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *QueueConsumerGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

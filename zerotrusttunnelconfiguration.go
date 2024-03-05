@@ -48,9 +48,9 @@ func (r *ZeroTrustTunnelConfigurationService) Update(ctx context.Context, tunnel
 }
 
 // Gets the configuration for a remotely-managed tunnel
-func (r *ZeroTrustTunnelConfigurationService) List(ctx context.Context, tunnelID string, query ZeroTrustTunnelConfigurationListParams, opts ...option.RequestOption) (res *ZeroTrustTunnelConfigurationListResponse, err error) {
+func (r *ZeroTrustTunnelConfigurationService) Get(ctx context.Context, tunnelID string, query ZeroTrustTunnelConfigurationGetParams, opts ...option.RequestOption) (res *ZeroTrustTunnelConfigurationGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env ZeroTrustTunnelConfigurationListResponseEnvelope
+	var env ZeroTrustTunnelConfigurationGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cfd_tunnel/%s/configurations", query.AccountID, tunnelID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -82,15 +82,15 @@ type ZeroTrustTunnelConfigurationUpdateResponseArray []interface{}
 func (r ZeroTrustTunnelConfigurationUpdateResponseArray) ImplementsZeroTrustTunnelConfigurationUpdateResponse() {
 }
 
-// Union satisfied by [ZeroTrustTunnelConfigurationListResponseUnknown],
-// [ZeroTrustTunnelConfigurationListResponseArray] or [shared.UnionString].
-type ZeroTrustTunnelConfigurationListResponse interface {
-	ImplementsZeroTrustTunnelConfigurationListResponse()
+// Union satisfied by [ZeroTrustTunnelConfigurationGetResponseUnknown],
+// [ZeroTrustTunnelConfigurationGetResponseArray] or [shared.UnionString].
+type ZeroTrustTunnelConfigurationGetResponse interface {
+	ImplementsZeroTrustTunnelConfigurationGetResponse()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*ZeroTrustTunnelConfigurationListResponse)(nil)).Elem(),
+		reflect.TypeOf((*ZeroTrustTunnelConfigurationGetResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -99,9 +99,9 @@ func init() {
 	)
 }
 
-type ZeroTrustTunnelConfigurationListResponseArray []interface{}
+type ZeroTrustTunnelConfigurationGetResponseArray []interface{}
 
-func (r ZeroTrustTunnelConfigurationListResponseArray) ImplementsZeroTrustTunnelConfigurationListResponse() {
+func (r ZeroTrustTunnelConfigurationGetResponseArray) ImplementsZeroTrustTunnelConfigurationGetResponse() {
 }
 
 type ZeroTrustTunnelConfigurationUpdateParams struct {
@@ -353,23 +353,23 @@ const (
 	ZeroTrustTunnelConfigurationUpdateResponseEnvelopeSuccessTrue ZeroTrustTunnelConfigurationUpdateResponseEnvelopeSuccess = true
 )
 
-type ZeroTrustTunnelConfigurationListParams struct {
+type ZeroTrustTunnelConfigurationGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type ZeroTrustTunnelConfigurationListResponseEnvelope struct {
-	Errors   []ZeroTrustTunnelConfigurationListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ZeroTrustTunnelConfigurationListResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustTunnelConfigurationListResponse                   `json:"result,required"`
+type ZeroTrustTunnelConfigurationGetResponseEnvelope struct {
+	Errors   []ZeroTrustTunnelConfigurationGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ZeroTrustTunnelConfigurationGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   ZeroTrustTunnelConfigurationGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success ZeroTrustTunnelConfigurationListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    zeroTrustTunnelConfigurationListResponseEnvelopeJSON    `json:"-"`
+	Success ZeroTrustTunnelConfigurationGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    zeroTrustTunnelConfigurationGetResponseEnvelopeJSON    `json:"-"`
 }
 
-// zeroTrustTunnelConfigurationListResponseEnvelopeJSON contains the JSON metadata
-// for the struct [ZeroTrustTunnelConfigurationListResponseEnvelope]
-type zeroTrustTunnelConfigurationListResponseEnvelopeJSON struct {
+// zeroTrustTunnelConfigurationGetResponseEnvelopeJSON contains the JSON metadata
+// for the struct [ZeroTrustTunnelConfigurationGetResponseEnvelope]
+type zeroTrustTunnelConfigurationGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -378,52 +378,52 @@ type zeroTrustTunnelConfigurationListResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZeroTrustTunnelConfigurationListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustTunnelConfigurationGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZeroTrustTunnelConfigurationListResponseEnvelopeErrors struct {
-	Code    int64                                                      `json:"code,required"`
-	Message string                                                     `json:"message,required"`
-	JSON    zeroTrustTunnelConfigurationListResponseEnvelopeErrorsJSON `json:"-"`
+type ZeroTrustTunnelConfigurationGetResponseEnvelopeErrors struct {
+	Code    int64                                                     `json:"code,required"`
+	Message string                                                    `json:"message,required"`
+	JSON    zeroTrustTunnelConfigurationGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// zeroTrustTunnelConfigurationListResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [ZeroTrustTunnelConfigurationListResponseEnvelopeErrors]
-type zeroTrustTunnelConfigurationListResponseEnvelopeErrorsJSON struct {
+// zeroTrustTunnelConfigurationGetResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [ZeroTrustTunnelConfigurationGetResponseEnvelopeErrors]
+type zeroTrustTunnelConfigurationGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZeroTrustTunnelConfigurationListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustTunnelConfigurationGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZeroTrustTunnelConfigurationListResponseEnvelopeMessages struct {
-	Code    int64                                                        `json:"code,required"`
-	Message string                                                       `json:"message,required"`
-	JSON    zeroTrustTunnelConfigurationListResponseEnvelopeMessagesJSON `json:"-"`
+type ZeroTrustTunnelConfigurationGetResponseEnvelopeMessages struct {
+	Code    int64                                                       `json:"code,required"`
+	Message string                                                      `json:"message,required"`
+	JSON    zeroTrustTunnelConfigurationGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// zeroTrustTunnelConfigurationListResponseEnvelopeMessagesJSON contains the JSON
+// zeroTrustTunnelConfigurationGetResponseEnvelopeMessagesJSON contains the JSON
 // metadata for the struct
-// [ZeroTrustTunnelConfigurationListResponseEnvelopeMessages]
-type zeroTrustTunnelConfigurationListResponseEnvelopeMessagesJSON struct {
+// [ZeroTrustTunnelConfigurationGetResponseEnvelopeMessages]
+type zeroTrustTunnelConfigurationGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZeroTrustTunnelConfigurationListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustTunnelConfigurationGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type ZeroTrustTunnelConfigurationListResponseEnvelopeSuccess bool
+type ZeroTrustTunnelConfigurationGetResponseEnvelopeSuccess bool
 
 const (
-	ZeroTrustTunnelConfigurationListResponseEnvelopeSuccessTrue ZeroTrustTunnelConfigurationListResponseEnvelopeSuccess = true
+	ZeroTrustTunnelConfigurationGetResponseEnvelopeSuccessTrue ZeroTrustTunnelConfigurationGetResponseEnvelopeSuccess = true
 )

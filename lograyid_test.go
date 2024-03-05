@@ -27,7 +27,7 @@ func TestLogRayidGetWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Logs.Rayids.Get(
+	_, err := client.Logs.Rayid.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"41ddf1740f67442d",

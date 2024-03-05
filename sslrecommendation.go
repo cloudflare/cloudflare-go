@@ -32,9 +32,9 @@ func NewSSLRecommendationService(opts ...option.RequestOption) (r *SSLRecommenda
 }
 
 // Retrieve the SSL/TLS Recommender's recommendation for a zone.
-func (r *SSLRecommendationService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *SSLRecommendationListResponse, err error) {
+func (r *SSLRecommendationService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *SSLRecommendationGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SSLRecommendationListResponseEnvelope
+	var env SSLRecommendationGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/ssl/recommendation", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -44,17 +44,17 @@ func (r *SSLRecommendationService) List(ctx context.Context, zoneIdentifier stri
 	return
 }
 
-type SSLRecommendationListResponse struct {
+type SSLRecommendationGetResponse struct {
 	// Identifier of a recommedation result.
-	ID         string                             `json:"id"`
-	ModifiedOn time.Time                          `json:"modified_on" format:"date-time"`
-	Value      SSLRecommendationListResponseValue `json:"value"`
-	JSON       sslRecommendationListResponseJSON  `json:"-"`
+	ID         string                            `json:"id"`
+	ModifiedOn time.Time                         `json:"modified_on" format:"date-time"`
+	Value      SSLRecommendationGetResponseValue `json:"value"`
+	JSON       sslRecommendationGetResponseJSON  `json:"-"`
 }
 
-// sslRecommendationListResponseJSON contains the JSON metadata for the struct
-// [SSLRecommendationListResponse]
-type sslRecommendationListResponseJSON struct {
+// sslRecommendationGetResponseJSON contains the JSON metadata for the struct
+// [SSLRecommendationGetResponse]
+type sslRecommendationGetResponseJSON struct {
 	ID          apijson.Field
 	ModifiedOn  apijson.Field
 	Value       apijson.Field
@@ -62,30 +62,30 @@ type sslRecommendationListResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SSLRecommendationListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SSLRecommendationGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SSLRecommendationListResponseValue string
+type SSLRecommendationGetResponseValue string
 
 const (
-	SSLRecommendationListResponseValueFlexible SSLRecommendationListResponseValue = "flexible"
-	SSLRecommendationListResponseValueFull     SSLRecommendationListResponseValue = "full"
-	SSLRecommendationListResponseValueStrict   SSLRecommendationListResponseValue = "strict"
+	SSLRecommendationGetResponseValueFlexible SSLRecommendationGetResponseValue = "flexible"
+	SSLRecommendationGetResponseValueFull     SSLRecommendationGetResponseValue = "full"
+	SSLRecommendationGetResponseValueStrict   SSLRecommendationGetResponseValue = "strict"
 )
 
-type SSLRecommendationListResponseEnvelope struct {
-	Errors   []SSLRecommendationListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SSLRecommendationListResponseEnvelopeMessages `json:"messages,required"`
-	Result   SSLRecommendationListResponse                   `json:"result,required,nullable"`
+type SSLRecommendationGetResponseEnvelope struct {
+	Errors   []SSLRecommendationGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SSLRecommendationGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   SSLRecommendationGetResponse                   `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success SSLRecommendationListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    sslRecommendationListResponseEnvelopeJSON    `json:"-"`
+	Success SSLRecommendationGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    sslRecommendationGetResponseEnvelopeJSON    `json:"-"`
 }
 
-// sslRecommendationListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [SSLRecommendationListResponseEnvelope]
-type sslRecommendationListResponseEnvelopeJSON struct {
+// sslRecommendationGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [SSLRecommendationGetResponseEnvelope]
+type sslRecommendationGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -94,51 +94,51 @@ type sslRecommendationListResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SSLRecommendationListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SSLRecommendationGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SSLRecommendationListResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    sslRecommendationListResponseEnvelopeErrorsJSON `json:"-"`
+type SSLRecommendationGetResponseEnvelopeErrors struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    sslRecommendationGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// sslRecommendationListResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [SSLRecommendationListResponseEnvelopeErrors]
-type sslRecommendationListResponseEnvelopeErrorsJSON struct {
+// sslRecommendationGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [SSLRecommendationGetResponseEnvelopeErrors]
+type sslRecommendationGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SSLRecommendationListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *SSLRecommendationGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SSLRecommendationListResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    sslRecommendationListResponseEnvelopeMessagesJSON `json:"-"`
+type SSLRecommendationGetResponseEnvelopeMessages struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    sslRecommendationGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// sslRecommendationListResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [SSLRecommendationListResponseEnvelopeMessages]
-type sslRecommendationListResponseEnvelopeMessagesJSON struct {
+// sslRecommendationGetResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [SSLRecommendationGetResponseEnvelopeMessages]
+type sslRecommendationGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SSLRecommendationListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SSLRecommendationGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type SSLRecommendationListResponseEnvelopeSuccess bool
+type SSLRecommendationGetResponseEnvelopeSuccess bool
 
 const (
-	SSLRecommendationListResponseEnvelopeSuccessTrue SSLRecommendationListResponseEnvelopeSuccess = true
+	SSLRecommendationGetResponseEnvelopeSuccessTrue SSLRecommendationGetResponseEnvelopeSuccess = true
 )

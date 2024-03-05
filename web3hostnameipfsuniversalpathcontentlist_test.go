@@ -57,7 +57,7 @@ func TestWeb3HostnameIPFSUniversalPathContentListUpdate(t *testing.T) {
 	}
 }
 
-func TestWeb3HostnameIPFSUniversalPathContentListList(t *testing.T) {
+func TestWeb3HostnameIPFSUniversalPathContentListGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -71,7 +71,7 @@ func TestWeb3HostnameIPFSUniversalPathContentListList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Web3.Hostnames.IPFSUniversalPaths.ContentLists.List(
+	_, err := client.Web3.Hostnames.IPFSUniversalPaths.ContentLists.Get(
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		"023e105f4ecef8ad9ca31a8372d0c353",

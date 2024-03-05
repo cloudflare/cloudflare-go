@@ -31,9 +31,9 @@ func NewMagicNetworkMonitoringConfigFullService(opts ...option.RequestOption) (r
 }
 
 // Lists default sampling, router IPs, and rules for account.
-func (r *MagicNetworkMonitoringConfigFullService) List(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MagicNetworkMonitoringConfigFullListResponse, err error) {
+func (r *MagicNetworkMonitoringConfigFullService) Get(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MagicNetworkMonitoringConfigFullGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env MagicNetworkMonitoringConfigFullListResponseEnvelope
+	var env MagicNetworkMonitoringConfigFullGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/mnm/config/full", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -43,19 +43,19 @@ func (r *MagicNetworkMonitoringConfigFullService) List(ctx context.Context, acco
 	return
 }
 
-type MagicNetworkMonitoringConfigFullListResponse struct {
+type MagicNetworkMonitoringConfigFullGetResponse struct {
 	// Fallback sampling rate of flow messages being sent in packets per second. This
 	// should match the packet sampling rate configured on the router.
 	DefaultSampling float64 `json:"default_sampling,required"`
 	// The account name.
-	Name      string                                           `json:"name,required"`
-	RouterIPs []string                                         `json:"router_ips,required"`
-	JSON      magicNetworkMonitoringConfigFullListResponseJSON `json:"-"`
+	Name      string                                          `json:"name,required"`
+	RouterIPs []string                                        `json:"router_ips,required"`
+	JSON      magicNetworkMonitoringConfigFullGetResponseJSON `json:"-"`
 }
 
-// magicNetworkMonitoringConfigFullListResponseJSON contains the JSON metadata for
-// the struct [MagicNetworkMonitoringConfigFullListResponse]
-type magicNetworkMonitoringConfigFullListResponseJSON struct {
+// magicNetworkMonitoringConfigFullGetResponseJSON contains the JSON metadata for
+// the struct [MagicNetworkMonitoringConfigFullGetResponse]
+type magicNetworkMonitoringConfigFullGetResponseJSON struct {
 	DefaultSampling apijson.Field
 	Name            apijson.Field
 	RouterIPs       apijson.Field
@@ -63,22 +63,22 @@ type magicNetworkMonitoringConfigFullListResponseJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *MagicNetworkMonitoringConfigFullListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicNetworkMonitoringConfigFullGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MagicNetworkMonitoringConfigFullListResponseEnvelope struct {
-	Errors   []MagicNetworkMonitoringConfigFullListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MagicNetworkMonitoringConfigFullListResponseEnvelopeMessages `json:"messages,required"`
-	Result   MagicNetworkMonitoringConfigFullListResponse                   `json:"result,required"`
+type MagicNetworkMonitoringConfigFullGetResponseEnvelope struct {
+	Errors   []MagicNetworkMonitoringConfigFullGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []MagicNetworkMonitoringConfigFullGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   MagicNetworkMonitoringConfigFullGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success MagicNetworkMonitoringConfigFullListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    magicNetworkMonitoringConfigFullListResponseEnvelopeJSON    `json:"-"`
+	Success MagicNetworkMonitoringConfigFullGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    magicNetworkMonitoringConfigFullGetResponseEnvelopeJSON    `json:"-"`
 }
 
-// magicNetworkMonitoringConfigFullListResponseEnvelopeJSON contains the JSON
-// metadata for the struct [MagicNetworkMonitoringConfigFullListResponseEnvelope]
-type magicNetworkMonitoringConfigFullListResponseEnvelopeJSON struct {
+// magicNetworkMonitoringConfigFullGetResponseEnvelopeJSON contains the JSON
+// metadata for the struct [MagicNetworkMonitoringConfigFullGetResponseEnvelope]
+type magicNetworkMonitoringConfigFullGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -87,53 +87,53 @@ type magicNetworkMonitoringConfigFullListResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MagicNetworkMonitoringConfigFullListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicNetworkMonitoringConfigFullGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MagicNetworkMonitoringConfigFullListResponseEnvelopeErrors struct {
-	Code    int64                                                          `json:"code,required"`
-	Message string                                                         `json:"message,required"`
-	JSON    magicNetworkMonitoringConfigFullListResponseEnvelopeErrorsJSON `json:"-"`
+type MagicNetworkMonitoringConfigFullGetResponseEnvelopeErrors struct {
+	Code    int64                                                         `json:"code,required"`
+	Message string                                                        `json:"message,required"`
+	JSON    magicNetworkMonitoringConfigFullGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// magicNetworkMonitoringConfigFullListResponseEnvelopeErrorsJSON contains the JSON
+// magicNetworkMonitoringConfigFullGetResponseEnvelopeErrorsJSON contains the JSON
 // metadata for the struct
-// [MagicNetworkMonitoringConfigFullListResponseEnvelopeErrors]
-type magicNetworkMonitoringConfigFullListResponseEnvelopeErrorsJSON struct {
+// [MagicNetworkMonitoringConfigFullGetResponseEnvelopeErrors]
+type magicNetworkMonitoringConfigFullGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MagicNetworkMonitoringConfigFullListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicNetworkMonitoringConfigFullGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MagicNetworkMonitoringConfigFullListResponseEnvelopeMessages struct {
-	Code    int64                                                            `json:"code,required"`
-	Message string                                                           `json:"message,required"`
-	JSON    magicNetworkMonitoringConfigFullListResponseEnvelopeMessagesJSON `json:"-"`
+type MagicNetworkMonitoringConfigFullGetResponseEnvelopeMessages struct {
+	Code    int64                                                           `json:"code,required"`
+	Message string                                                          `json:"message,required"`
+	JSON    magicNetworkMonitoringConfigFullGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// magicNetworkMonitoringConfigFullListResponseEnvelopeMessagesJSON contains the
+// magicNetworkMonitoringConfigFullGetResponseEnvelopeMessagesJSON contains the
 // JSON metadata for the struct
-// [MagicNetworkMonitoringConfigFullListResponseEnvelopeMessages]
-type magicNetworkMonitoringConfigFullListResponseEnvelopeMessagesJSON struct {
+// [MagicNetworkMonitoringConfigFullGetResponseEnvelopeMessages]
+type magicNetworkMonitoringConfigFullGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MagicNetworkMonitoringConfigFullListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicNetworkMonitoringConfigFullGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type MagicNetworkMonitoringConfigFullListResponseEnvelopeSuccess bool
+type MagicNetworkMonitoringConfigFullGetResponseEnvelopeSuccess bool
 
 const (
-	MagicNetworkMonitoringConfigFullListResponseEnvelopeSuccessTrue MagicNetworkMonitoringConfigFullListResponseEnvelopeSuccess = true
+	MagicNetworkMonitoringConfigFullGetResponseEnvelopeSuccessTrue MagicNetworkMonitoringConfigFullGetResponseEnvelopeSuccess = true
 )

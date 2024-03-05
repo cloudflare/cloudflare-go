@@ -13,7 +13,7 @@ import (
 // method instead.
 type LogControlRetentionService struct {
 	Options []option.RequestOption
-	Flags   *LogControlRetentionFlagService
+	Flag    *LogControlRetentionFlagService
 }
 
 // NewLogControlRetentionService generates a new service that applies the given
@@ -22,6 +22,6 @@ type LogControlRetentionService struct {
 func NewLogControlRetentionService(opts ...option.RequestOption) (r *LogControlRetentionService) {
 	r = &LogControlRetentionService{}
 	r.Options = opts
-	r.Flags = NewLogControlRetentionFlagService(opts...)
+	r.Flag = NewLogControlRetentionFlagService(opts...)
 	return
 }

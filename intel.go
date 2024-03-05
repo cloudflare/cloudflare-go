@@ -15,7 +15,7 @@ type IntelService struct {
 	ASN                *IntelASNService
 	DNS                *IntelDNSService
 	Domains            *IntelDomainService
-	DomainHistories    *IntelDomainHistoryService
+	DomainHistory      *IntelDomainHistoryService
 	IPs                *IntelIPService
 	IPLists            *IntelIPListService
 	Miscategorizations *IntelMiscategorizationService
@@ -33,7 +33,7 @@ func NewIntelService(opts ...option.RequestOption) (r *IntelService) {
 	r.ASN = NewIntelASNService(opts...)
 	r.DNS = NewIntelDNSService(opts...)
 	r.Domains = NewIntelDomainService(opts...)
-	r.DomainHistories = NewIntelDomainHistoryService(opts...)
+	r.DomainHistory = NewIntelDomainHistoryService(opts...)
 	r.IPs = NewIntelIPService(opts...)
 	r.IPLists = NewIntelIPListService(opts...)
 	r.Miscategorizations = NewIntelMiscategorizationService(opts...)

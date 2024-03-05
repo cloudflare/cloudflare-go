@@ -41,7 +41,7 @@ func TestCertificateAuthorityHostnameAssociationUpdateWithOptionalParams(t *test
 	}
 }
 
-func TestCertificateAuthorityHostnameAssociationListWithOptionalParams(t *testing.T) {
+func TestCertificateAuthorityHostnameAssociationGetWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -55,7 +55,7 @@ func TestCertificateAuthorityHostnameAssociationListWithOptionalParams(t *testin
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.CertificateAuthorities.HostnameAssociations.List(context.TODO(), cloudflare.CertificateAuthorityHostnameAssociationListParams{
+	_, err := client.CertificateAuthorities.HostnameAssociations.Get(context.TODO(), cloudflare.CertificateAuthorityHostnameAssociationGetParams{
 		ZoneID:            cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		MTLSCertificateID: cloudflare.F("b2134436-2555-4acf-be5b-26c48136575e"),
 	})

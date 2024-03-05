@@ -47,12 +47,12 @@ func (r *WorkerScriptTailService) New(ctx context.Context, scriptName string, bo
 	return
 }
 
-// Get list of tails currently deployed on a Worker.
-func (r *WorkerScriptTailService) List(ctx context.Context, scriptName string, query WorkerScriptTailListParams, opts ...option.RequestOption) (res *WorkerScriptTailListResponse, err error) {
+// Deletes a tail from a Worker.
+func (r *WorkerScriptTailService) Delete(ctx context.Context, scriptName string, id string, body WorkerScriptTailDeleteParams, opts ...option.RequestOption) (res *WorkerScriptTailDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env WorkerScriptTailListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/tails", query.AccountID, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	var env WorkerScriptTailDeleteResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/tails/%s", body.AccountID, scriptName, id)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -60,12 +60,12 @@ func (r *WorkerScriptTailService) List(ctx context.Context, scriptName string, q
 	return
 }
 
-// Deletes a tail from a Worker.
-func (r *WorkerScriptTailService) Delete(ctx context.Context, scriptName string, id string, body WorkerScriptTailDeleteParams, opts ...option.RequestOption) (res *WorkerScriptTailDeleteResponse, err error) {
+// Get list of tails currently deployed on a Worker.
+func (r *WorkerScriptTailService) Get(ctx context.Context, scriptName string, query WorkerScriptTailGetParams, opts ...option.RequestOption) (res *WorkerScriptTailGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env WorkerScriptTailDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/tails/%s", body.AccountID, scriptName, id)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	var env WorkerScriptTailGetResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/tails", query.AccountID, scriptName)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -94,27 +94,6 @@ func (r *WorkerScriptTailNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerScriptTailListResponse struct {
-	ID        interface{}                      `json:"id"`
-	ExpiresAt interface{}                      `json:"expires_at"`
-	URL       interface{}                      `json:"url"`
-	JSON      workerScriptTailListResponseJSON `json:"-"`
-}
-
-// workerScriptTailListResponseJSON contains the JSON metadata for the struct
-// [WorkerScriptTailListResponse]
-type workerScriptTailListResponseJSON struct {
-	ID          apijson.Field
-	ExpiresAt   apijson.Field
-	URL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerScriptTailListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 // Union satisfied by [WorkerScriptTailDeleteResponseUnknown],
 // [WorkerScriptTailDeleteResponseArray] or [shared.UnionString].
 type WorkerScriptTailDeleteResponse interface {
@@ -135,6 +114,27 @@ func init() {
 type WorkerScriptTailDeleteResponseArray []interface{}
 
 func (r WorkerScriptTailDeleteResponseArray) ImplementsWorkerScriptTailDeleteResponse() {}
+
+type WorkerScriptTailGetResponse struct {
+	ID        interface{}                     `json:"id"`
+	ExpiresAt interface{}                     `json:"expires_at"`
+	URL       interface{}                     `json:"url"`
+	JSON      workerScriptTailGetResponseJSON `json:"-"`
+}
+
+// workerScriptTailGetResponseJSON contains the JSON metadata for the struct
+// [WorkerScriptTailGetResponse]
+type workerScriptTailGetResponseJSON struct {
+	ID          apijson.Field
+	ExpiresAt   apijson.Field
+	URL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerScriptTailGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type WorkerScriptTailNewParams struct {
 	// Identifier
@@ -210,80 +210,6 @@ const (
 	WorkerScriptTailNewResponseEnvelopeSuccessTrue WorkerScriptTailNewResponseEnvelopeSuccess = true
 )
 
-type WorkerScriptTailListParams struct {
-	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type WorkerScriptTailListResponseEnvelope struct {
-	Errors   []WorkerScriptTailListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WorkerScriptTailListResponseEnvelopeMessages `json:"messages,required"`
-	Result   WorkerScriptTailListResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success WorkerScriptTailListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    workerScriptTailListResponseEnvelopeJSON    `json:"-"`
-}
-
-// workerScriptTailListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [WorkerScriptTailListResponseEnvelope]
-type workerScriptTailListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerScriptTailListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WorkerScriptTailListResponseEnvelopeErrors struct {
-	Code    int64                                          `json:"code,required"`
-	Message string                                         `json:"message,required"`
-	JSON    workerScriptTailListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// workerScriptTailListResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [WorkerScriptTailListResponseEnvelopeErrors]
-type workerScriptTailListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerScriptTailListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WorkerScriptTailListResponseEnvelopeMessages struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    workerScriptTailListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// workerScriptTailListResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [WorkerScriptTailListResponseEnvelopeMessages]
-type workerScriptTailListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerScriptTailListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type WorkerScriptTailListResponseEnvelopeSuccess bool
-
-const (
-	WorkerScriptTailListResponseEnvelopeSuccessTrue WorkerScriptTailListResponseEnvelopeSuccess = true
-)
-
 type WorkerScriptTailDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -356,4 +282,78 @@ type WorkerScriptTailDeleteResponseEnvelopeSuccess bool
 
 const (
 	WorkerScriptTailDeleteResponseEnvelopeSuccessTrue WorkerScriptTailDeleteResponseEnvelopeSuccess = true
+)
+
+type WorkerScriptTailGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type WorkerScriptTailGetResponseEnvelope struct {
+	Errors   []WorkerScriptTailGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WorkerScriptTailGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   WorkerScriptTailGetResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success WorkerScriptTailGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    workerScriptTailGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// workerScriptTailGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [WorkerScriptTailGetResponseEnvelope]
+type workerScriptTailGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerScriptTailGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WorkerScriptTailGetResponseEnvelopeErrors struct {
+	Code    int64                                         `json:"code,required"`
+	Message string                                        `json:"message,required"`
+	JSON    workerScriptTailGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// workerScriptTailGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [WorkerScriptTailGetResponseEnvelopeErrors]
+type workerScriptTailGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerScriptTailGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WorkerScriptTailGetResponseEnvelopeMessages struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    workerScriptTailGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// workerScriptTailGetResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [WorkerScriptTailGetResponseEnvelopeMessages]
+type workerScriptTailGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerScriptTailGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type WorkerScriptTailGetResponseEnvelopeSuccess bool
+
+const (
+	WorkerScriptTailGetResponseEnvelopeSuccessTrue WorkerScriptTailGetResponseEnvelopeSuccess = true
 )

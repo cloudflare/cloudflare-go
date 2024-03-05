@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestLoadBalancerSearchListWithOptionalParams(t *testing.T) {
+func TestLoadBalancerSearchGetWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -27,13 +27,13 @@ func TestLoadBalancerSearchListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.LoadBalancers.Searches.List(context.TODO(), cloudflare.LoadBalancerSearchListParams{
+	_, err := client.LoadBalancers.Searches.Get(context.TODO(), cloudflare.LoadBalancerSearchGetParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Page:      cloudflare.F[any](map[string]interface{}{}),
 		PerPage:   cloudflare.F[any](map[string]interface{}{}),
-		SearchParams: cloudflare.F(cloudflare.LoadBalancerSearchListParamsSearchParams{
+		SearchParams: cloudflare.F(cloudflare.LoadBalancerSearchGetParamsSearchParams{
 			Query:      cloudflare.F("primary"),
-			References: cloudflare.F(cloudflare.LoadBalancerSearchListParamsSearchParamsReferencesStar),
+			References: cloudflare.F(cloudflare.LoadBalancerSearchGetParamsSearchParamsReferencesStar),
 		}),
 	})
 	if err != nil {

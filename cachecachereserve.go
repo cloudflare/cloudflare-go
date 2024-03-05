@@ -32,24 +32,6 @@ func NewCacheCacheReserveService(opts ...option.RequestOption) (r *CacheCacheRes
 	return
 }
 
-// Increase cache lifetimes by automatically storing all cacheable files into
-// Cloudflare's persistent object storage buckets. Requires Cache Reserve
-// subscription. Note: using Tiered Cache with Cache Reserve is highly recommended
-// to reduce Reserve operations costs. See the
-// [developer docs](https://developers.cloudflare.com/cache/about/cache-reserve)
-// for more information.
-func (r *CacheCacheReserveService) List(ctx context.Context, query CacheCacheReserveListParams, opts ...option.RequestOption) (res *CacheCacheReserveListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env CacheCacheReserveListResponseEnvelope
-	path := fmt.Sprintf("zones/%s/cache/cache_reserve", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // You can use Cache Reserve Clear to clear your Cache Reserve, but you must first
 // disable Cache Reserve. In most cases, this will be accomplished within 24 hours.
 // You cannot re-enable Cache Reserve while this process is ongoing. Keep in mind
@@ -84,6 +66,24 @@ func (r *CacheCacheReserveService) Edit(ctx context.Context, params CacheCacheRe
 	return
 }
 
+// Increase cache lifetimes by automatically storing all cacheable files into
+// Cloudflare's persistent object storage buckets. Requires Cache Reserve
+// subscription. Note: using Tiered Cache with Cache Reserve is highly recommended
+// to reduce Reserve operations costs. See the
+// [developer docs](https://developers.cloudflare.com/cache/about/cache-reserve)
+// for more information.
+func (r *CacheCacheReserveService) Get(ctx context.Context, query CacheCacheReserveGetParams, opts ...option.RequestOption) (res *CacheCacheReserveGetResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env CacheCacheReserveGetResponseEnvelope
+	path := fmt.Sprintf("zones/%s/cache/cache_reserve", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
 // You can use Cache Reserve Clear to clear your Cache Reserve, but you must first
 // disable Cache Reserve. In most cases, this will be accomplished within 24 hours.
 // You cannot re-enable Cache Reserve while this process is ongoing. Keep in mind
@@ -99,51 +99,6 @@ func (r *CacheCacheReserveService) Status(ctx context.Context, query CacheCacheR
 	res = &env.Result
 	return
 }
-
-// Increase cache lifetimes by automatically storing all cacheable files into
-// Cloudflare's persistent object storage buckets. Requires Cache Reserve
-// subscription. Note: using Tiered Cache with Cache Reserve is highly recommended
-// to reduce Reserve operations costs. See the
-// [developer docs](https://developers.cloudflare.com/cache/about/cache-reserve)
-// for more information.
-type CacheCacheReserveListResponse struct {
-	// ID of the zone setting.
-	ID CacheCacheReserveListResponseID `json:"id,required"`
-	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
-	// Value of the Cache Reserve zone setting.
-	Value CacheCacheReserveListResponseValue `json:"value,required"`
-	JSON  cacheCacheReserveListResponseJSON  `json:"-"`
-}
-
-// cacheCacheReserveListResponseJSON contains the JSON metadata for the struct
-// [CacheCacheReserveListResponse]
-type cacheCacheReserveListResponseJSON struct {
-	ID          apijson.Field
-	ModifiedOn  apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CacheCacheReserveListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// ID of the zone setting.
-type CacheCacheReserveListResponseID string
-
-const (
-	CacheCacheReserveListResponseIDCacheReserve CacheCacheReserveListResponseID = "cache_reserve"
-)
-
-// Value of the Cache Reserve zone setting.
-type CacheCacheReserveListResponseValue string
-
-const (
-	CacheCacheReserveListResponseValueOn  CacheCacheReserveListResponseValue = "on"
-	CacheCacheReserveListResponseValueOff CacheCacheReserveListResponseValue = "off"
-)
 
 // You can use Cache Reserve Clear to clear your Cache Reserve, but you must first
 // disable Cache Reserve. In most cases, this will be accomplished within 24 hours.
@@ -239,6 +194,51 @@ const (
 	CacheCacheReserveEditResponseValueOff CacheCacheReserveEditResponseValue = "off"
 )
 
+// Increase cache lifetimes by automatically storing all cacheable files into
+// Cloudflare's persistent object storage buckets. Requires Cache Reserve
+// subscription. Note: using Tiered Cache with Cache Reserve is highly recommended
+// to reduce Reserve operations costs. See the
+// [developer docs](https://developers.cloudflare.com/cache/about/cache-reserve)
+// for more information.
+type CacheCacheReserveGetResponse struct {
+	// ID of the zone setting.
+	ID CacheCacheReserveGetResponseID `json:"id,required"`
+	// last time this setting was modified.
+	ModifiedOn time.Time `json:"modified_on,required,nullable" format:"date-time"`
+	// Value of the Cache Reserve zone setting.
+	Value CacheCacheReserveGetResponseValue `json:"value,required"`
+	JSON  cacheCacheReserveGetResponseJSON  `json:"-"`
+}
+
+// cacheCacheReserveGetResponseJSON contains the JSON metadata for the struct
+// [CacheCacheReserveGetResponse]
+type cacheCacheReserveGetResponseJSON struct {
+	ID          apijson.Field
+	ModifiedOn  apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CacheCacheReserveGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// ID of the zone setting.
+type CacheCacheReserveGetResponseID string
+
+const (
+	CacheCacheReserveGetResponseIDCacheReserve CacheCacheReserveGetResponseID = "cache_reserve"
+)
+
+// Value of the Cache Reserve zone setting.
+type CacheCacheReserveGetResponseValue string
+
+const (
+	CacheCacheReserveGetResponseValueOn  CacheCacheReserveGetResponseValue = "on"
+	CacheCacheReserveGetResponseValueOff CacheCacheReserveGetResponseValue = "off"
+)
+
 // You can use Cache Reserve Clear to clear your Cache Reserve, but you must first
 // disable Cache Reserve. In most cases, this will be accomplished within 24 hours.
 // You cannot re-enable Cache Reserve while this process is ongoing. Keep in mind
@@ -286,86 +286,6 @@ type CacheCacheReserveStatusResponseState string
 const (
 	CacheCacheReserveStatusResponseStateInProgress CacheCacheReserveStatusResponseState = "In-progress"
 	CacheCacheReserveStatusResponseStateCompleted  CacheCacheReserveStatusResponseState = "Completed"
-)
-
-type CacheCacheReserveListParams struct {
-	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
-}
-
-type CacheCacheReserveListResponseEnvelope struct {
-	Errors   []CacheCacheReserveListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CacheCacheReserveListResponseEnvelopeMessages `json:"messages,required"`
-	// Increase cache lifetimes by automatically storing all cacheable files into
-	// Cloudflare's persistent object storage buckets. Requires Cache Reserve
-	// subscription. Note: using Tiered Cache with Cache Reserve is highly recommended
-	// to reduce Reserve operations costs. See the
-	// [developer docs](https://developers.cloudflare.com/cache/about/cache-reserve)
-	// for more information.
-	Result CacheCacheReserveListResponse `json:"result,required"`
-	// Whether the API call was successful
-	Success CacheCacheReserveListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    cacheCacheReserveListResponseEnvelopeJSON    `json:"-"`
-}
-
-// cacheCacheReserveListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [CacheCacheReserveListResponseEnvelope]
-type cacheCacheReserveListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CacheCacheReserveListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CacheCacheReserveListResponseEnvelopeErrors struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    cacheCacheReserveListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// cacheCacheReserveListResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [CacheCacheReserveListResponseEnvelopeErrors]
-type cacheCacheReserveListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CacheCacheReserveListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CacheCacheReserveListResponseEnvelopeMessages struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    cacheCacheReserveListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// cacheCacheReserveListResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [CacheCacheReserveListResponseEnvelopeMessages]
-type cacheCacheReserveListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CacheCacheReserveListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type CacheCacheReserveListResponseEnvelopeSuccess bool
-
-const (
-	CacheCacheReserveListResponseEnvelopeSuccessTrue CacheCacheReserveListResponseEnvelopeSuccess = true
 )
 
 type CacheCacheReserveClearParams struct {
@@ -538,6 +458,86 @@ type CacheCacheReserveEditResponseEnvelopeSuccess bool
 
 const (
 	CacheCacheReserveEditResponseEnvelopeSuccessTrue CacheCacheReserveEditResponseEnvelopeSuccess = true
+)
+
+type CacheCacheReserveGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
+type CacheCacheReserveGetResponseEnvelope struct {
+	Errors   []CacheCacheReserveGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []CacheCacheReserveGetResponseEnvelopeMessages `json:"messages,required"`
+	// Increase cache lifetimes by automatically storing all cacheable files into
+	// Cloudflare's persistent object storage buckets. Requires Cache Reserve
+	// subscription. Note: using Tiered Cache with Cache Reserve is highly recommended
+	// to reduce Reserve operations costs. See the
+	// [developer docs](https://developers.cloudflare.com/cache/about/cache-reserve)
+	// for more information.
+	Result CacheCacheReserveGetResponse `json:"result,required"`
+	// Whether the API call was successful
+	Success CacheCacheReserveGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    cacheCacheReserveGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// cacheCacheReserveGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [CacheCacheReserveGetResponseEnvelope]
+type cacheCacheReserveGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CacheCacheReserveGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CacheCacheReserveGetResponseEnvelopeErrors struct {
+	Code    int64                                          `json:"code,required"`
+	Message string                                         `json:"message,required"`
+	JSON    cacheCacheReserveGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// cacheCacheReserveGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [CacheCacheReserveGetResponseEnvelopeErrors]
+type cacheCacheReserveGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CacheCacheReserveGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CacheCacheReserveGetResponseEnvelopeMessages struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    cacheCacheReserveGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// cacheCacheReserveGetResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [CacheCacheReserveGetResponseEnvelopeMessages]
+type cacheCacheReserveGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CacheCacheReserveGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type CacheCacheReserveGetResponseEnvelopeSuccess bool
+
+const (
+	CacheCacheReserveGetResponseEnvelopeSuccessTrue CacheCacheReserveGetResponseEnvelopeSuccess = true
 )
 
 type CacheCacheReserveStatusParams struct {

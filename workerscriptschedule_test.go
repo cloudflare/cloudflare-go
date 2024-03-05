@@ -44,7 +44,7 @@ func TestWorkerScriptScheduleUpdate(t *testing.T) {
 	}
 }
 
-func TestWorkerScriptScheduleList(t *testing.T) {
+func TestWorkerScriptScheduleGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -58,10 +58,10 @@ func TestWorkerScriptScheduleList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Workers.Scripts.Schedules.List(
+	_, err := client.Workers.Scripts.Schedules.Get(
 		context.TODO(),
 		"this-is_my_script-01",
-		cloudflare.WorkerScriptScheduleListParams{
+		cloudflare.WorkerScriptScheduleGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)

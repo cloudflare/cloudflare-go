@@ -39,9 +39,9 @@ func NewDNSFirewallAnalyticsReportBytimeService(opts ...option.RequestOption) (r
 // See
 // [Analytics API properties](https://developers.cloudflare.com/dns/reference/analytics-api-properties/)
 // for detailed information about the available query parameters.
-func (r *DNSFirewallAnalyticsReportBytimeService) List(ctx context.Context, accountIdentifier string, identifier string, query DNSFirewallAnalyticsReportBytimeListParams, opts ...option.RequestOption) (res *DNSFirewallAnalyticsReportBytimeListResponse, err error) {
+func (r *DNSFirewallAnalyticsReportBytimeService) Get(ctx context.Context, accountIdentifier string, identifier string, query DNSFirewallAnalyticsReportBytimeGetParams, opts ...option.RequestOption) (res *DNSFirewallAnalyticsReportBytimeGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env DNSFirewallAnalyticsReportBytimeListResponseEnvelope
+	var env DNSFirewallAnalyticsReportBytimeGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dns_firewall/%s/dns_analytics/report/bytime", accountIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -51,9 +51,9 @@ func (r *DNSFirewallAnalyticsReportBytimeService) List(ctx context.Context, acco
 	return
 }
 
-type DNSFirewallAnalyticsReportBytimeListResponse struct {
+type DNSFirewallAnalyticsReportBytimeGetResponse struct {
 	// Array with one row per combination of dimension values.
-	Data []DNSFirewallAnalyticsReportBytimeListResponseData `json:"data,required"`
+	Data []DNSFirewallAnalyticsReportBytimeGetResponseData `json:"data,required"`
 	// Number of seconds between current time and last processed event, in another
 	// words how many seconds of data could be missing.
 	DataLag float64 `json:"data_lag,required"`
@@ -62,8 +62,8 @@ type DNSFirewallAnalyticsReportBytimeListResponse struct {
 	Max interface{} `json:"max,required"`
 	// Minimum results for each metric (object mapping metric names to values).
 	// Currently always an empty object.
-	Min   interface{}                                       `json:"min,required"`
-	Query DNSFirewallAnalyticsReportBytimeListResponseQuery `json:"query,required"`
+	Min   interface{}                                      `json:"min,required"`
+	Query DNSFirewallAnalyticsReportBytimeGetResponseQuery `json:"query,required"`
 	// Total number of rows in the result.
 	Rows float64 `json:"rows,required"`
 	// Array of time intervals in the response data. Each interval is represented as an
@@ -71,13 +71,13 @@ type DNSFirewallAnalyticsReportBytimeListResponse struct {
 	TimeIntervals [][]time.Time `json:"time_intervals,required" format:"date-time"`
 	// Total results for metrics across all data (object mapping metric names to
 	// values).
-	Totals interface{}                                      `json:"totals,required"`
-	JSON   dnsFirewallAnalyticsReportBytimeListResponseJSON `json:"-"`
+	Totals interface{}                                     `json:"totals,required"`
+	JSON   dnsFirewallAnalyticsReportBytimeGetResponseJSON `json:"-"`
 }
 
-// dnsFirewallAnalyticsReportBytimeListResponseJSON contains the JSON metadata for
-// the struct [DNSFirewallAnalyticsReportBytimeListResponse]
-type dnsFirewallAnalyticsReportBytimeListResponseJSON struct {
+// dnsFirewallAnalyticsReportBytimeGetResponseJSON contains the JSON metadata for
+// the struct [DNSFirewallAnalyticsReportBytimeGetResponse]
+type dnsFirewallAnalyticsReportBytimeGetResponseJSON struct {
 	Data          apijson.Field
 	DataLag       apijson.Field
 	Max           apijson.Field
@@ -90,34 +90,34 @@ type dnsFirewallAnalyticsReportBytimeListResponseJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *DNSFirewallAnalyticsReportBytimeListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSFirewallAnalyticsReportBytimeGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DNSFirewallAnalyticsReportBytimeListResponseData struct {
+type DNSFirewallAnalyticsReportBytimeGetResponseData struct {
 	// Array of dimension values, representing the combination of dimension values
 	// corresponding to this row.
 	Dimensions []string `json:"dimensions,required"`
 	// Array with one item per requested metric. Each item is an array of values,
 	// broken down by time interval.
-	Metrics [][]interface{}                                      `json:"metrics,required"`
-	JSON    dnsFirewallAnalyticsReportBytimeListResponseDataJSON `json:"-"`
+	Metrics [][]interface{}                                     `json:"metrics,required"`
+	JSON    dnsFirewallAnalyticsReportBytimeGetResponseDataJSON `json:"-"`
 }
 
-// dnsFirewallAnalyticsReportBytimeListResponseDataJSON contains the JSON metadata
-// for the struct [DNSFirewallAnalyticsReportBytimeListResponseData]
-type dnsFirewallAnalyticsReportBytimeListResponseDataJSON struct {
+// dnsFirewallAnalyticsReportBytimeGetResponseDataJSON contains the JSON metadata
+// for the struct [DNSFirewallAnalyticsReportBytimeGetResponseData]
+type dnsFirewallAnalyticsReportBytimeGetResponseDataJSON struct {
 	Dimensions  apijson.Field
 	Metrics     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSFirewallAnalyticsReportBytimeListResponseData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSFirewallAnalyticsReportBytimeGetResponseData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DNSFirewallAnalyticsReportBytimeListResponseQuery struct {
+type DNSFirewallAnalyticsReportBytimeGetResponseQuery struct {
 	// Array of dimension names.
 	Dimensions []string `json:"dimensions,required"`
 	// Limit number of returned metrics.
@@ -127,20 +127,20 @@ type DNSFirewallAnalyticsReportBytimeListResponseQuery struct {
 	// Start date and time of requesting data period in ISO 8601 format.
 	Since time.Time `json:"since,required" format:"date-time"`
 	// Unit of time to group data by.
-	TimeDelta DNSFirewallAnalyticsReportBytimeListResponseQueryTimeDelta `json:"time_delta,required"`
+	TimeDelta DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDelta `json:"time_delta,required"`
 	// End date and time of requesting data period in ISO 8601 format.
 	Until time.Time `json:"until,required" format:"date-time"`
 	// Segmentation filter in 'attribute operator value' format.
 	Filters string `json:"filters"`
 	// Array of dimensions to sort by, where each dimension may be prefixed by -
 	// (descending) or + (ascending).
-	Sort []string                                              `json:"sort"`
-	JSON dnsFirewallAnalyticsReportBytimeListResponseQueryJSON `json:"-"`
+	Sort []string                                             `json:"sort"`
+	JSON dnsFirewallAnalyticsReportBytimeGetResponseQueryJSON `json:"-"`
 }
 
-// dnsFirewallAnalyticsReportBytimeListResponseQueryJSON contains the JSON metadata
-// for the struct [DNSFirewallAnalyticsReportBytimeListResponseQuery]
-type dnsFirewallAnalyticsReportBytimeListResponseQueryJSON struct {
+// dnsFirewallAnalyticsReportBytimeGetResponseQueryJSON contains the JSON metadata
+// for the struct [DNSFirewallAnalyticsReportBytimeGetResponseQuery]
+type dnsFirewallAnalyticsReportBytimeGetResponseQueryJSON struct {
 	Dimensions  apijson.Field
 	Limit       apijson.Field
 	Metrics     apijson.Field
@@ -153,27 +153,27 @@ type dnsFirewallAnalyticsReportBytimeListResponseQueryJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSFirewallAnalyticsReportBytimeListResponseQuery) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSFirewallAnalyticsReportBytimeGetResponseQuery) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Unit of time to group data by.
-type DNSFirewallAnalyticsReportBytimeListResponseQueryTimeDelta string
+type DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDelta string
 
 const (
-	DNSFirewallAnalyticsReportBytimeListResponseQueryTimeDeltaAll        DNSFirewallAnalyticsReportBytimeListResponseQueryTimeDelta = "all"
-	DNSFirewallAnalyticsReportBytimeListResponseQueryTimeDeltaAuto       DNSFirewallAnalyticsReportBytimeListResponseQueryTimeDelta = "auto"
-	DNSFirewallAnalyticsReportBytimeListResponseQueryTimeDeltaYear       DNSFirewallAnalyticsReportBytimeListResponseQueryTimeDelta = "year"
-	DNSFirewallAnalyticsReportBytimeListResponseQueryTimeDeltaQuarter    DNSFirewallAnalyticsReportBytimeListResponseQueryTimeDelta = "quarter"
-	DNSFirewallAnalyticsReportBytimeListResponseQueryTimeDeltaMonth      DNSFirewallAnalyticsReportBytimeListResponseQueryTimeDelta = "month"
-	DNSFirewallAnalyticsReportBytimeListResponseQueryTimeDeltaWeek       DNSFirewallAnalyticsReportBytimeListResponseQueryTimeDelta = "week"
-	DNSFirewallAnalyticsReportBytimeListResponseQueryTimeDeltaDay        DNSFirewallAnalyticsReportBytimeListResponseQueryTimeDelta = "day"
-	DNSFirewallAnalyticsReportBytimeListResponseQueryTimeDeltaHour       DNSFirewallAnalyticsReportBytimeListResponseQueryTimeDelta = "hour"
-	DNSFirewallAnalyticsReportBytimeListResponseQueryTimeDeltaDekaminute DNSFirewallAnalyticsReportBytimeListResponseQueryTimeDelta = "dekaminute"
-	DNSFirewallAnalyticsReportBytimeListResponseQueryTimeDeltaMinute     DNSFirewallAnalyticsReportBytimeListResponseQueryTimeDelta = "minute"
+	DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDeltaAll        DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDelta = "all"
+	DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDeltaAuto       DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDelta = "auto"
+	DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDeltaYear       DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDelta = "year"
+	DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDeltaQuarter    DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDelta = "quarter"
+	DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDeltaMonth      DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDelta = "month"
+	DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDeltaWeek       DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDelta = "week"
+	DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDeltaDay        DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDelta = "day"
+	DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDeltaHour       DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDelta = "hour"
+	DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDeltaDekaminute DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDelta = "dekaminute"
+	DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDeltaMinute     DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDelta = "minute"
 )
 
-type DNSFirewallAnalyticsReportBytimeListParams struct {
+type DNSFirewallAnalyticsReportBytimeGetParams struct {
 	// A comma-separated list of dimensions to group results by.
 	Dimensions param.Field[string] `query:"dimensions"`
 	// Segmentation filter in 'attribute operator value' format.
@@ -188,14 +188,14 @@ type DNSFirewallAnalyticsReportBytimeListParams struct {
 	// prefixed by - (descending) or + (ascending).
 	Sort param.Field[string] `query:"sort"`
 	// Unit of time to group data by.
-	TimeDelta param.Field[DNSFirewallAnalyticsReportBytimeListParamsTimeDelta] `query:"time_delta"`
+	TimeDelta param.Field[DNSFirewallAnalyticsReportBytimeGetParamsTimeDelta] `query:"time_delta"`
 	// End date and time of requesting data period in ISO 8601 format.
 	Until param.Field[time.Time] `query:"until" format:"date-time"`
 }
 
-// URLQuery serializes [DNSFirewallAnalyticsReportBytimeListParams]'s query
+// URLQuery serializes [DNSFirewallAnalyticsReportBytimeGetParams]'s query
 // parameters as `url.Values`.
-func (r DNSFirewallAnalyticsReportBytimeListParams) URLQuery() (v url.Values) {
+func (r DNSFirewallAnalyticsReportBytimeGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
@@ -203,33 +203,33 @@ func (r DNSFirewallAnalyticsReportBytimeListParams) URLQuery() (v url.Values) {
 }
 
 // Unit of time to group data by.
-type DNSFirewallAnalyticsReportBytimeListParamsTimeDelta string
+type DNSFirewallAnalyticsReportBytimeGetParamsTimeDelta string
 
 const (
-	DNSFirewallAnalyticsReportBytimeListParamsTimeDeltaAll        DNSFirewallAnalyticsReportBytimeListParamsTimeDelta = "all"
-	DNSFirewallAnalyticsReportBytimeListParamsTimeDeltaAuto       DNSFirewallAnalyticsReportBytimeListParamsTimeDelta = "auto"
-	DNSFirewallAnalyticsReportBytimeListParamsTimeDeltaYear       DNSFirewallAnalyticsReportBytimeListParamsTimeDelta = "year"
-	DNSFirewallAnalyticsReportBytimeListParamsTimeDeltaQuarter    DNSFirewallAnalyticsReportBytimeListParamsTimeDelta = "quarter"
-	DNSFirewallAnalyticsReportBytimeListParamsTimeDeltaMonth      DNSFirewallAnalyticsReportBytimeListParamsTimeDelta = "month"
-	DNSFirewallAnalyticsReportBytimeListParamsTimeDeltaWeek       DNSFirewallAnalyticsReportBytimeListParamsTimeDelta = "week"
-	DNSFirewallAnalyticsReportBytimeListParamsTimeDeltaDay        DNSFirewallAnalyticsReportBytimeListParamsTimeDelta = "day"
-	DNSFirewallAnalyticsReportBytimeListParamsTimeDeltaHour       DNSFirewallAnalyticsReportBytimeListParamsTimeDelta = "hour"
-	DNSFirewallAnalyticsReportBytimeListParamsTimeDeltaDekaminute DNSFirewallAnalyticsReportBytimeListParamsTimeDelta = "dekaminute"
-	DNSFirewallAnalyticsReportBytimeListParamsTimeDeltaMinute     DNSFirewallAnalyticsReportBytimeListParamsTimeDelta = "minute"
+	DNSFirewallAnalyticsReportBytimeGetParamsTimeDeltaAll        DNSFirewallAnalyticsReportBytimeGetParamsTimeDelta = "all"
+	DNSFirewallAnalyticsReportBytimeGetParamsTimeDeltaAuto       DNSFirewallAnalyticsReportBytimeGetParamsTimeDelta = "auto"
+	DNSFirewallAnalyticsReportBytimeGetParamsTimeDeltaYear       DNSFirewallAnalyticsReportBytimeGetParamsTimeDelta = "year"
+	DNSFirewallAnalyticsReportBytimeGetParamsTimeDeltaQuarter    DNSFirewallAnalyticsReportBytimeGetParamsTimeDelta = "quarter"
+	DNSFirewallAnalyticsReportBytimeGetParamsTimeDeltaMonth      DNSFirewallAnalyticsReportBytimeGetParamsTimeDelta = "month"
+	DNSFirewallAnalyticsReportBytimeGetParamsTimeDeltaWeek       DNSFirewallAnalyticsReportBytimeGetParamsTimeDelta = "week"
+	DNSFirewallAnalyticsReportBytimeGetParamsTimeDeltaDay        DNSFirewallAnalyticsReportBytimeGetParamsTimeDelta = "day"
+	DNSFirewallAnalyticsReportBytimeGetParamsTimeDeltaHour       DNSFirewallAnalyticsReportBytimeGetParamsTimeDelta = "hour"
+	DNSFirewallAnalyticsReportBytimeGetParamsTimeDeltaDekaminute DNSFirewallAnalyticsReportBytimeGetParamsTimeDelta = "dekaminute"
+	DNSFirewallAnalyticsReportBytimeGetParamsTimeDeltaMinute     DNSFirewallAnalyticsReportBytimeGetParamsTimeDelta = "minute"
 )
 
-type DNSFirewallAnalyticsReportBytimeListResponseEnvelope struct {
-	Errors   []DNSFirewallAnalyticsReportBytimeListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DNSFirewallAnalyticsReportBytimeListResponseEnvelopeMessages `json:"messages,required"`
-	Result   DNSFirewallAnalyticsReportBytimeListResponse                   `json:"result,required"`
+type DNSFirewallAnalyticsReportBytimeGetResponseEnvelope struct {
+	Errors   []DNSFirewallAnalyticsReportBytimeGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DNSFirewallAnalyticsReportBytimeGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   DNSFirewallAnalyticsReportBytimeGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success DNSFirewallAnalyticsReportBytimeListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    dnsFirewallAnalyticsReportBytimeListResponseEnvelopeJSON    `json:"-"`
+	Success DNSFirewallAnalyticsReportBytimeGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    dnsFirewallAnalyticsReportBytimeGetResponseEnvelopeJSON    `json:"-"`
 }
 
-// dnsFirewallAnalyticsReportBytimeListResponseEnvelopeJSON contains the JSON
-// metadata for the struct [DNSFirewallAnalyticsReportBytimeListResponseEnvelope]
-type dnsFirewallAnalyticsReportBytimeListResponseEnvelopeJSON struct {
+// dnsFirewallAnalyticsReportBytimeGetResponseEnvelopeJSON contains the JSON
+// metadata for the struct [DNSFirewallAnalyticsReportBytimeGetResponseEnvelope]
+type dnsFirewallAnalyticsReportBytimeGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -238,53 +238,53 @@ type dnsFirewallAnalyticsReportBytimeListResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSFirewallAnalyticsReportBytimeListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSFirewallAnalyticsReportBytimeGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DNSFirewallAnalyticsReportBytimeListResponseEnvelopeErrors struct {
-	Code    int64                                                          `json:"code,required"`
-	Message string                                                         `json:"message,required"`
-	JSON    dnsFirewallAnalyticsReportBytimeListResponseEnvelopeErrorsJSON `json:"-"`
+type DNSFirewallAnalyticsReportBytimeGetResponseEnvelopeErrors struct {
+	Code    int64                                                         `json:"code,required"`
+	Message string                                                        `json:"message,required"`
+	JSON    dnsFirewallAnalyticsReportBytimeGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// dnsFirewallAnalyticsReportBytimeListResponseEnvelopeErrorsJSON contains the JSON
+// dnsFirewallAnalyticsReportBytimeGetResponseEnvelopeErrorsJSON contains the JSON
 // metadata for the struct
-// [DNSFirewallAnalyticsReportBytimeListResponseEnvelopeErrors]
-type dnsFirewallAnalyticsReportBytimeListResponseEnvelopeErrorsJSON struct {
+// [DNSFirewallAnalyticsReportBytimeGetResponseEnvelopeErrors]
+type dnsFirewallAnalyticsReportBytimeGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSFirewallAnalyticsReportBytimeListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSFirewallAnalyticsReportBytimeGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DNSFirewallAnalyticsReportBytimeListResponseEnvelopeMessages struct {
-	Code    int64                                                            `json:"code,required"`
-	Message string                                                           `json:"message,required"`
-	JSON    dnsFirewallAnalyticsReportBytimeListResponseEnvelopeMessagesJSON `json:"-"`
+type DNSFirewallAnalyticsReportBytimeGetResponseEnvelopeMessages struct {
+	Code    int64                                                           `json:"code,required"`
+	Message string                                                          `json:"message,required"`
+	JSON    dnsFirewallAnalyticsReportBytimeGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// dnsFirewallAnalyticsReportBytimeListResponseEnvelopeMessagesJSON contains the
+// dnsFirewallAnalyticsReportBytimeGetResponseEnvelopeMessagesJSON contains the
 // JSON metadata for the struct
-// [DNSFirewallAnalyticsReportBytimeListResponseEnvelopeMessages]
-type dnsFirewallAnalyticsReportBytimeListResponseEnvelopeMessagesJSON struct {
+// [DNSFirewallAnalyticsReportBytimeGetResponseEnvelopeMessages]
+type dnsFirewallAnalyticsReportBytimeGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSFirewallAnalyticsReportBytimeListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSFirewallAnalyticsReportBytimeGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type DNSFirewallAnalyticsReportBytimeListResponseEnvelopeSuccess bool
+type DNSFirewallAnalyticsReportBytimeGetResponseEnvelopeSuccess bool
 
 const (
-	DNSFirewallAnalyticsReportBytimeListResponseEnvelopeSuccessTrue DNSFirewallAnalyticsReportBytimeListResponseEnvelopeSuccess = true
+	DNSFirewallAnalyticsReportBytimeGetResponseEnvelopeSuccessTrue DNSFirewallAnalyticsReportBytimeGetResponseEnvelopeSuccess = true
 )

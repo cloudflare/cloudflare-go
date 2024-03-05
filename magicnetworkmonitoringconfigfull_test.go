@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestMagicNetworkMonitoringConfigFullList(t *testing.T) {
+func TestMagicNetworkMonitoringConfigFullGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -27,7 +27,7 @@ func TestMagicNetworkMonitoringConfigFullList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.MagicNetworkMonitoring.Configs.Fulls.List(context.TODO(), "6f91088a406011ed95aed352566e8d4c")
+	_, err := client.MagicNetworkMonitoring.Configs.Full.Get(context.TODO(), "6f91088a406011ed95aed352566e8d4c")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

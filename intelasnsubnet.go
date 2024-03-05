@@ -32,14 +32,14 @@ func NewIntelASNSubnetService(opts ...option.RequestOption) (r *IntelASNSubnetSe
 }
 
 // Get ASN Subnets
-func (r *IntelASNSubnetService) List(ctx context.Context, asn int64, query IntelASNSubnetListParams, opts ...option.RequestOption) (res *IntelASNSubnetListResponse, err error) {
+func (r *IntelASNSubnetService) Get(ctx context.Context, asn int64, query IntelASNSubnetGetParams, opts ...option.RequestOption) (res *IntelASNSubnetGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/intel/asn/%v/subnets", query.AccountID, asn)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
-type IntelASNSubnetListResponse struct {
+type IntelASNSubnetGetResponse struct {
 	ASN int64 `json:"asn"`
 	// Total results returned based on your search parameters.
 	Count        float64 `json:"count"`
@@ -47,14 +47,14 @@ type IntelASNSubnetListResponse struct {
 	// Current page within paginated list of results.
 	Page float64 `json:"page"`
 	// Number of results per page of results.
-	PerPage float64                        `json:"per_page"`
-	Subnets []string                       `json:"subnets"`
-	JSON    intelASNSubnetListResponseJSON `json:"-"`
+	PerPage float64                       `json:"per_page"`
+	Subnets []string                      `json:"subnets"`
+	JSON    intelASNSubnetGetResponseJSON `json:"-"`
 }
 
-// intelASNSubnetListResponseJSON contains the JSON metadata for the struct
-// [IntelASNSubnetListResponse]
-type intelASNSubnetListResponseJSON struct {
+// intelASNSubnetGetResponseJSON contains the JSON metadata for the struct
+// [IntelASNSubnetGetResponse]
+type intelASNSubnetGetResponseJSON struct {
 	ASN          apijson.Field
 	Count        apijson.Field
 	IPCountTotal apijson.Field
@@ -65,11 +65,11 @@ type intelASNSubnetListResponseJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *IntelASNSubnetListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelASNSubnetGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type IntelASNSubnetListParams struct {
+type IntelASNSubnetGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }

@@ -33,9 +33,9 @@ func NewWorkerScriptBindingService(opts ...option.RequestOption) (r *WorkerScrip
 }
 
 // List the bindings for a Workers script.
-func (r *WorkerScriptBindingService) List(ctx context.Context, query WorkerScriptBindingListParams, opts ...option.RequestOption) (res *[]WorkerScriptBindingListResponse, err error) {
+func (r *WorkerScriptBindingService) Get(ctx context.Context, query WorkerScriptBindingGetParams, opts ...option.RequestOption) (res *[]WorkerScriptBindingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env WorkerScriptBindingListResponseEnvelope
+	var env WorkerScriptBindingGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/workers/script/bindings", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -45,30 +45,30 @@ func (r *WorkerScriptBindingService) List(ctx context.Context, query WorkerScrip
 	return
 }
 
-// Union satisfied by [WorkerScriptBindingListResponseWorkersKVNamespaceBinding] or
-// [WorkerScriptBindingListResponseWorkersWasmModuleBinding].
-type WorkerScriptBindingListResponse interface {
-	implementsWorkerScriptBindingListResponse()
+// Union satisfied by [WorkerScriptBindingGetResponseWorkersKVNamespaceBinding] or
+// [WorkerScriptBindingGetResponseWorkersWasmModuleBinding].
+type WorkerScriptBindingGetResponse interface {
+	implementsWorkerScriptBindingGetResponse()
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*WorkerScriptBindingListResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(reflect.TypeOf((*WorkerScriptBindingGetResponse)(nil)).Elem(), "")
 }
 
-type WorkerScriptBindingListResponseWorkersKVNamespaceBinding struct {
+type WorkerScriptBindingGetResponseWorkersKVNamespaceBinding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// Namespace identifier tag.
 	NamespaceID string `json:"namespace_id,required"`
 	// The class of resource that the binding provides.
-	Type WorkerScriptBindingListResponseWorkersKVNamespaceBindingType `json:"type,required"`
-	JSON workerScriptBindingListResponseWorkersKVNamespaceBindingJSON `json:"-"`
+	Type WorkerScriptBindingGetResponseWorkersKVNamespaceBindingType `json:"type,required"`
+	JSON workerScriptBindingGetResponseWorkersKVNamespaceBindingJSON `json:"-"`
 }
 
-// workerScriptBindingListResponseWorkersKVNamespaceBindingJSON contains the JSON
+// workerScriptBindingGetResponseWorkersKVNamespaceBindingJSON contains the JSON
 // metadata for the struct
-// [WorkerScriptBindingListResponseWorkersKVNamespaceBinding]
-type workerScriptBindingListResponseWorkersKVNamespaceBindingJSON struct {
+// [WorkerScriptBindingGetResponseWorkersKVNamespaceBinding]
+type workerScriptBindingGetResponseWorkersKVNamespaceBindingJSON struct {
 	Name        apijson.Field
 	NamespaceID apijson.Field
 	Type        apijson.Field
@@ -76,69 +76,68 @@ type workerScriptBindingListResponseWorkersKVNamespaceBindingJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerScriptBindingListResponseWorkersKVNamespaceBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerScriptBindingGetResponseWorkersKVNamespaceBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r WorkerScriptBindingListResponseWorkersKVNamespaceBinding) implementsWorkerScriptBindingListResponse() {
+func (r WorkerScriptBindingGetResponseWorkersKVNamespaceBinding) implementsWorkerScriptBindingGetResponse() {
 }
 
 // The class of resource that the binding provides.
-type WorkerScriptBindingListResponseWorkersKVNamespaceBindingType string
+type WorkerScriptBindingGetResponseWorkersKVNamespaceBindingType string
 
 const (
-	WorkerScriptBindingListResponseWorkersKVNamespaceBindingTypeKVNamespace WorkerScriptBindingListResponseWorkersKVNamespaceBindingType = "kv_namespace"
+	WorkerScriptBindingGetResponseWorkersKVNamespaceBindingTypeKVNamespace WorkerScriptBindingGetResponseWorkersKVNamespaceBindingType = "kv_namespace"
 )
 
-type WorkerScriptBindingListResponseWorkersWasmModuleBinding struct {
+type WorkerScriptBindingGetResponseWorkersWasmModuleBinding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The class of resource that the binding provides.
-	Type WorkerScriptBindingListResponseWorkersWasmModuleBindingType `json:"type,required"`
-	JSON workerScriptBindingListResponseWorkersWasmModuleBindingJSON `json:"-"`
+	Type WorkerScriptBindingGetResponseWorkersWasmModuleBindingType `json:"type,required"`
+	JSON workerScriptBindingGetResponseWorkersWasmModuleBindingJSON `json:"-"`
 }
 
-// workerScriptBindingListResponseWorkersWasmModuleBindingJSON contains the JSON
-// metadata for the struct
-// [WorkerScriptBindingListResponseWorkersWasmModuleBinding]
-type workerScriptBindingListResponseWorkersWasmModuleBindingJSON struct {
+// workerScriptBindingGetResponseWorkersWasmModuleBindingJSON contains the JSON
+// metadata for the struct [WorkerScriptBindingGetResponseWorkersWasmModuleBinding]
+type workerScriptBindingGetResponseWorkersWasmModuleBindingJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerScriptBindingListResponseWorkersWasmModuleBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerScriptBindingGetResponseWorkersWasmModuleBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r WorkerScriptBindingListResponseWorkersWasmModuleBinding) implementsWorkerScriptBindingListResponse() {
+func (r WorkerScriptBindingGetResponseWorkersWasmModuleBinding) implementsWorkerScriptBindingGetResponse() {
 }
 
 // The class of resource that the binding provides.
-type WorkerScriptBindingListResponseWorkersWasmModuleBindingType string
+type WorkerScriptBindingGetResponseWorkersWasmModuleBindingType string
 
 const (
-	WorkerScriptBindingListResponseWorkersWasmModuleBindingTypeWasmModule WorkerScriptBindingListResponseWorkersWasmModuleBindingType = "wasm_module"
+	WorkerScriptBindingGetResponseWorkersWasmModuleBindingTypeWasmModule WorkerScriptBindingGetResponseWorkersWasmModuleBindingType = "wasm_module"
 )
 
-type WorkerScriptBindingListParams struct {
+type WorkerScriptBindingGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
-type WorkerScriptBindingListResponseEnvelope struct {
-	Errors   []WorkerScriptBindingListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WorkerScriptBindingListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []WorkerScriptBindingListResponse                 `json:"result,required"`
+type WorkerScriptBindingGetResponseEnvelope struct {
+	Errors   []WorkerScriptBindingGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WorkerScriptBindingGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   []WorkerScriptBindingGetResponse                 `json:"result,required"`
 	// Whether the API call was successful
-	Success WorkerScriptBindingListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    workerScriptBindingListResponseEnvelopeJSON    `json:"-"`
+	Success WorkerScriptBindingGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    workerScriptBindingGetResponseEnvelopeJSON    `json:"-"`
 }
 
-// workerScriptBindingListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [WorkerScriptBindingListResponseEnvelope]
-type workerScriptBindingListResponseEnvelopeJSON struct {
+// workerScriptBindingGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [WorkerScriptBindingGetResponseEnvelope]
+type workerScriptBindingGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -147,51 +146,51 @@ type workerScriptBindingListResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerScriptBindingListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerScriptBindingGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerScriptBindingListResponseEnvelopeErrors struct {
-	Code    int64                                             `json:"code,required"`
-	Message string                                            `json:"message,required"`
-	JSON    workerScriptBindingListResponseEnvelopeErrorsJSON `json:"-"`
+type WorkerScriptBindingGetResponseEnvelopeErrors struct {
+	Code    int64                                            `json:"code,required"`
+	Message string                                           `json:"message,required"`
+	JSON    workerScriptBindingGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// workerScriptBindingListResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [WorkerScriptBindingListResponseEnvelopeErrors]
-type workerScriptBindingListResponseEnvelopeErrorsJSON struct {
+// workerScriptBindingGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [WorkerScriptBindingGetResponseEnvelopeErrors]
+type workerScriptBindingGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerScriptBindingListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerScriptBindingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerScriptBindingListResponseEnvelopeMessages struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    workerScriptBindingListResponseEnvelopeMessagesJSON `json:"-"`
+type WorkerScriptBindingGetResponseEnvelopeMessages struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    workerScriptBindingGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// workerScriptBindingListResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [WorkerScriptBindingListResponseEnvelopeMessages]
-type workerScriptBindingListResponseEnvelopeMessagesJSON struct {
+// workerScriptBindingGetResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [WorkerScriptBindingGetResponseEnvelopeMessages]
+type workerScriptBindingGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerScriptBindingListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerScriptBindingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type WorkerScriptBindingListResponseEnvelopeSuccess bool
+type WorkerScriptBindingGetResponseEnvelopeSuccess bool
 
 const (
-	WorkerScriptBindingListResponseEnvelopeSuccessTrue WorkerScriptBindingListResponseEnvelopeSuccess = true
+	WorkerScriptBindingGetResponseEnvelopeSuccessTrue WorkerScriptBindingGetResponseEnvelopeSuccess = true
 )

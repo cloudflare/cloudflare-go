@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestAddressingLOADocumentDownloadList(t *testing.T) {
+func TestAddressingLOADocumentDownloadGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -27,10 +27,10 @@ func TestAddressingLOADocumentDownloadList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Addressing.LOADocuments.Downloads.List(
+	_, err := client.Addressing.LOADocuments.Downloads.Get(
 		context.TODO(),
 		"d933b1530bc56c9953cf8ce166da8004",
-		cloudflare.AddressingLOADocumentDownloadListParams{
+		cloudflare.AddressingLOADocumentDownloadGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)

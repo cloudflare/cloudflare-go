@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
@@ -48,25 +49,35 @@ func (r *EmailRoutingRoutingAddressService) New(ctx context.Context, accountIden
 	return
 }
 
+// Lists existing destination addresses.
+func (r *EmailRoutingRoutingAddressService) List(ctx context.Context, accountIdentifier string, query EmailRoutingRoutingAddressListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[EmailRoutingRoutingAddressListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
+	path := fmt.Sprintf("accounts/%s/email/routing/addresses", accountIdentifier)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	if err != nil {
+		return nil, err
+	}
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists existing destination addresses.
+func (r *EmailRoutingRoutingAddressService) ListAutoPaging(ctx context.Context, accountIdentifier string, query EmailRoutingRoutingAddressListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[EmailRoutingRoutingAddressListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, accountIdentifier, query, opts...))
+}
+
 // Deletes a specific destination address.
 func (r *EmailRoutingRoutingAddressService) Delete(ctx context.Context, accountIdentifier string, destinationAddressIdentifier string, opts ...option.RequestOption) (res *EmailRoutingRoutingAddressDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env EmailRoutingRoutingAddressDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/email/routing/addresses/%s", accountIdentifier, destinationAddressIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
-// Lists existing destination addresses.
-func (r *EmailRoutingRoutingAddressService) EmailRoutingDestinationAddressesListDestinationAddresses(ctx context.Context, accountIdentifier string, query EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesParams, opts ...option.RequestOption) (res *[]EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/email/routing/addresses", accountIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -122,6 +133,41 @@ func (r *EmailRoutingRoutingAddressNewResponse) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type EmailRoutingRoutingAddressListResponse struct {
+	// Destination address identifier.
+	ID string `json:"id"`
+	// The date and time the destination address has been created.
+	Created time.Time `json:"created" format:"date-time"`
+	// The contact email address of the user.
+	Email string `json:"email"`
+	// The date and time the destination address was last modified.
+	Modified time.Time `json:"modified" format:"date-time"`
+	// Destination address tag. (Deprecated, replaced by destination address
+	// identifier)
+	Tag string `json:"tag"`
+	// The date and time the destination address has been verified. Null means not
+	// verified yet.
+	Verified time.Time                                  `json:"verified" format:"date-time"`
+	JSON     emailRoutingRoutingAddressListResponseJSON `json:"-"`
+}
+
+// emailRoutingRoutingAddressListResponseJSON contains the JSON metadata for the
+// struct [EmailRoutingRoutingAddressListResponse]
+type emailRoutingRoutingAddressListResponseJSON struct {
+	ID          apijson.Field
+	Created     apijson.Field
+	Email       apijson.Field
+	Modified    apijson.Field
+	Tag         apijson.Field
+	Verified    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EmailRoutingRoutingAddressListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type EmailRoutingRoutingAddressDeleteResponse struct {
 	// Destination address identifier.
 	ID string `json:"id"`
@@ -154,42 +200,6 @@ type emailRoutingRoutingAddressDeleteResponseJSON struct {
 }
 
 func (r *EmailRoutingRoutingAddressDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponse struct {
-	// Destination address identifier.
-	ID string `json:"id"`
-	// The date and time the destination address has been created.
-	Created time.Time `json:"created" format:"date-time"`
-	// The contact email address of the user.
-	Email string `json:"email"`
-	// The date and time the destination address was last modified.
-	Modified time.Time `json:"modified" format:"date-time"`
-	// Destination address tag. (Deprecated, replaced by destination address
-	// identifier)
-	Tag string `json:"tag"`
-	// The date and time the destination address has been verified. Null means not
-	// verified yet.
-	Verified time.Time                                                                                      `json:"verified" format:"date-time"`
-	JSON     emailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseJSON `json:"-"`
-}
-
-// emailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseJSON
-// contains the JSON metadata for the struct
-// [EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponse]
-type emailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseJSON struct {
-	ID          apijson.Field
-	Created     apijson.Field
-	Email       apijson.Field
-	Modified    apijson.Field
-	Tag         apijson.Field
-	Verified    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -306,6 +316,42 @@ const (
 	EmailRoutingRoutingAddressNewResponseEnvelopeSuccessTrue EmailRoutingRoutingAddressNewResponseEnvelopeSuccess = true
 )
 
+type EmailRoutingRoutingAddressListParams struct {
+	// Sorts results in an ascending or descending order.
+	Direction param.Field[EmailRoutingRoutingAddressListParamsDirection] `query:"direction"`
+	// Page number of paginated results.
+	Page param.Field[float64] `query:"page"`
+	// Maximum number of results per page.
+	PerPage param.Field[float64] `query:"per_page"`
+	// Filter by verified destination addresses.
+	Verified param.Field[EmailRoutingRoutingAddressListParamsVerified] `query:"verified"`
+}
+
+// URLQuery serializes [EmailRoutingRoutingAddressListParams]'s query parameters as
+// `url.Values`.
+func (r EmailRoutingRoutingAddressListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+// Sorts results in an ascending or descending order.
+type EmailRoutingRoutingAddressListParamsDirection string
+
+const (
+	EmailRoutingRoutingAddressListParamsDirectionAsc  EmailRoutingRoutingAddressListParamsDirection = "asc"
+	EmailRoutingRoutingAddressListParamsDirectionDesc EmailRoutingRoutingAddressListParamsDirection = "desc"
+)
+
+// Filter by verified destination addresses.
+type EmailRoutingRoutingAddressListParamsVerified bool
+
+const (
+	EmailRoutingRoutingAddressListParamsVerifiedTrue  EmailRoutingRoutingAddressListParamsVerified = true
+	EmailRoutingRoutingAddressListParamsVerifiedFalse EmailRoutingRoutingAddressListParamsVerified = false
+)
+
 type EmailRoutingRoutingAddressDeleteResponseEnvelope struct {
 	Errors   []EmailRoutingRoutingAddressDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []EmailRoutingRoutingAddressDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -375,145 +421,6 @@ type EmailRoutingRoutingAddressDeleteResponseEnvelopeSuccess bool
 const (
 	EmailRoutingRoutingAddressDeleteResponseEnvelopeSuccessTrue EmailRoutingRoutingAddressDeleteResponseEnvelopeSuccess = true
 )
-
-type EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesParams struct {
-	// Sorts results in an ascending or descending order.
-	Direction param.Field[EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesParamsDirection] `query:"direction"`
-	// Page number of paginated results.
-	Page param.Field[float64] `query:"page"`
-	// Maximum number of results per page.
-	PerPage param.Field[float64] `query:"per_page"`
-	// Filter by verified destination addresses.
-	Verified param.Field[EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesParamsVerified] `query:"verified"`
-}
-
-// URLQuery serializes
-// [EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesParams]'s
-// query parameters as `url.Values`.
-func (r EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesParams) URLQuery() (v url.Values) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
-	})
-}
-
-// Sorts results in an ascending or descending order.
-type EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesParamsDirection string
-
-const (
-	EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesParamsDirectionAsc  EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesParamsDirection = "asc"
-	EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesParamsDirectionDesc EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesParamsDirection = "desc"
-)
-
-// Filter by verified destination addresses.
-type EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesParamsVerified bool
-
-const (
-	EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesParamsVerifiedTrue  EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesParamsVerified = true
-	EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesParamsVerifiedFalse EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesParamsVerified = false
-)
-
-type EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelope struct {
-	Errors   []EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeMessages `json:"messages,required"`
-	Result   []EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       emailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeJSON       `json:"-"`
-}
-
-// emailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelope]
-type emailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeErrors struct {
-	Code    int64                                                                                                        `json:"code,required"`
-	Message string                                                                                                       `json:"message,required"`
-	JSON    emailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// emailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeErrors]
-type emailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeMessages struct {
-	Code    int64                                                                                                          `json:"code,required"`
-	Message string                                                                                                         `json:"message,required"`
-	JSON    emailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// emailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeMessages]
-type emailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeSuccess bool
-
-const (
-	EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeSuccessTrue EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeSuccess = true
-)
-
-type EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeResultInfo struct {
-	// Total number of results for the requested service
-	Count float64 `json:"count"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                                                                                          `json:"total_count"`
-	JSON       emailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// emailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeResultInfoJSON
-// contains the JSON metadata for the struct
-// [EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeResultInfo]
-type emailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *EmailRoutingRoutingAddressEmailRoutingDestinationAddressesListDestinationAddressesResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
 
 type EmailRoutingRoutingAddressGetResponseEnvelope struct {
 	Errors   []EmailRoutingRoutingAddressGetResponseEnvelopeErrors   `json:"errors,required"`

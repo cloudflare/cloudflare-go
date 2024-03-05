@@ -49,12 +49,12 @@ func (r *StreamKeyService) New(ctx context.Context, body StreamKeyNewParams, opt
 	return
 }
 
-// Lists the video ID and creation date and time when a signing key was created.
-func (r *StreamKeyService) List(ctx context.Context, query StreamKeyListParams, opts ...option.RequestOption) (res *[]StreamKeyListResponse, err error) {
+// Deletes signing keys and revokes all signed URLs generated with the key.
+func (r *StreamKeyService) Delete(ctx context.Context, identifier string, body StreamKeyDeleteParams, opts ...option.RequestOption) (res *StreamKeyDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env StreamKeyListResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/keys", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	var env StreamKeyDeleteResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/stream/keys/%s", body.AccountID, identifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -62,12 +62,12 @@ func (r *StreamKeyService) List(ctx context.Context, query StreamKeyListParams, 
 	return
 }
 
-// Deletes signing keys and revokes all signed URLs generated with the key.
-func (r *StreamKeyService) Delete(ctx context.Context, identifier string, body StreamKeyDeleteParams, opts ...option.RequestOption) (res *StreamKeyDeleteResponse, err error) {
+// Lists the video ID and creation date and time when a signing key was created.
+func (r *StreamKeyService) Get(ctx context.Context, query StreamKeyGetParams, opts ...option.RequestOption) (res *[]StreamKeyGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env StreamKeyDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/stream/keys/%s", body.AccountID, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	var env StreamKeyGetResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/stream/keys", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -102,27 +102,6 @@ func (r *StreamKeyNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type StreamKeyListResponse struct {
-	// Identifier
-	ID string `json:"id"`
-	// The date and time a signing key was created.
-	Created time.Time                 `json:"created" format:"date-time"`
-	JSON    streamKeyListResponseJSON `json:"-"`
-}
-
-// streamKeyListResponseJSON contains the JSON metadata for the struct
-// [StreamKeyListResponse]
-type streamKeyListResponseJSON struct {
-	ID          apijson.Field
-	Created     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamKeyListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 // Union satisfied by [StreamKeyDeleteResponseUnknown] or [shared.UnionString].
 type StreamKeyDeleteResponse interface {
 	ImplementsStreamKeyDeleteResponse()
@@ -137,6 +116,27 @@ func init() {
 			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
 	)
+}
+
+type StreamKeyGetResponse struct {
+	// Identifier
+	ID string `json:"id"`
+	// The date and time a signing key was created.
+	Created time.Time                `json:"created" format:"date-time"`
+	JSON    streamKeyGetResponseJSON `json:"-"`
+}
+
+// streamKeyGetResponseJSON contains the JSON metadata for the struct
+// [StreamKeyGetResponse]
+type streamKeyGetResponseJSON struct {
+	ID          apijson.Field
+	Created     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamKeyGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type StreamKeyNewParams struct {
@@ -213,80 +213,6 @@ const (
 	StreamKeyNewResponseEnvelopeSuccessTrue StreamKeyNewResponseEnvelopeSuccess = true
 )
 
-type StreamKeyListParams struct {
-	// Identifier
-	AccountID param.Field[string] `path:"account_id,required"`
-}
-
-type StreamKeyListResponseEnvelope struct {
-	Errors   []StreamKeyListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []StreamKeyListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []StreamKeyListResponse                 `json:"result,required"`
-	// Whether the API call was successful
-	Success StreamKeyListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    streamKeyListResponseEnvelopeJSON    `json:"-"`
-}
-
-// streamKeyListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [StreamKeyListResponseEnvelope]
-type streamKeyListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamKeyListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type StreamKeyListResponseEnvelopeErrors struct {
-	Code    int64                                   `json:"code,required"`
-	Message string                                  `json:"message,required"`
-	JSON    streamKeyListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// streamKeyListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [StreamKeyListResponseEnvelopeErrors]
-type streamKeyListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamKeyListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type StreamKeyListResponseEnvelopeMessages struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    streamKeyListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// streamKeyListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [StreamKeyListResponseEnvelopeMessages]
-type streamKeyListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamKeyListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type StreamKeyListResponseEnvelopeSuccess bool
-
-const (
-	StreamKeyListResponseEnvelopeSuccessTrue StreamKeyListResponseEnvelopeSuccess = true
-)
-
 type StreamKeyDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -359,4 +285,78 @@ type StreamKeyDeleteResponseEnvelopeSuccess bool
 
 const (
 	StreamKeyDeleteResponseEnvelopeSuccessTrue StreamKeyDeleteResponseEnvelopeSuccess = true
+)
+
+type StreamKeyGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type StreamKeyGetResponseEnvelope struct {
+	Errors   []StreamKeyGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []StreamKeyGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   []StreamKeyGetResponse                 `json:"result,required"`
+	// Whether the API call was successful
+	Success StreamKeyGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    streamKeyGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// streamKeyGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [StreamKeyGetResponseEnvelope]
+type streamKeyGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamKeyGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type StreamKeyGetResponseEnvelopeErrors struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    streamKeyGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// streamKeyGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [StreamKeyGetResponseEnvelopeErrors]
+type streamKeyGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamKeyGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type StreamKeyGetResponseEnvelopeMessages struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    streamKeyGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// streamKeyGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [StreamKeyGetResponseEnvelopeMessages]
+type streamKeyGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamKeyGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type StreamKeyGetResponseEnvelopeSuccess bool
+
+const (
+	StreamKeyGetResponseEnvelopeSuccessTrue StreamKeyGetResponseEnvelopeSuccess = true
 )

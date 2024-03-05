@@ -19,7 +19,7 @@ import (
 // [NewMagicNetworkMonitoringConfigService] method instead.
 type MagicNetworkMonitoringConfigService struct {
 	Options []option.RequestOption
-	Fulls   *MagicNetworkMonitoringConfigFullService
+	Full    *MagicNetworkMonitoringConfigFullService
 }
 
 // NewMagicNetworkMonitoringConfigService generates a new service that applies the
@@ -28,7 +28,7 @@ type MagicNetworkMonitoringConfigService struct {
 func NewMagicNetworkMonitoringConfigService(opts ...option.RequestOption) (r *MagicNetworkMonitoringConfigService) {
 	r = &MagicNetworkMonitoringConfigService{}
 	r.Options = opts
-	r.Fulls = NewMagicNetworkMonitoringConfigFullService(opts...)
+	r.Full = NewMagicNetworkMonitoringConfigFullService(opts...)
 	return
 }
 
@@ -59,19 +59,6 @@ func (r *MagicNetworkMonitoringConfigService) Update(ctx context.Context, accoun
 	return
 }
 
-// Lists default sampling and router IPs for account.
-func (r *MagicNetworkMonitoringConfigService) List(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MagicNetworkMonitoringConfigListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env MagicNetworkMonitoringConfigListResponseEnvelope
-	path := fmt.Sprintf("accounts/%v/mnm/config", accountIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Delete an existing network monitoring configuration.
 func (r *MagicNetworkMonitoringConfigService) Delete(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MagicNetworkMonitoringConfigDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -91,6 +78,19 @@ func (r *MagicNetworkMonitoringConfigService) Edit(ctx context.Context, accountI
 	var env MagicNetworkMonitoringConfigEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/mnm/config", accountIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Lists default sampling and router IPs for account.
+func (r *MagicNetworkMonitoringConfigService) Get(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MagicNetworkMonitoringConfigGetResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env MagicNetworkMonitoringConfigGetResponseEnvelope
+	path := fmt.Sprintf("accounts/%v/mnm/config", accountIdentifier)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -146,30 +146,6 @@ func (r *MagicNetworkMonitoringConfigUpdateResponse) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MagicNetworkMonitoringConfigListResponse struct {
-	// Fallback sampling rate of flow messages being sent in packets per second. This
-	// should match the packet sampling rate configured on the router.
-	DefaultSampling float64 `json:"default_sampling,required"`
-	// The account name.
-	Name      string                                       `json:"name,required"`
-	RouterIPs []string                                     `json:"router_ips,required"`
-	JSON      magicNetworkMonitoringConfigListResponseJSON `json:"-"`
-}
-
-// magicNetworkMonitoringConfigListResponseJSON contains the JSON metadata for the
-// struct [MagicNetworkMonitoringConfigListResponse]
-type magicNetworkMonitoringConfigListResponseJSON struct {
-	DefaultSampling apijson.Field
-	Name            apijson.Field
-	RouterIPs       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *MagicNetworkMonitoringConfigListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type MagicNetworkMonitoringConfigDeleteResponse struct {
 	// Fallback sampling rate of flow messages being sent in packets per second. This
 	// should match the packet sampling rate configured on the router.
@@ -215,6 +191,30 @@ type magicNetworkMonitoringConfigEditResponseJSON struct {
 }
 
 func (r *MagicNetworkMonitoringConfigEditResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MagicNetworkMonitoringConfigGetResponse struct {
+	// Fallback sampling rate of flow messages being sent in packets per second. This
+	// should match the packet sampling rate configured on the router.
+	DefaultSampling float64 `json:"default_sampling,required"`
+	// The account name.
+	Name      string                                      `json:"name,required"`
+	RouterIPs []string                                    `json:"router_ips,required"`
+	JSON      magicNetworkMonitoringConfigGetResponseJSON `json:"-"`
+}
+
+// magicNetworkMonitoringConfigGetResponseJSON contains the JSON metadata for the
+// struct [MagicNetworkMonitoringConfigGetResponse]
+type magicNetworkMonitoringConfigGetResponseJSON struct {
+	DefaultSampling apijson.Field
+	Name            apijson.Field
+	RouterIPs       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *MagicNetworkMonitoringConfigGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -359,76 +359,6 @@ const (
 	MagicNetworkMonitoringConfigUpdateResponseEnvelopeSuccessTrue MagicNetworkMonitoringConfigUpdateResponseEnvelopeSuccess = true
 )
 
-type MagicNetworkMonitoringConfigListResponseEnvelope struct {
-	Errors   []MagicNetworkMonitoringConfigListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MagicNetworkMonitoringConfigListResponseEnvelopeMessages `json:"messages,required"`
-	Result   MagicNetworkMonitoringConfigListResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success MagicNetworkMonitoringConfigListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    magicNetworkMonitoringConfigListResponseEnvelopeJSON    `json:"-"`
-}
-
-// magicNetworkMonitoringConfigListResponseEnvelopeJSON contains the JSON metadata
-// for the struct [MagicNetworkMonitoringConfigListResponseEnvelope]
-type magicNetworkMonitoringConfigListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MagicNetworkMonitoringConfigListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type MagicNetworkMonitoringConfigListResponseEnvelopeErrors struct {
-	Code    int64                                                      `json:"code,required"`
-	Message string                                                     `json:"message,required"`
-	JSON    magicNetworkMonitoringConfigListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// magicNetworkMonitoringConfigListResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [MagicNetworkMonitoringConfigListResponseEnvelopeErrors]
-type magicNetworkMonitoringConfigListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MagicNetworkMonitoringConfigListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type MagicNetworkMonitoringConfigListResponseEnvelopeMessages struct {
-	Code    int64                                                        `json:"code,required"`
-	Message string                                                       `json:"message,required"`
-	JSON    magicNetworkMonitoringConfigListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// magicNetworkMonitoringConfigListResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct
-// [MagicNetworkMonitoringConfigListResponseEnvelopeMessages]
-type magicNetworkMonitoringConfigListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *MagicNetworkMonitoringConfigListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type MagicNetworkMonitoringConfigListResponseEnvelopeSuccess bool
-
-const (
-	MagicNetworkMonitoringConfigListResponseEnvelopeSuccessTrue MagicNetworkMonitoringConfigListResponseEnvelopeSuccess = true
-)
-
 type MagicNetworkMonitoringConfigDeleteResponseEnvelope struct {
 	Errors   []MagicNetworkMonitoringConfigDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []MagicNetworkMonitoringConfigDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -568,4 +498,74 @@ type MagicNetworkMonitoringConfigEditResponseEnvelopeSuccess bool
 
 const (
 	MagicNetworkMonitoringConfigEditResponseEnvelopeSuccessTrue MagicNetworkMonitoringConfigEditResponseEnvelopeSuccess = true
+)
+
+type MagicNetworkMonitoringConfigGetResponseEnvelope struct {
+	Errors   []MagicNetworkMonitoringConfigGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []MagicNetworkMonitoringConfigGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   MagicNetworkMonitoringConfigGetResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success MagicNetworkMonitoringConfigGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    magicNetworkMonitoringConfigGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// magicNetworkMonitoringConfigGetResponseEnvelopeJSON contains the JSON metadata
+// for the struct [MagicNetworkMonitoringConfigGetResponseEnvelope]
+type magicNetworkMonitoringConfigGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MagicNetworkMonitoringConfigGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MagicNetworkMonitoringConfigGetResponseEnvelopeErrors struct {
+	Code    int64                                                     `json:"code,required"`
+	Message string                                                    `json:"message,required"`
+	JSON    magicNetworkMonitoringConfigGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// magicNetworkMonitoringConfigGetResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [MagicNetworkMonitoringConfigGetResponseEnvelopeErrors]
+type magicNetworkMonitoringConfigGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MagicNetworkMonitoringConfigGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MagicNetworkMonitoringConfigGetResponseEnvelopeMessages struct {
+	Code    int64                                                       `json:"code,required"`
+	Message string                                                      `json:"message,required"`
+	JSON    magicNetworkMonitoringConfigGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// magicNetworkMonitoringConfigGetResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct
+// [MagicNetworkMonitoringConfigGetResponseEnvelopeMessages]
+type magicNetworkMonitoringConfigGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *MagicNetworkMonitoringConfigGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type MagicNetworkMonitoringConfigGetResponseEnvelopeSuccess bool
+
+const (
+	MagicNetworkMonitoringConfigGetResponseEnvelopeSuccessTrue MagicNetworkMonitoringConfigGetResponseEnvelopeSuccess = true
 )

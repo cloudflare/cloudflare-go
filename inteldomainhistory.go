@@ -35,9 +35,9 @@ func NewIntelDomainHistoryService(opts ...option.RequestOption) (r *IntelDomainH
 }
 
 // Get Domain History
-func (r *IntelDomainHistoryService) List(ctx context.Context, params IntelDomainHistoryListParams, opts ...option.RequestOption) (res *[]IntelDomainHistoryListResponse, err error) {
+func (r *IntelDomainHistoryService) Get(ctx context.Context, params IntelDomainHistoryGetParams, opts ...option.RequestOption) (res *[]IntelDomainHistoryGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env IntelDomainHistoryListResponseEnvelope
+	var env IntelDomainHistoryGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/domain-history", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
@@ -47,35 +47,35 @@ func (r *IntelDomainHistoryService) List(ctx context.Context, params IntelDomain
 	return
 }
 
-type IntelDomainHistoryListResponse struct {
-	Categorizations []IntelDomainHistoryListResponseCategorization `json:"categorizations"`
-	Domain          string                                         `json:"domain"`
-	JSON            intelDomainHistoryListResponseJSON             `json:"-"`
+type IntelDomainHistoryGetResponse struct {
+	Categorizations []IntelDomainHistoryGetResponseCategorization `json:"categorizations"`
+	Domain          string                                        `json:"domain"`
+	JSON            intelDomainHistoryGetResponseJSON             `json:"-"`
 }
 
-// intelDomainHistoryListResponseJSON contains the JSON metadata for the struct
-// [IntelDomainHistoryListResponse]
-type intelDomainHistoryListResponseJSON struct {
+// intelDomainHistoryGetResponseJSON contains the JSON metadata for the struct
+// [IntelDomainHistoryGetResponse]
+type intelDomainHistoryGetResponseJSON struct {
 	Categorizations apijson.Field
 	Domain          apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *IntelDomainHistoryListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelDomainHistoryGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type IntelDomainHistoryListResponseCategorization struct {
-	Categories interface{}                                      `json:"categories"`
-	End        time.Time                                        `json:"end" format:"date"`
-	Start      time.Time                                        `json:"start" format:"date"`
-	JSON       intelDomainHistoryListResponseCategorizationJSON `json:"-"`
+type IntelDomainHistoryGetResponseCategorization struct {
+	Categories interface{}                                     `json:"categories"`
+	End        time.Time                                       `json:"end" format:"date"`
+	Start      time.Time                                       `json:"start" format:"date"`
+	JSON       intelDomainHistoryGetResponseCategorizationJSON `json:"-"`
 }
 
-// intelDomainHistoryListResponseCategorizationJSON contains the JSON metadata for
-// the struct [IntelDomainHistoryListResponseCategorization]
-type intelDomainHistoryListResponseCategorizationJSON struct {
+// intelDomainHistoryGetResponseCategorizationJSON contains the JSON metadata for
+// the struct [IntelDomainHistoryGetResponseCategorization]
+type intelDomainHistoryGetResponseCategorizationJSON struct {
 	Categories  apijson.Field
 	End         apijson.Field
 	Start       apijson.Field
@@ -83,38 +83,38 @@ type intelDomainHistoryListResponseCategorizationJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelDomainHistoryListResponseCategorization) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelDomainHistoryGetResponseCategorization) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type IntelDomainHistoryListParams struct {
+type IntelDomainHistoryGetParams struct {
 	// Identifier
 	AccountID param.Field[string]      `path:"account_id,required"`
 	Domain    param.Field[interface{}] `query:"domain"`
 }
 
-// URLQuery serializes [IntelDomainHistoryListParams]'s query parameters as
+// URLQuery serializes [IntelDomainHistoryGetParams]'s query parameters as
 // `url.Values`.
-func (r IntelDomainHistoryListParams) URLQuery() (v url.Values) {
+func (r IntelDomainHistoryGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
 
-type IntelDomainHistoryListResponseEnvelope struct {
-	Errors   []IntelDomainHistoryListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []IntelDomainHistoryListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []IntelDomainHistoryListResponse                 `json:"result,required,nullable"`
+type IntelDomainHistoryGetResponseEnvelope struct {
+	Errors   []IntelDomainHistoryGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []IntelDomainHistoryGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   []IntelDomainHistoryGetResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success    IntelDomainHistoryListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo IntelDomainHistoryListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       intelDomainHistoryListResponseEnvelopeJSON       `json:"-"`
+	Success    IntelDomainHistoryGetResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo IntelDomainHistoryGetResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       intelDomainHistoryGetResponseEnvelopeJSON       `json:"-"`
 }
 
-// intelDomainHistoryListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [IntelDomainHistoryListResponseEnvelope]
-type intelDomainHistoryListResponseEnvelopeJSON struct {
+// intelDomainHistoryGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [IntelDomainHistoryGetResponseEnvelope]
+type intelDomainHistoryGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -124,56 +124,56 @@ type intelDomainHistoryListResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelDomainHistoryListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelDomainHistoryGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type IntelDomainHistoryListResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    intelDomainHistoryListResponseEnvelopeErrorsJSON `json:"-"`
+type IntelDomainHistoryGetResponseEnvelopeErrors struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    intelDomainHistoryGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// intelDomainHistoryListResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [IntelDomainHistoryListResponseEnvelopeErrors]
-type intelDomainHistoryListResponseEnvelopeErrorsJSON struct {
+// intelDomainHistoryGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [IntelDomainHistoryGetResponseEnvelopeErrors]
+type intelDomainHistoryGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelDomainHistoryListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelDomainHistoryGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type IntelDomainHistoryListResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    intelDomainHistoryListResponseEnvelopeMessagesJSON `json:"-"`
+type IntelDomainHistoryGetResponseEnvelopeMessages struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    intelDomainHistoryGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// intelDomainHistoryListResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [IntelDomainHistoryListResponseEnvelopeMessages]
-type intelDomainHistoryListResponseEnvelopeMessagesJSON struct {
+// intelDomainHistoryGetResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [IntelDomainHistoryGetResponseEnvelopeMessages]
+type intelDomainHistoryGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelDomainHistoryListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelDomainHistoryGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type IntelDomainHistoryListResponseEnvelopeSuccess bool
+type IntelDomainHistoryGetResponseEnvelopeSuccess bool
 
 const (
-	IntelDomainHistoryListResponseEnvelopeSuccessTrue IntelDomainHistoryListResponseEnvelopeSuccess = true
+	IntelDomainHistoryGetResponseEnvelopeSuccessTrue IntelDomainHistoryGetResponseEnvelopeSuccess = true
 )
 
-type IntelDomainHistoryListResponseEnvelopeResultInfo struct {
+type IntelDomainHistoryGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -181,13 +181,13 @@ type IntelDomainHistoryListResponseEnvelopeResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                              `json:"total_count"`
-	JSON       intelDomainHistoryListResponseEnvelopeResultInfoJSON `json:"-"`
+	TotalCount float64                                             `json:"total_count"`
+	JSON       intelDomainHistoryGetResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
-// intelDomainHistoryListResponseEnvelopeResultInfoJSON contains the JSON metadata
-// for the struct [IntelDomainHistoryListResponseEnvelopeResultInfo]
-type intelDomainHistoryListResponseEnvelopeResultInfoJSON struct {
+// intelDomainHistoryGetResponseEnvelopeResultInfoJSON contains the JSON metadata
+// for the struct [IntelDomainHistoryGetResponseEnvelopeResultInfo]
+type intelDomainHistoryGetResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -196,6 +196,6 @@ type intelDomainHistoryListResponseEnvelopeResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelDomainHistoryListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelDomainHistoryGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

@@ -32,9 +32,9 @@ func NewMTLSCertificateAssociationService(opts ...option.RequestOption) (r *MTLS
 }
 
 // Lists all active associations between the certificate and Cloudflare services.
-func (r *MTLSCertificateAssociationService) List(ctx context.Context, mtlsCertificateID string, query MTLSCertificateAssociationListParams, opts ...option.RequestOption) (res *[]MTLSCertificateAssociationListResponse, err error) {
+func (r *MTLSCertificateAssociationService) Get(ctx context.Context, mtlsCertificateID string, query MTLSCertificateAssociationGetParams, opts ...option.RequestOption) (res *[]MTLSCertificateAssociationGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env MTLSCertificateAssociationListResponseEnvelope
+	var env MTLSCertificateAssociationGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/mtls_certificates/%s/associations", query.AccountID, mtlsCertificateID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -44,45 +44,45 @@ func (r *MTLSCertificateAssociationService) List(ctx context.Context, mtlsCertif
 	return
 }
 
-type MTLSCertificateAssociationListResponse struct {
+type MTLSCertificateAssociationGetResponse struct {
 	// The service using the certificate.
 	Service string `json:"service"`
 	// Certificate deployment status for the given service.
-	Status string                                     `json:"status"`
-	JSON   mtlsCertificateAssociationListResponseJSON `json:"-"`
+	Status string                                    `json:"status"`
+	JSON   mtlsCertificateAssociationGetResponseJSON `json:"-"`
 }
 
-// mtlsCertificateAssociationListResponseJSON contains the JSON metadata for the
-// struct [MTLSCertificateAssociationListResponse]
-type mtlsCertificateAssociationListResponseJSON struct {
+// mtlsCertificateAssociationGetResponseJSON contains the JSON metadata for the
+// struct [MTLSCertificateAssociationGetResponse]
+type mtlsCertificateAssociationGetResponseJSON struct {
 	Service     apijson.Field
 	Status      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MTLSCertificateAssociationListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *MTLSCertificateAssociationGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MTLSCertificateAssociationListParams struct {
+type MTLSCertificateAssociationGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type MTLSCertificateAssociationListResponseEnvelope struct {
-	Errors   []MTLSCertificateAssociationListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []MTLSCertificateAssociationListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []MTLSCertificateAssociationListResponse                 `json:"result,required,nullable"`
+type MTLSCertificateAssociationGetResponseEnvelope struct {
+	Errors   []MTLSCertificateAssociationGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []MTLSCertificateAssociationGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   []MTLSCertificateAssociationGetResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success    MTLSCertificateAssociationListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo MTLSCertificateAssociationListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       mtlsCertificateAssociationListResponseEnvelopeJSON       `json:"-"`
+	Success    MTLSCertificateAssociationGetResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo MTLSCertificateAssociationGetResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       mtlsCertificateAssociationGetResponseEnvelopeJSON       `json:"-"`
 }
 
-// mtlsCertificateAssociationListResponseEnvelopeJSON contains the JSON metadata
-// for the struct [MTLSCertificateAssociationListResponseEnvelope]
-type mtlsCertificateAssociationListResponseEnvelopeJSON struct {
+// mtlsCertificateAssociationGetResponseEnvelopeJSON contains the JSON metadata for
+// the struct [MTLSCertificateAssociationGetResponseEnvelope]
+type mtlsCertificateAssociationGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -92,56 +92,56 @@ type mtlsCertificateAssociationListResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MTLSCertificateAssociationListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *MTLSCertificateAssociationGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MTLSCertificateAssociationListResponseEnvelopeErrors struct {
-	Code    int64                                                    `json:"code,required"`
-	Message string                                                   `json:"message,required"`
-	JSON    mtlsCertificateAssociationListResponseEnvelopeErrorsJSON `json:"-"`
+type MTLSCertificateAssociationGetResponseEnvelopeErrors struct {
+	Code    int64                                                   `json:"code,required"`
+	Message string                                                  `json:"message,required"`
+	JSON    mtlsCertificateAssociationGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// mtlsCertificateAssociationListResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [MTLSCertificateAssociationListResponseEnvelopeErrors]
-type mtlsCertificateAssociationListResponseEnvelopeErrorsJSON struct {
+// mtlsCertificateAssociationGetResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [MTLSCertificateAssociationGetResponseEnvelopeErrors]
+type mtlsCertificateAssociationGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MTLSCertificateAssociationListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *MTLSCertificateAssociationGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type MTLSCertificateAssociationListResponseEnvelopeMessages struct {
-	Code    int64                                                      `json:"code,required"`
-	Message string                                                     `json:"message,required"`
-	JSON    mtlsCertificateAssociationListResponseEnvelopeMessagesJSON `json:"-"`
+type MTLSCertificateAssociationGetResponseEnvelopeMessages struct {
+	Code    int64                                                     `json:"code,required"`
+	Message string                                                    `json:"message,required"`
+	JSON    mtlsCertificateAssociationGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// mtlsCertificateAssociationListResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [MTLSCertificateAssociationListResponseEnvelopeMessages]
-type mtlsCertificateAssociationListResponseEnvelopeMessagesJSON struct {
+// mtlsCertificateAssociationGetResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [MTLSCertificateAssociationGetResponseEnvelopeMessages]
+type mtlsCertificateAssociationGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MTLSCertificateAssociationListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *MTLSCertificateAssociationGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type MTLSCertificateAssociationListResponseEnvelopeSuccess bool
+type MTLSCertificateAssociationGetResponseEnvelopeSuccess bool
 
 const (
-	MTLSCertificateAssociationListResponseEnvelopeSuccessTrue MTLSCertificateAssociationListResponseEnvelopeSuccess = true
+	MTLSCertificateAssociationGetResponseEnvelopeSuccessTrue MTLSCertificateAssociationGetResponseEnvelopeSuccess = true
 )
 
-type MTLSCertificateAssociationListResponseEnvelopeResultInfo struct {
+type MTLSCertificateAssociationGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -149,14 +149,14 @@ type MTLSCertificateAssociationListResponseEnvelopeResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                                      `json:"total_count"`
-	JSON       mtlsCertificateAssociationListResponseEnvelopeResultInfoJSON `json:"-"`
+	TotalCount float64                                                     `json:"total_count"`
+	JSON       mtlsCertificateAssociationGetResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
-// mtlsCertificateAssociationListResponseEnvelopeResultInfoJSON contains the JSON
+// mtlsCertificateAssociationGetResponseEnvelopeResultInfoJSON contains the JSON
 // metadata for the struct
-// [MTLSCertificateAssociationListResponseEnvelopeResultInfo]
-type mtlsCertificateAssociationListResponseEnvelopeResultInfoJSON struct {
+// [MTLSCertificateAssociationGetResponseEnvelopeResultInfo]
+type mtlsCertificateAssociationGetResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -165,6 +165,6 @@ type mtlsCertificateAssociationListResponseEnvelopeResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *MTLSCertificateAssociationListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *MTLSCertificateAssociationGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

@@ -11,10 +11,10 @@ func (UnionString) ImplementsCertificateNewResponse()                           
 func (UnionString) ImplementsCertificateGetResponse()                                             {}
 func (UnionString) ImplementsMembershipUpdateResponse()                                           {}
 func (UnionString) ImplementsMembershipGetResponse()                                              {}
-func (UnionString) ImplementsUserListResponse()                                                   {}
 func (UnionString) ImplementsUserEditResponse()                                                   {}
+func (UnionString) ImplementsUserGetResponse()                                                    {}
 func (UnionString) ImplementsUserAuditLogListResponse()                                           {}
-func (UnionString) ImplementsUserBillingProfileListResponse()                                     {}
+func (UnionString) ImplementsUserBillingProfileGetResponse()                                      {}
 func (UnionString) ImplementsUserInviteEditResponse()                                             {}
 func (UnionString) ImplementsUserInviteGetResponse()                                              {}
 func (UnionString) ImplementsUserLoadBalancerPoolHealthResponse()                                 {}
@@ -130,7 +130,7 @@ func (UnionString) ImplementsIntelIPGetResponseIP()                             
 func (UnionString) ImplementsIntelMiscategorizationNewResponse()                                  {}
 func (UnionString) ImplementsPageProjectNewResponse()                                             {}
 func (UnionString) ImplementsPageProjectEditResponse()                                            {}
-func (UnionString) ImplementsPageProjectDeploymentHistoryLogListResponse()                        {}
+func (UnionString) ImplementsPageProjectDeploymentHistoryLogGetResponse()                         {}
 func (UnionString) ImplementsPageProjectDomainNewResponse()                                       {}
 func (UnionString) ImplementsPageProjectDomainEditResponse()                                      {}
 func (UnionString) ImplementsPageProjectDomainGetResponse()                                       {}
@@ -148,8 +148,8 @@ func (UnionString) ImplementsStreamWebhookGetResponse()                         
 func (UnionString) ImplementsStreamCaptionUpdateResponse()                                        {}
 func (UnionString) ImplementsStreamCaptionDeleteResponse()                                        {}
 func (UnionString) ImplementsStreamDownloadNewResponse()                                          {}
-func (UnionString) ImplementsStreamDownloadListResponse()                                         {}
 func (UnionString) ImplementsStreamDownloadDeleteResponse()                                       {}
+func (UnionString) ImplementsStreamDownloadGetResponse()                                          {}
 func (UnionString) ImplementsAlertingV3ListResponse()                                             {}
 func (UnionString) ImplementsAlertingV3DestinationEligibleGetResponse()                           {}
 func (UnionString) ImplementsAlertingV3DestinationPagerdutyDeleteResponse()                       {}
@@ -176,7 +176,7 @@ func (UnionString) ImplementsZeroTrustAccessKeyUpdateResponse()                 
 func (UnionString) ImplementsZeroTrustAccessKeyListResponse()                                     {}
 func (UnionString) ImplementsZeroTrustAccessKeyRotateResponse()                                   {}
 func (UnionString) ImplementsZeroTrustTunnelConfigurationUpdateResponse()                         {}
-func (UnionString) ImplementsZeroTrustTunnelConfigurationListResponse()                           {}
+func (UnionString) ImplementsZeroTrustTunnelConfigurationGetResponse()                            {}
 func (UnionString) ImplementsZeroTrustTunnelConnectionDeleteResponse()                            {}
 func (UnionString) ImplementsZeroTrustTunnelTokenGetResponse()                                    {}
 func (UnionString) ImplementsZeroTrustTunnelManagementNewResponse()                               {}

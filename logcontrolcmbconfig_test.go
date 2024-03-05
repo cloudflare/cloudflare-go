@@ -27,7 +27,7 @@ func TestLogControlCmbConfigNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Logs.Controls.Cmb.Config.New(context.TODO(), cloudflare.LogControlCmbConfigNewParams{
+	_, err := client.Logs.Control.Cmb.Config.New(context.TODO(), cloudflare.LogControlCmbConfigNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Regions:   cloudflare.F("eu"),
 	})
@@ -54,7 +54,7 @@ func TestLogControlCmbConfigDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Logs.Controls.Cmb.Config.Delete(context.TODO(), cloudflare.LogControlCmbConfigDeleteParams{
+	_, err := client.Logs.Control.Cmb.Config.Delete(context.TODO(), cloudflare.LogControlCmbConfigDeleteParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {
@@ -80,7 +80,7 @@ func TestLogControlCmbConfigGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Logs.Controls.Cmb.Config.Get(context.TODO(), cloudflare.LogControlCmbConfigGetParams{
+	_, err := client.Logs.Control.Cmb.Config.Get(context.TODO(), cloudflare.LogControlCmbConfigGetParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {

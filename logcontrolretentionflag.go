@@ -45,9 +45,9 @@ func (r *LogControlRetentionFlagService) New(ctx context.Context, zoneIdentifier
 }
 
 // Gets log retention flag for Logpull API.
-func (r *LogControlRetentionFlagService) LogsReceivedGetLogRetentionFlag(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *LogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponse, err error) {
+func (r *LogControlRetentionFlagService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *LogControlRetentionFlagGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env LogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseEnvelope
+	var env LogControlRetentionFlagGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/logs/control/retention/flag", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -74,21 +74,20 @@ func (r *LogControlRetentionFlagNewResponse) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type LogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponse struct {
-	Flag bool                                                               `json:"flag"`
-	JSON logControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseJSON `json:"-"`
+type LogControlRetentionFlagGetResponse struct {
+	Flag bool                                   `json:"flag"`
+	JSON logControlRetentionFlagGetResponseJSON `json:"-"`
 }
 
-// logControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseJSON contains the
-// JSON metadata for the struct
-// [LogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponse]
-type logControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseJSON struct {
+// logControlRetentionFlagGetResponseJSON contains the JSON metadata for the struct
+// [LogControlRetentionFlagGetResponse]
+type logControlRetentionFlagGetResponseJSON struct {
 	Flag        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *LogControlRetentionFlagGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -170,19 +169,18 @@ const (
 	LogControlRetentionFlagNewResponseEnvelopeSuccessTrue LogControlRetentionFlagNewResponseEnvelopeSuccess = true
 )
 
-type LogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseEnvelope struct {
-	Errors   []LogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []LogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseEnvelopeMessages `json:"messages,required"`
-	Result   LogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponse                   `json:"result,required"`
+type LogControlRetentionFlagGetResponseEnvelope struct {
+	Errors   []LogControlRetentionFlagGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LogControlRetentionFlagGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   LogControlRetentionFlagGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success LogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseEnvelopeSuccess `json:"success,required"`
-	JSON    logControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseEnvelopeJSON    `json:"-"`
+	Success LogControlRetentionFlagGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    logControlRetentionFlagGetResponseEnvelopeJSON    `json:"-"`
 }
 
-// logControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseEnvelopeJSON
-// contains the JSON metadata for the struct
-// [LogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseEnvelope]
-type logControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseEnvelopeJSON struct {
+// logControlRetentionFlagGetResponseEnvelopeJSON contains the JSON metadata for
+// the struct [LogControlRetentionFlagGetResponseEnvelope]
+type logControlRetentionFlagGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -191,53 +189,51 @@ type logControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseEnvelopeJSON 
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *LogControlRetentionFlagGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type LogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseEnvelopeErrors struct {
-	Code    int64                                                                            `json:"code,required"`
-	Message string                                                                           `json:"message,required"`
-	JSON    logControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseEnvelopeErrorsJSON `json:"-"`
+type LogControlRetentionFlagGetResponseEnvelopeErrors struct {
+	Code    int64                                                `json:"code,required"`
+	Message string                                               `json:"message,required"`
+	JSON    logControlRetentionFlagGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// logControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [LogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseEnvelopeErrors]
-type logControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseEnvelopeErrorsJSON struct {
+// logControlRetentionFlagGetResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [LogControlRetentionFlagGetResponseEnvelopeErrors]
+type logControlRetentionFlagGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *LogControlRetentionFlagGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type LogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseEnvelopeMessages struct {
-	Code    int64                                                                              `json:"code,required"`
-	Message string                                                                             `json:"message,required"`
-	JSON    logControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseEnvelopeMessagesJSON `json:"-"`
+type LogControlRetentionFlagGetResponseEnvelopeMessages struct {
+	Code    int64                                                  `json:"code,required"`
+	Message string                                                 `json:"message,required"`
+	JSON    logControlRetentionFlagGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// logControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [LogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseEnvelopeMessages]
-type logControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseEnvelopeMessagesJSON struct {
+// logControlRetentionFlagGetResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [LogControlRetentionFlagGetResponseEnvelopeMessages]
+type logControlRetentionFlagGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *LogControlRetentionFlagGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type LogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseEnvelopeSuccess bool
+type LogControlRetentionFlagGetResponseEnvelopeSuccess bool
 
 const (
-	LogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseEnvelopeSuccessTrue LogControlRetentionFlagLogsReceivedGetLogRetentionFlagResponseEnvelopeSuccess = true
+	LogControlRetentionFlagGetResponseEnvelopeSuccessTrue LogControlRetentionFlagGetResponseEnvelopeSuccess = true
 )

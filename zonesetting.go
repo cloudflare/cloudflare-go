@@ -135,19 +135,6 @@ func NewZoneSettingService(opts ...option.RequestOption) (r *ZoneSettingService)
 	return
 }
 
-// Available settings for your user in relation to a zone.
-func (r *ZoneSettingService) List(ctx context.Context, query ZoneSettingListParams, opts ...option.RequestOption) (res *[]ZoneSettingListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env ZoneSettingListResponseEnvelope
-	path := fmt.Sprintf("zones/%s/settings", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Edit settings for a zone.
 func (r *ZoneSettingService) Edit(ctx context.Context, params ZoneSettingEditParams, opts ...option.RequestOption) (res *[]ZoneSettingEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -161,3355 +148,18 @@ func (r *ZoneSettingService) Edit(ctx context.Context, params ZoneSettingEditPar
 	return
 }
 
-// 0-RTT session resumption enabled for this zone.
-//
-// Union satisfied by [ZoneSettingListResponseZones0rtt],
-// [ZoneSettingListResponseZonesAdvancedDDOS],
-// [ZoneSettingListResponseZonesAlwaysOnline],
-// [ZoneSettingListResponseZonesAlwaysUseHTTPS],
-// [ZoneSettingListResponseZonesAutomaticHTTPSRewrites],
-// [ZoneSettingListResponseZonesBrotli],
-// [ZoneSettingListResponseZonesBrowserCacheTTL],
-// [ZoneSettingListResponseZonesBrowserCheck],
-// [ZoneSettingListResponseZonesCacheLevel],
-// [ZoneSettingListResponseZonesChallengeTTL],
-// [ZoneSettingListResponseZonesCiphers],
-// [ZoneSettingListResponseZonesCnameFlattening],
-// [ZoneSettingListResponseZonesDevelopmentMode],
-// [ZoneSettingListResponseZonesEarlyHints],
-// [ZoneSettingListResponseZonesEdgeCacheTTL],
-// [ZoneSettingListResponseZonesEmailObfuscation],
-// [ZoneSettingListResponseZonesH2Prioritization],
-// [ZoneSettingListResponseZonesHotlinkProtection],
-// [ZoneSettingListResponseZonesHTTP2], [ZoneSettingListResponseZonesHTTP3],
-// [ZoneSettingListResponseZonesImageResizing],
-// [ZoneSettingListResponseZonesIPGeolocation], [ZoneSettingListResponseZonesIPV6],
-// [ZoneSettingListResponseZonesMaxUpload],
-// [ZoneSettingListResponseZonesMinTLSVersion],
-// [ZoneSettingListResponseZonesMinify], [ZoneSettingListResponseZonesMirage],
-// [ZoneSettingListResponseZonesMobileRedirect], [ZoneSettingListResponseZonesNEL],
-// [ZoneSettingListResponseZonesOpportunisticEncryption],
-// [ZoneSettingListResponseZonesOpportunisticOnion],
-// [ZoneSettingListResponseZonesOrangeToOrange],
-// [ZoneSettingListResponseZonesOriginErrorPagePassThru],
-// [ZoneSettingListResponseZonesPolish],
-// [ZoneSettingListResponseZonesPrefetchPreload],
-// [ZoneSettingListResponseZonesProxyReadTimeout],
-// [ZoneSettingListResponseZonesPseudoIPV4],
-// [ZoneSettingListResponseZonesResponseBuffering],
-// [ZoneSettingListResponseZonesRocketLoader],
-// [ZoneSettingListResponseZonesSchemasAutomaticPlatformOptimization],
-// [ZoneSettingListResponseZonesSecurityHeader],
-// [ZoneSettingListResponseZonesSecurityLevel],
-// [ZoneSettingListResponseZonesServerSideExclude],
-// [ZoneSettingListResponseZonesSha1Support],
-// [ZoneSettingListResponseZonesSortQueryStringForCache],
-// [ZoneSettingListResponseZonesSSL], [ZoneSettingListResponseZonesSSLRecommender],
-// [ZoneSettingListResponseZonesTLS1_2Only], [ZoneSettingListResponseZonesTLS1_3],
-// [ZoneSettingListResponseZonesTLSClientAuth],
-// [ZoneSettingListResponseZonesTrueClientIPHeader],
-// [ZoneSettingListResponseZonesWAF], [ZoneSettingListResponseZonesWebp] or
-// [ZoneSettingListResponseZonesWebsockets].
-type ZoneSettingListResponse interface {
-	implementsZoneSettingListResponse()
+// Available settings for your user in relation to a zone.
+func (r *ZoneSettingService) Get(ctx context.Context, query ZoneSettingGetParams, opts ...option.RequestOption) (res *[]ZoneSettingGetResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env ZoneSettingGetResponseEnvelope
+	path := fmt.Sprintf("zones/%s/settings", query.ZoneID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
 }
-
-func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZoneSettingListResponse)(nil)).Elem(), "")
-}
-
-// 0-RTT session resumption enabled for this zone.
-type ZoneSettingListResponseZones0rtt struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZones0rttID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZones0rttValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZones0rttEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                            `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZones0rttJSON `json:"-"`
-}
-
-// zoneSettingListResponseZones0rttJSON contains the JSON metadata for the struct
-// [ZoneSettingListResponseZones0rtt]
-type zoneSettingListResponseZones0rttJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZones0rtt) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZones0rtt) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZones0rttID string
-
-const (
-	ZoneSettingListResponseZones0rttID0rtt ZoneSettingListResponseZones0rttID = "0rtt"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZones0rttValue string
-
-const (
-	ZoneSettingListResponseZones0rttValueOn  ZoneSettingListResponseZones0rttValue = "on"
-	ZoneSettingListResponseZones0rttValueOff ZoneSettingListResponseZones0rttValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZones0rttEditable bool
-
-const (
-	ZoneSettingListResponseZones0rttEditableTrue  ZoneSettingListResponseZones0rttEditable = true
-	ZoneSettingListResponseZones0rttEditableFalse ZoneSettingListResponseZones0rttEditable = false
-)
-
-// Advanced protection from Distributed Denial of Service (DDoS) attacks on your
-// website. This is an uneditable value that is 'on' in the case of Business and
-// Enterprise zones.
-type ZoneSettingListResponseZonesAdvancedDDOS struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesAdvancedDDOSID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesAdvancedDDOSValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesAdvancedDDOSEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                    `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesAdvancedDDOSJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesAdvancedDDOSJSON contains the JSON metadata for the
-// struct [ZoneSettingListResponseZonesAdvancedDDOS]
-type zoneSettingListResponseZonesAdvancedDDOSJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesAdvancedDDOS) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesAdvancedDDOS) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesAdvancedDDOSID string
-
-const (
-	ZoneSettingListResponseZonesAdvancedDDOSIDAdvancedDDOS ZoneSettingListResponseZonesAdvancedDDOSID = "advanced_ddos"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesAdvancedDDOSValue string
-
-const (
-	ZoneSettingListResponseZonesAdvancedDDOSValueOn  ZoneSettingListResponseZonesAdvancedDDOSValue = "on"
-	ZoneSettingListResponseZonesAdvancedDDOSValueOff ZoneSettingListResponseZonesAdvancedDDOSValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesAdvancedDDOSEditable bool
-
-const (
-	ZoneSettingListResponseZonesAdvancedDDOSEditableTrue  ZoneSettingListResponseZonesAdvancedDDOSEditable = true
-	ZoneSettingListResponseZonesAdvancedDDOSEditableFalse ZoneSettingListResponseZonesAdvancedDDOSEditable = false
-)
-
-// When enabled, Cloudflare serves limited copies of web pages available from the
-// [Internet Archive's Wayback Machine](https://archive.org/web/) if your server is
-// offline. Refer to
-// [Always Online](https://developers.cloudflare.com/cache/about/always-online) for
-// more information.
-type ZoneSettingListResponseZonesAlwaysOnline struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesAlwaysOnlineID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesAlwaysOnlineValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesAlwaysOnlineEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                    `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesAlwaysOnlineJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesAlwaysOnlineJSON contains the JSON metadata for the
-// struct [ZoneSettingListResponseZonesAlwaysOnline]
-type zoneSettingListResponseZonesAlwaysOnlineJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesAlwaysOnline) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesAlwaysOnline) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesAlwaysOnlineID string
-
-const (
-	ZoneSettingListResponseZonesAlwaysOnlineIDAlwaysOnline ZoneSettingListResponseZonesAlwaysOnlineID = "always_online"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesAlwaysOnlineValue string
-
-const (
-	ZoneSettingListResponseZonesAlwaysOnlineValueOn  ZoneSettingListResponseZonesAlwaysOnlineValue = "on"
-	ZoneSettingListResponseZonesAlwaysOnlineValueOff ZoneSettingListResponseZonesAlwaysOnlineValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesAlwaysOnlineEditable bool
-
-const (
-	ZoneSettingListResponseZonesAlwaysOnlineEditableTrue  ZoneSettingListResponseZonesAlwaysOnlineEditable = true
-	ZoneSettingListResponseZonesAlwaysOnlineEditableFalse ZoneSettingListResponseZonesAlwaysOnlineEditable = false
-)
-
-// Reply to all requests for URLs that use "http" with a 301 redirect to the
-// equivalent "https" URL. If you only want to redirect for a subset of requests,
-// consider creating an "Always use HTTPS" page rule.
-type ZoneSettingListResponseZonesAlwaysUseHTTPS struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesAlwaysUseHTTPSID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesAlwaysUseHTTPSValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesAlwaysUseHTTPSEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                      `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesAlwaysUseHTTPSJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesAlwaysUseHTTPSJSON contains the JSON metadata for
-// the struct [ZoneSettingListResponseZonesAlwaysUseHTTPS]
-type zoneSettingListResponseZonesAlwaysUseHTTPSJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesAlwaysUseHTTPS) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesAlwaysUseHTTPS) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesAlwaysUseHTTPSID string
-
-const (
-	ZoneSettingListResponseZonesAlwaysUseHTTPSIDAlwaysUseHTTPS ZoneSettingListResponseZonesAlwaysUseHTTPSID = "always_use_https"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesAlwaysUseHTTPSValue string
-
-const (
-	ZoneSettingListResponseZonesAlwaysUseHTTPSValueOn  ZoneSettingListResponseZonesAlwaysUseHTTPSValue = "on"
-	ZoneSettingListResponseZonesAlwaysUseHTTPSValueOff ZoneSettingListResponseZonesAlwaysUseHTTPSValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesAlwaysUseHTTPSEditable bool
-
-const (
-	ZoneSettingListResponseZonesAlwaysUseHTTPSEditableTrue  ZoneSettingListResponseZonesAlwaysUseHTTPSEditable = true
-	ZoneSettingListResponseZonesAlwaysUseHTTPSEditableFalse ZoneSettingListResponseZonesAlwaysUseHTTPSEditable = false
-)
-
-// Enable the Automatic HTTPS Rewrites feature for this zone.
-type ZoneSettingListResponseZonesAutomaticHTTPSRewrites struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesAutomaticHTTPSRewritesID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesAutomaticHTTPSRewritesValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesAutomaticHTTPSRewritesEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                              `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesAutomaticHTTPSRewritesJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesAutomaticHTTPSRewritesJSON contains the JSON
-// metadata for the struct [ZoneSettingListResponseZonesAutomaticHTTPSRewrites]
-type zoneSettingListResponseZonesAutomaticHTTPSRewritesJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesAutomaticHTTPSRewrites) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesAutomaticHTTPSRewrites) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesAutomaticHTTPSRewritesID string
-
-const (
-	ZoneSettingListResponseZonesAutomaticHTTPSRewritesIDAutomaticHTTPSRewrites ZoneSettingListResponseZonesAutomaticHTTPSRewritesID = "automatic_https_rewrites"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesAutomaticHTTPSRewritesValue string
-
-const (
-	ZoneSettingListResponseZonesAutomaticHTTPSRewritesValueOn  ZoneSettingListResponseZonesAutomaticHTTPSRewritesValue = "on"
-	ZoneSettingListResponseZonesAutomaticHTTPSRewritesValueOff ZoneSettingListResponseZonesAutomaticHTTPSRewritesValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesAutomaticHTTPSRewritesEditable bool
-
-const (
-	ZoneSettingListResponseZonesAutomaticHTTPSRewritesEditableTrue  ZoneSettingListResponseZonesAutomaticHTTPSRewritesEditable = true
-	ZoneSettingListResponseZonesAutomaticHTTPSRewritesEditableFalse ZoneSettingListResponseZonesAutomaticHTTPSRewritesEditable = false
-)
-
-// When the client requesting an asset supports the Brotli compression algorithm,
-// Cloudflare will serve a Brotli compressed version of the asset.
-type ZoneSettingListResponseZonesBrotli struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesBrotliID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesBrotliValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesBrotliEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                              `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesBrotliJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesBrotliJSON contains the JSON metadata for the struct
-// [ZoneSettingListResponseZonesBrotli]
-type zoneSettingListResponseZonesBrotliJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesBrotli) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesBrotli) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesBrotliID string
-
-const (
-	ZoneSettingListResponseZonesBrotliIDBrotli ZoneSettingListResponseZonesBrotliID = "brotli"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesBrotliValue string
-
-const (
-	ZoneSettingListResponseZonesBrotliValueOff ZoneSettingListResponseZonesBrotliValue = "off"
-	ZoneSettingListResponseZonesBrotliValueOn  ZoneSettingListResponseZonesBrotliValue = "on"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesBrotliEditable bool
-
-const (
-	ZoneSettingListResponseZonesBrotliEditableTrue  ZoneSettingListResponseZonesBrotliEditable = true
-	ZoneSettingListResponseZonesBrotliEditableFalse ZoneSettingListResponseZonesBrotliEditable = false
-)
-
-// Browser Cache TTL (in seconds) specifies how long Cloudflare-cached resources
-// will remain on your visitors' computers. Cloudflare will honor any larger times
-// specified by your server.
-// (https://support.cloudflare.com/hc/en-us/articles/200168276).
-type ZoneSettingListResponseZonesBrowserCacheTTL struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesBrowserCacheTTLID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesBrowserCacheTTLValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesBrowserCacheTTLEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                       `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesBrowserCacheTTLJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesBrowserCacheTTLJSON contains the JSON metadata for
-// the struct [ZoneSettingListResponseZonesBrowserCacheTTL]
-type zoneSettingListResponseZonesBrowserCacheTTLJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesBrowserCacheTTL) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesBrowserCacheTTL) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesBrowserCacheTTLID string
-
-const (
-	ZoneSettingListResponseZonesBrowserCacheTTLIDBrowserCacheTTL ZoneSettingListResponseZonesBrowserCacheTTLID = "browser_cache_ttl"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesBrowserCacheTTLValue float64
-
-const (
-	ZoneSettingListResponseZonesBrowserCacheTTLValue0        ZoneSettingListResponseZonesBrowserCacheTTLValue = 0
-	ZoneSettingListResponseZonesBrowserCacheTTLValue30       ZoneSettingListResponseZonesBrowserCacheTTLValue = 30
-	ZoneSettingListResponseZonesBrowserCacheTTLValue60       ZoneSettingListResponseZonesBrowserCacheTTLValue = 60
-	ZoneSettingListResponseZonesBrowserCacheTTLValue120      ZoneSettingListResponseZonesBrowserCacheTTLValue = 120
-	ZoneSettingListResponseZonesBrowserCacheTTLValue300      ZoneSettingListResponseZonesBrowserCacheTTLValue = 300
-	ZoneSettingListResponseZonesBrowserCacheTTLValue1200     ZoneSettingListResponseZonesBrowserCacheTTLValue = 1200
-	ZoneSettingListResponseZonesBrowserCacheTTLValue1800     ZoneSettingListResponseZonesBrowserCacheTTLValue = 1800
-	ZoneSettingListResponseZonesBrowserCacheTTLValue3600     ZoneSettingListResponseZonesBrowserCacheTTLValue = 3600
-	ZoneSettingListResponseZonesBrowserCacheTTLValue7200     ZoneSettingListResponseZonesBrowserCacheTTLValue = 7200
-	ZoneSettingListResponseZonesBrowserCacheTTLValue10800    ZoneSettingListResponseZonesBrowserCacheTTLValue = 10800
-	ZoneSettingListResponseZonesBrowserCacheTTLValue14400    ZoneSettingListResponseZonesBrowserCacheTTLValue = 14400
-	ZoneSettingListResponseZonesBrowserCacheTTLValue18000    ZoneSettingListResponseZonesBrowserCacheTTLValue = 18000
-	ZoneSettingListResponseZonesBrowserCacheTTLValue28800    ZoneSettingListResponseZonesBrowserCacheTTLValue = 28800
-	ZoneSettingListResponseZonesBrowserCacheTTLValue43200    ZoneSettingListResponseZonesBrowserCacheTTLValue = 43200
-	ZoneSettingListResponseZonesBrowserCacheTTLValue57600    ZoneSettingListResponseZonesBrowserCacheTTLValue = 57600
-	ZoneSettingListResponseZonesBrowserCacheTTLValue72000    ZoneSettingListResponseZonesBrowserCacheTTLValue = 72000
-	ZoneSettingListResponseZonesBrowserCacheTTLValue86400    ZoneSettingListResponseZonesBrowserCacheTTLValue = 86400
-	ZoneSettingListResponseZonesBrowserCacheTTLValue172800   ZoneSettingListResponseZonesBrowserCacheTTLValue = 172800
-	ZoneSettingListResponseZonesBrowserCacheTTLValue259200   ZoneSettingListResponseZonesBrowserCacheTTLValue = 259200
-	ZoneSettingListResponseZonesBrowserCacheTTLValue345600   ZoneSettingListResponseZonesBrowserCacheTTLValue = 345600
-	ZoneSettingListResponseZonesBrowserCacheTTLValue432000   ZoneSettingListResponseZonesBrowserCacheTTLValue = 432000
-	ZoneSettingListResponseZonesBrowserCacheTTLValue691200   ZoneSettingListResponseZonesBrowserCacheTTLValue = 691200
-	ZoneSettingListResponseZonesBrowserCacheTTLValue1382400  ZoneSettingListResponseZonesBrowserCacheTTLValue = 1382400
-	ZoneSettingListResponseZonesBrowserCacheTTLValue2073600  ZoneSettingListResponseZonesBrowserCacheTTLValue = 2073600
-	ZoneSettingListResponseZonesBrowserCacheTTLValue2678400  ZoneSettingListResponseZonesBrowserCacheTTLValue = 2678400
-	ZoneSettingListResponseZonesBrowserCacheTTLValue5356800  ZoneSettingListResponseZonesBrowserCacheTTLValue = 5356800
-	ZoneSettingListResponseZonesBrowserCacheTTLValue16070400 ZoneSettingListResponseZonesBrowserCacheTTLValue = 16070400
-	ZoneSettingListResponseZonesBrowserCacheTTLValue31536000 ZoneSettingListResponseZonesBrowserCacheTTLValue = 31536000
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesBrowserCacheTTLEditable bool
-
-const (
-	ZoneSettingListResponseZonesBrowserCacheTTLEditableTrue  ZoneSettingListResponseZonesBrowserCacheTTLEditable = true
-	ZoneSettingListResponseZonesBrowserCacheTTLEditableFalse ZoneSettingListResponseZonesBrowserCacheTTLEditable = false
-)
-
-// Browser Integrity Check is similar to Bad Behavior and looks for common HTTP
-// headers abused most commonly by spammers and denies access to your page. It will
-// also challenge visitors that do not have a user agent or a non standard user
-// agent (also commonly used by abuse bots, crawlers or visitors).
-// (https://support.cloudflare.com/hc/en-us/articles/200170086).
-type ZoneSettingListResponseZonesBrowserCheck struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesBrowserCheckID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesBrowserCheckValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesBrowserCheckEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                    `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesBrowserCheckJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesBrowserCheckJSON contains the JSON metadata for the
-// struct [ZoneSettingListResponseZonesBrowserCheck]
-type zoneSettingListResponseZonesBrowserCheckJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesBrowserCheck) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesBrowserCheck) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesBrowserCheckID string
-
-const (
-	ZoneSettingListResponseZonesBrowserCheckIDBrowserCheck ZoneSettingListResponseZonesBrowserCheckID = "browser_check"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesBrowserCheckValue string
-
-const (
-	ZoneSettingListResponseZonesBrowserCheckValueOn  ZoneSettingListResponseZonesBrowserCheckValue = "on"
-	ZoneSettingListResponseZonesBrowserCheckValueOff ZoneSettingListResponseZonesBrowserCheckValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesBrowserCheckEditable bool
-
-const (
-	ZoneSettingListResponseZonesBrowserCheckEditableTrue  ZoneSettingListResponseZonesBrowserCheckEditable = true
-	ZoneSettingListResponseZonesBrowserCheckEditableFalse ZoneSettingListResponseZonesBrowserCheckEditable = false
-)
-
-// Cache Level functions based off the setting level. The basic setting will cache
-// most static resources (i.e., css, images, and JavaScript). The simplified
-// setting will ignore the query string when delivering a cached resource. The
-// aggressive setting will cache all static resources, including ones with a query
-// string. (https://support.cloudflare.com/hc/en-us/articles/200168256).
-type ZoneSettingListResponseZonesCacheLevel struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesCacheLevelID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesCacheLevelValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesCacheLevelEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                  `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesCacheLevelJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesCacheLevelJSON contains the JSON metadata for the
-// struct [ZoneSettingListResponseZonesCacheLevel]
-type zoneSettingListResponseZonesCacheLevelJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesCacheLevel) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesCacheLevel) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesCacheLevelID string
-
-const (
-	ZoneSettingListResponseZonesCacheLevelIDCacheLevel ZoneSettingListResponseZonesCacheLevelID = "cache_level"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesCacheLevelValue string
-
-const (
-	ZoneSettingListResponseZonesCacheLevelValueAggressive ZoneSettingListResponseZonesCacheLevelValue = "aggressive"
-	ZoneSettingListResponseZonesCacheLevelValueBasic      ZoneSettingListResponseZonesCacheLevelValue = "basic"
-	ZoneSettingListResponseZonesCacheLevelValueSimplified ZoneSettingListResponseZonesCacheLevelValue = "simplified"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesCacheLevelEditable bool
-
-const (
-	ZoneSettingListResponseZonesCacheLevelEditableTrue  ZoneSettingListResponseZonesCacheLevelEditable = true
-	ZoneSettingListResponseZonesCacheLevelEditableFalse ZoneSettingListResponseZonesCacheLevelEditable = false
-)
-
-// Specify how long a visitor is allowed access to your site after successfully
-// completing a challenge (such as a CAPTCHA). After the TTL has expired the
-// visitor will have to complete a new challenge. We recommend a 15 - 45 minute
-// setting and will attempt to honor any setting above 45 minutes.
-// (https://support.cloudflare.com/hc/en-us/articles/200170136).
-type ZoneSettingListResponseZonesChallengeTTL struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesChallengeTTLID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesChallengeTTLValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesChallengeTTLEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                    `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesChallengeTTLJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesChallengeTTLJSON contains the JSON metadata for the
-// struct [ZoneSettingListResponseZonesChallengeTTL]
-type zoneSettingListResponseZonesChallengeTTLJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesChallengeTTL) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesChallengeTTL) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesChallengeTTLID string
-
-const (
-	ZoneSettingListResponseZonesChallengeTTLIDChallengeTTL ZoneSettingListResponseZonesChallengeTTLID = "challenge_ttl"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesChallengeTTLValue float64
-
-const (
-	ZoneSettingListResponseZonesChallengeTTLValue300      ZoneSettingListResponseZonesChallengeTTLValue = 300
-	ZoneSettingListResponseZonesChallengeTTLValue900      ZoneSettingListResponseZonesChallengeTTLValue = 900
-	ZoneSettingListResponseZonesChallengeTTLValue1800     ZoneSettingListResponseZonesChallengeTTLValue = 1800
-	ZoneSettingListResponseZonesChallengeTTLValue2700     ZoneSettingListResponseZonesChallengeTTLValue = 2700
-	ZoneSettingListResponseZonesChallengeTTLValue3600     ZoneSettingListResponseZonesChallengeTTLValue = 3600
-	ZoneSettingListResponseZonesChallengeTTLValue7200     ZoneSettingListResponseZonesChallengeTTLValue = 7200
-	ZoneSettingListResponseZonesChallengeTTLValue10800    ZoneSettingListResponseZonesChallengeTTLValue = 10800
-	ZoneSettingListResponseZonesChallengeTTLValue14400    ZoneSettingListResponseZonesChallengeTTLValue = 14400
-	ZoneSettingListResponseZonesChallengeTTLValue28800    ZoneSettingListResponseZonesChallengeTTLValue = 28800
-	ZoneSettingListResponseZonesChallengeTTLValue57600    ZoneSettingListResponseZonesChallengeTTLValue = 57600
-	ZoneSettingListResponseZonesChallengeTTLValue86400    ZoneSettingListResponseZonesChallengeTTLValue = 86400
-	ZoneSettingListResponseZonesChallengeTTLValue604800   ZoneSettingListResponseZonesChallengeTTLValue = 604800
-	ZoneSettingListResponseZonesChallengeTTLValue2592000  ZoneSettingListResponseZonesChallengeTTLValue = 2592000
-	ZoneSettingListResponseZonesChallengeTTLValue31536000 ZoneSettingListResponseZonesChallengeTTLValue = 31536000
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesChallengeTTLEditable bool
-
-const (
-	ZoneSettingListResponseZonesChallengeTTLEditableTrue  ZoneSettingListResponseZonesChallengeTTLEditable = true
-	ZoneSettingListResponseZonesChallengeTTLEditableFalse ZoneSettingListResponseZonesChallengeTTLEditable = false
-)
-
-// An allowlist of ciphers for TLS termination. These ciphers must be in the
-// BoringSSL format.
-type ZoneSettingListResponseZonesCiphers struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesCiphersID `json:"id,required"`
-	// Current value of the zone setting.
-	Value []string `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesCiphersEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                               `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesCiphersJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesCiphersJSON contains the JSON metadata for the
-// struct [ZoneSettingListResponseZonesCiphers]
-type zoneSettingListResponseZonesCiphersJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesCiphers) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesCiphers) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesCiphersID string
-
-const (
-	ZoneSettingListResponseZonesCiphersIDCiphers ZoneSettingListResponseZonesCiphersID = "ciphers"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesCiphersEditable bool
-
-const (
-	ZoneSettingListResponseZonesCiphersEditableTrue  ZoneSettingListResponseZonesCiphersEditable = true
-	ZoneSettingListResponseZonesCiphersEditableFalse ZoneSettingListResponseZonesCiphersEditable = false
-)
-
-// Whether or not cname flattening is on.
-type ZoneSettingListResponseZonesCnameFlattening struct {
-	// How to flatten the cname destination.
-	ID ZoneSettingListResponseZonesCnameFlatteningID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesCnameFlatteningValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesCnameFlatteningEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                       `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesCnameFlatteningJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesCnameFlatteningJSON contains the JSON metadata for
-// the struct [ZoneSettingListResponseZonesCnameFlattening]
-type zoneSettingListResponseZonesCnameFlatteningJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesCnameFlattening) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesCnameFlattening) implementsZoneSettingListResponse() {}
-
-// How to flatten the cname destination.
-type ZoneSettingListResponseZonesCnameFlatteningID string
-
-const (
-	ZoneSettingListResponseZonesCnameFlatteningIDCnameFlattening ZoneSettingListResponseZonesCnameFlatteningID = "cname_flattening"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesCnameFlatteningValue string
-
-const (
-	ZoneSettingListResponseZonesCnameFlatteningValueFlattenAtRoot ZoneSettingListResponseZonesCnameFlatteningValue = "flatten_at_root"
-	ZoneSettingListResponseZonesCnameFlatteningValueFlattenAll    ZoneSettingListResponseZonesCnameFlatteningValue = "flatten_all"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesCnameFlatteningEditable bool
-
-const (
-	ZoneSettingListResponseZonesCnameFlatteningEditableTrue  ZoneSettingListResponseZonesCnameFlatteningEditable = true
-	ZoneSettingListResponseZonesCnameFlatteningEditableFalse ZoneSettingListResponseZonesCnameFlatteningEditable = false
-)
-
-// Development Mode temporarily allows you to enter development mode for your
-// websites if you need to make changes to your site. This will bypass Cloudflare's
-// accelerated cache and slow down your site, but is useful if you are making
-// changes to cacheable content (like images, css, or JavaScript) and would like to
-// see those changes right away. Once entered, development mode will last for 3
-// hours and then automatically toggle off.
-type ZoneSettingListResponseZonesDevelopmentMode struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesDevelopmentModeID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesDevelopmentModeValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesDevelopmentModeEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// Value of the zone setting. Notes: The interval (in seconds) from when
-	// development mode expires (positive integer) or last expired (negative integer)
-	// for the domain. If development mode has never been enabled, this value is false.
-	TimeRemaining float64                                         `json:"time_remaining"`
-	JSON          zoneSettingListResponseZonesDevelopmentModeJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesDevelopmentModeJSON contains the JSON metadata for
-// the struct [ZoneSettingListResponseZonesDevelopmentMode]
-type zoneSettingListResponseZonesDevelopmentModeJSON struct {
-	ID            apijson.Field
-	Value         apijson.Field
-	Editable      apijson.Field
-	ModifiedOn    apijson.Field
-	TimeRemaining apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesDevelopmentMode) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesDevelopmentMode) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesDevelopmentModeID string
-
-const (
-	ZoneSettingListResponseZonesDevelopmentModeIDDevelopmentMode ZoneSettingListResponseZonesDevelopmentModeID = "development_mode"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesDevelopmentModeValue string
-
-const (
-	ZoneSettingListResponseZonesDevelopmentModeValueOn  ZoneSettingListResponseZonesDevelopmentModeValue = "on"
-	ZoneSettingListResponseZonesDevelopmentModeValueOff ZoneSettingListResponseZonesDevelopmentModeValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesDevelopmentModeEditable bool
-
-const (
-	ZoneSettingListResponseZonesDevelopmentModeEditableTrue  ZoneSettingListResponseZonesDevelopmentModeEditable = true
-	ZoneSettingListResponseZonesDevelopmentModeEditableFalse ZoneSettingListResponseZonesDevelopmentModeEditable = false
-)
-
-// When enabled, Cloudflare will attempt to speed up overall page loads by serving
-// `103` responses with `Link` headers from the final response. Refer to
-// [Early Hints](https://developers.cloudflare.com/cache/about/early-hints) for
-// more information.
-type ZoneSettingListResponseZonesEarlyHints struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesEarlyHintsID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesEarlyHintsValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesEarlyHintsEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                  `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesEarlyHintsJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesEarlyHintsJSON contains the JSON metadata for the
-// struct [ZoneSettingListResponseZonesEarlyHints]
-type zoneSettingListResponseZonesEarlyHintsJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesEarlyHints) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesEarlyHints) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesEarlyHintsID string
-
-const (
-	ZoneSettingListResponseZonesEarlyHintsIDEarlyHints ZoneSettingListResponseZonesEarlyHintsID = "early_hints"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesEarlyHintsValue string
-
-const (
-	ZoneSettingListResponseZonesEarlyHintsValueOn  ZoneSettingListResponseZonesEarlyHintsValue = "on"
-	ZoneSettingListResponseZonesEarlyHintsValueOff ZoneSettingListResponseZonesEarlyHintsValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesEarlyHintsEditable bool
-
-const (
-	ZoneSettingListResponseZonesEarlyHintsEditableTrue  ZoneSettingListResponseZonesEarlyHintsEditable = true
-	ZoneSettingListResponseZonesEarlyHintsEditableFalse ZoneSettingListResponseZonesEarlyHintsEditable = false
-)
-
-// Time (in seconds) that a resource will be ensured to remain on Cloudflare's
-// cache servers.
-type ZoneSettingListResponseZonesEdgeCacheTTL struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesEdgeCacheTTLID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesEdgeCacheTTLValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesEdgeCacheTTLEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                    `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesEdgeCacheTTLJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesEdgeCacheTTLJSON contains the JSON metadata for the
-// struct [ZoneSettingListResponseZonesEdgeCacheTTL]
-type zoneSettingListResponseZonesEdgeCacheTTLJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesEdgeCacheTTL) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesEdgeCacheTTL) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesEdgeCacheTTLID string
-
-const (
-	ZoneSettingListResponseZonesEdgeCacheTTLIDEdgeCacheTTL ZoneSettingListResponseZonesEdgeCacheTTLID = "edge_cache_ttl"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesEdgeCacheTTLValue float64
-
-const (
-	ZoneSettingListResponseZonesEdgeCacheTTLValue30     ZoneSettingListResponseZonesEdgeCacheTTLValue = 30
-	ZoneSettingListResponseZonesEdgeCacheTTLValue60     ZoneSettingListResponseZonesEdgeCacheTTLValue = 60
-	ZoneSettingListResponseZonesEdgeCacheTTLValue300    ZoneSettingListResponseZonesEdgeCacheTTLValue = 300
-	ZoneSettingListResponseZonesEdgeCacheTTLValue1200   ZoneSettingListResponseZonesEdgeCacheTTLValue = 1200
-	ZoneSettingListResponseZonesEdgeCacheTTLValue1800   ZoneSettingListResponseZonesEdgeCacheTTLValue = 1800
-	ZoneSettingListResponseZonesEdgeCacheTTLValue3600   ZoneSettingListResponseZonesEdgeCacheTTLValue = 3600
-	ZoneSettingListResponseZonesEdgeCacheTTLValue7200   ZoneSettingListResponseZonesEdgeCacheTTLValue = 7200
-	ZoneSettingListResponseZonesEdgeCacheTTLValue10800  ZoneSettingListResponseZonesEdgeCacheTTLValue = 10800
-	ZoneSettingListResponseZonesEdgeCacheTTLValue14400  ZoneSettingListResponseZonesEdgeCacheTTLValue = 14400
-	ZoneSettingListResponseZonesEdgeCacheTTLValue18000  ZoneSettingListResponseZonesEdgeCacheTTLValue = 18000
-	ZoneSettingListResponseZonesEdgeCacheTTLValue28800  ZoneSettingListResponseZonesEdgeCacheTTLValue = 28800
-	ZoneSettingListResponseZonesEdgeCacheTTLValue43200  ZoneSettingListResponseZonesEdgeCacheTTLValue = 43200
-	ZoneSettingListResponseZonesEdgeCacheTTLValue57600  ZoneSettingListResponseZonesEdgeCacheTTLValue = 57600
-	ZoneSettingListResponseZonesEdgeCacheTTLValue72000  ZoneSettingListResponseZonesEdgeCacheTTLValue = 72000
-	ZoneSettingListResponseZonesEdgeCacheTTLValue86400  ZoneSettingListResponseZonesEdgeCacheTTLValue = 86400
-	ZoneSettingListResponseZonesEdgeCacheTTLValue172800 ZoneSettingListResponseZonesEdgeCacheTTLValue = 172800
-	ZoneSettingListResponseZonesEdgeCacheTTLValue259200 ZoneSettingListResponseZonesEdgeCacheTTLValue = 259200
-	ZoneSettingListResponseZonesEdgeCacheTTLValue345600 ZoneSettingListResponseZonesEdgeCacheTTLValue = 345600
-	ZoneSettingListResponseZonesEdgeCacheTTLValue432000 ZoneSettingListResponseZonesEdgeCacheTTLValue = 432000
-	ZoneSettingListResponseZonesEdgeCacheTTLValue518400 ZoneSettingListResponseZonesEdgeCacheTTLValue = 518400
-	ZoneSettingListResponseZonesEdgeCacheTTLValue604800 ZoneSettingListResponseZonesEdgeCacheTTLValue = 604800
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesEdgeCacheTTLEditable bool
-
-const (
-	ZoneSettingListResponseZonesEdgeCacheTTLEditableTrue  ZoneSettingListResponseZonesEdgeCacheTTLEditable = true
-	ZoneSettingListResponseZonesEdgeCacheTTLEditableFalse ZoneSettingListResponseZonesEdgeCacheTTLEditable = false
-)
-
-// Encrypt email adresses on your web page from bots, while keeping them visible to
-// humans. (https://support.cloudflare.com/hc/en-us/articles/200170016).
-type ZoneSettingListResponseZonesEmailObfuscation struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesEmailObfuscationID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesEmailObfuscationValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesEmailObfuscationEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                        `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesEmailObfuscationJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesEmailObfuscationJSON contains the JSON metadata for
-// the struct [ZoneSettingListResponseZonesEmailObfuscation]
-type zoneSettingListResponseZonesEmailObfuscationJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesEmailObfuscation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesEmailObfuscation) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesEmailObfuscationID string
-
-const (
-	ZoneSettingListResponseZonesEmailObfuscationIDEmailObfuscation ZoneSettingListResponseZonesEmailObfuscationID = "email_obfuscation"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesEmailObfuscationValue string
-
-const (
-	ZoneSettingListResponseZonesEmailObfuscationValueOn  ZoneSettingListResponseZonesEmailObfuscationValue = "on"
-	ZoneSettingListResponseZonesEmailObfuscationValueOff ZoneSettingListResponseZonesEmailObfuscationValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesEmailObfuscationEditable bool
-
-const (
-	ZoneSettingListResponseZonesEmailObfuscationEditableTrue  ZoneSettingListResponseZonesEmailObfuscationEditable = true
-	ZoneSettingListResponseZonesEmailObfuscationEditableFalse ZoneSettingListResponseZonesEmailObfuscationEditable = false
-)
-
-// HTTP/2 Edge Prioritization optimises the delivery of resources served through
-// HTTP/2 to improve page load performance. It also supports fine control of
-// content delivery when used in conjunction with Workers.
-type ZoneSettingListResponseZonesH2Prioritization struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesH2PrioritizationID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesH2PrioritizationValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesH2PrioritizationEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                        `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesH2PrioritizationJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesH2PrioritizationJSON contains the JSON metadata for
-// the struct [ZoneSettingListResponseZonesH2Prioritization]
-type zoneSettingListResponseZonesH2PrioritizationJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesH2Prioritization) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesH2Prioritization) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesH2PrioritizationID string
-
-const (
-	ZoneSettingListResponseZonesH2PrioritizationIDH2Prioritization ZoneSettingListResponseZonesH2PrioritizationID = "h2_prioritization"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesH2PrioritizationValue string
-
-const (
-	ZoneSettingListResponseZonesH2PrioritizationValueOn     ZoneSettingListResponseZonesH2PrioritizationValue = "on"
-	ZoneSettingListResponseZonesH2PrioritizationValueOff    ZoneSettingListResponseZonesH2PrioritizationValue = "off"
-	ZoneSettingListResponseZonesH2PrioritizationValueCustom ZoneSettingListResponseZonesH2PrioritizationValue = "custom"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesH2PrioritizationEditable bool
-
-const (
-	ZoneSettingListResponseZonesH2PrioritizationEditableTrue  ZoneSettingListResponseZonesH2PrioritizationEditable = true
-	ZoneSettingListResponseZonesH2PrioritizationEditableFalse ZoneSettingListResponseZonesH2PrioritizationEditable = false
-)
-
-// When enabled, the Hotlink Protection option ensures that other sites cannot suck
-// up your bandwidth by building pages that use images hosted on your site. Anytime
-// a request for an image on your site hits Cloudflare, we check to ensure that
-// it's not another site requesting them. People will still be able to download and
-// view images from your page, but other sites won't be able to steal them for use
-// on their own pages.
-// (https://support.cloudflare.com/hc/en-us/articles/200170026).
-type ZoneSettingListResponseZonesHotlinkProtection struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesHotlinkProtectionID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesHotlinkProtectionValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesHotlinkProtectionEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                         `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesHotlinkProtectionJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesHotlinkProtectionJSON contains the JSON metadata for
-// the struct [ZoneSettingListResponseZonesHotlinkProtection]
-type zoneSettingListResponseZonesHotlinkProtectionJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesHotlinkProtection) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesHotlinkProtection) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesHotlinkProtectionID string
-
-const (
-	ZoneSettingListResponseZonesHotlinkProtectionIDHotlinkProtection ZoneSettingListResponseZonesHotlinkProtectionID = "hotlink_protection"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesHotlinkProtectionValue string
-
-const (
-	ZoneSettingListResponseZonesHotlinkProtectionValueOn  ZoneSettingListResponseZonesHotlinkProtectionValue = "on"
-	ZoneSettingListResponseZonesHotlinkProtectionValueOff ZoneSettingListResponseZonesHotlinkProtectionValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesHotlinkProtectionEditable bool
-
-const (
-	ZoneSettingListResponseZonesHotlinkProtectionEditableTrue  ZoneSettingListResponseZonesHotlinkProtectionEditable = true
-	ZoneSettingListResponseZonesHotlinkProtectionEditableFalse ZoneSettingListResponseZonesHotlinkProtectionEditable = false
-)
-
-// HTTP2 enabled for this zone.
-type ZoneSettingListResponseZonesHTTP2 struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesHTTP2ID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesHTTP2Value `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesHTTP2Editable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                             `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesHTTP2JSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesHTTP2JSON contains the JSON metadata for the struct
-// [ZoneSettingListResponseZonesHTTP2]
-type zoneSettingListResponseZonesHTTP2JSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesHTTP2) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesHTTP2) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesHTTP2ID string
-
-const (
-	ZoneSettingListResponseZonesHTTP2IDHTTP2 ZoneSettingListResponseZonesHTTP2ID = "http2"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesHTTP2Value string
-
-const (
-	ZoneSettingListResponseZonesHTTP2ValueOn  ZoneSettingListResponseZonesHTTP2Value = "on"
-	ZoneSettingListResponseZonesHTTP2ValueOff ZoneSettingListResponseZonesHTTP2Value = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesHTTP2Editable bool
-
-const (
-	ZoneSettingListResponseZonesHTTP2EditableTrue  ZoneSettingListResponseZonesHTTP2Editable = true
-	ZoneSettingListResponseZonesHTTP2EditableFalse ZoneSettingListResponseZonesHTTP2Editable = false
-)
-
-// HTTP3 enabled for this zone.
-type ZoneSettingListResponseZonesHTTP3 struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesHTTP3ID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesHTTP3Value `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesHTTP3Editable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                             `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesHTTP3JSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesHTTP3JSON contains the JSON metadata for the struct
-// [ZoneSettingListResponseZonesHTTP3]
-type zoneSettingListResponseZonesHTTP3JSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesHTTP3) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesHTTP3) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesHTTP3ID string
-
-const (
-	ZoneSettingListResponseZonesHTTP3IDHTTP3 ZoneSettingListResponseZonesHTTP3ID = "http3"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesHTTP3Value string
-
-const (
-	ZoneSettingListResponseZonesHTTP3ValueOn  ZoneSettingListResponseZonesHTTP3Value = "on"
-	ZoneSettingListResponseZonesHTTP3ValueOff ZoneSettingListResponseZonesHTTP3Value = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesHTTP3Editable bool
-
-const (
-	ZoneSettingListResponseZonesHTTP3EditableTrue  ZoneSettingListResponseZonesHTTP3Editable = true
-	ZoneSettingListResponseZonesHTTP3EditableFalse ZoneSettingListResponseZonesHTTP3Editable = false
-)
-
-// Image Resizing provides on-demand resizing, conversion and optimisation for
-// images served through Cloudflare's network. Refer to the
-// [Image Resizing documentation](https://developers.cloudflare.com/images/) for
-// more information.
-type ZoneSettingListResponseZonesImageResizing struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesImageResizingID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesImageResizingValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesImageResizingEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                     `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesImageResizingJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesImageResizingJSON contains the JSON metadata for the
-// struct [ZoneSettingListResponseZonesImageResizing]
-type zoneSettingListResponseZonesImageResizingJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesImageResizing) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesImageResizing) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesImageResizingID string
-
-const (
-	ZoneSettingListResponseZonesImageResizingIDImageResizing ZoneSettingListResponseZonesImageResizingID = "image_resizing"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesImageResizingValue string
-
-const (
-	ZoneSettingListResponseZonesImageResizingValueOn   ZoneSettingListResponseZonesImageResizingValue = "on"
-	ZoneSettingListResponseZonesImageResizingValueOff  ZoneSettingListResponseZonesImageResizingValue = "off"
-	ZoneSettingListResponseZonesImageResizingValueOpen ZoneSettingListResponseZonesImageResizingValue = "open"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesImageResizingEditable bool
-
-const (
-	ZoneSettingListResponseZonesImageResizingEditableTrue  ZoneSettingListResponseZonesImageResizingEditable = true
-	ZoneSettingListResponseZonesImageResizingEditableFalse ZoneSettingListResponseZonesImageResizingEditable = false
-)
-
-// Enable IP Geolocation to have Cloudflare geolocate visitors to your website and
-// pass the country code to you.
-// (https://support.cloudflare.com/hc/en-us/articles/200168236).
-type ZoneSettingListResponseZonesIPGeolocation struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesIPGeolocationID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesIPGeolocationValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesIPGeolocationEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                     `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesIPGeolocationJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesIPGeolocationJSON contains the JSON metadata for the
-// struct [ZoneSettingListResponseZonesIPGeolocation]
-type zoneSettingListResponseZonesIPGeolocationJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesIPGeolocation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesIPGeolocation) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesIPGeolocationID string
-
-const (
-	ZoneSettingListResponseZonesIPGeolocationIDIPGeolocation ZoneSettingListResponseZonesIPGeolocationID = "ip_geolocation"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesIPGeolocationValue string
-
-const (
-	ZoneSettingListResponseZonesIPGeolocationValueOn  ZoneSettingListResponseZonesIPGeolocationValue = "on"
-	ZoneSettingListResponseZonesIPGeolocationValueOff ZoneSettingListResponseZonesIPGeolocationValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesIPGeolocationEditable bool
-
-const (
-	ZoneSettingListResponseZonesIPGeolocationEditableTrue  ZoneSettingListResponseZonesIPGeolocationEditable = true
-	ZoneSettingListResponseZonesIPGeolocationEditableFalse ZoneSettingListResponseZonesIPGeolocationEditable = false
-)
-
-// Enable IPv6 on all subdomains that are Cloudflare enabled.
-// (https://support.cloudflare.com/hc/en-us/articles/200168586).
-type ZoneSettingListResponseZonesIPV6 struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesIPV6ID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesIPV6Value `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesIPV6Editable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                            `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesIPV6JSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesIPV6JSON contains the JSON metadata for the struct
-// [ZoneSettingListResponseZonesIPV6]
-type zoneSettingListResponseZonesIPV6JSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesIPV6) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesIPV6) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesIPV6ID string
-
-const (
-	ZoneSettingListResponseZonesIPV6IDIPV6 ZoneSettingListResponseZonesIPV6ID = "ipv6"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesIPV6Value string
-
-const (
-	ZoneSettingListResponseZonesIPV6ValueOff ZoneSettingListResponseZonesIPV6Value = "off"
-	ZoneSettingListResponseZonesIPV6ValueOn  ZoneSettingListResponseZonesIPV6Value = "on"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesIPV6Editable bool
-
-const (
-	ZoneSettingListResponseZonesIPV6EditableTrue  ZoneSettingListResponseZonesIPV6Editable = true
-	ZoneSettingListResponseZonesIPV6EditableFalse ZoneSettingListResponseZonesIPV6Editable = false
-)
-
-// Maximum size of an allowable upload.
-type ZoneSettingListResponseZonesMaxUpload struct {
-	// identifier of the zone setting.
-	ID ZoneSettingListResponseZonesMaxUploadID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesMaxUploadValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesMaxUploadEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                 `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesMaxUploadJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesMaxUploadJSON contains the JSON metadata for the
-// struct [ZoneSettingListResponseZonesMaxUpload]
-type zoneSettingListResponseZonesMaxUploadJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesMaxUpload) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesMaxUpload) implementsZoneSettingListResponse() {}
-
-// identifier of the zone setting.
-type ZoneSettingListResponseZonesMaxUploadID string
-
-const (
-	ZoneSettingListResponseZonesMaxUploadIDMaxUpload ZoneSettingListResponseZonesMaxUploadID = "max_upload"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesMaxUploadValue float64
-
-const (
-	ZoneSettingListResponseZonesMaxUploadValue100 ZoneSettingListResponseZonesMaxUploadValue = 100
-	ZoneSettingListResponseZonesMaxUploadValue200 ZoneSettingListResponseZonesMaxUploadValue = 200
-	ZoneSettingListResponseZonesMaxUploadValue500 ZoneSettingListResponseZonesMaxUploadValue = 500
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesMaxUploadEditable bool
-
-const (
-	ZoneSettingListResponseZonesMaxUploadEditableTrue  ZoneSettingListResponseZonesMaxUploadEditable = true
-	ZoneSettingListResponseZonesMaxUploadEditableFalse ZoneSettingListResponseZonesMaxUploadEditable = false
-)
-
-// Only accepts HTTPS requests that use at least the TLS protocol version
-// specified. For example, if TLS 1.1 is selected, TLS 1.0 connections will be
-// rejected, while 1.1, 1.2, and 1.3 (if enabled) will be permitted.
-type ZoneSettingListResponseZonesMinTLSVersion struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesMinTLSVersionID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesMinTLSVersionValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesMinTLSVersionEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                     `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesMinTLSVersionJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesMinTLSVersionJSON contains the JSON metadata for the
-// struct [ZoneSettingListResponseZonesMinTLSVersion]
-type zoneSettingListResponseZonesMinTLSVersionJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesMinTLSVersion) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesMinTLSVersion) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesMinTLSVersionID string
-
-const (
-	ZoneSettingListResponseZonesMinTLSVersionIDMinTLSVersion ZoneSettingListResponseZonesMinTLSVersionID = "min_tls_version"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesMinTLSVersionValue string
-
-const (
-	ZoneSettingListResponseZonesMinTLSVersionValue1_0 ZoneSettingListResponseZonesMinTLSVersionValue = "1.0"
-	ZoneSettingListResponseZonesMinTLSVersionValue1_1 ZoneSettingListResponseZonesMinTLSVersionValue = "1.1"
-	ZoneSettingListResponseZonesMinTLSVersionValue1_2 ZoneSettingListResponseZonesMinTLSVersionValue = "1.2"
-	ZoneSettingListResponseZonesMinTLSVersionValue1_3 ZoneSettingListResponseZonesMinTLSVersionValue = "1.3"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesMinTLSVersionEditable bool
-
-const (
-	ZoneSettingListResponseZonesMinTLSVersionEditableTrue  ZoneSettingListResponseZonesMinTLSVersionEditable = true
-	ZoneSettingListResponseZonesMinTLSVersionEditableFalse ZoneSettingListResponseZonesMinTLSVersionEditable = false
-)
-
-// Automatically minify certain assets for your website. Refer to
-// [Using Cloudflare Auto Minify](https://support.cloudflare.com/hc/en-us/articles/200168196)
-// for more information.
-type ZoneSettingListResponseZonesMinify struct {
-	// Zone setting identifier.
-	ID ZoneSettingListResponseZonesMinifyID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesMinifyValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesMinifyEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                              `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesMinifyJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesMinifyJSON contains the JSON metadata for the struct
-// [ZoneSettingListResponseZonesMinify]
-type zoneSettingListResponseZonesMinifyJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesMinify) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesMinify) implementsZoneSettingListResponse() {}
-
-// Zone setting identifier.
-type ZoneSettingListResponseZonesMinifyID string
-
-const (
-	ZoneSettingListResponseZonesMinifyIDMinify ZoneSettingListResponseZonesMinifyID = "minify"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesMinifyValue struct {
-	// Automatically minify all CSS files for your website.
-	Css ZoneSettingListResponseZonesMinifyValueCss `json:"css"`
-	// Automatically minify all HTML files for your website.
-	HTML ZoneSettingListResponseZonesMinifyValueHTML `json:"html"`
-	// Automatically minify all JavaScript files for your website.
-	Js   ZoneSettingListResponseZonesMinifyValueJs   `json:"js"`
-	JSON zoneSettingListResponseZonesMinifyValueJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesMinifyValueJSON contains the JSON metadata for the
-// struct [ZoneSettingListResponseZonesMinifyValue]
-type zoneSettingListResponseZonesMinifyValueJSON struct {
-	Css         apijson.Field
-	HTML        apijson.Field
-	Js          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesMinifyValue) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Automatically minify all CSS files for your website.
-type ZoneSettingListResponseZonesMinifyValueCss string
-
-const (
-	ZoneSettingListResponseZonesMinifyValueCssOn  ZoneSettingListResponseZonesMinifyValueCss = "on"
-	ZoneSettingListResponseZonesMinifyValueCssOff ZoneSettingListResponseZonesMinifyValueCss = "off"
-)
-
-// Automatically minify all HTML files for your website.
-type ZoneSettingListResponseZonesMinifyValueHTML string
-
-const (
-	ZoneSettingListResponseZonesMinifyValueHTMLOn  ZoneSettingListResponseZonesMinifyValueHTML = "on"
-	ZoneSettingListResponseZonesMinifyValueHTMLOff ZoneSettingListResponseZonesMinifyValueHTML = "off"
-)
-
-// Automatically minify all JavaScript files for your website.
-type ZoneSettingListResponseZonesMinifyValueJs string
-
-const (
-	ZoneSettingListResponseZonesMinifyValueJsOn  ZoneSettingListResponseZonesMinifyValueJs = "on"
-	ZoneSettingListResponseZonesMinifyValueJsOff ZoneSettingListResponseZonesMinifyValueJs = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesMinifyEditable bool
-
-const (
-	ZoneSettingListResponseZonesMinifyEditableTrue  ZoneSettingListResponseZonesMinifyEditable = true
-	ZoneSettingListResponseZonesMinifyEditableFalse ZoneSettingListResponseZonesMinifyEditable = false
-)
-
-// Automatically optimize image loading for website visitors on mobile devices.
-// Refer to
-// [our blog post](http://blog.cloudflare.com/mirage2-solving-mobile-speed) for
-// more information.
-type ZoneSettingListResponseZonesMirage struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesMirageID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesMirageValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesMirageEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                              `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesMirageJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesMirageJSON contains the JSON metadata for the struct
-// [ZoneSettingListResponseZonesMirage]
-type zoneSettingListResponseZonesMirageJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesMirage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesMirage) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesMirageID string
-
-const (
-	ZoneSettingListResponseZonesMirageIDMirage ZoneSettingListResponseZonesMirageID = "mirage"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesMirageValue string
-
-const (
-	ZoneSettingListResponseZonesMirageValueOn  ZoneSettingListResponseZonesMirageValue = "on"
-	ZoneSettingListResponseZonesMirageValueOff ZoneSettingListResponseZonesMirageValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesMirageEditable bool
-
-const (
-	ZoneSettingListResponseZonesMirageEditableTrue  ZoneSettingListResponseZonesMirageEditable = true
-	ZoneSettingListResponseZonesMirageEditableFalse ZoneSettingListResponseZonesMirageEditable = false
-)
-
-// Automatically redirect visitors on mobile devices to a mobile-optimized
-// subdomain. Refer to
-// [Understanding Cloudflare Mobile Redirect](https://support.cloudflare.com/hc/articles/200168336)
-// for more information.
-type ZoneSettingListResponseZonesMobileRedirect struct {
-	// Identifier of the zone setting.
-	ID ZoneSettingListResponseZonesMobileRedirectID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesMobileRedirectValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesMobileRedirectEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                      `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesMobileRedirectJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesMobileRedirectJSON contains the JSON metadata for
-// the struct [ZoneSettingListResponseZonesMobileRedirect]
-type zoneSettingListResponseZonesMobileRedirectJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesMobileRedirect) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesMobileRedirect) implementsZoneSettingListResponse() {}
-
-// Identifier of the zone setting.
-type ZoneSettingListResponseZonesMobileRedirectID string
-
-const (
-	ZoneSettingListResponseZonesMobileRedirectIDMobileRedirect ZoneSettingListResponseZonesMobileRedirectID = "mobile_redirect"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesMobileRedirectValue struct {
-	// Which subdomain prefix you wish to redirect visitors on mobile devices to
-	// (subdomain must already exist).
-	MobileSubdomain string `json:"mobile_subdomain,nullable"`
-	// Whether or not mobile redirect is enabled.
-	Status ZoneSettingListResponseZonesMobileRedirectValueStatus `json:"status"`
-	// Whether to drop the current page path and redirect to the mobile subdomain URL
-	// root, or keep the path and redirect to the same page on the mobile subdomain.
-	StripUri bool                                                `json:"strip_uri"`
-	JSON     zoneSettingListResponseZonesMobileRedirectValueJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesMobileRedirectValueJSON contains the JSON metadata
-// for the struct [ZoneSettingListResponseZonesMobileRedirectValue]
-type zoneSettingListResponseZonesMobileRedirectValueJSON struct {
-	MobileSubdomain apijson.Field
-	Status          apijson.Field
-	StripUri        apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesMobileRedirectValue) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether or not mobile redirect is enabled.
-type ZoneSettingListResponseZonesMobileRedirectValueStatus string
-
-const (
-	ZoneSettingListResponseZonesMobileRedirectValueStatusOn  ZoneSettingListResponseZonesMobileRedirectValueStatus = "on"
-	ZoneSettingListResponseZonesMobileRedirectValueStatusOff ZoneSettingListResponseZonesMobileRedirectValueStatus = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesMobileRedirectEditable bool
-
-const (
-	ZoneSettingListResponseZonesMobileRedirectEditableTrue  ZoneSettingListResponseZonesMobileRedirectEditable = true
-	ZoneSettingListResponseZonesMobileRedirectEditableFalse ZoneSettingListResponseZonesMobileRedirectEditable = false
-)
-
-// Enable Network Error Logging reporting on your zone. (Beta)
-type ZoneSettingListResponseZonesNEL struct {
-	// Zone setting identifier.
-	ID ZoneSettingListResponseZonesNELID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesNELValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesNELEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                           `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesNELJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesNELJSON contains the JSON metadata for the struct
-// [ZoneSettingListResponseZonesNEL]
-type zoneSettingListResponseZonesNELJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesNEL) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesNEL) implementsZoneSettingListResponse() {}
-
-// Zone setting identifier.
-type ZoneSettingListResponseZonesNELID string
-
-const (
-	ZoneSettingListResponseZonesNELIDNEL ZoneSettingListResponseZonesNELID = "nel"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesNELValue struct {
-	Enabled bool                                     `json:"enabled"`
-	JSON    zoneSettingListResponseZonesNELValueJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesNELValueJSON contains the JSON metadata for the
-// struct [ZoneSettingListResponseZonesNELValue]
-type zoneSettingListResponseZonesNELValueJSON struct {
-	Enabled     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesNELValue) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesNELEditable bool
-
-const (
-	ZoneSettingListResponseZonesNELEditableTrue  ZoneSettingListResponseZonesNELEditable = true
-	ZoneSettingListResponseZonesNELEditableFalse ZoneSettingListResponseZonesNELEditable = false
-)
-
-// Enables the Opportunistic Encryption feature for a zone.
-type ZoneSettingListResponseZonesOpportunisticEncryption struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesOpportunisticEncryptionID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesOpportunisticEncryptionValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesOpportunisticEncryptionEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                               `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesOpportunisticEncryptionJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesOpportunisticEncryptionJSON contains the JSON
-// metadata for the struct [ZoneSettingListResponseZonesOpportunisticEncryption]
-type zoneSettingListResponseZonesOpportunisticEncryptionJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesOpportunisticEncryption) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesOpportunisticEncryption) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesOpportunisticEncryptionID string
-
-const (
-	ZoneSettingListResponseZonesOpportunisticEncryptionIDOpportunisticEncryption ZoneSettingListResponseZonesOpportunisticEncryptionID = "opportunistic_encryption"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesOpportunisticEncryptionValue string
-
-const (
-	ZoneSettingListResponseZonesOpportunisticEncryptionValueOn  ZoneSettingListResponseZonesOpportunisticEncryptionValue = "on"
-	ZoneSettingListResponseZonesOpportunisticEncryptionValueOff ZoneSettingListResponseZonesOpportunisticEncryptionValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesOpportunisticEncryptionEditable bool
-
-const (
-	ZoneSettingListResponseZonesOpportunisticEncryptionEditableTrue  ZoneSettingListResponseZonesOpportunisticEncryptionEditable = true
-	ZoneSettingListResponseZonesOpportunisticEncryptionEditableFalse ZoneSettingListResponseZonesOpportunisticEncryptionEditable = false
-)
-
-// Add an Alt-Svc header to all legitimate requests from Tor, allowing the
-// connection to use our onion services instead of exit nodes.
-type ZoneSettingListResponseZonesOpportunisticOnion struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesOpportunisticOnionID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesOpportunisticOnionValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesOpportunisticOnionEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                          `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesOpportunisticOnionJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesOpportunisticOnionJSON contains the JSON metadata
-// for the struct [ZoneSettingListResponseZonesOpportunisticOnion]
-type zoneSettingListResponseZonesOpportunisticOnionJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesOpportunisticOnion) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesOpportunisticOnion) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesOpportunisticOnionID string
-
-const (
-	ZoneSettingListResponseZonesOpportunisticOnionIDOpportunisticOnion ZoneSettingListResponseZonesOpportunisticOnionID = "opportunistic_onion"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesOpportunisticOnionValue string
-
-const (
-	ZoneSettingListResponseZonesOpportunisticOnionValueOn  ZoneSettingListResponseZonesOpportunisticOnionValue = "on"
-	ZoneSettingListResponseZonesOpportunisticOnionValueOff ZoneSettingListResponseZonesOpportunisticOnionValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesOpportunisticOnionEditable bool
-
-const (
-	ZoneSettingListResponseZonesOpportunisticOnionEditableTrue  ZoneSettingListResponseZonesOpportunisticOnionEditable = true
-	ZoneSettingListResponseZonesOpportunisticOnionEditableFalse ZoneSettingListResponseZonesOpportunisticOnionEditable = false
-)
-
-// Orange to Orange (O2O) allows zones on Cloudflare to CNAME to other zones also
-// on Cloudflare.
-type ZoneSettingListResponseZonesOrangeToOrange struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesOrangeToOrangeID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesOrangeToOrangeValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesOrangeToOrangeEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                      `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesOrangeToOrangeJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesOrangeToOrangeJSON contains the JSON metadata for
-// the struct [ZoneSettingListResponseZonesOrangeToOrange]
-type zoneSettingListResponseZonesOrangeToOrangeJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesOrangeToOrange) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesOrangeToOrange) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesOrangeToOrangeID string
-
-const (
-	ZoneSettingListResponseZonesOrangeToOrangeIDOrangeToOrange ZoneSettingListResponseZonesOrangeToOrangeID = "orange_to_orange"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesOrangeToOrangeValue string
-
-const (
-	ZoneSettingListResponseZonesOrangeToOrangeValueOn  ZoneSettingListResponseZonesOrangeToOrangeValue = "on"
-	ZoneSettingListResponseZonesOrangeToOrangeValueOff ZoneSettingListResponseZonesOrangeToOrangeValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesOrangeToOrangeEditable bool
-
-const (
-	ZoneSettingListResponseZonesOrangeToOrangeEditableTrue  ZoneSettingListResponseZonesOrangeToOrangeEditable = true
-	ZoneSettingListResponseZonesOrangeToOrangeEditableFalse ZoneSettingListResponseZonesOrangeToOrangeEditable = false
-)
-
-// Cloudflare will proxy customer error pages on any 502,504 errors on origin
-// server instead of showing a default Cloudflare error page. This does not apply
-// to 522 errors and is limited to Enterprise Zones.
-type ZoneSettingListResponseZonesOriginErrorPagePassThru struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesOriginErrorPagePassThruID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesOriginErrorPagePassThruValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesOriginErrorPagePassThruEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                               `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesOriginErrorPagePassThruJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesOriginErrorPagePassThruJSON contains the JSON
-// metadata for the struct [ZoneSettingListResponseZonesOriginErrorPagePassThru]
-type zoneSettingListResponseZonesOriginErrorPagePassThruJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesOriginErrorPagePassThru) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesOriginErrorPagePassThru) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesOriginErrorPagePassThruID string
-
-const (
-	ZoneSettingListResponseZonesOriginErrorPagePassThruIDOriginErrorPagePassThru ZoneSettingListResponseZonesOriginErrorPagePassThruID = "origin_error_page_pass_thru"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesOriginErrorPagePassThruValue string
-
-const (
-	ZoneSettingListResponseZonesOriginErrorPagePassThruValueOn  ZoneSettingListResponseZonesOriginErrorPagePassThruValue = "on"
-	ZoneSettingListResponseZonesOriginErrorPagePassThruValueOff ZoneSettingListResponseZonesOriginErrorPagePassThruValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesOriginErrorPagePassThruEditable bool
-
-const (
-	ZoneSettingListResponseZonesOriginErrorPagePassThruEditableTrue  ZoneSettingListResponseZonesOriginErrorPagePassThruEditable = true
-	ZoneSettingListResponseZonesOriginErrorPagePassThruEditableFalse ZoneSettingListResponseZonesOriginErrorPagePassThruEditable = false
-)
-
-// Removes metadata and compresses your images for faster page load times. Basic
-// (Lossless): Reduce the size of PNG, JPEG, and GIF files - no impact on visual
-// quality. Basic + JPEG (Lossy): Further reduce the size of JPEG files for faster
-// image loading. Larger JPEGs are converted to progressive images, loading a
-// lower-resolution image first and ending in a higher-resolution version. Not
-// recommended for hi-res photography sites.
-type ZoneSettingListResponseZonesPolish struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesPolishID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesPolishValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesPolishEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                              `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesPolishJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesPolishJSON contains the JSON metadata for the struct
-// [ZoneSettingListResponseZonesPolish]
-type zoneSettingListResponseZonesPolishJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesPolish) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesPolish) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesPolishID string
-
-const (
-	ZoneSettingListResponseZonesPolishIDPolish ZoneSettingListResponseZonesPolishID = "polish"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesPolishValue string
-
-const (
-	ZoneSettingListResponseZonesPolishValueOff      ZoneSettingListResponseZonesPolishValue = "off"
-	ZoneSettingListResponseZonesPolishValueLossless ZoneSettingListResponseZonesPolishValue = "lossless"
-	ZoneSettingListResponseZonesPolishValueLossy    ZoneSettingListResponseZonesPolishValue = "lossy"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesPolishEditable bool
-
-const (
-	ZoneSettingListResponseZonesPolishEditableTrue  ZoneSettingListResponseZonesPolishEditable = true
-	ZoneSettingListResponseZonesPolishEditableFalse ZoneSettingListResponseZonesPolishEditable = false
-)
-
-// Cloudflare will prefetch any URLs that are included in the response headers.
-// This is limited to Enterprise Zones.
-type ZoneSettingListResponseZonesPrefetchPreload struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesPrefetchPreloadID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesPrefetchPreloadValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesPrefetchPreloadEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                       `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesPrefetchPreloadJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesPrefetchPreloadJSON contains the JSON metadata for
-// the struct [ZoneSettingListResponseZonesPrefetchPreload]
-type zoneSettingListResponseZonesPrefetchPreloadJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesPrefetchPreload) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesPrefetchPreload) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesPrefetchPreloadID string
-
-const (
-	ZoneSettingListResponseZonesPrefetchPreloadIDPrefetchPreload ZoneSettingListResponseZonesPrefetchPreloadID = "prefetch_preload"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesPrefetchPreloadValue string
-
-const (
-	ZoneSettingListResponseZonesPrefetchPreloadValueOn  ZoneSettingListResponseZonesPrefetchPreloadValue = "on"
-	ZoneSettingListResponseZonesPrefetchPreloadValueOff ZoneSettingListResponseZonesPrefetchPreloadValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesPrefetchPreloadEditable bool
-
-const (
-	ZoneSettingListResponseZonesPrefetchPreloadEditableTrue  ZoneSettingListResponseZonesPrefetchPreloadEditable = true
-	ZoneSettingListResponseZonesPrefetchPreloadEditableFalse ZoneSettingListResponseZonesPrefetchPreloadEditable = false
-)
-
-// Maximum time between two read operations from origin.
-type ZoneSettingListResponseZonesProxyReadTimeout struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesProxyReadTimeoutID `json:"id,required"`
-	// Current value of the zone setting.
-	Value float64 `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesProxyReadTimeoutEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                        `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesProxyReadTimeoutJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesProxyReadTimeoutJSON contains the JSON metadata for
-// the struct [ZoneSettingListResponseZonesProxyReadTimeout]
-type zoneSettingListResponseZonesProxyReadTimeoutJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesProxyReadTimeout) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesProxyReadTimeout) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesProxyReadTimeoutID string
-
-const (
-	ZoneSettingListResponseZonesProxyReadTimeoutIDProxyReadTimeout ZoneSettingListResponseZonesProxyReadTimeoutID = "proxy_read_timeout"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesProxyReadTimeoutEditable bool
-
-const (
-	ZoneSettingListResponseZonesProxyReadTimeoutEditableTrue  ZoneSettingListResponseZonesProxyReadTimeoutEditable = true
-	ZoneSettingListResponseZonesProxyReadTimeoutEditableFalse ZoneSettingListResponseZonesProxyReadTimeoutEditable = false
-)
-
-// The value set for the Pseudo IPv4 setting.
-type ZoneSettingListResponseZonesPseudoIPV4 struct {
-	// Value of the Pseudo IPv4 setting.
-	ID ZoneSettingListResponseZonesPseudoIPV4ID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesPseudoIPV4Value `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesPseudoIPV4Editable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                  `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesPseudoIPV4JSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesPseudoIPV4JSON contains the JSON metadata for the
-// struct [ZoneSettingListResponseZonesPseudoIPV4]
-type zoneSettingListResponseZonesPseudoIPV4JSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesPseudoIPV4) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesPseudoIPV4) implementsZoneSettingListResponse() {}
-
-// Value of the Pseudo IPv4 setting.
-type ZoneSettingListResponseZonesPseudoIPV4ID string
-
-const (
-	ZoneSettingListResponseZonesPseudoIPV4IDPseudoIPV4 ZoneSettingListResponseZonesPseudoIPV4ID = "pseudo_ipv4"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesPseudoIPV4Value string
-
-const (
-	ZoneSettingListResponseZonesPseudoIPV4ValueOff             ZoneSettingListResponseZonesPseudoIPV4Value = "off"
-	ZoneSettingListResponseZonesPseudoIPV4ValueAddHeader       ZoneSettingListResponseZonesPseudoIPV4Value = "add_header"
-	ZoneSettingListResponseZonesPseudoIPV4ValueOverwriteHeader ZoneSettingListResponseZonesPseudoIPV4Value = "overwrite_header"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesPseudoIPV4Editable bool
-
-const (
-	ZoneSettingListResponseZonesPseudoIPV4EditableTrue  ZoneSettingListResponseZonesPseudoIPV4Editable = true
-	ZoneSettingListResponseZonesPseudoIPV4EditableFalse ZoneSettingListResponseZonesPseudoIPV4Editable = false
-)
-
-// Enables or disables buffering of responses from the proxied server. Cloudflare
-// may buffer the whole payload to deliver it at once to the client versus allowing
-// it to be delivered in chunks. By default, the proxied server streams directly
-// and is not buffered by Cloudflare. This is limited to Enterprise Zones.
-type ZoneSettingListResponseZonesResponseBuffering struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesResponseBufferingID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesResponseBufferingValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesResponseBufferingEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                         `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesResponseBufferingJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesResponseBufferingJSON contains the JSON metadata for
-// the struct [ZoneSettingListResponseZonesResponseBuffering]
-type zoneSettingListResponseZonesResponseBufferingJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesResponseBuffering) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesResponseBuffering) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesResponseBufferingID string
-
-const (
-	ZoneSettingListResponseZonesResponseBufferingIDResponseBuffering ZoneSettingListResponseZonesResponseBufferingID = "response_buffering"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesResponseBufferingValue string
-
-const (
-	ZoneSettingListResponseZonesResponseBufferingValueOn  ZoneSettingListResponseZonesResponseBufferingValue = "on"
-	ZoneSettingListResponseZonesResponseBufferingValueOff ZoneSettingListResponseZonesResponseBufferingValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesResponseBufferingEditable bool
-
-const (
-	ZoneSettingListResponseZonesResponseBufferingEditableTrue  ZoneSettingListResponseZonesResponseBufferingEditable = true
-	ZoneSettingListResponseZonesResponseBufferingEditableFalse ZoneSettingListResponseZonesResponseBufferingEditable = false
-)
-
-// Rocket Loader is a general-purpose asynchronous JavaScript optimisation that
-// prioritises rendering your content while loading your site's Javascript
-// asynchronously. Turning on Rocket Loader will immediately improve a web page's
-// rendering time sometimes measured as Time to First Paint (TTFP), and also the
-// `window.onload` time (assuming there is JavaScript on the page). This can have a
-// positive impact on your Google search ranking. When turned on, Rocket Loader
-// will automatically defer the loading of all Javascript referenced in your HTML,
-// with no configuration required. Refer to
-// [Understanding Rocket Loader](https://support.cloudflare.com/hc/articles/200168056)
-// for more information.
-type ZoneSettingListResponseZonesRocketLoader struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesRocketLoaderID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesRocketLoaderValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesRocketLoaderEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                    `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesRocketLoaderJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesRocketLoaderJSON contains the JSON metadata for the
-// struct [ZoneSettingListResponseZonesRocketLoader]
-type zoneSettingListResponseZonesRocketLoaderJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesRocketLoader) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesRocketLoader) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesRocketLoaderID string
-
-const (
-	ZoneSettingListResponseZonesRocketLoaderIDRocketLoader ZoneSettingListResponseZonesRocketLoaderID = "rocket_loader"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesRocketLoaderValue string
-
-const (
-	ZoneSettingListResponseZonesRocketLoaderValueOn  ZoneSettingListResponseZonesRocketLoaderValue = "on"
-	ZoneSettingListResponseZonesRocketLoaderValueOff ZoneSettingListResponseZonesRocketLoaderValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesRocketLoaderEditable bool
-
-const (
-	ZoneSettingListResponseZonesRocketLoaderEditableTrue  ZoneSettingListResponseZonesRocketLoaderEditable = true
-	ZoneSettingListResponseZonesRocketLoaderEditableFalse ZoneSettingListResponseZonesRocketLoaderEditable = false
-)
-
-// [Automatic Platform Optimization for WordPress](https://developers.cloudflare.com/automatic-platform-optimization/)
-// serves your WordPress site from Cloudflare's edge network and caches third-party
-// fonts.
-type ZoneSettingListResponseZonesSchemasAutomaticPlatformOptimization struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesSchemasAutomaticPlatformOptimizationID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesSchemasAutomaticPlatformOptimizationValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesSchemasAutomaticPlatformOptimizationEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                                            `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesSchemasAutomaticPlatformOptimizationJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesSchemasAutomaticPlatformOptimizationJSON contains
-// the JSON metadata for the struct
-// [ZoneSettingListResponseZonesSchemasAutomaticPlatformOptimization]
-type zoneSettingListResponseZonesSchemasAutomaticPlatformOptimizationJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesSchemasAutomaticPlatformOptimization) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesSchemasAutomaticPlatformOptimization) implementsZoneSettingListResponse() {
-}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesSchemasAutomaticPlatformOptimizationID string
-
-const (
-	ZoneSettingListResponseZonesSchemasAutomaticPlatformOptimizationIDAutomaticPlatformOptimization ZoneSettingListResponseZonesSchemasAutomaticPlatformOptimizationID = "automatic_platform_optimization"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesSchemasAutomaticPlatformOptimizationValue struct {
-	// Indicates whether or not
-	// [cache by device type](https://developers.cloudflare.com/automatic-platform-optimization/reference/cache-device-type/)
-	// is enabled.
-	CacheByDeviceType bool `json:"cache_by_device_type,required"`
-	// Indicates whether or not Cloudflare proxy is enabled.
-	Cf bool `json:"cf,required"`
-	// Indicates whether or not Automatic Platform Optimization is enabled.
-	Enabled bool `json:"enabled,required"`
-	// An array of hostnames where Automatic Platform Optimization for WordPress is
-	// activated.
-	Hostnames []string `json:"hostnames,required" format:"hostname"`
-	// Indicates whether or not site is powered by WordPress.
-	Wordpress bool `json:"wordpress,required"`
-	// Indicates whether or not
-	// [Cloudflare for WordPress plugin](https://wordpress.org/plugins/cloudflare/) is
-	// installed.
-	WpPlugin bool                                                                      `json:"wp_plugin,required"`
-	JSON     zoneSettingListResponseZonesSchemasAutomaticPlatformOptimizationValueJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesSchemasAutomaticPlatformOptimizationValueJSON
-// contains the JSON metadata for the struct
-// [ZoneSettingListResponseZonesSchemasAutomaticPlatformOptimizationValue]
-type zoneSettingListResponseZonesSchemasAutomaticPlatformOptimizationValueJSON struct {
-	CacheByDeviceType apijson.Field
-	Cf                apijson.Field
-	Enabled           apijson.Field
-	Hostnames         apijson.Field
-	Wordpress         apijson.Field
-	WpPlugin          apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesSchemasAutomaticPlatformOptimizationValue) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesSchemasAutomaticPlatformOptimizationEditable bool
-
-const (
-	ZoneSettingListResponseZonesSchemasAutomaticPlatformOptimizationEditableTrue  ZoneSettingListResponseZonesSchemasAutomaticPlatformOptimizationEditable = true
-	ZoneSettingListResponseZonesSchemasAutomaticPlatformOptimizationEditableFalse ZoneSettingListResponseZonesSchemasAutomaticPlatformOptimizationEditable = false
-)
-
-// Cloudflare security header for a zone.
-type ZoneSettingListResponseZonesSecurityHeader struct {
-	// ID of the zone's security header.
-	ID ZoneSettingListResponseZonesSecurityHeaderID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesSecurityHeaderValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesSecurityHeaderEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                      `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesSecurityHeaderJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesSecurityHeaderJSON contains the JSON metadata for
-// the struct [ZoneSettingListResponseZonesSecurityHeader]
-type zoneSettingListResponseZonesSecurityHeaderJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesSecurityHeader) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesSecurityHeader) implementsZoneSettingListResponse() {}
-
-// ID of the zone's security header.
-type ZoneSettingListResponseZonesSecurityHeaderID string
-
-const (
-	ZoneSettingListResponseZonesSecurityHeaderIDSecurityHeader ZoneSettingListResponseZonesSecurityHeaderID = "security_header"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesSecurityHeaderValue struct {
-	// Strict Transport Security.
-	StrictTransportSecurity ZoneSettingListResponseZonesSecurityHeaderValueStrictTransportSecurity `json:"strict_transport_security"`
-	JSON                    zoneSettingListResponseZonesSecurityHeaderValueJSON                    `json:"-"`
-}
-
-// zoneSettingListResponseZonesSecurityHeaderValueJSON contains the JSON metadata
-// for the struct [ZoneSettingListResponseZonesSecurityHeaderValue]
-type zoneSettingListResponseZonesSecurityHeaderValueJSON struct {
-	StrictTransportSecurity apijson.Field
-	raw                     string
-	ExtraFields             map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesSecurityHeaderValue) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Strict Transport Security.
-type ZoneSettingListResponseZonesSecurityHeaderValueStrictTransportSecurity struct {
-	// Whether or not strict transport security is enabled.
-	Enabled bool `json:"enabled"`
-	// Include all subdomains for strict transport security.
-	IncludeSubdomains bool `json:"include_subdomains"`
-	// Max age in seconds of the strict transport security.
-	MaxAge float64 `json:"max_age"`
-	// Whether or not to include 'X-Content-Type-Options: nosniff' header.
-	Nosniff bool                                                                       `json:"nosniff"`
-	JSON    zoneSettingListResponseZonesSecurityHeaderValueStrictTransportSecurityJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesSecurityHeaderValueStrictTransportSecurityJSON
-// contains the JSON metadata for the struct
-// [ZoneSettingListResponseZonesSecurityHeaderValueStrictTransportSecurity]
-type zoneSettingListResponseZonesSecurityHeaderValueStrictTransportSecurityJSON struct {
-	Enabled           apijson.Field
-	IncludeSubdomains apijson.Field
-	MaxAge            apijson.Field
-	Nosniff           apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesSecurityHeaderValueStrictTransportSecurity) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesSecurityHeaderEditable bool
-
-const (
-	ZoneSettingListResponseZonesSecurityHeaderEditableTrue  ZoneSettingListResponseZonesSecurityHeaderEditable = true
-	ZoneSettingListResponseZonesSecurityHeaderEditableFalse ZoneSettingListResponseZonesSecurityHeaderEditable = false
-)
-
-// Choose the appropriate security profile for your website, which will
-// automatically adjust each of the security settings. If you choose to customize
-// an individual security setting, the profile will become Custom.
-// (https://support.cloudflare.com/hc/en-us/articles/200170056).
-type ZoneSettingListResponseZonesSecurityLevel struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesSecurityLevelID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesSecurityLevelValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesSecurityLevelEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                     `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesSecurityLevelJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesSecurityLevelJSON contains the JSON metadata for the
-// struct [ZoneSettingListResponseZonesSecurityLevel]
-type zoneSettingListResponseZonesSecurityLevelJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesSecurityLevel) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesSecurityLevel) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesSecurityLevelID string
-
-const (
-	ZoneSettingListResponseZonesSecurityLevelIDSecurityLevel ZoneSettingListResponseZonesSecurityLevelID = "security_level"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesSecurityLevelValue string
-
-const (
-	ZoneSettingListResponseZonesSecurityLevelValueOff            ZoneSettingListResponseZonesSecurityLevelValue = "off"
-	ZoneSettingListResponseZonesSecurityLevelValueEssentiallyOff ZoneSettingListResponseZonesSecurityLevelValue = "essentially_off"
-	ZoneSettingListResponseZonesSecurityLevelValueLow            ZoneSettingListResponseZonesSecurityLevelValue = "low"
-	ZoneSettingListResponseZonesSecurityLevelValueMedium         ZoneSettingListResponseZonesSecurityLevelValue = "medium"
-	ZoneSettingListResponseZonesSecurityLevelValueHigh           ZoneSettingListResponseZonesSecurityLevelValue = "high"
-	ZoneSettingListResponseZonesSecurityLevelValueUnderAttack    ZoneSettingListResponseZonesSecurityLevelValue = "under_attack"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesSecurityLevelEditable bool
-
-const (
-	ZoneSettingListResponseZonesSecurityLevelEditableTrue  ZoneSettingListResponseZonesSecurityLevelEditable = true
-	ZoneSettingListResponseZonesSecurityLevelEditableFalse ZoneSettingListResponseZonesSecurityLevelEditable = false
-)
-
-// If there is sensitive content on your website that you want visible to real
-// visitors, but that you want to hide from suspicious visitors, all you have to do
-// is wrap the content with Cloudflare SSE tags. Wrap any content that you want to
-// be excluded from suspicious visitors in the following SSE tags:
-// <!--sse--><!--/sse-->. For example: <!--sse--> Bad visitors won't see my phone
-// number, 555-555-5555 <!--/sse-->. Note: SSE only will work with HTML. If you
-// have HTML minification enabled, you won't see the SSE tags in your HTML source
-// when it's served through Cloudflare. SSE will still function in this case, as
-// Cloudflare's HTML minification and SSE functionality occur on-the-fly as the
-// resource moves through our network to the visitor's computer.
-// (https://support.cloudflare.com/hc/en-us/articles/200170036).
-type ZoneSettingListResponseZonesServerSideExclude struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesServerSideExcludeID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesServerSideExcludeValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesServerSideExcludeEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                         `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesServerSideExcludeJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesServerSideExcludeJSON contains the JSON metadata for
-// the struct [ZoneSettingListResponseZonesServerSideExclude]
-type zoneSettingListResponseZonesServerSideExcludeJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesServerSideExclude) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesServerSideExclude) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesServerSideExcludeID string
-
-const (
-	ZoneSettingListResponseZonesServerSideExcludeIDServerSideExclude ZoneSettingListResponseZonesServerSideExcludeID = "server_side_exclude"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesServerSideExcludeValue string
-
-const (
-	ZoneSettingListResponseZonesServerSideExcludeValueOn  ZoneSettingListResponseZonesServerSideExcludeValue = "on"
-	ZoneSettingListResponseZonesServerSideExcludeValueOff ZoneSettingListResponseZonesServerSideExcludeValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesServerSideExcludeEditable bool
-
-const (
-	ZoneSettingListResponseZonesServerSideExcludeEditableTrue  ZoneSettingListResponseZonesServerSideExcludeEditable = true
-	ZoneSettingListResponseZonesServerSideExcludeEditableFalse ZoneSettingListResponseZonesServerSideExcludeEditable = false
-)
-
-// Allow SHA1 support.
-type ZoneSettingListResponseZonesSha1Support struct {
-	// Zone setting identifier.
-	ID ZoneSettingListResponseZonesSha1SupportID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesSha1SupportValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesSha1SupportEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                   `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesSha1SupportJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesSha1SupportJSON contains the JSON metadata for the
-// struct [ZoneSettingListResponseZonesSha1Support]
-type zoneSettingListResponseZonesSha1SupportJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesSha1Support) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesSha1Support) implementsZoneSettingListResponse() {}
-
-// Zone setting identifier.
-type ZoneSettingListResponseZonesSha1SupportID string
-
-const (
-	ZoneSettingListResponseZonesSha1SupportIDSha1Support ZoneSettingListResponseZonesSha1SupportID = "sha1_support"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesSha1SupportValue string
-
-const (
-	ZoneSettingListResponseZonesSha1SupportValueOff ZoneSettingListResponseZonesSha1SupportValue = "off"
-	ZoneSettingListResponseZonesSha1SupportValueOn  ZoneSettingListResponseZonesSha1SupportValue = "on"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesSha1SupportEditable bool
-
-const (
-	ZoneSettingListResponseZonesSha1SupportEditableTrue  ZoneSettingListResponseZonesSha1SupportEditable = true
-	ZoneSettingListResponseZonesSha1SupportEditableFalse ZoneSettingListResponseZonesSha1SupportEditable = false
-)
-
-// Cloudflare will treat files with the same query strings as the same file in
-// cache, regardless of the order of the query strings. This is limited to
-// Enterprise Zones.
-type ZoneSettingListResponseZonesSortQueryStringForCache struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesSortQueryStringForCacheID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesSortQueryStringForCacheValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesSortQueryStringForCacheEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                               `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesSortQueryStringForCacheJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesSortQueryStringForCacheJSON contains the JSON
-// metadata for the struct [ZoneSettingListResponseZonesSortQueryStringForCache]
-type zoneSettingListResponseZonesSortQueryStringForCacheJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesSortQueryStringForCache) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesSortQueryStringForCache) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesSortQueryStringForCacheID string
-
-const (
-	ZoneSettingListResponseZonesSortQueryStringForCacheIDSortQueryStringForCache ZoneSettingListResponseZonesSortQueryStringForCacheID = "sort_query_string_for_cache"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesSortQueryStringForCacheValue string
-
-const (
-	ZoneSettingListResponseZonesSortQueryStringForCacheValueOn  ZoneSettingListResponseZonesSortQueryStringForCacheValue = "on"
-	ZoneSettingListResponseZonesSortQueryStringForCacheValueOff ZoneSettingListResponseZonesSortQueryStringForCacheValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesSortQueryStringForCacheEditable bool
-
-const (
-	ZoneSettingListResponseZonesSortQueryStringForCacheEditableTrue  ZoneSettingListResponseZonesSortQueryStringForCacheEditable = true
-	ZoneSettingListResponseZonesSortQueryStringForCacheEditableFalse ZoneSettingListResponseZonesSortQueryStringForCacheEditable = false
-)
-
-// SSL encrypts your visitor's connection and safeguards credit card numbers and
-// other personal data to and from your website. SSL can take up to 5 minutes to
-// fully activate. Requires Cloudflare active on your root domain or www domain.
-// Off: no SSL between the visitor and Cloudflare, and no SSL between Cloudflare
-// and your web server (all HTTP traffic). Flexible: SSL between the visitor and
-// Cloudflare -- visitor sees HTTPS on your site, but no SSL between Cloudflare and
-// your web server. You don't need to have an SSL cert on your web server, but your
-// vistors will still see the site as being HTTPS enabled. Full: SSL between the
-// visitor and Cloudflare -- visitor sees HTTPS on your site, and SSL between
-// Cloudflare and your web server. You'll need to have your own SSL cert or
-// self-signed cert at the very least. Full (Strict): SSL between the visitor and
-// Cloudflare -- visitor sees HTTPS on your site, and SSL between Cloudflare and
-// your web server. You'll need to have a valid SSL certificate installed on your
-// web server. This certificate must be signed by a certificate authority, have an
-// expiration date in the future, and respond for the request domain name
-// (hostname). (https://support.cloudflare.com/hc/en-us/articles/200170416).
-type ZoneSettingListResponseZonesSSL struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesSSLID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesSSLValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesSSLEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                           `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesSSLJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesSSLJSON contains the JSON metadata for the struct
-// [ZoneSettingListResponseZonesSSL]
-type zoneSettingListResponseZonesSSLJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesSSL) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesSSL) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesSSLID string
-
-const (
-	ZoneSettingListResponseZonesSSLIDSSL ZoneSettingListResponseZonesSSLID = "ssl"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesSSLValue string
-
-const (
-	ZoneSettingListResponseZonesSSLValueOff      ZoneSettingListResponseZonesSSLValue = "off"
-	ZoneSettingListResponseZonesSSLValueFlexible ZoneSettingListResponseZonesSSLValue = "flexible"
-	ZoneSettingListResponseZonesSSLValueFull     ZoneSettingListResponseZonesSSLValue = "full"
-	ZoneSettingListResponseZonesSSLValueStrict   ZoneSettingListResponseZonesSSLValue = "strict"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesSSLEditable bool
-
-const (
-	ZoneSettingListResponseZonesSSLEditableTrue  ZoneSettingListResponseZonesSSLEditable = true
-	ZoneSettingListResponseZonesSSLEditableFalse ZoneSettingListResponseZonesSSLEditable = false
-)
-
-// Enrollment in the SSL/TLS Recommender service which tries to detect and
-// recommend (by sending periodic emails) the most secure SSL/TLS setting your
-// origin servers support.
-type ZoneSettingListResponseZonesSSLRecommender struct {
-	// Enrollment value for SSL/TLS Recommender.
-	ID ZoneSettingListResponseZonesSSLRecommenderID `json:"id"`
-	// ssl-recommender enrollment setting.
-	Enabled bool                                           `json:"enabled"`
-	JSON    zoneSettingListResponseZonesSSLRecommenderJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesSSLRecommenderJSON contains the JSON metadata for
-// the struct [ZoneSettingListResponseZonesSSLRecommender]
-type zoneSettingListResponseZonesSSLRecommenderJSON struct {
-	ID          apijson.Field
-	Enabled     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesSSLRecommender) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesSSLRecommender) implementsZoneSettingListResponse() {}
-
-// Enrollment value for SSL/TLS Recommender.
-type ZoneSettingListResponseZonesSSLRecommenderID string
-
-const (
-	ZoneSettingListResponseZonesSSLRecommenderIDSSLRecommender ZoneSettingListResponseZonesSSLRecommenderID = "ssl_recommender"
-)
-
-// Only allows TLS1.2.
-type ZoneSettingListResponseZonesTLS1_2Only struct {
-	// Zone setting identifier.
-	ID ZoneSettingListResponseZonesTLS1_2OnlyID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesTLS1_2OnlyValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesTLS1_2OnlyEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                  `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesTls1_2OnlyJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesTls1_2OnlyJSON contains the JSON metadata for the
-// struct [ZoneSettingListResponseZonesTLS1_2Only]
-type zoneSettingListResponseZonesTls1_2OnlyJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesTLS1_2Only) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesTLS1_2Only) implementsZoneSettingListResponse() {}
-
-// Zone setting identifier.
-type ZoneSettingListResponseZonesTLS1_2OnlyID string
-
-const (
-	ZoneSettingListResponseZonesTLS1_2OnlyIDTLS1_2Only ZoneSettingListResponseZonesTLS1_2OnlyID = "tls_1_2_only"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesTLS1_2OnlyValue string
-
-const (
-	ZoneSettingListResponseZonesTLS1_2OnlyValueOff ZoneSettingListResponseZonesTLS1_2OnlyValue = "off"
-	ZoneSettingListResponseZonesTLS1_2OnlyValueOn  ZoneSettingListResponseZonesTLS1_2OnlyValue = "on"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesTLS1_2OnlyEditable bool
-
-const (
-	ZoneSettingListResponseZonesTLS1_2OnlyEditableTrue  ZoneSettingListResponseZonesTLS1_2OnlyEditable = true
-	ZoneSettingListResponseZonesTLS1_2OnlyEditableFalse ZoneSettingListResponseZonesTLS1_2OnlyEditable = false
-)
-
-// Enables Crypto TLS 1.3 feature for a zone.
-type ZoneSettingListResponseZonesTLS1_3 struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesTLS1_3ID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesTLS1_3Value `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesTLS1_3Editable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                              `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesTls1_3JSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesTls1_3JSON contains the JSON metadata for the struct
-// [ZoneSettingListResponseZonesTLS1_3]
-type zoneSettingListResponseZonesTls1_3JSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesTLS1_3) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesTLS1_3) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesTLS1_3ID string
-
-const (
-	ZoneSettingListResponseZonesTLS1_3IDTLS1_3 ZoneSettingListResponseZonesTLS1_3ID = "tls_1_3"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesTLS1_3Value string
-
-const (
-	ZoneSettingListResponseZonesTLS1_3ValueOn  ZoneSettingListResponseZonesTLS1_3Value = "on"
-	ZoneSettingListResponseZonesTLS1_3ValueOff ZoneSettingListResponseZonesTLS1_3Value = "off"
-	ZoneSettingListResponseZonesTLS1_3ValueZrt ZoneSettingListResponseZonesTLS1_3Value = "zrt"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesTLS1_3Editable bool
-
-const (
-	ZoneSettingListResponseZonesTLS1_3EditableTrue  ZoneSettingListResponseZonesTLS1_3Editable = true
-	ZoneSettingListResponseZonesTLS1_3EditableFalse ZoneSettingListResponseZonesTLS1_3Editable = false
-)
-
-// TLS Client Auth requires Cloudflare to connect to your origin server using a
-// client certificate (Enterprise Only).
-type ZoneSettingListResponseZonesTLSClientAuth struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesTLSClientAuthID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesTLSClientAuthValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesTLSClientAuthEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                     `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesTLSClientAuthJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesTLSClientAuthJSON contains the JSON metadata for the
-// struct [ZoneSettingListResponseZonesTLSClientAuth]
-type zoneSettingListResponseZonesTLSClientAuthJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesTLSClientAuth) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesTLSClientAuth) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesTLSClientAuthID string
-
-const (
-	ZoneSettingListResponseZonesTLSClientAuthIDTLSClientAuth ZoneSettingListResponseZonesTLSClientAuthID = "tls_client_auth"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesTLSClientAuthValue string
-
-const (
-	ZoneSettingListResponseZonesTLSClientAuthValueOn  ZoneSettingListResponseZonesTLSClientAuthValue = "on"
-	ZoneSettingListResponseZonesTLSClientAuthValueOff ZoneSettingListResponseZonesTLSClientAuthValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesTLSClientAuthEditable bool
-
-const (
-	ZoneSettingListResponseZonesTLSClientAuthEditableTrue  ZoneSettingListResponseZonesTLSClientAuthEditable = true
-	ZoneSettingListResponseZonesTLSClientAuthEditableFalse ZoneSettingListResponseZonesTLSClientAuthEditable = false
-)
-
-// Allows customer to continue to use True Client IP (Akamai feature) in the
-// headers we send to the origin. This is limited to Enterprise Zones.
-type ZoneSettingListResponseZonesTrueClientIPHeader struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesTrueClientIPHeaderID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesTrueClientIPHeaderValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesTrueClientIPHeaderEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                          `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesTrueClientIPHeaderJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesTrueClientIPHeaderJSON contains the JSON metadata
-// for the struct [ZoneSettingListResponseZonesTrueClientIPHeader]
-type zoneSettingListResponseZonesTrueClientIPHeaderJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesTrueClientIPHeader) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesTrueClientIPHeader) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesTrueClientIPHeaderID string
-
-const (
-	ZoneSettingListResponseZonesTrueClientIPHeaderIDTrueClientIPHeader ZoneSettingListResponseZonesTrueClientIPHeaderID = "true_client_ip_header"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesTrueClientIPHeaderValue string
-
-const (
-	ZoneSettingListResponseZonesTrueClientIPHeaderValueOn  ZoneSettingListResponseZonesTrueClientIPHeaderValue = "on"
-	ZoneSettingListResponseZonesTrueClientIPHeaderValueOff ZoneSettingListResponseZonesTrueClientIPHeaderValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesTrueClientIPHeaderEditable bool
-
-const (
-	ZoneSettingListResponseZonesTrueClientIPHeaderEditableTrue  ZoneSettingListResponseZonesTrueClientIPHeaderEditable = true
-	ZoneSettingListResponseZonesTrueClientIPHeaderEditableFalse ZoneSettingListResponseZonesTrueClientIPHeaderEditable = false
-)
-
-// The WAF examines HTTP requests to your website. It inspects both GET and POST
-// requests and applies rules to help filter out illegitimate traffic from
-// legitimate website visitors. The Cloudflare WAF inspects website addresses or
-// URLs to detect anything out of the ordinary. If the Cloudflare WAF determines
-// suspicious user behavior, then the WAF will 'challenge' the web visitor with a
-// page that asks them to submit a CAPTCHA successfully to continue their action.
-// If the challenge is failed, the action will be stopped. What this means is that
-// Cloudflare's WAF will block any traffic identified as illegitimate before it
-// reaches your origin web server.
-// (https://support.cloudflare.com/hc/en-us/articles/200172016).
-type ZoneSettingListResponseZonesWAF struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesWAFID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesWAFValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesWAFEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                           `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesWAFJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesWAFJSON contains the JSON metadata for the struct
-// [ZoneSettingListResponseZonesWAF]
-type zoneSettingListResponseZonesWAFJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesWAF) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesWAF) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesWAFID string
-
-const (
-	ZoneSettingListResponseZonesWAFIDWAF ZoneSettingListResponseZonesWAFID = "waf"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesWAFValue string
-
-const (
-	ZoneSettingListResponseZonesWAFValueOn  ZoneSettingListResponseZonesWAFValue = "on"
-	ZoneSettingListResponseZonesWAFValueOff ZoneSettingListResponseZonesWAFValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesWAFEditable bool
-
-const (
-	ZoneSettingListResponseZonesWAFEditableTrue  ZoneSettingListResponseZonesWAFEditable = true
-	ZoneSettingListResponseZonesWAFEditableFalse ZoneSettingListResponseZonesWAFEditable = false
-)
-
-// When the client requesting the image supports the WebP image codec, and WebP
-// offers a performance advantage over the original image format, Cloudflare will
-// serve a WebP version of the original image.
-type ZoneSettingListResponseZonesWebp struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesWebpID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesWebpValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesWebpEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                            `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesWebpJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesWebpJSON contains the JSON metadata for the struct
-// [ZoneSettingListResponseZonesWebp]
-type zoneSettingListResponseZonesWebpJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesWebp) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesWebp) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesWebpID string
-
-const (
-	ZoneSettingListResponseZonesWebpIDWebp ZoneSettingListResponseZonesWebpID = "webp"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesWebpValue string
-
-const (
-	ZoneSettingListResponseZonesWebpValueOff ZoneSettingListResponseZonesWebpValue = "off"
-	ZoneSettingListResponseZonesWebpValueOn  ZoneSettingListResponseZonesWebpValue = "on"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesWebpEditable bool
-
-const (
-	ZoneSettingListResponseZonesWebpEditableTrue  ZoneSettingListResponseZonesWebpEditable = true
-	ZoneSettingListResponseZonesWebpEditableFalse ZoneSettingListResponseZonesWebpEditable = false
-)
-
-// WebSockets are open connections sustained between the client and the origin
-// server. Inside a WebSockets connection, the client and the origin can pass data
-// back and forth without having to reestablish sessions. This makes exchanging
-// data within a WebSockets connection fast. WebSockets are often used for
-// real-time applications such as live chat and gaming. For more information refer
-// to
-// [Can I use Cloudflare with Websockets](https://support.cloudflare.com/hc/en-us/articles/200169466-Can-I-use-Cloudflare-with-WebSockets-).
-type ZoneSettingListResponseZonesWebsockets struct {
-	// ID of the zone setting.
-	ID ZoneSettingListResponseZonesWebsocketsID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingListResponseZonesWebsocketsValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingListResponseZonesWebsocketsEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                  `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingListResponseZonesWebsocketsJSON `json:"-"`
-}
-
-// zoneSettingListResponseZonesWebsocketsJSON contains the JSON metadata for the
-// struct [ZoneSettingListResponseZonesWebsockets]
-type zoneSettingListResponseZonesWebsocketsJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingListResponseZonesWebsockets) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ZoneSettingListResponseZonesWebsockets) implementsZoneSettingListResponse() {}
-
-// ID of the zone setting.
-type ZoneSettingListResponseZonesWebsocketsID string
-
-const (
-	ZoneSettingListResponseZonesWebsocketsIDWebsockets ZoneSettingListResponseZonesWebsocketsID = "websockets"
-)
-
-// Current value of the zone setting.
-type ZoneSettingListResponseZonesWebsocketsValue string
-
-const (
-	ZoneSettingListResponseZonesWebsocketsValueOff ZoneSettingListResponseZonesWebsocketsValue = "off"
-	ZoneSettingListResponseZonesWebsocketsValueOn  ZoneSettingListResponseZonesWebsocketsValue = "on"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingListResponseZonesWebsocketsEditable bool
-
-const (
-	ZoneSettingListResponseZonesWebsocketsEditableTrue  ZoneSettingListResponseZonesWebsocketsEditable = true
-	ZoneSettingListResponseZonesWebsocketsEditableFalse ZoneSettingListResponseZonesWebsocketsEditable = false
-)
 
 // 0-RTT session resumption enabled for this zone.
 //
@@ -6861,72 +3511,3354 @@ const (
 	ZoneSettingEditResponseZonesWebsocketsEditableFalse ZoneSettingEditResponseZonesWebsocketsEditable = false
 )
 
-type ZoneSettingListParams struct {
-	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+// 0-RTT session resumption enabled for this zone.
+//
+// Union satisfied by [ZoneSettingGetResponseZones0rtt],
+// [ZoneSettingGetResponseZonesAdvancedDDOS],
+// [ZoneSettingGetResponseZonesAlwaysOnline],
+// [ZoneSettingGetResponseZonesAlwaysUseHTTPS],
+// [ZoneSettingGetResponseZonesAutomaticHTTPSRewrites],
+// [ZoneSettingGetResponseZonesBrotli],
+// [ZoneSettingGetResponseZonesBrowserCacheTTL],
+// [ZoneSettingGetResponseZonesBrowserCheck],
+// [ZoneSettingGetResponseZonesCacheLevel],
+// [ZoneSettingGetResponseZonesChallengeTTL], [ZoneSettingGetResponseZonesCiphers],
+// [ZoneSettingGetResponseZonesCnameFlattening],
+// [ZoneSettingGetResponseZonesDevelopmentMode],
+// [ZoneSettingGetResponseZonesEarlyHints],
+// [ZoneSettingGetResponseZonesEdgeCacheTTL],
+// [ZoneSettingGetResponseZonesEmailObfuscation],
+// [ZoneSettingGetResponseZonesH2Prioritization],
+// [ZoneSettingGetResponseZonesHotlinkProtection],
+// [ZoneSettingGetResponseZonesHTTP2], [ZoneSettingGetResponseZonesHTTP3],
+// [ZoneSettingGetResponseZonesImageResizing],
+// [ZoneSettingGetResponseZonesIPGeolocation], [ZoneSettingGetResponseZonesIPV6],
+// [ZoneSettingGetResponseZonesMaxUpload],
+// [ZoneSettingGetResponseZonesMinTLSVersion], [ZoneSettingGetResponseZonesMinify],
+// [ZoneSettingGetResponseZonesMirage],
+// [ZoneSettingGetResponseZonesMobileRedirect], [ZoneSettingGetResponseZonesNEL],
+// [ZoneSettingGetResponseZonesOpportunisticEncryption],
+// [ZoneSettingGetResponseZonesOpportunisticOnion],
+// [ZoneSettingGetResponseZonesOrangeToOrange],
+// [ZoneSettingGetResponseZonesOriginErrorPagePassThru],
+// [ZoneSettingGetResponseZonesPolish],
+// [ZoneSettingGetResponseZonesPrefetchPreload],
+// [ZoneSettingGetResponseZonesProxyReadTimeout],
+// [ZoneSettingGetResponseZonesPseudoIPV4],
+// [ZoneSettingGetResponseZonesResponseBuffering],
+// [ZoneSettingGetResponseZonesRocketLoader],
+// [ZoneSettingGetResponseZonesSchemasAutomaticPlatformOptimization],
+// [ZoneSettingGetResponseZonesSecurityHeader],
+// [ZoneSettingGetResponseZonesSecurityLevel],
+// [ZoneSettingGetResponseZonesServerSideExclude],
+// [ZoneSettingGetResponseZonesSha1Support],
+// [ZoneSettingGetResponseZonesSortQueryStringForCache],
+// [ZoneSettingGetResponseZonesSSL], [ZoneSettingGetResponseZonesSSLRecommender],
+// [ZoneSettingGetResponseZonesTLS1_2Only], [ZoneSettingGetResponseZonesTLS1_3],
+// [ZoneSettingGetResponseZonesTLSClientAuth],
+// [ZoneSettingGetResponseZonesTrueClientIPHeader],
+// [ZoneSettingGetResponseZonesWAF], [ZoneSettingGetResponseZonesWebp] or
+// [ZoneSettingGetResponseZonesWebsockets].
+type ZoneSettingGetResponse interface {
+	implementsZoneSettingGetResponse()
 }
 
-type ZoneSettingListResponseEnvelope struct {
-	Errors   []ZoneSettingListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ZoneSettingListResponseEnvelopeMessages `json:"messages,required"`
-	// Whether the API call was successful
-	Success bool                                `json:"success,required"`
-	Result  []ZoneSettingListResponse           `json:"result"`
-	JSON    zoneSettingListResponseEnvelopeJSON `json:"-"`
+func init() {
+	apijson.RegisterUnion(reflect.TypeOf((*ZoneSettingGetResponse)(nil)).Elem(), "")
 }
 
-// zoneSettingListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [ZoneSettingListResponseEnvelope]
-type zoneSettingListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Success     apijson.Field
-	Result      apijson.Field
+// 0-RTT session resumption enabled for this zone.
+type ZoneSettingGetResponseZones0rtt struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZones0rttID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZones0rttValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZones0rttEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                           `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZones0rttJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZones0rttJSON contains the JSON metadata for the struct
+// [ZoneSettingGetResponseZones0rtt]
+type zoneSettingGetResponseZones0rttJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingGetResponseZones0rtt) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZoneSettingListResponseEnvelopeErrors struct {
-	Code    int64                                     `json:"code,required"`
-	Message string                                    `json:"message,required"`
-	JSON    zoneSettingListResponseEnvelopeErrorsJSON `json:"-"`
+func (r ZoneSettingGetResponseZones0rtt) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZones0rttID string
+
+const (
+	ZoneSettingGetResponseZones0rttID0rtt ZoneSettingGetResponseZones0rttID = "0rtt"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZones0rttValue string
+
+const (
+	ZoneSettingGetResponseZones0rttValueOn  ZoneSettingGetResponseZones0rttValue = "on"
+	ZoneSettingGetResponseZones0rttValueOff ZoneSettingGetResponseZones0rttValue = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZones0rttEditable bool
+
+const (
+	ZoneSettingGetResponseZones0rttEditableTrue  ZoneSettingGetResponseZones0rttEditable = true
+	ZoneSettingGetResponseZones0rttEditableFalse ZoneSettingGetResponseZones0rttEditable = false
+)
+
+// Advanced protection from Distributed Denial of Service (DDoS) attacks on your
+// website. This is an uneditable value that is 'on' in the case of Business and
+// Enterprise zones.
+type ZoneSettingGetResponseZonesAdvancedDDOS struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesAdvancedDDOSID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesAdvancedDDOSValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesAdvancedDDOSEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                   `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesAdvancedDDOSJSON `json:"-"`
 }
 
-// zoneSettingListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [ZoneSettingListResponseEnvelopeErrors]
-type zoneSettingListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
+// zoneSettingGetResponseZonesAdvancedDDOSJSON contains the JSON metadata for the
+// struct [ZoneSettingGetResponseZonesAdvancedDDOS]
+type zoneSettingGetResponseZonesAdvancedDDOSJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingGetResponseZonesAdvancedDDOS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type ZoneSettingListResponseEnvelopeMessages struct {
-	Code    int64                                       `json:"code,required"`
-	Message string                                      `json:"message,required"`
-	JSON    zoneSettingListResponseEnvelopeMessagesJSON `json:"-"`
+func (r ZoneSettingGetResponseZonesAdvancedDDOS) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesAdvancedDDOSID string
+
+const (
+	ZoneSettingGetResponseZonesAdvancedDDOSIDAdvancedDDOS ZoneSettingGetResponseZonesAdvancedDDOSID = "advanced_ddos"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesAdvancedDDOSValue string
+
+const (
+	ZoneSettingGetResponseZonesAdvancedDDOSValueOn  ZoneSettingGetResponseZonesAdvancedDDOSValue = "on"
+	ZoneSettingGetResponseZonesAdvancedDDOSValueOff ZoneSettingGetResponseZonesAdvancedDDOSValue = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesAdvancedDDOSEditable bool
+
+const (
+	ZoneSettingGetResponseZonesAdvancedDDOSEditableTrue  ZoneSettingGetResponseZonesAdvancedDDOSEditable = true
+	ZoneSettingGetResponseZonesAdvancedDDOSEditableFalse ZoneSettingGetResponseZonesAdvancedDDOSEditable = false
+)
+
+// When enabled, Cloudflare serves limited copies of web pages available from the
+// [Internet Archive's Wayback Machine](https://archive.org/web/) if your server is
+// offline. Refer to
+// [Always Online](https://developers.cloudflare.com/cache/about/always-online) for
+// more information.
+type ZoneSettingGetResponseZonesAlwaysOnline struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesAlwaysOnlineID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesAlwaysOnlineValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesAlwaysOnlineEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                   `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesAlwaysOnlineJSON `json:"-"`
 }
 
-// zoneSettingListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ZoneSettingListResponseEnvelopeMessages]
-type zoneSettingListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
+// zoneSettingGetResponseZonesAlwaysOnlineJSON contains the JSON metadata for the
+// struct [ZoneSettingGetResponseZonesAlwaysOnline]
+type zoneSettingGetResponseZonesAlwaysOnlineJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingGetResponseZonesAlwaysOnline) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+func (r ZoneSettingGetResponseZonesAlwaysOnline) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesAlwaysOnlineID string
+
+const (
+	ZoneSettingGetResponseZonesAlwaysOnlineIDAlwaysOnline ZoneSettingGetResponseZonesAlwaysOnlineID = "always_online"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesAlwaysOnlineValue string
+
+const (
+	ZoneSettingGetResponseZonesAlwaysOnlineValueOn  ZoneSettingGetResponseZonesAlwaysOnlineValue = "on"
+	ZoneSettingGetResponseZonesAlwaysOnlineValueOff ZoneSettingGetResponseZonesAlwaysOnlineValue = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesAlwaysOnlineEditable bool
+
+const (
+	ZoneSettingGetResponseZonesAlwaysOnlineEditableTrue  ZoneSettingGetResponseZonesAlwaysOnlineEditable = true
+	ZoneSettingGetResponseZonesAlwaysOnlineEditableFalse ZoneSettingGetResponseZonesAlwaysOnlineEditable = false
+)
+
+// Reply to all requests for URLs that use "http" with a 301 redirect to the
+// equivalent "https" URL. If you only want to redirect for a subset of requests,
+// consider creating an "Always use HTTPS" page rule.
+type ZoneSettingGetResponseZonesAlwaysUseHTTPS struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesAlwaysUseHTTPSID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesAlwaysUseHTTPSValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesAlwaysUseHTTPSEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                     `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesAlwaysUseHTTPSJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesAlwaysUseHTTPSJSON contains the JSON metadata for the
+// struct [ZoneSettingGetResponseZonesAlwaysUseHTTPS]
+type zoneSettingGetResponseZonesAlwaysUseHTTPSJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesAlwaysUseHTTPS) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesAlwaysUseHTTPS) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesAlwaysUseHTTPSID string
+
+const (
+	ZoneSettingGetResponseZonesAlwaysUseHTTPSIDAlwaysUseHTTPS ZoneSettingGetResponseZonesAlwaysUseHTTPSID = "always_use_https"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesAlwaysUseHTTPSValue string
+
+const (
+	ZoneSettingGetResponseZonesAlwaysUseHTTPSValueOn  ZoneSettingGetResponseZonesAlwaysUseHTTPSValue = "on"
+	ZoneSettingGetResponseZonesAlwaysUseHTTPSValueOff ZoneSettingGetResponseZonesAlwaysUseHTTPSValue = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesAlwaysUseHTTPSEditable bool
+
+const (
+	ZoneSettingGetResponseZonesAlwaysUseHTTPSEditableTrue  ZoneSettingGetResponseZonesAlwaysUseHTTPSEditable = true
+	ZoneSettingGetResponseZonesAlwaysUseHTTPSEditableFalse ZoneSettingGetResponseZonesAlwaysUseHTTPSEditable = false
+)
+
+// Enable the Automatic HTTPS Rewrites feature for this zone.
+type ZoneSettingGetResponseZonesAutomaticHTTPSRewrites struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesAutomaticHTTPSRewritesID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesAutomaticHTTPSRewritesValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesAutomaticHTTPSRewritesEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                             `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesAutomaticHTTPSRewritesJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesAutomaticHTTPSRewritesJSON contains the JSON metadata
+// for the struct [ZoneSettingGetResponseZonesAutomaticHTTPSRewrites]
+type zoneSettingGetResponseZonesAutomaticHTTPSRewritesJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesAutomaticHTTPSRewrites) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesAutomaticHTTPSRewrites) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesAutomaticHTTPSRewritesID string
+
+const (
+	ZoneSettingGetResponseZonesAutomaticHTTPSRewritesIDAutomaticHTTPSRewrites ZoneSettingGetResponseZonesAutomaticHTTPSRewritesID = "automatic_https_rewrites"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesAutomaticHTTPSRewritesValue string
+
+const (
+	ZoneSettingGetResponseZonesAutomaticHTTPSRewritesValueOn  ZoneSettingGetResponseZonesAutomaticHTTPSRewritesValue = "on"
+	ZoneSettingGetResponseZonesAutomaticHTTPSRewritesValueOff ZoneSettingGetResponseZonesAutomaticHTTPSRewritesValue = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesAutomaticHTTPSRewritesEditable bool
+
+const (
+	ZoneSettingGetResponseZonesAutomaticHTTPSRewritesEditableTrue  ZoneSettingGetResponseZonesAutomaticHTTPSRewritesEditable = true
+	ZoneSettingGetResponseZonesAutomaticHTTPSRewritesEditableFalse ZoneSettingGetResponseZonesAutomaticHTTPSRewritesEditable = false
+)
+
+// When the client requesting an asset supports the Brotli compression algorithm,
+// Cloudflare will serve a Brotli compressed version of the asset.
+type ZoneSettingGetResponseZonesBrotli struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesBrotliID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesBrotliValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesBrotliEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                             `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesBrotliJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesBrotliJSON contains the JSON metadata for the struct
+// [ZoneSettingGetResponseZonesBrotli]
+type zoneSettingGetResponseZonesBrotliJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesBrotli) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesBrotli) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesBrotliID string
+
+const (
+	ZoneSettingGetResponseZonesBrotliIDBrotli ZoneSettingGetResponseZonesBrotliID = "brotli"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesBrotliValue string
+
+const (
+	ZoneSettingGetResponseZonesBrotliValueOff ZoneSettingGetResponseZonesBrotliValue = "off"
+	ZoneSettingGetResponseZonesBrotliValueOn  ZoneSettingGetResponseZonesBrotliValue = "on"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesBrotliEditable bool
+
+const (
+	ZoneSettingGetResponseZonesBrotliEditableTrue  ZoneSettingGetResponseZonesBrotliEditable = true
+	ZoneSettingGetResponseZonesBrotliEditableFalse ZoneSettingGetResponseZonesBrotliEditable = false
+)
+
+// Browser Cache TTL (in seconds) specifies how long Cloudflare-cached resources
+// will remain on your visitors' computers. Cloudflare will honor any larger times
+// specified by your server.
+// (https://support.cloudflare.com/hc/en-us/articles/200168276).
+type ZoneSettingGetResponseZonesBrowserCacheTTL struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesBrowserCacheTTLID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesBrowserCacheTTLValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesBrowserCacheTTLEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                      `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesBrowserCacheTTLJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesBrowserCacheTTLJSON contains the JSON metadata for
+// the struct [ZoneSettingGetResponseZonesBrowserCacheTTL]
+type zoneSettingGetResponseZonesBrowserCacheTTLJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesBrowserCacheTTL) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesBrowserCacheTTL) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesBrowserCacheTTLID string
+
+const (
+	ZoneSettingGetResponseZonesBrowserCacheTTLIDBrowserCacheTTL ZoneSettingGetResponseZonesBrowserCacheTTLID = "browser_cache_ttl"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesBrowserCacheTTLValue float64
+
+const (
+	ZoneSettingGetResponseZonesBrowserCacheTTLValue0        ZoneSettingGetResponseZonesBrowserCacheTTLValue = 0
+	ZoneSettingGetResponseZonesBrowserCacheTTLValue30       ZoneSettingGetResponseZonesBrowserCacheTTLValue = 30
+	ZoneSettingGetResponseZonesBrowserCacheTTLValue60       ZoneSettingGetResponseZonesBrowserCacheTTLValue = 60
+	ZoneSettingGetResponseZonesBrowserCacheTTLValue120      ZoneSettingGetResponseZonesBrowserCacheTTLValue = 120
+	ZoneSettingGetResponseZonesBrowserCacheTTLValue300      ZoneSettingGetResponseZonesBrowserCacheTTLValue = 300
+	ZoneSettingGetResponseZonesBrowserCacheTTLValue1200     ZoneSettingGetResponseZonesBrowserCacheTTLValue = 1200
+	ZoneSettingGetResponseZonesBrowserCacheTTLValue1800     ZoneSettingGetResponseZonesBrowserCacheTTLValue = 1800
+	ZoneSettingGetResponseZonesBrowserCacheTTLValue3600     ZoneSettingGetResponseZonesBrowserCacheTTLValue = 3600
+	ZoneSettingGetResponseZonesBrowserCacheTTLValue7200     ZoneSettingGetResponseZonesBrowserCacheTTLValue = 7200
+	ZoneSettingGetResponseZonesBrowserCacheTTLValue10800    ZoneSettingGetResponseZonesBrowserCacheTTLValue = 10800
+	ZoneSettingGetResponseZonesBrowserCacheTTLValue14400    ZoneSettingGetResponseZonesBrowserCacheTTLValue = 14400
+	ZoneSettingGetResponseZonesBrowserCacheTTLValue18000    ZoneSettingGetResponseZonesBrowserCacheTTLValue = 18000
+	ZoneSettingGetResponseZonesBrowserCacheTTLValue28800    ZoneSettingGetResponseZonesBrowserCacheTTLValue = 28800
+	ZoneSettingGetResponseZonesBrowserCacheTTLValue43200    ZoneSettingGetResponseZonesBrowserCacheTTLValue = 43200
+	ZoneSettingGetResponseZonesBrowserCacheTTLValue57600    ZoneSettingGetResponseZonesBrowserCacheTTLValue = 57600
+	ZoneSettingGetResponseZonesBrowserCacheTTLValue72000    ZoneSettingGetResponseZonesBrowserCacheTTLValue = 72000
+	ZoneSettingGetResponseZonesBrowserCacheTTLValue86400    ZoneSettingGetResponseZonesBrowserCacheTTLValue = 86400
+	ZoneSettingGetResponseZonesBrowserCacheTTLValue172800   ZoneSettingGetResponseZonesBrowserCacheTTLValue = 172800
+	ZoneSettingGetResponseZonesBrowserCacheTTLValue259200   ZoneSettingGetResponseZonesBrowserCacheTTLValue = 259200
+	ZoneSettingGetResponseZonesBrowserCacheTTLValue345600   ZoneSettingGetResponseZonesBrowserCacheTTLValue = 345600
+	ZoneSettingGetResponseZonesBrowserCacheTTLValue432000   ZoneSettingGetResponseZonesBrowserCacheTTLValue = 432000
+	ZoneSettingGetResponseZonesBrowserCacheTTLValue691200   ZoneSettingGetResponseZonesBrowserCacheTTLValue = 691200
+	ZoneSettingGetResponseZonesBrowserCacheTTLValue1382400  ZoneSettingGetResponseZonesBrowserCacheTTLValue = 1382400
+	ZoneSettingGetResponseZonesBrowserCacheTTLValue2073600  ZoneSettingGetResponseZonesBrowserCacheTTLValue = 2073600
+	ZoneSettingGetResponseZonesBrowserCacheTTLValue2678400  ZoneSettingGetResponseZonesBrowserCacheTTLValue = 2678400
+	ZoneSettingGetResponseZonesBrowserCacheTTLValue5356800  ZoneSettingGetResponseZonesBrowserCacheTTLValue = 5356800
+	ZoneSettingGetResponseZonesBrowserCacheTTLValue16070400 ZoneSettingGetResponseZonesBrowserCacheTTLValue = 16070400
+	ZoneSettingGetResponseZonesBrowserCacheTTLValue31536000 ZoneSettingGetResponseZonesBrowserCacheTTLValue = 31536000
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesBrowserCacheTTLEditable bool
+
+const (
+	ZoneSettingGetResponseZonesBrowserCacheTTLEditableTrue  ZoneSettingGetResponseZonesBrowserCacheTTLEditable = true
+	ZoneSettingGetResponseZonesBrowserCacheTTLEditableFalse ZoneSettingGetResponseZonesBrowserCacheTTLEditable = false
+)
+
+// Browser Integrity Check is similar to Bad Behavior and looks for common HTTP
+// headers abused most commonly by spammers and denies access to your page. It will
+// also challenge visitors that do not have a user agent or a non standard user
+// agent (also commonly used by abuse bots, crawlers or visitors).
+// (https://support.cloudflare.com/hc/en-us/articles/200170086).
+type ZoneSettingGetResponseZonesBrowserCheck struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesBrowserCheckID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesBrowserCheckValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesBrowserCheckEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                   `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesBrowserCheckJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesBrowserCheckJSON contains the JSON metadata for the
+// struct [ZoneSettingGetResponseZonesBrowserCheck]
+type zoneSettingGetResponseZonesBrowserCheckJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesBrowserCheck) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesBrowserCheck) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesBrowserCheckID string
+
+const (
+	ZoneSettingGetResponseZonesBrowserCheckIDBrowserCheck ZoneSettingGetResponseZonesBrowserCheckID = "browser_check"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesBrowserCheckValue string
+
+const (
+	ZoneSettingGetResponseZonesBrowserCheckValueOn  ZoneSettingGetResponseZonesBrowserCheckValue = "on"
+	ZoneSettingGetResponseZonesBrowserCheckValueOff ZoneSettingGetResponseZonesBrowserCheckValue = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesBrowserCheckEditable bool
+
+const (
+	ZoneSettingGetResponseZonesBrowserCheckEditableTrue  ZoneSettingGetResponseZonesBrowserCheckEditable = true
+	ZoneSettingGetResponseZonesBrowserCheckEditableFalse ZoneSettingGetResponseZonesBrowserCheckEditable = false
+)
+
+// Cache Level functions based off the setting level. The basic setting will cache
+// most static resources (i.e., css, images, and JavaScript). The simplified
+// setting will ignore the query string when delivering a cached resource. The
+// aggressive setting will cache all static resources, including ones with a query
+// string. (https://support.cloudflare.com/hc/en-us/articles/200168256).
+type ZoneSettingGetResponseZonesCacheLevel struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesCacheLevelID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesCacheLevelValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesCacheLevelEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                 `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesCacheLevelJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesCacheLevelJSON contains the JSON metadata for the
+// struct [ZoneSettingGetResponseZonesCacheLevel]
+type zoneSettingGetResponseZonesCacheLevelJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesCacheLevel) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesCacheLevel) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesCacheLevelID string
+
+const (
+	ZoneSettingGetResponseZonesCacheLevelIDCacheLevel ZoneSettingGetResponseZonesCacheLevelID = "cache_level"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesCacheLevelValue string
+
+const (
+	ZoneSettingGetResponseZonesCacheLevelValueAggressive ZoneSettingGetResponseZonesCacheLevelValue = "aggressive"
+	ZoneSettingGetResponseZonesCacheLevelValueBasic      ZoneSettingGetResponseZonesCacheLevelValue = "basic"
+	ZoneSettingGetResponseZonesCacheLevelValueSimplified ZoneSettingGetResponseZonesCacheLevelValue = "simplified"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesCacheLevelEditable bool
+
+const (
+	ZoneSettingGetResponseZonesCacheLevelEditableTrue  ZoneSettingGetResponseZonesCacheLevelEditable = true
+	ZoneSettingGetResponseZonesCacheLevelEditableFalse ZoneSettingGetResponseZonesCacheLevelEditable = false
+)
+
+// Specify how long a visitor is allowed access to your site after successfully
+// completing a challenge (such as a CAPTCHA). After the TTL has expired the
+// visitor will have to complete a new challenge. We recommend a 15 - 45 minute
+// setting and will attempt to honor any setting above 45 minutes.
+// (https://support.cloudflare.com/hc/en-us/articles/200170136).
+type ZoneSettingGetResponseZonesChallengeTTL struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesChallengeTTLID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesChallengeTTLValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesChallengeTTLEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                   `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesChallengeTTLJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesChallengeTTLJSON contains the JSON metadata for the
+// struct [ZoneSettingGetResponseZonesChallengeTTL]
+type zoneSettingGetResponseZonesChallengeTTLJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesChallengeTTL) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesChallengeTTL) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesChallengeTTLID string
+
+const (
+	ZoneSettingGetResponseZonesChallengeTTLIDChallengeTTL ZoneSettingGetResponseZonesChallengeTTLID = "challenge_ttl"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesChallengeTTLValue float64
+
+const (
+	ZoneSettingGetResponseZonesChallengeTTLValue300      ZoneSettingGetResponseZonesChallengeTTLValue = 300
+	ZoneSettingGetResponseZonesChallengeTTLValue900      ZoneSettingGetResponseZonesChallengeTTLValue = 900
+	ZoneSettingGetResponseZonesChallengeTTLValue1800     ZoneSettingGetResponseZonesChallengeTTLValue = 1800
+	ZoneSettingGetResponseZonesChallengeTTLValue2700     ZoneSettingGetResponseZonesChallengeTTLValue = 2700
+	ZoneSettingGetResponseZonesChallengeTTLValue3600     ZoneSettingGetResponseZonesChallengeTTLValue = 3600
+	ZoneSettingGetResponseZonesChallengeTTLValue7200     ZoneSettingGetResponseZonesChallengeTTLValue = 7200
+	ZoneSettingGetResponseZonesChallengeTTLValue10800    ZoneSettingGetResponseZonesChallengeTTLValue = 10800
+	ZoneSettingGetResponseZonesChallengeTTLValue14400    ZoneSettingGetResponseZonesChallengeTTLValue = 14400
+	ZoneSettingGetResponseZonesChallengeTTLValue28800    ZoneSettingGetResponseZonesChallengeTTLValue = 28800
+	ZoneSettingGetResponseZonesChallengeTTLValue57600    ZoneSettingGetResponseZonesChallengeTTLValue = 57600
+	ZoneSettingGetResponseZonesChallengeTTLValue86400    ZoneSettingGetResponseZonesChallengeTTLValue = 86400
+	ZoneSettingGetResponseZonesChallengeTTLValue604800   ZoneSettingGetResponseZonesChallengeTTLValue = 604800
+	ZoneSettingGetResponseZonesChallengeTTLValue2592000  ZoneSettingGetResponseZonesChallengeTTLValue = 2592000
+	ZoneSettingGetResponseZonesChallengeTTLValue31536000 ZoneSettingGetResponseZonesChallengeTTLValue = 31536000
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesChallengeTTLEditable bool
+
+const (
+	ZoneSettingGetResponseZonesChallengeTTLEditableTrue  ZoneSettingGetResponseZonesChallengeTTLEditable = true
+	ZoneSettingGetResponseZonesChallengeTTLEditableFalse ZoneSettingGetResponseZonesChallengeTTLEditable = false
+)
+
+// An allowlist of ciphers for TLS termination. These ciphers must be in the
+// BoringSSL format.
+type ZoneSettingGetResponseZonesCiphers struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesCiphersID `json:"id,required"`
+	// Current value of the zone setting.
+	Value []string `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesCiphersEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                              `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesCiphersJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesCiphersJSON contains the JSON metadata for the struct
+// [ZoneSettingGetResponseZonesCiphers]
+type zoneSettingGetResponseZonesCiphersJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesCiphers) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesCiphers) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesCiphersID string
+
+const (
+	ZoneSettingGetResponseZonesCiphersIDCiphers ZoneSettingGetResponseZonesCiphersID = "ciphers"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesCiphersEditable bool
+
+const (
+	ZoneSettingGetResponseZonesCiphersEditableTrue  ZoneSettingGetResponseZonesCiphersEditable = true
+	ZoneSettingGetResponseZonesCiphersEditableFalse ZoneSettingGetResponseZonesCiphersEditable = false
+)
+
+// Whether or not cname flattening is on.
+type ZoneSettingGetResponseZonesCnameFlattening struct {
+	// How to flatten the cname destination.
+	ID ZoneSettingGetResponseZonesCnameFlatteningID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesCnameFlatteningValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesCnameFlatteningEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                      `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesCnameFlatteningJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesCnameFlatteningJSON contains the JSON metadata for
+// the struct [ZoneSettingGetResponseZonesCnameFlattening]
+type zoneSettingGetResponseZonesCnameFlatteningJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesCnameFlattening) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesCnameFlattening) implementsZoneSettingGetResponse() {}
+
+// How to flatten the cname destination.
+type ZoneSettingGetResponseZonesCnameFlatteningID string
+
+const (
+	ZoneSettingGetResponseZonesCnameFlatteningIDCnameFlattening ZoneSettingGetResponseZonesCnameFlatteningID = "cname_flattening"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesCnameFlatteningValue string
+
+const (
+	ZoneSettingGetResponseZonesCnameFlatteningValueFlattenAtRoot ZoneSettingGetResponseZonesCnameFlatteningValue = "flatten_at_root"
+	ZoneSettingGetResponseZonesCnameFlatteningValueFlattenAll    ZoneSettingGetResponseZonesCnameFlatteningValue = "flatten_all"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesCnameFlatteningEditable bool
+
+const (
+	ZoneSettingGetResponseZonesCnameFlatteningEditableTrue  ZoneSettingGetResponseZonesCnameFlatteningEditable = true
+	ZoneSettingGetResponseZonesCnameFlatteningEditableFalse ZoneSettingGetResponseZonesCnameFlatteningEditable = false
+)
+
+// Development Mode temporarily allows you to enter development mode for your
+// websites if you need to make changes to your site. This will bypass Cloudflare's
+// accelerated cache and slow down your site, but is useful if you are making
+// changes to cacheable content (like images, css, or JavaScript) and would like to
+// see those changes right away. Once entered, development mode will last for 3
+// hours and then automatically toggle off.
+type ZoneSettingGetResponseZonesDevelopmentMode struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesDevelopmentModeID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesDevelopmentModeValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesDevelopmentModeEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
+	// Value of the zone setting. Notes: The interval (in seconds) from when
+	// development mode expires (positive integer) or last expired (negative integer)
+	// for the domain. If development mode has never been enabled, this value is false.
+	TimeRemaining float64                                        `json:"time_remaining"`
+	JSON          zoneSettingGetResponseZonesDevelopmentModeJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesDevelopmentModeJSON contains the JSON metadata for
+// the struct [ZoneSettingGetResponseZonesDevelopmentMode]
+type zoneSettingGetResponseZonesDevelopmentModeJSON struct {
+	ID            apijson.Field
+	Value         apijson.Field
+	Editable      apijson.Field
+	ModifiedOn    apijson.Field
+	TimeRemaining apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesDevelopmentMode) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesDevelopmentMode) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesDevelopmentModeID string
+
+const (
+	ZoneSettingGetResponseZonesDevelopmentModeIDDevelopmentMode ZoneSettingGetResponseZonesDevelopmentModeID = "development_mode"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesDevelopmentModeValue string
+
+const (
+	ZoneSettingGetResponseZonesDevelopmentModeValueOn  ZoneSettingGetResponseZonesDevelopmentModeValue = "on"
+	ZoneSettingGetResponseZonesDevelopmentModeValueOff ZoneSettingGetResponseZonesDevelopmentModeValue = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesDevelopmentModeEditable bool
+
+const (
+	ZoneSettingGetResponseZonesDevelopmentModeEditableTrue  ZoneSettingGetResponseZonesDevelopmentModeEditable = true
+	ZoneSettingGetResponseZonesDevelopmentModeEditableFalse ZoneSettingGetResponseZonesDevelopmentModeEditable = false
+)
+
+// When enabled, Cloudflare will attempt to speed up overall page loads by serving
+// `103` responses with `Link` headers from the final response. Refer to
+// [Early Hints](https://developers.cloudflare.com/cache/about/early-hints) for
+// more information.
+type ZoneSettingGetResponseZonesEarlyHints struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesEarlyHintsID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesEarlyHintsValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesEarlyHintsEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                 `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesEarlyHintsJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesEarlyHintsJSON contains the JSON metadata for the
+// struct [ZoneSettingGetResponseZonesEarlyHints]
+type zoneSettingGetResponseZonesEarlyHintsJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesEarlyHints) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesEarlyHints) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesEarlyHintsID string
+
+const (
+	ZoneSettingGetResponseZonesEarlyHintsIDEarlyHints ZoneSettingGetResponseZonesEarlyHintsID = "early_hints"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesEarlyHintsValue string
+
+const (
+	ZoneSettingGetResponseZonesEarlyHintsValueOn  ZoneSettingGetResponseZonesEarlyHintsValue = "on"
+	ZoneSettingGetResponseZonesEarlyHintsValueOff ZoneSettingGetResponseZonesEarlyHintsValue = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesEarlyHintsEditable bool
+
+const (
+	ZoneSettingGetResponseZonesEarlyHintsEditableTrue  ZoneSettingGetResponseZonesEarlyHintsEditable = true
+	ZoneSettingGetResponseZonesEarlyHintsEditableFalse ZoneSettingGetResponseZonesEarlyHintsEditable = false
+)
+
+// Time (in seconds) that a resource will be ensured to remain on Cloudflare's
+// cache servers.
+type ZoneSettingGetResponseZonesEdgeCacheTTL struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesEdgeCacheTTLID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesEdgeCacheTTLValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesEdgeCacheTTLEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                   `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesEdgeCacheTTLJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesEdgeCacheTTLJSON contains the JSON metadata for the
+// struct [ZoneSettingGetResponseZonesEdgeCacheTTL]
+type zoneSettingGetResponseZonesEdgeCacheTTLJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesEdgeCacheTTL) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesEdgeCacheTTL) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesEdgeCacheTTLID string
+
+const (
+	ZoneSettingGetResponseZonesEdgeCacheTTLIDEdgeCacheTTL ZoneSettingGetResponseZonesEdgeCacheTTLID = "edge_cache_ttl"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesEdgeCacheTTLValue float64
+
+const (
+	ZoneSettingGetResponseZonesEdgeCacheTTLValue30     ZoneSettingGetResponseZonesEdgeCacheTTLValue = 30
+	ZoneSettingGetResponseZonesEdgeCacheTTLValue60     ZoneSettingGetResponseZonesEdgeCacheTTLValue = 60
+	ZoneSettingGetResponseZonesEdgeCacheTTLValue300    ZoneSettingGetResponseZonesEdgeCacheTTLValue = 300
+	ZoneSettingGetResponseZonesEdgeCacheTTLValue1200   ZoneSettingGetResponseZonesEdgeCacheTTLValue = 1200
+	ZoneSettingGetResponseZonesEdgeCacheTTLValue1800   ZoneSettingGetResponseZonesEdgeCacheTTLValue = 1800
+	ZoneSettingGetResponseZonesEdgeCacheTTLValue3600   ZoneSettingGetResponseZonesEdgeCacheTTLValue = 3600
+	ZoneSettingGetResponseZonesEdgeCacheTTLValue7200   ZoneSettingGetResponseZonesEdgeCacheTTLValue = 7200
+	ZoneSettingGetResponseZonesEdgeCacheTTLValue10800  ZoneSettingGetResponseZonesEdgeCacheTTLValue = 10800
+	ZoneSettingGetResponseZonesEdgeCacheTTLValue14400  ZoneSettingGetResponseZonesEdgeCacheTTLValue = 14400
+	ZoneSettingGetResponseZonesEdgeCacheTTLValue18000  ZoneSettingGetResponseZonesEdgeCacheTTLValue = 18000
+	ZoneSettingGetResponseZonesEdgeCacheTTLValue28800  ZoneSettingGetResponseZonesEdgeCacheTTLValue = 28800
+	ZoneSettingGetResponseZonesEdgeCacheTTLValue43200  ZoneSettingGetResponseZonesEdgeCacheTTLValue = 43200
+	ZoneSettingGetResponseZonesEdgeCacheTTLValue57600  ZoneSettingGetResponseZonesEdgeCacheTTLValue = 57600
+	ZoneSettingGetResponseZonesEdgeCacheTTLValue72000  ZoneSettingGetResponseZonesEdgeCacheTTLValue = 72000
+	ZoneSettingGetResponseZonesEdgeCacheTTLValue86400  ZoneSettingGetResponseZonesEdgeCacheTTLValue = 86400
+	ZoneSettingGetResponseZonesEdgeCacheTTLValue172800 ZoneSettingGetResponseZonesEdgeCacheTTLValue = 172800
+	ZoneSettingGetResponseZonesEdgeCacheTTLValue259200 ZoneSettingGetResponseZonesEdgeCacheTTLValue = 259200
+	ZoneSettingGetResponseZonesEdgeCacheTTLValue345600 ZoneSettingGetResponseZonesEdgeCacheTTLValue = 345600
+	ZoneSettingGetResponseZonesEdgeCacheTTLValue432000 ZoneSettingGetResponseZonesEdgeCacheTTLValue = 432000
+	ZoneSettingGetResponseZonesEdgeCacheTTLValue518400 ZoneSettingGetResponseZonesEdgeCacheTTLValue = 518400
+	ZoneSettingGetResponseZonesEdgeCacheTTLValue604800 ZoneSettingGetResponseZonesEdgeCacheTTLValue = 604800
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesEdgeCacheTTLEditable bool
+
+const (
+	ZoneSettingGetResponseZonesEdgeCacheTTLEditableTrue  ZoneSettingGetResponseZonesEdgeCacheTTLEditable = true
+	ZoneSettingGetResponseZonesEdgeCacheTTLEditableFalse ZoneSettingGetResponseZonesEdgeCacheTTLEditable = false
+)
+
+// Encrypt email adresses on your web page from bots, while keeping them visible to
+// humans. (https://support.cloudflare.com/hc/en-us/articles/200170016).
+type ZoneSettingGetResponseZonesEmailObfuscation struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesEmailObfuscationID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesEmailObfuscationValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesEmailObfuscationEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                       `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesEmailObfuscationJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesEmailObfuscationJSON contains the JSON metadata for
+// the struct [ZoneSettingGetResponseZonesEmailObfuscation]
+type zoneSettingGetResponseZonesEmailObfuscationJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesEmailObfuscation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesEmailObfuscation) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesEmailObfuscationID string
+
+const (
+	ZoneSettingGetResponseZonesEmailObfuscationIDEmailObfuscation ZoneSettingGetResponseZonesEmailObfuscationID = "email_obfuscation"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesEmailObfuscationValue string
+
+const (
+	ZoneSettingGetResponseZonesEmailObfuscationValueOn  ZoneSettingGetResponseZonesEmailObfuscationValue = "on"
+	ZoneSettingGetResponseZonesEmailObfuscationValueOff ZoneSettingGetResponseZonesEmailObfuscationValue = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesEmailObfuscationEditable bool
+
+const (
+	ZoneSettingGetResponseZonesEmailObfuscationEditableTrue  ZoneSettingGetResponseZonesEmailObfuscationEditable = true
+	ZoneSettingGetResponseZonesEmailObfuscationEditableFalse ZoneSettingGetResponseZonesEmailObfuscationEditable = false
+)
+
+// HTTP/2 Edge Prioritization optimises the delivery of resources served through
+// HTTP/2 to improve page load performance. It also supports fine control of
+// content delivery when used in conjunction with Workers.
+type ZoneSettingGetResponseZonesH2Prioritization struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesH2PrioritizationID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesH2PrioritizationValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesH2PrioritizationEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                       `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesH2PrioritizationJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesH2PrioritizationJSON contains the JSON metadata for
+// the struct [ZoneSettingGetResponseZonesH2Prioritization]
+type zoneSettingGetResponseZonesH2PrioritizationJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesH2Prioritization) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesH2Prioritization) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesH2PrioritizationID string
+
+const (
+	ZoneSettingGetResponseZonesH2PrioritizationIDH2Prioritization ZoneSettingGetResponseZonesH2PrioritizationID = "h2_prioritization"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesH2PrioritizationValue string
+
+const (
+	ZoneSettingGetResponseZonesH2PrioritizationValueOn     ZoneSettingGetResponseZonesH2PrioritizationValue = "on"
+	ZoneSettingGetResponseZonesH2PrioritizationValueOff    ZoneSettingGetResponseZonesH2PrioritizationValue = "off"
+	ZoneSettingGetResponseZonesH2PrioritizationValueCustom ZoneSettingGetResponseZonesH2PrioritizationValue = "custom"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesH2PrioritizationEditable bool
+
+const (
+	ZoneSettingGetResponseZonesH2PrioritizationEditableTrue  ZoneSettingGetResponseZonesH2PrioritizationEditable = true
+	ZoneSettingGetResponseZonesH2PrioritizationEditableFalse ZoneSettingGetResponseZonesH2PrioritizationEditable = false
+)
+
+// When enabled, the Hotlink Protection option ensures that other sites cannot suck
+// up your bandwidth by building pages that use images hosted on your site. Anytime
+// a request for an image on your site hits Cloudflare, we check to ensure that
+// it's not another site requesting them. People will still be able to download and
+// view images from your page, but other sites won't be able to steal them for use
+// on their own pages.
+// (https://support.cloudflare.com/hc/en-us/articles/200170026).
+type ZoneSettingGetResponseZonesHotlinkProtection struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesHotlinkProtectionID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesHotlinkProtectionValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesHotlinkProtectionEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                        `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesHotlinkProtectionJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesHotlinkProtectionJSON contains the JSON metadata for
+// the struct [ZoneSettingGetResponseZonesHotlinkProtection]
+type zoneSettingGetResponseZonesHotlinkProtectionJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesHotlinkProtection) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesHotlinkProtection) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesHotlinkProtectionID string
+
+const (
+	ZoneSettingGetResponseZonesHotlinkProtectionIDHotlinkProtection ZoneSettingGetResponseZonesHotlinkProtectionID = "hotlink_protection"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesHotlinkProtectionValue string
+
+const (
+	ZoneSettingGetResponseZonesHotlinkProtectionValueOn  ZoneSettingGetResponseZonesHotlinkProtectionValue = "on"
+	ZoneSettingGetResponseZonesHotlinkProtectionValueOff ZoneSettingGetResponseZonesHotlinkProtectionValue = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesHotlinkProtectionEditable bool
+
+const (
+	ZoneSettingGetResponseZonesHotlinkProtectionEditableTrue  ZoneSettingGetResponseZonesHotlinkProtectionEditable = true
+	ZoneSettingGetResponseZonesHotlinkProtectionEditableFalse ZoneSettingGetResponseZonesHotlinkProtectionEditable = false
+)
+
+// HTTP2 enabled for this zone.
+type ZoneSettingGetResponseZonesHTTP2 struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesHTTP2ID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesHTTP2Value `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesHTTP2Editable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                            `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesHTTP2JSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesHTTP2JSON contains the JSON metadata for the struct
+// [ZoneSettingGetResponseZonesHTTP2]
+type zoneSettingGetResponseZonesHTTP2JSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesHTTP2) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesHTTP2) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesHTTP2ID string
+
+const (
+	ZoneSettingGetResponseZonesHTTP2IDHTTP2 ZoneSettingGetResponseZonesHTTP2ID = "http2"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesHTTP2Value string
+
+const (
+	ZoneSettingGetResponseZonesHTTP2ValueOn  ZoneSettingGetResponseZonesHTTP2Value = "on"
+	ZoneSettingGetResponseZonesHTTP2ValueOff ZoneSettingGetResponseZonesHTTP2Value = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesHTTP2Editable bool
+
+const (
+	ZoneSettingGetResponseZonesHTTP2EditableTrue  ZoneSettingGetResponseZonesHTTP2Editable = true
+	ZoneSettingGetResponseZonesHTTP2EditableFalse ZoneSettingGetResponseZonesHTTP2Editable = false
+)
+
+// HTTP3 enabled for this zone.
+type ZoneSettingGetResponseZonesHTTP3 struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesHTTP3ID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesHTTP3Value `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesHTTP3Editable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                            `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesHTTP3JSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesHTTP3JSON contains the JSON metadata for the struct
+// [ZoneSettingGetResponseZonesHTTP3]
+type zoneSettingGetResponseZonesHTTP3JSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesHTTP3) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesHTTP3) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesHTTP3ID string
+
+const (
+	ZoneSettingGetResponseZonesHTTP3IDHTTP3 ZoneSettingGetResponseZonesHTTP3ID = "http3"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesHTTP3Value string
+
+const (
+	ZoneSettingGetResponseZonesHTTP3ValueOn  ZoneSettingGetResponseZonesHTTP3Value = "on"
+	ZoneSettingGetResponseZonesHTTP3ValueOff ZoneSettingGetResponseZonesHTTP3Value = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesHTTP3Editable bool
+
+const (
+	ZoneSettingGetResponseZonesHTTP3EditableTrue  ZoneSettingGetResponseZonesHTTP3Editable = true
+	ZoneSettingGetResponseZonesHTTP3EditableFalse ZoneSettingGetResponseZonesHTTP3Editable = false
+)
+
+// Image Resizing provides on-demand resizing, conversion and optimisation for
+// images served through Cloudflare's network. Refer to the
+// [Image Resizing documentation](https://developers.cloudflare.com/images/) for
+// more information.
+type ZoneSettingGetResponseZonesImageResizing struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesImageResizingID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesImageResizingValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesImageResizingEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                    `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesImageResizingJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesImageResizingJSON contains the JSON metadata for the
+// struct [ZoneSettingGetResponseZonesImageResizing]
+type zoneSettingGetResponseZonesImageResizingJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesImageResizing) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesImageResizing) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesImageResizingID string
+
+const (
+	ZoneSettingGetResponseZonesImageResizingIDImageResizing ZoneSettingGetResponseZonesImageResizingID = "image_resizing"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesImageResizingValue string
+
+const (
+	ZoneSettingGetResponseZonesImageResizingValueOn   ZoneSettingGetResponseZonesImageResizingValue = "on"
+	ZoneSettingGetResponseZonesImageResizingValueOff  ZoneSettingGetResponseZonesImageResizingValue = "off"
+	ZoneSettingGetResponseZonesImageResizingValueOpen ZoneSettingGetResponseZonesImageResizingValue = "open"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesImageResizingEditable bool
+
+const (
+	ZoneSettingGetResponseZonesImageResizingEditableTrue  ZoneSettingGetResponseZonesImageResizingEditable = true
+	ZoneSettingGetResponseZonesImageResizingEditableFalse ZoneSettingGetResponseZonesImageResizingEditable = false
+)
+
+// Enable IP Geolocation to have Cloudflare geolocate visitors to your website and
+// pass the country code to you.
+// (https://support.cloudflare.com/hc/en-us/articles/200168236).
+type ZoneSettingGetResponseZonesIPGeolocation struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesIPGeolocationID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesIPGeolocationValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesIPGeolocationEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                    `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesIPGeolocationJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesIPGeolocationJSON contains the JSON metadata for the
+// struct [ZoneSettingGetResponseZonesIPGeolocation]
+type zoneSettingGetResponseZonesIPGeolocationJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesIPGeolocation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesIPGeolocation) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesIPGeolocationID string
+
+const (
+	ZoneSettingGetResponseZonesIPGeolocationIDIPGeolocation ZoneSettingGetResponseZonesIPGeolocationID = "ip_geolocation"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesIPGeolocationValue string
+
+const (
+	ZoneSettingGetResponseZonesIPGeolocationValueOn  ZoneSettingGetResponseZonesIPGeolocationValue = "on"
+	ZoneSettingGetResponseZonesIPGeolocationValueOff ZoneSettingGetResponseZonesIPGeolocationValue = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesIPGeolocationEditable bool
+
+const (
+	ZoneSettingGetResponseZonesIPGeolocationEditableTrue  ZoneSettingGetResponseZonesIPGeolocationEditable = true
+	ZoneSettingGetResponseZonesIPGeolocationEditableFalse ZoneSettingGetResponseZonesIPGeolocationEditable = false
+)
+
+// Enable IPv6 on all subdomains that are Cloudflare enabled.
+// (https://support.cloudflare.com/hc/en-us/articles/200168586).
+type ZoneSettingGetResponseZonesIPV6 struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesIPV6ID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesIPV6Value `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesIPV6Editable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                           `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesIPV6JSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesIPV6JSON contains the JSON metadata for the struct
+// [ZoneSettingGetResponseZonesIPV6]
+type zoneSettingGetResponseZonesIPV6JSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesIPV6) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesIPV6) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesIPV6ID string
+
+const (
+	ZoneSettingGetResponseZonesIPV6IDIPV6 ZoneSettingGetResponseZonesIPV6ID = "ipv6"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesIPV6Value string
+
+const (
+	ZoneSettingGetResponseZonesIPV6ValueOff ZoneSettingGetResponseZonesIPV6Value = "off"
+	ZoneSettingGetResponseZonesIPV6ValueOn  ZoneSettingGetResponseZonesIPV6Value = "on"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesIPV6Editable bool
+
+const (
+	ZoneSettingGetResponseZonesIPV6EditableTrue  ZoneSettingGetResponseZonesIPV6Editable = true
+	ZoneSettingGetResponseZonesIPV6EditableFalse ZoneSettingGetResponseZonesIPV6Editable = false
+)
+
+// Maximum size of an allowable upload.
+type ZoneSettingGetResponseZonesMaxUpload struct {
+	// identifier of the zone setting.
+	ID ZoneSettingGetResponseZonesMaxUploadID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesMaxUploadValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesMaxUploadEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesMaxUploadJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesMaxUploadJSON contains the JSON metadata for the
+// struct [ZoneSettingGetResponseZonesMaxUpload]
+type zoneSettingGetResponseZonesMaxUploadJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesMaxUpload) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesMaxUpload) implementsZoneSettingGetResponse() {}
+
+// identifier of the zone setting.
+type ZoneSettingGetResponseZonesMaxUploadID string
+
+const (
+	ZoneSettingGetResponseZonesMaxUploadIDMaxUpload ZoneSettingGetResponseZonesMaxUploadID = "max_upload"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesMaxUploadValue float64
+
+const (
+	ZoneSettingGetResponseZonesMaxUploadValue100 ZoneSettingGetResponseZonesMaxUploadValue = 100
+	ZoneSettingGetResponseZonesMaxUploadValue200 ZoneSettingGetResponseZonesMaxUploadValue = 200
+	ZoneSettingGetResponseZonesMaxUploadValue500 ZoneSettingGetResponseZonesMaxUploadValue = 500
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesMaxUploadEditable bool
+
+const (
+	ZoneSettingGetResponseZonesMaxUploadEditableTrue  ZoneSettingGetResponseZonesMaxUploadEditable = true
+	ZoneSettingGetResponseZonesMaxUploadEditableFalse ZoneSettingGetResponseZonesMaxUploadEditable = false
+)
+
+// Only accepts HTTPS requests that use at least the TLS protocol version
+// specified. For example, if TLS 1.1 is selected, TLS 1.0 connections will be
+// rejected, while 1.1, 1.2, and 1.3 (if enabled) will be permitted.
+type ZoneSettingGetResponseZonesMinTLSVersion struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesMinTLSVersionID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesMinTLSVersionValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesMinTLSVersionEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                    `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesMinTLSVersionJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesMinTLSVersionJSON contains the JSON metadata for the
+// struct [ZoneSettingGetResponseZonesMinTLSVersion]
+type zoneSettingGetResponseZonesMinTLSVersionJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesMinTLSVersion) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesMinTLSVersion) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesMinTLSVersionID string
+
+const (
+	ZoneSettingGetResponseZonesMinTLSVersionIDMinTLSVersion ZoneSettingGetResponseZonesMinTLSVersionID = "min_tls_version"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesMinTLSVersionValue string
+
+const (
+	ZoneSettingGetResponseZonesMinTLSVersionValue1_0 ZoneSettingGetResponseZonesMinTLSVersionValue = "1.0"
+	ZoneSettingGetResponseZonesMinTLSVersionValue1_1 ZoneSettingGetResponseZonesMinTLSVersionValue = "1.1"
+	ZoneSettingGetResponseZonesMinTLSVersionValue1_2 ZoneSettingGetResponseZonesMinTLSVersionValue = "1.2"
+	ZoneSettingGetResponseZonesMinTLSVersionValue1_3 ZoneSettingGetResponseZonesMinTLSVersionValue = "1.3"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesMinTLSVersionEditable bool
+
+const (
+	ZoneSettingGetResponseZonesMinTLSVersionEditableTrue  ZoneSettingGetResponseZonesMinTLSVersionEditable = true
+	ZoneSettingGetResponseZonesMinTLSVersionEditableFalse ZoneSettingGetResponseZonesMinTLSVersionEditable = false
+)
+
+// Automatically minify certain assets for your website. Refer to
+// [Using Cloudflare Auto Minify](https://support.cloudflare.com/hc/en-us/articles/200168196)
+// for more information.
+type ZoneSettingGetResponseZonesMinify struct {
+	// Zone setting identifier.
+	ID ZoneSettingGetResponseZonesMinifyID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesMinifyValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesMinifyEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                             `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesMinifyJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesMinifyJSON contains the JSON metadata for the struct
+// [ZoneSettingGetResponseZonesMinify]
+type zoneSettingGetResponseZonesMinifyJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesMinify) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesMinify) implementsZoneSettingGetResponse() {}
+
+// Zone setting identifier.
+type ZoneSettingGetResponseZonesMinifyID string
+
+const (
+	ZoneSettingGetResponseZonesMinifyIDMinify ZoneSettingGetResponseZonesMinifyID = "minify"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesMinifyValue struct {
+	// Automatically minify all CSS files for your website.
+	Css ZoneSettingGetResponseZonesMinifyValueCss `json:"css"`
+	// Automatically minify all HTML files for your website.
+	HTML ZoneSettingGetResponseZonesMinifyValueHTML `json:"html"`
+	// Automatically minify all JavaScript files for your website.
+	Js   ZoneSettingGetResponseZonesMinifyValueJs   `json:"js"`
+	JSON zoneSettingGetResponseZonesMinifyValueJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesMinifyValueJSON contains the JSON metadata for the
+// struct [ZoneSettingGetResponseZonesMinifyValue]
+type zoneSettingGetResponseZonesMinifyValueJSON struct {
+	Css         apijson.Field
+	HTML        apijson.Field
+	Js          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesMinifyValue) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Automatically minify all CSS files for your website.
+type ZoneSettingGetResponseZonesMinifyValueCss string
+
+const (
+	ZoneSettingGetResponseZonesMinifyValueCssOn  ZoneSettingGetResponseZonesMinifyValueCss = "on"
+	ZoneSettingGetResponseZonesMinifyValueCssOff ZoneSettingGetResponseZonesMinifyValueCss = "off"
+)
+
+// Automatically minify all HTML files for your website.
+type ZoneSettingGetResponseZonesMinifyValueHTML string
+
+const (
+	ZoneSettingGetResponseZonesMinifyValueHTMLOn  ZoneSettingGetResponseZonesMinifyValueHTML = "on"
+	ZoneSettingGetResponseZonesMinifyValueHTMLOff ZoneSettingGetResponseZonesMinifyValueHTML = "off"
+)
+
+// Automatically minify all JavaScript files for your website.
+type ZoneSettingGetResponseZonesMinifyValueJs string
+
+const (
+	ZoneSettingGetResponseZonesMinifyValueJsOn  ZoneSettingGetResponseZonesMinifyValueJs = "on"
+	ZoneSettingGetResponseZonesMinifyValueJsOff ZoneSettingGetResponseZonesMinifyValueJs = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesMinifyEditable bool
+
+const (
+	ZoneSettingGetResponseZonesMinifyEditableTrue  ZoneSettingGetResponseZonesMinifyEditable = true
+	ZoneSettingGetResponseZonesMinifyEditableFalse ZoneSettingGetResponseZonesMinifyEditable = false
+)
+
+// Automatically optimize image loading for website visitors on mobile devices.
+// Refer to
+// [our blog post](http://blog.cloudflare.com/mirage2-solving-mobile-speed) for
+// more information.
+type ZoneSettingGetResponseZonesMirage struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesMirageID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesMirageValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesMirageEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                             `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesMirageJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesMirageJSON contains the JSON metadata for the struct
+// [ZoneSettingGetResponseZonesMirage]
+type zoneSettingGetResponseZonesMirageJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesMirage) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesMirage) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesMirageID string
+
+const (
+	ZoneSettingGetResponseZonesMirageIDMirage ZoneSettingGetResponseZonesMirageID = "mirage"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesMirageValue string
+
+const (
+	ZoneSettingGetResponseZonesMirageValueOn  ZoneSettingGetResponseZonesMirageValue = "on"
+	ZoneSettingGetResponseZonesMirageValueOff ZoneSettingGetResponseZonesMirageValue = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesMirageEditable bool
+
+const (
+	ZoneSettingGetResponseZonesMirageEditableTrue  ZoneSettingGetResponseZonesMirageEditable = true
+	ZoneSettingGetResponseZonesMirageEditableFalse ZoneSettingGetResponseZonesMirageEditable = false
+)
+
+// Automatically redirect visitors on mobile devices to a mobile-optimized
+// subdomain. Refer to
+// [Understanding Cloudflare Mobile Redirect](https://support.cloudflare.com/hc/articles/200168336)
+// for more information.
+type ZoneSettingGetResponseZonesMobileRedirect struct {
+	// Identifier of the zone setting.
+	ID ZoneSettingGetResponseZonesMobileRedirectID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesMobileRedirectValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesMobileRedirectEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                     `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesMobileRedirectJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesMobileRedirectJSON contains the JSON metadata for the
+// struct [ZoneSettingGetResponseZonesMobileRedirect]
+type zoneSettingGetResponseZonesMobileRedirectJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesMobileRedirect) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesMobileRedirect) implementsZoneSettingGetResponse() {}
+
+// Identifier of the zone setting.
+type ZoneSettingGetResponseZonesMobileRedirectID string
+
+const (
+	ZoneSettingGetResponseZonesMobileRedirectIDMobileRedirect ZoneSettingGetResponseZonesMobileRedirectID = "mobile_redirect"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesMobileRedirectValue struct {
+	// Which subdomain prefix you wish to redirect visitors on mobile devices to
+	// (subdomain must already exist).
+	MobileSubdomain string `json:"mobile_subdomain,nullable"`
+	// Whether or not mobile redirect is enabled.
+	Status ZoneSettingGetResponseZonesMobileRedirectValueStatus `json:"status"`
+	// Whether to drop the current page path and redirect to the mobile subdomain URL
+	// root, or keep the path and redirect to the same page on the mobile subdomain.
+	StripUri bool                                               `json:"strip_uri"`
+	JSON     zoneSettingGetResponseZonesMobileRedirectValueJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesMobileRedirectValueJSON contains the JSON metadata
+// for the struct [ZoneSettingGetResponseZonesMobileRedirectValue]
+type zoneSettingGetResponseZonesMobileRedirectValueJSON struct {
+	MobileSubdomain apijson.Field
+	Status          apijson.Field
+	StripUri        apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesMobileRedirectValue) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether or not mobile redirect is enabled.
+type ZoneSettingGetResponseZonesMobileRedirectValueStatus string
+
+const (
+	ZoneSettingGetResponseZonesMobileRedirectValueStatusOn  ZoneSettingGetResponseZonesMobileRedirectValueStatus = "on"
+	ZoneSettingGetResponseZonesMobileRedirectValueStatusOff ZoneSettingGetResponseZonesMobileRedirectValueStatus = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesMobileRedirectEditable bool
+
+const (
+	ZoneSettingGetResponseZonesMobileRedirectEditableTrue  ZoneSettingGetResponseZonesMobileRedirectEditable = true
+	ZoneSettingGetResponseZonesMobileRedirectEditableFalse ZoneSettingGetResponseZonesMobileRedirectEditable = false
+)
+
+// Enable Network Error Logging reporting on your zone. (Beta)
+type ZoneSettingGetResponseZonesNEL struct {
+	// Zone setting identifier.
+	ID ZoneSettingGetResponseZonesNELID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesNELValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesNELEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                          `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesNELJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesNELJSON contains the JSON metadata for the struct
+// [ZoneSettingGetResponseZonesNEL]
+type zoneSettingGetResponseZonesNELJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesNEL) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesNEL) implementsZoneSettingGetResponse() {}
+
+// Zone setting identifier.
+type ZoneSettingGetResponseZonesNELID string
+
+const (
+	ZoneSettingGetResponseZonesNELIDNEL ZoneSettingGetResponseZonesNELID = "nel"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesNELValue struct {
+	Enabled bool                                    `json:"enabled"`
+	JSON    zoneSettingGetResponseZonesNELValueJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesNELValueJSON contains the JSON metadata for the
+// struct [ZoneSettingGetResponseZonesNELValue]
+type zoneSettingGetResponseZonesNELValueJSON struct {
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesNELValue) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesNELEditable bool
+
+const (
+	ZoneSettingGetResponseZonesNELEditableTrue  ZoneSettingGetResponseZonesNELEditable = true
+	ZoneSettingGetResponseZonesNELEditableFalse ZoneSettingGetResponseZonesNELEditable = false
+)
+
+// Enables the Opportunistic Encryption feature for a zone.
+type ZoneSettingGetResponseZonesOpportunisticEncryption struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesOpportunisticEncryptionID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesOpportunisticEncryptionValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesOpportunisticEncryptionEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                              `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesOpportunisticEncryptionJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesOpportunisticEncryptionJSON contains the JSON
+// metadata for the struct [ZoneSettingGetResponseZonesOpportunisticEncryption]
+type zoneSettingGetResponseZonesOpportunisticEncryptionJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesOpportunisticEncryption) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesOpportunisticEncryption) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesOpportunisticEncryptionID string
+
+const (
+	ZoneSettingGetResponseZonesOpportunisticEncryptionIDOpportunisticEncryption ZoneSettingGetResponseZonesOpportunisticEncryptionID = "opportunistic_encryption"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesOpportunisticEncryptionValue string
+
+const (
+	ZoneSettingGetResponseZonesOpportunisticEncryptionValueOn  ZoneSettingGetResponseZonesOpportunisticEncryptionValue = "on"
+	ZoneSettingGetResponseZonesOpportunisticEncryptionValueOff ZoneSettingGetResponseZonesOpportunisticEncryptionValue = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesOpportunisticEncryptionEditable bool
+
+const (
+	ZoneSettingGetResponseZonesOpportunisticEncryptionEditableTrue  ZoneSettingGetResponseZonesOpportunisticEncryptionEditable = true
+	ZoneSettingGetResponseZonesOpportunisticEncryptionEditableFalse ZoneSettingGetResponseZonesOpportunisticEncryptionEditable = false
+)
+
+// Add an Alt-Svc header to all legitimate requests from Tor, allowing the
+// connection to use our onion services instead of exit nodes.
+type ZoneSettingGetResponseZonesOpportunisticOnion struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesOpportunisticOnionID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesOpportunisticOnionValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesOpportunisticOnionEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                         `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesOpportunisticOnionJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesOpportunisticOnionJSON contains the JSON metadata for
+// the struct [ZoneSettingGetResponseZonesOpportunisticOnion]
+type zoneSettingGetResponseZonesOpportunisticOnionJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesOpportunisticOnion) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesOpportunisticOnion) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesOpportunisticOnionID string
+
+const (
+	ZoneSettingGetResponseZonesOpportunisticOnionIDOpportunisticOnion ZoneSettingGetResponseZonesOpportunisticOnionID = "opportunistic_onion"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesOpportunisticOnionValue string
+
+const (
+	ZoneSettingGetResponseZonesOpportunisticOnionValueOn  ZoneSettingGetResponseZonesOpportunisticOnionValue = "on"
+	ZoneSettingGetResponseZonesOpportunisticOnionValueOff ZoneSettingGetResponseZonesOpportunisticOnionValue = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesOpportunisticOnionEditable bool
+
+const (
+	ZoneSettingGetResponseZonesOpportunisticOnionEditableTrue  ZoneSettingGetResponseZonesOpportunisticOnionEditable = true
+	ZoneSettingGetResponseZonesOpportunisticOnionEditableFalse ZoneSettingGetResponseZonesOpportunisticOnionEditable = false
+)
+
+// Orange to Orange (O2O) allows zones on Cloudflare to CNAME to other zones also
+// on Cloudflare.
+type ZoneSettingGetResponseZonesOrangeToOrange struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesOrangeToOrangeID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesOrangeToOrangeValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesOrangeToOrangeEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                     `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesOrangeToOrangeJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesOrangeToOrangeJSON contains the JSON metadata for the
+// struct [ZoneSettingGetResponseZonesOrangeToOrange]
+type zoneSettingGetResponseZonesOrangeToOrangeJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesOrangeToOrange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesOrangeToOrange) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesOrangeToOrangeID string
+
+const (
+	ZoneSettingGetResponseZonesOrangeToOrangeIDOrangeToOrange ZoneSettingGetResponseZonesOrangeToOrangeID = "orange_to_orange"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesOrangeToOrangeValue string
+
+const (
+	ZoneSettingGetResponseZonesOrangeToOrangeValueOn  ZoneSettingGetResponseZonesOrangeToOrangeValue = "on"
+	ZoneSettingGetResponseZonesOrangeToOrangeValueOff ZoneSettingGetResponseZonesOrangeToOrangeValue = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesOrangeToOrangeEditable bool
+
+const (
+	ZoneSettingGetResponseZonesOrangeToOrangeEditableTrue  ZoneSettingGetResponseZonesOrangeToOrangeEditable = true
+	ZoneSettingGetResponseZonesOrangeToOrangeEditableFalse ZoneSettingGetResponseZonesOrangeToOrangeEditable = false
+)
+
+// Cloudflare will proxy customer error pages on any 502,504 errors on origin
+// server instead of showing a default Cloudflare error page. This does not apply
+// to 522 errors and is limited to Enterprise Zones.
+type ZoneSettingGetResponseZonesOriginErrorPagePassThru struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesOriginErrorPagePassThruID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesOriginErrorPagePassThruValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesOriginErrorPagePassThruEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                              `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesOriginErrorPagePassThruJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesOriginErrorPagePassThruJSON contains the JSON
+// metadata for the struct [ZoneSettingGetResponseZonesOriginErrorPagePassThru]
+type zoneSettingGetResponseZonesOriginErrorPagePassThruJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesOriginErrorPagePassThru) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesOriginErrorPagePassThru) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesOriginErrorPagePassThruID string
+
+const (
+	ZoneSettingGetResponseZonesOriginErrorPagePassThruIDOriginErrorPagePassThru ZoneSettingGetResponseZonesOriginErrorPagePassThruID = "origin_error_page_pass_thru"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesOriginErrorPagePassThruValue string
+
+const (
+	ZoneSettingGetResponseZonesOriginErrorPagePassThruValueOn  ZoneSettingGetResponseZonesOriginErrorPagePassThruValue = "on"
+	ZoneSettingGetResponseZonesOriginErrorPagePassThruValueOff ZoneSettingGetResponseZonesOriginErrorPagePassThruValue = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesOriginErrorPagePassThruEditable bool
+
+const (
+	ZoneSettingGetResponseZonesOriginErrorPagePassThruEditableTrue  ZoneSettingGetResponseZonesOriginErrorPagePassThruEditable = true
+	ZoneSettingGetResponseZonesOriginErrorPagePassThruEditableFalse ZoneSettingGetResponseZonesOriginErrorPagePassThruEditable = false
+)
+
+// Removes metadata and compresses your images for faster page load times. Basic
+// (Lossless): Reduce the size of PNG, JPEG, and GIF files - no impact on visual
+// quality. Basic + JPEG (Lossy): Further reduce the size of JPEG files for faster
+// image loading. Larger JPEGs are converted to progressive images, loading a
+// lower-resolution image first and ending in a higher-resolution version. Not
+// recommended for hi-res photography sites.
+type ZoneSettingGetResponseZonesPolish struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesPolishID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesPolishValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesPolishEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                             `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesPolishJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesPolishJSON contains the JSON metadata for the struct
+// [ZoneSettingGetResponseZonesPolish]
+type zoneSettingGetResponseZonesPolishJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesPolish) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesPolish) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesPolishID string
+
+const (
+	ZoneSettingGetResponseZonesPolishIDPolish ZoneSettingGetResponseZonesPolishID = "polish"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesPolishValue string
+
+const (
+	ZoneSettingGetResponseZonesPolishValueOff      ZoneSettingGetResponseZonesPolishValue = "off"
+	ZoneSettingGetResponseZonesPolishValueLossless ZoneSettingGetResponseZonesPolishValue = "lossless"
+	ZoneSettingGetResponseZonesPolishValueLossy    ZoneSettingGetResponseZonesPolishValue = "lossy"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesPolishEditable bool
+
+const (
+	ZoneSettingGetResponseZonesPolishEditableTrue  ZoneSettingGetResponseZonesPolishEditable = true
+	ZoneSettingGetResponseZonesPolishEditableFalse ZoneSettingGetResponseZonesPolishEditable = false
+)
+
+// Cloudflare will prefetch any URLs that are included in the response headers.
+// This is limited to Enterprise Zones.
+type ZoneSettingGetResponseZonesPrefetchPreload struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesPrefetchPreloadID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesPrefetchPreloadValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesPrefetchPreloadEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                      `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesPrefetchPreloadJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesPrefetchPreloadJSON contains the JSON metadata for
+// the struct [ZoneSettingGetResponseZonesPrefetchPreload]
+type zoneSettingGetResponseZonesPrefetchPreloadJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesPrefetchPreload) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesPrefetchPreload) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesPrefetchPreloadID string
+
+const (
+	ZoneSettingGetResponseZonesPrefetchPreloadIDPrefetchPreload ZoneSettingGetResponseZonesPrefetchPreloadID = "prefetch_preload"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesPrefetchPreloadValue string
+
+const (
+	ZoneSettingGetResponseZonesPrefetchPreloadValueOn  ZoneSettingGetResponseZonesPrefetchPreloadValue = "on"
+	ZoneSettingGetResponseZonesPrefetchPreloadValueOff ZoneSettingGetResponseZonesPrefetchPreloadValue = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesPrefetchPreloadEditable bool
+
+const (
+	ZoneSettingGetResponseZonesPrefetchPreloadEditableTrue  ZoneSettingGetResponseZonesPrefetchPreloadEditable = true
+	ZoneSettingGetResponseZonesPrefetchPreloadEditableFalse ZoneSettingGetResponseZonesPrefetchPreloadEditable = false
+)
+
+// Maximum time between two read operations from origin.
+type ZoneSettingGetResponseZonesProxyReadTimeout struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesProxyReadTimeoutID `json:"id,required"`
+	// Current value of the zone setting.
+	Value float64 `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesProxyReadTimeoutEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                       `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesProxyReadTimeoutJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesProxyReadTimeoutJSON contains the JSON metadata for
+// the struct [ZoneSettingGetResponseZonesProxyReadTimeout]
+type zoneSettingGetResponseZonesProxyReadTimeoutJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesProxyReadTimeout) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesProxyReadTimeout) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesProxyReadTimeoutID string
+
+const (
+	ZoneSettingGetResponseZonesProxyReadTimeoutIDProxyReadTimeout ZoneSettingGetResponseZonesProxyReadTimeoutID = "proxy_read_timeout"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesProxyReadTimeoutEditable bool
+
+const (
+	ZoneSettingGetResponseZonesProxyReadTimeoutEditableTrue  ZoneSettingGetResponseZonesProxyReadTimeoutEditable = true
+	ZoneSettingGetResponseZonesProxyReadTimeoutEditableFalse ZoneSettingGetResponseZonesProxyReadTimeoutEditable = false
+)
+
+// The value set for the Pseudo IPv4 setting.
+type ZoneSettingGetResponseZonesPseudoIPV4 struct {
+	// Value of the Pseudo IPv4 setting.
+	ID ZoneSettingGetResponseZonesPseudoIPV4ID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesPseudoIPV4Value `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesPseudoIPV4Editable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                 `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesPseudoIPV4JSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesPseudoIPV4JSON contains the JSON metadata for the
+// struct [ZoneSettingGetResponseZonesPseudoIPV4]
+type zoneSettingGetResponseZonesPseudoIPV4JSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesPseudoIPV4) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesPseudoIPV4) implementsZoneSettingGetResponse() {}
+
+// Value of the Pseudo IPv4 setting.
+type ZoneSettingGetResponseZonesPseudoIPV4ID string
+
+const (
+	ZoneSettingGetResponseZonesPseudoIPV4IDPseudoIPV4 ZoneSettingGetResponseZonesPseudoIPV4ID = "pseudo_ipv4"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesPseudoIPV4Value string
+
+const (
+	ZoneSettingGetResponseZonesPseudoIPV4ValueOff             ZoneSettingGetResponseZonesPseudoIPV4Value = "off"
+	ZoneSettingGetResponseZonesPseudoIPV4ValueAddHeader       ZoneSettingGetResponseZonesPseudoIPV4Value = "add_header"
+	ZoneSettingGetResponseZonesPseudoIPV4ValueOverwriteHeader ZoneSettingGetResponseZonesPseudoIPV4Value = "overwrite_header"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesPseudoIPV4Editable bool
+
+const (
+	ZoneSettingGetResponseZonesPseudoIPV4EditableTrue  ZoneSettingGetResponseZonesPseudoIPV4Editable = true
+	ZoneSettingGetResponseZonesPseudoIPV4EditableFalse ZoneSettingGetResponseZonesPseudoIPV4Editable = false
+)
+
+// Enables or disables buffering of responses from the proxied server. Cloudflare
+// may buffer the whole payload to deliver it at once to the client versus allowing
+// it to be delivered in chunks. By default, the proxied server streams directly
+// and is not buffered by Cloudflare. This is limited to Enterprise Zones.
+type ZoneSettingGetResponseZonesResponseBuffering struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesResponseBufferingID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesResponseBufferingValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesResponseBufferingEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                        `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesResponseBufferingJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesResponseBufferingJSON contains the JSON metadata for
+// the struct [ZoneSettingGetResponseZonesResponseBuffering]
+type zoneSettingGetResponseZonesResponseBufferingJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesResponseBuffering) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesResponseBuffering) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesResponseBufferingID string
+
+const (
+	ZoneSettingGetResponseZonesResponseBufferingIDResponseBuffering ZoneSettingGetResponseZonesResponseBufferingID = "response_buffering"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesResponseBufferingValue string
+
+const (
+	ZoneSettingGetResponseZonesResponseBufferingValueOn  ZoneSettingGetResponseZonesResponseBufferingValue = "on"
+	ZoneSettingGetResponseZonesResponseBufferingValueOff ZoneSettingGetResponseZonesResponseBufferingValue = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesResponseBufferingEditable bool
+
+const (
+	ZoneSettingGetResponseZonesResponseBufferingEditableTrue  ZoneSettingGetResponseZonesResponseBufferingEditable = true
+	ZoneSettingGetResponseZonesResponseBufferingEditableFalse ZoneSettingGetResponseZonesResponseBufferingEditable = false
+)
+
+// Rocket Loader is a general-purpose asynchronous JavaScript optimisation that
+// prioritises rendering your content while loading your site's Javascript
+// asynchronously. Turning on Rocket Loader will immediately improve a web page's
+// rendering time sometimes measured as Time to First Paint (TTFP), and also the
+// `window.onload` time (assuming there is JavaScript on the page). This can have a
+// positive impact on your Google search ranking. When turned on, Rocket Loader
+// will automatically defer the loading of all Javascript referenced in your HTML,
+// with no configuration required. Refer to
+// [Understanding Rocket Loader](https://support.cloudflare.com/hc/articles/200168056)
+// for more information.
+type ZoneSettingGetResponseZonesRocketLoader struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesRocketLoaderID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesRocketLoaderValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesRocketLoaderEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                   `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesRocketLoaderJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesRocketLoaderJSON contains the JSON metadata for the
+// struct [ZoneSettingGetResponseZonesRocketLoader]
+type zoneSettingGetResponseZonesRocketLoaderJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesRocketLoader) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesRocketLoader) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesRocketLoaderID string
+
+const (
+	ZoneSettingGetResponseZonesRocketLoaderIDRocketLoader ZoneSettingGetResponseZonesRocketLoaderID = "rocket_loader"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesRocketLoaderValue string
+
+const (
+	ZoneSettingGetResponseZonesRocketLoaderValueOn  ZoneSettingGetResponseZonesRocketLoaderValue = "on"
+	ZoneSettingGetResponseZonesRocketLoaderValueOff ZoneSettingGetResponseZonesRocketLoaderValue = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesRocketLoaderEditable bool
+
+const (
+	ZoneSettingGetResponseZonesRocketLoaderEditableTrue  ZoneSettingGetResponseZonesRocketLoaderEditable = true
+	ZoneSettingGetResponseZonesRocketLoaderEditableFalse ZoneSettingGetResponseZonesRocketLoaderEditable = false
+)
+
+// [Automatic Platform Optimization for WordPress](https://developers.cloudflare.com/automatic-platform-optimization/)
+// serves your WordPress site from Cloudflare's edge network and caches third-party
+// fonts.
+type ZoneSettingGetResponseZonesSchemasAutomaticPlatformOptimization struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesSchemasAutomaticPlatformOptimizationID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesSchemasAutomaticPlatformOptimizationValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesSchemasAutomaticPlatformOptimizationEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                                           `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesSchemasAutomaticPlatformOptimizationJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesSchemasAutomaticPlatformOptimizationJSON contains the
+// JSON metadata for the struct
+// [ZoneSettingGetResponseZonesSchemasAutomaticPlatformOptimization]
+type zoneSettingGetResponseZonesSchemasAutomaticPlatformOptimizationJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesSchemasAutomaticPlatformOptimization) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesSchemasAutomaticPlatformOptimization) implementsZoneSettingGetResponse() {
+}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesSchemasAutomaticPlatformOptimizationID string
+
+const (
+	ZoneSettingGetResponseZonesSchemasAutomaticPlatformOptimizationIDAutomaticPlatformOptimization ZoneSettingGetResponseZonesSchemasAutomaticPlatformOptimizationID = "automatic_platform_optimization"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesSchemasAutomaticPlatformOptimizationValue struct {
+	// Indicates whether or not
+	// [cache by device type](https://developers.cloudflare.com/automatic-platform-optimization/reference/cache-device-type/)
+	// is enabled.
+	CacheByDeviceType bool `json:"cache_by_device_type,required"`
+	// Indicates whether or not Cloudflare proxy is enabled.
+	Cf bool `json:"cf,required"`
+	// Indicates whether or not Automatic Platform Optimization is enabled.
+	Enabled bool `json:"enabled,required"`
+	// An array of hostnames where Automatic Platform Optimization for WordPress is
+	// activated.
+	Hostnames []string `json:"hostnames,required" format:"hostname"`
+	// Indicates whether or not site is powered by WordPress.
+	Wordpress bool `json:"wordpress,required"`
+	// Indicates whether or not
+	// [Cloudflare for WordPress plugin](https://wordpress.org/plugins/cloudflare/) is
+	// installed.
+	WpPlugin bool                                                                     `json:"wp_plugin,required"`
+	JSON     zoneSettingGetResponseZonesSchemasAutomaticPlatformOptimizationValueJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesSchemasAutomaticPlatformOptimizationValueJSON
+// contains the JSON metadata for the struct
+// [ZoneSettingGetResponseZonesSchemasAutomaticPlatformOptimizationValue]
+type zoneSettingGetResponseZonesSchemasAutomaticPlatformOptimizationValueJSON struct {
+	CacheByDeviceType apijson.Field
+	Cf                apijson.Field
+	Enabled           apijson.Field
+	Hostnames         apijson.Field
+	Wordpress         apijson.Field
+	WpPlugin          apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesSchemasAutomaticPlatformOptimizationValue) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesSchemasAutomaticPlatformOptimizationEditable bool
+
+const (
+	ZoneSettingGetResponseZonesSchemasAutomaticPlatformOptimizationEditableTrue  ZoneSettingGetResponseZonesSchemasAutomaticPlatformOptimizationEditable = true
+	ZoneSettingGetResponseZonesSchemasAutomaticPlatformOptimizationEditableFalse ZoneSettingGetResponseZonesSchemasAutomaticPlatformOptimizationEditable = false
+)
+
+// Cloudflare security header for a zone.
+type ZoneSettingGetResponseZonesSecurityHeader struct {
+	// ID of the zone's security header.
+	ID ZoneSettingGetResponseZonesSecurityHeaderID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesSecurityHeaderValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesSecurityHeaderEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                     `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesSecurityHeaderJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesSecurityHeaderJSON contains the JSON metadata for the
+// struct [ZoneSettingGetResponseZonesSecurityHeader]
+type zoneSettingGetResponseZonesSecurityHeaderJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesSecurityHeader) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesSecurityHeader) implementsZoneSettingGetResponse() {}
+
+// ID of the zone's security header.
+type ZoneSettingGetResponseZonesSecurityHeaderID string
+
+const (
+	ZoneSettingGetResponseZonesSecurityHeaderIDSecurityHeader ZoneSettingGetResponseZonesSecurityHeaderID = "security_header"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesSecurityHeaderValue struct {
+	// Strict Transport Security.
+	StrictTransportSecurity ZoneSettingGetResponseZonesSecurityHeaderValueStrictTransportSecurity `json:"strict_transport_security"`
+	JSON                    zoneSettingGetResponseZonesSecurityHeaderValueJSON                    `json:"-"`
+}
+
+// zoneSettingGetResponseZonesSecurityHeaderValueJSON contains the JSON metadata
+// for the struct [ZoneSettingGetResponseZonesSecurityHeaderValue]
+type zoneSettingGetResponseZonesSecurityHeaderValueJSON struct {
+	StrictTransportSecurity apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesSecurityHeaderValue) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Strict Transport Security.
+type ZoneSettingGetResponseZonesSecurityHeaderValueStrictTransportSecurity struct {
+	// Whether or not strict transport security is enabled.
+	Enabled bool `json:"enabled"`
+	// Include all subdomains for strict transport security.
+	IncludeSubdomains bool `json:"include_subdomains"`
+	// Max age in seconds of the strict transport security.
+	MaxAge float64 `json:"max_age"`
+	// Whether or not to include 'X-Content-Type-Options: nosniff' header.
+	Nosniff bool                                                                      `json:"nosniff"`
+	JSON    zoneSettingGetResponseZonesSecurityHeaderValueStrictTransportSecurityJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesSecurityHeaderValueStrictTransportSecurityJSON
+// contains the JSON metadata for the struct
+// [ZoneSettingGetResponseZonesSecurityHeaderValueStrictTransportSecurity]
+type zoneSettingGetResponseZonesSecurityHeaderValueStrictTransportSecurityJSON struct {
+	Enabled           apijson.Field
+	IncludeSubdomains apijson.Field
+	MaxAge            apijson.Field
+	Nosniff           apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesSecurityHeaderValueStrictTransportSecurity) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesSecurityHeaderEditable bool
+
+const (
+	ZoneSettingGetResponseZonesSecurityHeaderEditableTrue  ZoneSettingGetResponseZonesSecurityHeaderEditable = true
+	ZoneSettingGetResponseZonesSecurityHeaderEditableFalse ZoneSettingGetResponseZonesSecurityHeaderEditable = false
+)
+
+// Choose the appropriate security profile for your website, which will
+// automatically adjust each of the security settings. If you choose to customize
+// an individual security setting, the profile will become Custom.
+// (https://support.cloudflare.com/hc/en-us/articles/200170056).
+type ZoneSettingGetResponseZonesSecurityLevel struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesSecurityLevelID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesSecurityLevelValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesSecurityLevelEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                    `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesSecurityLevelJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesSecurityLevelJSON contains the JSON metadata for the
+// struct [ZoneSettingGetResponseZonesSecurityLevel]
+type zoneSettingGetResponseZonesSecurityLevelJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesSecurityLevel) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesSecurityLevel) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesSecurityLevelID string
+
+const (
+	ZoneSettingGetResponseZonesSecurityLevelIDSecurityLevel ZoneSettingGetResponseZonesSecurityLevelID = "security_level"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesSecurityLevelValue string
+
+const (
+	ZoneSettingGetResponseZonesSecurityLevelValueOff            ZoneSettingGetResponseZonesSecurityLevelValue = "off"
+	ZoneSettingGetResponseZonesSecurityLevelValueEssentiallyOff ZoneSettingGetResponseZonesSecurityLevelValue = "essentially_off"
+	ZoneSettingGetResponseZonesSecurityLevelValueLow            ZoneSettingGetResponseZonesSecurityLevelValue = "low"
+	ZoneSettingGetResponseZonesSecurityLevelValueMedium         ZoneSettingGetResponseZonesSecurityLevelValue = "medium"
+	ZoneSettingGetResponseZonesSecurityLevelValueHigh           ZoneSettingGetResponseZonesSecurityLevelValue = "high"
+	ZoneSettingGetResponseZonesSecurityLevelValueUnderAttack    ZoneSettingGetResponseZonesSecurityLevelValue = "under_attack"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesSecurityLevelEditable bool
+
+const (
+	ZoneSettingGetResponseZonesSecurityLevelEditableTrue  ZoneSettingGetResponseZonesSecurityLevelEditable = true
+	ZoneSettingGetResponseZonesSecurityLevelEditableFalse ZoneSettingGetResponseZonesSecurityLevelEditable = false
+)
+
+// If there is sensitive content on your website that you want visible to real
+// visitors, but that you want to hide from suspicious visitors, all you have to do
+// is wrap the content with Cloudflare SSE tags. Wrap any content that you want to
+// be excluded from suspicious visitors in the following SSE tags:
+// <!--sse--><!--/sse-->. For example: <!--sse--> Bad visitors won't see my phone
+// number, 555-555-5555 <!--/sse-->. Note: SSE only will work with HTML. If you
+// have HTML minification enabled, you won't see the SSE tags in your HTML source
+// when it's served through Cloudflare. SSE will still function in this case, as
+// Cloudflare's HTML minification and SSE functionality occur on-the-fly as the
+// resource moves through our network to the visitor's computer.
+// (https://support.cloudflare.com/hc/en-us/articles/200170036).
+type ZoneSettingGetResponseZonesServerSideExclude struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesServerSideExcludeID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesServerSideExcludeValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesServerSideExcludeEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                        `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesServerSideExcludeJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesServerSideExcludeJSON contains the JSON metadata for
+// the struct [ZoneSettingGetResponseZonesServerSideExclude]
+type zoneSettingGetResponseZonesServerSideExcludeJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesServerSideExclude) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesServerSideExclude) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesServerSideExcludeID string
+
+const (
+	ZoneSettingGetResponseZonesServerSideExcludeIDServerSideExclude ZoneSettingGetResponseZonesServerSideExcludeID = "server_side_exclude"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesServerSideExcludeValue string
+
+const (
+	ZoneSettingGetResponseZonesServerSideExcludeValueOn  ZoneSettingGetResponseZonesServerSideExcludeValue = "on"
+	ZoneSettingGetResponseZonesServerSideExcludeValueOff ZoneSettingGetResponseZonesServerSideExcludeValue = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesServerSideExcludeEditable bool
+
+const (
+	ZoneSettingGetResponseZonesServerSideExcludeEditableTrue  ZoneSettingGetResponseZonesServerSideExcludeEditable = true
+	ZoneSettingGetResponseZonesServerSideExcludeEditableFalse ZoneSettingGetResponseZonesServerSideExcludeEditable = false
+)
+
+// Allow SHA1 support.
+type ZoneSettingGetResponseZonesSha1Support struct {
+	// Zone setting identifier.
+	ID ZoneSettingGetResponseZonesSha1SupportID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesSha1SupportValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesSha1SupportEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                  `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesSha1SupportJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesSha1SupportJSON contains the JSON metadata for the
+// struct [ZoneSettingGetResponseZonesSha1Support]
+type zoneSettingGetResponseZonesSha1SupportJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesSha1Support) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesSha1Support) implementsZoneSettingGetResponse() {}
+
+// Zone setting identifier.
+type ZoneSettingGetResponseZonesSha1SupportID string
+
+const (
+	ZoneSettingGetResponseZonesSha1SupportIDSha1Support ZoneSettingGetResponseZonesSha1SupportID = "sha1_support"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesSha1SupportValue string
+
+const (
+	ZoneSettingGetResponseZonesSha1SupportValueOff ZoneSettingGetResponseZonesSha1SupportValue = "off"
+	ZoneSettingGetResponseZonesSha1SupportValueOn  ZoneSettingGetResponseZonesSha1SupportValue = "on"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesSha1SupportEditable bool
+
+const (
+	ZoneSettingGetResponseZonesSha1SupportEditableTrue  ZoneSettingGetResponseZonesSha1SupportEditable = true
+	ZoneSettingGetResponseZonesSha1SupportEditableFalse ZoneSettingGetResponseZonesSha1SupportEditable = false
+)
+
+// Cloudflare will treat files with the same query strings as the same file in
+// cache, regardless of the order of the query strings. This is limited to
+// Enterprise Zones.
+type ZoneSettingGetResponseZonesSortQueryStringForCache struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesSortQueryStringForCacheID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesSortQueryStringForCacheValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesSortQueryStringForCacheEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                              `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesSortQueryStringForCacheJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesSortQueryStringForCacheJSON contains the JSON
+// metadata for the struct [ZoneSettingGetResponseZonesSortQueryStringForCache]
+type zoneSettingGetResponseZonesSortQueryStringForCacheJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesSortQueryStringForCache) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesSortQueryStringForCache) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesSortQueryStringForCacheID string
+
+const (
+	ZoneSettingGetResponseZonesSortQueryStringForCacheIDSortQueryStringForCache ZoneSettingGetResponseZonesSortQueryStringForCacheID = "sort_query_string_for_cache"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesSortQueryStringForCacheValue string
+
+const (
+	ZoneSettingGetResponseZonesSortQueryStringForCacheValueOn  ZoneSettingGetResponseZonesSortQueryStringForCacheValue = "on"
+	ZoneSettingGetResponseZonesSortQueryStringForCacheValueOff ZoneSettingGetResponseZonesSortQueryStringForCacheValue = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesSortQueryStringForCacheEditable bool
+
+const (
+	ZoneSettingGetResponseZonesSortQueryStringForCacheEditableTrue  ZoneSettingGetResponseZonesSortQueryStringForCacheEditable = true
+	ZoneSettingGetResponseZonesSortQueryStringForCacheEditableFalse ZoneSettingGetResponseZonesSortQueryStringForCacheEditable = false
+)
+
+// SSL encrypts your visitor's connection and safeguards credit card numbers and
+// other personal data to and from your website. SSL can take up to 5 minutes to
+// fully activate. Requires Cloudflare active on your root domain or www domain.
+// Off: no SSL between the visitor and Cloudflare, and no SSL between Cloudflare
+// and your web server (all HTTP traffic). Flexible: SSL between the visitor and
+// Cloudflare -- visitor sees HTTPS on your site, but no SSL between Cloudflare and
+// your web server. You don't need to have an SSL cert on your web server, but your
+// vistors will still see the site as being HTTPS enabled. Full: SSL between the
+// visitor and Cloudflare -- visitor sees HTTPS on your site, and SSL between
+// Cloudflare and your web server. You'll need to have your own SSL cert or
+// self-signed cert at the very least. Full (Strict): SSL between the visitor and
+// Cloudflare -- visitor sees HTTPS on your site, and SSL between Cloudflare and
+// your web server. You'll need to have a valid SSL certificate installed on your
+// web server. This certificate must be signed by a certificate authority, have an
+// expiration date in the future, and respond for the request domain name
+// (hostname). (https://support.cloudflare.com/hc/en-us/articles/200170416).
+type ZoneSettingGetResponseZonesSSL struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesSSLID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesSSLValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesSSLEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                          `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesSSLJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesSSLJSON contains the JSON metadata for the struct
+// [ZoneSettingGetResponseZonesSSL]
+type zoneSettingGetResponseZonesSSLJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesSSL) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesSSL) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesSSLID string
+
+const (
+	ZoneSettingGetResponseZonesSSLIDSSL ZoneSettingGetResponseZonesSSLID = "ssl"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesSSLValue string
+
+const (
+	ZoneSettingGetResponseZonesSSLValueOff      ZoneSettingGetResponseZonesSSLValue = "off"
+	ZoneSettingGetResponseZonesSSLValueFlexible ZoneSettingGetResponseZonesSSLValue = "flexible"
+	ZoneSettingGetResponseZonesSSLValueFull     ZoneSettingGetResponseZonesSSLValue = "full"
+	ZoneSettingGetResponseZonesSSLValueStrict   ZoneSettingGetResponseZonesSSLValue = "strict"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesSSLEditable bool
+
+const (
+	ZoneSettingGetResponseZonesSSLEditableTrue  ZoneSettingGetResponseZonesSSLEditable = true
+	ZoneSettingGetResponseZonesSSLEditableFalse ZoneSettingGetResponseZonesSSLEditable = false
+)
+
+// Enrollment in the SSL/TLS Recommender service which tries to detect and
+// recommend (by sending periodic emails) the most secure SSL/TLS setting your
+// origin servers support.
+type ZoneSettingGetResponseZonesSSLRecommender struct {
+	// Enrollment value for SSL/TLS Recommender.
+	ID ZoneSettingGetResponseZonesSSLRecommenderID `json:"id"`
+	// ssl-recommender enrollment setting.
+	Enabled bool                                          `json:"enabled"`
+	JSON    zoneSettingGetResponseZonesSSLRecommenderJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesSSLRecommenderJSON contains the JSON metadata for the
+// struct [ZoneSettingGetResponseZonesSSLRecommender]
+type zoneSettingGetResponseZonesSSLRecommenderJSON struct {
+	ID          apijson.Field
+	Enabled     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesSSLRecommender) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesSSLRecommender) implementsZoneSettingGetResponse() {}
+
+// Enrollment value for SSL/TLS Recommender.
+type ZoneSettingGetResponseZonesSSLRecommenderID string
+
+const (
+	ZoneSettingGetResponseZonesSSLRecommenderIDSSLRecommender ZoneSettingGetResponseZonesSSLRecommenderID = "ssl_recommender"
+)
+
+// Only allows TLS1.2.
+type ZoneSettingGetResponseZonesTLS1_2Only struct {
+	// Zone setting identifier.
+	ID ZoneSettingGetResponseZonesTLS1_2OnlyID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesTLS1_2OnlyValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesTLS1_2OnlyEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                 `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesTls1_2OnlyJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesTls1_2OnlyJSON contains the JSON metadata for the
+// struct [ZoneSettingGetResponseZonesTLS1_2Only]
+type zoneSettingGetResponseZonesTls1_2OnlyJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesTLS1_2Only) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesTLS1_2Only) implementsZoneSettingGetResponse() {}
+
+// Zone setting identifier.
+type ZoneSettingGetResponseZonesTLS1_2OnlyID string
+
+const (
+	ZoneSettingGetResponseZonesTLS1_2OnlyIDTLS1_2Only ZoneSettingGetResponseZonesTLS1_2OnlyID = "tls_1_2_only"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesTLS1_2OnlyValue string
+
+const (
+	ZoneSettingGetResponseZonesTLS1_2OnlyValueOff ZoneSettingGetResponseZonesTLS1_2OnlyValue = "off"
+	ZoneSettingGetResponseZonesTLS1_2OnlyValueOn  ZoneSettingGetResponseZonesTLS1_2OnlyValue = "on"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesTLS1_2OnlyEditable bool
+
+const (
+	ZoneSettingGetResponseZonesTLS1_2OnlyEditableTrue  ZoneSettingGetResponseZonesTLS1_2OnlyEditable = true
+	ZoneSettingGetResponseZonesTLS1_2OnlyEditableFalse ZoneSettingGetResponseZonesTLS1_2OnlyEditable = false
+)
+
+// Enables Crypto TLS 1.3 feature for a zone.
+type ZoneSettingGetResponseZonesTLS1_3 struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesTLS1_3ID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesTLS1_3Value `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesTLS1_3Editable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                             `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesTls1_3JSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesTls1_3JSON contains the JSON metadata for the struct
+// [ZoneSettingGetResponseZonesTLS1_3]
+type zoneSettingGetResponseZonesTls1_3JSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesTLS1_3) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesTLS1_3) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesTLS1_3ID string
+
+const (
+	ZoneSettingGetResponseZonesTLS1_3IDTLS1_3 ZoneSettingGetResponseZonesTLS1_3ID = "tls_1_3"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesTLS1_3Value string
+
+const (
+	ZoneSettingGetResponseZonesTLS1_3ValueOn  ZoneSettingGetResponseZonesTLS1_3Value = "on"
+	ZoneSettingGetResponseZonesTLS1_3ValueOff ZoneSettingGetResponseZonesTLS1_3Value = "off"
+	ZoneSettingGetResponseZonesTLS1_3ValueZrt ZoneSettingGetResponseZonesTLS1_3Value = "zrt"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesTLS1_3Editable bool
+
+const (
+	ZoneSettingGetResponseZonesTLS1_3EditableTrue  ZoneSettingGetResponseZonesTLS1_3Editable = true
+	ZoneSettingGetResponseZonesTLS1_3EditableFalse ZoneSettingGetResponseZonesTLS1_3Editable = false
+)
+
+// TLS Client Auth requires Cloudflare to connect to your origin server using a
+// client certificate (Enterprise Only).
+type ZoneSettingGetResponseZonesTLSClientAuth struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesTLSClientAuthID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesTLSClientAuthValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesTLSClientAuthEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                    `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesTLSClientAuthJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesTLSClientAuthJSON contains the JSON metadata for the
+// struct [ZoneSettingGetResponseZonesTLSClientAuth]
+type zoneSettingGetResponseZonesTLSClientAuthJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesTLSClientAuth) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesTLSClientAuth) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesTLSClientAuthID string
+
+const (
+	ZoneSettingGetResponseZonesTLSClientAuthIDTLSClientAuth ZoneSettingGetResponseZonesTLSClientAuthID = "tls_client_auth"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesTLSClientAuthValue string
+
+const (
+	ZoneSettingGetResponseZonesTLSClientAuthValueOn  ZoneSettingGetResponseZonesTLSClientAuthValue = "on"
+	ZoneSettingGetResponseZonesTLSClientAuthValueOff ZoneSettingGetResponseZonesTLSClientAuthValue = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesTLSClientAuthEditable bool
+
+const (
+	ZoneSettingGetResponseZonesTLSClientAuthEditableTrue  ZoneSettingGetResponseZonesTLSClientAuthEditable = true
+	ZoneSettingGetResponseZonesTLSClientAuthEditableFalse ZoneSettingGetResponseZonesTLSClientAuthEditable = false
+)
+
+// Allows customer to continue to use True Client IP (Akamai feature) in the
+// headers we send to the origin. This is limited to Enterprise Zones.
+type ZoneSettingGetResponseZonesTrueClientIPHeader struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesTrueClientIPHeaderID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesTrueClientIPHeaderValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesTrueClientIPHeaderEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                         `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesTrueClientIPHeaderJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesTrueClientIPHeaderJSON contains the JSON metadata for
+// the struct [ZoneSettingGetResponseZonesTrueClientIPHeader]
+type zoneSettingGetResponseZonesTrueClientIPHeaderJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesTrueClientIPHeader) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesTrueClientIPHeader) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesTrueClientIPHeaderID string
+
+const (
+	ZoneSettingGetResponseZonesTrueClientIPHeaderIDTrueClientIPHeader ZoneSettingGetResponseZonesTrueClientIPHeaderID = "true_client_ip_header"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesTrueClientIPHeaderValue string
+
+const (
+	ZoneSettingGetResponseZonesTrueClientIPHeaderValueOn  ZoneSettingGetResponseZonesTrueClientIPHeaderValue = "on"
+	ZoneSettingGetResponseZonesTrueClientIPHeaderValueOff ZoneSettingGetResponseZonesTrueClientIPHeaderValue = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesTrueClientIPHeaderEditable bool
+
+const (
+	ZoneSettingGetResponseZonesTrueClientIPHeaderEditableTrue  ZoneSettingGetResponseZonesTrueClientIPHeaderEditable = true
+	ZoneSettingGetResponseZonesTrueClientIPHeaderEditableFalse ZoneSettingGetResponseZonesTrueClientIPHeaderEditable = false
+)
+
+// The WAF examines HTTP requests to your website. It inspects both GET and POST
+// requests and applies rules to help filter out illegitimate traffic from
+// legitimate website visitors. The Cloudflare WAF inspects website addresses or
+// URLs to detect anything out of the ordinary. If the Cloudflare WAF determines
+// suspicious user behavior, then the WAF will 'challenge' the web visitor with a
+// page that asks them to submit a CAPTCHA successfully to continue their action.
+// If the challenge is failed, the action will be stopped. What this means is that
+// Cloudflare's WAF will block any traffic identified as illegitimate before it
+// reaches your origin web server.
+// (https://support.cloudflare.com/hc/en-us/articles/200172016).
+type ZoneSettingGetResponseZonesWAF struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesWAFID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesWAFValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesWAFEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                          `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesWAFJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesWAFJSON contains the JSON metadata for the struct
+// [ZoneSettingGetResponseZonesWAF]
+type zoneSettingGetResponseZonesWAFJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesWAF) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesWAF) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesWAFID string
+
+const (
+	ZoneSettingGetResponseZonesWAFIDWAF ZoneSettingGetResponseZonesWAFID = "waf"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesWAFValue string
+
+const (
+	ZoneSettingGetResponseZonesWAFValueOn  ZoneSettingGetResponseZonesWAFValue = "on"
+	ZoneSettingGetResponseZonesWAFValueOff ZoneSettingGetResponseZonesWAFValue = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesWAFEditable bool
+
+const (
+	ZoneSettingGetResponseZonesWAFEditableTrue  ZoneSettingGetResponseZonesWAFEditable = true
+	ZoneSettingGetResponseZonesWAFEditableFalse ZoneSettingGetResponseZonesWAFEditable = false
+)
+
+// When the client requesting the image supports the WebP image codec, and WebP
+// offers a performance advantage over the original image format, Cloudflare will
+// serve a WebP version of the original image.
+type ZoneSettingGetResponseZonesWebp struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesWebpID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesWebpValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesWebpEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                           `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesWebpJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesWebpJSON contains the JSON metadata for the struct
+// [ZoneSettingGetResponseZonesWebp]
+type zoneSettingGetResponseZonesWebpJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesWebp) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesWebp) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesWebpID string
+
+const (
+	ZoneSettingGetResponseZonesWebpIDWebp ZoneSettingGetResponseZonesWebpID = "webp"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesWebpValue string
+
+const (
+	ZoneSettingGetResponseZonesWebpValueOff ZoneSettingGetResponseZonesWebpValue = "off"
+	ZoneSettingGetResponseZonesWebpValueOn  ZoneSettingGetResponseZonesWebpValue = "on"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesWebpEditable bool
+
+const (
+	ZoneSettingGetResponseZonesWebpEditableTrue  ZoneSettingGetResponseZonesWebpEditable = true
+	ZoneSettingGetResponseZonesWebpEditableFalse ZoneSettingGetResponseZonesWebpEditable = false
+)
+
+// WebSockets are open connections sustained between the client and the origin
+// server. Inside a WebSockets connection, the client and the origin can pass data
+// back and forth without having to reestablish sessions. This makes exchanging
+// data within a WebSockets connection fast. WebSockets are often used for
+// real-time applications such as live chat and gaming. For more information refer
+// to
+// [Can I use Cloudflare with Websockets](https://support.cloudflare.com/hc/en-us/articles/200169466-Can-I-use-Cloudflare-with-WebSockets-).
+type ZoneSettingGetResponseZonesWebsockets struct {
+	// ID of the zone setting.
+	ID ZoneSettingGetResponseZonesWebsocketsID `json:"id,required"`
+	// Current value of the zone setting.
+	Value ZoneSettingGetResponseZonesWebsocketsValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingGetResponseZonesWebsocketsEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                 `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingGetResponseZonesWebsocketsJSON `json:"-"`
+}
+
+// zoneSettingGetResponseZonesWebsocketsJSON contains the JSON metadata for the
+// struct [ZoneSettingGetResponseZonesWebsockets]
+type zoneSettingGetResponseZonesWebsocketsJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseZonesWebsockets) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ZoneSettingGetResponseZonesWebsockets) implementsZoneSettingGetResponse() {}
+
+// ID of the zone setting.
+type ZoneSettingGetResponseZonesWebsocketsID string
+
+const (
+	ZoneSettingGetResponseZonesWebsocketsIDWebsockets ZoneSettingGetResponseZonesWebsocketsID = "websockets"
+)
+
+// Current value of the zone setting.
+type ZoneSettingGetResponseZonesWebsocketsValue string
+
+const (
+	ZoneSettingGetResponseZonesWebsocketsValueOff ZoneSettingGetResponseZonesWebsocketsValue = "off"
+	ZoneSettingGetResponseZonesWebsocketsValueOn  ZoneSettingGetResponseZonesWebsocketsValue = "on"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingGetResponseZonesWebsocketsEditable bool
+
+const (
+	ZoneSettingGetResponseZonesWebsocketsEditableTrue  ZoneSettingGetResponseZonesWebsocketsEditable = true
+	ZoneSettingGetResponseZonesWebsocketsEditableFalse ZoneSettingGetResponseZonesWebsocketsEditable = false
+)
 
 type ZoneSettingEditParams struct {
 	// Identifier
@@ -9368,5 +9300,72 @@ type zoneSettingEditResponseEnvelopeMessagesJSON struct {
 }
 
 func (r *ZoneSettingEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneSettingGetParams struct {
+	// Identifier
+	ZoneID param.Field[string] `path:"zone_id,required"`
+}
+
+type ZoneSettingGetResponseEnvelope struct {
+	Errors   []ZoneSettingGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ZoneSettingGetResponseEnvelopeMessages `json:"messages,required"`
+	// Whether the API call was successful
+	Success bool                               `json:"success,required"`
+	Result  []ZoneSettingGetResponse           `json:"result"`
+	JSON    zoneSettingGetResponseEnvelopeJSON `json:"-"`
+}
+
+// zoneSettingGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [ZoneSettingGetResponseEnvelope]
+type zoneSettingGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Success     apijson.Field
+	Result      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneSettingGetResponseEnvelopeErrors struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    zoneSettingGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// zoneSettingGetResponseEnvelopeErrorsJSON contains the JSON metadata for the
+// struct [ZoneSettingGetResponseEnvelopeErrors]
+type zoneSettingGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZoneSettingGetResponseEnvelopeMessages struct {
+	Code    int64                                      `json:"code,required"`
+	Message string                                     `json:"message,required"`
+	JSON    zoneSettingGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// zoneSettingGetResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [ZoneSettingGetResponseEnvelopeMessages]
+type zoneSettingGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZoneSettingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestUserBillingHistoryListWithOptionalParams(t *testing.T) {
+func TestUserBillingHistoryGetWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -27,8 +27,8 @@ func TestUserBillingHistoryListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.User.Billing.History.List(context.TODO(), cloudflare.UserBillingHistoryListParams{
-		Order:   cloudflare.F(cloudflare.UserBillingHistoryListParamsOrderOccuredAt),
+	_, err := client.User.Billing.History.Get(context.TODO(), cloudflare.UserBillingHistoryGetParams{
+		Order:   cloudflare.F(cloudflare.UserBillingHistoryGetParamsOrderOccuredAt),
 		Page:    cloudflare.F(1.000000),
 		PerPage: cloudflare.F(5.000000),
 	})

@@ -34,9 +34,9 @@ func NewLoadBalancerSearchService(opts ...option.RequestOption) (r *LoadBalancer
 }
 
 // Search for Load Balancing resources.
-func (r *LoadBalancerSearchService) List(ctx context.Context, params LoadBalancerSearchListParams, opts ...option.RequestOption) (res *[]LoadBalancerSearchListResponse, err error) {
+func (r *LoadBalancerSearchService) Get(ctx context.Context, params LoadBalancerSearchGetParams, opts ...option.RequestOption) (res *[]LoadBalancerSearchGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env LoadBalancerSearchListResponseEnvelope
+	var env LoadBalancerSearchGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/search", params.AccountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
@@ -46,35 +46,35 @@ func (r *LoadBalancerSearchService) List(ctx context.Context, params LoadBalance
 	return
 }
 
-type LoadBalancerSearchListResponse = interface{}
+type LoadBalancerSearchGetResponse = interface{}
 
-type LoadBalancerSearchListParams struct {
+type LoadBalancerSearchGetParams struct {
 	// Identifier
-	AccountID    param.Field[string]                                   `path:"account_id,required"`
-	Page         param.Field[interface{}]                              `query:"page"`
-	PerPage      param.Field[interface{}]                              `query:"per_page"`
-	SearchParams param.Field[LoadBalancerSearchListParamsSearchParams] `query:"search_params"`
+	AccountID    param.Field[string]                                  `path:"account_id,required"`
+	Page         param.Field[interface{}]                             `query:"page"`
+	PerPage      param.Field[interface{}]                             `query:"per_page"`
+	SearchParams param.Field[LoadBalancerSearchGetParamsSearchParams] `query:"search_params"`
 }
 
-// URLQuery serializes [LoadBalancerSearchListParams]'s query parameters as
+// URLQuery serializes [LoadBalancerSearchGetParams]'s query parameters as
 // `url.Values`.
-func (r LoadBalancerSearchListParams) URLQuery() (v url.Values) {
+func (r LoadBalancerSearchGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
 
-type LoadBalancerSearchListParamsSearchParams struct {
+type LoadBalancerSearchGetParamsSearchParams struct {
 	// Search query term.
 	Query param.Field[string] `query:"query"`
 	// The type of references to include ("\*" for all).
-	References param.Field[LoadBalancerSearchListParamsSearchParamsReferences] `query:"references"`
+	References param.Field[LoadBalancerSearchGetParamsSearchParamsReferences] `query:"references"`
 }
 
-// URLQuery serializes [LoadBalancerSearchListParamsSearchParams]'s query
-// parameters as `url.Values`.
-func (r LoadBalancerSearchListParamsSearchParams) URLQuery() (v url.Values) {
+// URLQuery serializes [LoadBalancerSearchGetParamsSearchParams]'s query parameters
+// as `url.Values`.
+func (r LoadBalancerSearchGetParamsSearchParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
@@ -82,28 +82,28 @@ func (r LoadBalancerSearchListParamsSearchParams) URLQuery() (v url.Values) {
 }
 
 // The type of references to include ("\*" for all).
-type LoadBalancerSearchListParamsSearchParamsReferences string
+type LoadBalancerSearchGetParamsSearchParamsReferences string
 
 const (
-	LoadBalancerSearchListParamsSearchParamsReferencesEmpty    LoadBalancerSearchListParamsSearchParamsReferences = ""
-	LoadBalancerSearchListParamsSearchParamsReferencesStar     LoadBalancerSearchListParamsSearchParamsReferences = "*"
-	LoadBalancerSearchListParamsSearchParamsReferencesReferral LoadBalancerSearchListParamsSearchParamsReferences = "referral"
-	LoadBalancerSearchListParamsSearchParamsReferencesReferrer LoadBalancerSearchListParamsSearchParamsReferences = "referrer"
+	LoadBalancerSearchGetParamsSearchParamsReferencesEmpty    LoadBalancerSearchGetParamsSearchParamsReferences = ""
+	LoadBalancerSearchGetParamsSearchParamsReferencesStar     LoadBalancerSearchGetParamsSearchParamsReferences = "*"
+	LoadBalancerSearchGetParamsSearchParamsReferencesReferral LoadBalancerSearchGetParamsSearchParamsReferences = "referral"
+	LoadBalancerSearchGetParamsSearchParamsReferencesReferrer LoadBalancerSearchGetParamsSearchParamsReferences = "referrer"
 )
 
-type LoadBalancerSearchListResponseEnvelope struct {
-	Errors   []LoadBalancerSearchListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []LoadBalancerSearchListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []LoadBalancerSearchListResponse                 `json:"result,required,nullable"`
+type LoadBalancerSearchGetResponseEnvelope struct {
+	Errors   []LoadBalancerSearchGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LoadBalancerSearchGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   []LoadBalancerSearchGetResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success    LoadBalancerSearchListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo LoadBalancerSearchListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       loadBalancerSearchListResponseEnvelopeJSON       `json:"-"`
+	Success    LoadBalancerSearchGetResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo LoadBalancerSearchGetResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       loadBalancerSearchGetResponseEnvelopeJSON       `json:"-"`
 }
 
-// loadBalancerSearchListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [LoadBalancerSearchListResponseEnvelope]
-type loadBalancerSearchListResponseEnvelopeJSON struct {
+// loadBalancerSearchGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [LoadBalancerSearchGetResponseEnvelope]
+type loadBalancerSearchGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -113,56 +113,56 @@ type loadBalancerSearchListResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerSearchListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerSearchGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type LoadBalancerSearchListResponseEnvelopeErrors struct {
-	Code    int64                                            `json:"code,required"`
-	Message string                                           `json:"message,required"`
-	JSON    loadBalancerSearchListResponseEnvelopeErrorsJSON `json:"-"`
+type LoadBalancerSearchGetResponseEnvelopeErrors struct {
+	Code    int64                                           `json:"code,required"`
+	Message string                                          `json:"message,required"`
+	JSON    loadBalancerSearchGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// loadBalancerSearchListResponseEnvelopeErrorsJSON contains the JSON metadata for
-// the struct [LoadBalancerSearchListResponseEnvelopeErrors]
-type loadBalancerSearchListResponseEnvelopeErrorsJSON struct {
+// loadBalancerSearchGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [LoadBalancerSearchGetResponseEnvelopeErrors]
+type loadBalancerSearchGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerSearchListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerSearchGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type LoadBalancerSearchListResponseEnvelopeMessages struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    loadBalancerSearchListResponseEnvelopeMessagesJSON `json:"-"`
+type LoadBalancerSearchGetResponseEnvelopeMessages struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    loadBalancerSearchGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// loadBalancerSearchListResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [LoadBalancerSearchListResponseEnvelopeMessages]
-type loadBalancerSearchListResponseEnvelopeMessagesJSON struct {
+// loadBalancerSearchGetResponseEnvelopeMessagesJSON contains the JSON metadata for
+// the struct [LoadBalancerSearchGetResponseEnvelopeMessages]
+type loadBalancerSearchGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerSearchListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerSearchGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type LoadBalancerSearchListResponseEnvelopeSuccess bool
+type LoadBalancerSearchGetResponseEnvelopeSuccess bool
 
 const (
-	LoadBalancerSearchListResponseEnvelopeSuccessTrue LoadBalancerSearchListResponseEnvelopeSuccess = true
+	LoadBalancerSearchGetResponseEnvelopeSuccessTrue LoadBalancerSearchGetResponseEnvelopeSuccess = true
 )
 
-type LoadBalancerSearchListResponseEnvelopeResultInfo struct {
+type LoadBalancerSearchGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -170,13 +170,13 @@ type LoadBalancerSearchListResponseEnvelopeResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                              `json:"total_count"`
-	JSON       loadBalancerSearchListResponseEnvelopeResultInfoJSON `json:"-"`
+	TotalCount float64                                             `json:"total_count"`
+	JSON       loadBalancerSearchGetResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
-// loadBalancerSearchListResponseEnvelopeResultInfoJSON contains the JSON metadata
-// for the struct [LoadBalancerSearchListResponseEnvelopeResultInfo]
-type loadBalancerSearchListResponseEnvelopeResultInfoJSON struct {
+// loadBalancerSearchGetResponseEnvelopeResultInfoJSON contains the JSON metadata
+// for the struct [LoadBalancerSearchGetResponseEnvelopeResultInfo]
+type loadBalancerSearchGetResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -185,6 +185,6 @@ type loadBalancerSearchListResponseEnvelopeResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerSearchListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerSearchGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

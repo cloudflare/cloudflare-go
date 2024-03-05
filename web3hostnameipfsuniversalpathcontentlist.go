@@ -48,9 +48,9 @@ func (r *Web3HostnameIPFSUniversalPathContentListService) Update(ctx context.Con
 }
 
 // IPFS Universal Path Gateway Content List Details
-func (r *Web3HostnameIPFSUniversalPathContentListService) List(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *Web3HostnameIPFSUniversalPathContentListListResponse, err error) {
+func (r *Web3HostnameIPFSUniversalPathContentListService) Get(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *Web3HostnameIPFSUniversalPathContentListGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env Web3HostnameIPFSUniversalPathContentListListResponseEnvelope
+	var env Web3HostnameIPFSUniversalPathContentListGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/web3/hostnames/%s/ipfs_universal_path/content_list", zoneIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
@@ -85,29 +85,29 @@ const (
 	Web3HostnameIPFSUniversalPathContentListUpdateResponseActionBlock Web3HostnameIPFSUniversalPathContentListUpdateResponseAction = "block"
 )
 
-type Web3HostnameIPFSUniversalPathContentListListResponse struct {
+type Web3HostnameIPFSUniversalPathContentListGetResponse struct {
 	// Behavior of the content list.
-	Action Web3HostnameIPFSUniversalPathContentListListResponseAction `json:"action"`
-	JSON   web3HostnameIPFSUniversalPathContentListListResponseJSON   `json:"-"`
+	Action Web3HostnameIPFSUniversalPathContentListGetResponseAction `json:"action"`
+	JSON   web3HostnameIPFSUniversalPathContentListGetResponseJSON   `json:"-"`
 }
 
-// web3HostnameIPFSUniversalPathContentListListResponseJSON contains the JSON
-// metadata for the struct [Web3HostnameIPFSUniversalPathContentListListResponse]
-type web3HostnameIPFSUniversalPathContentListListResponseJSON struct {
+// web3HostnameIPFSUniversalPathContentListGetResponseJSON contains the JSON
+// metadata for the struct [Web3HostnameIPFSUniversalPathContentListGetResponse]
+type web3HostnameIPFSUniversalPathContentListGetResponseJSON struct {
 	Action      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *Web3HostnameIPFSUniversalPathContentListListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *Web3HostnameIPFSUniversalPathContentListGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Behavior of the content list.
-type Web3HostnameIPFSUniversalPathContentListListResponseAction string
+type Web3HostnameIPFSUniversalPathContentListGetResponseAction string
 
 const (
-	Web3HostnameIPFSUniversalPathContentListListResponseActionBlock Web3HostnameIPFSUniversalPathContentListListResponseAction = "block"
+	Web3HostnameIPFSUniversalPathContentListGetResponseActionBlock Web3HostnameIPFSUniversalPathContentListGetResponseAction = "block"
 )
 
 type Web3HostnameIPFSUniversalPathContentListUpdateParams struct {
@@ -222,19 +222,19 @@ const (
 	Web3HostnameIPFSUniversalPathContentListUpdateResponseEnvelopeSuccessTrue Web3HostnameIPFSUniversalPathContentListUpdateResponseEnvelopeSuccess = true
 )
 
-type Web3HostnameIPFSUniversalPathContentListListResponseEnvelope struct {
-	Errors   []Web3HostnameIPFSUniversalPathContentListListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []Web3HostnameIPFSUniversalPathContentListListResponseEnvelopeMessages `json:"messages,required"`
-	Result   Web3HostnameIPFSUniversalPathContentListListResponse                   `json:"result,required"`
+type Web3HostnameIPFSUniversalPathContentListGetResponseEnvelope struct {
+	Errors   []Web3HostnameIPFSUniversalPathContentListGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []Web3HostnameIPFSUniversalPathContentListGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   Web3HostnameIPFSUniversalPathContentListGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success Web3HostnameIPFSUniversalPathContentListListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    web3HostnameIPFSUniversalPathContentListListResponseEnvelopeJSON    `json:"-"`
+	Success Web3HostnameIPFSUniversalPathContentListGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    web3HostnameIPFSUniversalPathContentListGetResponseEnvelopeJSON    `json:"-"`
 }
 
-// web3HostnameIPFSUniversalPathContentListListResponseEnvelopeJSON contains the
+// web3HostnameIPFSUniversalPathContentListGetResponseEnvelopeJSON contains the
 // JSON metadata for the struct
-// [Web3HostnameIPFSUniversalPathContentListListResponseEnvelope]
-type web3HostnameIPFSUniversalPathContentListListResponseEnvelopeJSON struct {
+// [Web3HostnameIPFSUniversalPathContentListGetResponseEnvelope]
+type web3HostnameIPFSUniversalPathContentListGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -243,53 +243,53 @@ type web3HostnameIPFSUniversalPathContentListListResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *Web3HostnameIPFSUniversalPathContentListListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *Web3HostnameIPFSUniversalPathContentListGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type Web3HostnameIPFSUniversalPathContentListListResponseEnvelopeErrors struct {
-	Code    int64                                                                  `json:"code,required"`
-	Message string                                                                 `json:"message,required"`
-	JSON    web3HostnameIPFSUniversalPathContentListListResponseEnvelopeErrorsJSON `json:"-"`
+type Web3HostnameIPFSUniversalPathContentListGetResponseEnvelopeErrors struct {
+	Code    int64                                                                 `json:"code,required"`
+	Message string                                                                `json:"message,required"`
+	JSON    web3HostnameIPFSUniversalPathContentListGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// web3HostnameIPFSUniversalPathContentListListResponseEnvelopeErrorsJSON contains
+// web3HostnameIPFSUniversalPathContentListGetResponseEnvelopeErrorsJSON contains
 // the JSON metadata for the struct
-// [Web3HostnameIPFSUniversalPathContentListListResponseEnvelopeErrors]
-type web3HostnameIPFSUniversalPathContentListListResponseEnvelopeErrorsJSON struct {
+// [Web3HostnameIPFSUniversalPathContentListGetResponseEnvelopeErrors]
+type web3HostnameIPFSUniversalPathContentListGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *Web3HostnameIPFSUniversalPathContentListListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *Web3HostnameIPFSUniversalPathContentListGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type Web3HostnameIPFSUniversalPathContentListListResponseEnvelopeMessages struct {
-	Code    int64                                                                    `json:"code,required"`
-	Message string                                                                   `json:"message,required"`
-	JSON    web3HostnameIPFSUniversalPathContentListListResponseEnvelopeMessagesJSON `json:"-"`
+type Web3HostnameIPFSUniversalPathContentListGetResponseEnvelopeMessages struct {
+	Code    int64                                                                   `json:"code,required"`
+	Message string                                                                  `json:"message,required"`
+	JSON    web3HostnameIPFSUniversalPathContentListGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// web3HostnameIPFSUniversalPathContentListListResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [Web3HostnameIPFSUniversalPathContentListListResponseEnvelopeMessages]
-type web3HostnameIPFSUniversalPathContentListListResponseEnvelopeMessagesJSON struct {
+// web3HostnameIPFSUniversalPathContentListGetResponseEnvelopeMessagesJSON contains
+// the JSON metadata for the struct
+// [Web3HostnameIPFSUniversalPathContentListGetResponseEnvelopeMessages]
+type web3HostnameIPFSUniversalPathContentListGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *Web3HostnameIPFSUniversalPathContentListListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *Web3HostnameIPFSUniversalPathContentListGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type Web3HostnameIPFSUniversalPathContentListListResponseEnvelopeSuccess bool
+type Web3HostnameIPFSUniversalPathContentListGetResponseEnvelopeSuccess bool
 
 const (
-	Web3HostnameIPFSUniversalPathContentListListResponseEnvelopeSuccessTrue Web3HostnameIPFSUniversalPathContentListListResponseEnvelopeSuccess = true
+	Web3HostnameIPFSUniversalPathContentListGetResponseEnvelopeSuccessTrue Web3HostnameIPFSUniversalPathContentListGetResponseEnvelopeSuccess = true
 )

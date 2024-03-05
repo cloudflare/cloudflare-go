@@ -32,9 +32,9 @@ func NewSSLCertificatePackQuotaService(opts ...option.RequestOption) (r *SSLCert
 }
 
 // For a given zone, list certificate pack quotas.
-func (r *SSLCertificatePackQuotaService) List(ctx context.Context, query SSLCertificatePackQuotaListParams, opts ...option.RequestOption) (res *SSLCertificatePackQuotaListResponse, err error) {
+func (r *SSLCertificatePackQuotaService) Get(ctx context.Context, query SSLCertificatePackQuotaGetParams, opts ...option.RequestOption) (res *SSLCertificatePackQuotaGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env SSLCertificatePackQuotaListResponseEnvelope
+	var env SSLCertificatePackQuotaGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/quota", query.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -44,61 +44,61 @@ func (r *SSLCertificatePackQuotaService) List(ctx context.Context, query SSLCert
 	return
 }
 
-type SSLCertificatePackQuotaListResponse struct {
-	Advanced SSLCertificatePackQuotaListResponseAdvanced `json:"advanced"`
-	JSON     sslCertificatePackQuotaListResponseJSON     `json:"-"`
+type SSLCertificatePackQuotaGetResponse struct {
+	Advanced SSLCertificatePackQuotaGetResponseAdvanced `json:"advanced"`
+	JSON     sslCertificatePackQuotaGetResponseJSON     `json:"-"`
 }
 
-// sslCertificatePackQuotaListResponseJSON contains the JSON metadata for the
-// struct [SSLCertificatePackQuotaListResponse]
-type sslCertificatePackQuotaListResponseJSON struct {
+// sslCertificatePackQuotaGetResponseJSON contains the JSON metadata for the struct
+// [SSLCertificatePackQuotaGetResponse]
+type sslCertificatePackQuotaGetResponseJSON struct {
 	Advanced    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SSLCertificatePackQuotaListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SSLCertificatePackQuotaGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SSLCertificatePackQuotaListResponseAdvanced struct {
+type SSLCertificatePackQuotaGetResponseAdvanced struct {
 	// Quantity Allocated.
 	Allocated int64 `json:"allocated"`
 	// Quantity Used.
-	Used int64                                           `json:"used"`
-	JSON sslCertificatePackQuotaListResponseAdvancedJSON `json:"-"`
+	Used int64                                          `json:"used"`
+	JSON sslCertificatePackQuotaGetResponseAdvancedJSON `json:"-"`
 }
 
-// sslCertificatePackQuotaListResponseAdvancedJSON contains the JSON metadata for
-// the struct [SSLCertificatePackQuotaListResponseAdvanced]
-type sslCertificatePackQuotaListResponseAdvancedJSON struct {
+// sslCertificatePackQuotaGetResponseAdvancedJSON contains the JSON metadata for
+// the struct [SSLCertificatePackQuotaGetResponseAdvanced]
+type sslCertificatePackQuotaGetResponseAdvancedJSON struct {
 	Allocated   apijson.Field
 	Used        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SSLCertificatePackQuotaListResponseAdvanced) UnmarshalJSON(data []byte) (err error) {
+func (r *SSLCertificatePackQuotaGetResponseAdvanced) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SSLCertificatePackQuotaListParams struct {
+type SSLCertificatePackQuotaGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
 
-type SSLCertificatePackQuotaListResponseEnvelope struct {
-	Errors   []SSLCertificatePackQuotaListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []SSLCertificatePackQuotaListResponseEnvelopeMessages `json:"messages,required"`
-	Result   SSLCertificatePackQuotaListResponse                   `json:"result,required"`
+type SSLCertificatePackQuotaGetResponseEnvelope struct {
+	Errors   []SSLCertificatePackQuotaGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []SSLCertificatePackQuotaGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   SSLCertificatePackQuotaGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success SSLCertificatePackQuotaListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    sslCertificatePackQuotaListResponseEnvelopeJSON    `json:"-"`
+	Success SSLCertificatePackQuotaGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    sslCertificatePackQuotaGetResponseEnvelopeJSON    `json:"-"`
 }
 
-// sslCertificatePackQuotaListResponseEnvelopeJSON contains the JSON metadata for
-// the struct [SSLCertificatePackQuotaListResponseEnvelope]
-type sslCertificatePackQuotaListResponseEnvelopeJSON struct {
+// sslCertificatePackQuotaGetResponseEnvelopeJSON contains the JSON metadata for
+// the struct [SSLCertificatePackQuotaGetResponseEnvelope]
+type sslCertificatePackQuotaGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -107,51 +107,51 @@ type sslCertificatePackQuotaListResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SSLCertificatePackQuotaListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *SSLCertificatePackQuotaGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SSLCertificatePackQuotaListResponseEnvelopeErrors struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    sslCertificatePackQuotaListResponseEnvelopeErrorsJSON `json:"-"`
+type SSLCertificatePackQuotaGetResponseEnvelopeErrors struct {
+	Code    int64                                                `json:"code,required"`
+	Message string                                               `json:"message,required"`
+	JSON    sslCertificatePackQuotaGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// sslCertificatePackQuotaListResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [SSLCertificatePackQuotaListResponseEnvelopeErrors]
-type sslCertificatePackQuotaListResponseEnvelopeErrorsJSON struct {
+// sslCertificatePackQuotaGetResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [SSLCertificatePackQuotaGetResponseEnvelopeErrors]
+type sslCertificatePackQuotaGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SSLCertificatePackQuotaListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *SSLCertificatePackQuotaGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SSLCertificatePackQuotaListResponseEnvelopeMessages struct {
-	Code    int64                                                   `json:"code,required"`
-	Message string                                                  `json:"message,required"`
-	JSON    sslCertificatePackQuotaListResponseEnvelopeMessagesJSON `json:"-"`
+type SSLCertificatePackQuotaGetResponseEnvelopeMessages struct {
+	Code    int64                                                  `json:"code,required"`
+	Message string                                                 `json:"message,required"`
+	JSON    sslCertificatePackQuotaGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// sslCertificatePackQuotaListResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [SSLCertificatePackQuotaListResponseEnvelopeMessages]
-type sslCertificatePackQuotaListResponseEnvelopeMessagesJSON struct {
+// sslCertificatePackQuotaGetResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [SSLCertificatePackQuotaGetResponseEnvelopeMessages]
+type sslCertificatePackQuotaGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SSLCertificatePackQuotaListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *SSLCertificatePackQuotaGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type SSLCertificatePackQuotaListResponseEnvelopeSuccess bool
+type SSLCertificatePackQuotaGetResponseEnvelopeSuccess bool
 
 const (
-	SSLCertificatePackQuotaListResponseEnvelopeSuccessTrue SSLCertificatePackQuotaListResponseEnvelopeSuccess = true
+	SSLCertificatePackQuotaGetResponseEnvelopeSuccessTrue SSLCertificatePackQuotaGetResponseEnvelopeSuccess = true
 )

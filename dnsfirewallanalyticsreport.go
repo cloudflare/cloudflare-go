@@ -41,9 +41,9 @@ func NewDNSFirewallAnalyticsReportService(opts ...option.RequestOption) (r *DNSF
 // See
 // [Analytics API properties](https://developers.cloudflare.com/dns/reference/analytics-api-properties/)
 // for detailed information about the available query parameters.
-func (r *DNSFirewallAnalyticsReportService) List(ctx context.Context, accountIdentifier string, identifier string, query DNSFirewallAnalyticsReportListParams, opts ...option.RequestOption) (res *DNSFirewallAnalyticsReportListResponse, err error) {
+func (r *DNSFirewallAnalyticsReportService) Get(ctx context.Context, accountIdentifier string, identifier string, query DNSFirewallAnalyticsReportGetParams, opts ...option.RequestOption) (res *DNSFirewallAnalyticsReportGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env DNSFirewallAnalyticsReportListResponseEnvelope
+	var env DNSFirewallAnalyticsReportGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dns_firewall/%s/dns_analytics/report", accountIdentifier, identifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -53,9 +53,9 @@ func (r *DNSFirewallAnalyticsReportService) List(ctx context.Context, accountIde
 	return
 }
 
-type DNSFirewallAnalyticsReportListResponse struct {
+type DNSFirewallAnalyticsReportGetResponse struct {
 	// Array with one row per combination of dimension values.
-	Data []DNSFirewallAnalyticsReportListResponseData `json:"data,required"`
+	Data []DNSFirewallAnalyticsReportGetResponseData `json:"data,required"`
 	// Number of seconds between current time and last processed event, in another
 	// words how many seconds of data could be missing.
 	DataLag float64 `json:"data_lag,required"`
@@ -64,19 +64,19 @@ type DNSFirewallAnalyticsReportListResponse struct {
 	Max interface{} `json:"max,required"`
 	// Minimum results for each metric (object mapping metric names to values).
 	// Currently always an empty object.
-	Min   interface{}                                 `json:"min,required"`
-	Query DNSFirewallAnalyticsReportListResponseQuery `json:"query,required"`
+	Min   interface{}                                `json:"min,required"`
+	Query DNSFirewallAnalyticsReportGetResponseQuery `json:"query,required"`
 	// Total number of rows in the result.
 	Rows float64 `json:"rows,required"`
 	// Total results for metrics across all data (object mapping metric names to
 	// values).
-	Totals interface{}                                `json:"totals,required"`
-	JSON   dnsFirewallAnalyticsReportListResponseJSON `json:"-"`
+	Totals interface{}                               `json:"totals,required"`
+	JSON   dnsFirewallAnalyticsReportGetResponseJSON `json:"-"`
 }
 
-// dnsFirewallAnalyticsReportListResponseJSON contains the JSON metadata for the
-// struct [DNSFirewallAnalyticsReportListResponse]
-type dnsFirewallAnalyticsReportListResponseJSON struct {
+// dnsFirewallAnalyticsReportGetResponseJSON contains the JSON metadata for the
+// struct [DNSFirewallAnalyticsReportGetResponse]
+type dnsFirewallAnalyticsReportGetResponseJSON struct {
 	Data        apijson.Field
 	DataLag     apijson.Field
 	Max         apijson.Field
@@ -88,33 +88,33 @@ type dnsFirewallAnalyticsReportListResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSFirewallAnalyticsReportListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSFirewallAnalyticsReportGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DNSFirewallAnalyticsReportListResponseData struct {
+type DNSFirewallAnalyticsReportGetResponseData struct {
 	// Array of dimension values, representing the combination of dimension values
 	// corresponding to this row.
 	Dimensions []string `json:"dimensions,required"`
 	// Array with one item per requested metric. Each item is a single value.
-	Metrics []float64                                      `json:"metrics,required"`
-	JSON    dnsFirewallAnalyticsReportListResponseDataJSON `json:"-"`
+	Metrics []float64                                     `json:"metrics,required"`
+	JSON    dnsFirewallAnalyticsReportGetResponseDataJSON `json:"-"`
 }
 
-// dnsFirewallAnalyticsReportListResponseDataJSON contains the JSON metadata for
-// the struct [DNSFirewallAnalyticsReportListResponseData]
-type dnsFirewallAnalyticsReportListResponseDataJSON struct {
+// dnsFirewallAnalyticsReportGetResponseDataJSON contains the JSON metadata for the
+// struct [DNSFirewallAnalyticsReportGetResponseData]
+type dnsFirewallAnalyticsReportGetResponseDataJSON struct {
 	Dimensions  apijson.Field
 	Metrics     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSFirewallAnalyticsReportListResponseData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSFirewallAnalyticsReportGetResponseData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DNSFirewallAnalyticsReportListResponseQuery struct {
+type DNSFirewallAnalyticsReportGetResponseQuery struct {
 	// Array of dimension names.
 	Dimensions []string `json:"dimensions,required"`
 	// Limit number of returned metrics.
@@ -129,13 +129,13 @@ type DNSFirewallAnalyticsReportListResponseQuery struct {
 	Filters string `json:"filters"`
 	// Array of dimensions to sort by, where each dimension may be prefixed by -
 	// (descending) or + (ascending).
-	Sort []string                                        `json:"sort"`
-	JSON dnsFirewallAnalyticsReportListResponseQueryJSON `json:"-"`
+	Sort []string                                       `json:"sort"`
+	JSON dnsFirewallAnalyticsReportGetResponseQueryJSON `json:"-"`
 }
 
-// dnsFirewallAnalyticsReportListResponseQueryJSON contains the JSON metadata for
-// the struct [DNSFirewallAnalyticsReportListResponseQuery]
-type dnsFirewallAnalyticsReportListResponseQueryJSON struct {
+// dnsFirewallAnalyticsReportGetResponseQueryJSON contains the JSON metadata for
+// the struct [DNSFirewallAnalyticsReportGetResponseQuery]
+type dnsFirewallAnalyticsReportGetResponseQueryJSON struct {
 	Dimensions  apijson.Field
 	Limit       apijson.Field
 	Metrics     apijson.Field
@@ -147,11 +147,11 @@ type dnsFirewallAnalyticsReportListResponseQueryJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSFirewallAnalyticsReportListResponseQuery) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSFirewallAnalyticsReportGetResponseQuery) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DNSFirewallAnalyticsReportListParams struct {
+type DNSFirewallAnalyticsReportGetParams struct {
 	// A comma-separated list of dimensions to group results by.
 	Dimensions param.Field[string] `query:"dimensions"`
 	// Segmentation filter in 'attribute operator value' format.
@@ -169,27 +169,27 @@ type DNSFirewallAnalyticsReportListParams struct {
 	Until param.Field[time.Time] `query:"until" format:"date-time"`
 }
 
-// URLQuery serializes [DNSFirewallAnalyticsReportListParams]'s query parameters as
+// URLQuery serializes [DNSFirewallAnalyticsReportGetParams]'s query parameters as
 // `url.Values`.
-func (r DNSFirewallAnalyticsReportListParams) URLQuery() (v url.Values) {
+func (r DNSFirewallAnalyticsReportGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
 
-type DNSFirewallAnalyticsReportListResponseEnvelope struct {
-	Errors   []DNSFirewallAnalyticsReportListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DNSFirewallAnalyticsReportListResponseEnvelopeMessages `json:"messages,required"`
-	Result   DNSFirewallAnalyticsReportListResponse                   `json:"result,required"`
+type DNSFirewallAnalyticsReportGetResponseEnvelope struct {
+	Errors   []DNSFirewallAnalyticsReportGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DNSFirewallAnalyticsReportGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   DNSFirewallAnalyticsReportGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success DNSFirewallAnalyticsReportListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    dnsFirewallAnalyticsReportListResponseEnvelopeJSON    `json:"-"`
+	Success DNSFirewallAnalyticsReportGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    dnsFirewallAnalyticsReportGetResponseEnvelopeJSON    `json:"-"`
 }
 
-// dnsFirewallAnalyticsReportListResponseEnvelopeJSON contains the JSON metadata
-// for the struct [DNSFirewallAnalyticsReportListResponseEnvelope]
-type dnsFirewallAnalyticsReportListResponseEnvelopeJSON struct {
+// dnsFirewallAnalyticsReportGetResponseEnvelopeJSON contains the JSON metadata for
+// the struct [DNSFirewallAnalyticsReportGetResponseEnvelope]
+type dnsFirewallAnalyticsReportGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -198,51 +198,51 @@ type dnsFirewallAnalyticsReportListResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSFirewallAnalyticsReportListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSFirewallAnalyticsReportGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DNSFirewallAnalyticsReportListResponseEnvelopeErrors struct {
-	Code    int64                                                    `json:"code,required"`
-	Message string                                                   `json:"message,required"`
-	JSON    dnsFirewallAnalyticsReportListResponseEnvelopeErrorsJSON `json:"-"`
+type DNSFirewallAnalyticsReportGetResponseEnvelopeErrors struct {
+	Code    int64                                                   `json:"code,required"`
+	Message string                                                  `json:"message,required"`
+	JSON    dnsFirewallAnalyticsReportGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// dnsFirewallAnalyticsReportListResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [DNSFirewallAnalyticsReportListResponseEnvelopeErrors]
-type dnsFirewallAnalyticsReportListResponseEnvelopeErrorsJSON struct {
+// dnsFirewallAnalyticsReportGetResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [DNSFirewallAnalyticsReportGetResponseEnvelopeErrors]
+type dnsFirewallAnalyticsReportGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSFirewallAnalyticsReportListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSFirewallAnalyticsReportGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DNSFirewallAnalyticsReportListResponseEnvelopeMessages struct {
-	Code    int64                                                      `json:"code,required"`
-	Message string                                                     `json:"message,required"`
-	JSON    dnsFirewallAnalyticsReportListResponseEnvelopeMessagesJSON `json:"-"`
+type DNSFirewallAnalyticsReportGetResponseEnvelopeMessages struct {
+	Code    int64                                                     `json:"code,required"`
+	Message string                                                    `json:"message,required"`
+	JSON    dnsFirewallAnalyticsReportGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// dnsFirewallAnalyticsReportListResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [DNSFirewallAnalyticsReportListResponseEnvelopeMessages]
-type dnsFirewallAnalyticsReportListResponseEnvelopeMessagesJSON struct {
+// dnsFirewallAnalyticsReportGetResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [DNSFirewallAnalyticsReportGetResponseEnvelopeMessages]
+type dnsFirewallAnalyticsReportGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSFirewallAnalyticsReportListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSFirewallAnalyticsReportGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type DNSFirewallAnalyticsReportListResponseEnvelopeSuccess bool
+type DNSFirewallAnalyticsReportGetResponseEnvelopeSuccess bool
 
 const (
-	DNSFirewallAnalyticsReportListResponseEnvelopeSuccessTrue DNSFirewallAnalyticsReportListResponseEnvelopeSuccess = true
+	DNSFirewallAnalyticsReportGetResponseEnvelopeSuccessTrue DNSFirewallAnalyticsReportGetResponseEnvelopeSuccess = true
 )

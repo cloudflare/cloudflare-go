@@ -31,16 +31,16 @@ func NewAddressingLOADocumentDownloadService(opts ...option.RequestOption) (r *A
 }
 
 // Download specified LOA document under the account.
-func (r *AddressingLOADocumentDownloadService) List(ctx context.Context, loaDocumentID string, query AddressingLOADocumentDownloadListParams, opts ...option.RequestOption) (res *AddressingLOADocumentDownloadListResponse, err error) {
+func (r *AddressingLOADocumentDownloadService) Get(ctx context.Context, loaDocumentID string, query AddressingLOADocumentDownloadGetParams, opts ...option.RequestOption) (res *AddressingLOADocumentDownloadGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/addressing/loa_documents/%s/download", query.AccountID, loaDocumentID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
-type AddressingLOADocumentDownloadListResponse = interface{}
+type AddressingLOADocumentDownloadGetResponse = interface{}
 
-type AddressingLOADocumentDownloadListParams struct {
+type AddressingLOADocumentDownloadGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }

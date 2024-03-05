@@ -32,26 +32,26 @@ func NewLogReceivedFieldService(opts ...option.RequestOption) (r *LogReceivedFie
 
 // Lists all fields available. The response is json object with key-value pairs,
 // where keys are field names, and values are descriptions.
-func (r *LogReceivedFieldService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *LogReceivedFieldListResponse, err error) {
+func (r *LogReceivedFieldService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *LogReceivedFieldGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/logs/received/fields", zoneIdentifier)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-type LogReceivedFieldListResponse struct {
-	Key  string                           `json:"key"`
-	JSON logReceivedFieldListResponseJSON `json:"-"`
+type LogReceivedFieldGetResponse struct {
+	Key  string                          `json:"key"`
+	JSON logReceivedFieldGetResponseJSON `json:"-"`
 }
 
-// logReceivedFieldListResponseJSON contains the JSON metadata for the struct
-// [LogReceivedFieldListResponse]
-type logReceivedFieldListResponseJSON struct {
+// logReceivedFieldGetResponseJSON contains the JSON metadata for the struct
+// [LogReceivedFieldGetResponse]
+type logReceivedFieldGetResponseJSON struct {
 	Key         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LogReceivedFieldListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *LogReceivedFieldGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

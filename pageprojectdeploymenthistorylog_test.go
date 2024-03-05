@@ -13,7 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/option"
 )
 
-func TestPageProjectDeploymentHistoryLogList(t *testing.T) {
+func TestPageProjectDeploymentHistoryLogGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -27,11 +27,11 @@ func TestPageProjectDeploymentHistoryLogList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Pages.Projects.Deployments.History.Logs.List(
+	_, err := client.Pages.Projects.Deployments.History.Logs.Get(
 		context.TODO(),
 		"this-is-my-project-01",
 		"023e105f4ecef8ad9ca31a8372d0c353",
-		cloudflare.PageProjectDeploymentHistoryLogListParams{
+		cloudflare.PageProjectDeploymentHistoryLogGetParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		},
 	)

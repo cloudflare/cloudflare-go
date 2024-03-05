@@ -32,9 +32,9 @@ func NewLoadBalancerMonitorReferenceService(opts ...option.RequestOption) (r *Lo
 }
 
 // Get the list of resources that reference the provided monitor.
-func (r *LoadBalancerMonitorReferenceService) List(ctx context.Context, monitorID string, query LoadBalancerMonitorReferenceListParams, opts ...option.RequestOption) (res *[]LoadBalancerMonitorReferenceListResponse, err error) {
+func (r *LoadBalancerMonitorReferenceService) Get(ctx context.Context, monitorID string, query LoadBalancerMonitorReferenceGetParams, opts ...option.RequestOption) (res *[]LoadBalancerMonitorReferenceGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env LoadBalancerMonitorReferenceListResponseEnvelope
+	var env LoadBalancerMonitorReferenceGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s/references", query.AccountID, monitorID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -44,17 +44,17 @@ func (r *LoadBalancerMonitorReferenceService) List(ctx context.Context, monitorI
 	return
 }
 
-type LoadBalancerMonitorReferenceListResponse struct {
-	ReferenceType LoadBalancerMonitorReferenceListResponseReferenceType `json:"reference_type"`
-	ResourceID    string                                                `json:"resource_id"`
-	ResourceName  string                                                `json:"resource_name"`
-	ResourceType  string                                                `json:"resource_type"`
-	JSON          loadBalancerMonitorReferenceListResponseJSON          `json:"-"`
+type LoadBalancerMonitorReferenceGetResponse struct {
+	ReferenceType LoadBalancerMonitorReferenceGetResponseReferenceType `json:"reference_type"`
+	ResourceID    string                                               `json:"resource_id"`
+	ResourceName  string                                               `json:"resource_name"`
+	ResourceType  string                                               `json:"resource_type"`
+	JSON          loadBalancerMonitorReferenceGetResponseJSON          `json:"-"`
 }
 
-// loadBalancerMonitorReferenceListResponseJSON contains the JSON metadata for the
-// struct [LoadBalancerMonitorReferenceListResponse]
-type loadBalancerMonitorReferenceListResponseJSON struct {
+// loadBalancerMonitorReferenceGetResponseJSON contains the JSON metadata for the
+// struct [LoadBalancerMonitorReferenceGetResponse]
+type loadBalancerMonitorReferenceGetResponseJSON struct {
 	ReferenceType apijson.Field
 	ResourceID    apijson.Field
 	ResourceName  apijson.Field
@@ -63,37 +63,37 @@ type loadBalancerMonitorReferenceListResponseJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *LoadBalancerMonitorReferenceListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerMonitorReferenceGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type LoadBalancerMonitorReferenceListResponseReferenceType string
+type LoadBalancerMonitorReferenceGetResponseReferenceType string
 
 const (
-	LoadBalancerMonitorReferenceListResponseReferenceTypeStar     LoadBalancerMonitorReferenceListResponseReferenceType = "*"
-	LoadBalancerMonitorReferenceListResponseReferenceTypeReferral LoadBalancerMonitorReferenceListResponseReferenceType = "referral"
-	LoadBalancerMonitorReferenceListResponseReferenceTypeReferrer LoadBalancerMonitorReferenceListResponseReferenceType = "referrer"
+	LoadBalancerMonitorReferenceGetResponseReferenceTypeStar     LoadBalancerMonitorReferenceGetResponseReferenceType = "*"
+	LoadBalancerMonitorReferenceGetResponseReferenceTypeReferral LoadBalancerMonitorReferenceGetResponseReferenceType = "referral"
+	LoadBalancerMonitorReferenceGetResponseReferenceTypeReferrer LoadBalancerMonitorReferenceGetResponseReferenceType = "referrer"
 )
 
-type LoadBalancerMonitorReferenceListParams struct {
+type LoadBalancerMonitorReferenceGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type LoadBalancerMonitorReferenceListResponseEnvelope struct {
-	Errors   []LoadBalancerMonitorReferenceListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []LoadBalancerMonitorReferenceListResponseEnvelopeMessages `json:"messages,required"`
+type LoadBalancerMonitorReferenceGetResponseEnvelope struct {
+	Errors   []LoadBalancerMonitorReferenceGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []LoadBalancerMonitorReferenceGetResponseEnvelopeMessages `json:"messages,required"`
 	// List of resources that reference a given monitor.
-	Result []LoadBalancerMonitorReferenceListResponse `json:"result,required,nullable"`
+	Result []LoadBalancerMonitorReferenceGetResponse `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success    LoadBalancerMonitorReferenceListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo LoadBalancerMonitorReferenceListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       loadBalancerMonitorReferenceListResponseEnvelopeJSON       `json:"-"`
+	Success    LoadBalancerMonitorReferenceGetResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo LoadBalancerMonitorReferenceGetResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       loadBalancerMonitorReferenceGetResponseEnvelopeJSON       `json:"-"`
 }
 
-// loadBalancerMonitorReferenceListResponseEnvelopeJSON contains the JSON metadata
-// for the struct [LoadBalancerMonitorReferenceListResponseEnvelope]
-type loadBalancerMonitorReferenceListResponseEnvelopeJSON struct {
+// loadBalancerMonitorReferenceGetResponseEnvelopeJSON contains the JSON metadata
+// for the struct [LoadBalancerMonitorReferenceGetResponseEnvelope]
+type loadBalancerMonitorReferenceGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -103,57 +103,57 @@ type loadBalancerMonitorReferenceListResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerMonitorReferenceListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerMonitorReferenceGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type LoadBalancerMonitorReferenceListResponseEnvelopeErrors struct {
-	Code    int64                                                      `json:"code,required"`
-	Message string                                                     `json:"message,required"`
-	JSON    loadBalancerMonitorReferenceListResponseEnvelopeErrorsJSON `json:"-"`
+type LoadBalancerMonitorReferenceGetResponseEnvelopeErrors struct {
+	Code    int64                                                     `json:"code,required"`
+	Message string                                                    `json:"message,required"`
+	JSON    loadBalancerMonitorReferenceGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// loadBalancerMonitorReferenceListResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [LoadBalancerMonitorReferenceListResponseEnvelopeErrors]
-type loadBalancerMonitorReferenceListResponseEnvelopeErrorsJSON struct {
+// loadBalancerMonitorReferenceGetResponseEnvelopeErrorsJSON contains the JSON
+// metadata for the struct [LoadBalancerMonitorReferenceGetResponseEnvelopeErrors]
+type loadBalancerMonitorReferenceGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerMonitorReferenceListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerMonitorReferenceGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type LoadBalancerMonitorReferenceListResponseEnvelopeMessages struct {
-	Code    int64                                                        `json:"code,required"`
-	Message string                                                       `json:"message,required"`
-	JSON    loadBalancerMonitorReferenceListResponseEnvelopeMessagesJSON `json:"-"`
+type LoadBalancerMonitorReferenceGetResponseEnvelopeMessages struct {
+	Code    int64                                                       `json:"code,required"`
+	Message string                                                      `json:"message,required"`
+	JSON    loadBalancerMonitorReferenceGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// loadBalancerMonitorReferenceListResponseEnvelopeMessagesJSON contains the JSON
+// loadBalancerMonitorReferenceGetResponseEnvelopeMessagesJSON contains the JSON
 // metadata for the struct
-// [LoadBalancerMonitorReferenceListResponseEnvelopeMessages]
-type loadBalancerMonitorReferenceListResponseEnvelopeMessagesJSON struct {
+// [LoadBalancerMonitorReferenceGetResponseEnvelopeMessages]
+type loadBalancerMonitorReferenceGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerMonitorReferenceListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerMonitorReferenceGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type LoadBalancerMonitorReferenceListResponseEnvelopeSuccess bool
+type LoadBalancerMonitorReferenceGetResponseEnvelopeSuccess bool
 
 const (
-	LoadBalancerMonitorReferenceListResponseEnvelopeSuccessTrue LoadBalancerMonitorReferenceListResponseEnvelopeSuccess = true
+	LoadBalancerMonitorReferenceGetResponseEnvelopeSuccessTrue LoadBalancerMonitorReferenceGetResponseEnvelopeSuccess = true
 )
 
-type LoadBalancerMonitorReferenceListResponseEnvelopeResultInfo struct {
+type LoadBalancerMonitorReferenceGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -161,14 +161,14 @@ type LoadBalancerMonitorReferenceListResponseEnvelopeResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                                        `json:"total_count"`
-	JSON       loadBalancerMonitorReferenceListResponseEnvelopeResultInfoJSON `json:"-"`
+	TotalCount float64                                                       `json:"total_count"`
+	JSON       loadBalancerMonitorReferenceGetResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
-// loadBalancerMonitorReferenceListResponseEnvelopeResultInfoJSON contains the JSON
+// loadBalancerMonitorReferenceGetResponseEnvelopeResultInfoJSON contains the JSON
 // metadata for the struct
-// [LoadBalancerMonitorReferenceListResponseEnvelopeResultInfo]
-type loadBalancerMonitorReferenceListResponseEnvelopeResultInfoJSON struct {
+// [LoadBalancerMonitorReferenceGetResponseEnvelopeResultInfo]
+type loadBalancerMonitorReferenceGetResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -177,6 +177,6 @@ type loadBalancerMonitorReferenceListResponseEnvelopeResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerMonitorReferenceListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancerMonitorReferenceGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }

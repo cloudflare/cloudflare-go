@@ -48,19 +48,6 @@ func NewUserService(opts ...option.RequestOption) (r *UserService) {
 	return
 }
 
-// User Details
-func (r *UserService) List(ctx context.Context, opts ...option.RequestOption) (res *UserListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env UserListResponseEnvelope
-	path := "user"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Edit part of your user details.
 func (r *UserService) Edit(ctx context.Context, body UserEditParams, opts ...option.RequestOption) (res *UserEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -74,20 +61,17 @@ func (r *UserService) Edit(ctx context.Context, body UserEditParams, opts ...opt
 	return
 }
 
-// Union satisfied by [UserListResponseUnknown] or [shared.UnionString].
-type UserListResponse interface {
-	ImplementsUserListResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*UserListResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
+// User Details
+func (r *UserService) Get(ctx context.Context, opts ...option.RequestOption) (res *UserGetResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env UserGetResponseEnvelope
+	path := "user"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
 }
 
 // Union satisfied by [UserEditResponseUnknown] or [shared.UnionString].
@@ -106,74 +90,21 @@ func init() {
 	)
 }
 
-type UserListResponseEnvelope struct {
-	Errors   []UserListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []UserListResponseEnvelopeMessages `json:"messages,required"`
-	Result   UserListResponse                   `json:"result,required"`
-	// Whether the API call was successful
-	Success UserListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    userListResponseEnvelopeJSON    `json:"-"`
+// Union satisfied by [UserGetResponseUnknown] or [shared.UnionString].
+type UserGetResponse interface {
+	ImplementsUserGetResponse()
 }
 
-// userListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [UserListResponseEnvelope]
-type userListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*UserGetResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
-
-func (r *UserListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type UserListResponseEnvelopeErrors struct {
-	Code    int64                              `json:"code,required"`
-	Message string                             `json:"message,required"`
-	JSON    userListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// userListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [UserListResponseEnvelopeErrors]
-type userListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UserListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type UserListResponseEnvelopeMessages struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    userListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// userListResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
-// [UserListResponseEnvelopeMessages]
-type userListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UserListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type UserListResponseEnvelopeSuccess bool
-
-const (
-	UserListResponseEnvelopeSuccessTrue UserListResponseEnvelopeSuccess = true
-)
 
 type UserEditParams struct {
 	// The country in which the user lives.
@@ -259,4 +190,73 @@ type UserEditResponseEnvelopeSuccess bool
 
 const (
 	UserEditResponseEnvelopeSuccessTrue UserEditResponseEnvelopeSuccess = true
+)
+
+type UserGetResponseEnvelope struct {
+	Errors   []UserGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []UserGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   UserGetResponse                   `json:"result,required"`
+	// Whether the API call was successful
+	Success UserGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    userGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// userGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [UserGetResponseEnvelope]
+type userGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type UserGetResponseEnvelopeErrors struct {
+	Code    int64                             `json:"code,required"`
+	Message string                            `json:"message,required"`
+	JSON    userGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// userGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [UserGetResponseEnvelopeErrors]
+type userGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type UserGetResponseEnvelopeMessages struct {
+	Code    int64                               `json:"code,required"`
+	Message string                              `json:"message,required"`
+	JSON    userGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// userGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [UserGetResponseEnvelopeMessages]
+type userGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Whether the API call was successful
+type UserGetResponseEnvelopeSuccess bool
+
+const (
+	UserGetResponseEnvelopeSuccessTrue UserGetResponseEnvelopeSuccess = true
 )

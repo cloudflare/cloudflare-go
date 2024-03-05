@@ -45,9 +45,9 @@ func (r *WorkerScriptScheduleService) Update(ctx context.Context, scriptName str
 }
 
 // Fetches Cron Triggers for a Worker.
-func (r *WorkerScriptScheduleService) List(ctx context.Context, scriptName string, query WorkerScriptScheduleListParams, opts ...option.RequestOption) (res *WorkerScriptScheduleListResponse, err error) {
+func (r *WorkerScriptScheduleService) Get(ctx context.Context, scriptName string, query WorkerScriptScheduleGetParams, opts ...option.RequestOption) (res *WorkerScriptScheduleGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	var env WorkerScriptScheduleListResponseEnvelope
+	var env WorkerScriptScheduleGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/schedules", query.AccountID, scriptName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -95,33 +95,33 @@ func (r *WorkerScriptScheduleUpdateResponseSchedule) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerScriptScheduleListResponse struct {
-	Schedules []WorkerScriptScheduleListResponseSchedule `json:"schedules"`
-	JSON      workerScriptScheduleListResponseJSON       `json:"-"`
+type WorkerScriptScheduleGetResponse struct {
+	Schedules []WorkerScriptScheduleGetResponseSchedule `json:"schedules"`
+	JSON      workerScriptScheduleGetResponseJSON       `json:"-"`
 }
 
-// workerScriptScheduleListResponseJSON contains the JSON metadata for the struct
-// [WorkerScriptScheduleListResponse]
-type workerScriptScheduleListResponseJSON struct {
+// workerScriptScheduleGetResponseJSON contains the JSON metadata for the struct
+// [WorkerScriptScheduleGetResponse]
+type workerScriptScheduleGetResponseJSON struct {
 	Schedules   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerScriptScheduleListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerScriptScheduleGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerScriptScheduleListResponseSchedule struct {
-	CreatedOn  interface{}                                  `json:"created_on"`
-	Cron       interface{}                                  `json:"cron"`
-	ModifiedOn interface{}                                  `json:"modified_on"`
-	JSON       workerScriptScheduleListResponseScheduleJSON `json:"-"`
+type WorkerScriptScheduleGetResponseSchedule struct {
+	CreatedOn  interface{}                                 `json:"created_on"`
+	Cron       interface{}                                 `json:"cron"`
+	ModifiedOn interface{}                                 `json:"modified_on"`
+	JSON       workerScriptScheduleGetResponseScheduleJSON `json:"-"`
 }
 
-// workerScriptScheduleListResponseScheduleJSON contains the JSON metadata for the
-// struct [WorkerScriptScheduleListResponseSchedule]
-type workerScriptScheduleListResponseScheduleJSON struct {
+// workerScriptScheduleGetResponseScheduleJSON contains the JSON metadata for the
+// struct [WorkerScriptScheduleGetResponseSchedule]
+type workerScriptScheduleGetResponseScheduleJSON struct {
 	CreatedOn   apijson.Field
 	Cron        apijson.Field
 	ModifiedOn  apijson.Field
@@ -129,7 +129,7 @@ type workerScriptScheduleListResponseScheduleJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerScriptScheduleListResponseSchedule) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerScriptScheduleGetResponseSchedule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -212,23 +212,23 @@ const (
 	WorkerScriptScheduleUpdateResponseEnvelopeSuccessTrue WorkerScriptScheduleUpdateResponseEnvelopeSuccess = true
 )
 
-type WorkerScriptScheduleListParams struct {
+type WorkerScriptScheduleGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type WorkerScriptScheduleListResponseEnvelope struct {
-	Errors   []WorkerScriptScheduleListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []WorkerScriptScheduleListResponseEnvelopeMessages `json:"messages,required"`
-	Result   WorkerScriptScheduleListResponse                   `json:"result,required"`
+type WorkerScriptScheduleGetResponseEnvelope struct {
+	Errors   []WorkerScriptScheduleGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []WorkerScriptScheduleGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   WorkerScriptScheduleGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
-	Success WorkerScriptScheduleListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    workerScriptScheduleListResponseEnvelopeJSON    `json:"-"`
+	Success WorkerScriptScheduleGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    workerScriptScheduleGetResponseEnvelopeJSON    `json:"-"`
 }
 
-// workerScriptScheduleListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [WorkerScriptScheduleListResponseEnvelope]
-type workerScriptScheduleListResponseEnvelopeJSON struct {
+// workerScriptScheduleGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [WorkerScriptScheduleGetResponseEnvelope]
+type workerScriptScheduleGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -237,51 +237,51 @@ type workerScriptScheduleListResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerScriptScheduleListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerScriptScheduleGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerScriptScheduleListResponseEnvelopeErrors struct {
-	Code    int64                                              `json:"code,required"`
-	Message string                                             `json:"message,required"`
-	JSON    workerScriptScheduleListResponseEnvelopeErrorsJSON `json:"-"`
+type WorkerScriptScheduleGetResponseEnvelopeErrors struct {
+	Code    int64                                             `json:"code,required"`
+	Message string                                            `json:"message,required"`
+	JSON    workerScriptScheduleGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// workerScriptScheduleListResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [WorkerScriptScheduleListResponseEnvelopeErrors]
-type workerScriptScheduleListResponseEnvelopeErrorsJSON struct {
+// workerScriptScheduleGetResponseEnvelopeErrorsJSON contains the JSON metadata for
+// the struct [WorkerScriptScheduleGetResponseEnvelopeErrors]
+type workerScriptScheduleGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerScriptScheduleListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerScriptScheduleGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkerScriptScheduleListResponseEnvelopeMessages struct {
-	Code    int64                                                `json:"code,required"`
-	Message string                                               `json:"message,required"`
-	JSON    workerScriptScheduleListResponseEnvelopeMessagesJSON `json:"-"`
+type WorkerScriptScheduleGetResponseEnvelopeMessages struct {
+	Code    int64                                               `json:"code,required"`
+	Message string                                              `json:"message,required"`
+	JSON    workerScriptScheduleGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// workerScriptScheduleListResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [WorkerScriptScheduleListResponseEnvelopeMessages]
-type workerScriptScheduleListResponseEnvelopeMessagesJSON struct {
+// workerScriptScheduleGetResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [WorkerScriptScheduleGetResponseEnvelopeMessages]
+type workerScriptScheduleGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerScriptScheduleListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerScriptScheduleGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the API call was successful
-type WorkerScriptScheduleListResponseEnvelopeSuccess bool
+type WorkerScriptScheduleGetResponseEnvelopeSuccess bool
 
 const (
-	WorkerScriptScheduleListResponseEnvelopeSuccessTrue WorkerScriptScheduleListResponseEnvelopeSuccess = true
+	WorkerScriptScheduleGetResponseEnvelopeSuccessTrue WorkerScriptScheduleGetResponseEnvelopeSuccess = true
 )
