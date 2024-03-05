@@ -37,7 +37,7 @@ func NewPageShieldService(opts ...option.RequestOption) (r *PageShieldService) {
 }
 
 // Updates Page Shield settings.
-func (r *PageShieldService) Update(ctx context.Context, params PageShieldUpdateParams, opts ...option.RequestOption) (res *PageShieldUpdateResponse, err error) {
+func (r *PageShieldService) Update(ctx context.Context, params PageShieldUpdateParams, opts ...option.RequestOption) (res *PageShieldUpdateZoneSettings, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageShieldUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/page_shield", params.ZoneID)
@@ -50,7 +50,7 @@ func (r *PageShieldService) Update(ctx context.Context, params PageShieldUpdateP
 }
 
 // Fetches the Page Shield settings.
-func (r *PageShieldService) List(ctx context.Context, query PageShieldListParams, opts ...option.RequestOption) (res *PageShieldListResponse, err error) {
+func (r *PageShieldService) List(ctx context.Context, query PageShieldListParams, opts ...option.RequestOption) (res *PageShieldGetZoneSettings, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageShieldListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/page_shield", query.ZoneID)
@@ -62,7 +62,7 @@ func (r *PageShieldService) List(ctx context.Context, query PageShieldListParams
 	return
 }
 
-type PageShieldUpdateResponse struct {
+type PageShieldGetZoneSettings struct {
 	// When true, indicates that Page Shield is enabled.
 	Enabled bool `json:"enabled"`
 	// The timestamp of when Page Shield was last updated.
@@ -71,13 +71,13 @@ type PageShieldUpdateResponse struct {
 	// https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report
 	UseCloudflareReportingEndpoint bool `json:"use_cloudflare_reporting_endpoint"`
 	// When true, the paths associated with connections URLs will also be analyzed.
-	UseConnectionURLPath bool                         `json:"use_connection_url_path"`
-	JSON                 pageShieldUpdateResponseJSON `json:"-"`
+	UseConnectionURLPath bool                          `json:"use_connection_url_path"`
+	JSON                 pageShieldGetZoneSettingsJSON `json:"-"`
 }
 
-// pageShieldUpdateResponseJSON contains the JSON metadata for the struct
-// [PageShieldUpdateResponse]
-type pageShieldUpdateResponseJSON struct {
+// pageShieldGetZoneSettingsJSON contains the JSON metadata for the struct
+// [PageShieldGetZoneSettings]
+type pageShieldGetZoneSettingsJSON struct {
 	Enabled                        apijson.Field
 	UpdatedAt                      apijson.Field
 	UseCloudflareReportingEndpoint apijson.Field
@@ -86,11 +86,11 @@ type pageShieldUpdateResponseJSON struct {
 	ExtraFields                    map[string]apijson.Field
 }
 
-func (r *PageShieldUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *PageShieldGetZoneSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type PageShieldListResponse struct {
+type PageShieldUpdateZoneSettings struct {
 	// When true, indicates that Page Shield is enabled.
 	Enabled bool `json:"enabled"`
 	// The timestamp of when Page Shield was last updated.
@@ -99,13 +99,13 @@ type PageShieldListResponse struct {
 	// https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report
 	UseCloudflareReportingEndpoint bool `json:"use_cloudflare_reporting_endpoint"`
 	// When true, the paths associated with connections URLs will also be analyzed.
-	UseConnectionURLPath bool                       `json:"use_connection_url_path"`
-	JSON                 pageShieldListResponseJSON `json:"-"`
+	UseConnectionURLPath bool                             `json:"use_connection_url_path"`
+	JSON                 pageShieldUpdateZoneSettingsJSON `json:"-"`
 }
 
-// pageShieldListResponseJSON contains the JSON metadata for the struct
-// [PageShieldListResponse]
-type pageShieldListResponseJSON struct {
+// pageShieldUpdateZoneSettingsJSON contains the JSON metadata for the struct
+// [PageShieldUpdateZoneSettings]
+type pageShieldUpdateZoneSettingsJSON struct {
 	Enabled                        apijson.Field
 	UpdatedAt                      apijson.Field
 	UseCloudflareReportingEndpoint apijson.Field
@@ -114,7 +114,7 @@ type pageShieldListResponseJSON struct {
 	ExtraFields                    map[string]apijson.Field
 }
 
-func (r *PageShieldListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *PageShieldUpdateZoneSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -137,7 +137,7 @@ func (r PageShieldUpdateParams) MarshalJSON() (data []byte, err error) {
 type PageShieldUpdateResponseEnvelope struct {
 	Errors   []PageShieldUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []PageShieldUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   PageShieldUpdateResponse                   `json:"result,required"`
+	Result   PageShieldUpdateZoneSettings               `json:"result,required"`
 	// Whether the API call was successful
 	Success PageShieldUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    pageShieldUpdateResponseEnvelopeJSON    `json:"-"`
@@ -211,7 +211,7 @@ type PageShieldListParams struct {
 type PageShieldListResponseEnvelope struct {
 	Errors   []PageShieldListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []PageShieldListResponseEnvelopeMessages `json:"messages,required"`
-	Result   PageShieldListResponse                   `json:"result,required"`
+	Result   PageShieldGetZoneSettings                `json:"result,required"`
 	// Whether the API call was successful
 	Success PageShieldListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    pageShieldListResponseEnvelopeJSON    `json:"-"`

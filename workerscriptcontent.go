@@ -9,7 +9,6 @@ import (
 	"io"
 	"mime/multipart"
 	"net/http"
-	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiform"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
@@ -37,7 +36,7 @@ func NewWorkerScriptContentService(opts ...option.RequestOption) (r *WorkerScrip
 }
 
 // Put script content without touching config or metadata
-func (r *WorkerScriptContentService) Update(ctx context.Context, scriptName string, params WorkerScriptContentUpdateParams, opts ...option.RequestOption) (res *WorkerScriptContentUpdateResponse, err error) {
+func (r *WorkerScriptContentService) Update(ctx context.Context, scriptName string, params WorkerScriptContentUpdateParams, opts ...option.RequestOption) (res *WorkersScript, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerScriptContentUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/content", params.AccountID, scriptName)
@@ -47,73 +46,6 @@ func (r *WorkerScriptContentService) Update(ctx context.Context, scriptName stri
 	}
 	res = &env.Result
 	return
-}
-
-type WorkerScriptContentUpdateResponse struct {
-	// The id of the script in the Workers system. Usually the script name.
-	ID string `json:"id"`
-	// When the script was created.
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Hashed script content, can be used in a If-None-Match header when updating.
-	Etag string `json:"etag"`
-	// Whether Logpush is turned on for the Worker.
-	Logpush bool `json:"logpush"`
-	// When the script was last modified.
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// Deprecated. Deployment metadata for internal usage.
-	PipelineHash string `json:"pipeline_hash"`
-	// Specifies the placement mode for the Worker (e.g. 'smart').
-	PlacementMode string `json:"placement_mode"`
-	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers []WorkerScriptContentUpdateResponseTailConsumer `json:"tail_consumers"`
-	// Specifies the usage model for the Worker (e.g. 'bundled' or 'unbound').
-	UsageModel string                                `json:"usage_model"`
-	JSON       workerScriptContentUpdateResponseJSON `json:"-"`
-}
-
-// workerScriptContentUpdateResponseJSON contains the JSON metadata for the struct
-// [WorkerScriptContentUpdateResponse]
-type workerScriptContentUpdateResponseJSON struct {
-	ID            apijson.Field
-	CreatedOn     apijson.Field
-	Etag          apijson.Field
-	Logpush       apijson.Field
-	ModifiedOn    apijson.Field
-	PipelineHash  apijson.Field
-	PlacementMode apijson.Field
-	TailConsumers apijson.Field
-	UsageModel    apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *WorkerScriptContentUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// A reference to a script that will consume logs from the attached Worker.
-type WorkerScriptContentUpdateResponseTailConsumer struct {
-	// Name of Worker that is to be the consumer.
-	Service string `json:"service,required"`
-	// Optional environment if the Worker utilizes one.
-	Environment string `json:"environment"`
-	// Optional dispatch namespace the script belongs to.
-	Namespace string                                            `json:"namespace"`
-	JSON      workerScriptContentUpdateResponseTailConsumerJSON `json:"-"`
-}
-
-// workerScriptContentUpdateResponseTailConsumerJSON contains the JSON metadata for
-// the struct [WorkerScriptContentUpdateResponseTailConsumer]
-type workerScriptContentUpdateResponseTailConsumerJSON struct {
-	Service     apijson.Field
-	Environment apijson.Field
-	Namespace   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerScriptContentUpdateResponseTailConsumer) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
 }
 
 type WorkerScriptContentUpdateParams struct {
@@ -164,7 +96,7 @@ func (r WorkerScriptContentUpdateParamsMetadata) MarshalJSON() (data []byte, err
 type WorkerScriptContentUpdateResponseEnvelope struct {
 	Errors   []WorkerScriptContentUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []WorkerScriptContentUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   WorkerScriptContentUpdateResponse                   `json:"result,required"`
+	Result   WorkersScript                                       `json:"result,required"`
 	// Whether the API call was successful
 	Success WorkerScriptContentUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    workerScriptContentUpdateResponseEnvelopeJSON    `json:"-"`

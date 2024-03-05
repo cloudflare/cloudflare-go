@@ -32,7 +32,7 @@ func NewZeroTrustDeviceDEXTestService(opts ...option.RequestOption) (r *ZeroTrus
 }
 
 // Create a DEX test.
-func (r *ZeroTrustDeviceDEXTestService) New(ctx context.Context, params ZeroTrustDeviceDEXTestNewParams, opts ...option.RequestOption) (res *ZeroTrustDeviceDEXTestNewResponse, err error) {
+func (r *ZeroTrustDeviceDEXTestService) New(ctx context.Context, params ZeroTrustDeviceDEXTestNewParams, opts ...option.RequestOption) (res *TeamsDevicesDeviceDEXTestSchemasHTTP, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustDeviceDEXTestNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/dex_tests", params.AccountID)
@@ -45,7 +45,7 @@ func (r *ZeroTrustDeviceDEXTestService) New(ctx context.Context, params ZeroTrus
 }
 
 // Update a DEX test.
-func (r *ZeroTrustDeviceDEXTestService) Update(ctx context.Context, dexTestID string, params ZeroTrustDeviceDEXTestUpdateParams, opts ...option.RequestOption) (res *ZeroTrustDeviceDEXTestUpdateResponse, err error) {
+func (r *ZeroTrustDeviceDEXTestService) Update(ctx context.Context, dexTestID string, params ZeroTrustDeviceDEXTestUpdateParams, opts ...option.RequestOption) (res *TeamsDevicesDeviceDEXTestSchemasHTTP, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustDeviceDEXTestUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/dex_tests/%s", params.AccountID, dexTestID)
@@ -58,7 +58,7 @@ func (r *ZeroTrustDeviceDEXTestService) Update(ctx context.Context, dexTestID st
 }
 
 // Fetch all DEX tests.
-func (r *ZeroTrustDeviceDEXTestService) List(ctx context.Context, query ZeroTrustDeviceDEXTestListParams, opts ...option.RequestOption) (res *[]ZeroTrustDeviceDEXTestListResponse, err error) {
+func (r *ZeroTrustDeviceDEXTestService) List(ctx context.Context, query ZeroTrustDeviceDEXTestListParams, opts ...option.RequestOption) (res *[]TeamsDevicesDeviceDEXTestSchemasHTTP, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustDeviceDEXTestListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/dex_tests", query.AccountID)
@@ -72,7 +72,7 @@ func (r *ZeroTrustDeviceDEXTestService) List(ctx context.Context, query ZeroTrus
 
 // Delete a Device DEX test. Returns the remaining device dex tests for the
 // account.
-func (r *ZeroTrustDeviceDEXTestService) Delete(ctx context.Context, dexTestID string, body ZeroTrustDeviceDEXTestDeleteParams, opts ...option.RequestOption) (res *[]ZeroTrustDeviceDEXTestDeleteResponse, err error) {
+func (r *ZeroTrustDeviceDEXTestService) Delete(ctx context.Context, dexTestID string, body ZeroTrustDeviceDEXTestDeleteParams, opts ...option.RequestOption) (res *[]TeamsDevicesDeviceDEXTestSchemasHTTP, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustDeviceDEXTestDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/dex_tests/%s", body.AccountID, dexTestID)
@@ -85,7 +85,7 @@ func (r *ZeroTrustDeviceDEXTestService) Delete(ctx context.Context, dexTestID st
 }
 
 // Fetch a single DEX test.
-func (r *ZeroTrustDeviceDEXTestService) Get(ctx context.Context, dexTestID string, query ZeroTrustDeviceDEXTestGetParams, opts ...option.RequestOption) (res *ZeroTrustDeviceDEXTestGetResponse, err error) {
+func (r *ZeroTrustDeviceDEXTestService) Get(ctx context.Context, dexTestID string, query ZeroTrustDeviceDEXTestGetParams, opts ...option.RequestOption) (res *TeamsDevicesDeviceDEXTestSchemasHTTP, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustDeviceDEXTestGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/dex_tests/%s", query.AccountID, dexTestID)
@@ -97,67 +97,10 @@ func (r *ZeroTrustDeviceDEXTestService) Get(ctx context.Context, dexTestID strin
 	return
 }
 
-type ZeroTrustDeviceDEXTestNewResponse struct {
+type TeamsDevicesDeviceDEXTestSchemasHTTP struct {
 	// The configuration object which contains the details for the WARP client to
 	// conduct the test.
-	Data ZeroTrustDeviceDEXTestNewResponseData `json:"data,required"`
-	// Determines whether or not the test is active.
-	Enabled bool `json:"enabled,required"`
-	// How often the test will run.
-	Interval string `json:"interval,required"`
-	// The name of the DEX test. Must be unique.
-	Name string `json:"name,required"`
-	// Additional details about the test.
-	Description string                                `json:"description"`
-	JSON        zeroTrustDeviceDEXTestNewResponseJSON `json:"-"`
-}
-
-// zeroTrustDeviceDEXTestNewResponseJSON contains the JSON metadata for the struct
-// [ZeroTrustDeviceDEXTestNewResponse]
-type zeroTrustDeviceDEXTestNewResponseJSON struct {
-	Data        apijson.Field
-	Enabled     apijson.Field
-	Interval    apijson.Field
-	Name        apijson.Field
-	Description apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustDeviceDEXTestNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The configuration object which contains the details for the WARP client to
-// conduct the test.
-type ZeroTrustDeviceDEXTestNewResponseData struct {
-	// The desired endpoint to test.
-	Host string `json:"host"`
-	// The type of test.
-	Kind string `json:"kind"`
-	// The HTTP request method type.
-	Method string                                    `json:"method"`
-	JSON   zeroTrustDeviceDEXTestNewResponseDataJSON `json:"-"`
-}
-
-// zeroTrustDeviceDEXTestNewResponseDataJSON contains the JSON metadata for the
-// struct [ZeroTrustDeviceDEXTestNewResponseData]
-type zeroTrustDeviceDEXTestNewResponseDataJSON struct {
-	Host        apijson.Field
-	Kind        apijson.Field
-	Method      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustDeviceDEXTestNewResponseData) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZeroTrustDeviceDEXTestUpdateResponse struct {
-	// The configuration object which contains the details for the WARP client to
-	// conduct the test.
-	Data ZeroTrustDeviceDEXTestUpdateResponseData `json:"data,required"`
+	Data TeamsDevicesDeviceDEXTestSchemasHTTPData `json:"data,required"`
 	// Determines whether or not the test is active.
 	Enabled bool `json:"enabled,required"`
 	// How often the test will run.
@@ -166,12 +109,12 @@ type ZeroTrustDeviceDEXTestUpdateResponse struct {
 	Name string `json:"name,required"`
 	// Additional details about the test.
 	Description string                                   `json:"description"`
-	JSON        zeroTrustDeviceDEXTestUpdateResponseJSON `json:"-"`
+	JSON        teamsDevicesDeviceDEXTestSchemasHTTPJSON `json:"-"`
 }
 
-// zeroTrustDeviceDEXTestUpdateResponseJSON contains the JSON metadata for the
-// struct [ZeroTrustDeviceDEXTestUpdateResponse]
-type zeroTrustDeviceDEXTestUpdateResponseJSON struct {
+// teamsDevicesDeviceDEXTestSchemasHTTPJSON contains the JSON metadata for the
+// struct [TeamsDevicesDeviceDEXTestSchemasHTTP]
+type teamsDevicesDeviceDEXTestSchemasHTTPJSON struct {
 	Data        apijson.Field
 	Enabled     apijson.Field
 	Interval    apijson.Field
@@ -181,25 +124,25 @@ type zeroTrustDeviceDEXTestUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZeroTrustDeviceDEXTestUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *TeamsDevicesDeviceDEXTestSchemasHTTP) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The configuration object which contains the details for the WARP client to
 // conduct the test.
-type ZeroTrustDeviceDEXTestUpdateResponseData struct {
+type TeamsDevicesDeviceDEXTestSchemasHTTPData struct {
 	// The desired endpoint to test.
 	Host string `json:"host"`
 	// The type of test.
 	Kind string `json:"kind"`
 	// The HTTP request method type.
 	Method string                                       `json:"method"`
-	JSON   zeroTrustDeviceDEXTestUpdateResponseDataJSON `json:"-"`
+	JSON   teamsDevicesDeviceDEXTestSchemasHTTPDataJSON `json:"-"`
 }
 
-// zeroTrustDeviceDEXTestUpdateResponseDataJSON contains the JSON metadata for the
-// struct [ZeroTrustDeviceDEXTestUpdateResponseData]
-type zeroTrustDeviceDEXTestUpdateResponseDataJSON struct {
+// teamsDevicesDeviceDEXTestSchemasHTTPDataJSON contains the JSON metadata for the
+// struct [TeamsDevicesDeviceDEXTestSchemasHTTPData]
+type teamsDevicesDeviceDEXTestSchemasHTTPDataJSON struct {
 	Host        apijson.Field
 	Kind        apijson.Field
 	Method      apijson.Field
@@ -207,178 +150,7 @@ type zeroTrustDeviceDEXTestUpdateResponseDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZeroTrustDeviceDEXTestUpdateResponseData) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZeroTrustDeviceDEXTestListResponse struct {
-	// The configuration object which contains the details for the WARP client to
-	// conduct the test.
-	Data ZeroTrustDeviceDEXTestListResponseData `json:"data,required"`
-	// Determines whether or not the test is active.
-	Enabled bool `json:"enabled,required"`
-	// How often the test will run.
-	Interval string `json:"interval,required"`
-	// The name of the DEX test. Must be unique.
-	Name string `json:"name,required"`
-	// Additional details about the test.
-	Description string                                 `json:"description"`
-	JSON        zeroTrustDeviceDEXTestListResponseJSON `json:"-"`
-}
-
-// zeroTrustDeviceDEXTestListResponseJSON contains the JSON metadata for the struct
-// [ZeroTrustDeviceDEXTestListResponse]
-type zeroTrustDeviceDEXTestListResponseJSON struct {
-	Data        apijson.Field
-	Enabled     apijson.Field
-	Interval    apijson.Field
-	Name        apijson.Field
-	Description apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustDeviceDEXTestListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The configuration object which contains the details for the WARP client to
-// conduct the test.
-type ZeroTrustDeviceDEXTestListResponseData struct {
-	// The desired endpoint to test.
-	Host string `json:"host"`
-	// The type of test.
-	Kind string `json:"kind"`
-	// The HTTP request method type.
-	Method string                                     `json:"method"`
-	JSON   zeroTrustDeviceDEXTestListResponseDataJSON `json:"-"`
-}
-
-// zeroTrustDeviceDEXTestListResponseDataJSON contains the JSON metadata for the
-// struct [ZeroTrustDeviceDEXTestListResponseData]
-type zeroTrustDeviceDEXTestListResponseDataJSON struct {
-	Host        apijson.Field
-	Kind        apijson.Field
-	Method      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustDeviceDEXTestListResponseData) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZeroTrustDeviceDEXTestDeleteResponse struct {
-	// The configuration object which contains the details for the WARP client to
-	// conduct the test.
-	Data ZeroTrustDeviceDEXTestDeleteResponseData `json:"data,required"`
-	// Determines whether or not the test is active.
-	Enabled bool `json:"enabled,required"`
-	// How often the test will run.
-	Interval string `json:"interval,required"`
-	// The name of the DEX test. Must be unique.
-	Name string `json:"name,required"`
-	// Additional details about the test.
-	Description string                                   `json:"description"`
-	JSON        zeroTrustDeviceDEXTestDeleteResponseJSON `json:"-"`
-}
-
-// zeroTrustDeviceDEXTestDeleteResponseJSON contains the JSON metadata for the
-// struct [ZeroTrustDeviceDEXTestDeleteResponse]
-type zeroTrustDeviceDEXTestDeleteResponseJSON struct {
-	Data        apijson.Field
-	Enabled     apijson.Field
-	Interval    apijson.Field
-	Name        apijson.Field
-	Description apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustDeviceDEXTestDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The configuration object which contains the details for the WARP client to
-// conduct the test.
-type ZeroTrustDeviceDEXTestDeleteResponseData struct {
-	// The desired endpoint to test.
-	Host string `json:"host"`
-	// The type of test.
-	Kind string `json:"kind"`
-	// The HTTP request method type.
-	Method string                                       `json:"method"`
-	JSON   zeroTrustDeviceDEXTestDeleteResponseDataJSON `json:"-"`
-}
-
-// zeroTrustDeviceDEXTestDeleteResponseDataJSON contains the JSON metadata for the
-// struct [ZeroTrustDeviceDEXTestDeleteResponseData]
-type zeroTrustDeviceDEXTestDeleteResponseDataJSON struct {
-	Host        apijson.Field
-	Kind        apijson.Field
-	Method      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustDeviceDEXTestDeleteResponseData) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZeroTrustDeviceDEXTestGetResponse struct {
-	// The configuration object which contains the details for the WARP client to
-	// conduct the test.
-	Data ZeroTrustDeviceDEXTestGetResponseData `json:"data,required"`
-	// Determines whether or not the test is active.
-	Enabled bool `json:"enabled,required"`
-	// How often the test will run.
-	Interval string `json:"interval,required"`
-	// The name of the DEX test. Must be unique.
-	Name string `json:"name,required"`
-	// Additional details about the test.
-	Description string                                `json:"description"`
-	JSON        zeroTrustDeviceDEXTestGetResponseJSON `json:"-"`
-}
-
-// zeroTrustDeviceDEXTestGetResponseJSON contains the JSON metadata for the struct
-// [ZeroTrustDeviceDEXTestGetResponse]
-type zeroTrustDeviceDEXTestGetResponseJSON struct {
-	Data        apijson.Field
-	Enabled     apijson.Field
-	Interval    apijson.Field
-	Name        apijson.Field
-	Description apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustDeviceDEXTestGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The configuration object which contains the details for the WARP client to
-// conduct the test.
-type ZeroTrustDeviceDEXTestGetResponseData struct {
-	// The desired endpoint to test.
-	Host string `json:"host"`
-	// The type of test.
-	Kind string `json:"kind"`
-	// The HTTP request method type.
-	Method string                                    `json:"method"`
-	JSON   zeroTrustDeviceDEXTestGetResponseDataJSON `json:"-"`
-}
-
-// zeroTrustDeviceDEXTestGetResponseDataJSON contains the JSON metadata for the
-// struct [ZeroTrustDeviceDEXTestGetResponseData]
-type zeroTrustDeviceDEXTestGetResponseDataJSON struct {
-	Host        apijson.Field
-	Kind        apijson.Field
-	Method      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustDeviceDEXTestGetResponseData) UnmarshalJSON(data []byte) (err error) {
+func (r *TeamsDevicesDeviceDEXTestSchemasHTTPData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -419,7 +191,7 @@ func (r ZeroTrustDeviceDEXTestNewParamsData) MarshalJSON() (data []byte, err err
 type ZeroTrustDeviceDEXTestNewResponseEnvelope struct {
 	Errors   []ZeroTrustDeviceDEXTestNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustDeviceDEXTestNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustDeviceDEXTestNewResponse                   `json:"result,required,nullable"`
+	Result   TeamsDevicesDeviceDEXTestSchemasHTTP                `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success ZeroTrustDeviceDEXTestNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustDeviceDEXTestNewResponseEnvelopeJSON    `json:"-"`
@@ -522,7 +294,7 @@ func (r ZeroTrustDeviceDEXTestUpdateParamsData) MarshalJSON() (data []byte, err 
 type ZeroTrustDeviceDEXTestUpdateResponseEnvelope struct {
 	Errors   []ZeroTrustDeviceDEXTestUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustDeviceDEXTestUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustDeviceDEXTestUpdateResponse                   `json:"result,required,nullable"`
+	Result   TeamsDevicesDeviceDEXTestSchemasHTTP                   `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success ZeroTrustDeviceDEXTestUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustDeviceDEXTestUpdateResponseEnvelopeJSON    `json:"-"`
@@ -595,7 +367,7 @@ type ZeroTrustDeviceDEXTestListParams struct {
 type ZeroTrustDeviceDEXTestListResponseEnvelope struct {
 	Errors   []ZeroTrustDeviceDEXTestListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustDeviceDEXTestListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []ZeroTrustDeviceDEXTestListResponse                 `json:"result,required,nullable"`
+	Result   []TeamsDevicesDeviceDEXTestSchemasHTTP               `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success ZeroTrustDeviceDEXTestListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustDeviceDEXTestListResponseEnvelopeJSON    `json:"-"`
@@ -668,7 +440,7 @@ type ZeroTrustDeviceDEXTestDeleteParams struct {
 type ZeroTrustDeviceDEXTestDeleteResponseEnvelope struct {
 	Errors   []ZeroTrustDeviceDEXTestDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustDeviceDEXTestDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   []ZeroTrustDeviceDEXTestDeleteResponse                 `json:"result,required,nullable"`
+	Result   []TeamsDevicesDeviceDEXTestSchemasHTTP                 `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success ZeroTrustDeviceDEXTestDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustDeviceDEXTestDeleteResponseEnvelopeJSON    `json:"-"`
@@ -741,7 +513,7 @@ type ZeroTrustDeviceDEXTestGetParams struct {
 type ZeroTrustDeviceDEXTestGetResponseEnvelope struct {
 	Errors   []ZeroTrustDeviceDEXTestGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustDeviceDEXTestGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustDeviceDEXTestGetResponse                   `json:"result,required,nullable"`
+	Result   TeamsDevicesDeviceDEXTestSchemasHTTP                `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success ZeroTrustDeviceDEXTestGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustDeviceDEXTestGetResponseEnvelopeJSON    `json:"-"`

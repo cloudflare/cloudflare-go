@@ -33,7 +33,7 @@ func NewZoneSettingProxyReadTimeoutService(opts ...option.RequestOption) (r *Zon
 }
 
 // Maximum time between two read operations from origin.
-func (r *ZoneSettingProxyReadTimeoutService) Edit(ctx context.Context, params ZoneSettingProxyReadTimeoutEditParams, opts ...option.RequestOption) (res *ZoneSettingProxyReadTimeoutEditResponse, err error) {
+func (r *ZoneSettingProxyReadTimeoutService) Edit(ctx context.Context, params ZoneSettingProxyReadTimeoutEditParams, opts ...option.RequestOption) (res *ZonesProxyReadTimeout, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingProxyReadTimeoutEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/proxy_read_timeout", params.ZoneID)
@@ -46,7 +46,7 @@ func (r *ZoneSettingProxyReadTimeoutService) Edit(ctx context.Context, params Zo
 }
 
 // Maximum time between two read operations from origin.
-func (r *ZoneSettingProxyReadTimeoutService) Get(ctx context.Context, query ZoneSettingProxyReadTimeoutGetParams, opts ...option.RequestOption) (res *ZoneSettingProxyReadTimeoutGetResponse, err error) {
+func (r *ZoneSettingProxyReadTimeoutService) Get(ctx context.Context, query ZoneSettingProxyReadTimeoutGetParams, opts ...option.RequestOption) (res *ZonesProxyReadTimeout, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingProxyReadTimeoutGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/proxy_read_timeout", query.ZoneID)
@@ -59,22 +59,22 @@ func (r *ZoneSettingProxyReadTimeoutService) Get(ctx context.Context, query Zone
 }
 
 // Maximum time between two read operations from origin.
-type ZoneSettingProxyReadTimeoutEditResponse struct {
+type ZonesProxyReadTimeout struct {
 	// ID of the zone setting.
-	ID ZoneSettingProxyReadTimeoutEditResponseID `json:"id,required"`
+	ID ZonesProxyReadTimeoutID `json:"id,required"`
 	// Current value of the zone setting.
 	Value float64 `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingProxyReadTimeoutEditResponseEditable `json:"editable"`
+	Editable ZonesProxyReadTimeoutEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                   `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingProxyReadTimeoutEditResponseJSON `json:"-"`
+	ModifiedOn time.Time                 `json:"modified_on,nullable" format:"date-time"`
+	JSON       zonesProxyReadTimeoutJSON `json:"-"`
 }
 
-// zoneSettingProxyReadTimeoutEditResponseJSON contains the JSON metadata for the
-// struct [ZoneSettingProxyReadTimeoutEditResponse]
-type zoneSettingProxyReadTimeoutEditResponseJSON struct {
+// zonesProxyReadTimeoutJSON contains the JSON metadata for the struct
+// [ZonesProxyReadTimeout]
+type zonesProxyReadTimeoutJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -83,109 +83,54 @@ type zoneSettingProxyReadTimeoutEditResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingProxyReadTimeoutEditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonesProxyReadTimeout) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r ZonesProxyReadTimeout) implementsZoneSettingEditResponse() {}
+
+func (r ZonesProxyReadTimeout) implementsZoneSettingGetResponse() {}
+
 // ID of the zone setting.
-type ZoneSettingProxyReadTimeoutEditResponseID string
+type ZonesProxyReadTimeoutID string
 
 const (
-	ZoneSettingProxyReadTimeoutEditResponseIDProxyReadTimeout ZoneSettingProxyReadTimeoutEditResponseID = "proxy_read_timeout"
+	ZonesProxyReadTimeoutIDProxyReadTimeout ZonesProxyReadTimeoutID = "proxy_read_timeout"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingProxyReadTimeoutEditResponseEditable bool
+type ZonesProxyReadTimeoutEditable bool
 
 const (
-	ZoneSettingProxyReadTimeoutEditResponseEditableTrue  ZoneSettingProxyReadTimeoutEditResponseEditable = true
-	ZoneSettingProxyReadTimeoutEditResponseEditableFalse ZoneSettingProxyReadTimeoutEditResponseEditable = false
+	ZonesProxyReadTimeoutEditableTrue  ZonesProxyReadTimeoutEditable = true
+	ZonesProxyReadTimeoutEditableFalse ZonesProxyReadTimeoutEditable = false
 )
 
 // Maximum time between two read operations from origin.
-type ZoneSettingProxyReadTimeoutGetResponse struct {
+type ZonesProxyReadTimeoutParam struct {
 	// ID of the zone setting.
-	ID ZoneSettingProxyReadTimeoutGetResponseID `json:"id,required"`
+	ID param.Field[ZonesProxyReadTimeoutID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value float64 `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingProxyReadTimeoutGetResponseEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                  `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingProxyReadTimeoutGetResponseJSON `json:"-"`
+	Value param.Field[float64] `json:"value,required"`
 }
 
-// zoneSettingProxyReadTimeoutGetResponseJSON contains the JSON metadata for the
-// struct [ZoneSettingProxyReadTimeoutGetResponse]
-type zoneSettingProxyReadTimeoutGetResponseJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+func (r ZonesProxyReadTimeoutParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *ZoneSettingProxyReadTimeoutGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// ID of the zone setting.
-type ZoneSettingProxyReadTimeoutGetResponseID string
-
-const (
-	ZoneSettingProxyReadTimeoutGetResponseIDProxyReadTimeout ZoneSettingProxyReadTimeoutGetResponseID = "proxy_read_timeout"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingProxyReadTimeoutGetResponseEditable bool
-
-const (
-	ZoneSettingProxyReadTimeoutGetResponseEditableTrue  ZoneSettingProxyReadTimeoutGetResponseEditable = true
-	ZoneSettingProxyReadTimeoutGetResponseEditableFalse ZoneSettingProxyReadTimeoutGetResponseEditable = false
-)
+func (r ZonesProxyReadTimeoutParam) implementsZoneSettingEditParamsItem() {}
 
 type ZoneSettingProxyReadTimeoutEditParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Maximum time between two read operations from origin.
-	Value param.Field[ZoneSettingProxyReadTimeoutEditParamsValue] `json:"value,required"`
+	Value param.Field[ZonesProxyReadTimeoutParam] `json:"value,required"`
 }
 
 func (r ZoneSettingProxyReadTimeoutEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
-
-// Maximum time between two read operations from origin.
-type ZoneSettingProxyReadTimeoutEditParamsValue struct {
-	// ID of the zone setting.
-	ID param.Field[ZoneSettingProxyReadTimeoutEditParamsValueID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[float64] `json:"value,required"`
-}
-
-func (r ZoneSettingProxyReadTimeoutEditParamsValue) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// ID of the zone setting.
-type ZoneSettingProxyReadTimeoutEditParamsValueID string
-
-const (
-	ZoneSettingProxyReadTimeoutEditParamsValueIDProxyReadTimeout ZoneSettingProxyReadTimeoutEditParamsValueID = "proxy_read_timeout"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingProxyReadTimeoutEditParamsValueEditable bool
-
-const (
-	ZoneSettingProxyReadTimeoutEditParamsValueEditableTrue  ZoneSettingProxyReadTimeoutEditParamsValueEditable = true
-	ZoneSettingProxyReadTimeoutEditParamsValueEditableFalse ZoneSettingProxyReadTimeoutEditParamsValueEditable = false
-)
 
 type ZoneSettingProxyReadTimeoutEditResponseEnvelope struct {
 	Errors   []ZoneSettingProxyReadTimeoutEditResponseEnvelopeErrors   `json:"errors,required"`
@@ -193,7 +138,7 @@ type ZoneSettingProxyReadTimeoutEditResponseEnvelope struct {
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Maximum time between two read operations from origin.
-	Result ZoneSettingProxyReadTimeoutEditResponse             `json:"result"`
+	Result ZonesProxyReadTimeout                               `json:"result"`
 	JSON   zoneSettingProxyReadTimeoutEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -262,7 +207,7 @@ type ZoneSettingProxyReadTimeoutGetResponseEnvelope struct {
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Maximum time between two read operations from origin.
-	Result ZoneSettingProxyReadTimeoutGetResponse             `json:"result"`
+	Result ZonesProxyReadTimeout                              `json:"result"`
 	JSON   zoneSettingProxyReadTimeoutGetResponseEnvelopeJSON `json:"-"`
 }
 

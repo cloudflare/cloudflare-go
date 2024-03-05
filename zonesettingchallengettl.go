@@ -37,7 +37,7 @@ func NewZoneSettingChallengeTTLService(opts ...option.RequestOption) (r *ZoneSet
 // visitor will have to complete a new challenge. We recommend a 15 - 45 minute
 // setting and will attempt to honor any setting above 45 minutes.
 // (https://support.cloudflare.com/hc/en-us/articles/200170136).
-func (r *ZoneSettingChallengeTTLService) Edit(ctx context.Context, params ZoneSettingChallengeTTLEditParams, opts ...option.RequestOption) (res *ZoneSettingChallengeTTLEditResponse, err error) {
+func (r *ZoneSettingChallengeTTLService) Edit(ctx context.Context, params ZoneSettingChallengeTTLEditParams, opts ...option.RequestOption) (res *ZonesChallengeTTL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingChallengeTTLEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/challenge_ttl", params.ZoneID)
@@ -54,7 +54,7 @@ func (r *ZoneSettingChallengeTTLService) Edit(ctx context.Context, params ZoneSe
 // visitor will have to complete a new challenge. We recommend a 15 - 45 minute
 // setting and will attempt to honor any setting above 45 minutes.
 // (https://support.cloudflare.com/hc/en-us/articles/200170136).
-func (r *ZoneSettingChallengeTTLService) Get(ctx context.Context, query ZoneSettingChallengeTTLGetParams, opts ...option.RequestOption) (res *ZoneSettingChallengeTTLGetResponse, err error) {
+func (r *ZoneSettingChallengeTTLService) Get(ctx context.Context, query ZoneSettingChallengeTTLGetParams, opts ...option.RequestOption) (res *ZonesChallengeTTL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingChallengeTTLGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/challenge_ttl", query.ZoneID)
@@ -71,22 +71,22 @@ func (r *ZoneSettingChallengeTTLService) Get(ctx context.Context, query ZoneSett
 // visitor will have to complete a new challenge. We recommend a 15 - 45 minute
 // setting and will attempt to honor any setting above 45 minutes.
 // (https://support.cloudflare.com/hc/en-us/articles/200170136).
-type ZoneSettingChallengeTTLEditResponse struct {
+type ZonesChallengeTTL struct {
 	// ID of the zone setting.
-	ID ZoneSettingChallengeTTLEditResponseID `json:"id,required"`
+	ID ZonesChallengeTTLID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingChallengeTTLEditResponseValue `json:"value,required"`
+	Value ZonesChallengeTTLValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingChallengeTTLEditResponseEditable `json:"editable"`
+	Editable ZonesChallengeTTLEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                               `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingChallengeTTLEditResponseJSON `json:"-"`
+	ModifiedOn time.Time             `json:"modified_on,nullable" format:"date-time"`
+	JSON       zonesChallengeTTLJSON `json:"-"`
 }
 
-// zoneSettingChallengeTTLEditResponseJSON contains the JSON metadata for the
-// struct [ZoneSettingChallengeTTLEditResponse]
-type zoneSettingChallengeTTLEditResponseJSON struct {
+// zonesChallengeTTLJSON contains the JSON metadata for the struct
+// [ZonesChallengeTTL]
+type zonesChallengeTTLJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -95,44 +95,48 @@ type zoneSettingChallengeTTLEditResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingChallengeTTLEditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonesChallengeTTL) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r ZonesChallengeTTL) implementsZoneSettingEditResponse() {}
+
+func (r ZonesChallengeTTL) implementsZoneSettingGetResponse() {}
+
 // ID of the zone setting.
-type ZoneSettingChallengeTTLEditResponseID string
+type ZonesChallengeTTLID string
 
 const (
-	ZoneSettingChallengeTTLEditResponseIDChallengeTTL ZoneSettingChallengeTTLEditResponseID = "challenge_ttl"
+	ZonesChallengeTTLIDChallengeTTL ZonesChallengeTTLID = "challenge_ttl"
 )
 
 // Current value of the zone setting.
-type ZoneSettingChallengeTTLEditResponseValue float64
+type ZonesChallengeTTLValue float64
 
 const (
-	ZoneSettingChallengeTTLEditResponseValue300      ZoneSettingChallengeTTLEditResponseValue = 300
-	ZoneSettingChallengeTTLEditResponseValue900      ZoneSettingChallengeTTLEditResponseValue = 900
-	ZoneSettingChallengeTTLEditResponseValue1800     ZoneSettingChallengeTTLEditResponseValue = 1800
-	ZoneSettingChallengeTTLEditResponseValue2700     ZoneSettingChallengeTTLEditResponseValue = 2700
-	ZoneSettingChallengeTTLEditResponseValue3600     ZoneSettingChallengeTTLEditResponseValue = 3600
-	ZoneSettingChallengeTTLEditResponseValue7200     ZoneSettingChallengeTTLEditResponseValue = 7200
-	ZoneSettingChallengeTTLEditResponseValue10800    ZoneSettingChallengeTTLEditResponseValue = 10800
-	ZoneSettingChallengeTTLEditResponseValue14400    ZoneSettingChallengeTTLEditResponseValue = 14400
-	ZoneSettingChallengeTTLEditResponseValue28800    ZoneSettingChallengeTTLEditResponseValue = 28800
-	ZoneSettingChallengeTTLEditResponseValue57600    ZoneSettingChallengeTTLEditResponseValue = 57600
-	ZoneSettingChallengeTTLEditResponseValue86400    ZoneSettingChallengeTTLEditResponseValue = 86400
-	ZoneSettingChallengeTTLEditResponseValue604800   ZoneSettingChallengeTTLEditResponseValue = 604800
-	ZoneSettingChallengeTTLEditResponseValue2592000  ZoneSettingChallengeTTLEditResponseValue = 2592000
-	ZoneSettingChallengeTTLEditResponseValue31536000 ZoneSettingChallengeTTLEditResponseValue = 31536000
+	ZonesChallengeTTLValue300      ZonesChallengeTTLValue = 300
+	ZonesChallengeTTLValue900      ZonesChallengeTTLValue = 900
+	ZonesChallengeTTLValue1800     ZonesChallengeTTLValue = 1800
+	ZonesChallengeTTLValue2700     ZonesChallengeTTLValue = 2700
+	ZonesChallengeTTLValue3600     ZonesChallengeTTLValue = 3600
+	ZonesChallengeTTLValue7200     ZonesChallengeTTLValue = 7200
+	ZonesChallengeTTLValue10800    ZonesChallengeTTLValue = 10800
+	ZonesChallengeTTLValue14400    ZonesChallengeTTLValue = 14400
+	ZonesChallengeTTLValue28800    ZonesChallengeTTLValue = 28800
+	ZonesChallengeTTLValue57600    ZonesChallengeTTLValue = 57600
+	ZonesChallengeTTLValue86400    ZonesChallengeTTLValue = 86400
+	ZonesChallengeTTLValue604800   ZonesChallengeTTLValue = 604800
+	ZonesChallengeTTLValue2592000  ZonesChallengeTTLValue = 2592000
+	ZonesChallengeTTLValue31536000 ZonesChallengeTTLValue = 31536000
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingChallengeTTLEditResponseEditable bool
+type ZonesChallengeTTLEditable bool
 
 const (
-	ZoneSettingChallengeTTLEditResponseEditableTrue  ZoneSettingChallengeTTLEditResponseEditable = true
-	ZoneSettingChallengeTTLEditResponseEditableFalse ZoneSettingChallengeTTLEditResponseEditable = false
+	ZonesChallengeTTLEditableTrue  ZonesChallengeTTLEditable = true
+	ZonesChallengeTTLEditableFalse ZonesChallengeTTLEditable = false
 )
 
 // Specify how long a visitor is allowed access to your site after successfully
@@ -140,69 +144,18 @@ const (
 // visitor will have to complete a new challenge. We recommend a 15 - 45 minute
 // setting and will attempt to honor any setting above 45 minutes.
 // (https://support.cloudflare.com/hc/en-us/articles/200170136).
-type ZoneSettingChallengeTTLGetResponse struct {
+type ZonesChallengeTTLParam struct {
 	// ID of the zone setting.
-	ID ZoneSettingChallengeTTLGetResponseID `json:"id,required"`
+	ID param.Field[ZonesChallengeTTLID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingChallengeTTLGetResponseValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingChallengeTTLGetResponseEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                              `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingChallengeTTLGetResponseJSON `json:"-"`
+	Value param.Field[ZonesChallengeTTLValue] `json:"value,required"`
 }
 
-// zoneSettingChallengeTTLGetResponseJSON contains the JSON metadata for the struct
-// [ZoneSettingChallengeTTLGetResponse]
-type zoneSettingChallengeTTLGetResponseJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+func (r ZonesChallengeTTLParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *ZoneSettingChallengeTTLGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// ID of the zone setting.
-type ZoneSettingChallengeTTLGetResponseID string
-
-const (
-	ZoneSettingChallengeTTLGetResponseIDChallengeTTL ZoneSettingChallengeTTLGetResponseID = "challenge_ttl"
-)
-
-// Current value of the zone setting.
-type ZoneSettingChallengeTTLGetResponseValue float64
-
-const (
-	ZoneSettingChallengeTTLGetResponseValue300      ZoneSettingChallengeTTLGetResponseValue = 300
-	ZoneSettingChallengeTTLGetResponseValue900      ZoneSettingChallengeTTLGetResponseValue = 900
-	ZoneSettingChallengeTTLGetResponseValue1800     ZoneSettingChallengeTTLGetResponseValue = 1800
-	ZoneSettingChallengeTTLGetResponseValue2700     ZoneSettingChallengeTTLGetResponseValue = 2700
-	ZoneSettingChallengeTTLGetResponseValue3600     ZoneSettingChallengeTTLGetResponseValue = 3600
-	ZoneSettingChallengeTTLGetResponseValue7200     ZoneSettingChallengeTTLGetResponseValue = 7200
-	ZoneSettingChallengeTTLGetResponseValue10800    ZoneSettingChallengeTTLGetResponseValue = 10800
-	ZoneSettingChallengeTTLGetResponseValue14400    ZoneSettingChallengeTTLGetResponseValue = 14400
-	ZoneSettingChallengeTTLGetResponseValue28800    ZoneSettingChallengeTTLGetResponseValue = 28800
-	ZoneSettingChallengeTTLGetResponseValue57600    ZoneSettingChallengeTTLGetResponseValue = 57600
-	ZoneSettingChallengeTTLGetResponseValue86400    ZoneSettingChallengeTTLGetResponseValue = 86400
-	ZoneSettingChallengeTTLGetResponseValue604800   ZoneSettingChallengeTTLGetResponseValue = 604800
-	ZoneSettingChallengeTTLGetResponseValue2592000  ZoneSettingChallengeTTLGetResponseValue = 2592000
-	ZoneSettingChallengeTTLGetResponseValue31536000 ZoneSettingChallengeTTLGetResponseValue = 31536000
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingChallengeTTLGetResponseEditable bool
-
-const (
-	ZoneSettingChallengeTTLGetResponseEditableTrue  ZoneSettingChallengeTTLGetResponseEditable = true
-	ZoneSettingChallengeTTLGetResponseEditableFalse ZoneSettingChallengeTTLGetResponseEditable = false
-)
+func (r ZonesChallengeTTLParam) implementsZoneSettingEditParamsItem() {}
 
 type ZoneSettingChallengeTTLEditParams struct {
 	// Identifier
@@ -245,7 +198,7 @@ type ZoneSettingChallengeTTLEditResponseEnvelope struct {
 	// visitor will have to complete a new challenge. We recommend a 15 - 45 minute
 	// setting and will attempt to honor any setting above 45 minutes.
 	// (https://support.cloudflare.com/hc/en-us/articles/200170136).
-	Result ZoneSettingChallengeTTLEditResponse             `json:"result"`
+	Result ZonesChallengeTTL                               `json:"result"`
 	JSON   zoneSettingChallengeTTLEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -317,7 +270,7 @@ type ZoneSettingChallengeTTLGetResponseEnvelope struct {
 	// visitor will have to complete a new challenge. We recommend a 15 - 45 minute
 	// setting and will attempt to honor any setting above 45 minutes.
 	// (https://support.cloudflare.com/hc/en-us/articles/200170136).
-	Result ZoneSettingChallengeTTLGetResponse             `json:"result"`
+	Result ZonesChallengeTTL                              `json:"result"`
 	JSON   zoneSettingChallengeTTLGetResponseEnvelopeJSON `json:"-"`
 }
 

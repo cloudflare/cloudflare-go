@@ -34,7 +34,7 @@ func NewZoneSettingTrueClientIPHeaderService(opts ...option.RequestOption) (r *Z
 
 // Allows customer to continue to use True Client IP (Akamai feature) in the
 // headers we send to the origin. This is limited to Enterprise Zones.
-func (r *ZoneSettingTrueClientIPHeaderService) Edit(ctx context.Context, params ZoneSettingTrueClientIPHeaderEditParams, opts ...option.RequestOption) (res *ZoneSettingTrueClientIPHeaderEditResponse, err error) {
+func (r *ZoneSettingTrueClientIPHeaderService) Edit(ctx context.Context, params ZoneSettingTrueClientIPHeaderEditParams, opts ...option.RequestOption) (res *ZonesTrueClientIPHeader, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingTrueClientIPHeaderEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/true_client_ip_header", params.ZoneID)
@@ -48,7 +48,7 @@ func (r *ZoneSettingTrueClientIPHeaderService) Edit(ctx context.Context, params 
 
 // Allows customer to continue to use True Client IP (Akamai feature) in the
 // headers we send to the origin. This is limited to Enterprise Zones.
-func (r *ZoneSettingTrueClientIPHeaderService) Get(ctx context.Context, query ZoneSettingTrueClientIPHeaderGetParams, opts ...option.RequestOption) (res *ZoneSettingTrueClientIPHeaderGetResponse, err error) {
+func (r *ZoneSettingTrueClientIPHeaderService) Get(ctx context.Context, query ZoneSettingTrueClientIPHeaderGetParams, opts ...option.RequestOption) (res *ZonesTrueClientIPHeader, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingTrueClientIPHeaderGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/true_client_ip_header", query.ZoneID)
@@ -62,22 +62,22 @@ func (r *ZoneSettingTrueClientIPHeaderService) Get(ctx context.Context, query Zo
 
 // Allows customer to continue to use True Client IP (Akamai feature) in the
 // headers we send to the origin. This is limited to Enterprise Zones.
-type ZoneSettingTrueClientIPHeaderEditResponse struct {
+type ZonesTrueClientIPHeader struct {
 	// ID of the zone setting.
-	ID ZoneSettingTrueClientIPHeaderEditResponseID `json:"id,required"`
+	ID ZonesTrueClientIPHeaderID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingTrueClientIPHeaderEditResponseValue `json:"value,required"`
+	Value ZonesTrueClientIPHeaderValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingTrueClientIPHeaderEditResponseEditable `json:"editable"`
+	Editable ZonesTrueClientIPHeaderEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                     `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingTrueClientIPHeaderEditResponseJSON `json:"-"`
+	ModifiedOn time.Time                   `json:"modified_on,nullable" format:"date-time"`
+	JSON       zonesTrueClientIPHeaderJSON `json:"-"`
 }
 
-// zoneSettingTrueClientIPHeaderEditResponseJSON contains the JSON metadata for the
-// struct [ZoneSettingTrueClientIPHeaderEditResponse]
-type zoneSettingTrueClientIPHeaderEditResponseJSON struct {
+// zonesTrueClientIPHeaderJSON contains the JSON metadata for the struct
+// [ZonesTrueClientIPHeader]
+type zonesTrueClientIPHeaderJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -86,87 +86,52 @@ type zoneSettingTrueClientIPHeaderEditResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingTrueClientIPHeaderEditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonesTrueClientIPHeader) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r ZonesTrueClientIPHeader) implementsZoneSettingEditResponse() {}
+
+func (r ZonesTrueClientIPHeader) implementsZoneSettingGetResponse() {}
+
 // ID of the zone setting.
-type ZoneSettingTrueClientIPHeaderEditResponseID string
+type ZonesTrueClientIPHeaderID string
 
 const (
-	ZoneSettingTrueClientIPHeaderEditResponseIDTrueClientIPHeader ZoneSettingTrueClientIPHeaderEditResponseID = "true_client_ip_header"
+	ZonesTrueClientIPHeaderIDTrueClientIPHeader ZonesTrueClientIPHeaderID = "true_client_ip_header"
 )
 
 // Current value of the zone setting.
-type ZoneSettingTrueClientIPHeaderEditResponseValue string
+type ZonesTrueClientIPHeaderValue string
 
 const (
-	ZoneSettingTrueClientIPHeaderEditResponseValueOn  ZoneSettingTrueClientIPHeaderEditResponseValue = "on"
-	ZoneSettingTrueClientIPHeaderEditResponseValueOff ZoneSettingTrueClientIPHeaderEditResponseValue = "off"
+	ZonesTrueClientIPHeaderValueOn  ZonesTrueClientIPHeaderValue = "on"
+	ZonesTrueClientIPHeaderValueOff ZonesTrueClientIPHeaderValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingTrueClientIPHeaderEditResponseEditable bool
+type ZonesTrueClientIPHeaderEditable bool
 
 const (
-	ZoneSettingTrueClientIPHeaderEditResponseEditableTrue  ZoneSettingTrueClientIPHeaderEditResponseEditable = true
-	ZoneSettingTrueClientIPHeaderEditResponseEditableFalse ZoneSettingTrueClientIPHeaderEditResponseEditable = false
+	ZonesTrueClientIPHeaderEditableTrue  ZonesTrueClientIPHeaderEditable = true
+	ZonesTrueClientIPHeaderEditableFalse ZonesTrueClientIPHeaderEditable = false
 )
 
 // Allows customer to continue to use True Client IP (Akamai feature) in the
 // headers we send to the origin. This is limited to Enterprise Zones.
-type ZoneSettingTrueClientIPHeaderGetResponse struct {
+type ZonesTrueClientIPHeaderParam struct {
 	// ID of the zone setting.
-	ID ZoneSettingTrueClientIPHeaderGetResponseID `json:"id,required"`
+	ID param.Field[ZonesTrueClientIPHeaderID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingTrueClientIPHeaderGetResponseValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingTrueClientIPHeaderGetResponseEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                    `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingTrueClientIPHeaderGetResponseJSON `json:"-"`
+	Value param.Field[ZonesTrueClientIPHeaderValue] `json:"value,required"`
 }
 
-// zoneSettingTrueClientIPHeaderGetResponseJSON contains the JSON metadata for the
-// struct [ZoneSettingTrueClientIPHeaderGetResponse]
-type zoneSettingTrueClientIPHeaderGetResponseJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+func (r ZonesTrueClientIPHeaderParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *ZoneSettingTrueClientIPHeaderGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// ID of the zone setting.
-type ZoneSettingTrueClientIPHeaderGetResponseID string
-
-const (
-	ZoneSettingTrueClientIPHeaderGetResponseIDTrueClientIPHeader ZoneSettingTrueClientIPHeaderGetResponseID = "true_client_ip_header"
-)
-
-// Current value of the zone setting.
-type ZoneSettingTrueClientIPHeaderGetResponseValue string
-
-const (
-	ZoneSettingTrueClientIPHeaderGetResponseValueOn  ZoneSettingTrueClientIPHeaderGetResponseValue = "on"
-	ZoneSettingTrueClientIPHeaderGetResponseValueOff ZoneSettingTrueClientIPHeaderGetResponseValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingTrueClientIPHeaderGetResponseEditable bool
-
-const (
-	ZoneSettingTrueClientIPHeaderGetResponseEditableTrue  ZoneSettingTrueClientIPHeaderGetResponseEditable = true
-	ZoneSettingTrueClientIPHeaderGetResponseEditableFalse ZoneSettingTrueClientIPHeaderGetResponseEditable = false
-)
+func (r ZonesTrueClientIPHeaderParam) implementsZoneSettingEditParamsItem() {}
 
 type ZoneSettingTrueClientIPHeaderEditParams struct {
 	// Identifier
@@ -194,7 +159,7 @@ type ZoneSettingTrueClientIPHeaderEditResponseEnvelope struct {
 	Success bool `json:"success,required"`
 	// Allows customer to continue to use True Client IP (Akamai feature) in the
 	// headers we send to the origin. This is limited to Enterprise Zones.
-	Result ZoneSettingTrueClientIPHeaderEditResponse             `json:"result"`
+	Result ZonesTrueClientIPHeader                               `json:"result"`
 	JSON   zoneSettingTrueClientIPHeaderEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -265,7 +230,7 @@ type ZoneSettingTrueClientIPHeaderGetResponseEnvelope struct {
 	Success bool `json:"success,required"`
 	// Allows customer to continue to use True Client IP (Akamai feature) in the
 	// headers we send to the origin. This is limited to Enterprise Zones.
-	Result ZoneSettingTrueClientIPHeaderGetResponse             `json:"result"`
+	Result ZonesTrueClientIPHeader                              `json:"result"`
 	JSON   zoneSettingTrueClientIPHeaderGetResponseEnvelopeJSON `json:"-"`
 }
 

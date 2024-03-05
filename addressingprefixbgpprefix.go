@@ -36,7 +36,7 @@ func NewAddressingPrefixBGPPrefixService(opts ...option.RequestOption) (r *Addre
 // control which specific subnets are advertised to the Internet. It is possible to
 // advertise subnets more specific than an IP Prefix by creating more specific BGP
 // Prefixes.
-func (r *AddressingPrefixBGPPrefixService) List(ctx context.Context, prefixID string, query AddressingPrefixBGPPrefixListParams, opts ...option.RequestOption) (res *[]AddressingPrefixBGPPrefixListResponse, err error) {
+func (r *AddressingPrefixBGPPrefixService) List(ctx context.Context, prefixID string, query AddressingPrefixBGPPrefixListParams, opts ...option.RequestOption) (res *[]AddressingIpamBGPPrefixes, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressingPrefixBGPPrefixListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bgp/prefixes", query.AccountID, prefixID)
@@ -50,7 +50,7 @@ func (r *AddressingPrefixBGPPrefixService) List(ctx context.Context, prefixID st
 
 // Update the properties of a BGP Prefix, such as the on demand advertisement
 // status (advertised or withdrawn).
-func (r *AddressingPrefixBGPPrefixService) Edit(ctx context.Context, prefixID string, bgpPrefixID string, params AddressingPrefixBGPPrefixEditParams, opts ...option.RequestOption) (res *AddressingPrefixBGPPrefixEditResponse, err error) {
+func (r *AddressingPrefixBGPPrefixService) Edit(ctx context.Context, prefixID string, bgpPrefixID string, params AddressingPrefixBGPPrefixEditParams, opts ...option.RequestOption) (res *AddressingIpamBGPPrefixes, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressingPrefixBGPPrefixEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bgp/prefixes/%s", params.AccountID, prefixID, bgpPrefixID)
@@ -63,7 +63,7 @@ func (r *AddressingPrefixBGPPrefixService) Edit(ctx context.Context, prefixID st
 }
 
 // Retrieve a single BGP Prefix according to its identifier
-func (r *AddressingPrefixBGPPrefixService) Get(ctx context.Context, prefixID string, bgpPrefixID string, query AddressingPrefixBGPPrefixGetParams, opts ...option.RequestOption) (res *AddressingPrefixBGPPrefixGetResponse, err error) {
+func (r *AddressingPrefixBGPPrefixService) Get(ctx context.Context, prefixID string, bgpPrefixID string, query AddressingPrefixBGPPrefixGetParams, opts ...option.RequestOption) (res *AddressingIpamBGPPrefixes, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressingPrefixBGPPrefixGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bgp/prefixes/%s", query.AccountID, prefixID, bgpPrefixID)
@@ -75,23 +75,23 @@ func (r *AddressingPrefixBGPPrefixService) Get(ctx context.Context, prefixID str
 	return
 }
 
-type AddressingPrefixBGPPrefixListResponse struct {
+type AddressingIpamBGPPrefixes struct {
 	// Identifier
 	ID string `json:"id"`
 	// Autonomous System Number (ASN) the prefix will be advertised under.
-	ASN           int64                                              `json:"asn,nullable"`
-	BGPSignalOpts AddressingPrefixBGPPrefixListResponseBGPSignalOpts `json:"bgp_signal_opts"`
+	ASN           int64                                  `json:"asn,nullable"`
+	BGPSignalOpts AddressingIpamBGPPrefixesBGPSignalOpts `json:"bgp_signal_opts"`
 	// IP Prefix in Classless Inter-Domain Routing format.
-	Cidr       string                                        `json:"cidr"`
-	CreatedAt  time.Time                                     `json:"created_at" format:"date-time"`
-	ModifiedAt time.Time                                     `json:"modified_at" format:"date-time"`
-	OnDemand   AddressingPrefixBGPPrefixListResponseOnDemand `json:"on_demand"`
-	JSON       addressingPrefixBGPPrefixListResponseJSON     `json:"-"`
+	Cidr       string                            `json:"cidr"`
+	CreatedAt  time.Time                         `json:"created_at" format:"date-time"`
+	ModifiedAt time.Time                         `json:"modified_at" format:"date-time"`
+	OnDemand   AddressingIpamBGPPrefixesOnDemand `json:"on_demand"`
+	JSON       addressingIpamBGPPrefixesJSON     `json:"-"`
 }
 
-// addressingPrefixBGPPrefixListResponseJSON contains the JSON metadata for the
-// struct [AddressingPrefixBGPPrefixListResponse]
-type addressingPrefixBGPPrefixListResponseJSON struct {
+// addressingIpamBGPPrefixesJSON contains the JSON metadata for the struct
+// [AddressingIpamBGPPrefixes]
+type addressingIpamBGPPrefixesJSON struct {
 	ID            apijson.Field
 	ASN           apijson.Field
 	BGPSignalOpts apijson.Field
@@ -103,34 +103,34 @@ type addressingPrefixBGPPrefixListResponseJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *AddressingPrefixBGPPrefixListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressingIpamBGPPrefixes) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AddressingPrefixBGPPrefixListResponseBGPSignalOpts struct {
+type AddressingIpamBGPPrefixesBGPSignalOpts struct {
 	// Whether control of advertisement of the prefix to the Internet is enabled to be
 	// performed via BGP signal
 	Enabled bool `json:"enabled"`
 	// Last time BGP signaling control was toggled. This field is null if BGP signaling
 	// has never been enabled.
-	ModifiedAt time.Time                                              `json:"modified_at,nullable" format:"date-time"`
-	JSON       addressingPrefixBGPPrefixListResponseBGPSignalOptsJSON `json:"-"`
+	ModifiedAt time.Time                                  `json:"modified_at,nullable" format:"date-time"`
+	JSON       addressingIpamBGPPrefixesBGPSignalOptsJSON `json:"-"`
 }
 
-// addressingPrefixBGPPrefixListResponseBGPSignalOptsJSON contains the JSON
-// metadata for the struct [AddressingPrefixBGPPrefixListResponseBGPSignalOpts]
-type addressingPrefixBGPPrefixListResponseBGPSignalOptsJSON struct {
+// addressingIpamBGPPrefixesBGPSignalOptsJSON contains the JSON metadata for the
+// struct [AddressingIpamBGPPrefixesBGPSignalOpts]
+type addressingIpamBGPPrefixesBGPSignalOptsJSON struct {
 	Enabled     apijson.Field
 	ModifiedAt  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AddressingPrefixBGPPrefixListResponseBGPSignalOpts) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressingIpamBGPPrefixesBGPSignalOpts) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AddressingPrefixBGPPrefixListResponseOnDemand struct {
+type AddressingIpamBGPPrefixesOnDemand struct {
 	// Prefix advertisement status to the Internet. This field is only not 'null' if on
 	// demand is enabled.
 	Advertised bool `json:"advertised,nullable"`
@@ -142,13 +142,13 @@ type AddressingPrefixBGPPrefixListResponseOnDemand struct {
 	OnDemandEnabled bool `json:"on_demand_enabled"`
 	// Whether advertisement status of the prefix is locked, meaning it cannot be
 	// changed.
-	OnDemandLocked bool                                              `json:"on_demand_locked"`
-	JSON           addressingPrefixBGPPrefixListResponseOnDemandJSON `json:"-"`
+	OnDemandLocked bool                                  `json:"on_demand_locked"`
+	JSON           addressingIpamBGPPrefixesOnDemandJSON `json:"-"`
 }
 
-// addressingPrefixBGPPrefixListResponseOnDemandJSON contains the JSON metadata for
-// the struct [AddressingPrefixBGPPrefixListResponseOnDemand]
-type addressingPrefixBGPPrefixListResponseOnDemandJSON struct {
+// addressingIpamBGPPrefixesOnDemandJSON contains the JSON metadata for the struct
+// [AddressingIpamBGPPrefixesOnDemand]
+type addressingIpamBGPPrefixesOnDemandJSON struct {
 	Advertised           apijson.Field
 	AdvertisedModifiedAt apijson.Field
 	OnDemandEnabled      apijson.Field
@@ -157,179 +157,7 @@ type addressingPrefixBGPPrefixListResponseOnDemandJSON struct {
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *AddressingPrefixBGPPrefixListResponseOnDemand) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AddressingPrefixBGPPrefixEditResponse struct {
-	// Identifier
-	ID string `json:"id"`
-	// Autonomous System Number (ASN) the prefix will be advertised under.
-	ASN           int64                                              `json:"asn,nullable"`
-	BGPSignalOpts AddressingPrefixBGPPrefixEditResponseBGPSignalOpts `json:"bgp_signal_opts"`
-	// IP Prefix in Classless Inter-Domain Routing format.
-	Cidr       string                                        `json:"cidr"`
-	CreatedAt  time.Time                                     `json:"created_at" format:"date-time"`
-	ModifiedAt time.Time                                     `json:"modified_at" format:"date-time"`
-	OnDemand   AddressingPrefixBGPPrefixEditResponseOnDemand `json:"on_demand"`
-	JSON       addressingPrefixBGPPrefixEditResponseJSON     `json:"-"`
-}
-
-// addressingPrefixBGPPrefixEditResponseJSON contains the JSON metadata for the
-// struct [AddressingPrefixBGPPrefixEditResponse]
-type addressingPrefixBGPPrefixEditResponseJSON struct {
-	ID            apijson.Field
-	ASN           apijson.Field
-	BGPSignalOpts apijson.Field
-	Cidr          apijson.Field
-	CreatedAt     apijson.Field
-	ModifiedAt    apijson.Field
-	OnDemand      apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *AddressingPrefixBGPPrefixEditResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AddressingPrefixBGPPrefixEditResponseBGPSignalOpts struct {
-	// Whether control of advertisement of the prefix to the Internet is enabled to be
-	// performed via BGP signal
-	Enabled bool `json:"enabled"`
-	// Last time BGP signaling control was toggled. This field is null if BGP signaling
-	// has never been enabled.
-	ModifiedAt time.Time                                              `json:"modified_at,nullable" format:"date-time"`
-	JSON       addressingPrefixBGPPrefixEditResponseBGPSignalOptsJSON `json:"-"`
-}
-
-// addressingPrefixBGPPrefixEditResponseBGPSignalOptsJSON contains the JSON
-// metadata for the struct [AddressingPrefixBGPPrefixEditResponseBGPSignalOpts]
-type addressingPrefixBGPPrefixEditResponseBGPSignalOptsJSON struct {
-	Enabled     apijson.Field
-	ModifiedAt  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressingPrefixBGPPrefixEditResponseBGPSignalOpts) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AddressingPrefixBGPPrefixEditResponseOnDemand struct {
-	// Prefix advertisement status to the Internet. This field is only not 'null' if on
-	// demand is enabled.
-	Advertised bool `json:"advertised,nullable"`
-	// Last time the advertisement status was changed. This field is only not 'null' if
-	// on demand is enabled.
-	AdvertisedModifiedAt time.Time `json:"advertised_modified_at,nullable" format:"date-time"`
-	// Whether advertisement of the prefix to the Internet may be dynamically enabled
-	// or disabled.
-	OnDemandEnabled bool `json:"on_demand_enabled"`
-	// Whether advertisement status of the prefix is locked, meaning it cannot be
-	// changed.
-	OnDemandLocked bool                                              `json:"on_demand_locked"`
-	JSON           addressingPrefixBGPPrefixEditResponseOnDemandJSON `json:"-"`
-}
-
-// addressingPrefixBGPPrefixEditResponseOnDemandJSON contains the JSON metadata for
-// the struct [AddressingPrefixBGPPrefixEditResponseOnDemand]
-type addressingPrefixBGPPrefixEditResponseOnDemandJSON struct {
-	Advertised           apijson.Field
-	AdvertisedModifiedAt apijson.Field
-	OnDemandEnabled      apijson.Field
-	OnDemandLocked       apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *AddressingPrefixBGPPrefixEditResponseOnDemand) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AddressingPrefixBGPPrefixGetResponse struct {
-	// Identifier
-	ID string `json:"id"`
-	// Autonomous System Number (ASN) the prefix will be advertised under.
-	ASN           int64                                             `json:"asn,nullable"`
-	BGPSignalOpts AddressingPrefixBGPPrefixGetResponseBGPSignalOpts `json:"bgp_signal_opts"`
-	// IP Prefix in Classless Inter-Domain Routing format.
-	Cidr       string                                       `json:"cidr"`
-	CreatedAt  time.Time                                    `json:"created_at" format:"date-time"`
-	ModifiedAt time.Time                                    `json:"modified_at" format:"date-time"`
-	OnDemand   AddressingPrefixBGPPrefixGetResponseOnDemand `json:"on_demand"`
-	JSON       addressingPrefixBGPPrefixGetResponseJSON     `json:"-"`
-}
-
-// addressingPrefixBGPPrefixGetResponseJSON contains the JSON metadata for the
-// struct [AddressingPrefixBGPPrefixGetResponse]
-type addressingPrefixBGPPrefixGetResponseJSON struct {
-	ID            apijson.Field
-	ASN           apijson.Field
-	BGPSignalOpts apijson.Field
-	Cidr          apijson.Field
-	CreatedAt     apijson.Field
-	ModifiedAt    apijson.Field
-	OnDemand      apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *AddressingPrefixBGPPrefixGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AddressingPrefixBGPPrefixGetResponseBGPSignalOpts struct {
-	// Whether control of advertisement of the prefix to the Internet is enabled to be
-	// performed via BGP signal
-	Enabled bool `json:"enabled"`
-	// Last time BGP signaling control was toggled. This field is null if BGP signaling
-	// has never been enabled.
-	ModifiedAt time.Time                                             `json:"modified_at,nullable" format:"date-time"`
-	JSON       addressingPrefixBGPPrefixGetResponseBGPSignalOptsJSON `json:"-"`
-}
-
-// addressingPrefixBGPPrefixGetResponseBGPSignalOptsJSON contains the JSON metadata
-// for the struct [AddressingPrefixBGPPrefixGetResponseBGPSignalOpts]
-type addressingPrefixBGPPrefixGetResponseBGPSignalOptsJSON struct {
-	Enabled     apijson.Field
-	ModifiedAt  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AddressingPrefixBGPPrefixGetResponseBGPSignalOpts) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AddressingPrefixBGPPrefixGetResponseOnDemand struct {
-	// Prefix advertisement status to the Internet. This field is only not 'null' if on
-	// demand is enabled.
-	Advertised bool `json:"advertised,nullable"`
-	// Last time the advertisement status was changed. This field is only not 'null' if
-	// on demand is enabled.
-	AdvertisedModifiedAt time.Time `json:"advertised_modified_at,nullable" format:"date-time"`
-	// Whether advertisement of the prefix to the Internet may be dynamically enabled
-	// or disabled.
-	OnDemandEnabled bool `json:"on_demand_enabled"`
-	// Whether advertisement status of the prefix is locked, meaning it cannot be
-	// changed.
-	OnDemandLocked bool                                             `json:"on_demand_locked"`
-	JSON           addressingPrefixBGPPrefixGetResponseOnDemandJSON `json:"-"`
-}
-
-// addressingPrefixBGPPrefixGetResponseOnDemandJSON contains the JSON metadata for
-// the struct [AddressingPrefixBGPPrefixGetResponseOnDemand]
-type addressingPrefixBGPPrefixGetResponseOnDemandJSON struct {
-	Advertised           apijson.Field
-	AdvertisedModifiedAt apijson.Field
-	OnDemandEnabled      apijson.Field
-	OnDemandLocked       apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
-}
-
-func (r *AddressingPrefixBGPPrefixGetResponseOnDemand) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressingIpamBGPPrefixesOnDemand) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -341,7 +169,7 @@ type AddressingPrefixBGPPrefixListParams struct {
 type AddressingPrefixBGPPrefixListResponseEnvelope struct {
 	Errors   []AddressingPrefixBGPPrefixListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AddressingPrefixBGPPrefixListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AddressingPrefixBGPPrefixListResponse                 `json:"result,required,nullable"`
+	Result   []AddressingIpamBGPPrefixes                             `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AddressingPrefixBGPPrefixListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AddressingPrefixBGPPrefixListResponseEnvelopeResultInfo `json:"result_info"`
@@ -458,7 +286,7 @@ func (r AddressingPrefixBGPPrefixEditParamsOnDemand) MarshalJSON() (data []byte,
 type AddressingPrefixBGPPrefixEditResponseEnvelope struct {
 	Errors   []AddressingPrefixBGPPrefixEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AddressingPrefixBGPPrefixEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   AddressingPrefixBGPPrefixEditResponse                   `json:"result,required"`
+	Result   AddressingIpamBGPPrefixes                               `json:"result,required"`
 	// Whether the API call was successful
 	Success AddressingPrefixBGPPrefixEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    addressingPrefixBGPPrefixEditResponseEnvelopeJSON    `json:"-"`
@@ -532,7 +360,7 @@ type AddressingPrefixBGPPrefixGetParams struct {
 type AddressingPrefixBGPPrefixGetResponseEnvelope struct {
 	Errors   []AddressingPrefixBGPPrefixGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AddressingPrefixBGPPrefixGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   AddressingPrefixBGPPrefixGetResponse                   `json:"result,required"`
+	Result   AddressingIpamBGPPrefixes                              `json:"result,required"`
 	// Whether the API call was successful
 	Success AddressingPrefixBGPPrefixGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    addressingPrefixBGPPrefixGetResponseEnvelopeJSON    `json:"-"`

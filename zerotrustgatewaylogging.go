@@ -32,7 +32,7 @@ func NewZeroTrustGatewayLoggingService(opts ...option.RequestOption) (r *ZeroTru
 }
 
 // Updates logging settings for the current Zero Trust account.
-func (r *ZeroTrustGatewayLoggingService) Update(ctx context.Context, params ZeroTrustGatewayLoggingUpdateParams, opts ...option.RequestOption) (res *ZeroTrustGatewayLoggingUpdateResponse, err error) {
+func (r *ZeroTrustGatewayLoggingService) Update(ctx context.Context, params ZeroTrustGatewayLoggingUpdateParams, opts ...option.RequestOption) (res *ZeroTrustGatewayGatewayAccountLoggingSettings, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustGatewayLoggingUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/gateway/logging", params.AccountID)
@@ -45,7 +45,7 @@ func (r *ZeroTrustGatewayLoggingService) Update(ctx context.Context, params Zero
 }
 
 // Fetches the current logging settings for Zero Trust account.
-func (r *ZeroTrustGatewayLoggingService) Get(ctx context.Context, query ZeroTrustGatewayLoggingGetParams, opts ...option.RequestOption) (res *ZeroTrustGatewayLoggingGetResponse, err error) {
+func (r *ZeroTrustGatewayLoggingService) Get(ctx context.Context, query ZeroTrustGatewayLoggingGetParams, opts ...option.RequestOption) (res *ZeroTrustGatewayGatewayAccountLoggingSettings, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustGatewayLoggingGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/gateway/logging", query.AccountID)
@@ -57,43 +57,43 @@ func (r *ZeroTrustGatewayLoggingService) Get(ctx context.Context, query ZeroTrus
 	return
 }
 
-type ZeroTrustGatewayLoggingUpdateResponse struct {
+type ZeroTrustGatewayGatewayAccountLoggingSettings struct {
 	// Redact personally identifiable information from activity logging (PII fields
 	// are: source IP, user email, user ID, device ID, URL, referrer, user agent).
 	RedactPii bool `json:"redact_pii"`
 	// Logging settings by rule type.
-	SettingsByRuleType ZeroTrustGatewayLoggingUpdateResponseSettingsByRuleType `json:"settings_by_rule_type"`
-	JSON               zeroTrustGatewayLoggingUpdateResponseJSON               `json:"-"`
+	SettingsByRuleType ZeroTrustGatewayGatewayAccountLoggingSettingsSettingsByRuleType `json:"settings_by_rule_type"`
+	JSON               zeroTrustGatewayGatewayAccountLoggingSettingsJSON               `json:"-"`
 }
 
-// zeroTrustGatewayLoggingUpdateResponseJSON contains the JSON metadata for the
-// struct [ZeroTrustGatewayLoggingUpdateResponse]
-type zeroTrustGatewayLoggingUpdateResponseJSON struct {
+// zeroTrustGatewayGatewayAccountLoggingSettingsJSON contains the JSON metadata for
+// the struct [ZeroTrustGatewayGatewayAccountLoggingSettings]
+type zeroTrustGatewayGatewayAccountLoggingSettingsJSON struct {
 	RedactPii          apijson.Field
 	SettingsByRuleType apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *ZeroTrustGatewayLoggingUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustGatewayGatewayAccountLoggingSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Logging settings by rule type.
-type ZeroTrustGatewayLoggingUpdateResponseSettingsByRuleType struct {
+type ZeroTrustGatewayGatewayAccountLoggingSettingsSettingsByRuleType struct {
 	// Logging settings for DNS firewall.
 	DNS interface{} `json:"dns"`
 	// Logging settings for HTTP/HTTPS firewall.
 	HTTP interface{} `json:"http"`
 	// Logging settings for Network firewall.
-	L4   interface{}                                                 `json:"l4"`
-	JSON zeroTrustGatewayLoggingUpdateResponseSettingsByRuleTypeJSON `json:"-"`
+	L4   interface{}                                                         `json:"l4"`
+	JSON zeroTrustGatewayGatewayAccountLoggingSettingsSettingsByRuleTypeJSON `json:"-"`
 }
 
-// zeroTrustGatewayLoggingUpdateResponseSettingsByRuleTypeJSON contains the JSON
-// metadata for the struct
-// [ZeroTrustGatewayLoggingUpdateResponseSettingsByRuleType]
-type zeroTrustGatewayLoggingUpdateResponseSettingsByRuleTypeJSON struct {
+// zeroTrustGatewayGatewayAccountLoggingSettingsSettingsByRuleTypeJSON contains the
+// JSON metadata for the struct
+// [ZeroTrustGatewayGatewayAccountLoggingSettingsSettingsByRuleType]
+type zeroTrustGatewayGatewayAccountLoggingSettingsSettingsByRuleTypeJSON struct {
 	DNS         apijson.Field
 	HTTP        apijson.Field
 	L4          apijson.Field
@@ -101,54 +101,7 @@ type zeroTrustGatewayLoggingUpdateResponseSettingsByRuleTypeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZeroTrustGatewayLoggingUpdateResponseSettingsByRuleType) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZeroTrustGatewayLoggingGetResponse struct {
-	// Redact personally identifiable information from activity logging (PII fields
-	// are: source IP, user email, user ID, device ID, URL, referrer, user agent).
-	RedactPii bool `json:"redact_pii"`
-	// Logging settings by rule type.
-	SettingsByRuleType ZeroTrustGatewayLoggingGetResponseSettingsByRuleType `json:"settings_by_rule_type"`
-	JSON               zeroTrustGatewayLoggingGetResponseJSON               `json:"-"`
-}
-
-// zeroTrustGatewayLoggingGetResponseJSON contains the JSON metadata for the struct
-// [ZeroTrustGatewayLoggingGetResponse]
-type zeroTrustGatewayLoggingGetResponseJSON struct {
-	RedactPii          apijson.Field
-	SettingsByRuleType apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *ZeroTrustGatewayLoggingGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Logging settings by rule type.
-type ZeroTrustGatewayLoggingGetResponseSettingsByRuleType struct {
-	// Logging settings for DNS firewall.
-	DNS interface{} `json:"dns"`
-	// Logging settings for HTTP/HTTPS firewall.
-	HTTP interface{} `json:"http"`
-	// Logging settings for Network firewall.
-	L4   interface{}                                              `json:"l4"`
-	JSON zeroTrustGatewayLoggingGetResponseSettingsByRuleTypeJSON `json:"-"`
-}
-
-// zeroTrustGatewayLoggingGetResponseSettingsByRuleTypeJSON contains the JSON
-// metadata for the struct [ZeroTrustGatewayLoggingGetResponseSettingsByRuleType]
-type zeroTrustGatewayLoggingGetResponseSettingsByRuleTypeJSON struct {
-	DNS         apijson.Field
-	HTTP        apijson.Field
-	L4          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustGatewayLoggingGetResponseSettingsByRuleType) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustGatewayGatewayAccountLoggingSettingsSettingsByRuleType) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -182,7 +135,7 @@ func (r ZeroTrustGatewayLoggingUpdateParamsSettingsByRuleType) MarshalJSON() (da
 type ZeroTrustGatewayLoggingUpdateResponseEnvelope struct {
 	Errors   []ZeroTrustGatewayLoggingUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustGatewayLoggingUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustGatewayLoggingUpdateResponse                   `json:"result,required"`
+	Result   ZeroTrustGatewayGatewayAccountLoggingSettings           `json:"result,required"`
 	// Whether the API call was successful
 	Success ZeroTrustGatewayLoggingUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustGatewayLoggingUpdateResponseEnvelopeJSON    `json:"-"`
@@ -255,7 +208,7 @@ type ZeroTrustGatewayLoggingGetParams struct {
 type ZeroTrustGatewayLoggingGetResponseEnvelope struct {
 	Errors   []ZeroTrustGatewayLoggingGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustGatewayLoggingGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustGatewayLoggingGetResponse                   `json:"result,required"`
+	Result   ZeroTrustGatewayGatewayAccountLoggingSettings        `json:"result,required"`
 	// Whether the API call was successful
 	Success ZeroTrustGatewayLoggingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustGatewayLoggingGetResponseEnvelopeJSON    `json:"-"`

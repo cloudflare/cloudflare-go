@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
@@ -35,7 +34,7 @@ func NewZeroTrustNetworkRouteIPService(opts ...option.RequestOption) (r *ZeroTru
 }
 
 // Fetches routes that contain the given IP address.
-func (r *ZeroTrustNetworkRouteIPService) Get(ctx context.Context, ip string, params ZeroTrustNetworkRouteIPGetParams, opts ...option.RequestOption) (res *ZeroTrustNetworkRouteIPGetResponse, err error) {
+func (r *ZeroTrustNetworkRouteIPService) Get(ctx context.Context, ip string, params ZeroTrustNetworkRouteIPGetParams, opts ...option.RequestOption) (res *TunnelTeamnet, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustNetworkRouteIPGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/teamnet/routes/ip/%s", params.AccountID, ip)
@@ -46,65 +45,6 @@ func (r *ZeroTrustNetworkRouteIPService) Get(ctx context.Context, ip string, par
 	res = &env.Result
 	return
 }
-
-type ZeroTrustNetworkRouteIPGetResponse struct {
-	// UUID of the route.
-	ID string `json:"id"`
-	// Optional remark describing the route.
-	Comment string `json:"comment"`
-	// Timestamp of when the route was created.
-	CreatedAt interface{} `json:"created_at"`
-	// Timestamp of when the route was deleted. If `null`, the route has not been
-	// deleted.
-	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
-	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
-	Network string `json:"network"`
-	// The type of tunnel.
-	TunType ZeroTrustNetworkRouteIPGetResponseTunType `json:"tun_type"`
-	// UUID of the Cloudflare Tunnel serving the route.
-	TunnelID interface{} `json:"tunnel_id"`
-	// The user-friendly name of the Cloudflare Tunnel serving the route.
-	TunnelName interface{} `json:"tunnel_name"`
-	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks
-	// are configured, the route is assigned to the default virtual network of the
-	// account.
-	VirtualNetworkID interface{} `json:"virtual_network_id"`
-	// A user-friendly name for the virtual network.
-	VirtualNetworkName string                                 `json:"virtual_network_name"`
-	JSON               zeroTrustNetworkRouteIPGetResponseJSON `json:"-"`
-}
-
-// zeroTrustNetworkRouteIPGetResponseJSON contains the JSON metadata for the struct
-// [ZeroTrustNetworkRouteIPGetResponse]
-type zeroTrustNetworkRouteIPGetResponseJSON struct {
-	ID                 apijson.Field
-	Comment            apijson.Field
-	CreatedAt          apijson.Field
-	DeletedAt          apijson.Field
-	Network            apijson.Field
-	TunType            apijson.Field
-	TunnelID           apijson.Field
-	TunnelName         apijson.Field
-	VirtualNetworkID   apijson.Field
-	VirtualNetworkName apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *ZeroTrustNetworkRouteIPGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of tunnel.
-type ZeroTrustNetworkRouteIPGetResponseTunType string
-
-const (
-	ZeroTrustNetworkRouteIPGetResponseTunTypeCfdTunnel     ZeroTrustNetworkRouteIPGetResponseTunType = "cfd_tunnel"
-	ZeroTrustNetworkRouteIPGetResponseTunTypeWARPConnector ZeroTrustNetworkRouteIPGetResponseTunType = "warp_connector"
-	ZeroTrustNetworkRouteIPGetResponseTunTypeIPSec         ZeroTrustNetworkRouteIPGetResponseTunType = "ip_sec"
-	ZeroTrustNetworkRouteIPGetResponseTunTypeGRE           ZeroTrustNetworkRouteIPGetResponseTunType = "gre"
-	ZeroTrustNetworkRouteIPGetResponseTunTypeCni           ZeroTrustNetworkRouteIPGetResponseTunType = "cni"
-)
 
 type ZeroTrustNetworkRouteIPGetParams struct {
 	// Cloudflare account ID
@@ -127,7 +67,7 @@ func (r ZeroTrustNetworkRouteIPGetParams) URLQuery() (v url.Values) {
 type ZeroTrustNetworkRouteIPGetResponseEnvelope struct {
 	Errors   []ZeroTrustNetworkRouteIPGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustNetworkRouteIPGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustNetworkRouteIPGetResponse                   `json:"result,required"`
+	Result   TunnelTeamnet                                        `json:"result,required"`
 	// Whether the API call was successful
 	Success ZeroTrustNetworkRouteIPGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustNetworkRouteIPGetResponseEnvelopeJSON    `json:"-"`

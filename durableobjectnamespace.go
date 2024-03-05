@@ -34,7 +34,7 @@ func NewDurableObjectNamespaceService(opts ...option.RequestOption) (r *DurableO
 }
 
 // Returns the Durable Object namespaces owned by an account.
-func (r *DurableObjectNamespaceService) List(ctx context.Context, query DurableObjectNamespaceListParams, opts ...option.RequestOption) (res *[]DurableObjectNamespaceListResponse, err error) {
+func (r *DurableObjectNamespaceService) List(ctx context.Context, query DurableObjectNamespaceListParams, opts ...option.RequestOption) (res *[]WorkersNamespace, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DurableObjectNamespaceListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/durable_objects/namespaces", query.AccountID)
@@ -46,17 +46,17 @@ func (r *DurableObjectNamespaceService) List(ctx context.Context, query DurableO
 	return
 }
 
-type DurableObjectNamespaceListResponse struct {
-	ID     interface{}                            `json:"id"`
-	Class  interface{}                            `json:"class"`
-	Name   interface{}                            `json:"name"`
-	Script interface{}                            `json:"script"`
-	JSON   durableObjectNamespaceListResponseJSON `json:"-"`
+type WorkersNamespace struct {
+	ID     interface{}          `json:"id"`
+	Class  interface{}          `json:"class"`
+	Name   interface{}          `json:"name"`
+	Script interface{}          `json:"script"`
+	JSON   workersNamespaceJSON `json:"-"`
 }
 
-// durableObjectNamespaceListResponseJSON contains the JSON metadata for the struct
-// [DurableObjectNamespaceListResponse]
-type durableObjectNamespaceListResponseJSON struct {
+// workersNamespaceJSON contains the JSON metadata for the struct
+// [WorkersNamespace]
+type workersNamespaceJSON struct {
 	ID          apijson.Field
 	Class       apijson.Field
 	Name        apijson.Field
@@ -65,7 +65,7 @@ type durableObjectNamespaceListResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DurableObjectNamespaceListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkersNamespace) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -77,7 +77,7 @@ type DurableObjectNamespaceListParams struct {
 type DurableObjectNamespaceListResponseEnvelope struct {
 	Errors   []DurableObjectNamespaceListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DurableObjectNamespaceListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DurableObjectNamespaceListResponse                 `json:"result,required,nullable"`
+	Result   []WorkersNamespace                                   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    DurableObjectNamespaceListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DurableObjectNamespaceListResponseEnvelopeResultInfo `json:"result_info"`

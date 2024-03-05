@@ -53,7 +53,7 @@ func NewWorkerScriptService(opts ...option.RequestOption) (r *WorkerScriptServic
 }
 
 // Upload a worker module.
-func (r *WorkerScriptService) Update(ctx context.Context, scriptName string, params WorkerScriptUpdateParams, opts ...option.RequestOption) (res *WorkerScriptUpdateResponse, err error) {
+func (r *WorkerScriptService) Update(ctx context.Context, scriptName string, params WorkerScriptUpdateParams, opts ...option.RequestOption) (res *WorkersScript, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerScriptUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s", params.AccountID, scriptName)
@@ -66,7 +66,7 @@ func (r *WorkerScriptService) Update(ctx context.Context, scriptName string, par
 }
 
 // Fetch a list of uploaded workers.
-func (r *WorkerScriptService) List(ctx context.Context, query WorkerScriptListParams, opts ...option.RequestOption) (res *[]WorkerScriptListResponse, err error) {
+func (r *WorkerScriptService) List(ctx context.Context, query WorkerScriptListParams, opts ...option.RequestOption) (res *[]WorkersScript, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerScriptListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/scripts", query.AccountID)
@@ -97,7 +97,7 @@ func (r *WorkerScriptService) Get(ctx context.Context, scriptName string, query 
 	return
 }
 
-type WorkerScriptUpdateResponse struct {
+type WorkersScript struct {
 	// The id of the script in the Workers system. Usually the script name.
 	ID string `json:"id"`
 	// When the script was created.
@@ -113,15 +113,14 @@ type WorkerScriptUpdateResponse struct {
 	// Specifies the placement mode for the Worker (e.g. 'smart').
 	PlacementMode string `json:"placement_mode"`
 	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers []WorkerScriptUpdateResponseTailConsumer `json:"tail_consumers"`
+	TailConsumers []WorkersScriptTailConsumer `json:"tail_consumers"`
 	// Specifies the usage model for the Worker (e.g. 'bundled' or 'unbound').
-	UsageModel string                         `json:"usage_model"`
-	JSON       workerScriptUpdateResponseJSON `json:"-"`
+	UsageModel string            `json:"usage_model"`
+	JSON       workersScriptJSON `json:"-"`
 }
 
-// workerScriptUpdateResponseJSON contains the JSON metadata for the struct
-// [WorkerScriptUpdateResponse]
-type workerScriptUpdateResponseJSON struct {
+// workersScriptJSON contains the JSON metadata for the struct [WorkersScript]
+type workersScriptJSON struct {
 	ID            apijson.Field
 	CreatedOn     apijson.Field
 	Etag          apijson.Field
@@ -135,24 +134,24 @@ type workerScriptUpdateResponseJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *WorkerScriptUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkersScript) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // A reference to a script that will consume logs from the attached Worker.
-type WorkerScriptUpdateResponseTailConsumer struct {
+type WorkersScriptTailConsumer struct {
 	// Name of Worker that is to be the consumer.
 	Service string `json:"service,required"`
 	// Optional environment if the Worker utilizes one.
 	Environment string `json:"environment"`
 	// Optional dispatch namespace the script belongs to.
-	Namespace string                                     `json:"namespace"`
-	JSON      workerScriptUpdateResponseTailConsumerJSON `json:"-"`
+	Namespace string                        `json:"namespace"`
+	JSON      workersScriptTailConsumerJSON `json:"-"`
 }
 
-// workerScriptUpdateResponseTailConsumerJSON contains the JSON metadata for the
-// struct [WorkerScriptUpdateResponseTailConsumer]
-type workerScriptUpdateResponseTailConsumerJSON struct {
+// workersScriptTailConsumerJSON contains the JSON metadata for the struct
+// [WorkersScriptTailConsumer]
+type workersScriptTailConsumerJSON struct {
 	Service     apijson.Field
 	Environment apijson.Field
 	Namespace   apijson.Field
@@ -160,74 +159,7 @@ type workerScriptUpdateResponseTailConsumerJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkerScriptUpdateResponseTailConsumer) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WorkerScriptListResponse struct {
-	// The id of the script in the Workers system. Usually the script name.
-	ID string `json:"id"`
-	// When the script was created.
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Hashed script content, can be used in a If-None-Match header when updating.
-	Etag string `json:"etag"`
-	// Whether Logpush is turned on for the Worker.
-	Logpush bool `json:"logpush"`
-	// When the script was last modified.
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// Deprecated. Deployment metadata for internal usage.
-	PipelineHash string `json:"pipeline_hash"`
-	// Specifies the placement mode for the Worker (e.g. 'smart').
-	PlacementMode string `json:"placement_mode"`
-	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers []WorkerScriptListResponseTailConsumer `json:"tail_consumers"`
-	// Specifies the usage model for the Worker (e.g. 'bundled' or 'unbound').
-	UsageModel string                       `json:"usage_model"`
-	JSON       workerScriptListResponseJSON `json:"-"`
-}
-
-// workerScriptListResponseJSON contains the JSON metadata for the struct
-// [WorkerScriptListResponse]
-type workerScriptListResponseJSON struct {
-	ID            apijson.Field
-	CreatedOn     apijson.Field
-	Etag          apijson.Field
-	Logpush       apijson.Field
-	ModifiedOn    apijson.Field
-	PipelineHash  apijson.Field
-	PlacementMode apijson.Field
-	TailConsumers apijson.Field
-	UsageModel    apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *WorkerScriptListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// A reference to a script that will consume logs from the attached Worker.
-type WorkerScriptListResponseTailConsumer struct {
-	// Name of Worker that is to be the consumer.
-	Service string `json:"service,required"`
-	// Optional environment if the Worker utilizes one.
-	Environment string `json:"environment"`
-	// Optional dispatch namespace the script belongs to.
-	Namespace string                                   `json:"namespace"`
-	JSON      workerScriptListResponseTailConsumerJSON `json:"-"`
-}
-
-// workerScriptListResponseTailConsumerJSON contains the JSON metadata for the
-// struct [WorkerScriptListResponseTailConsumer]
-type workerScriptListResponseTailConsumerJSON struct {
-	Service     apijson.Field
-	Environment apijson.Field
-	Namespace   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerScriptListResponseTailConsumer) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkersScriptTailConsumer) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -462,7 +394,7 @@ const (
 type WorkerScriptUpdateResponseEnvelope struct {
 	Errors   []WorkerScriptUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []WorkerScriptUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   WorkerScriptUpdateResponse                   `json:"result,required"`
+	Result   WorkersScript                                `json:"result,required"`
 	// Whether the API call was successful
 	Success WorkerScriptUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    workerScriptUpdateResponseEnvelopeJSON    `json:"-"`
@@ -536,7 +468,7 @@ type WorkerScriptListParams struct {
 type WorkerScriptListResponseEnvelope struct {
 	Errors   []WorkerScriptListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []WorkerScriptListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []WorkerScriptListResponse                 `json:"result,required"`
+	Result   []WorkersScript                            `json:"result,required"`
 	// Whether the API call was successful
 	Success WorkerScriptListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    workerScriptListResponseEnvelopeJSON    `json:"-"`

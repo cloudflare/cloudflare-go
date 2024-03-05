@@ -35,7 +35,7 @@ func NewZeroTrustAccessCertificateService(opts ...option.RequestOption) (r *Zero
 }
 
 // Adds a new mTLS root certificate to Access.
-func (r *ZeroTrustAccessCertificateService) New(ctx context.Context, params ZeroTrustAccessCertificateNewParams, opts ...option.RequestOption) (res *ZeroTrustAccessCertificateNewResponse, err error) {
+func (r *ZeroTrustAccessCertificateService) New(ctx context.Context, params ZeroTrustAccessCertificateNewParams, opts ...option.RequestOption) (res *AccessCertificates, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustAccessCertificateNewResponseEnvelope
 	var accountOrZone string
@@ -57,7 +57,7 @@ func (r *ZeroTrustAccessCertificateService) New(ctx context.Context, params Zero
 }
 
 // Updates a configured mTLS certificate.
-func (r *ZeroTrustAccessCertificateService) Update(ctx context.Context, uuid string, params ZeroTrustAccessCertificateUpdateParams, opts ...option.RequestOption) (res *ZeroTrustAccessCertificateUpdateResponse, err error) {
+func (r *ZeroTrustAccessCertificateService) Update(ctx context.Context, uuid string, params ZeroTrustAccessCertificateUpdateParams, opts ...option.RequestOption) (res *AccessCertificates, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustAccessCertificateUpdateResponseEnvelope
 	var accountOrZone string
@@ -79,7 +79,7 @@ func (r *ZeroTrustAccessCertificateService) Update(ctx context.Context, uuid str
 }
 
 // Lists all mTLS root certificates.
-func (r *ZeroTrustAccessCertificateService) List(ctx context.Context, query ZeroTrustAccessCertificateListParams, opts ...option.RequestOption) (res *[]ZeroTrustAccessCertificateListResponse, err error) {
+func (r *ZeroTrustAccessCertificateService) List(ctx context.Context, query ZeroTrustAccessCertificateListParams, opts ...option.RequestOption) (res *[]AccessCertificates, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustAccessCertificateListResponseEnvelope
 	var accountOrZone string
@@ -123,7 +123,7 @@ func (r *ZeroTrustAccessCertificateService) Delete(ctx context.Context, uuid str
 }
 
 // Fetches a single mTLS certificate.
-func (r *ZeroTrustAccessCertificateService) Get(ctx context.Context, uuid string, query ZeroTrustAccessCertificateGetParams, opts ...option.RequestOption) (res *ZeroTrustAccessCertificateGetResponse, err error) {
+func (r *ZeroTrustAccessCertificateService) Get(ctx context.Context, uuid string, query ZeroTrustAccessCertificateGetParams, opts ...option.RequestOption) (res *AccessCertificates, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustAccessCertificateGetResponseEnvelope
 	var accountOrZone string
@@ -144,7 +144,7 @@ func (r *ZeroTrustAccessCertificateService) Get(ctx context.Context, uuid string
 	return
 }
 
-type ZeroTrustAccessCertificateNewResponse struct {
+type AccessCertificates struct {
 	// The ID of the application that will use this certificate.
 	ID interface{} `json:"id"`
 	// The hostnames of the applications that will use this certificate.
@@ -154,14 +154,14 @@ type ZeroTrustAccessCertificateNewResponse struct {
 	// The MD5 fingerprint of the certificate.
 	Fingerprint string `json:"fingerprint"`
 	// The name of the certificate.
-	Name      string                                    `json:"name"`
-	UpdatedAt time.Time                                 `json:"updated_at" format:"date-time"`
-	JSON      zeroTrustAccessCertificateNewResponseJSON `json:"-"`
+	Name      string                 `json:"name"`
+	UpdatedAt time.Time              `json:"updated_at" format:"date-time"`
+	JSON      accessCertificatesJSON `json:"-"`
 }
 
-// zeroTrustAccessCertificateNewResponseJSON contains the JSON metadata for the
-// struct [ZeroTrustAccessCertificateNewResponse]
-type zeroTrustAccessCertificateNewResponseJSON struct {
+// accessCertificatesJSON contains the JSON metadata for the struct
+// [AccessCertificates]
+type accessCertificatesJSON struct {
 	ID                  apijson.Field
 	AssociatedHostnames apijson.Field
 	CreatedAt           apijson.Field
@@ -173,73 +173,7 @@ type zeroTrustAccessCertificateNewResponseJSON struct {
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *ZeroTrustAccessCertificateNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZeroTrustAccessCertificateUpdateResponse struct {
-	// The ID of the application that will use this certificate.
-	ID interface{} `json:"id"`
-	// The hostnames of the applications that will use this certificate.
-	AssociatedHostnames []string  `json:"associated_hostnames"`
-	CreatedAt           time.Time `json:"created_at" format:"date-time"`
-	ExpiresOn           time.Time `json:"expires_on" format:"date-time"`
-	// The MD5 fingerprint of the certificate.
-	Fingerprint string `json:"fingerprint"`
-	// The name of the certificate.
-	Name      string                                       `json:"name"`
-	UpdatedAt time.Time                                    `json:"updated_at" format:"date-time"`
-	JSON      zeroTrustAccessCertificateUpdateResponseJSON `json:"-"`
-}
-
-// zeroTrustAccessCertificateUpdateResponseJSON contains the JSON metadata for the
-// struct [ZeroTrustAccessCertificateUpdateResponse]
-type zeroTrustAccessCertificateUpdateResponseJSON struct {
-	ID                  apijson.Field
-	AssociatedHostnames apijson.Field
-	CreatedAt           apijson.Field
-	ExpiresOn           apijson.Field
-	Fingerprint         apijson.Field
-	Name                apijson.Field
-	UpdatedAt           apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *ZeroTrustAccessCertificateUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZeroTrustAccessCertificateListResponse struct {
-	// The ID of the application that will use this certificate.
-	ID interface{} `json:"id"`
-	// The hostnames of the applications that will use this certificate.
-	AssociatedHostnames []string  `json:"associated_hostnames"`
-	CreatedAt           time.Time `json:"created_at" format:"date-time"`
-	ExpiresOn           time.Time `json:"expires_on" format:"date-time"`
-	// The MD5 fingerprint of the certificate.
-	Fingerprint string `json:"fingerprint"`
-	// The name of the certificate.
-	Name      string                                     `json:"name"`
-	UpdatedAt time.Time                                  `json:"updated_at" format:"date-time"`
-	JSON      zeroTrustAccessCertificateListResponseJSON `json:"-"`
-}
-
-// zeroTrustAccessCertificateListResponseJSON contains the JSON metadata for the
-// struct [ZeroTrustAccessCertificateListResponse]
-type zeroTrustAccessCertificateListResponseJSON struct {
-	ID                  apijson.Field
-	AssociatedHostnames apijson.Field
-	CreatedAt           apijson.Field
-	ExpiresOn           apijson.Field
-	Fingerprint         apijson.Field
-	Name                apijson.Field
-	UpdatedAt           apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *ZeroTrustAccessCertificateListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessCertificates) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -258,39 +192,6 @@ type zeroTrustAccessCertificateDeleteResponseJSON struct {
 }
 
 func (r *ZeroTrustAccessCertificateDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZeroTrustAccessCertificateGetResponse struct {
-	// The ID of the application that will use this certificate.
-	ID interface{} `json:"id"`
-	// The hostnames of the applications that will use this certificate.
-	AssociatedHostnames []string  `json:"associated_hostnames"`
-	CreatedAt           time.Time `json:"created_at" format:"date-time"`
-	ExpiresOn           time.Time `json:"expires_on" format:"date-time"`
-	// The MD5 fingerprint of the certificate.
-	Fingerprint string `json:"fingerprint"`
-	// The name of the certificate.
-	Name      string                                    `json:"name"`
-	UpdatedAt time.Time                                 `json:"updated_at" format:"date-time"`
-	JSON      zeroTrustAccessCertificateGetResponseJSON `json:"-"`
-}
-
-// zeroTrustAccessCertificateGetResponseJSON contains the JSON metadata for the
-// struct [ZeroTrustAccessCertificateGetResponse]
-type zeroTrustAccessCertificateGetResponseJSON struct {
-	ID                  apijson.Field
-	AssociatedHostnames apijson.Field
-	CreatedAt           apijson.Field
-	ExpiresOn           apijson.Field
-	Fingerprint         apijson.Field
-	Name                apijson.Field
-	UpdatedAt           apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *ZeroTrustAccessCertificateGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -314,7 +215,7 @@ func (r ZeroTrustAccessCertificateNewParams) MarshalJSON() (data []byte, err err
 type ZeroTrustAccessCertificateNewResponseEnvelope struct {
 	Errors   []ZeroTrustAccessCertificateNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustAccessCertificateNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustAccessCertificateNewResponse                   `json:"result,required"`
+	Result   AccessCertificates                                      `json:"result,required"`
 	// Whether the API call was successful
 	Success ZeroTrustAccessCertificateNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustAccessCertificateNewResponseEnvelopeJSON    `json:"-"`
@@ -398,7 +299,7 @@ func (r ZeroTrustAccessCertificateUpdateParams) MarshalJSON() (data []byte, err 
 type ZeroTrustAccessCertificateUpdateResponseEnvelope struct {
 	Errors   []ZeroTrustAccessCertificateUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustAccessCertificateUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustAccessCertificateUpdateResponse                   `json:"result,required"`
+	Result   AccessCertificates                                         `json:"result,required"`
 	// Whether the API call was successful
 	Success ZeroTrustAccessCertificateUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustAccessCertificateUpdateResponseEnvelopeJSON    `json:"-"`
@@ -475,7 +376,7 @@ type ZeroTrustAccessCertificateListParams struct {
 type ZeroTrustAccessCertificateListResponseEnvelope struct {
 	Errors   []ZeroTrustAccessCertificateListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustAccessCertificateListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []ZeroTrustAccessCertificateListResponse                 `json:"result,required,nullable"`
+	Result   []AccessCertificates                                     `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    ZeroTrustAccessCertificateListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ZeroTrustAccessCertificateListResponseEnvelopeResultInfo `json:"result_info"`
@@ -658,7 +559,7 @@ type ZeroTrustAccessCertificateGetParams struct {
 type ZeroTrustAccessCertificateGetResponseEnvelope struct {
 	Errors   []ZeroTrustAccessCertificateGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustAccessCertificateGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustAccessCertificateGetResponse                   `json:"result,required"`
+	Result   AccessCertificates                                      `json:"result,required"`
 	// Whether the API call was successful
 	Success ZeroTrustAccessCertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustAccessCertificateGetResponseEnvelopeJSON    `json:"-"`

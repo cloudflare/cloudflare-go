@@ -36,7 +36,7 @@ func NewZoneSettingResponseBufferingService(opts ...option.RequestOption) (r *Zo
 // may buffer the whole payload to deliver it at once to the client versus allowing
 // it to be delivered in chunks. By default, the proxied server streams directly
 // and is not buffered by Cloudflare. This is limited to Enterprise Zones.
-func (r *ZoneSettingResponseBufferingService) Edit(ctx context.Context, params ZoneSettingResponseBufferingEditParams, opts ...option.RequestOption) (res *ZoneSettingResponseBufferingEditResponse, err error) {
+func (r *ZoneSettingResponseBufferingService) Edit(ctx context.Context, params ZoneSettingResponseBufferingEditParams, opts ...option.RequestOption) (res *ZonesBuffering, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingResponseBufferingEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/response_buffering", params.ZoneID)
@@ -52,7 +52,7 @@ func (r *ZoneSettingResponseBufferingService) Edit(ctx context.Context, params Z
 // may buffer the whole payload to deliver it at once to the client versus allowing
 // it to be delivered in chunks. By default, the proxied server streams directly
 // and is not buffered by Cloudflare. This is limited to Enterprise Zones.
-func (r *ZoneSettingResponseBufferingService) Get(ctx context.Context, query ZoneSettingResponseBufferingGetParams, opts ...option.RequestOption) (res *ZoneSettingResponseBufferingGetResponse, err error) {
+func (r *ZoneSettingResponseBufferingService) Get(ctx context.Context, query ZoneSettingResponseBufferingGetParams, opts ...option.RequestOption) (res *ZonesBuffering, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingResponseBufferingGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/response_buffering", query.ZoneID)
@@ -68,22 +68,21 @@ func (r *ZoneSettingResponseBufferingService) Get(ctx context.Context, query Zon
 // may buffer the whole payload to deliver it at once to the client versus allowing
 // it to be delivered in chunks. By default, the proxied server streams directly
 // and is not buffered by Cloudflare. This is limited to Enterprise Zones.
-type ZoneSettingResponseBufferingEditResponse struct {
+type ZonesBuffering struct {
 	// ID of the zone setting.
-	ID ZoneSettingResponseBufferingEditResponseID `json:"id,required"`
+	ID ZonesBufferingID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingResponseBufferingEditResponseValue `json:"value,required"`
+	Value ZonesBufferingValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingResponseBufferingEditResponseEditable `json:"editable"`
+	Editable ZonesBufferingEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                    `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingResponseBufferingEditResponseJSON `json:"-"`
+	ModifiedOn time.Time          `json:"modified_on,nullable" format:"date-time"`
+	JSON       zonesBufferingJSON `json:"-"`
 }
 
-// zoneSettingResponseBufferingEditResponseJSON contains the JSON metadata for the
-// struct [ZoneSettingResponseBufferingEditResponse]
-type zoneSettingResponseBufferingEditResponseJSON struct {
+// zonesBufferingJSON contains the JSON metadata for the struct [ZonesBuffering]
+type zonesBufferingJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -92,89 +91,54 @@ type zoneSettingResponseBufferingEditResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingResponseBufferingEditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonesBuffering) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r ZonesBuffering) implementsZoneSettingEditResponse() {}
+
+func (r ZonesBuffering) implementsZoneSettingGetResponse() {}
+
 // ID of the zone setting.
-type ZoneSettingResponseBufferingEditResponseID string
+type ZonesBufferingID string
 
 const (
-	ZoneSettingResponseBufferingEditResponseIDResponseBuffering ZoneSettingResponseBufferingEditResponseID = "response_buffering"
+	ZonesBufferingIDResponseBuffering ZonesBufferingID = "response_buffering"
 )
 
 // Current value of the zone setting.
-type ZoneSettingResponseBufferingEditResponseValue string
+type ZonesBufferingValue string
 
 const (
-	ZoneSettingResponseBufferingEditResponseValueOn  ZoneSettingResponseBufferingEditResponseValue = "on"
-	ZoneSettingResponseBufferingEditResponseValueOff ZoneSettingResponseBufferingEditResponseValue = "off"
+	ZonesBufferingValueOn  ZonesBufferingValue = "on"
+	ZonesBufferingValueOff ZonesBufferingValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingResponseBufferingEditResponseEditable bool
+type ZonesBufferingEditable bool
 
 const (
-	ZoneSettingResponseBufferingEditResponseEditableTrue  ZoneSettingResponseBufferingEditResponseEditable = true
-	ZoneSettingResponseBufferingEditResponseEditableFalse ZoneSettingResponseBufferingEditResponseEditable = false
+	ZonesBufferingEditableTrue  ZonesBufferingEditable = true
+	ZonesBufferingEditableFalse ZonesBufferingEditable = false
 )
 
 // Enables or disables buffering of responses from the proxied server. Cloudflare
 // may buffer the whole payload to deliver it at once to the client versus allowing
 // it to be delivered in chunks. By default, the proxied server streams directly
 // and is not buffered by Cloudflare. This is limited to Enterprise Zones.
-type ZoneSettingResponseBufferingGetResponse struct {
+type ZonesBufferingParam struct {
 	// ID of the zone setting.
-	ID ZoneSettingResponseBufferingGetResponseID `json:"id,required"`
+	ID param.Field[ZonesBufferingID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingResponseBufferingGetResponseValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingResponseBufferingGetResponseEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                   `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingResponseBufferingGetResponseJSON `json:"-"`
+	Value param.Field[ZonesBufferingValue] `json:"value,required"`
 }
 
-// zoneSettingResponseBufferingGetResponseJSON contains the JSON metadata for the
-// struct [ZoneSettingResponseBufferingGetResponse]
-type zoneSettingResponseBufferingGetResponseJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+func (r ZonesBufferingParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *ZoneSettingResponseBufferingGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// ID of the zone setting.
-type ZoneSettingResponseBufferingGetResponseID string
-
-const (
-	ZoneSettingResponseBufferingGetResponseIDResponseBuffering ZoneSettingResponseBufferingGetResponseID = "response_buffering"
-)
-
-// Current value of the zone setting.
-type ZoneSettingResponseBufferingGetResponseValue string
-
-const (
-	ZoneSettingResponseBufferingGetResponseValueOn  ZoneSettingResponseBufferingGetResponseValue = "on"
-	ZoneSettingResponseBufferingGetResponseValueOff ZoneSettingResponseBufferingGetResponseValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingResponseBufferingGetResponseEditable bool
-
-const (
-	ZoneSettingResponseBufferingGetResponseEditableTrue  ZoneSettingResponseBufferingGetResponseEditable = true
-	ZoneSettingResponseBufferingGetResponseEditableFalse ZoneSettingResponseBufferingGetResponseEditable = false
-)
+func (r ZonesBufferingParam) implementsZoneSettingEditParamsItem() {}
 
 type ZoneSettingResponseBufferingEditParams struct {
 	// Identifier
@@ -204,7 +168,7 @@ type ZoneSettingResponseBufferingEditResponseEnvelope struct {
 	// may buffer the whole payload to deliver it at once to the client versus allowing
 	// it to be delivered in chunks. By default, the proxied server streams directly
 	// and is not buffered by Cloudflare. This is limited to Enterprise Zones.
-	Result ZoneSettingResponseBufferingEditResponse             `json:"result"`
+	Result ZonesBuffering                                       `json:"result"`
 	JSON   zoneSettingResponseBufferingEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -276,7 +240,7 @@ type ZoneSettingResponseBufferingGetResponseEnvelope struct {
 	// may buffer the whole payload to deliver it at once to the client versus allowing
 	// it to be delivered in chunks. By default, the proxied server streams directly
 	// and is not buffered by Cloudflare. This is limited to Enterprise Zones.
-	Result ZoneSettingResponseBufferingGetResponse             `json:"result"`
+	Result ZonesBuffering                                      `json:"result"`
 	JSON   zoneSettingResponseBufferingGetResponseEnvelopeJSON `json:"-"`
 }
 

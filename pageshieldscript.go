@@ -34,7 +34,7 @@ func NewPageShieldScriptService(opts ...option.RequestOption) (r *PageShieldScri
 }
 
 // Lists all scripts detected by Page Shield.
-func (r *PageShieldScriptService) List(ctx context.Context, params PageShieldScriptListParams, opts ...option.RequestOption) (res *[]PageShieldScriptListResponse, err error) {
+func (r *PageShieldScriptService) List(ctx context.Context, params PageShieldScriptListParams, opts ...option.RequestOption) (res *[]PageShieldScript, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageShieldScriptListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/page_shield/scripts", params.ZoneID)
@@ -54,26 +54,26 @@ func (r *PageShieldScriptService) Get(ctx context.Context, scriptID string, quer
 	return
 }
 
-type PageShieldScriptListResponse struct {
-	ID                      interface{}                      `json:"id"`
-	AddedAt                 interface{}                      `json:"added_at"`
-	DomainReportedMalicious interface{}                      `json:"domain_reported_malicious"`
-	FetchedAt               interface{}                      `json:"fetched_at"`
-	FirstPageURL            interface{}                      `json:"first_page_url"`
-	FirstSeenAt             interface{}                      `json:"first_seen_at"`
-	Hash                    interface{}                      `json:"hash"`
-	Host                    interface{}                      `json:"host"`
-	JsIntegrityScore        interface{}                      `json:"js_integrity_score"`
-	LastSeenAt              interface{}                      `json:"last_seen_at"`
-	PageURLs                interface{}                      `json:"page_urls"`
-	URL                     interface{}                      `json:"url"`
-	URLContainsCdnCgiPath   interface{}                      `json:"url_contains_cdn_cgi_path"`
-	JSON                    pageShieldScriptListResponseJSON `json:"-"`
+type PageShieldScript struct {
+	ID                      interface{}          `json:"id"`
+	AddedAt                 interface{}          `json:"added_at"`
+	DomainReportedMalicious interface{}          `json:"domain_reported_malicious"`
+	FetchedAt               interface{}          `json:"fetched_at"`
+	FirstPageURL            interface{}          `json:"first_page_url"`
+	FirstSeenAt             interface{}          `json:"first_seen_at"`
+	Hash                    interface{}          `json:"hash"`
+	Host                    interface{}          `json:"host"`
+	JsIntegrityScore        interface{}          `json:"js_integrity_score"`
+	LastSeenAt              interface{}          `json:"last_seen_at"`
+	PageURLs                interface{}          `json:"page_urls"`
+	URL                     interface{}          `json:"url"`
+	URLContainsCdnCgiPath   interface{}          `json:"url_contains_cdn_cgi_path"`
+	JSON                    pageShieldScriptJSON `json:"-"`
 }
 
-// pageShieldScriptListResponseJSON contains the JSON metadata for the struct
-// [PageShieldScriptListResponse]
-type pageShieldScriptListResponseJSON struct {
+// pageShieldScriptJSON contains the JSON metadata for the struct
+// [PageShieldScript]
+type pageShieldScriptJSON struct {
 	ID                      apijson.Field
 	AddedAt                 apijson.Field
 	DomainReportedMalicious apijson.Field
@@ -91,7 +91,7 @@ type pageShieldScriptListResponseJSON struct {
 	ExtraFields             map[string]apijson.Field
 }
 
-func (r *PageShieldScriptListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *PageShieldScript) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -255,7 +255,7 @@ const (
 type PageShieldScriptListResponseEnvelope struct {
 	Errors   []PageShieldScriptListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []PageShieldScriptListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []PageShieldScriptListResponse                 `json:"result,required,nullable"`
+	Result   []PageShieldScript                             `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    PageShieldScriptListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo PageShieldScriptListResponseEnvelopeResultInfo `json:"result_info"`

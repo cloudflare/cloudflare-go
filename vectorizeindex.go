@@ -35,7 +35,7 @@ func NewVectorizeIndexService(opts ...option.RequestOption) (r *VectorizeIndexSe
 }
 
 // Creates and returns a new Vectorize Index.
-func (r *VectorizeIndexService) New(ctx context.Context, accountIdentifier string, body VectorizeIndexNewParams, opts ...option.RequestOption) (res *VectorizeIndexNewResponse, err error) {
+func (r *VectorizeIndexService) New(ctx context.Context, accountIdentifier string, body VectorizeIndexNewParams, opts ...option.RequestOption) (res *VectorizeCreateIndex, err error) {
 	opts = append(r.Options[:], opts...)
 	var env VectorizeIndexNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/vectorize/indexes", accountIdentifier)
@@ -48,7 +48,7 @@ func (r *VectorizeIndexService) New(ctx context.Context, accountIdentifier strin
 }
 
 // Updates and returns the specified Vectorize Index.
-func (r *VectorizeIndexService) Update(ctx context.Context, accountIdentifier string, indexName string, body VectorizeIndexUpdateParams, opts ...option.RequestOption) (res *VectorizeIndexUpdateResponse, err error) {
+func (r *VectorizeIndexService) Update(ctx context.Context, accountIdentifier string, indexName string, body VectorizeIndexUpdateParams, opts ...option.RequestOption) (res *VectorizeCreateIndex, err error) {
 	opts = append(r.Options[:], opts...)
 	var env VectorizeIndexUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/vectorize/indexes/%s", accountIdentifier, indexName)
@@ -61,7 +61,7 @@ func (r *VectorizeIndexService) Update(ctx context.Context, accountIdentifier st
 }
 
 // Returns a list of Vectorize Indexes
-func (r *VectorizeIndexService) List(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *[]VectorizeIndexListResponse, err error) {
+func (r *VectorizeIndexService) List(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *[]VectorizeCreateIndex, err error) {
 	opts = append(r.Options[:], opts...)
 	var env VectorizeIndexListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/vectorize/indexes", accountIdentifier)
@@ -87,7 +87,7 @@ func (r *VectorizeIndexService) Delete(ctx context.Context, accountIdentifier st
 }
 
 // Delete a set of vectors from an index by their vector identifiers.
-func (r *VectorizeIndexService) DeleteByIDs(ctx context.Context, accountIdentifier string, indexName string, body VectorizeIndexDeleteByIDsParams, opts ...option.RequestOption) (res *VectorizeIndexDeleteByIDsResponse, err error) {
+func (r *VectorizeIndexService) DeleteByIDs(ctx context.Context, accountIdentifier string, indexName string, body VectorizeIndexDeleteByIDsParams, opts ...option.RequestOption) (res *VectorizeIndexDeleteVectorsByID, err error) {
 	opts = append(r.Options[:], opts...)
 	var env VectorizeIndexDeleteByIDsResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/vectorize/indexes/%s/delete-by-ids", accountIdentifier, indexName)
@@ -100,7 +100,7 @@ func (r *VectorizeIndexService) DeleteByIDs(ctx context.Context, accountIdentifi
 }
 
 // Returns the specified Vectorize Index.
-func (r *VectorizeIndexService) Get(ctx context.Context, accountIdentifier string, indexName string, opts ...option.RequestOption) (res *VectorizeIndexGetResponse, err error) {
+func (r *VectorizeIndexService) Get(ctx context.Context, accountIdentifier string, indexName string, opts ...option.RequestOption) (res *VectorizeCreateIndex, err error) {
 	opts = append(r.Options[:], opts...)
 	var env VectorizeIndexGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/vectorize/indexes/%s", accountIdentifier, indexName)
@@ -127,7 +127,7 @@ func (r *VectorizeIndexService) GetByIDs(ctx context.Context, accountIdentifier 
 
 // Inserts vectors into the specified index and returns the count of the vectors
 // successfully inserted.
-func (r *VectorizeIndexService) Insert(ctx context.Context, accountIdentifier string, indexName string, opts ...option.RequestOption) (res *VectorizeIndexInsertResponse, err error) {
+func (r *VectorizeIndexService) Insert(ctx context.Context, accountIdentifier string, indexName string, opts ...option.RequestOption) (res *VectorizeIndexInsert, err error) {
 	opts = append(r.Options[:], opts...)
 	var env VectorizeIndexInsertResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/vectorize/indexes/%s/insert", accountIdentifier, indexName)
@@ -140,7 +140,7 @@ func (r *VectorizeIndexService) Insert(ctx context.Context, accountIdentifier st
 }
 
 // Finds vectors closest to a given vector in an index.
-func (r *VectorizeIndexService) Query(ctx context.Context, accountIdentifier string, indexName string, body VectorizeIndexQueryParams, opts ...option.RequestOption) (res *VectorizeIndexQueryResponse, err error) {
+func (r *VectorizeIndexService) Query(ctx context.Context, accountIdentifier string, indexName string, body VectorizeIndexQueryParams, opts ...option.RequestOption) (res *VectorizeIndexQuery, err error) {
 	opts = append(r.Options[:], opts...)
 	var env VectorizeIndexQueryResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/vectorize/indexes/%s/query", accountIdentifier, indexName)
@@ -154,7 +154,7 @@ func (r *VectorizeIndexService) Query(ctx context.Context, accountIdentifier str
 
 // Upserts vectors into the specified index, creating them if they do not exist and
 // returns the count of values and ids successfully inserted.
-func (r *VectorizeIndexService) Upsert(ctx context.Context, accountIdentifier string, indexName string, opts ...option.RequestOption) (res *VectorizeIndexUpsertResponse, err error) {
+func (r *VectorizeIndexService) Upsert(ctx context.Context, accountIdentifier string, indexName string, opts ...option.RequestOption) (res *VectorizeIndexUpsert, err error) {
 	opts = append(r.Options[:], opts...)
 	var env VectorizeIndexUpsertResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/vectorize/indexes/%s/upsert", accountIdentifier, indexName)
@@ -166,21 +166,21 @@ func (r *VectorizeIndexService) Upsert(ctx context.Context, accountIdentifier st
 	return
 }
 
-type VectorizeIndexNewResponse struct {
-	Config VectorizeIndexNewResponseConfig `json:"config"`
+type VectorizeCreateIndex struct {
+	Config VectorizeCreateIndexConfig `json:"config"`
 	// Specifies the timestamp the resource was created as an ISO8601 string.
 	CreatedOn interface{} `json:"created_on"`
 	// Specifies the description of the index.
 	Description string `json:"description"`
 	// Specifies the timestamp the resource was modified as an ISO8601 string.
-	ModifiedOn interface{}                   `json:"modified_on"`
-	Name       string                        `json:"name"`
-	JSON       vectorizeIndexNewResponseJSON `json:"-"`
+	ModifiedOn interface{}              `json:"modified_on"`
+	Name       string                   `json:"name"`
+	JSON       vectorizeCreateIndexJSON `json:"-"`
 }
 
-// vectorizeIndexNewResponseJSON contains the JSON metadata for the struct
-// [VectorizeIndexNewResponse]
-type vectorizeIndexNewResponseJSON struct {
+// vectorizeCreateIndexJSON contains the JSON metadata for the struct
+// [VectorizeCreateIndex]
+type vectorizeCreateIndexJSON struct {
 	Config      apijson.Field
 	CreatedOn   apijson.Field
 	Description apijson.Field
@@ -190,155 +190,149 @@ type vectorizeIndexNewResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *VectorizeIndexNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *VectorizeCreateIndex) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type VectorizeIndexNewResponseConfig struct {
+type VectorizeCreateIndexConfig struct {
 	// Specifies the number of dimensions for the index
 	Dimensions int64 `json:"dimensions,required"`
 	// Specifies the type of metric to use calculating distance.
-	Metric VectorizeIndexNewResponseConfigMetric `json:"metric,required"`
-	JSON   vectorizeIndexNewResponseConfigJSON   `json:"-"`
+	Metric VectorizeCreateIndexConfigMetric `json:"metric,required"`
+	JSON   vectorizeCreateIndexConfigJSON   `json:"-"`
 }
 
-// vectorizeIndexNewResponseConfigJSON contains the JSON metadata for the struct
-// [VectorizeIndexNewResponseConfig]
-type vectorizeIndexNewResponseConfigJSON struct {
+// vectorizeCreateIndexConfigJSON contains the JSON metadata for the struct
+// [VectorizeCreateIndexConfig]
+type vectorizeCreateIndexConfigJSON struct {
 	Dimensions  apijson.Field
 	Metric      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *VectorizeIndexNewResponseConfig) UnmarshalJSON(data []byte) (err error) {
+func (r *VectorizeCreateIndexConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Specifies the type of metric to use calculating distance.
-type VectorizeIndexNewResponseConfigMetric string
+type VectorizeCreateIndexConfigMetric string
 
 const (
-	VectorizeIndexNewResponseConfigMetricCosine     VectorizeIndexNewResponseConfigMetric = "cosine"
-	VectorizeIndexNewResponseConfigMetricEuclidean  VectorizeIndexNewResponseConfigMetric = "euclidean"
-	VectorizeIndexNewResponseConfigMetricDotProduct VectorizeIndexNewResponseConfigMetric = "dot-product"
+	VectorizeCreateIndexConfigMetricCosine     VectorizeCreateIndexConfigMetric = "cosine"
+	VectorizeCreateIndexConfigMetricEuclidean  VectorizeCreateIndexConfigMetric = "euclidean"
+	VectorizeCreateIndexConfigMetricDotProduct VectorizeCreateIndexConfigMetric = "dot-product"
 )
 
-type VectorizeIndexUpdateResponse struct {
-	Config VectorizeIndexUpdateResponseConfig `json:"config"`
-	// Specifies the timestamp the resource was created as an ISO8601 string.
-	CreatedOn interface{} `json:"created_on"`
-	// Specifies the description of the index.
-	Description string `json:"description"`
-	// Specifies the timestamp the resource was modified as an ISO8601 string.
-	ModifiedOn interface{}                      `json:"modified_on"`
-	Name       string                           `json:"name"`
-	JSON       vectorizeIndexUpdateResponseJSON `json:"-"`
+type VectorizeIndexDeleteVectorsByID struct {
+	// The count of the vectors successfully deleted.
+	Count int64 `json:"count"`
+	// Array of vector identifiers of the vectors that were successfully processed for
+	// deletion.
+	IDs  []string                            `json:"ids"`
+	JSON vectorizeIndexDeleteVectorsByIDJSON `json:"-"`
 }
 
-// vectorizeIndexUpdateResponseJSON contains the JSON metadata for the struct
-// [VectorizeIndexUpdateResponse]
-type vectorizeIndexUpdateResponseJSON struct {
-	Config      apijson.Field
-	CreatedOn   apijson.Field
-	Description apijson.Field
-	ModifiedOn  apijson.Field
-	Name        apijson.Field
+// vectorizeIndexDeleteVectorsByIDJSON contains the JSON metadata for the struct
+// [VectorizeIndexDeleteVectorsByID]
+type vectorizeIndexDeleteVectorsByIDJSON struct {
+	Count       apijson.Field
+	IDs         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *VectorizeIndexUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *VectorizeIndexDeleteVectorsByID) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type VectorizeIndexUpdateResponseConfig struct {
-	// Specifies the number of dimensions for the index
-	Dimensions int64 `json:"dimensions,required"`
-	// Specifies the type of metric to use calculating distance.
-	Metric VectorizeIndexUpdateResponseConfigMetric `json:"metric,required"`
-	JSON   vectorizeIndexUpdateResponseConfigJSON   `json:"-"`
+type VectorizeIndexInsert struct {
+	// Specifies the count of the vectors successfully inserted.
+	Count int64 `json:"count"`
+	// Array of vector identifiers of the vectors successfully inserted.
+	IDs  []string                 `json:"ids"`
+	JSON vectorizeIndexInsertJSON `json:"-"`
 }
 
-// vectorizeIndexUpdateResponseConfigJSON contains the JSON metadata for the struct
-// [VectorizeIndexUpdateResponseConfig]
-type vectorizeIndexUpdateResponseConfigJSON struct {
-	Dimensions  apijson.Field
-	Metric      apijson.Field
+// vectorizeIndexInsertJSON contains the JSON metadata for the struct
+// [VectorizeIndexInsert]
+type vectorizeIndexInsertJSON struct {
+	Count       apijson.Field
+	IDs         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *VectorizeIndexUpdateResponseConfig) UnmarshalJSON(data []byte) (err error) {
+func (r *VectorizeIndexInsert) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Specifies the type of metric to use calculating distance.
-type VectorizeIndexUpdateResponseConfigMetric string
-
-const (
-	VectorizeIndexUpdateResponseConfigMetricCosine     VectorizeIndexUpdateResponseConfigMetric = "cosine"
-	VectorizeIndexUpdateResponseConfigMetricEuclidean  VectorizeIndexUpdateResponseConfigMetric = "euclidean"
-	VectorizeIndexUpdateResponseConfigMetricDotProduct VectorizeIndexUpdateResponseConfigMetric = "dot-product"
-)
-
-type VectorizeIndexListResponse struct {
-	Config VectorizeIndexListResponseConfig `json:"config"`
-	// Specifies the timestamp the resource was created as an ISO8601 string.
-	CreatedOn interface{} `json:"created_on"`
-	// Specifies the description of the index.
-	Description string `json:"description"`
-	// Specifies the timestamp the resource was modified as an ISO8601 string.
-	ModifiedOn interface{}                    `json:"modified_on"`
-	Name       string                         `json:"name"`
-	JSON       vectorizeIndexListResponseJSON `json:"-"`
+type VectorizeIndexQuery struct {
+	// Specifies the count of vectors returned by the search
+	Count int64 `json:"count"`
+	// Array of vectors matched by the search
+	Matches []VectorizeIndexQueryMatch `json:"matches"`
+	JSON    vectorizeIndexQueryJSON    `json:"-"`
 }
 
-// vectorizeIndexListResponseJSON contains the JSON metadata for the struct
-// [VectorizeIndexListResponse]
-type vectorizeIndexListResponseJSON struct {
-	Config      apijson.Field
-	CreatedOn   apijson.Field
-	Description apijson.Field
-	ModifiedOn  apijson.Field
-	Name        apijson.Field
+// vectorizeIndexQueryJSON contains the JSON metadata for the struct
+// [VectorizeIndexQuery]
+type vectorizeIndexQueryJSON struct {
+	Count       apijson.Field
+	Matches     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *VectorizeIndexListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *VectorizeIndexQuery) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type VectorizeIndexListResponseConfig struct {
-	// Specifies the number of dimensions for the index
-	Dimensions int64 `json:"dimensions,required"`
-	// Specifies the type of metric to use calculating distance.
-	Metric VectorizeIndexListResponseConfigMetric `json:"metric,required"`
-	JSON   vectorizeIndexListResponseConfigJSON   `json:"-"`
+type VectorizeIndexQueryMatch struct {
+	// Identifier
+	ID       string      `json:"id"`
+	Metadata interface{} `json:"metadata"`
+	// The score of the vector according to the index's distance metric
+	Score  float64                      `json:"score"`
+	Values []float64                    `json:"values"`
+	JSON   vectorizeIndexQueryMatchJSON `json:"-"`
 }
 
-// vectorizeIndexListResponseConfigJSON contains the JSON metadata for the struct
-// [VectorizeIndexListResponseConfig]
-type vectorizeIndexListResponseConfigJSON struct {
-	Dimensions  apijson.Field
-	Metric      apijson.Field
+// vectorizeIndexQueryMatchJSON contains the JSON metadata for the struct
+// [VectorizeIndexQueryMatch]
+type vectorizeIndexQueryMatchJSON struct {
+	ID          apijson.Field
+	Metadata    apijson.Field
+	Score       apijson.Field
+	Values      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *VectorizeIndexListResponseConfig) UnmarshalJSON(data []byte) (err error) {
+func (r *VectorizeIndexQueryMatch) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Specifies the type of metric to use calculating distance.
-type VectorizeIndexListResponseConfigMetric string
+type VectorizeIndexUpsert struct {
+	// Specifies the count of the vectors successfully inserted.
+	Count int64 `json:"count"`
+	// Array of vector identifiers of the vectors successfully inserted.
+	IDs  []string                 `json:"ids"`
+	JSON vectorizeIndexUpsertJSON `json:"-"`
+}
 
-const (
-	VectorizeIndexListResponseConfigMetricCosine     VectorizeIndexListResponseConfigMetric = "cosine"
-	VectorizeIndexListResponseConfigMetricEuclidean  VectorizeIndexListResponseConfigMetric = "euclidean"
-	VectorizeIndexListResponseConfigMetricDotProduct VectorizeIndexListResponseConfigMetric = "dot-product"
-)
+// vectorizeIndexUpsertJSON contains the JSON metadata for the struct
+// [VectorizeIndexUpsert]
+type vectorizeIndexUpsertJSON struct {
+	Count       apijson.Field
+	IDs         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *VectorizeIndexUpsert) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 // Union satisfied by [VectorizeIndexDeleteResponseUnknown] or
 // [shared.UnionString].
@@ -357,175 +351,7 @@ func init() {
 	)
 }
 
-type VectorizeIndexDeleteByIDsResponse struct {
-	// The count of the vectors successfully deleted.
-	Count int64 `json:"count"`
-	// Array of vector identifiers of the vectors that were successfully processed for
-	// deletion.
-	IDs  []string                              `json:"ids"`
-	JSON vectorizeIndexDeleteByIDsResponseJSON `json:"-"`
-}
-
-// vectorizeIndexDeleteByIDsResponseJSON contains the JSON metadata for the struct
-// [VectorizeIndexDeleteByIDsResponse]
-type vectorizeIndexDeleteByIDsResponseJSON struct {
-	Count       apijson.Field
-	IDs         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VectorizeIndexDeleteByIDsResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type VectorizeIndexGetResponse struct {
-	Config VectorizeIndexGetResponseConfig `json:"config"`
-	// Specifies the timestamp the resource was created as an ISO8601 string.
-	CreatedOn interface{} `json:"created_on"`
-	// Specifies the description of the index.
-	Description string `json:"description"`
-	// Specifies the timestamp the resource was modified as an ISO8601 string.
-	ModifiedOn interface{}                   `json:"modified_on"`
-	Name       string                        `json:"name"`
-	JSON       vectorizeIndexGetResponseJSON `json:"-"`
-}
-
-// vectorizeIndexGetResponseJSON contains the JSON metadata for the struct
-// [VectorizeIndexGetResponse]
-type vectorizeIndexGetResponseJSON struct {
-	Config      apijson.Field
-	CreatedOn   apijson.Field
-	Description apijson.Field
-	ModifiedOn  apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VectorizeIndexGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type VectorizeIndexGetResponseConfig struct {
-	// Specifies the number of dimensions for the index
-	Dimensions int64 `json:"dimensions,required"`
-	// Specifies the type of metric to use calculating distance.
-	Metric VectorizeIndexGetResponseConfigMetric `json:"metric,required"`
-	JSON   vectorizeIndexGetResponseConfigJSON   `json:"-"`
-}
-
-// vectorizeIndexGetResponseConfigJSON contains the JSON metadata for the struct
-// [VectorizeIndexGetResponseConfig]
-type vectorizeIndexGetResponseConfigJSON struct {
-	Dimensions  apijson.Field
-	Metric      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VectorizeIndexGetResponseConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Specifies the type of metric to use calculating distance.
-type VectorizeIndexGetResponseConfigMetric string
-
-const (
-	VectorizeIndexGetResponseConfigMetricCosine     VectorizeIndexGetResponseConfigMetric = "cosine"
-	VectorizeIndexGetResponseConfigMetricEuclidean  VectorizeIndexGetResponseConfigMetric = "euclidean"
-	VectorizeIndexGetResponseConfigMetricDotProduct VectorizeIndexGetResponseConfigMetric = "dot-product"
-)
-
 type VectorizeIndexGetByIDsResponse = interface{}
-
-type VectorizeIndexInsertResponse struct {
-	// Specifies the count of the vectors successfully inserted.
-	Count int64 `json:"count"`
-	// Array of vector identifiers of the vectors successfully inserted.
-	IDs  []string                         `json:"ids"`
-	JSON vectorizeIndexInsertResponseJSON `json:"-"`
-}
-
-// vectorizeIndexInsertResponseJSON contains the JSON metadata for the struct
-// [VectorizeIndexInsertResponse]
-type vectorizeIndexInsertResponseJSON struct {
-	Count       apijson.Field
-	IDs         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VectorizeIndexInsertResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type VectorizeIndexQueryResponse struct {
-	// Specifies the count of vectors returned by the search
-	Count int64 `json:"count"`
-	// Array of vectors matched by the search
-	Matches []VectorizeIndexQueryResponseMatch `json:"matches"`
-	JSON    vectorizeIndexQueryResponseJSON    `json:"-"`
-}
-
-// vectorizeIndexQueryResponseJSON contains the JSON metadata for the struct
-// [VectorizeIndexQueryResponse]
-type vectorizeIndexQueryResponseJSON struct {
-	Count       apijson.Field
-	Matches     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VectorizeIndexQueryResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type VectorizeIndexQueryResponseMatch struct {
-	// Identifier
-	ID       string      `json:"id"`
-	Metadata interface{} `json:"metadata"`
-	// The score of the vector according to the index's distance metric
-	Score  float64                              `json:"score"`
-	Values []float64                            `json:"values"`
-	JSON   vectorizeIndexQueryResponseMatchJSON `json:"-"`
-}
-
-// vectorizeIndexQueryResponseMatchJSON contains the JSON metadata for the struct
-// [VectorizeIndexQueryResponseMatch]
-type vectorizeIndexQueryResponseMatchJSON struct {
-	ID          apijson.Field
-	Metadata    apijson.Field
-	Score       apijson.Field
-	Values      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VectorizeIndexQueryResponseMatch) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type VectorizeIndexUpsertResponse struct {
-	// Specifies the count of the vectors successfully inserted.
-	Count int64 `json:"count"`
-	// Array of vector identifiers of the vectors successfully inserted.
-	IDs  []string                         `json:"ids"`
-	JSON vectorizeIndexUpsertResponseJSON `json:"-"`
-}
-
-// vectorizeIndexUpsertResponseJSON contains the JSON metadata for the struct
-// [VectorizeIndexUpsertResponse]
-type vectorizeIndexUpsertResponseJSON struct {
-	Count       apijson.Field
-	IDs         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *VectorizeIndexUpsertResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
 
 type VectorizeIndexNewParams struct {
 	// Specifies the type of configuration to use for the index.
@@ -596,7 +422,7 @@ const (
 type VectorizeIndexNewResponseEnvelope struct {
 	Errors   []VectorizeIndexNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []VectorizeIndexNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   VectorizeIndexNewResponse                   `json:"result,required,nullable"`
+	Result   VectorizeCreateIndex                        `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success VectorizeIndexNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    vectorizeIndexNewResponseEnvelopeJSON    `json:"-"`
@@ -674,7 +500,7 @@ func (r VectorizeIndexUpdateParams) MarshalJSON() (data []byte, err error) {
 type VectorizeIndexUpdateResponseEnvelope struct {
 	Errors   []VectorizeIndexUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []VectorizeIndexUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   VectorizeIndexUpdateResponse                   `json:"result,required,nullable"`
+	Result   VectorizeCreateIndex                           `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success VectorizeIndexUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    vectorizeIndexUpdateResponseEnvelopeJSON    `json:"-"`
@@ -743,7 +569,7 @@ const (
 type VectorizeIndexListResponseEnvelope struct {
 	Errors   []VectorizeIndexListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []VectorizeIndexListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []VectorizeIndexListResponse                 `json:"result,required"`
+	Result   []VectorizeCreateIndex                       `json:"result,required"`
 	// Whether the API call was successful
 	Success VectorizeIndexListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    vectorizeIndexListResponseEnvelopeJSON    `json:"-"`
@@ -890,7 +716,7 @@ func (r VectorizeIndexDeleteByIDsParams) MarshalJSON() (data []byte, err error) 
 type VectorizeIndexDeleteByIDsResponseEnvelope struct {
 	Errors   []VectorizeIndexDeleteByIDsResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []VectorizeIndexDeleteByIDsResponseEnvelopeMessages `json:"messages,required"`
-	Result   VectorizeIndexDeleteByIDsResponse                   `json:"result,required,nullable"`
+	Result   VectorizeIndexDeleteVectorsByID                     `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success VectorizeIndexDeleteByIDsResponseEnvelopeSuccess `json:"success,required"`
 	JSON    vectorizeIndexDeleteByIDsResponseEnvelopeJSON    `json:"-"`
@@ -959,7 +785,7 @@ const (
 type VectorizeIndexGetResponseEnvelope struct {
 	Errors   []VectorizeIndexGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []VectorizeIndexGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   VectorizeIndexGetResponse                   `json:"result,required,nullable"`
+	Result   VectorizeCreateIndex                        `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success VectorizeIndexGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    vectorizeIndexGetResponseEnvelopeJSON    `json:"-"`
@@ -1107,7 +933,7 @@ const (
 type VectorizeIndexInsertResponseEnvelope struct {
 	Errors   []VectorizeIndexInsertResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []VectorizeIndexInsertResponseEnvelopeMessages `json:"messages,required"`
-	Result   VectorizeIndexInsertResponse                   `json:"result,required,nullable"`
+	Result   VectorizeIndexInsert                           `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success VectorizeIndexInsertResponseEnvelopeSuccess `json:"success,required"`
 	JSON    vectorizeIndexInsertResponseEnvelopeJSON    `json:"-"`
@@ -1191,7 +1017,7 @@ func (r VectorizeIndexQueryParams) MarshalJSON() (data []byte, err error) {
 type VectorizeIndexQueryResponseEnvelope struct {
 	Errors   []VectorizeIndexQueryResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []VectorizeIndexQueryResponseEnvelopeMessages `json:"messages,required"`
-	Result   VectorizeIndexQueryResponse                   `json:"result,required,nullable"`
+	Result   VectorizeIndexQuery                           `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success VectorizeIndexQueryResponseEnvelopeSuccess `json:"success,required"`
 	JSON    vectorizeIndexQueryResponseEnvelopeJSON    `json:"-"`
@@ -1260,7 +1086,7 @@ const (
 type VectorizeIndexUpsertResponseEnvelope struct {
 	Errors   []VectorizeIndexUpsertResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []VectorizeIndexUpsertResponseEnvelopeMessages `json:"messages,required"`
-	Result   VectorizeIndexUpsertResponse                   `json:"result,required,nullable"`
+	Result   VectorizeIndexUpsert                           `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success VectorizeIndexUpsertResponseEnvelopeSuccess `json:"success,required"`
 	JSON    vectorizeIndexUpsertResponseEnvelopeJSON    `json:"-"`

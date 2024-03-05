@@ -32,7 +32,7 @@ func NewSpeedAvailabilityService(opts ...option.RequestOption) (r *SpeedAvailabi
 }
 
 // Retrieves quota for all plans, as well as the current zone quota.
-func (r *SpeedAvailabilityService) List(ctx context.Context, query SpeedAvailabilityListParams, opts ...option.RequestOption) (res *SpeedAvailabilityListResponse, err error) {
+func (r *SpeedAvailabilityService) List(ctx context.Context, query SpeedAvailabilityListParams, opts ...option.RequestOption) (res *ObservatoryAvailabilities, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SpeedAvailabilityListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/speed_api/availabilities", query.ZoneID)
@@ -44,16 +44,16 @@ func (r *SpeedAvailabilityService) List(ctx context.Context, query SpeedAvailabi
 	return
 }
 
-type SpeedAvailabilityListResponse struct {
-	Quota          SpeedAvailabilityListResponseQuota    `json:"quota"`
-	Regions        []SpeedAvailabilityListResponseRegion `json:"regions"`
-	RegionsPerPlan interface{}                           `json:"regionsPerPlan"`
-	JSON           speedAvailabilityListResponseJSON     `json:"-"`
+type ObservatoryAvailabilities struct {
+	Quota          ObservatoryAvailabilitiesQuota    `json:"quota"`
+	Regions        []ObservatoryAvailabilitiesRegion `json:"regions"`
+	RegionsPerPlan interface{}                       `json:"regionsPerPlan"`
+	JSON           observatoryAvailabilitiesJSON     `json:"-"`
 }
 
-// speedAvailabilityListResponseJSON contains the JSON metadata for the struct
-// [SpeedAvailabilityListResponse]
-type speedAvailabilityListResponseJSON struct {
+// observatoryAvailabilitiesJSON contains the JSON metadata for the struct
+// [ObservatoryAvailabilities]
+type observatoryAvailabilitiesJSON struct {
 	Quota          apijson.Field
 	Regions        apijson.Field
 	RegionsPerPlan apijson.Field
@@ -61,11 +61,11 @@ type speedAvailabilityListResponseJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *SpeedAvailabilityListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ObservatoryAvailabilities) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type SpeedAvailabilityListResponseQuota struct {
+type ObservatoryAvailabilitiesQuota struct {
 	// Cloudflare plan.
 	Plan string `json:"plan"`
 	// The number of tests available per plan.
@@ -75,13 +75,13 @@ type SpeedAvailabilityListResponseQuota struct {
 	// The number of remaining tests available.
 	RemainingTests float64 `json:"remainingTests"`
 	// The number of schedules available per plan.
-	ScheduleQuotasPerPlan map[string]float64                     `json:"scheduleQuotasPerPlan"`
-	JSON                  speedAvailabilityListResponseQuotaJSON `json:"-"`
+	ScheduleQuotasPerPlan map[string]float64                 `json:"scheduleQuotasPerPlan"`
+	JSON                  observatoryAvailabilitiesQuotaJSON `json:"-"`
 }
 
-// speedAvailabilityListResponseQuotaJSON contains the JSON metadata for the struct
-// [SpeedAvailabilityListResponseQuota]
-type speedAvailabilityListResponseQuotaJSON struct {
+// observatoryAvailabilitiesQuotaJSON contains the JSON metadata for the struct
+// [ObservatoryAvailabilitiesQuota]
+type observatoryAvailabilitiesQuotaJSON struct {
 	Plan                  apijson.Field
 	QuotasPerPlan         apijson.Field
 	RemainingSchedules    apijson.Field
@@ -91,56 +91,56 @@ type speedAvailabilityListResponseQuotaJSON struct {
 	ExtraFields           map[string]apijson.Field
 }
 
-func (r *SpeedAvailabilityListResponseQuota) UnmarshalJSON(data []byte) (err error) {
+func (r *ObservatoryAvailabilitiesQuota) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // A test region with a label.
-type SpeedAvailabilityListResponseRegion struct {
+type ObservatoryAvailabilitiesRegion struct {
 	Label string `json:"label"`
 	// A test region.
-	Value SpeedAvailabilityListResponseRegionsValue `json:"value"`
-	JSON  speedAvailabilityListResponseRegionJSON   `json:"-"`
+	Value ObservatoryAvailabilitiesRegionsValue `json:"value"`
+	JSON  observatoryAvailabilitiesRegionJSON   `json:"-"`
 }
 
-// speedAvailabilityListResponseRegionJSON contains the JSON metadata for the
-// struct [SpeedAvailabilityListResponseRegion]
-type speedAvailabilityListResponseRegionJSON struct {
+// observatoryAvailabilitiesRegionJSON contains the JSON metadata for the struct
+// [ObservatoryAvailabilitiesRegion]
+type observatoryAvailabilitiesRegionJSON struct {
 	Label       apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SpeedAvailabilityListResponseRegion) UnmarshalJSON(data []byte) (err error) {
+func (r *ObservatoryAvailabilitiesRegion) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // A test region.
-type SpeedAvailabilityListResponseRegionsValue string
+type ObservatoryAvailabilitiesRegionsValue string
 
 const (
-	SpeedAvailabilityListResponseRegionsValueAsiaEast1           SpeedAvailabilityListResponseRegionsValue = "asia-east1"
-	SpeedAvailabilityListResponseRegionsValueAsiaNortheast1      SpeedAvailabilityListResponseRegionsValue = "asia-northeast1"
-	SpeedAvailabilityListResponseRegionsValueAsiaNortheast2      SpeedAvailabilityListResponseRegionsValue = "asia-northeast2"
-	SpeedAvailabilityListResponseRegionsValueAsiaSouth1          SpeedAvailabilityListResponseRegionsValue = "asia-south1"
-	SpeedAvailabilityListResponseRegionsValueAsiaSoutheast1      SpeedAvailabilityListResponseRegionsValue = "asia-southeast1"
-	SpeedAvailabilityListResponseRegionsValueAustraliaSoutheast1 SpeedAvailabilityListResponseRegionsValue = "australia-southeast1"
-	SpeedAvailabilityListResponseRegionsValueEuropeNorth1        SpeedAvailabilityListResponseRegionsValue = "europe-north1"
-	SpeedAvailabilityListResponseRegionsValueEuropeSouthwest1    SpeedAvailabilityListResponseRegionsValue = "europe-southwest1"
-	SpeedAvailabilityListResponseRegionsValueEuropeWest1         SpeedAvailabilityListResponseRegionsValue = "europe-west1"
-	SpeedAvailabilityListResponseRegionsValueEuropeWest2         SpeedAvailabilityListResponseRegionsValue = "europe-west2"
-	SpeedAvailabilityListResponseRegionsValueEuropeWest3         SpeedAvailabilityListResponseRegionsValue = "europe-west3"
-	SpeedAvailabilityListResponseRegionsValueEuropeWest4         SpeedAvailabilityListResponseRegionsValue = "europe-west4"
-	SpeedAvailabilityListResponseRegionsValueEuropeWest8         SpeedAvailabilityListResponseRegionsValue = "europe-west8"
-	SpeedAvailabilityListResponseRegionsValueEuropeWest9         SpeedAvailabilityListResponseRegionsValue = "europe-west9"
-	SpeedAvailabilityListResponseRegionsValueMeWest1             SpeedAvailabilityListResponseRegionsValue = "me-west1"
-	SpeedAvailabilityListResponseRegionsValueSouthamericaEast1   SpeedAvailabilityListResponseRegionsValue = "southamerica-east1"
-	SpeedAvailabilityListResponseRegionsValueUsCentral1          SpeedAvailabilityListResponseRegionsValue = "us-central1"
-	SpeedAvailabilityListResponseRegionsValueUsEast1             SpeedAvailabilityListResponseRegionsValue = "us-east1"
-	SpeedAvailabilityListResponseRegionsValueUsEast4             SpeedAvailabilityListResponseRegionsValue = "us-east4"
-	SpeedAvailabilityListResponseRegionsValueUsSouth1            SpeedAvailabilityListResponseRegionsValue = "us-south1"
-	SpeedAvailabilityListResponseRegionsValueUsWest1             SpeedAvailabilityListResponseRegionsValue = "us-west1"
+	ObservatoryAvailabilitiesRegionsValueAsiaEast1           ObservatoryAvailabilitiesRegionsValue = "asia-east1"
+	ObservatoryAvailabilitiesRegionsValueAsiaNortheast1      ObservatoryAvailabilitiesRegionsValue = "asia-northeast1"
+	ObservatoryAvailabilitiesRegionsValueAsiaNortheast2      ObservatoryAvailabilitiesRegionsValue = "asia-northeast2"
+	ObservatoryAvailabilitiesRegionsValueAsiaSouth1          ObservatoryAvailabilitiesRegionsValue = "asia-south1"
+	ObservatoryAvailabilitiesRegionsValueAsiaSoutheast1      ObservatoryAvailabilitiesRegionsValue = "asia-southeast1"
+	ObservatoryAvailabilitiesRegionsValueAustraliaSoutheast1 ObservatoryAvailabilitiesRegionsValue = "australia-southeast1"
+	ObservatoryAvailabilitiesRegionsValueEuropeNorth1        ObservatoryAvailabilitiesRegionsValue = "europe-north1"
+	ObservatoryAvailabilitiesRegionsValueEuropeSouthwest1    ObservatoryAvailabilitiesRegionsValue = "europe-southwest1"
+	ObservatoryAvailabilitiesRegionsValueEuropeWest1         ObservatoryAvailabilitiesRegionsValue = "europe-west1"
+	ObservatoryAvailabilitiesRegionsValueEuropeWest2         ObservatoryAvailabilitiesRegionsValue = "europe-west2"
+	ObservatoryAvailabilitiesRegionsValueEuropeWest3         ObservatoryAvailabilitiesRegionsValue = "europe-west3"
+	ObservatoryAvailabilitiesRegionsValueEuropeWest4         ObservatoryAvailabilitiesRegionsValue = "europe-west4"
+	ObservatoryAvailabilitiesRegionsValueEuropeWest8         ObservatoryAvailabilitiesRegionsValue = "europe-west8"
+	ObservatoryAvailabilitiesRegionsValueEuropeWest9         ObservatoryAvailabilitiesRegionsValue = "europe-west9"
+	ObservatoryAvailabilitiesRegionsValueMeWest1             ObservatoryAvailabilitiesRegionsValue = "me-west1"
+	ObservatoryAvailabilitiesRegionsValueSouthamericaEast1   ObservatoryAvailabilitiesRegionsValue = "southamerica-east1"
+	ObservatoryAvailabilitiesRegionsValueUsCentral1          ObservatoryAvailabilitiesRegionsValue = "us-central1"
+	ObservatoryAvailabilitiesRegionsValueUsEast1             ObservatoryAvailabilitiesRegionsValue = "us-east1"
+	ObservatoryAvailabilitiesRegionsValueUsEast4             ObservatoryAvailabilitiesRegionsValue = "us-east4"
+	ObservatoryAvailabilitiesRegionsValueUsSouth1            ObservatoryAvailabilitiesRegionsValue = "us-south1"
+	ObservatoryAvailabilitiesRegionsValueUsWest1             ObservatoryAvailabilitiesRegionsValue = "us-west1"
 )
 
 type SpeedAvailabilityListParams struct {
@@ -149,7 +149,7 @@ type SpeedAvailabilityListParams struct {
 }
 
 type SpeedAvailabilityListResponseEnvelope struct {
-	Result SpeedAvailabilityListResponse             `json:"result"`
+	Result ObservatoryAvailabilities                 `json:"result"`
 	JSON   speedAvailabilityListResponseEnvelopeJSON `json:"-"`
 }
 

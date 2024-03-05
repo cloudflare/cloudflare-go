@@ -74,7 +74,7 @@ func (r *SecondaryDNSOutgoingService) Delete(ctx context.Context, body Secondary
 
 // Disable outgoing zone transfers for primary zone and clears IXFR backlog of
 // primary zone.
-func (r *SecondaryDNSOutgoingService) Disable(ctx context.Context, body SecondaryDNSOutgoingDisableParams, opts ...option.RequestOption) (res *string, err error) {
+func (r *SecondaryDNSOutgoingService) Disable(ctx context.Context, body SecondaryDNSOutgoingDisableParams, opts ...option.RequestOption) (res *SecondaryDNSDisableTransferResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SecondaryDNSOutgoingDisableResponseEnvelope
 	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing/disable", body.ZoneID)
@@ -87,7 +87,7 @@ func (r *SecondaryDNSOutgoingService) Disable(ctx context.Context, body Secondar
 }
 
 // Enable outgoing zone transfers for primary zone.
-func (r *SecondaryDNSOutgoingService) Enable(ctx context.Context, body SecondaryDNSOutgoingEnableParams, opts ...option.RequestOption) (res *string, err error) {
+func (r *SecondaryDNSOutgoingService) Enable(ctx context.Context, body SecondaryDNSOutgoingEnableParams, opts ...option.RequestOption) (res *SecondaryDNSEnableTransferResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SecondaryDNSOutgoingEnableResponseEnvelope
 	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing/enable", body.ZoneID)
@@ -100,7 +100,7 @@ func (r *SecondaryDNSOutgoingService) Enable(ctx context.Context, body Secondary
 }
 
 // Notifies the secondary nameserver(s) and clears IXFR backlog of primary zone.
-func (r *SecondaryDNSOutgoingService) ForceNotify(ctx context.Context, body SecondaryDNSOutgoingForceNotifyParams, opts ...option.RequestOption) (res *string, err error) {
+func (r *SecondaryDNSOutgoingService) ForceNotify(ctx context.Context, body SecondaryDNSOutgoingForceNotifyParams, opts ...option.RequestOption) (res *SecondaryDNSSchemasForceResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SecondaryDNSOutgoingForceNotifyResponseEnvelope
 	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing/force_notify", body.ZoneID)
@@ -124,6 +124,12 @@ func (r *SecondaryDNSOutgoingService) Get(ctx context.Context, query SecondaryDN
 	res = &env.Result
 	return
 }
+
+type SecondaryDNSDisableTransferResult = string
+
+type SecondaryDNSEnableTransferResult = string
+
+type SecondaryDNSSchemasForceResult = string
 
 type SecondaryDNSOutgoingNewResponse struct {
 	ID interface{} `json:"id"`
@@ -490,7 +496,7 @@ type SecondaryDNSOutgoingDisableResponseEnvelope struct {
 	Errors   []SecondaryDNSOutgoingDisableResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SecondaryDNSOutgoingDisableResponseEnvelopeMessages `json:"messages,required"`
 	// The zone transfer status of a primary zone
-	Result string `json:"result,required"`
+	Result SecondaryDNSDisableTransferResult `json:"result,required"`
 	// Whether the API call was successful
 	Success SecondaryDNSOutgoingDisableResponseEnvelopeSuccess `json:"success,required"`
 	JSON    secondaryDNSOutgoingDisableResponseEnvelopeJSON    `json:"-"`
@@ -564,7 +570,7 @@ type SecondaryDNSOutgoingEnableResponseEnvelope struct {
 	Errors   []SecondaryDNSOutgoingEnableResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SecondaryDNSOutgoingEnableResponseEnvelopeMessages `json:"messages,required"`
 	// The zone transfer status of a primary zone
-	Result string `json:"result,required"`
+	Result SecondaryDNSEnableTransferResult `json:"result,required"`
 	// Whether the API call was successful
 	Success SecondaryDNSOutgoingEnableResponseEnvelopeSuccess `json:"success,required"`
 	JSON    secondaryDNSOutgoingEnableResponseEnvelopeJSON    `json:"-"`
@@ -639,7 +645,7 @@ type SecondaryDNSOutgoingForceNotifyResponseEnvelope struct {
 	Messages []SecondaryDNSOutgoingForceNotifyResponseEnvelopeMessages `json:"messages,required"`
 	// When force_notify query parameter is set to true, the response is a simple
 	// string
-	Result string `json:"result,required"`
+	Result SecondaryDNSSchemasForceResult `json:"result,required"`
 	// Whether the API call was successful
 	Success SecondaryDNSOutgoingForceNotifyResponseEnvelopeSuccess `json:"success,required"`
 	JSON    secondaryDNSOutgoingForceNotifyResponseEnvelopeJSON    `json:"-"`

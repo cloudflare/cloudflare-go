@@ -48,7 +48,7 @@ func (r *WorkerRouteService) New(ctx context.Context, params WorkerRouteNewParam
 }
 
 // Updates the URL pattern or Worker associated with a route.
-func (r *WorkerRouteService) Update(ctx context.Context, routeID string, params WorkerRouteUpdateParams, opts ...option.RequestOption) (res *WorkerRouteUpdateResponse, err error) {
+func (r *WorkerRouteService) Update(ctx context.Context, routeID string, params WorkerRouteUpdateParams, opts ...option.RequestOption) (res *WorkersRoutes, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerRouteUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/workers/routes/%s", params.ZoneID, routeID)
@@ -61,7 +61,7 @@ func (r *WorkerRouteService) Update(ctx context.Context, routeID string, params 
 }
 
 // Returns routes for a zone.
-func (r *WorkerRouteService) List(ctx context.Context, query WorkerRouteListParams, opts ...option.RequestOption) (res *[]WorkerRouteListResponse, err error) {
+func (r *WorkerRouteService) List(ctx context.Context, query WorkerRouteListParams, opts ...option.RequestOption) (res *[]WorkersRoutes, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerRouteListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/workers/routes", query.ZoneID)
@@ -87,7 +87,7 @@ func (r *WorkerRouteService) Delete(ctx context.Context, routeID string, body Wo
 }
 
 // Returns information about a route, including URL pattern and Worker.
-func (r *WorkerRouteService) Get(ctx context.Context, routeID string, query WorkerRouteGetParams, opts ...option.RequestOption) (res *WorkerRouteGetResponse, err error) {
+func (r *WorkerRouteService) Get(ctx context.Context, routeID string, query WorkerRouteGetParams, opts ...option.RequestOption) (res *WorkersRoutes, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerRouteGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/workers/routes/%s", query.ZoneID, routeID)
@@ -97,6 +97,28 @@ func (r *WorkerRouteService) Get(ctx context.Context, routeID string, query Work
 	}
 	res = &env.Result
 	return
+}
+
+type WorkersRoutes struct {
+	// Identifier
+	ID      string `json:"id,required"`
+	Pattern string `json:"pattern,required"`
+	// Name of the script, used in URLs and route configuration.
+	Script string            `json:"script,required"`
+	JSON   workersRoutesJSON `json:"-"`
+}
+
+// workersRoutesJSON contains the JSON metadata for the struct [WorkersRoutes]
+type workersRoutesJSON struct {
+	ID          apijson.Field
+	Pattern     apijson.Field
+	Script      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkersRoutes) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 // Union satisfied by [WorkerRouteNewResponseUnknown] or [shared.UnionString].
@@ -115,52 +137,6 @@ func init() {
 	)
 }
 
-type WorkerRouteUpdateResponse struct {
-	// Identifier
-	ID      string `json:"id,required"`
-	Pattern string `json:"pattern,required"`
-	// Name of the script, used in URLs and route configuration.
-	Script string                        `json:"script,required"`
-	JSON   workerRouteUpdateResponseJSON `json:"-"`
-}
-
-// workerRouteUpdateResponseJSON contains the JSON metadata for the struct
-// [WorkerRouteUpdateResponse]
-type workerRouteUpdateResponseJSON struct {
-	ID          apijson.Field
-	Pattern     apijson.Field
-	Script      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerRouteUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WorkerRouteListResponse struct {
-	// Identifier
-	ID      string `json:"id,required"`
-	Pattern string `json:"pattern,required"`
-	// Name of the script, used in URLs and route configuration.
-	Script string                      `json:"script,required"`
-	JSON   workerRouteListResponseJSON `json:"-"`
-}
-
-// workerRouteListResponseJSON contains the JSON metadata for the struct
-// [WorkerRouteListResponse]
-type workerRouteListResponseJSON struct {
-	ID          apijson.Field
-	Pattern     apijson.Field
-	Script      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerRouteListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 // Union satisfied by [WorkerRouteDeleteResponseUnknown] or [shared.UnionString].
 type WorkerRouteDeleteResponse interface {
 	ImplementsWorkerRouteDeleteResponse()
@@ -175,29 +151,6 @@ func init() {
 			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
 	)
-}
-
-type WorkerRouteGetResponse struct {
-	// Identifier
-	ID      string `json:"id,required"`
-	Pattern string `json:"pattern,required"`
-	// Name of the script, used in URLs and route configuration.
-	Script string                     `json:"script,required"`
-	JSON   workerRouteGetResponseJSON `json:"-"`
-}
-
-// workerRouteGetResponseJSON contains the JSON metadata for the struct
-// [WorkerRouteGetResponse]
-type workerRouteGetResponseJSON struct {
-	ID          apijson.Field
-	Pattern     apijson.Field
-	Script      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *WorkerRouteGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
 }
 
 type WorkerRouteNewParams struct {
@@ -296,7 +249,7 @@ func (r WorkerRouteUpdateParams) MarshalJSON() (data []byte, err error) {
 type WorkerRouteUpdateResponseEnvelope struct {
 	Errors   []WorkerRouteUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []WorkerRouteUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   WorkerRouteUpdateResponse                   `json:"result,required"`
+	Result   WorkersRoutes                               `json:"result,required"`
 	// Whether the API call was successful
 	Success WorkerRouteUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    workerRouteUpdateResponseEnvelopeJSON    `json:"-"`
@@ -370,7 +323,7 @@ type WorkerRouteListParams struct {
 type WorkerRouteListResponseEnvelope struct {
 	Errors   []WorkerRouteListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []WorkerRouteListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []WorkerRouteListResponse                 `json:"result,required"`
+	Result   []WorkersRoutes                           `json:"result,required"`
 	// Whether the API call was successful
 	Success WorkerRouteListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    workerRouteListResponseEnvelopeJSON    `json:"-"`
@@ -518,7 +471,7 @@ type WorkerRouteGetParams struct {
 type WorkerRouteGetResponseEnvelope struct {
 	Errors   []WorkerRouteGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []WorkerRouteGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   WorkerRouteGetResponse                   `json:"result,required"`
+	Result   WorkersRoutes                            `json:"result,required"`
 	// Whether the API call was successful
 	Success WorkerRouteGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    workerRouteGetResponseEnvelopeJSON    `json:"-"`

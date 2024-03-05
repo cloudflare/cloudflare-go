@@ -40,7 +40,7 @@ func NewFirewallWAFPackageGroupService(opts ...option.RequestOption) (r *Firewal
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *FirewallWAFPackageGroupService) List(ctx context.Context, packageID string, params FirewallWAFPackageGroupListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[FirewallWAFPackageGroupListResponse], err error) {
+func (r *FirewallWAFPackageGroupService) List(ctx context.Context, packageID string, params FirewallWAFPackageGroupListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[WAFManagedRulesSchemasGroup], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -61,7 +61,7 @@ func (r *FirewallWAFPackageGroupService) List(ctx context.Context, packageID str
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *FirewallWAFPackageGroupService) ListAutoPaging(ctx context.Context, packageID string, params FirewallWAFPackageGroupListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[FirewallWAFPackageGroupListResponse] {
+func (r *FirewallWAFPackageGroupService) ListAutoPaging(ctx context.Context, packageID string, params FirewallWAFPackageGroupListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[WAFManagedRulesSchemasGroup] {
 	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, packageID, params, opts...))
 }
 
@@ -98,31 +98,31 @@ func (r *FirewallWAFPackageGroupService) Get(ctx context.Context, packageID stri
 	return
 }
 
-type FirewallWAFPackageGroupListResponse struct {
+type WAFManagedRulesSchemasGroup struct {
 	// The unique identifier of the rule group.
 	ID string `json:"id,required"`
 	// An informative summary of what the rule group does.
 	Description string `json:"description,required,nullable"`
 	// The state of the rules contained in the rule group. When `on`, the rules in the
 	// group are configurable/usable.
-	Mode FirewallWAFPackageGroupListResponseMode `json:"mode,required"`
+	Mode WAFManagedRulesSchemasGroupMode `json:"mode,required"`
 	// The name of the rule group.
 	Name string `json:"name,required"`
 	// The number of rules in the current rule group.
 	RulesCount float64 `json:"rules_count,required"`
 	// The available states for the rule group.
-	AllowedModes []FirewallWAFPackageGroupListResponseAllowedMode `json:"allowed_modes"`
+	AllowedModes []WAFManagedRulesSchemasGroupAllowedMode `json:"allowed_modes"`
 	// The number of rules within the group that have been modified from their default
 	// configuration.
 	ModifiedRulesCount float64 `json:"modified_rules_count"`
 	// The unique identifier of a WAF package.
-	PackageID string                                  `json:"package_id"`
-	JSON      firewallWAFPackageGroupListResponseJSON `json:"-"`
+	PackageID string                          `json:"package_id"`
+	JSON      wafManagedRulesSchemasGroupJSON `json:"-"`
 }
 
-// firewallWAFPackageGroupListResponseJSON contains the JSON metadata for the
-// struct [FirewallWAFPackageGroupListResponse]
-type firewallWAFPackageGroupListResponseJSON struct {
+// wafManagedRulesSchemasGroupJSON contains the JSON metadata for the struct
+// [WAFManagedRulesSchemasGroup]
+type wafManagedRulesSchemasGroupJSON struct {
 	ID                 apijson.Field
 	Description        apijson.Field
 	Mode               apijson.Field
@@ -135,26 +135,26 @@ type firewallWAFPackageGroupListResponseJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *FirewallWAFPackageGroupListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *WAFManagedRulesSchemasGroup) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The state of the rules contained in the rule group. When `on`, the rules in the
 // group are configurable/usable.
-type FirewallWAFPackageGroupListResponseMode string
+type WAFManagedRulesSchemasGroupMode string
 
 const (
-	FirewallWAFPackageGroupListResponseModeOn  FirewallWAFPackageGroupListResponseMode = "on"
-	FirewallWAFPackageGroupListResponseModeOff FirewallWAFPackageGroupListResponseMode = "off"
+	WAFManagedRulesSchemasGroupModeOn  WAFManagedRulesSchemasGroupMode = "on"
+	WAFManagedRulesSchemasGroupModeOff WAFManagedRulesSchemasGroupMode = "off"
 )
 
 // The state of the rules contained in the rule group. When `on`, the rules in the
 // group are configurable/usable.
-type FirewallWAFPackageGroupListResponseAllowedMode string
+type WAFManagedRulesSchemasGroupAllowedMode string
 
 const (
-	FirewallWAFPackageGroupListResponseAllowedModeOn  FirewallWAFPackageGroupListResponseAllowedMode = "on"
-	FirewallWAFPackageGroupListResponseAllowedModeOff FirewallWAFPackageGroupListResponseAllowedMode = "off"
+	WAFManagedRulesSchemasGroupAllowedModeOn  WAFManagedRulesSchemasGroupAllowedMode = "on"
+	WAFManagedRulesSchemasGroupAllowedModeOff WAFManagedRulesSchemasGroupAllowedMode = "off"
 )
 
 // Union satisfied by [FirewallWAFPackageGroupEditResponseUnknown],

@@ -36,7 +36,7 @@ func NewZeroTrustGatewayProxyEndpointService(opts ...option.RequestOption) (r *Z
 }
 
 // Creates a new Zero Trust Gateway proxy endpoint.
-func (r *ZeroTrustGatewayProxyEndpointService) New(ctx context.Context, params ZeroTrustGatewayProxyEndpointNewParams, opts ...option.RequestOption) (res *ZeroTrustGatewayProxyEndpointNewResponse, err error) {
+func (r *ZeroTrustGatewayProxyEndpointService) New(ctx context.Context, params ZeroTrustGatewayProxyEndpointNewParams, opts ...option.RequestOption) (res *ZeroTrustGatewayProxyEndpoints, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustGatewayProxyEndpointNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/gateway/proxy_endpoints", params.AccountID)
@@ -49,7 +49,7 @@ func (r *ZeroTrustGatewayProxyEndpointService) New(ctx context.Context, params Z
 }
 
 // Fetches a single Zero Trust Gateway proxy endpoint.
-func (r *ZeroTrustGatewayProxyEndpointService) List(ctx context.Context, query ZeroTrustGatewayProxyEndpointListParams, opts ...option.RequestOption) (res *[]ZeroTrustGatewayProxyEndpointListResponse, err error) {
+func (r *ZeroTrustGatewayProxyEndpointService) List(ctx context.Context, query ZeroTrustGatewayProxyEndpointListParams, opts ...option.RequestOption) (res *[]ZeroTrustGatewayProxyEndpoints, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustGatewayProxyEndpointListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/gateway/proxy_endpoints", query.AccountID)
@@ -75,7 +75,7 @@ func (r *ZeroTrustGatewayProxyEndpointService) Delete(ctx context.Context, proxy
 }
 
 // Updates a configured Zero Trust Gateway proxy endpoint.
-func (r *ZeroTrustGatewayProxyEndpointService) Edit(ctx context.Context, proxyEndpointID interface{}, params ZeroTrustGatewayProxyEndpointEditParams, opts ...option.RequestOption) (res *ZeroTrustGatewayProxyEndpointEditResponse, err error) {
+func (r *ZeroTrustGatewayProxyEndpointService) Edit(ctx context.Context, proxyEndpointID interface{}, params ZeroTrustGatewayProxyEndpointEditParams, opts ...option.RequestOption) (res *ZeroTrustGatewayProxyEndpoints, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustGatewayProxyEndpointEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/gateway/proxy_endpoints/%v", params.AccountID, proxyEndpointID)
@@ -88,7 +88,7 @@ func (r *ZeroTrustGatewayProxyEndpointService) Edit(ctx context.Context, proxyEn
 }
 
 // Fetches all Zero Trust Gateway proxy endpoints for an account.
-func (r *ZeroTrustGatewayProxyEndpointService) Get(ctx context.Context, proxyEndpointID interface{}, query ZeroTrustGatewayProxyEndpointGetParams, opts ...option.RequestOption) (res *ZeroTrustGatewayProxyEndpointGetResponse, err error) {
+func (r *ZeroTrustGatewayProxyEndpointService) Get(ctx context.Context, proxyEndpointID interface{}, query ZeroTrustGatewayProxyEndpointGetParams, opts ...option.RequestOption) (res *ZeroTrustGatewayProxyEndpoints, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustGatewayProxyEndpointGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/gateway/proxy_endpoints/%v", query.AccountID, proxyEndpointID)
@@ -100,7 +100,7 @@ func (r *ZeroTrustGatewayProxyEndpointService) Get(ctx context.Context, proxyEnd
 	return
 }
 
-type ZeroTrustGatewayProxyEndpointNewResponse struct {
+type ZeroTrustGatewayProxyEndpoints struct {
 	ID        interface{} `json:"id"`
 	CreatedAt time.Time   `json:"created_at" format:"date-time"`
 	// A list of CIDRs to restrict ingress connections.
@@ -108,14 +108,14 @@ type ZeroTrustGatewayProxyEndpointNewResponse struct {
 	// The name of the proxy endpoint.
 	Name string `json:"name"`
 	// The subdomain to be used as the destination in the proxy client.
-	Subdomain string                                       `json:"subdomain"`
-	UpdatedAt time.Time                                    `json:"updated_at" format:"date-time"`
-	JSON      zeroTrustGatewayProxyEndpointNewResponseJSON `json:"-"`
+	Subdomain string                             `json:"subdomain"`
+	UpdatedAt time.Time                          `json:"updated_at" format:"date-time"`
+	JSON      zeroTrustGatewayProxyEndpointsJSON `json:"-"`
 }
 
-// zeroTrustGatewayProxyEndpointNewResponseJSON contains the JSON metadata for the
-// struct [ZeroTrustGatewayProxyEndpointNewResponse]
-type zeroTrustGatewayProxyEndpointNewResponseJSON struct {
+// zeroTrustGatewayProxyEndpointsJSON contains the JSON metadata for the struct
+// [ZeroTrustGatewayProxyEndpoints]
+type zeroTrustGatewayProxyEndpointsJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	IPs         apijson.Field
@@ -126,37 +126,7 @@ type zeroTrustGatewayProxyEndpointNewResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZeroTrustGatewayProxyEndpointNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZeroTrustGatewayProxyEndpointListResponse struct {
-	ID        interface{} `json:"id"`
-	CreatedAt time.Time   `json:"created_at" format:"date-time"`
-	// A list of CIDRs to restrict ingress connections.
-	IPs []string `json:"ips"`
-	// The name of the proxy endpoint.
-	Name string `json:"name"`
-	// The subdomain to be used as the destination in the proxy client.
-	Subdomain string                                        `json:"subdomain"`
-	UpdatedAt time.Time                                     `json:"updated_at" format:"date-time"`
-	JSON      zeroTrustGatewayProxyEndpointListResponseJSON `json:"-"`
-}
-
-// zeroTrustGatewayProxyEndpointListResponseJSON contains the JSON metadata for the
-// struct [ZeroTrustGatewayProxyEndpointListResponse]
-type zeroTrustGatewayProxyEndpointListResponseJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	IPs         apijson.Field
-	Name        apijson.Field
-	Subdomain   apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustGatewayProxyEndpointListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustGatewayProxyEndpoints) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -177,66 +147,6 @@ func init() {
 	)
 }
 
-type ZeroTrustGatewayProxyEndpointEditResponse struct {
-	ID        interface{} `json:"id"`
-	CreatedAt time.Time   `json:"created_at" format:"date-time"`
-	// A list of CIDRs to restrict ingress connections.
-	IPs []string `json:"ips"`
-	// The name of the proxy endpoint.
-	Name string `json:"name"`
-	// The subdomain to be used as the destination in the proxy client.
-	Subdomain string                                        `json:"subdomain"`
-	UpdatedAt time.Time                                     `json:"updated_at" format:"date-time"`
-	JSON      zeroTrustGatewayProxyEndpointEditResponseJSON `json:"-"`
-}
-
-// zeroTrustGatewayProxyEndpointEditResponseJSON contains the JSON metadata for the
-// struct [ZeroTrustGatewayProxyEndpointEditResponse]
-type zeroTrustGatewayProxyEndpointEditResponseJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	IPs         apijson.Field
-	Name        apijson.Field
-	Subdomain   apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustGatewayProxyEndpointEditResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZeroTrustGatewayProxyEndpointGetResponse struct {
-	ID        interface{} `json:"id"`
-	CreatedAt time.Time   `json:"created_at" format:"date-time"`
-	// A list of CIDRs to restrict ingress connections.
-	IPs []string `json:"ips"`
-	// The name of the proxy endpoint.
-	Name string `json:"name"`
-	// The subdomain to be used as the destination in the proxy client.
-	Subdomain string                                       `json:"subdomain"`
-	UpdatedAt time.Time                                    `json:"updated_at" format:"date-time"`
-	JSON      zeroTrustGatewayProxyEndpointGetResponseJSON `json:"-"`
-}
-
-// zeroTrustGatewayProxyEndpointGetResponseJSON contains the JSON metadata for the
-// struct [ZeroTrustGatewayProxyEndpointGetResponse]
-type zeroTrustGatewayProxyEndpointGetResponseJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	IPs         apijson.Field
-	Name        apijson.Field
-	Subdomain   apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustGatewayProxyEndpointGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type ZeroTrustGatewayProxyEndpointNewParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// A list of CIDRs to restrict ingress connections.
@@ -254,7 +164,7 @@ func (r ZeroTrustGatewayProxyEndpointNewParams) MarshalJSON() (data []byte, err 
 type ZeroTrustGatewayProxyEndpointNewResponseEnvelope struct {
 	Errors   []ZeroTrustGatewayProxyEndpointNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustGatewayProxyEndpointNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustGatewayProxyEndpointNewResponse                   `json:"result,required"`
+	Result   ZeroTrustGatewayProxyEndpoints                             `json:"result,required"`
 	// Whether the API call was successful
 	Success ZeroTrustGatewayProxyEndpointNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustGatewayProxyEndpointNewResponseEnvelopeJSON    `json:"-"`
@@ -328,7 +238,7 @@ type ZeroTrustGatewayProxyEndpointListParams struct {
 type ZeroTrustGatewayProxyEndpointListResponseEnvelope struct {
 	Errors   []ZeroTrustGatewayProxyEndpointListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustGatewayProxyEndpointListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []ZeroTrustGatewayProxyEndpointListResponse                 `json:"result,required,nullable"`
+	Result   []ZeroTrustGatewayProxyEndpoints                            `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    ZeroTrustGatewayProxyEndpointListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ZeroTrustGatewayProxyEndpointListResponseEnvelopeResultInfo `json:"result_info"`
@@ -518,7 +428,7 @@ func (r ZeroTrustGatewayProxyEndpointEditParams) MarshalJSON() (data []byte, err
 type ZeroTrustGatewayProxyEndpointEditResponseEnvelope struct {
 	Errors   []ZeroTrustGatewayProxyEndpointEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustGatewayProxyEndpointEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustGatewayProxyEndpointEditResponse                   `json:"result,required"`
+	Result   ZeroTrustGatewayProxyEndpoints                              `json:"result,required"`
 	// Whether the API call was successful
 	Success ZeroTrustGatewayProxyEndpointEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustGatewayProxyEndpointEditResponseEnvelopeJSON    `json:"-"`
@@ -593,7 +503,7 @@ type ZeroTrustGatewayProxyEndpointGetParams struct {
 type ZeroTrustGatewayProxyEndpointGetResponseEnvelope struct {
 	Errors   []ZeroTrustGatewayProxyEndpointGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustGatewayProxyEndpointGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustGatewayProxyEndpointGetResponse                   `json:"result,required"`
+	Result   ZeroTrustGatewayProxyEndpoints                             `json:"result,required"`
 	// Whether the API call was successful
 	Success ZeroTrustGatewayProxyEndpointGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustGatewayProxyEndpointGetResponseEnvelopeJSON    `json:"-"`

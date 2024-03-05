@@ -35,7 +35,7 @@ func NewZoneSettingFontSettingService(opts ...option.RequestOption) (r *ZoneSett
 // Enhance your website's font delivery with Cloudflare Fonts. Deliver Google
 // Hosted fonts from your own domain, boost performance, and enhance user privacy.
 // Refer to the Cloudflare Fonts documentation for more information.
-func (r *ZoneSettingFontSettingService) Edit(ctx context.Context, params ZoneSettingFontSettingEditParams, opts ...option.RequestOption) (res *ZoneSettingFontSettingEditResponse, err error) {
+func (r *ZoneSettingFontSettingService) Edit(ctx context.Context, params ZoneSettingFontSettingEditParams, opts ...option.RequestOption) (res *SpeedCloudflareFonts, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingFontSettingEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/fonts", params.ZoneID)
@@ -50,7 +50,7 @@ func (r *ZoneSettingFontSettingService) Edit(ctx context.Context, params ZoneSet
 // Enhance your website's font delivery with Cloudflare Fonts. Deliver Google
 // Hosted fonts from your own domain, boost performance, and enhance user privacy.
 // Refer to the Cloudflare Fonts documentation for more information.
-func (r *ZoneSettingFontSettingService) Get(ctx context.Context, query ZoneSettingFontSettingGetParams, opts ...option.RequestOption) (res *ZoneSettingFontSettingGetResponse, err error) {
+func (r *ZoneSettingFontSettingService) Get(ctx context.Context, query ZoneSettingFontSettingGetParams, opts ...option.RequestOption) (res *SpeedCloudflareFonts, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingFontSettingGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/fonts", query.ZoneID)
@@ -65,22 +65,22 @@ func (r *ZoneSettingFontSettingService) Get(ctx context.Context, query ZoneSetti
 // Enhance your website's font delivery with Cloudflare Fonts. Deliver Google
 // Hosted fonts from your own domain, boost performance, and enhance user privacy.
 // Refer to the Cloudflare Fonts documentation for more information.
-type ZoneSettingFontSettingEditResponse struct {
+type SpeedCloudflareFonts struct {
 	// ID of the zone setting.
-	ID ZoneSettingFontSettingEditResponseID `json:"id,required"`
+	ID SpeedCloudflareFontsID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingFontSettingEditResponseValue `json:"value,required"`
+	Value SpeedCloudflareFontsValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingFontSettingEditResponseEditable `json:"editable"`
+	Editable SpeedCloudflareFontsEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                              `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingFontSettingEditResponseJSON `json:"-"`
+	ModifiedOn time.Time                `json:"modified_on,nullable" format:"date-time"`
+	JSON       speedCloudflareFontsJSON `json:"-"`
 }
 
-// zoneSettingFontSettingEditResponseJSON contains the JSON metadata for the struct
-// [ZoneSettingFontSettingEditResponse]
-type zoneSettingFontSettingEditResponseJSON struct {
+// speedCloudflareFontsJSON contains the JSON metadata for the struct
+// [SpeedCloudflareFonts]
+type speedCloudflareFontsJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -89,87 +89,32 @@ type zoneSettingFontSettingEditResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingFontSettingEditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SpeedCloudflareFonts) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // ID of the zone setting.
-type ZoneSettingFontSettingEditResponseID string
+type SpeedCloudflareFontsID string
 
 const (
-	ZoneSettingFontSettingEditResponseIDFonts ZoneSettingFontSettingEditResponseID = "fonts"
+	SpeedCloudflareFontsIDFonts SpeedCloudflareFontsID = "fonts"
 )
 
 // Current value of the zone setting.
-type ZoneSettingFontSettingEditResponseValue string
+type SpeedCloudflareFontsValue string
 
 const (
-	ZoneSettingFontSettingEditResponseValueOn  ZoneSettingFontSettingEditResponseValue = "on"
-	ZoneSettingFontSettingEditResponseValueOff ZoneSettingFontSettingEditResponseValue = "off"
+	SpeedCloudflareFontsValueOn  SpeedCloudflareFontsValue = "on"
+	SpeedCloudflareFontsValueOff SpeedCloudflareFontsValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingFontSettingEditResponseEditable bool
+type SpeedCloudflareFontsEditable bool
 
 const (
-	ZoneSettingFontSettingEditResponseEditableTrue  ZoneSettingFontSettingEditResponseEditable = true
-	ZoneSettingFontSettingEditResponseEditableFalse ZoneSettingFontSettingEditResponseEditable = false
-)
-
-// Enhance your website's font delivery with Cloudflare Fonts. Deliver Google
-// Hosted fonts from your own domain, boost performance, and enhance user privacy.
-// Refer to the Cloudflare Fonts documentation for more information.
-type ZoneSettingFontSettingGetResponse struct {
-	// ID of the zone setting.
-	ID ZoneSettingFontSettingGetResponseID `json:"id,required"`
-	// Current value of the zone setting.
-	Value ZoneSettingFontSettingGetResponseValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingFontSettingGetResponseEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                             `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingFontSettingGetResponseJSON `json:"-"`
-}
-
-// zoneSettingFontSettingGetResponseJSON contains the JSON metadata for the struct
-// [ZoneSettingFontSettingGetResponse]
-type zoneSettingFontSettingGetResponseJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZoneSettingFontSettingGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// ID of the zone setting.
-type ZoneSettingFontSettingGetResponseID string
-
-const (
-	ZoneSettingFontSettingGetResponseIDFonts ZoneSettingFontSettingGetResponseID = "fonts"
-)
-
-// Current value of the zone setting.
-type ZoneSettingFontSettingGetResponseValue string
-
-const (
-	ZoneSettingFontSettingGetResponseValueOn  ZoneSettingFontSettingGetResponseValue = "on"
-	ZoneSettingFontSettingGetResponseValueOff ZoneSettingFontSettingGetResponseValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingFontSettingGetResponseEditable bool
-
-const (
-	ZoneSettingFontSettingGetResponseEditableTrue  ZoneSettingFontSettingGetResponseEditable = true
-	ZoneSettingFontSettingGetResponseEditableFalse ZoneSettingFontSettingGetResponseEditable = false
+	SpeedCloudflareFontsEditableTrue  SpeedCloudflareFontsEditable = true
+	SpeedCloudflareFontsEditableFalse SpeedCloudflareFontsEditable = false
 )
 
 type ZoneSettingFontSettingEditParams struct {
@@ -199,7 +144,7 @@ type ZoneSettingFontSettingEditResponseEnvelope struct {
 	// Enhance your website's font delivery with Cloudflare Fonts. Deliver Google
 	// Hosted fonts from your own domain, boost performance, and enhance user privacy.
 	// Refer to the Cloudflare Fonts documentation for more information.
-	Result ZoneSettingFontSettingEditResponse             `json:"result"`
+	Result SpeedCloudflareFonts                           `json:"result"`
 	JSON   zoneSettingFontSettingEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -269,7 +214,7 @@ type ZoneSettingFontSettingGetResponseEnvelope struct {
 	// Enhance your website's font delivery with Cloudflare Fonts. Deliver Google
 	// Hosted fonts from your own domain, boost performance, and enhance user privacy.
 	// Refer to the Cloudflare Fonts documentation for more information.
-	Result ZoneSettingFontSettingGetResponse             `json:"result"`
+	Result SpeedCloudflareFonts                          `json:"result"`
 	JSON   zoneSettingFontSettingGetResponseEnvelopeJSON `json:"-"`
 }
 

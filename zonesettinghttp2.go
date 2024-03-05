@@ -33,7 +33,7 @@ func NewZoneSettingHTTP2Service(opts ...option.RequestOption) (r *ZoneSettingHTT
 }
 
 // Value of the HTTP2 setting.
-func (r *ZoneSettingHTTP2Service) Edit(ctx context.Context, params ZoneSettingHTTP2EditParams, opts ...option.RequestOption) (res *ZoneSettingHTTP2EditResponse, err error) {
+func (r *ZoneSettingHTTP2Service) Edit(ctx context.Context, params ZoneSettingHTTP2EditParams, opts ...option.RequestOption) (res *ZonesHTTP2, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingHTTP2EditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/http2", params.ZoneID)
@@ -46,7 +46,7 @@ func (r *ZoneSettingHTTP2Service) Edit(ctx context.Context, params ZoneSettingHT
 }
 
 // Value of the HTTP2 setting.
-func (r *ZoneSettingHTTP2Service) Get(ctx context.Context, query ZoneSettingHTTP2GetParams, opts ...option.RequestOption) (res *ZoneSettingHTTP2GetResponse, err error) {
+func (r *ZoneSettingHTTP2Service) Get(ctx context.Context, query ZoneSettingHTTP2GetParams, opts ...option.RequestOption) (res *ZonesHTTP2, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingHTTP2GetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/http2", query.ZoneID)
@@ -59,22 +59,21 @@ func (r *ZoneSettingHTTP2Service) Get(ctx context.Context, query ZoneSettingHTTP
 }
 
 // HTTP2 enabled for this zone.
-type ZoneSettingHTTP2EditResponse struct {
+type ZonesHTTP2 struct {
 	// ID of the zone setting.
-	ID ZoneSettingHTTP2EditResponseID `json:"id,required"`
+	ID ZonesHTTP2ID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingHTTP2EditResponseValue `json:"value,required"`
+	Value ZonesHTTP2Value `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingHTTP2EditResponseEditable `json:"editable"`
+	Editable ZonesHTTP2Editable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                        `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingHTTP2EditResponseJSON `json:"-"`
+	ModifiedOn time.Time      `json:"modified_on,nullable" format:"date-time"`
+	JSON       zonesHTTP2JSON `json:"-"`
 }
 
-// zoneSettingHTTP2EditResponseJSON contains the JSON metadata for the struct
-// [ZoneSettingHTTP2EditResponse]
-type zoneSettingHTTP2EditResponseJSON struct {
+// zonesHTTP2JSON contains the JSON metadata for the struct [ZonesHTTP2]
+type zonesHTTP2JSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -83,86 +82,51 @@ type zoneSettingHTTP2EditResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingHTTP2EditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonesHTTP2) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r ZonesHTTP2) implementsZoneSettingEditResponse() {}
+
+func (r ZonesHTTP2) implementsZoneSettingGetResponse() {}
+
 // ID of the zone setting.
-type ZoneSettingHTTP2EditResponseID string
+type ZonesHTTP2ID string
 
 const (
-	ZoneSettingHTTP2EditResponseIDHTTP2 ZoneSettingHTTP2EditResponseID = "http2"
+	ZonesHTTP2IDHTTP2 ZonesHTTP2ID = "http2"
 )
 
 // Current value of the zone setting.
-type ZoneSettingHTTP2EditResponseValue string
+type ZonesHTTP2Value string
 
 const (
-	ZoneSettingHTTP2EditResponseValueOn  ZoneSettingHTTP2EditResponseValue = "on"
-	ZoneSettingHTTP2EditResponseValueOff ZoneSettingHTTP2EditResponseValue = "off"
+	ZonesHTTP2ValueOn  ZonesHTTP2Value = "on"
+	ZonesHTTP2ValueOff ZonesHTTP2Value = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingHTTP2EditResponseEditable bool
+type ZonesHTTP2Editable bool
 
 const (
-	ZoneSettingHTTP2EditResponseEditableTrue  ZoneSettingHTTP2EditResponseEditable = true
-	ZoneSettingHTTP2EditResponseEditableFalse ZoneSettingHTTP2EditResponseEditable = false
+	ZonesHTTP2EditableTrue  ZonesHTTP2Editable = true
+	ZonesHTTP2EditableFalse ZonesHTTP2Editable = false
 )
 
 // HTTP2 enabled for this zone.
-type ZoneSettingHTTP2GetResponse struct {
+type ZonesHTTP2Param struct {
 	// ID of the zone setting.
-	ID ZoneSettingHTTP2GetResponseID `json:"id,required"`
+	ID param.Field[ZonesHTTP2ID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingHTTP2GetResponseValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingHTTP2GetResponseEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                       `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingHTTP2GetResponseJSON `json:"-"`
+	Value param.Field[ZonesHTTP2Value] `json:"value,required"`
 }
 
-// zoneSettingHTTP2GetResponseJSON contains the JSON metadata for the struct
-// [ZoneSettingHTTP2GetResponse]
-type zoneSettingHTTP2GetResponseJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+func (r ZonesHTTP2Param) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *ZoneSettingHTTP2GetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// ID of the zone setting.
-type ZoneSettingHTTP2GetResponseID string
-
-const (
-	ZoneSettingHTTP2GetResponseIDHTTP2 ZoneSettingHTTP2GetResponseID = "http2"
-)
-
-// Current value of the zone setting.
-type ZoneSettingHTTP2GetResponseValue string
-
-const (
-	ZoneSettingHTTP2GetResponseValueOn  ZoneSettingHTTP2GetResponseValue = "on"
-	ZoneSettingHTTP2GetResponseValueOff ZoneSettingHTTP2GetResponseValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingHTTP2GetResponseEditable bool
-
-const (
-	ZoneSettingHTTP2GetResponseEditableTrue  ZoneSettingHTTP2GetResponseEditable = true
-	ZoneSettingHTTP2GetResponseEditableFalse ZoneSettingHTTP2GetResponseEditable = false
-)
+func (r ZonesHTTP2Param) implementsZoneSettingEditParamsItem() {}
 
 type ZoneSettingHTTP2EditParams struct {
 	// Identifier
@@ -189,7 +153,7 @@ type ZoneSettingHTTP2EditResponseEnvelope struct {
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// HTTP2 enabled for this zone.
-	Result ZoneSettingHTTP2EditResponse             `json:"result"`
+	Result ZonesHTTP2                               `json:"result"`
 	JSON   zoneSettingHTTP2EditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -257,7 +221,7 @@ type ZoneSettingHTTP2GetResponseEnvelope struct {
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// HTTP2 enabled for this zone.
-	Result ZoneSettingHTTP2GetResponse             `json:"result"`
+	Result ZonesHTTP2                              `json:"result"`
 	JSON   zoneSettingHTTP2GetResponseEnvelopeJSON `json:"-"`
 }
 

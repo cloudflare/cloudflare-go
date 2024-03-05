@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
@@ -35,7 +34,7 @@ func NewCustomCertificatePrioritizeService(opts ...option.RequestOption) (r *Cus
 // If a zone has multiple SSL certificates, you can set the order in which they
 // should be used during a request. The higher priority will break ties across
 // overlapping 'legacy_custom' certificates.
-func (r *CustomCertificatePrioritizeService) Update(ctx context.Context, params CustomCertificatePrioritizeUpdateParams, opts ...option.RequestOption) (res *[]CustomCertificatePrioritizeUpdateResponse, err error) {
+func (r *CustomCertificatePrioritizeService) Update(ctx context.Context, params CustomCertificatePrioritizeUpdateParams, opts ...option.RequestOption) (res *[]TLSCertificatesAndHostnamesCustomCertificate, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomCertificatePrioritizeUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/custom_certificates/prioritize", params.ZoneID)
@@ -45,215 +44,6 @@ func (r *CustomCertificatePrioritizeService) Update(ctx context.Context, params 
 	}
 	res = &env.Result
 	return
-}
-
-type CustomCertificatePrioritizeUpdateResponse struct {
-	// Identifier
-	ID string `json:"id,required"`
-	// A ubiquitous bundle has the highest probability of being verified everywhere,
-	// even by clients using outdated or unusual trust stores. An optimal bundle uses
-	// the shortest chain and newest intermediates. And the force bundle verifies the
-	// chain, but does not otherwise modify it.
-	BundleMethod CustomCertificatePrioritizeUpdateResponseBundleMethod `json:"bundle_method,required"`
-	// When the certificate from the authority expires.
-	ExpiresOn time.Time `json:"expires_on,required" format:"date-time"`
-	Hosts     []string  `json:"hosts,required"`
-	// The certificate authority that issued the certificate.
-	Issuer string `json:"issuer,required"`
-	// When the certificate was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// The order/priority in which the certificate will be used in a request. The
-	// higher priority will break ties across overlapping 'legacy_custom' certificates,
-	// but 'legacy_custom' certificates will always supercede 'sni_custom'
-	// certificates.
-	Priority float64 `json:"priority,required"`
-	// The type of hash used for the certificate.
-	Signature string `json:"signature,required"`
-	// Status of the zone's custom SSL.
-	Status CustomCertificatePrioritizeUpdateResponseStatus `json:"status,required"`
-	// When the certificate was uploaded to Cloudflare.
-	UploadedOn time.Time `json:"uploaded_on,required" format:"date-time"`
-	// Identifier
-	ZoneID string `json:"zone_id,required"`
-	// Specify the region where your private key can be held locally for optimal TLS
-	// performance. HTTPS connections to any excluded data center will still be fully
-	// encrypted, but will incur some latency while Keyless SSL is used to complete the
-	// handshake with the nearest allowed data center. Options allow distribution to
-	// only to U.S. data centers, only to E.U. data centers, or only to highest
-	// security data centers. Default distribution is to all Cloudflare datacenters,
-	// for optimal performance.
-	GeoRestrictions CustomCertificatePrioritizeUpdateResponseGeoRestrictions `json:"geo_restrictions"`
-	KeylessServer   CustomCertificatePrioritizeUpdateResponseKeylessServer   `json:"keyless_server"`
-	// Specify the policy that determines the region where your private key will be
-	// held locally. HTTPS connections to any excluded data center will still be fully
-	// encrypted, but will incur some latency while Keyless SSL is used to complete the
-	// handshake with the nearest allowed data center. Any combination of countries,
-	// specified by their two letter country code
-	// (https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements)
-	// can be chosen, such as 'country: IN', as well as 'region: EU' which refers to
-	// the EU region. If there are too few data centers satisfying the policy, it will
-	// be rejected.
-	Policy string                                        `json:"policy"`
-	JSON   customCertificatePrioritizeUpdateResponseJSON `json:"-"`
-}
-
-// customCertificatePrioritizeUpdateResponseJSON contains the JSON metadata for the
-// struct [CustomCertificatePrioritizeUpdateResponse]
-type customCertificatePrioritizeUpdateResponseJSON struct {
-	ID              apijson.Field
-	BundleMethod    apijson.Field
-	ExpiresOn       apijson.Field
-	Hosts           apijson.Field
-	Issuer          apijson.Field
-	ModifiedOn      apijson.Field
-	Priority        apijson.Field
-	Signature       apijson.Field
-	Status          apijson.Field
-	UploadedOn      apijson.Field
-	ZoneID          apijson.Field
-	GeoRestrictions apijson.Field
-	KeylessServer   apijson.Field
-	Policy          apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *CustomCertificatePrioritizeUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// A ubiquitous bundle has the highest probability of being verified everywhere,
-// even by clients using outdated or unusual trust stores. An optimal bundle uses
-// the shortest chain and newest intermediates. And the force bundle verifies the
-// chain, but does not otherwise modify it.
-type CustomCertificatePrioritizeUpdateResponseBundleMethod string
-
-const (
-	CustomCertificatePrioritizeUpdateResponseBundleMethodUbiquitous CustomCertificatePrioritizeUpdateResponseBundleMethod = "ubiquitous"
-	CustomCertificatePrioritizeUpdateResponseBundleMethodOptimal    CustomCertificatePrioritizeUpdateResponseBundleMethod = "optimal"
-	CustomCertificatePrioritizeUpdateResponseBundleMethodForce      CustomCertificatePrioritizeUpdateResponseBundleMethod = "force"
-)
-
-// Status of the zone's custom SSL.
-type CustomCertificatePrioritizeUpdateResponseStatus string
-
-const (
-	CustomCertificatePrioritizeUpdateResponseStatusActive       CustomCertificatePrioritizeUpdateResponseStatus = "active"
-	CustomCertificatePrioritizeUpdateResponseStatusExpired      CustomCertificatePrioritizeUpdateResponseStatus = "expired"
-	CustomCertificatePrioritizeUpdateResponseStatusDeleted      CustomCertificatePrioritizeUpdateResponseStatus = "deleted"
-	CustomCertificatePrioritizeUpdateResponseStatusPending      CustomCertificatePrioritizeUpdateResponseStatus = "pending"
-	CustomCertificatePrioritizeUpdateResponseStatusInitializing CustomCertificatePrioritizeUpdateResponseStatus = "initializing"
-)
-
-// Specify the region where your private key can be held locally for optimal TLS
-// performance. HTTPS connections to any excluded data center will still be fully
-// encrypted, but will incur some latency while Keyless SSL is used to complete the
-// handshake with the nearest allowed data center. Options allow distribution to
-// only to U.S. data centers, only to E.U. data centers, or only to highest
-// security data centers. Default distribution is to all Cloudflare datacenters,
-// for optimal performance.
-type CustomCertificatePrioritizeUpdateResponseGeoRestrictions struct {
-	Label CustomCertificatePrioritizeUpdateResponseGeoRestrictionsLabel `json:"label"`
-	JSON  customCertificatePrioritizeUpdateResponseGeoRestrictionsJSON  `json:"-"`
-}
-
-// customCertificatePrioritizeUpdateResponseGeoRestrictionsJSON contains the JSON
-// metadata for the struct
-// [CustomCertificatePrioritizeUpdateResponseGeoRestrictions]
-type customCertificatePrioritizeUpdateResponseGeoRestrictionsJSON struct {
-	Label       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomCertificatePrioritizeUpdateResponseGeoRestrictions) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CustomCertificatePrioritizeUpdateResponseGeoRestrictionsLabel string
-
-const (
-	CustomCertificatePrioritizeUpdateResponseGeoRestrictionsLabelUs              CustomCertificatePrioritizeUpdateResponseGeoRestrictionsLabel = "us"
-	CustomCertificatePrioritizeUpdateResponseGeoRestrictionsLabelEu              CustomCertificatePrioritizeUpdateResponseGeoRestrictionsLabel = "eu"
-	CustomCertificatePrioritizeUpdateResponseGeoRestrictionsLabelHighestSecurity CustomCertificatePrioritizeUpdateResponseGeoRestrictionsLabel = "highest_security"
-)
-
-type CustomCertificatePrioritizeUpdateResponseKeylessServer struct {
-	// Keyless certificate identifier tag.
-	ID string `json:"id,required"`
-	// When the Keyless SSL was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	// Whether or not the Keyless SSL is on or off.
-	Enabled bool `json:"enabled,required"`
-	// The keyless SSL name.
-	Host string `json:"host,required" format:"hostname"`
-	// When the Keyless SSL was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// The keyless SSL name.
-	Name string `json:"name,required"`
-	// Available permissions for the Keyless SSL for the current user requesting the
-	// item.
-	Permissions []interface{} `json:"permissions,required"`
-	// The keyless SSL port used to communicate between Cloudflare and the client's
-	// Keyless SSL server.
-	Port float64 `json:"port,required"`
-	// Status of the Keyless SSL.
-	Status CustomCertificatePrioritizeUpdateResponseKeylessServerStatus `json:"status,required"`
-	// Configuration for using Keyless SSL through a Cloudflare Tunnel
-	Tunnel CustomCertificatePrioritizeUpdateResponseKeylessServerTunnel `json:"tunnel"`
-	JSON   customCertificatePrioritizeUpdateResponseKeylessServerJSON   `json:"-"`
-}
-
-// customCertificatePrioritizeUpdateResponseKeylessServerJSON contains the JSON
-// metadata for the struct [CustomCertificatePrioritizeUpdateResponseKeylessServer]
-type customCertificatePrioritizeUpdateResponseKeylessServerJSON struct {
-	ID          apijson.Field
-	CreatedOn   apijson.Field
-	Enabled     apijson.Field
-	Host        apijson.Field
-	ModifiedOn  apijson.Field
-	Name        apijson.Field
-	Permissions apijson.Field
-	Port        apijson.Field
-	Status      apijson.Field
-	Tunnel      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomCertificatePrioritizeUpdateResponseKeylessServer) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Status of the Keyless SSL.
-type CustomCertificatePrioritizeUpdateResponseKeylessServerStatus string
-
-const (
-	CustomCertificatePrioritizeUpdateResponseKeylessServerStatusActive  CustomCertificatePrioritizeUpdateResponseKeylessServerStatus = "active"
-	CustomCertificatePrioritizeUpdateResponseKeylessServerStatusDeleted CustomCertificatePrioritizeUpdateResponseKeylessServerStatus = "deleted"
-)
-
-// Configuration for using Keyless SSL through a Cloudflare Tunnel
-type CustomCertificatePrioritizeUpdateResponseKeylessServerTunnel struct {
-	// Private IP of the Key Server Host
-	PrivateIP string `json:"private_ip,required"`
-	// Cloudflare Tunnel Virtual Network ID
-	VnetID string                                                           `json:"vnet_id,required"`
-	JSON   customCertificatePrioritizeUpdateResponseKeylessServerTunnelJSON `json:"-"`
-}
-
-// customCertificatePrioritizeUpdateResponseKeylessServerTunnelJSON contains the
-// JSON metadata for the struct
-// [CustomCertificatePrioritizeUpdateResponseKeylessServerTunnel]
-type customCertificatePrioritizeUpdateResponseKeylessServerTunnelJSON struct {
-	PrivateIP   apijson.Field
-	VnetID      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomCertificatePrioritizeUpdateResponseKeylessServerTunnel) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
 }
 
 type CustomCertificatePrioritizeUpdateParams struct {
@@ -282,7 +72,7 @@ func (r CustomCertificatePrioritizeUpdateParamsCertificate) MarshalJSON() (data 
 type CustomCertificatePrioritizeUpdateResponseEnvelope struct {
 	Errors   []CustomCertificatePrioritizeUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []CustomCertificatePrioritizeUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   []CustomCertificatePrioritizeUpdateResponse                 `json:"result,required,nullable"`
+	Result   []TLSCertificatesAndHostnamesCustomCertificate              `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    CustomCertificatePrioritizeUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo CustomCertificatePrioritizeUpdateResponseEnvelopeResultInfo `json:"result_info"`

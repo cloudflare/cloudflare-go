@@ -35,7 +35,7 @@ func NewZeroTrustDEXTestUniqueDeviceService(opts ...option.RequestOption) (r *Ze
 
 // Returns unique count of devices that have run synthetic application monitoring
 // tests in the past 7 days.
-func (r *ZeroTrustDEXTestUniqueDeviceService) List(ctx context.Context, params ZeroTrustDEXTestUniqueDeviceListParams, opts ...option.RequestOption) (res *ZeroTrustDEXTestUniqueDeviceListResponse, err error) {
+func (r *ZeroTrustDEXTestUniqueDeviceService) List(ctx context.Context, params ZeroTrustDEXTestUniqueDeviceListParams, opts ...option.RequestOption) (res *DigitalExperienceMonitoringUniqueDevices, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustDEXTestUniqueDeviceListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dex/tests/unique-devices", params.AccountID)
@@ -47,21 +47,21 @@ func (r *ZeroTrustDEXTestUniqueDeviceService) List(ctx context.Context, params Z
 	return
 }
 
-type ZeroTrustDEXTestUniqueDeviceListResponse struct {
+type DigitalExperienceMonitoringUniqueDevices struct {
 	// total number of unique devices
 	UniqueDevicesTotal int64                                        `json:"uniqueDevicesTotal,required"`
-	JSON               zeroTrustDEXTestUniqueDeviceListResponseJSON `json:"-"`
+	JSON               digitalExperienceMonitoringUniqueDevicesJSON `json:"-"`
 }
 
-// zeroTrustDEXTestUniqueDeviceListResponseJSON contains the JSON metadata for the
-// struct [ZeroTrustDEXTestUniqueDeviceListResponse]
-type zeroTrustDEXTestUniqueDeviceListResponseJSON struct {
+// digitalExperienceMonitoringUniqueDevicesJSON contains the JSON metadata for the
+// struct [DigitalExperienceMonitoringUniqueDevices]
+type digitalExperienceMonitoringUniqueDevicesJSON struct {
 	UniqueDevicesTotal apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *ZeroTrustDEXTestUniqueDeviceListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DigitalExperienceMonitoringUniqueDevices) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -86,7 +86,7 @@ func (r ZeroTrustDEXTestUniqueDeviceListParams) URLQuery() (v url.Values) {
 type ZeroTrustDEXTestUniqueDeviceListResponseEnvelope struct {
 	Errors   []ZeroTrustDEXTestUniqueDeviceListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustDEXTestUniqueDeviceListResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustDEXTestUniqueDeviceListResponse                   `json:"result,required"`
+	Result   DigitalExperienceMonitoringUniqueDevices                   `json:"result,required"`
 	// Whether the API call was successful
 	Success ZeroTrustDEXTestUniqueDeviceListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustDEXTestUniqueDeviceListResponseEnvelopeJSON    `json:"-"`

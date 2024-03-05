@@ -32,7 +32,7 @@ func NewSecondaryDNSOutgoingStatusService(opts ...option.RequestOption) (r *Seco
 }
 
 // Get primary zone transfer status.
-func (r *SecondaryDNSOutgoingStatusService) Get(ctx context.Context, query SecondaryDNSOutgoingStatusGetParams, opts ...option.RequestOption) (res *string, err error) {
+func (r *SecondaryDNSOutgoingStatusService) Get(ctx context.Context, query SecondaryDNSOutgoingStatusGetParams, opts ...option.RequestOption) (res *SecondaryDNSEnableTransferResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SecondaryDNSOutgoingStatusGetResponseEnvelope
 	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing/status", query.ZoneID)
@@ -52,7 +52,7 @@ type SecondaryDNSOutgoingStatusGetResponseEnvelope struct {
 	Errors   []SecondaryDNSOutgoingStatusGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SecondaryDNSOutgoingStatusGetResponseEnvelopeMessages `json:"messages,required"`
 	// The zone transfer status of a primary zone
-	Result string `json:"result,required"`
+	Result SecondaryDNSEnableTransferResult `json:"result,required"`
 	// Whether the API call was successful
 	Success SecondaryDNSOutgoingStatusGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    secondaryDNSOutgoingStatusGetResponseEnvelopeJSON    `json:"-"`

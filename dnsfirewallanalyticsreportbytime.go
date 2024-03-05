@@ -39,7 +39,7 @@ func NewDNSFirewallAnalyticsReportBytimeService(opts ...option.RequestOption) (r
 // See
 // [Analytics API properties](https://developers.cloudflare.com/dns/reference/analytics-api-properties/)
 // for detailed information about the available query parameters.
-func (r *DNSFirewallAnalyticsReportBytimeService) Get(ctx context.Context, accountIdentifier string, identifier string, query DNSFirewallAnalyticsReportBytimeGetParams, opts ...option.RequestOption) (res *DNSFirewallAnalyticsReportBytimeGetResponse, err error) {
+func (r *DNSFirewallAnalyticsReportBytimeService) Get(ctx context.Context, accountIdentifier string, identifier string, query DNSFirewallAnalyticsReportBytimeGetParams, opts ...option.RequestOption) (res *DNSDNSAnalyticsAPIReportBytime, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DNSFirewallAnalyticsReportBytimeGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dns_firewall/%s/dns_analytics/report/bytime", accountIdentifier, identifier)
@@ -50,128 +50,6 @@ func (r *DNSFirewallAnalyticsReportBytimeService) Get(ctx context.Context, accou
 	res = &env.Result
 	return
 }
-
-type DNSFirewallAnalyticsReportBytimeGetResponse struct {
-	// Array with one row per combination of dimension values.
-	Data []DNSFirewallAnalyticsReportBytimeGetResponseData `json:"data,required"`
-	// Number of seconds between current time and last processed event, in another
-	// words how many seconds of data could be missing.
-	DataLag float64 `json:"data_lag,required"`
-	// Maximum results for each metric (object mapping metric names to values).
-	// Currently always an empty object.
-	Max interface{} `json:"max,required"`
-	// Minimum results for each metric (object mapping metric names to values).
-	// Currently always an empty object.
-	Min   interface{}                                      `json:"min,required"`
-	Query DNSFirewallAnalyticsReportBytimeGetResponseQuery `json:"query,required"`
-	// Total number of rows in the result.
-	Rows float64 `json:"rows,required"`
-	// Array of time intervals in the response data. Each interval is represented as an
-	// array containing two values: the start time, and the end time.
-	TimeIntervals [][]time.Time `json:"time_intervals,required" format:"date-time"`
-	// Total results for metrics across all data (object mapping metric names to
-	// values).
-	Totals interface{}                                     `json:"totals,required"`
-	JSON   dnsFirewallAnalyticsReportBytimeGetResponseJSON `json:"-"`
-}
-
-// dnsFirewallAnalyticsReportBytimeGetResponseJSON contains the JSON metadata for
-// the struct [DNSFirewallAnalyticsReportBytimeGetResponse]
-type dnsFirewallAnalyticsReportBytimeGetResponseJSON struct {
-	Data          apijson.Field
-	DataLag       apijson.Field
-	Max           apijson.Field
-	Min           apijson.Field
-	Query         apijson.Field
-	Rows          apijson.Field
-	TimeIntervals apijson.Field
-	Totals        apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *DNSFirewallAnalyticsReportBytimeGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DNSFirewallAnalyticsReportBytimeGetResponseData struct {
-	// Array of dimension values, representing the combination of dimension values
-	// corresponding to this row.
-	Dimensions []string `json:"dimensions,required"`
-	// Array with one item per requested metric. Each item is an array of values,
-	// broken down by time interval.
-	Metrics [][]interface{}                                     `json:"metrics,required"`
-	JSON    dnsFirewallAnalyticsReportBytimeGetResponseDataJSON `json:"-"`
-}
-
-// dnsFirewallAnalyticsReportBytimeGetResponseDataJSON contains the JSON metadata
-// for the struct [DNSFirewallAnalyticsReportBytimeGetResponseData]
-type dnsFirewallAnalyticsReportBytimeGetResponseDataJSON struct {
-	Dimensions  apijson.Field
-	Metrics     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSFirewallAnalyticsReportBytimeGetResponseData) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type DNSFirewallAnalyticsReportBytimeGetResponseQuery struct {
-	// Array of dimension names.
-	Dimensions []string `json:"dimensions,required"`
-	// Limit number of returned metrics.
-	Limit int64 `json:"limit,required"`
-	// Array of metric names.
-	Metrics []string `json:"metrics,required"`
-	// Start date and time of requesting data period in ISO 8601 format.
-	Since time.Time `json:"since,required" format:"date-time"`
-	// Unit of time to group data by.
-	TimeDelta DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDelta `json:"time_delta,required"`
-	// End date and time of requesting data period in ISO 8601 format.
-	Until time.Time `json:"until,required" format:"date-time"`
-	// Segmentation filter in 'attribute operator value' format.
-	Filters string `json:"filters"`
-	// Array of dimensions to sort by, where each dimension may be prefixed by -
-	// (descending) or + (ascending).
-	Sort []string                                             `json:"sort"`
-	JSON dnsFirewallAnalyticsReportBytimeGetResponseQueryJSON `json:"-"`
-}
-
-// dnsFirewallAnalyticsReportBytimeGetResponseQueryJSON contains the JSON metadata
-// for the struct [DNSFirewallAnalyticsReportBytimeGetResponseQuery]
-type dnsFirewallAnalyticsReportBytimeGetResponseQueryJSON struct {
-	Dimensions  apijson.Field
-	Limit       apijson.Field
-	Metrics     apijson.Field
-	Since       apijson.Field
-	TimeDelta   apijson.Field
-	Until       apijson.Field
-	Filters     apijson.Field
-	Sort        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DNSFirewallAnalyticsReportBytimeGetResponseQuery) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Unit of time to group data by.
-type DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDelta string
-
-const (
-	DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDeltaAll        DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDelta = "all"
-	DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDeltaAuto       DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDelta = "auto"
-	DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDeltaYear       DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDelta = "year"
-	DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDeltaQuarter    DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDelta = "quarter"
-	DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDeltaMonth      DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDelta = "month"
-	DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDeltaWeek       DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDelta = "week"
-	DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDeltaDay        DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDelta = "day"
-	DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDeltaHour       DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDelta = "hour"
-	DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDeltaDekaminute DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDelta = "dekaminute"
-	DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDeltaMinute     DNSFirewallAnalyticsReportBytimeGetResponseQueryTimeDelta = "minute"
-)
 
 type DNSFirewallAnalyticsReportBytimeGetParams struct {
 	// A comma-separated list of dimensions to group results by.
@@ -221,7 +99,7 @@ const (
 type DNSFirewallAnalyticsReportBytimeGetResponseEnvelope struct {
 	Errors   []DNSFirewallAnalyticsReportBytimeGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DNSFirewallAnalyticsReportBytimeGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DNSFirewallAnalyticsReportBytimeGetResponse                   `json:"result,required"`
+	Result   DNSDNSAnalyticsAPIReportBytime                                `json:"result,required"`
 	// Whether the API call was successful
 	Success DNSFirewallAnalyticsReportBytimeGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dnsFirewallAnalyticsReportBytimeGetResponseEnvelopeJSON    `json:"-"`

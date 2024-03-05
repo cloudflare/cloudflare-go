@@ -32,7 +32,7 @@ func NewIntelIPListService(opts ...option.RequestOption) (r *IntelIPListService)
 }
 
 // Get IP Lists
-func (r *IntelIPListService) Get(ctx context.Context, query IntelIPListGetParams, opts ...option.RequestOption) (res *[]IntelIPListGetResponse, err error) {
+func (r *IntelIPListService) Get(ctx context.Context, query IntelIPListGetParams, opts ...option.RequestOption) (res *[]IntelIPList, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IntelIPListGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/ip-list", query.AccountID)
@@ -44,16 +44,15 @@ func (r *IntelIPListService) Get(ctx context.Context, query IntelIPListGetParams
 	return
 }
 
-type IntelIPListGetResponse struct {
-	ID          int64                      `json:"id"`
-	Description string                     `json:"description"`
-	Name        string                     `json:"name"`
-	JSON        intelIPListGetResponseJSON `json:"-"`
+type IntelIPList struct {
+	ID          int64           `json:"id"`
+	Description string          `json:"description"`
+	Name        string          `json:"name"`
+	JSON        intelIPListJSON `json:"-"`
 }
 
-// intelIPListGetResponseJSON contains the JSON metadata for the struct
-// [IntelIPListGetResponse]
-type intelIPListGetResponseJSON struct {
+// intelIPListJSON contains the JSON metadata for the struct [IntelIPList]
+type intelIPListJSON struct {
 	ID          apijson.Field
 	Description apijson.Field
 	Name        apijson.Field
@@ -61,7 +60,7 @@ type intelIPListGetResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelIPListGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelIPList) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -73,7 +72,7 @@ type IntelIPListGetParams struct {
 type IntelIPListGetResponseEnvelope struct {
 	Errors   []IntelIPListGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []IntelIPListGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []IntelIPListGetResponse                 `json:"result,required,nullable"`
+	Result   []IntelIPList                            `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    IntelIPListGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo IntelIPListGetResponseEnvelopeResultInfo `json:"result_info"`

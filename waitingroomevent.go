@@ -40,7 +40,7 @@ func NewWaitingRoomEventService(opts ...option.RequestOption) (r *WaitingRoomEve
 // some of the properties in the event's configuration may either override or
 // inherit from the waiting room's configuration. Note that events cannot overlap
 // with each other, so only one event can be active at a time.
-func (r *WaitingRoomEventService) New(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, body WaitingRoomEventNewParams, opts ...option.RequestOption) (res *WaitingRoomEventNewResponse, err error) {
+func (r *WaitingRoomEventService) New(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, body WaitingRoomEventNewParams, opts ...option.RequestOption) (res *WaitingroomEventResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WaitingRoomEventNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%v/events", zoneIdentifier, waitingRoomID)
@@ -53,7 +53,7 @@ func (r *WaitingRoomEventService) New(ctx context.Context, zoneIdentifier string
 }
 
 // Updates a configured event for a waiting room.
-func (r *WaitingRoomEventService) Update(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, eventID interface{}, body WaitingRoomEventUpdateParams, opts ...option.RequestOption) (res *WaitingRoomEventUpdateResponse, err error) {
+func (r *WaitingRoomEventService) Update(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, eventID interface{}, body WaitingRoomEventUpdateParams, opts ...option.RequestOption) (res *WaitingroomEventResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WaitingRoomEventUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%v/events/%v", zoneIdentifier, waitingRoomID, eventID)
@@ -66,7 +66,7 @@ func (r *WaitingRoomEventService) Update(ctx context.Context, zoneIdentifier str
 }
 
 // Lists events for a waiting room.
-func (r *WaitingRoomEventService) List(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, opts ...option.RequestOption) (res *[]WaitingRoomEventListResponse, err error) {
+func (r *WaitingRoomEventService) List(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, opts ...option.RequestOption) (res *[]WaitingroomEventResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WaitingRoomEventListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%v/events", zoneIdentifier, waitingRoomID)
@@ -92,7 +92,7 @@ func (r *WaitingRoomEventService) Delete(ctx context.Context, zoneIdentifier str
 }
 
 // Patches a configured event for a waiting room.
-func (r *WaitingRoomEventService) Edit(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, eventID interface{}, body WaitingRoomEventEditParams, opts ...option.RequestOption) (res *WaitingRoomEventEditResponse, err error) {
+func (r *WaitingRoomEventService) Edit(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, eventID interface{}, body WaitingRoomEventEditParams, opts ...option.RequestOption) (res *WaitingroomEventResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WaitingRoomEventEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%v/events/%v", zoneIdentifier, waitingRoomID, eventID)
@@ -105,7 +105,7 @@ func (r *WaitingRoomEventService) Edit(ctx context.Context, zoneIdentifier strin
 }
 
 // Fetches a single configured event for a waiting room.
-func (r *WaitingRoomEventService) Get(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, eventID interface{}, opts ...option.RequestOption) (res *WaitingRoomEventGetResponse, err error) {
+func (r *WaitingRoomEventService) Get(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, eventID interface{}, opts ...option.RequestOption) (res *WaitingroomEventResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WaitingRoomEventGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%v/events/%v", zoneIdentifier, waitingRoomID, eventID)
@@ -117,7 +117,7 @@ func (r *WaitingRoomEventService) Get(ctx context.Context, zoneIdentifier string
 	return
 }
 
-type WaitingRoomEventNewResponse struct {
+type WaitingroomEventResult struct {
 	ID        interface{} `json:"id"`
 	CreatedOn time.Time   `json:"created_on" format:"date-time"`
 	// If set, the event will override the waiting room's `custom_page_html` property
@@ -165,13 +165,13 @@ type WaitingRoomEventNewResponse struct {
 	// If set, the event will override the waiting room's `total_active_users` property
 	// while it is active. If null, the event will inherit it. This can only be set if
 	// the event's `new_users_per_minute` property is also set.
-	TotalActiveUsers int64                           `json:"total_active_users,nullable"`
-	JSON             waitingRoomEventNewResponseJSON `json:"-"`
+	TotalActiveUsers int64                      `json:"total_active_users,nullable"`
+	JSON             waitingroomEventResultJSON `json:"-"`
 }
 
-// waitingRoomEventNewResponseJSON contains the JSON metadata for the struct
-// [WaitingRoomEventNewResponse]
-type waitingRoomEventNewResponseJSON struct {
+// waitingroomEventResultJSON contains the JSON metadata for the struct
+// [WaitingroomEventResult]
+type waitingroomEventResultJSON struct {
 	ID                    apijson.Field
 	CreatedOn             apijson.Field
 	CustomPageHTML        apijson.Field
@@ -192,165 +192,7 @@ type waitingRoomEventNewResponseJSON struct {
 	ExtraFields           map[string]apijson.Field
 }
 
-func (r *WaitingRoomEventNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WaitingRoomEventUpdateResponse struct {
-	ID        interface{} `json:"id"`
-	CreatedOn time.Time   `json:"created_on" format:"date-time"`
-	// If set, the event will override the waiting room's `custom_page_html` property
-	// while it is active. If null, the event will inherit it.
-	CustomPageHTML string `json:"custom_page_html,nullable"`
-	// A note that you can use to add more details about the event.
-	Description string `json:"description"`
-	// If set, the event will override the waiting room's `disable_session_renewal`
-	// property while it is active. If null, the event will inherit it.
-	DisableSessionRenewal bool `json:"disable_session_renewal,nullable"`
-	// An ISO 8601 timestamp that marks the end of the event.
-	EventEndTime string `json:"event_end_time"`
-	// An ISO 8601 timestamp that marks the start of the event. At this time, queued
-	// users will be processed with the event's configuration. The start time must be
-	// at least one minute before `event_end_time`.
-	EventStartTime string    `json:"event_start_time"`
-	ModifiedOn     time.Time `json:"modified_on" format:"date-time"`
-	// A unique name to identify the event. Only alphanumeric characters, hyphens and
-	// underscores are allowed.
-	Name string `json:"name"`
-	// If set, the event will override the waiting room's `new_users_per_minute`
-	// property while it is active. If null, the event will inherit it. This can only
-	// be set if the event's `total_active_users` property is also set.
-	NewUsersPerMinute int64 `json:"new_users_per_minute,nullable"`
-	// An ISO 8601 timestamp that marks when to begin queueing all users before the
-	// event starts. The prequeue must start at least five minutes before
-	// `event_start_time`.
-	PrequeueStartTime string `json:"prequeue_start_time,nullable"`
-	// If set, the event will override the waiting room's `queueing_method` property
-	// while it is active. If null, the event will inherit it.
-	QueueingMethod string `json:"queueing_method,nullable"`
-	// If set, the event will override the waiting room's `session_duration` property
-	// while it is active. If null, the event will inherit it.
-	SessionDuration int64 `json:"session_duration,nullable"`
-	// If enabled, users in the prequeue will be shuffled randomly at the
-	// `event_start_time`. Requires that `prequeue_start_time` is not null. This is
-	// useful for situations when many users will join the event prequeue at the same
-	// time and you want to shuffle them to ensure fairness. Naturally, it makes the
-	// most sense to enable this feature when the `queueing_method` during the event
-	// respects ordering such as **fifo**, or else the shuffling may be unnecessary.
-	ShuffleAtEventStart bool `json:"shuffle_at_event_start"`
-	// Suspends or allows an event. If set to `true`, the event is ignored and traffic
-	// will be handled based on the waiting room configuration.
-	Suspended bool `json:"suspended"`
-	// If set, the event will override the waiting room's `total_active_users` property
-	// while it is active. If null, the event will inherit it. This can only be set if
-	// the event's `new_users_per_minute` property is also set.
-	TotalActiveUsers int64                              `json:"total_active_users,nullable"`
-	JSON             waitingRoomEventUpdateResponseJSON `json:"-"`
-}
-
-// waitingRoomEventUpdateResponseJSON contains the JSON metadata for the struct
-// [WaitingRoomEventUpdateResponse]
-type waitingRoomEventUpdateResponseJSON struct {
-	ID                    apijson.Field
-	CreatedOn             apijson.Field
-	CustomPageHTML        apijson.Field
-	Description           apijson.Field
-	DisableSessionRenewal apijson.Field
-	EventEndTime          apijson.Field
-	EventStartTime        apijson.Field
-	ModifiedOn            apijson.Field
-	Name                  apijson.Field
-	NewUsersPerMinute     apijson.Field
-	PrequeueStartTime     apijson.Field
-	QueueingMethod        apijson.Field
-	SessionDuration       apijson.Field
-	ShuffleAtEventStart   apijson.Field
-	Suspended             apijson.Field
-	TotalActiveUsers      apijson.Field
-	raw                   string
-	ExtraFields           map[string]apijson.Field
-}
-
-func (r *WaitingRoomEventUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WaitingRoomEventListResponse struct {
-	ID        interface{} `json:"id"`
-	CreatedOn time.Time   `json:"created_on" format:"date-time"`
-	// If set, the event will override the waiting room's `custom_page_html` property
-	// while it is active. If null, the event will inherit it.
-	CustomPageHTML string `json:"custom_page_html,nullable"`
-	// A note that you can use to add more details about the event.
-	Description string `json:"description"`
-	// If set, the event will override the waiting room's `disable_session_renewal`
-	// property while it is active. If null, the event will inherit it.
-	DisableSessionRenewal bool `json:"disable_session_renewal,nullable"`
-	// An ISO 8601 timestamp that marks the end of the event.
-	EventEndTime string `json:"event_end_time"`
-	// An ISO 8601 timestamp that marks the start of the event. At this time, queued
-	// users will be processed with the event's configuration. The start time must be
-	// at least one minute before `event_end_time`.
-	EventStartTime string    `json:"event_start_time"`
-	ModifiedOn     time.Time `json:"modified_on" format:"date-time"`
-	// A unique name to identify the event. Only alphanumeric characters, hyphens and
-	// underscores are allowed.
-	Name string `json:"name"`
-	// If set, the event will override the waiting room's `new_users_per_minute`
-	// property while it is active. If null, the event will inherit it. This can only
-	// be set if the event's `total_active_users` property is also set.
-	NewUsersPerMinute int64 `json:"new_users_per_minute,nullable"`
-	// An ISO 8601 timestamp that marks when to begin queueing all users before the
-	// event starts. The prequeue must start at least five minutes before
-	// `event_start_time`.
-	PrequeueStartTime string `json:"prequeue_start_time,nullable"`
-	// If set, the event will override the waiting room's `queueing_method` property
-	// while it is active. If null, the event will inherit it.
-	QueueingMethod string `json:"queueing_method,nullable"`
-	// If set, the event will override the waiting room's `session_duration` property
-	// while it is active. If null, the event will inherit it.
-	SessionDuration int64 `json:"session_duration,nullable"`
-	// If enabled, users in the prequeue will be shuffled randomly at the
-	// `event_start_time`. Requires that `prequeue_start_time` is not null. This is
-	// useful for situations when many users will join the event prequeue at the same
-	// time and you want to shuffle them to ensure fairness. Naturally, it makes the
-	// most sense to enable this feature when the `queueing_method` during the event
-	// respects ordering such as **fifo**, or else the shuffling may be unnecessary.
-	ShuffleAtEventStart bool `json:"shuffle_at_event_start"`
-	// Suspends or allows an event. If set to `true`, the event is ignored and traffic
-	// will be handled based on the waiting room configuration.
-	Suspended bool `json:"suspended"`
-	// If set, the event will override the waiting room's `total_active_users` property
-	// while it is active. If null, the event will inherit it. This can only be set if
-	// the event's `new_users_per_minute` property is also set.
-	TotalActiveUsers int64                            `json:"total_active_users,nullable"`
-	JSON             waitingRoomEventListResponseJSON `json:"-"`
-}
-
-// waitingRoomEventListResponseJSON contains the JSON metadata for the struct
-// [WaitingRoomEventListResponse]
-type waitingRoomEventListResponseJSON struct {
-	ID                    apijson.Field
-	CreatedOn             apijson.Field
-	CustomPageHTML        apijson.Field
-	Description           apijson.Field
-	DisableSessionRenewal apijson.Field
-	EventEndTime          apijson.Field
-	EventStartTime        apijson.Field
-	ModifiedOn            apijson.Field
-	Name                  apijson.Field
-	NewUsersPerMinute     apijson.Field
-	PrequeueStartTime     apijson.Field
-	QueueingMethod        apijson.Field
-	SessionDuration       apijson.Field
-	ShuffleAtEventStart   apijson.Field
-	Suspended             apijson.Field
-	TotalActiveUsers      apijson.Field
-	raw                   string
-	ExtraFields           map[string]apijson.Field
-}
-
-func (r *WaitingRoomEventListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *WaitingroomEventResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -368,164 +210,6 @@ type waitingRoomEventDeleteResponseJSON struct {
 }
 
 func (r *WaitingRoomEventDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WaitingRoomEventEditResponse struct {
-	ID        interface{} `json:"id"`
-	CreatedOn time.Time   `json:"created_on" format:"date-time"`
-	// If set, the event will override the waiting room's `custom_page_html` property
-	// while it is active. If null, the event will inherit it.
-	CustomPageHTML string `json:"custom_page_html,nullable"`
-	// A note that you can use to add more details about the event.
-	Description string `json:"description"`
-	// If set, the event will override the waiting room's `disable_session_renewal`
-	// property while it is active. If null, the event will inherit it.
-	DisableSessionRenewal bool `json:"disable_session_renewal,nullable"`
-	// An ISO 8601 timestamp that marks the end of the event.
-	EventEndTime string `json:"event_end_time"`
-	// An ISO 8601 timestamp that marks the start of the event. At this time, queued
-	// users will be processed with the event's configuration. The start time must be
-	// at least one minute before `event_end_time`.
-	EventStartTime string    `json:"event_start_time"`
-	ModifiedOn     time.Time `json:"modified_on" format:"date-time"`
-	// A unique name to identify the event. Only alphanumeric characters, hyphens and
-	// underscores are allowed.
-	Name string `json:"name"`
-	// If set, the event will override the waiting room's `new_users_per_minute`
-	// property while it is active. If null, the event will inherit it. This can only
-	// be set if the event's `total_active_users` property is also set.
-	NewUsersPerMinute int64 `json:"new_users_per_minute,nullable"`
-	// An ISO 8601 timestamp that marks when to begin queueing all users before the
-	// event starts. The prequeue must start at least five minutes before
-	// `event_start_time`.
-	PrequeueStartTime string `json:"prequeue_start_time,nullable"`
-	// If set, the event will override the waiting room's `queueing_method` property
-	// while it is active. If null, the event will inherit it.
-	QueueingMethod string `json:"queueing_method,nullable"`
-	// If set, the event will override the waiting room's `session_duration` property
-	// while it is active. If null, the event will inherit it.
-	SessionDuration int64 `json:"session_duration,nullable"`
-	// If enabled, users in the prequeue will be shuffled randomly at the
-	// `event_start_time`. Requires that `prequeue_start_time` is not null. This is
-	// useful for situations when many users will join the event prequeue at the same
-	// time and you want to shuffle them to ensure fairness. Naturally, it makes the
-	// most sense to enable this feature when the `queueing_method` during the event
-	// respects ordering such as **fifo**, or else the shuffling may be unnecessary.
-	ShuffleAtEventStart bool `json:"shuffle_at_event_start"`
-	// Suspends or allows an event. If set to `true`, the event is ignored and traffic
-	// will be handled based on the waiting room configuration.
-	Suspended bool `json:"suspended"`
-	// If set, the event will override the waiting room's `total_active_users` property
-	// while it is active. If null, the event will inherit it. This can only be set if
-	// the event's `new_users_per_minute` property is also set.
-	TotalActiveUsers int64                            `json:"total_active_users,nullable"`
-	JSON             waitingRoomEventEditResponseJSON `json:"-"`
-}
-
-// waitingRoomEventEditResponseJSON contains the JSON metadata for the struct
-// [WaitingRoomEventEditResponse]
-type waitingRoomEventEditResponseJSON struct {
-	ID                    apijson.Field
-	CreatedOn             apijson.Field
-	CustomPageHTML        apijson.Field
-	Description           apijson.Field
-	DisableSessionRenewal apijson.Field
-	EventEndTime          apijson.Field
-	EventStartTime        apijson.Field
-	ModifiedOn            apijson.Field
-	Name                  apijson.Field
-	NewUsersPerMinute     apijson.Field
-	PrequeueStartTime     apijson.Field
-	QueueingMethod        apijson.Field
-	SessionDuration       apijson.Field
-	ShuffleAtEventStart   apijson.Field
-	Suspended             apijson.Field
-	TotalActiveUsers      apijson.Field
-	raw                   string
-	ExtraFields           map[string]apijson.Field
-}
-
-func (r *WaitingRoomEventEditResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type WaitingRoomEventGetResponse struct {
-	ID        interface{} `json:"id"`
-	CreatedOn time.Time   `json:"created_on" format:"date-time"`
-	// If set, the event will override the waiting room's `custom_page_html` property
-	// while it is active. If null, the event will inherit it.
-	CustomPageHTML string `json:"custom_page_html,nullable"`
-	// A note that you can use to add more details about the event.
-	Description string `json:"description"`
-	// If set, the event will override the waiting room's `disable_session_renewal`
-	// property while it is active. If null, the event will inherit it.
-	DisableSessionRenewal bool `json:"disable_session_renewal,nullable"`
-	// An ISO 8601 timestamp that marks the end of the event.
-	EventEndTime string `json:"event_end_time"`
-	// An ISO 8601 timestamp that marks the start of the event. At this time, queued
-	// users will be processed with the event's configuration. The start time must be
-	// at least one minute before `event_end_time`.
-	EventStartTime string    `json:"event_start_time"`
-	ModifiedOn     time.Time `json:"modified_on" format:"date-time"`
-	// A unique name to identify the event. Only alphanumeric characters, hyphens and
-	// underscores are allowed.
-	Name string `json:"name"`
-	// If set, the event will override the waiting room's `new_users_per_minute`
-	// property while it is active. If null, the event will inherit it. This can only
-	// be set if the event's `total_active_users` property is also set.
-	NewUsersPerMinute int64 `json:"new_users_per_minute,nullable"`
-	// An ISO 8601 timestamp that marks when to begin queueing all users before the
-	// event starts. The prequeue must start at least five minutes before
-	// `event_start_time`.
-	PrequeueStartTime string `json:"prequeue_start_time,nullable"`
-	// If set, the event will override the waiting room's `queueing_method` property
-	// while it is active. If null, the event will inherit it.
-	QueueingMethod string `json:"queueing_method,nullable"`
-	// If set, the event will override the waiting room's `session_duration` property
-	// while it is active. If null, the event will inherit it.
-	SessionDuration int64 `json:"session_duration,nullable"`
-	// If enabled, users in the prequeue will be shuffled randomly at the
-	// `event_start_time`. Requires that `prequeue_start_time` is not null. This is
-	// useful for situations when many users will join the event prequeue at the same
-	// time and you want to shuffle them to ensure fairness. Naturally, it makes the
-	// most sense to enable this feature when the `queueing_method` during the event
-	// respects ordering such as **fifo**, or else the shuffling may be unnecessary.
-	ShuffleAtEventStart bool `json:"shuffle_at_event_start"`
-	// Suspends or allows an event. If set to `true`, the event is ignored and traffic
-	// will be handled based on the waiting room configuration.
-	Suspended bool `json:"suspended"`
-	// If set, the event will override the waiting room's `total_active_users` property
-	// while it is active. If null, the event will inherit it. This can only be set if
-	// the event's `new_users_per_minute` property is also set.
-	TotalActiveUsers int64                           `json:"total_active_users,nullable"`
-	JSON             waitingRoomEventGetResponseJSON `json:"-"`
-}
-
-// waitingRoomEventGetResponseJSON contains the JSON metadata for the struct
-// [WaitingRoomEventGetResponse]
-type waitingRoomEventGetResponseJSON struct {
-	ID                    apijson.Field
-	CreatedOn             apijson.Field
-	CustomPageHTML        apijson.Field
-	Description           apijson.Field
-	DisableSessionRenewal apijson.Field
-	EventEndTime          apijson.Field
-	EventStartTime        apijson.Field
-	ModifiedOn            apijson.Field
-	Name                  apijson.Field
-	NewUsersPerMinute     apijson.Field
-	PrequeueStartTime     apijson.Field
-	QueueingMethod        apijson.Field
-	SessionDuration       apijson.Field
-	ShuffleAtEventStart   apijson.Field
-	Suspended             apijson.Field
-	TotalActiveUsers      apijson.Field
-	raw                   string
-	ExtraFields           map[string]apijson.Field
-}
-
-func (r *WaitingRoomEventGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -582,7 +266,7 @@ func (r WaitingRoomEventNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WaitingRoomEventNewResponseEnvelope struct {
-	Result WaitingRoomEventNewResponse             `json:"result,required"`
+	Result WaitingroomEventResult                  `json:"result,required"`
 	JSON   waitingRoomEventNewResponseEnvelopeJSON `json:"-"`
 }
 
@@ -651,7 +335,7 @@ func (r WaitingRoomEventUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WaitingRoomEventUpdateResponseEnvelope struct {
-	Result WaitingRoomEventUpdateResponse             `json:"result,required"`
+	Result WaitingroomEventResult                     `json:"result,required"`
 	JSON   waitingRoomEventUpdateResponseEnvelopeJSON `json:"-"`
 }
 
@@ -670,7 +354,7 @@ func (r *WaitingRoomEventUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err
 type WaitingRoomEventListResponseEnvelope struct {
 	Errors   []WaitingRoomEventListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []WaitingRoomEventListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []WaitingRoomEventListResponse                 `json:"result,required,nullable"`
+	Result   []WaitingroomEventResult                       `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    WaitingRoomEventListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo WaitingRoomEventListResponseEnvelopeResultInfo `json:"result_info"`
@@ -835,7 +519,7 @@ func (r WaitingRoomEventEditParams) MarshalJSON() (data []byte, err error) {
 }
 
 type WaitingRoomEventEditResponseEnvelope struct {
-	Result WaitingRoomEventEditResponse             `json:"result,required"`
+	Result WaitingroomEventResult                   `json:"result,required"`
 	JSON   waitingRoomEventEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -852,7 +536,7 @@ func (r *WaitingRoomEventEditResponseEnvelope) UnmarshalJSON(data []byte) (err e
 }
 
 type WaitingRoomEventGetResponseEnvelope struct {
-	Result WaitingRoomEventGetResponse             `json:"result,required"`
+	Result WaitingroomEventResult                  `json:"result,required"`
 	JSON   waitingRoomEventGetResponseEnvelopeJSON `json:"-"`
 }
 

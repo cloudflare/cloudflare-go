@@ -34,7 +34,7 @@ func NewDurableObjectNamespaceObjectService(opts ...option.RequestOption) (r *Du
 }
 
 // Returns the Durable Objects in a given namespace.
-func (r *DurableObjectNamespaceObjectService) List(ctx context.Context, id string, params DurableObjectNamespaceObjectListParams, opts ...option.RequestOption) (res *[]DurableObjectNamespaceObjectListResponse, err error) {
+func (r *DurableObjectNamespaceObjectService) List(ctx context.Context, id string, params DurableObjectNamespaceObjectListParams, opts ...option.RequestOption) (res *[]WorkersObject, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DurableObjectNamespaceObjectListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/durable_objects/namespaces/%s/objects", params.AccountID, id)
@@ -46,24 +46,23 @@ func (r *DurableObjectNamespaceObjectService) List(ctx context.Context, id strin
 	return
 }
 
-type DurableObjectNamespaceObjectListResponse struct {
+type WorkersObject struct {
 	// ID of the Durable Object.
 	ID string `json:"id"`
 	// Whether the Durable Object has stored data.
-	HasStoredData bool                                         `json:"hasStoredData"`
-	JSON          durableObjectNamespaceObjectListResponseJSON `json:"-"`
+	HasStoredData bool              `json:"hasStoredData"`
+	JSON          workersObjectJSON `json:"-"`
 }
 
-// durableObjectNamespaceObjectListResponseJSON contains the JSON metadata for the
-// struct [DurableObjectNamespaceObjectListResponse]
-type durableObjectNamespaceObjectListResponseJSON struct {
+// workersObjectJSON contains the JSON metadata for the struct [WorkersObject]
+type workersObjectJSON struct {
 	ID            apijson.Field
 	HasStoredData apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *DurableObjectNamespaceObjectListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkersObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -91,7 +90,7 @@ func (r DurableObjectNamespaceObjectListParams) URLQuery() (v url.Values) {
 type DurableObjectNamespaceObjectListResponseEnvelope struct {
 	Errors   []DurableObjectNamespaceObjectListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DurableObjectNamespaceObjectListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DurableObjectNamespaceObjectListResponse                 `json:"result,required,nullable"`
+	Result   []WorkersObject                                            `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    DurableObjectNamespaceObjectListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DurableObjectNamespaceObjectListResponseEnvelopeResultInfo `json:"result_info"`

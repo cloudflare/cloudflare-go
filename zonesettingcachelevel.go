@@ -37,7 +37,7 @@ func NewZoneSettingCacheLevelService(opts ...option.RequestOption) (r *ZoneSetti
 // setting will ignore the query string when delivering a cached resource. The
 // aggressive setting will cache all static resources, including ones with a query
 // string. (https://support.cloudflare.com/hc/en-us/articles/200168256).
-func (r *ZoneSettingCacheLevelService) Edit(ctx context.Context, params ZoneSettingCacheLevelEditParams, opts ...option.RequestOption) (res *ZoneSettingCacheLevelEditResponse, err error) {
+func (r *ZoneSettingCacheLevelService) Edit(ctx context.Context, params ZoneSettingCacheLevelEditParams, opts ...option.RequestOption) (res *ZonesCacheLevel, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingCacheLevelEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/cache_level", params.ZoneID)
@@ -54,7 +54,7 @@ func (r *ZoneSettingCacheLevelService) Edit(ctx context.Context, params ZoneSett
 // setting will ignore the query string when delivering a cached resource. The
 // aggressive setting will cache all static resources, including ones with a query
 // string. (https://support.cloudflare.com/hc/en-us/articles/200168256).
-func (r *ZoneSettingCacheLevelService) Get(ctx context.Context, query ZoneSettingCacheLevelGetParams, opts ...option.RequestOption) (res *ZoneSettingCacheLevelGetResponse, err error) {
+func (r *ZoneSettingCacheLevelService) Get(ctx context.Context, query ZoneSettingCacheLevelGetParams, opts ...option.RequestOption) (res *ZonesCacheLevel, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingCacheLevelGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/cache_level", query.ZoneID)
@@ -71,22 +71,21 @@ func (r *ZoneSettingCacheLevelService) Get(ctx context.Context, query ZoneSettin
 // setting will ignore the query string when delivering a cached resource. The
 // aggressive setting will cache all static resources, including ones with a query
 // string. (https://support.cloudflare.com/hc/en-us/articles/200168256).
-type ZoneSettingCacheLevelEditResponse struct {
+type ZonesCacheLevel struct {
 	// ID of the zone setting.
-	ID ZoneSettingCacheLevelEditResponseID `json:"id,required"`
+	ID ZonesCacheLevelID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingCacheLevelEditResponseValue `json:"value,required"`
+	Value ZonesCacheLevelValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingCacheLevelEditResponseEditable `json:"editable"`
+	Editable ZonesCacheLevelEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                             `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingCacheLevelEditResponseJSON `json:"-"`
+	ModifiedOn time.Time           `json:"modified_on,nullable" format:"date-time"`
+	JSON       zonesCacheLevelJSON `json:"-"`
 }
 
-// zoneSettingCacheLevelEditResponseJSON contains the JSON metadata for the struct
-// [ZoneSettingCacheLevelEditResponse]
-type zoneSettingCacheLevelEditResponseJSON struct {
+// zonesCacheLevelJSON contains the JSON metadata for the struct [ZonesCacheLevel]
+type zonesCacheLevelJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -95,33 +94,37 @@ type zoneSettingCacheLevelEditResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingCacheLevelEditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonesCacheLevel) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r ZonesCacheLevel) implementsZoneSettingEditResponse() {}
+
+func (r ZonesCacheLevel) implementsZoneSettingGetResponse() {}
+
 // ID of the zone setting.
-type ZoneSettingCacheLevelEditResponseID string
+type ZonesCacheLevelID string
 
 const (
-	ZoneSettingCacheLevelEditResponseIDCacheLevel ZoneSettingCacheLevelEditResponseID = "cache_level"
+	ZonesCacheLevelIDCacheLevel ZonesCacheLevelID = "cache_level"
 )
 
 // Current value of the zone setting.
-type ZoneSettingCacheLevelEditResponseValue string
+type ZonesCacheLevelValue string
 
 const (
-	ZoneSettingCacheLevelEditResponseValueAggressive ZoneSettingCacheLevelEditResponseValue = "aggressive"
-	ZoneSettingCacheLevelEditResponseValueBasic      ZoneSettingCacheLevelEditResponseValue = "basic"
-	ZoneSettingCacheLevelEditResponseValueSimplified ZoneSettingCacheLevelEditResponseValue = "simplified"
+	ZonesCacheLevelValueAggressive ZonesCacheLevelValue = "aggressive"
+	ZonesCacheLevelValueBasic      ZonesCacheLevelValue = "basic"
+	ZonesCacheLevelValueSimplified ZonesCacheLevelValue = "simplified"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingCacheLevelEditResponseEditable bool
+type ZonesCacheLevelEditable bool
 
 const (
-	ZoneSettingCacheLevelEditResponseEditableTrue  ZoneSettingCacheLevelEditResponseEditable = true
-	ZoneSettingCacheLevelEditResponseEditableFalse ZoneSettingCacheLevelEditResponseEditable = false
+	ZonesCacheLevelEditableTrue  ZonesCacheLevelEditable = true
+	ZonesCacheLevelEditableFalse ZonesCacheLevelEditable = false
 )
 
 // Cache Level functions based off the setting level. The basic setting will cache
@@ -129,58 +132,18 @@ const (
 // setting will ignore the query string when delivering a cached resource. The
 // aggressive setting will cache all static resources, including ones with a query
 // string. (https://support.cloudflare.com/hc/en-us/articles/200168256).
-type ZoneSettingCacheLevelGetResponse struct {
+type ZonesCacheLevelParam struct {
 	// ID of the zone setting.
-	ID ZoneSettingCacheLevelGetResponseID `json:"id,required"`
+	ID param.Field[ZonesCacheLevelID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingCacheLevelGetResponseValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingCacheLevelGetResponseEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                            `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingCacheLevelGetResponseJSON `json:"-"`
+	Value param.Field[ZonesCacheLevelValue] `json:"value,required"`
 }
 
-// zoneSettingCacheLevelGetResponseJSON contains the JSON metadata for the struct
-// [ZoneSettingCacheLevelGetResponse]
-type zoneSettingCacheLevelGetResponseJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+func (r ZonesCacheLevelParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *ZoneSettingCacheLevelGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// ID of the zone setting.
-type ZoneSettingCacheLevelGetResponseID string
-
-const (
-	ZoneSettingCacheLevelGetResponseIDCacheLevel ZoneSettingCacheLevelGetResponseID = "cache_level"
-)
-
-// Current value of the zone setting.
-type ZoneSettingCacheLevelGetResponseValue string
-
-const (
-	ZoneSettingCacheLevelGetResponseValueAggressive ZoneSettingCacheLevelGetResponseValue = "aggressive"
-	ZoneSettingCacheLevelGetResponseValueBasic      ZoneSettingCacheLevelGetResponseValue = "basic"
-	ZoneSettingCacheLevelGetResponseValueSimplified ZoneSettingCacheLevelGetResponseValue = "simplified"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingCacheLevelGetResponseEditable bool
-
-const (
-	ZoneSettingCacheLevelGetResponseEditableTrue  ZoneSettingCacheLevelGetResponseEditable = true
-	ZoneSettingCacheLevelGetResponseEditableFalse ZoneSettingCacheLevelGetResponseEditable = false
-)
+func (r ZonesCacheLevelParam) implementsZoneSettingEditParamsItem() {}
 
 type ZoneSettingCacheLevelEditParams struct {
 	// Identifier
@@ -212,7 +175,7 @@ type ZoneSettingCacheLevelEditResponseEnvelope struct {
 	// setting will ignore the query string when delivering a cached resource. The
 	// aggressive setting will cache all static resources, including ones with a query
 	// string. (https://support.cloudflare.com/hc/en-us/articles/200168256).
-	Result ZoneSettingCacheLevelEditResponse             `json:"result"`
+	Result ZonesCacheLevel                               `json:"result"`
 	JSON   zoneSettingCacheLevelEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -284,7 +247,7 @@ type ZoneSettingCacheLevelGetResponseEnvelope struct {
 	// setting will ignore the query string when delivering a cached resource. The
 	// aggressive setting will cache all static resources, including ones with a query
 	// string. (https://support.cloudflare.com/hc/en-us/articles/200168256).
-	Result ZoneSettingCacheLevelGetResponse             `json:"result"`
+	Result ZonesCacheLevel                              `json:"result"`
 	JSON   zoneSettingCacheLevelGetResponseEnvelopeJSON `json:"-"`
 }
 

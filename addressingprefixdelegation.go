@@ -33,7 +33,7 @@ func NewAddressingPrefixDelegationService(opts ...option.RequestOption) (r *Addr
 }
 
 // Create a new account delegation for a given IP prefix.
-func (r *AddressingPrefixDelegationService) New(ctx context.Context, prefixID string, params AddressingPrefixDelegationNewParams, opts ...option.RequestOption) (res *AddressingPrefixDelegationNewResponse, err error) {
+func (r *AddressingPrefixDelegationService) New(ctx context.Context, prefixID string, params AddressingPrefixDelegationNewParams, opts ...option.RequestOption) (res *AddressingIpamDelegations, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressingPrefixDelegationNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/delegations", params.AccountID, prefixID)
@@ -46,7 +46,7 @@ func (r *AddressingPrefixDelegationService) New(ctx context.Context, prefixID st
 }
 
 // List all delegations for a given account IP prefix.
-func (r *AddressingPrefixDelegationService) List(ctx context.Context, prefixID string, query AddressingPrefixDelegationListParams, opts ...option.RequestOption) (res *[]AddressingPrefixDelegationListResponse, err error) {
+func (r *AddressingPrefixDelegationService) List(ctx context.Context, prefixID string, query AddressingPrefixDelegationListParams, opts ...option.RequestOption) (res *[]AddressingIpamDelegations, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressingPrefixDelegationListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/delegations", query.AccountID, prefixID)
@@ -71,7 +71,7 @@ func (r *AddressingPrefixDelegationService) Delete(ctx context.Context, prefixID
 	return
 }
 
-type AddressingPrefixDelegationNewResponse struct {
+type AddressingIpamDelegations struct {
 	// Delegation identifier tag.
 	ID string `json:"id"`
 	// IP Prefix in Classless Inter-Domain Routing format.
@@ -81,13 +81,13 @@ type AddressingPrefixDelegationNewResponse struct {
 	DelegatedAccountID string    `json:"delegated_account_id"`
 	ModifiedAt         time.Time `json:"modified_at" format:"date-time"`
 	// Identifier
-	ParentPrefixID string                                    `json:"parent_prefix_id"`
-	JSON           addressingPrefixDelegationNewResponseJSON `json:"-"`
+	ParentPrefixID string                        `json:"parent_prefix_id"`
+	JSON           addressingIpamDelegationsJSON `json:"-"`
 }
 
-// addressingPrefixDelegationNewResponseJSON contains the JSON metadata for the
-// struct [AddressingPrefixDelegationNewResponse]
-type addressingPrefixDelegationNewResponseJSON struct {
+// addressingIpamDelegationsJSON contains the JSON metadata for the struct
+// [AddressingIpamDelegations]
+type addressingIpamDelegationsJSON struct {
 	ID                 apijson.Field
 	Cidr               apijson.Field
 	CreatedAt          apijson.Field
@@ -98,38 +98,7 @@ type addressingPrefixDelegationNewResponseJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *AddressingPrefixDelegationNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type AddressingPrefixDelegationListResponse struct {
-	// Delegation identifier tag.
-	ID string `json:"id"`
-	// IP Prefix in Classless Inter-Domain Routing format.
-	Cidr      string    `json:"cidr"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Account identifier for the account to which prefix is being delegated.
-	DelegatedAccountID string    `json:"delegated_account_id"`
-	ModifiedAt         time.Time `json:"modified_at" format:"date-time"`
-	// Identifier
-	ParentPrefixID string                                     `json:"parent_prefix_id"`
-	JSON           addressingPrefixDelegationListResponseJSON `json:"-"`
-}
-
-// addressingPrefixDelegationListResponseJSON contains the JSON metadata for the
-// struct [AddressingPrefixDelegationListResponse]
-type addressingPrefixDelegationListResponseJSON struct {
-	ID                 apijson.Field
-	Cidr               apijson.Field
-	CreatedAt          apijson.Field
-	DelegatedAccountID apijson.Field
-	ModifiedAt         apijson.Field
-	ParentPrefixID     apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AddressingPrefixDelegationListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AddressingIpamDelegations) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -167,7 +136,7 @@ func (r AddressingPrefixDelegationNewParams) MarshalJSON() (data []byte, err err
 type AddressingPrefixDelegationNewResponseEnvelope struct {
 	Errors   []AddressingPrefixDelegationNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AddressingPrefixDelegationNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   AddressingPrefixDelegationNewResponse                   `json:"result,required"`
+	Result   AddressingIpamDelegations                               `json:"result,required"`
 	// Whether the API call was successful
 	Success AddressingPrefixDelegationNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    addressingPrefixDelegationNewResponseEnvelopeJSON    `json:"-"`
@@ -241,7 +210,7 @@ type AddressingPrefixDelegationListParams struct {
 type AddressingPrefixDelegationListResponseEnvelope struct {
 	Errors   []AddressingPrefixDelegationListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AddressingPrefixDelegationListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AddressingPrefixDelegationListResponse                 `json:"result,required,nullable"`
+	Result   []AddressingIpamDelegations                              `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AddressingPrefixDelegationListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AddressingPrefixDelegationListResponseEnvelopeResultInfo `json:"result_info"`

@@ -29,7 +29,7 @@ func TestZeroTrustDevicePolicyIncludeUpdate(t *testing.T) {
 	)
 	_, err := client.ZeroTrust.Devices.Policies.Includes.Update(context.TODO(), cloudflare.ZeroTrustDevicePolicyIncludeUpdateParams{
 		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
-		Body: cloudflare.F([]cloudflare.ZeroTrustDevicePolicyIncludeUpdateParamsBody{{
+		Body: cloudflare.F([]cloudflare.TeamsDevicesSplitTunnelIncludeParam{{
 			Address:     cloudflare.F("192.0.2.0/24"),
 			Description: cloudflare.F("Include testing domains from the tunnel"),
 			Host:        cloudflare.F("*.example.com"),

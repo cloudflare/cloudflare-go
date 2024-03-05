@@ -62,7 +62,7 @@ func (r *StreamCaptionService) Delete(ctx context.Context, identifier string, la
 }
 
 // Lists the available captions or subtitles for a specific video.
-func (r *StreamCaptionService) Get(ctx context.Context, identifier string, query StreamCaptionGetParams, opts ...option.RequestOption) (res *[]StreamCaptionGetResponse, err error) {
+func (r *StreamCaptionService) Get(ctx context.Context, identifier string, query StreamCaptionGetParams, opts ...option.RequestOption) (res *[]StreamCaptions, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamCaptionGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/%s/captions", query.AccountID, identifier)
@@ -72,6 +72,26 @@ func (r *StreamCaptionService) Get(ctx context.Context, identifier string, query
 	}
 	res = &env.Result
 	return
+}
+
+type StreamCaptions struct {
+	// The language label displayed in the native language to users.
+	Label string `json:"label"`
+	// The language tag in BCP 47 format.
+	Language string             `json:"language"`
+	JSON     streamCaptionsJSON `json:"-"`
+}
+
+// streamCaptionsJSON contains the JSON metadata for the struct [StreamCaptions]
+type streamCaptionsJSON struct {
+	Label       apijson.Field
+	Language    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamCaptions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 // Union satisfied by [StreamCaptionUpdateResponseUnknown] or [shared.UnionString].
@@ -110,27 +130,6 @@ func init() {
 type StreamCaptionDeleteResponseArray []interface{}
 
 func (r StreamCaptionDeleteResponseArray) ImplementsStreamCaptionDeleteResponse() {}
-
-type StreamCaptionGetResponse struct {
-	// The language label displayed in the native language to users.
-	Label string `json:"label"`
-	// The language tag in BCP 47 format.
-	Language string                       `json:"language"`
-	JSON     streamCaptionGetResponseJSON `json:"-"`
-}
-
-// streamCaptionGetResponseJSON contains the JSON metadata for the struct
-// [StreamCaptionGetResponse]
-type streamCaptionGetResponseJSON struct {
-	Label       apijson.Field
-	Language    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamCaptionGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
 
 type StreamCaptionUpdateParams struct {
 	// Identifier
@@ -294,7 +293,7 @@ type StreamCaptionGetParams struct {
 type StreamCaptionGetResponseEnvelope struct {
 	Errors   []StreamCaptionGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []StreamCaptionGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []StreamCaptionGetResponse                 `json:"result,required"`
+	Result   []StreamCaptions                           `json:"result,required"`
 	// Whether the API call was successful
 	Success StreamCaptionGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    streamCaptionGetResponseEnvelopeJSON    `json:"-"`

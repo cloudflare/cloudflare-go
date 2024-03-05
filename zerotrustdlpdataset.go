@@ -35,7 +35,7 @@ func NewZeroTrustDLPDatasetService(opts ...option.RequestOption) (r *ZeroTrustDL
 }
 
 // Create a new dataset.
-func (r *ZeroTrustDLPDatasetService) New(ctx context.Context, params ZeroTrustDLPDatasetNewParams, opts ...option.RequestOption) (res *ZeroTrustDLPDatasetNewResponse, err error) {
+func (r *ZeroTrustDLPDatasetService) New(ctx context.Context, params ZeroTrustDLPDatasetNewParams, opts ...option.RequestOption) (res *DLPDatasetCreation, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustDLPDatasetNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dlp/datasets", params.AccountID)
@@ -48,7 +48,7 @@ func (r *ZeroTrustDLPDatasetService) New(ctx context.Context, params ZeroTrustDL
 }
 
 // Update details about a dataset.
-func (r *ZeroTrustDLPDatasetService) Update(ctx context.Context, datasetID string, params ZeroTrustDLPDatasetUpdateParams, opts ...option.RequestOption) (res *ZeroTrustDLPDatasetUpdateResponse, err error) {
+func (r *ZeroTrustDLPDatasetService) Update(ctx context.Context, datasetID string, params ZeroTrustDLPDatasetUpdateParams, opts ...option.RequestOption) (res *DLPDataset, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustDLPDatasetUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s", params.AccountID, datasetID)
@@ -61,7 +61,7 @@ func (r *ZeroTrustDLPDatasetService) Update(ctx context.Context, datasetID strin
 }
 
 // Fetch all datasets with information about available versions.
-func (r *ZeroTrustDLPDatasetService) List(ctx context.Context, query ZeroTrustDLPDatasetListParams, opts ...option.RequestOption) (res *[]ZeroTrustDLPDatasetListResponse, err error) {
+func (r *ZeroTrustDLPDatasetService) List(ctx context.Context, query ZeroTrustDLPDatasetListParams, opts ...option.RequestOption) (res *DLPDatasetArray, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustDLPDatasetListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dlp/datasets", query.AccountID)
@@ -85,7 +85,7 @@ func (r *ZeroTrustDLPDatasetService) Delete(ctx context.Context, datasetID strin
 }
 
 // Fetch a specific dataset with information about available versions.
-func (r *ZeroTrustDLPDatasetService) Get(ctx context.Context, datasetID string, query ZeroTrustDLPDatasetGetParams, opts ...option.RequestOption) (res *ZeroTrustDLPDatasetGetResponse, err error) {
+func (r *ZeroTrustDLPDatasetService) Get(ctx context.Context, datasetID string, query ZeroTrustDLPDatasetGetParams, opts ...option.RequestOption) (res *DLPDataset, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustDLPDatasetGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s", query.AccountID, datasetID)
@@ -97,20 +97,93 @@ func (r *ZeroTrustDLPDatasetService) Get(ctx context.Context, datasetID string, 
 	return
 }
 
-type ZeroTrustDLPDatasetNewResponse struct {
-	Dataset  ZeroTrustDLPDatasetNewResponseDataset `json:"dataset,required"`
-	MaxCells int64                                 `json:"max_cells,required"`
+type DLPDataset struct {
+	ID          string             `json:"id,required" format:"uuid"`
+	CreatedAt   time.Time          `json:"created_at,required" format:"date-time"`
+	Name        string             `json:"name,required"`
+	NumCells    int64              `json:"num_cells,required"`
+	Secret      bool               `json:"secret,required"`
+	Status      DLPDatasetStatus   `json:"status,required"`
+	UpdatedAt   time.Time          `json:"updated_at,required" format:"date-time"`
+	Uploads     []DLPDatasetUpload `json:"uploads,required"`
+	Description string             `json:"description,nullable"`
+	JSON        dlpDatasetJSON     `json:"-"`
+}
+
+// dlpDatasetJSON contains the JSON metadata for the struct [DLPDataset]
+type dlpDatasetJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Name        apijson.Field
+	NumCells    apijson.Field
+	Secret      apijson.Field
+	Status      apijson.Field
+	UpdatedAt   apijson.Field
+	Uploads     apijson.Field
+	Description apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPDataset) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DLPDatasetStatus string
+
+const (
+	DLPDatasetStatusEmpty     DLPDatasetStatus = "empty"
+	DLPDatasetStatusUploading DLPDatasetStatus = "uploading"
+	DLPDatasetStatusFailed    DLPDatasetStatus = "failed"
+	DLPDatasetStatusComplete  DLPDatasetStatus = "complete"
+)
+
+type DLPDatasetUpload struct {
+	NumCells int64                   `json:"num_cells,required"`
+	Status   DLPDatasetUploadsStatus `json:"status,required"`
+	Version  int64                   `json:"version,required"`
+	JSON     dlpDatasetUploadJSON    `json:"-"`
+}
+
+// dlpDatasetUploadJSON contains the JSON metadata for the struct
+// [DLPDatasetUpload]
+type dlpDatasetUploadJSON struct {
+	NumCells    apijson.Field
+	Status      apijson.Field
+	Version     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DLPDatasetUpload) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DLPDatasetUploadsStatus string
+
+const (
+	DLPDatasetUploadsStatusEmpty     DLPDatasetUploadsStatus = "empty"
+	DLPDatasetUploadsStatusUploading DLPDatasetUploadsStatus = "uploading"
+	DLPDatasetUploadsStatusFailed    DLPDatasetUploadsStatus = "failed"
+	DLPDatasetUploadsStatusComplete  DLPDatasetUploadsStatus = "complete"
+)
+
+type DLPDatasetArray []DLPDataset
+
+type DLPDatasetCreation struct {
+	Dataset  DLPDataset `json:"dataset,required"`
+	MaxCells int64      `json:"max_cells,required"`
 	// The version to use when uploading the dataset.
 	Version int64 `json:"version,required"`
 	// The secret to use for Exact Data Match datasets. This is not present in Custom
 	// Wordlists.
-	Secret string                             `json:"secret" format:"password"`
-	JSON   zeroTrustDLPDatasetNewResponseJSON `json:"-"`
+	Secret string                 `json:"secret" format:"password"`
+	JSON   dlpDatasetCreationJSON `json:"-"`
 }
 
-// zeroTrustDLPDatasetNewResponseJSON contains the JSON metadata for the struct
-// [ZeroTrustDLPDatasetNewResponse]
-type zeroTrustDLPDatasetNewResponseJSON struct {
+// dlpDatasetCreationJSON contains the JSON metadata for the struct
+// [DLPDatasetCreation]
+type dlpDatasetCreationJSON struct {
 	Dataset     apijson.Field
 	MaxCells    apijson.Field
 	Version     apijson.Field
@@ -119,297 +192,9 @@ type zeroTrustDLPDatasetNewResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZeroTrustDLPDatasetNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DLPDatasetCreation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-type ZeroTrustDLPDatasetNewResponseDataset struct {
-	ID          string                                        `json:"id,required" format:"uuid"`
-	CreatedAt   time.Time                                     `json:"created_at,required" format:"date-time"`
-	Name        string                                        `json:"name,required"`
-	NumCells    int64                                         `json:"num_cells,required"`
-	Secret      bool                                          `json:"secret,required"`
-	Status      ZeroTrustDLPDatasetNewResponseDatasetStatus   `json:"status,required"`
-	UpdatedAt   time.Time                                     `json:"updated_at,required" format:"date-time"`
-	Uploads     []ZeroTrustDLPDatasetNewResponseDatasetUpload `json:"uploads,required"`
-	Description string                                        `json:"description,nullable"`
-	JSON        zeroTrustDLPDatasetNewResponseDatasetJSON     `json:"-"`
-}
-
-// zeroTrustDLPDatasetNewResponseDatasetJSON contains the JSON metadata for the
-// struct [ZeroTrustDLPDatasetNewResponseDataset]
-type zeroTrustDLPDatasetNewResponseDatasetJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Name        apijson.Field
-	NumCells    apijson.Field
-	Secret      apijson.Field
-	Status      apijson.Field
-	UpdatedAt   apijson.Field
-	Uploads     apijson.Field
-	Description apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustDLPDatasetNewResponseDataset) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZeroTrustDLPDatasetNewResponseDatasetStatus string
-
-const (
-	ZeroTrustDLPDatasetNewResponseDatasetStatusEmpty     ZeroTrustDLPDatasetNewResponseDatasetStatus = "empty"
-	ZeroTrustDLPDatasetNewResponseDatasetStatusUploading ZeroTrustDLPDatasetNewResponseDatasetStatus = "uploading"
-	ZeroTrustDLPDatasetNewResponseDatasetStatusFailed    ZeroTrustDLPDatasetNewResponseDatasetStatus = "failed"
-	ZeroTrustDLPDatasetNewResponseDatasetStatusComplete  ZeroTrustDLPDatasetNewResponseDatasetStatus = "complete"
-)
-
-type ZeroTrustDLPDatasetNewResponseDatasetUpload struct {
-	NumCells int64                                              `json:"num_cells,required"`
-	Status   ZeroTrustDLPDatasetNewResponseDatasetUploadsStatus `json:"status,required"`
-	Version  int64                                              `json:"version,required"`
-	JSON     zeroTrustDLPDatasetNewResponseDatasetUploadJSON    `json:"-"`
-}
-
-// zeroTrustDLPDatasetNewResponseDatasetUploadJSON contains the JSON metadata for
-// the struct [ZeroTrustDLPDatasetNewResponseDatasetUpload]
-type zeroTrustDLPDatasetNewResponseDatasetUploadJSON struct {
-	NumCells    apijson.Field
-	Status      apijson.Field
-	Version     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustDLPDatasetNewResponseDatasetUpload) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZeroTrustDLPDatasetNewResponseDatasetUploadsStatus string
-
-const (
-	ZeroTrustDLPDatasetNewResponseDatasetUploadsStatusEmpty     ZeroTrustDLPDatasetNewResponseDatasetUploadsStatus = "empty"
-	ZeroTrustDLPDatasetNewResponseDatasetUploadsStatusUploading ZeroTrustDLPDatasetNewResponseDatasetUploadsStatus = "uploading"
-	ZeroTrustDLPDatasetNewResponseDatasetUploadsStatusFailed    ZeroTrustDLPDatasetNewResponseDatasetUploadsStatus = "failed"
-	ZeroTrustDLPDatasetNewResponseDatasetUploadsStatusComplete  ZeroTrustDLPDatasetNewResponseDatasetUploadsStatus = "complete"
-)
-
-type ZeroTrustDLPDatasetUpdateResponse struct {
-	ID          string                                    `json:"id,required" format:"uuid"`
-	CreatedAt   time.Time                                 `json:"created_at,required" format:"date-time"`
-	Name        string                                    `json:"name,required"`
-	NumCells    int64                                     `json:"num_cells,required"`
-	Secret      bool                                      `json:"secret,required"`
-	Status      ZeroTrustDLPDatasetUpdateResponseStatus   `json:"status,required"`
-	UpdatedAt   time.Time                                 `json:"updated_at,required" format:"date-time"`
-	Uploads     []ZeroTrustDLPDatasetUpdateResponseUpload `json:"uploads,required"`
-	Description string                                    `json:"description,nullable"`
-	JSON        zeroTrustDLPDatasetUpdateResponseJSON     `json:"-"`
-}
-
-// zeroTrustDLPDatasetUpdateResponseJSON contains the JSON metadata for the struct
-// [ZeroTrustDLPDatasetUpdateResponse]
-type zeroTrustDLPDatasetUpdateResponseJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Name        apijson.Field
-	NumCells    apijson.Field
-	Secret      apijson.Field
-	Status      apijson.Field
-	UpdatedAt   apijson.Field
-	Uploads     apijson.Field
-	Description apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustDLPDatasetUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZeroTrustDLPDatasetUpdateResponseStatus string
-
-const (
-	ZeroTrustDLPDatasetUpdateResponseStatusEmpty     ZeroTrustDLPDatasetUpdateResponseStatus = "empty"
-	ZeroTrustDLPDatasetUpdateResponseStatusUploading ZeroTrustDLPDatasetUpdateResponseStatus = "uploading"
-	ZeroTrustDLPDatasetUpdateResponseStatusFailed    ZeroTrustDLPDatasetUpdateResponseStatus = "failed"
-	ZeroTrustDLPDatasetUpdateResponseStatusComplete  ZeroTrustDLPDatasetUpdateResponseStatus = "complete"
-)
-
-type ZeroTrustDLPDatasetUpdateResponseUpload struct {
-	NumCells int64                                          `json:"num_cells,required"`
-	Status   ZeroTrustDLPDatasetUpdateResponseUploadsStatus `json:"status,required"`
-	Version  int64                                          `json:"version,required"`
-	JSON     zeroTrustDLPDatasetUpdateResponseUploadJSON    `json:"-"`
-}
-
-// zeroTrustDLPDatasetUpdateResponseUploadJSON contains the JSON metadata for the
-// struct [ZeroTrustDLPDatasetUpdateResponseUpload]
-type zeroTrustDLPDatasetUpdateResponseUploadJSON struct {
-	NumCells    apijson.Field
-	Status      apijson.Field
-	Version     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustDLPDatasetUpdateResponseUpload) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZeroTrustDLPDatasetUpdateResponseUploadsStatus string
-
-const (
-	ZeroTrustDLPDatasetUpdateResponseUploadsStatusEmpty     ZeroTrustDLPDatasetUpdateResponseUploadsStatus = "empty"
-	ZeroTrustDLPDatasetUpdateResponseUploadsStatusUploading ZeroTrustDLPDatasetUpdateResponseUploadsStatus = "uploading"
-	ZeroTrustDLPDatasetUpdateResponseUploadsStatusFailed    ZeroTrustDLPDatasetUpdateResponseUploadsStatus = "failed"
-	ZeroTrustDLPDatasetUpdateResponseUploadsStatusComplete  ZeroTrustDLPDatasetUpdateResponseUploadsStatus = "complete"
-)
-
-type ZeroTrustDLPDatasetListResponse struct {
-	ID          string                                  `json:"id,required" format:"uuid"`
-	CreatedAt   time.Time                               `json:"created_at,required" format:"date-time"`
-	Name        string                                  `json:"name,required"`
-	NumCells    int64                                   `json:"num_cells,required"`
-	Secret      bool                                    `json:"secret,required"`
-	Status      ZeroTrustDLPDatasetListResponseStatus   `json:"status,required"`
-	UpdatedAt   time.Time                               `json:"updated_at,required" format:"date-time"`
-	Uploads     []ZeroTrustDLPDatasetListResponseUpload `json:"uploads,required"`
-	Description string                                  `json:"description,nullable"`
-	JSON        zeroTrustDLPDatasetListResponseJSON     `json:"-"`
-}
-
-// zeroTrustDLPDatasetListResponseJSON contains the JSON metadata for the struct
-// [ZeroTrustDLPDatasetListResponse]
-type zeroTrustDLPDatasetListResponseJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Name        apijson.Field
-	NumCells    apijson.Field
-	Secret      apijson.Field
-	Status      apijson.Field
-	UpdatedAt   apijson.Field
-	Uploads     apijson.Field
-	Description apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustDLPDatasetListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZeroTrustDLPDatasetListResponseStatus string
-
-const (
-	ZeroTrustDLPDatasetListResponseStatusEmpty     ZeroTrustDLPDatasetListResponseStatus = "empty"
-	ZeroTrustDLPDatasetListResponseStatusUploading ZeroTrustDLPDatasetListResponseStatus = "uploading"
-	ZeroTrustDLPDatasetListResponseStatusFailed    ZeroTrustDLPDatasetListResponseStatus = "failed"
-	ZeroTrustDLPDatasetListResponseStatusComplete  ZeroTrustDLPDatasetListResponseStatus = "complete"
-)
-
-type ZeroTrustDLPDatasetListResponseUpload struct {
-	NumCells int64                                        `json:"num_cells,required"`
-	Status   ZeroTrustDLPDatasetListResponseUploadsStatus `json:"status,required"`
-	Version  int64                                        `json:"version,required"`
-	JSON     zeroTrustDLPDatasetListResponseUploadJSON    `json:"-"`
-}
-
-// zeroTrustDLPDatasetListResponseUploadJSON contains the JSON metadata for the
-// struct [ZeroTrustDLPDatasetListResponseUpload]
-type zeroTrustDLPDatasetListResponseUploadJSON struct {
-	NumCells    apijson.Field
-	Status      apijson.Field
-	Version     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustDLPDatasetListResponseUpload) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZeroTrustDLPDatasetListResponseUploadsStatus string
-
-const (
-	ZeroTrustDLPDatasetListResponseUploadsStatusEmpty     ZeroTrustDLPDatasetListResponseUploadsStatus = "empty"
-	ZeroTrustDLPDatasetListResponseUploadsStatusUploading ZeroTrustDLPDatasetListResponseUploadsStatus = "uploading"
-	ZeroTrustDLPDatasetListResponseUploadsStatusFailed    ZeroTrustDLPDatasetListResponseUploadsStatus = "failed"
-	ZeroTrustDLPDatasetListResponseUploadsStatusComplete  ZeroTrustDLPDatasetListResponseUploadsStatus = "complete"
-)
-
-type ZeroTrustDLPDatasetGetResponse struct {
-	ID          string                                 `json:"id,required" format:"uuid"`
-	CreatedAt   time.Time                              `json:"created_at,required" format:"date-time"`
-	Name        string                                 `json:"name,required"`
-	NumCells    int64                                  `json:"num_cells,required"`
-	Secret      bool                                   `json:"secret,required"`
-	Status      ZeroTrustDLPDatasetGetResponseStatus   `json:"status,required"`
-	UpdatedAt   time.Time                              `json:"updated_at,required" format:"date-time"`
-	Uploads     []ZeroTrustDLPDatasetGetResponseUpload `json:"uploads,required"`
-	Description string                                 `json:"description,nullable"`
-	JSON        zeroTrustDLPDatasetGetResponseJSON     `json:"-"`
-}
-
-// zeroTrustDLPDatasetGetResponseJSON contains the JSON metadata for the struct
-// [ZeroTrustDLPDatasetGetResponse]
-type zeroTrustDLPDatasetGetResponseJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Name        apijson.Field
-	NumCells    apijson.Field
-	Secret      apijson.Field
-	Status      apijson.Field
-	UpdatedAt   apijson.Field
-	Uploads     apijson.Field
-	Description apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustDLPDatasetGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZeroTrustDLPDatasetGetResponseStatus string
-
-const (
-	ZeroTrustDLPDatasetGetResponseStatusEmpty     ZeroTrustDLPDatasetGetResponseStatus = "empty"
-	ZeroTrustDLPDatasetGetResponseStatusUploading ZeroTrustDLPDatasetGetResponseStatus = "uploading"
-	ZeroTrustDLPDatasetGetResponseStatusFailed    ZeroTrustDLPDatasetGetResponseStatus = "failed"
-	ZeroTrustDLPDatasetGetResponseStatusComplete  ZeroTrustDLPDatasetGetResponseStatus = "complete"
-)
-
-type ZeroTrustDLPDatasetGetResponseUpload struct {
-	NumCells int64                                       `json:"num_cells,required"`
-	Status   ZeroTrustDLPDatasetGetResponseUploadsStatus `json:"status,required"`
-	Version  int64                                       `json:"version,required"`
-	JSON     zeroTrustDLPDatasetGetResponseUploadJSON    `json:"-"`
-}
-
-// zeroTrustDLPDatasetGetResponseUploadJSON contains the JSON metadata for the
-// struct [ZeroTrustDLPDatasetGetResponseUpload]
-type zeroTrustDLPDatasetGetResponseUploadJSON struct {
-	NumCells    apijson.Field
-	Status      apijson.Field
-	Version     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustDLPDatasetGetResponseUpload) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZeroTrustDLPDatasetGetResponseUploadsStatus string
-
-const (
-	ZeroTrustDLPDatasetGetResponseUploadsStatusEmpty     ZeroTrustDLPDatasetGetResponseUploadsStatus = "empty"
-	ZeroTrustDLPDatasetGetResponseUploadsStatusUploading ZeroTrustDLPDatasetGetResponseUploadsStatus = "uploading"
-	ZeroTrustDLPDatasetGetResponseUploadsStatusFailed    ZeroTrustDLPDatasetGetResponseUploadsStatus = "failed"
-	ZeroTrustDLPDatasetGetResponseUploadsStatusComplete  ZeroTrustDLPDatasetGetResponseUploadsStatus = "complete"
-)
 
 type ZeroTrustDLPDatasetNewParams struct {
 	AccountID   param.Field[string] `path:"account_id,required"`
@@ -430,7 +215,7 @@ type ZeroTrustDLPDatasetNewResponseEnvelope struct {
 	Errors     []ZeroTrustDLPDatasetNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages   []ZeroTrustDLPDatasetNewResponseEnvelopeMessages `json:"messages,required"`
 	Success    bool                                             `json:"success,required"`
-	Result     ZeroTrustDLPDatasetNewResponse                   `json:"result"`
+	Result     DLPDatasetCreation                               `json:"result"`
 	ResultInfo ZeroTrustDLPDatasetNewResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       zeroTrustDLPDatasetNewResponseEnvelopeJSON       `json:"-"`
 }
@@ -530,7 +315,7 @@ type ZeroTrustDLPDatasetUpdateResponseEnvelope struct {
 	Errors     []ZeroTrustDLPDatasetUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages   []ZeroTrustDLPDatasetUpdateResponseEnvelopeMessages `json:"messages,required"`
 	Success    bool                                                `json:"success,required"`
-	Result     ZeroTrustDLPDatasetUpdateResponse                   `json:"result"`
+	Result     DLPDataset                                          `json:"result"`
 	ResultInfo ZeroTrustDLPDatasetUpdateResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       zeroTrustDLPDatasetUpdateResponseEnvelopeJSON       `json:"-"`
 }
@@ -624,7 +409,7 @@ type ZeroTrustDLPDatasetListResponseEnvelope struct {
 	Errors     []ZeroTrustDLPDatasetListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages   []ZeroTrustDLPDatasetListResponseEnvelopeMessages `json:"messages,required"`
 	Success    bool                                              `json:"success,required"`
-	Result     []ZeroTrustDLPDatasetListResponse                 `json:"result"`
+	Result     DLPDatasetArray                                   `json:"result"`
 	ResultInfo ZeroTrustDLPDatasetListResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       zeroTrustDLPDatasetListResponseEnvelopeJSON       `json:"-"`
 }
@@ -722,7 +507,7 @@ type ZeroTrustDLPDatasetGetResponseEnvelope struct {
 	Errors     []ZeroTrustDLPDatasetGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages   []ZeroTrustDLPDatasetGetResponseEnvelopeMessages `json:"messages,required"`
 	Success    bool                                             `json:"success,required"`
-	Result     ZeroTrustDLPDatasetGetResponse                   `json:"result"`
+	Result     DLPDataset                                       `json:"result"`
 	ResultInfo ZeroTrustDLPDatasetGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       zeroTrustDLPDatasetGetResponseEnvelopeJSON       `json:"-"`
 }

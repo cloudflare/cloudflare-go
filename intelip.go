@@ -36,7 +36,7 @@ func NewIntelIPService(opts ...option.RequestOption) (r *IntelIPService) {
 }
 
 // Get IP Overview
-func (r *IntelIPService) Get(ctx context.Context, params IntelIPGetParams, opts ...option.RequestOption) (res *[]IntelIPGetResponse, err error) {
+func (r *IntelIPService) Get(ctx context.Context, params IntelIPGetParams, opts ...option.RequestOption) (res *[]IntelSchemasIP, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IntelIPGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/ip", params.AccountID)
@@ -48,18 +48,17 @@ func (r *IntelIPService) Get(ctx context.Context, params IntelIPGetParams, opts 
 	return
 }
 
-type IntelIPGetResponse struct {
+type IntelSchemasIP struct {
 	// Specifies a reference to the autonomous systems (AS) that the IP address belongs
 	// to.
-	BelongsToRef IntelIPGetResponseBelongsToRef `json:"belongs_to_ref"`
-	IP           IntelIPGetResponseIP           `json:"ip" format:"ipv4"`
-	RiskTypes    interface{}                    `json:"risk_types"`
-	JSON         intelIPGetResponseJSON         `json:"-"`
+	BelongsToRef IntelSchemasIPBelongsToRef `json:"belongs_to_ref"`
+	IP           IntelSchemasIPIP           `json:"ip" format:"ipv4"`
+	RiskTypes    interface{}                `json:"risk_types"`
+	JSON         intelSchemasIPJSON         `json:"-"`
 }
 
-// intelIPGetResponseJSON contains the JSON metadata for the struct
-// [IntelIPGetResponse]
-type intelIPGetResponseJSON struct {
+// intelSchemasIPJSON contains the JSON metadata for the struct [IntelSchemasIP]
+type intelSchemasIPJSON struct {
 	BelongsToRef apijson.Field
 	IP           apijson.Field
 	RiskTypes    apijson.Field
@@ -67,25 +66,25 @@ type intelIPGetResponseJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *IntelIPGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelSchemasIP) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Specifies a reference to the autonomous systems (AS) that the IP address belongs
 // to.
-type IntelIPGetResponseBelongsToRef struct {
+type IntelSchemasIPBelongsToRef struct {
 	ID          interface{} `json:"id"`
 	Country     string      `json:"country"`
 	Description string      `json:"description"`
 	// Infrastructure type of this ASN.
-	Type  IntelIPGetResponseBelongsToRefType `json:"type"`
-	Value string                             `json:"value"`
-	JSON  intelIPGetResponseBelongsToRefJSON `json:"-"`
+	Type  IntelSchemasIPBelongsToRefType `json:"type"`
+	Value string                         `json:"value"`
+	JSON  intelSchemasIPBelongsToRefJSON `json:"-"`
 }
 
-// intelIPGetResponseBelongsToRefJSON contains the JSON metadata for the struct
-// [IntelIPGetResponseBelongsToRef]
-type intelIPGetResponseBelongsToRefJSON struct {
+// intelSchemasIPBelongsToRefJSON contains the JSON metadata for the struct
+// [IntelSchemasIPBelongsToRef]
+type intelSchemasIPBelongsToRefJSON struct {
 	ID          apijson.Field
 	Country     apijson.Field
 	Description apijson.Field
@@ -95,27 +94,27 @@ type intelIPGetResponseBelongsToRefJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelIPGetResponseBelongsToRef) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelSchemasIPBelongsToRef) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Infrastructure type of this ASN.
-type IntelIPGetResponseBelongsToRefType string
+type IntelSchemasIPBelongsToRefType string
 
 const (
-	IntelIPGetResponseBelongsToRefTypeHostingProvider IntelIPGetResponseBelongsToRefType = "hosting_provider"
-	IntelIPGetResponseBelongsToRefTypeIsp             IntelIPGetResponseBelongsToRefType = "isp"
-	IntelIPGetResponseBelongsToRefTypeOrganization    IntelIPGetResponseBelongsToRefType = "organization"
+	IntelSchemasIPBelongsToRefTypeHostingProvider IntelSchemasIPBelongsToRefType = "hosting_provider"
+	IntelSchemasIPBelongsToRefTypeIsp             IntelSchemasIPBelongsToRefType = "isp"
+	IntelSchemasIPBelongsToRefTypeOrganization    IntelSchemasIPBelongsToRefType = "organization"
 )
 
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
-type IntelIPGetResponseIP interface {
-	ImplementsIntelIPGetResponseIP()
+type IntelSchemasIPIP interface {
+	ImplementsIntelSchemasIpip()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*IntelIPGetResponseIP)(nil)).Elem(),
+		reflect.TypeOf((*IntelSchemasIPIP)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
@@ -146,7 +145,7 @@ func (r IntelIPGetParams) URLQuery() (v url.Values) {
 type IntelIPGetResponseEnvelope struct {
 	Errors   []IntelIPGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []IntelIPGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []IntelIPGetResponse                 `json:"result,required,nullable"`
+	Result   []IntelSchemasIP                     `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    IntelIPGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo IntelIPGetResponseEnvelopeResultInfo `json:"result_info"`

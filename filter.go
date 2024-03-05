@@ -34,7 +34,7 @@ func NewFilterService(opts ...option.RequestOption) (r *FilterService) {
 }
 
 // Creates one or more filters.
-func (r *FilterService) New(ctx context.Context, zoneIdentifier string, body FilterNewParams, opts ...option.RequestOption) (res *[]FilterNewResponse, err error) {
+func (r *FilterService) New(ctx context.Context, zoneIdentifier string, body FilterNewParams, opts ...option.RequestOption) (res *[]LegacyJhsFilter, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FilterNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/filters", zoneIdentifier)
@@ -47,7 +47,7 @@ func (r *FilterService) New(ctx context.Context, zoneIdentifier string, body Fil
 }
 
 // Updates an existing filter.
-func (r *FilterService) Update(ctx context.Context, zoneIdentifier string, id string, body FilterUpdateParams, opts ...option.RequestOption) (res *FilterUpdateResponse, err error) {
+func (r *FilterService) Update(ctx context.Context, zoneIdentifier string, id string, body FilterUpdateParams, opts ...option.RequestOption) (res *LegacyJhsFilter, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FilterUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/filters/%s", zoneIdentifier, id)
@@ -61,7 +61,7 @@ func (r *FilterService) Update(ctx context.Context, zoneIdentifier string, id st
 
 // Fetches filters in a zone. You can filter the results using several optional
 // parameters.
-func (r *FilterService) List(ctx context.Context, zoneIdentifier string, query FilterListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[FilterListResponse], err error) {
+func (r *FilterService) List(ctx context.Context, zoneIdentifier string, query FilterListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[LegacyJhsFilter], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -80,12 +80,12 @@ func (r *FilterService) List(ctx context.Context, zoneIdentifier string, query F
 
 // Fetches filters in a zone. You can filter the results using several optional
 // parameters.
-func (r *FilterService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query FilterListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[FilterListResponse] {
+func (r *FilterService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query FilterListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[LegacyJhsFilter] {
 	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneIdentifier, query, opts...))
 }
 
 // Deletes an existing filter.
-func (r *FilterService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *FilterDeleteResponse, err error) {
+func (r *FilterService) Delete(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *LegacyJhsFilter, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FilterDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/filters/%s", zoneIdentifier, id)
@@ -98,7 +98,7 @@ func (r *FilterService) Delete(ctx context.Context, zoneIdentifier string, id st
 }
 
 // Fetches the details of a filter.
-func (r *FilterService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *FilterGetResponse, err error) {
+func (r *FilterService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *LegacyJhsFilter, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FilterGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/filters/%s", zoneIdentifier, id)
@@ -110,102 +110,9 @@ func (r *FilterService) Get(ctx context.Context, zoneIdentifier string, id strin
 	return
 }
 
-type FilterNewResponse struct {
+type LegacyJhsFilter struct {
 	// The unique identifier of the filter.
-	ID string `json:"id,required"`
-	// The filter expression. For more information, refer to
-	// [Expressions](https://developers.cloudflare.com/ruleset-engine/rules-language/expressions/).
-	Expression string `json:"expression,required"`
-	// When true, indicates that the filter is currently paused.
-	Paused bool `json:"paused,required"`
-	// An informative summary of the filter.
-	Description string `json:"description"`
-	// A short reference tag. Allows you to select related filters.
-	Ref  string                `json:"ref"`
-	JSON filterNewResponseJSON `json:"-"`
-}
-
-// filterNewResponseJSON contains the JSON metadata for the struct
-// [FilterNewResponse]
-type filterNewResponseJSON struct {
-	ID          apijson.Field
-	Expression  apijson.Field
-	Paused      apijson.Field
-	Description apijson.Field
-	Ref         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FilterNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FilterUpdateResponse struct {
-	// The unique identifier of the filter.
-	ID string `json:"id,required"`
-	// The filter expression. For more information, refer to
-	// [Expressions](https://developers.cloudflare.com/ruleset-engine/rules-language/expressions/).
-	Expression string `json:"expression,required"`
-	// When true, indicates that the filter is currently paused.
-	Paused bool `json:"paused,required"`
-	// An informative summary of the filter.
-	Description string `json:"description"`
-	// A short reference tag. Allows you to select related filters.
-	Ref  string                   `json:"ref"`
-	JSON filterUpdateResponseJSON `json:"-"`
-}
-
-// filterUpdateResponseJSON contains the JSON metadata for the struct
-// [FilterUpdateResponse]
-type filterUpdateResponseJSON struct {
-	ID          apijson.Field
-	Expression  apijson.Field
-	Paused      apijson.Field
-	Description apijson.Field
-	Ref         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FilterUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FilterListResponse struct {
-	// The unique identifier of the filter.
-	ID string `json:"id,required"`
-	// The filter expression. For more information, refer to
-	// [Expressions](https://developers.cloudflare.com/ruleset-engine/rules-language/expressions/).
-	Expression string `json:"expression,required"`
-	// When true, indicates that the filter is currently paused.
-	Paused bool `json:"paused,required"`
-	// An informative summary of the filter.
-	Description string `json:"description"`
-	// A short reference tag. Allows you to select related filters.
-	Ref  string                 `json:"ref"`
-	JSON filterListResponseJSON `json:"-"`
-}
-
-// filterListResponseJSON contains the JSON metadata for the struct
-// [FilterListResponse]
-type filterListResponseJSON struct {
-	ID          apijson.Field
-	Expression  apijson.Field
-	Paused      apijson.Field
-	Description apijson.Field
-	Ref         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FilterListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type FilterDeleteResponse struct {
-	// The unique identifier of the filter.
-	ID string `json:"id,required"`
+	ID string `json:"id"`
 	// An informative summary of the filter.
 	Description string `json:"description"`
 	// The filter expression. For more information, refer to
@@ -214,13 +121,12 @@ type FilterDeleteResponse struct {
 	// When true, indicates that the filter is currently paused.
 	Paused bool `json:"paused"`
 	// A short reference tag. Allows you to select related filters.
-	Ref  string                   `json:"ref"`
-	JSON filterDeleteResponseJSON `json:"-"`
+	Ref  string              `json:"ref"`
+	JSON legacyJhsFilterJSON `json:"-"`
 }
 
-// filterDeleteResponseJSON contains the JSON metadata for the struct
-// [FilterDeleteResponse]
-type filterDeleteResponseJSON struct {
+// legacyJhsFilterJSON contains the JSON metadata for the struct [LegacyJhsFilter]
+type legacyJhsFilterJSON struct {
 	ID          apijson.Field
 	Description apijson.Field
 	Expression  apijson.Field
@@ -230,40 +136,11 @@ type filterDeleteResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FilterDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *LegacyJhsFilter) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type FilterGetResponse struct {
-	// The unique identifier of the filter.
-	ID string `json:"id,required"`
-	// The filter expression. For more information, refer to
-	// [Expressions](https://developers.cloudflare.com/ruleset-engine/rules-language/expressions/).
-	Expression string `json:"expression,required"`
-	// When true, indicates that the filter is currently paused.
-	Paused bool `json:"paused,required"`
-	// An informative summary of the filter.
-	Description string `json:"description"`
-	// A short reference tag. Allows you to select related filters.
-	Ref  string                `json:"ref"`
-	JSON filterGetResponseJSON `json:"-"`
-}
-
-// filterGetResponseJSON contains the JSON metadata for the struct
-// [FilterGetResponse]
-type filterGetResponseJSON struct {
-	ID          apijson.Field
-	Expression  apijson.Field
-	Paused      apijson.Field
-	Description apijson.Field
-	Ref         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FilterGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
+func (r LegacyJhsFilter) implementsLegacyJhsFilterRuleFilter() {}
 
 type FilterNewParams struct {
 	Body param.Field[interface{}] `json:"body,required"`
@@ -276,7 +153,7 @@ func (r FilterNewParams) MarshalJSON() (data []byte, err error) {
 type FilterNewResponseEnvelope struct {
 	Errors   []FilterNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []FilterNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   []FilterNewResponse                 `json:"result,required,nullable"`
+	Result   []LegacyJhsFilter                   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    FilterNewResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo FilterNewResponseEnvelopeResultInfo `json:"result_info"`
@@ -382,7 +259,7 @@ func (r FilterUpdateParams) MarshalJSON() (data []byte, err error) {
 type FilterUpdateResponseEnvelope struct {
 	Errors   []FilterUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []FilterUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   FilterUpdateResponse                   `json:"result,required,nullable"`
+	Result   LegacyJhsFilter                        `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success FilterUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    filterUpdateResponseEnvelopeJSON    `json:"-"`
@@ -474,7 +351,7 @@ func (r FilterListParams) URLQuery() (v url.Values) {
 type FilterDeleteResponseEnvelope struct {
 	Errors   []FilterDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []FilterDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   FilterDeleteResponse                   `json:"result,required,nullable"`
+	Result   LegacyJhsFilter                        `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success FilterDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    filterDeleteResponseEnvelopeJSON    `json:"-"`
@@ -543,7 +420,7 @@ const (
 type FilterGetResponseEnvelope struct {
 	Errors   []FilterGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []FilterGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   FilterGetResponse                   `json:"result,required,nullable"`
+	Result   LegacyJhsFilter                     `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success FilterGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    filterGetResponseEnvelopeJSON    `json:"-"`

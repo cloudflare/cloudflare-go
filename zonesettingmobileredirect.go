@@ -36,7 +36,7 @@ func NewZoneSettingMobileRedirectService(opts ...option.RequestOption) (r *ZoneS
 // subdomain. Refer to
 // [Understanding Cloudflare Mobile Redirect](https://support.cloudflare.com/hc/articles/200168336)
 // for more information.
-func (r *ZoneSettingMobileRedirectService) Edit(ctx context.Context, params ZoneSettingMobileRedirectEditParams, opts ...option.RequestOption) (res *ZoneSettingMobileRedirectEditResponse, err error) {
+func (r *ZoneSettingMobileRedirectService) Edit(ctx context.Context, params ZoneSettingMobileRedirectEditParams, opts ...option.RequestOption) (res *ZonesMobileRedirect, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingMobileRedirectEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/mobile_redirect", params.ZoneID)
@@ -52,7 +52,7 @@ func (r *ZoneSettingMobileRedirectService) Edit(ctx context.Context, params Zone
 // subdomain. Refer to
 // [Understanding Cloudflare Mobile Redirect](https://support.cloudflare.com/hc/articles/200168336)
 // for more information.
-func (r *ZoneSettingMobileRedirectService) Get(ctx context.Context, query ZoneSettingMobileRedirectGetParams, opts ...option.RequestOption) (res *ZoneSettingMobileRedirectGetResponse, err error) {
+func (r *ZoneSettingMobileRedirectService) Get(ctx context.Context, query ZoneSettingMobileRedirectGetParams, opts ...option.RequestOption) (res *ZonesMobileRedirect, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingMobileRedirectGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/mobile_redirect", query.ZoneID)
@@ -68,22 +68,22 @@ func (r *ZoneSettingMobileRedirectService) Get(ctx context.Context, query ZoneSe
 // subdomain. Refer to
 // [Understanding Cloudflare Mobile Redirect](https://support.cloudflare.com/hc/articles/200168336)
 // for more information.
-type ZoneSettingMobileRedirectEditResponse struct {
+type ZonesMobileRedirect struct {
 	// Identifier of the zone setting.
-	ID ZoneSettingMobileRedirectEditResponseID `json:"id,required"`
+	ID ZonesMobileRedirectID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingMobileRedirectEditResponseValue `json:"value,required"`
+	Value ZonesMobileRedirectValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingMobileRedirectEditResponseEditable `json:"editable"`
+	Editable ZonesMobileRedirectEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                 `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingMobileRedirectEditResponseJSON `json:"-"`
+	ModifiedOn time.Time               `json:"modified_on,nullable" format:"date-time"`
+	JSON       zonesMobileRedirectJSON `json:"-"`
 }
 
-// zoneSettingMobileRedirectEditResponseJSON contains the JSON metadata for the
-// struct [ZoneSettingMobileRedirectEditResponse]
-type zoneSettingMobileRedirectEditResponseJSON struct {
+// zonesMobileRedirectJSON contains the JSON metadata for the struct
+// [ZonesMobileRedirect]
+type zonesMobileRedirectJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -92,33 +92,37 @@ type zoneSettingMobileRedirectEditResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingMobileRedirectEditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonesMobileRedirect) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r ZonesMobileRedirect) implementsZoneSettingEditResponse() {}
+
+func (r ZonesMobileRedirect) implementsZoneSettingGetResponse() {}
+
 // Identifier of the zone setting.
-type ZoneSettingMobileRedirectEditResponseID string
+type ZonesMobileRedirectID string
 
 const (
-	ZoneSettingMobileRedirectEditResponseIDMobileRedirect ZoneSettingMobileRedirectEditResponseID = "mobile_redirect"
+	ZonesMobileRedirectIDMobileRedirect ZonesMobileRedirectID = "mobile_redirect"
 )
 
 // Current value of the zone setting.
-type ZoneSettingMobileRedirectEditResponseValue struct {
+type ZonesMobileRedirectValue struct {
 	// Which subdomain prefix you wish to redirect visitors on mobile devices to
 	// (subdomain must already exist).
 	MobileSubdomain string `json:"mobile_subdomain,nullable"`
 	// Whether or not mobile redirect is enabled.
-	Status ZoneSettingMobileRedirectEditResponseValueStatus `json:"status"`
+	Status ZonesMobileRedirectValueStatus `json:"status"`
 	// Whether to drop the current page path and redirect to the mobile subdomain URL
 	// root, or keep the path and redirect to the same page on the mobile subdomain.
-	StripUri bool                                           `json:"strip_uri"`
-	JSON     zoneSettingMobileRedirectEditResponseValueJSON `json:"-"`
+	StripUri bool                         `json:"strip_uri"`
+	JSON     zonesMobileRedirectValueJSON `json:"-"`
 }
 
-// zoneSettingMobileRedirectEditResponseValueJSON contains the JSON metadata for
-// the struct [ZoneSettingMobileRedirectEditResponseValue]
-type zoneSettingMobileRedirectEditResponseValueJSON struct {
+// zonesMobileRedirectValueJSON contains the JSON metadata for the struct
+// [ZonesMobileRedirectValue]
+type zonesMobileRedirectValueJSON struct {
 	MobileSubdomain apijson.Field
 	Status          apijson.Field
 	StripUri        apijson.Field
@@ -126,109 +130,59 @@ type zoneSettingMobileRedirectEditResponseValueJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *ZoneSettingMobileRedirectEditResponseValue) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonesMobileRedirectValue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether or not mobile redirect is enabled.
-type ZoneSettingMobileRedirectEditResponseValueStatus string
+type ZonesMobileRedirectValueStatus string
 
 const (
-	ZoneSettingMobileRedirectEditResponseValueStatusOn  ZoneSettingMobileRedirectEditResponseValueStatus = "on"
-	ZoneSettingMobileRedirectEditResponseValueStatusOff ZoneSettingMobileRedirectEditResponseValueStatus = "off"
+	ZonesMobileRedirectValueStatusOn  ZonesMobileRedirectValueStatus = "on"
+	ZonesMobileRedirectValueStatusOff ZonesMobileRedirectValueStatus = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingMobileRedirectEditResponseEditable bool
+type ZonesMobileRedirectEditable bool
 
 const (
-	ZoneSettingMobileRedirectEditResponseEditableTrue  ZoneSettingMobileRedirectEditResponseEditable = true
-	ZoneSettingMobileRedirectEditResponseEditableFalse ZoneSettingMobileRedirectEditResponseEditable = false
+	ZonesMobileRedirectEditableTrue  ZonesMobileRedirectEditable = true
+	ZonesMobileRedirectEditableFalse ZonesMobileRedirectEditable = false
 )
 
 // Automatically redirect visitors on mobile devices to a mobile-optimized
 // subdomain. Refer to
 // [Understanding Cloudflare Mobile Redirect](https://support.cloudflare.com/hc/articles/200168336)
 // for more information.
-type ZoneSettingMobileRedirectGetResponse struct {
+type ZonesMobileRedirectParam struct {
 	// Identifier of the zone setting.
-	ID ZoneSettingMobileRedirectGetResponseID `json:"id,required"`
+	ID param.Field[ZonesMobileRedirectID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingMobileRedirectGetResponseValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingMobileRedirectGetResponseEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingMobileRedirectGetResponseJSON `json:"-"`
+	Value param.Field[ZonesMobileRedirectValueParam] `json:"value,required"`
 }
 
-// zoneSettingMobileRedirectGetResponseJSON contains the JSON metadata for the
-// struct [ZoneSettingMobileRedirectGetResponse]
-type zoneSettingMobileRedirectGetResponseJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+func (r ZonesMobileRedirectParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *ZoneSettingMobileRedirectGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Identifier of the zone setting.
-type ZoneSettingMobileRedirectGetResponseID string
-
-const (
-	ZoneSettingMobileRedirectGetResponseIDMobileRedirect ZoneSettingMobileRedirectGetResponseID = "mobile_redirect"
-)
+func (r ZonesMobileRedirectParam) implementsZoneSettingEditParamsItem() {}
 
 // Current value of the zone setting.
-type ZoneSettingMobileRedirectGetResponseValue struct {
+type ZonesMobileRedirectValueParam struct {
 	// Which subdomain prefix you wish to redirect visitors on mobile devices to
 	// (subdomain must already exist).
-	MobileSubdomain string `json:"mobile_subdomain,nullable"`
+	MobileSubdomain param.Field[string] `json:"mobile_subdomain"`
 	// Whether or not mobile redirect is enabled.
-	Status ZoneSettingMobileRedirectGetResponseValueStatus `json:"status"`
+	Status param.Field[ZonesMobileRedirectValueStatus] `json:"status"`
 	// Whether to drop the current page path and redirect to the mobile subdomain URL
 	// root, or keep the path and redirect to the same page on the mobile subdomain.
-	StripUri bool                                          `json:"strip_uri"`
-	JSON     zoneSettingMobileRedirectGetResponseValueJSON `json:"-"`
+	StripUri param.Field[bool] `json:"strip_uri"`
 }
 
-// zoneSettingMobileRedirectGetResponseValueJSON contains the JSON metadata for the
-// struct [ZoneSettingMobileRedirectGetResponseValue]
-type zoneSettingMobileRedirectGetResponseValueJSON struct {
-	MobileSubdomain apijson.Field
-	Status          apijson.Field
-	StripUri        apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+func (r ZonesMobileRedirectValueParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
-
-func (r *ZoneSettingMobileRedirectGetResponseValue) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether or not mobile redirect is enabled.
-type ZoneSettingMobileRedirectGetResponseValueStatus string
-
-const (
-	ZoneSettingMobileRedirectGetResponseValueStatusOn  ZoneSettingMobileRedirectGetResponseValueStatus = "on"
-	ZoneSettingMobileRedirectGetResponseValueStatusOff ZoneSettingMobileRedirectGetResponseValueStatus = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingMobileRedirectGetResponseEditable bool
-
-const (
-	ZoneSettingMobileRedirectGetResponseEditableTrue  ZoneSettingMobileRedirectGetResponseEditable = true
-	ZoneSettingMobileRedirectGetResponseEditableFalse ZoneSettingMobileRedirectGetResponseEditable = false
-)
 
 type ZoneSettingMobileRedirectEditParams struct {
 	// Identifier
@@ -274,7 +228,7 @@ type ZoneSettingMobileRedirectEditResponseEnvelope struct {
 	// subdomain. Refer to
 	// [Understanding Cloudflare Mobile Redirect](https://support.cloudflare.com/hc/articles/200168336)
 	// for more information.
-	Result ZoneSettingMobileRedirectEditResponse             `json:"result"`
+	Result ZonesMobileRedirect                               `json:"result"`
 	JSON   zoneSettingMobileRedirectEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -345,7 +299,7 @@ type ZoneSettingMobileRedirectGetResponseEnvelope struct {
 	// subdomain. Refer to
 	// [Understanding Cloudflare Mobile Redirect](https://support.cloudflare.com/hc/articles/200168336)
 	// for more information.
-	Result ZoneSettingMobileRedirectGetResponse             `json:"result"`
+	Result ZonesMobileRedirect                              `json:"result"`
 	JSON   zoneSettingMobileRedirectGetResponseEnvelopeJSON `json:"-"`
 }
 

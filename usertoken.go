@@ -130,7 +130,7 @@ func (r *UserTokenService) Verify(ctx context.Context, opts ...option.RequestOpt
 
 type UserTokenNewResponse struct {
 	// The token value.
-	Value string                   `json:"value"`
+	Value IamValue                 `json:"value"`
 	JSON  userTokenNewResponseJSON `json:"-"`
 }
 

@@ -33,7 +33,7 @@ func NewZoneSettingAutomaticHTTPSRewriteService(opts ...option.RequestOption) (r
 }
 
 // Enable the Automatic HTTPS Rewrites feature for this zone.
-func (r *ZoneSettingAutomaticHTTPSRewriteService) Edit(ctx context.Context, params ZoneSettingAutomaticHTTPSRewriteEditParams, opts ...option.RequestOption) (res *ZoneSettingAutomaticHTTPSRewriteEditResponse, err error) {
+func (r *ZoneSettingAutomaticHTTPSRewriteService) Edit(ctx context.Context, params ZoneSettingAutomaticHTTPSRewriteEditParams, opts ...option.RequestOption) (res *ZonesAutomaticHTTPSRewrites, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingAutomaticHTTPSRewriteEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/automatic_https_rewrites", params.ZoneID)
@@ -46,7 +46,7 @@ func (r *ZoneSettingAutomaticHTTPSRewriteService) Edit(ctx context.Context, para
 }
 
 // Enable the Automatic HTTPS Rewrites feature for this zone.
-func (r *ZoneSettingAutomaticHTTPSRewriteService) Get(ctx context.Context, query ZoneSettingAutomaticHTTPSRewriteGetParams, opts ...option.RequestOption) (res *ZoneSettingAutomaticHTTPSRewriteGetResponse, err error) {
+func (r *ZoneSettingAutomaticHTTPSRewriteService) Get(ctx context.Context, query ZoneSettingAutomaticHTTPSRewriteGetParams, opts ...option.RequestOption) (res *ZonesAutomaticHTTPSRewrites, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingAutomaticHTTPSRewriteGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/automatic_https_rewrites", query.ZoneID)
@@ -59,22 +59,22 @@ func (r *ZoneSettingAutomaticHTTPSRewriteService) Get(ctx context.Context, query
 }
 
 // Enable the Automatic HTTPS Rewrites feature for this zone.
-type ZoneSettingAutomaticHTTPSRewriteEditResponse struct {
+type ZonesAutomaticHTTPSRewrites struct {
 	// ID of the zone setting.
-	ID ZoneSettingAutomaticHTTPSRewriteEditResponseID `json:"id,required"`
+	ID ZonesAutomaticHTTPSRewritesID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingAutomaticHTTPSRewriteEditResponseValue `json:"value,required"`
+	Value ZonesAutomaticHTTPSRewritesValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingAutomaticHTTPSRewriteEditResponseEditable `json:"editable"`
+	Editable ZonesAutomaticHTTPSRewritesEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                        `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingAutomaticHTTPSRewriteEditResponseJSON `json:"-"`
+	ModifiedOn time.Time                       `json:"modified_on,nullable" format:"date-time"`
+	JSON       zonesAutomaticHTTPSRewritesJSON `json:"-"`
 }
 
-// zoneSettingAutomaticHTTPSRewriteEditResponseJSON contains the JSON metadata for
-// the struct [ZoneSettingAutomaticHTTPSRewriteEditResponse]
-type zoneSettingAutomaticHTTPSRewriteEditResponseJSON struct {
+// zonesAutomaticHTTPSRewritesJSON contains the JSON metadata for the struct
+// [ZonesAutomaticHTTPSRewrites]
+type zonesAutomaticHTTPSRewritesJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -83,86 +83,51 @@ type zoneSettingAutomaticHTTPSRewriteEditResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingAutomaticHTTPSRewriteEditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonesAutomaticHTTPSRewrites) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r ZonesAutomaticHTTPSRewrites) implementsZoneSettingEditResponse() {}
+
+func (r ZonesAutomaticHTTPSRewrites) implementsZoneSettingGetResponse() {}
+
 // ID of the zone setting.
-type ZoneSettingAutomaticHTTPSRewriteEditResponseID string
+type ZonesAutomaticHTTPSRewritesID string
 
 const (
-	ZoneSettingAutomaticHTTPSRewriteEditResponseIDAutomaticHTTPSRewrites ZoneSettingAutomaticHTTPSRewriteEditResponseID = "automatic_https_rewrites"
+	ZonesAutomaticHTTPSRewritesIDAutomaticHTTPSRewrites ZonesAutomaticHTTPSRewritesID = "automatic_https_rewrites"
 )
 
 // Current value of the zone setting.
-type ZoneSettingAutomaticHTTPSRewriteEditResponseValue string
+type ZonesAutomaticHTTPSRewritesValue string
 
 const (
-	ZoneSettingAutomaticHTTPSRewriteEditResponseValueOn  ZoneSettingAutomaticHTTPSRewriteEditResponseValue = "on"
-	ZoneSettingAutomaticHTTPSRewriteEditResponseValueOff ZoneSettingAutomaticHTTPSRewriteEditResponseValue = "off"
+	ZonesAutomaticHTTPSRewritesValueOn  ZonesAutomaticHTTPSRewritesValue = "on"
+	ZonesAutomaticHTTPSRewritesValueOff ZonesAutomaticHTTPSRewritesValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingAutomaticHTTPSRewriteEditResponseEditable bool
+type ZonesAutomaticHTTPSRewritesEditable bool
 
 const (
-	ZoneSettingAutomaticHTTPSRewriteEditResponseEditableTrue  ZoneSettingAutomaticHTTPSRewriteEditResponseEditable = true
-	ZoneSettingAutomaticHTTPSRewriteEditResponseEditableFalse ZoneSettingAutomaticHTTPSRewriteEditResponseEditable = false
+	ZonesAutomaticHTTPSRewritesEditableTrue  ZonesAutomaticHTTPSRewritesEditable = true
+	ZonesAutomaticHTTPSRewritesEditableFalse ZonesAutomaticHTTPSRewritesEditable = false
 )
 
 // Enable the Automatic HTTPS Rewrites feature for this zone.
-type ZoneSettingAutomaticHTTPSRewriteGetResponse struct {
+type ZonesAutomaticHTTPSRewritesParam struct {
 	// ID of the zone setting.
-	ID ZoneSettingAutomaticHTTPSRewriteGetResponseID `json:"id,required"`
+	ID param.Field[ZonesAutomaticHTTPSRewritesID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingAutomaticHTTPSRewriteGetResponseValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingAutomaticHTTPSRewriteGetResponseEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                       `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingAutomaticHTTPSRewriteGetResponseJSON `json:"-"`
+	Value param.Field[ZonesAutomaticHTTPSRewritesValue] `json:"value,required"`
 }
 
-// zoneSettingAutomaticHTTPSRewriteGetResponseJSON contains the JSON metadata for
-// the struct [ZoneSettingAutomaticHTTPSRewriteGetResponse]
-type zoneSettingAutomaticHTTPSRewriteGetResponseJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+func (r ZonesAutomaticHTTPSRewritesParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *ZoneSettingAutomaticHTTPSRewriteGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// ID of the zone setting.
-type ZoneSettingAutomaticHTTPSRewriteGetResponseID string
-
-const (
-	ZoneSettingAutomaticHTTPSRewriteGetResponseIDAutomaticHTTPSRewrites ZoneSettingAutomaticHTTPSRewriteGetResponseID = "automatic_https_rewrites"
-)
-
-// Current value of the zone setting.
-type ZoneSettingAutomaticHTTPSRewriteGetResponseValue string
-
-const (
-	ZoneSettingAutomaticHTTPSRewriteGetResponseValueOn  ZoneSettingAutomaticHTTPSRewriteGetResponseValue = "on"
-	ZoneSettingAutomaticHTTPSRewriteGetResponseValueOff ZoneSettingAutomaticHTTPSRewriteGetResponseValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingAutomaticHTTPSRewriteGetResponseEditable bool
-
-const (
-	ZoneSettingAutomaticHTTPSRewriteGetResponseEditableTrue  ZoneSettingAutomaticHTTPSRewriteGetResponseEditable = true
-	ZoneSettingAutomaticHTTPSRewriteGetResponseEditableFalse ZoneSettingAutomaticHTTPSRewriteGetResponseEditable = false
-)
+func (r ZonesAutomaticHTTPSRewritesParam) implementsZoneSettingEditParamsItem() {}
 
 type ZoneSettingAutomaticHTTPSRewriteEditParams struct {
 	// Identifier
@@ -191,7 +156,7 @@ type ZoneSettingAutomaticHTTPSRewriteEditResponseEnvelope struct {
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Enable the Automatic HTTPS Rewrites feature for this zone.
-	Result ZoneSettingAutomaticHTTPSRewriteEditResponse             `json:"result"`
+	Result ZonesAutomaticHTTPSRewrites                              `json:"result"`
 	JSON   zoneSettingAutomaticHTTPSRewriteEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -261,7 +226,7 @@ type ZoneSettingAutomaticHTTPSRewriteGetResponseEnvelope struct {
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Enable the Automatic HTTPS Rewrites feature for this zone.
-	Result ZoneSettingAutomaticHTTPSRewriteGetResponse             `json:"result"`
+	Result ZonesAutomaticHTTPSRewrites                             `json:"result"`
 	JSON   zoneSettingAutomaticHTTPSRewriteGetResponseEnvelopeJSON `json:"-"`
 }
 

@@ -35,7 +35,7 @@ func NewWeb3HostnameService(opts ...option.RequestOption) (r *Web3HostnameServic
 }
 
 // Create Web3 Hostname
-func (r *Web3HostnameService) New(ctx context.Context, zoneIdentifier string, body Web3HostnameNewParams, opts ...option.RequestOption) (res *Web3HostnameNewResponse, err error) {
+func (r *Web3HostnameService) New(ctx context.Context, zoneIdentifier string, body Web3HostnameNewParams, opts ...option.RequestOption) (res *DwebConfigWeb3Hostname, err error) {
 	opts = append(r.Options[:], opts...)
 	var env Web3HostnameNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/web3/hostnames", zoneIdentifier)
@@ -48,7 +48,7 @@ func (r *Web3HostnameService) New(ctx context.Context, zoneIdentifier string, bo
 }
 
 // List Web3 Hostnames
-func (r *Web3HostnameService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *[]Web3HostnameListResponse, err error) {
+func (r *Web3HostnameService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *[]DwebConfigWeb3Hostname, err error) {
 	opts = append(r.Options[:], opts...)
 	var env Web3HostnameListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/web3/hostnames", zoneIdentifier)
@@ -74,7 +74,7 @@ func (r *Web3HostnameService) Delete(ctx context.Context, zoneIdentifier string,
 }
 
 // Edit Web3 Hostname
-func (r *Web3HostnameService) Edit(ctx context.Context, zoneIdentifier string, identifier string, body Web3HostnameEditParams, opts ...option.RequestOption) (res *Web3HostnameEditResponse, err error) {
+func (r *Web3HostnameService) Edit(ctx context.Context, zoneIdentifier string, identifier string, body Web3HostnameEditParams, opts ...option.RequestOption) (res *DwebConfigWeb3Hostname, err error) {
 	opts = append(r.Options[:], opts...)
 	var env Web3HostnameEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/web3/hostnames/%s", zoneIdentifier, identifier)
@@ -87,7 +87,7 @@ func (r *Web3HostnameService) Edit(ctx context.Context, zoneIdentifier string, i
 }
 
 // Web3 Hostname Details
-func (r *Web3HostnameService) Get(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *Web3HostnameGetResponse, err error) {
+func (r *Web3HostnameService) Get(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *DwebConfigWeb3Hostname, err error) {
 	opts = append(r.Options[:], opts...)
 	var env Web3HostnameGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/web3/hostnames/%s", zoneIdentifier, identifier)
@@ -99,7 +99,7 @@ func (r *Web3HostnameService) Get(ctx context.Context, zoneIdentifier string, id
 	return
 }
 
-type Web3HostnameNewResponse struct {
+type DwebConfigWeb3Hostname struct {
 	// Identifier
 	ID        string    `json:"id"`
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
@@ -111,15 +111,15 @@ type Web3HostnameNewResponse struct {
 	// The hostname that will point to the target gateway via CNAME.
 	Name string `json:"name"`
 	// Status of the hostname's activation.
-	Status Web3HostnameNewResponseStatus `json:"status"`
+	Status DwebConfigWeb3HostnameStatus `json:"status"`
 	// Target gateway of the hostname.
-	Target Web3HostnameNewResponseTarget `json:"target"`
-	JSON   web3HostnameNewResponseJSON   `json:"-"`
+	Target DwebConfigWeb3HostnameTarget `json:"target"`
+	JSON   dwebConfigWeb3HostnameJSON   `json:"-"`
 }
 
-// web3HostnameNewResponseJSON contains the JSON metadata for the struct
-// [Web3HostnameNewResponse]
-type web3HostnameNewResponseJSON struct {
+// dwebConfigWeb3HostnameJSON contains the JSON metadata for the struct
+// [DwebConfigWeb3Hostname]
+type dwebConfigWeb3HostnameJSON struct {
 	ID          apijson.Field
 	CreatedOn   apijson.Field
 	Description apijson.Field
@@ -132,83 +132,27 @@ type web3HostnameNewResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *Web3HostnameNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DwebConfigWeb3Hostname) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Status of the hostname's activation.
-type Web3HostnameNewResponseStatus string
+type DwebConfigWeb3HostnameStatus string
 
 const (
-	Web3HostnameNewResponseStatusActive   Web3HostnameNewResponseStatus = "active"
-	Web3HostnameNewResponseStatusPending  Web3HostnameNewResponseStatus = "pending"
-	Web3HostnameNewResponseStatusDeleting Web3HostnameNewResponseStatus = "deleting"
-	Web3HostnameNewResponseStatusError    Web3HostnameNewResponseStatus = "error"
+	DwebConfigWeb3HostnameStatusActive   DwebConfigWeb3HostnameStatus = "active"
+	DwebConfigWeb3HostnameStatusPending  DwebConfigWeb3HostnameStatus = "pending"
+	DwebConfigWeb3HostnameStatusDeleting DwebConfigWeb3HostnameStatus = "deleting"
+	DwebConfigWeb3HostnameStatusError    DwebConfigWeb3HostnameStatus = "error"
 )
 
 // Target gateway of the hostname.
-type Web3HostnameNewResponseTarget string
+type DwebConfigWeb3HostnameTarget string
 
 const (
-	Web3HostnameNewResponseTargetEthereum          Web3HostnameNewResponseTarget = "ethereum"
-	Web3HostnameNewResponseTargetIPFS              Web3HostnameNewResponseTarget = "ipfs"
-	Web3HostnameNewResponseTargetIPFSUniversalPath Web3HostnameNewResponseTarget = "ipfs_universal_path"
-)
-
-type Web3HostnameListResponse struct {
-	// Identifier
-	ID        string    `json:"id"`
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// An optional description of the hostname.
-	Description string `json:"description"`
-	// DNSLink value used if the target is ipfs.
-	Dnslink    string    `json:"dnslink"`
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// The hostname that will point to the target gateway via CNAME.
-	Name string `json:"name"`
-	// Status of the hostname's activation.
-	Status Web3HostnameListResponseStatus `json:"status"`
-	// Target gateway of the hostname.
-	Target Web3HostnameListResponseTarget `json:"target"`
-	JSON   web3HostnameListResponseJSON   `json:"-"`
-}
-
-// web3HostnameListResponseJSON contains the JSON metadata for the struct
-// [Web3HostnameListResponse]
-type web3HostnameListResponseJSON struct {
-	ID          apijson.Field
-	CreatedOn   apijson.Field
-	Description apijson.Field
-	Dnslink     apijson.Field
-	ModifiedOn  apijson.Field
-	Name        apijson.Field
-	Status      apijson.Field
-	Target      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *Web3HostnameListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Status of the hostname's activation.
-type Web3HostnameListResponseStatus string
-
-const (
-	Web3HostnameListResponseStatusActive   Web3HostnameListResponseStatus = "active"
-	Web3HostnameListResponseStatusPending  Web3HostnameListResponseStatus = "pending"
-	Web3HostnameListResponseStatusDeleting Web3HostnameListResponseStatus = "deleting"
-	Web3HostnameListResponseStatusError    Web3HostnameListResponseStatus = "error"
-)
-
-// Target gateway of the hostname.
-type Web3HostnameListResponseTarget string
-
-const (
-	Web3HostnameListResponseTargetEthereum          Web3HostnameListResponseTarget = "ethereum"
-	Web3HostnameListResponseTargetIPFS              Web3HostnameListResponseTarget = "ipfs"
-	Web3HostnameListResponseTargetIPFSUniversalPath Web3HostnameListResponseTarget = "ipfs_universal_path"
+	DwebConfigWeb3HostnameTargetEthereum          DwebConfigWeb3HostnameTarget = "ethereum"
+	DwebConfigWeb3HostnameTargetIPFS              DwebConfigWeb3HostnameTarget = "ipfs"
+	DwebConfigWeb3HostnameTargetIPFSUniversalPath DwebConfigWeb3HostnameTarget = "ipfs_universal_path"
 )
 
 type Web3HostnameDeleteResponse struct {
@@ -228,118 +172,6 @@ type web3HostnameDeleteResponseJSON struct {
 func (r *Web3HostnameDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-type Web3HostnameEditResponse struct {
-	// Identifier
-	ID        string    `json:"id"`
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// An optional description of the hostname.
-	Description string `json:"description"`
-	// DNSLink value used if the target is ipfs.
-	Dnslink    string    `json:"dnslink"`
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// The hostname that will point to the target gateway via CNAME.
-	Name string `json:"name"`
-	// Status of the hostname's activation.
-	Status Web3HostnameEditResponseStatus `json:"status"`
-	// Target gateway of the hostname.
-	Target Web3HostnameEditResponseTarget `json:"target"`
-	JSON   web3HostnameEditResponseJSON   `json:"-"`
-}
-
-// web3HostnameEditResponseJSON contains the JSON metadata for the struct
-// [Web3HostnameEditResponse]
-type web3HostnameEditResponseJSON struct {
-	ID          apijson.Field
-	CreatedOn   apijson.Field
-	Description apijson.Field
-	Dnslink     apijson.Field
-	ModifiedOn  apijson.Field
-	Name        apijson.Field
-	Status      apijson.Field
-	Target      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *Web3HostnameEditResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Status of the hostname's activation.
-type Web3HostnameEditResponseStatus string
-
-const (
-	Web3HostnameEditResponseStatusActive   Web3HostnameEditResponseStatus = "active"
-	Web3HostnameEditResponseStatusPending  Web3HostnameEditResponseStatus = "pending"
-	Web3HostnameEditResponseStatusDeleting Web3HostnameEditResponseStatus = "deleting"
-	Web3HostnameEditResponseStatusError    Web3HostnameEditResponseStatus = "error"
-)
-
-// Target gateway of the hostname.
-type Web3HostnameEditResponseTarget string
-
-const (
-	Web3HostnameEditResponseTargetEthereum          Web3HostnameEditResponseTarget = "ethereum"
-	Web3HostnameEditResponseTargetIPFS              Web3HostnameEditResponseTarget = "ipfs"
-	Web3HostnameEditResponseTargetIPFSUniversalPath Web3HostnameEditResponseTarget = "ipfs_universal_path"
-)
-
-type Web3HostnameGetResponse struct {
-	// Identifier
-	ID        string    `json:"id"`
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// An optional description of the hostname.
-	Description string `json:"description"`
-	// DNSLink value used if the target is ipfs.
-	Dnslink    string    `json:"dnslink"`
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// The hostname that will point to the target gateway via CNAME.
-	Name string `json:"name"`
-	// Status of the hostname's activation.
-	Status Web3HostnameGetResponseStatus `json:"status"`
-	// Target gateway of the hostname.
-	Target Web3HostnameGetResponseTarget `json:"target"`
-	JSON   web3HostnameGetResponseJSON   `json:"-"`
-}
-
-// web3HostnameGetResponseJSON contains the JSON metadata for the struct
-// [Web3HostnameGetResponse]
-type web3HostnameGetResponseJSON struct {
-	ID          apijson.Field
-	CreatedOn   apijson.Field
-	Description apijson.Field
-	Dnslink     apijson.Field
-	ModifiedOn  apijson.Field
-	Name        apijson.Field
-	Status      apijson.Field
-	Target      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *Web3HostnameGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Status of the hostname's activation.
-type Web3HostnameGetResponseStatus string
-
-const (
-	Web3HostnameGetResponseStatusActive   Web3HostnameGetResponseStatus = "active"
-	Web3HostnameGetResponseStatusPending  Web3HostnameGetResponseStatus = "pending"
-	Web3HostnameGetResponseStatusDeleting Web3HostnameGetResponseStatus = "deleting"
-	Web3HostnameGetResponseStatusError    Web3HostnameGetResponseStatus = "error"
-)
-
-// Target gateway of the hostname.
-type Web3HostnameGetResponseTarget string
-
-const (
-	Web3HostnameGetResponseTargetEthereum          Web3HostnameGetResponseTarget = "ethereum"
-	Web3HostnameGetResponseTargetIPFS              Web3HostnameGetResponseTarget = "ipfs"
-	Web3HostnameGetResponseTargetIPFSUniversalPath Web3HostnameGetResponseTarget = "ipfs_universal_path"
-)
 
 type Web3HostnameNewParams struct {
 	// Target gateway of the hostname.
@@ -366,7 +198,7 @@ const (
 type Web3HostnameNewResponseEnvelope struct {
 	Errors   []Web3HostnameNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []Web3HostnameNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   Web3HostnameNewResponse                   `json:"result,required"`
+	Result   DwebConfigWeb3Hostname                    `json:"result,required"`
 	// Whether the API call was successful
 	Success Web3HostnameNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    web3HostnameNewResponseEnvelopeJSON    `json:"-"`
@@ -435,7 +267,7 @@ const (
 type Web3HostnameListResponseEnvelope struct {
 	Errors   []Web3HostnameListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []Web3HostnameListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []Web3HostnameListResponse                 `json:"result,required,nullable"`
+	Result   []DwebConfigWeb3Hostname                   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    Web3HostnameListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo Web3HostnameListResponseEnvelopeResultInfo `json:"result_info"`
@@ -613,7 +445,7 @@ func (r Web3HostnameEditParams) MarshalJSON() (data []byte, err error) {
 type Web3HostnameEditResponseEnvelope struct {
 	Errors   []Web3HostnameEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []Web3HostnameEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   Web3HostnameEditResponse                   `json:"result,required"`
+	Result   DwebConfigWeb3Hostname                     `json:"result,required"`
 	// Whether the API call was successful
 	Success Web3HostnameEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    web3HostnameEditResponseEnvelopeJSON    `json:"-"`
@@ -682,7 +514,7 @@ const (
 type Web3HostnameGetResponseEnvelope struct {
 	Errors   []Web3HostnameGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []Web3HostnameGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   Web3HostnameGetResponse                   `json:"result,required"`
+	Result   DwebConfigWeb3Hostname                    `json:"result,required"`
 	// Whether the API call was successful
 	Success Web3HostnameGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    web3HostnameGetResponseEnvelopeJSON    `json:"-"`

@@ -6,7 +6,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
@@ -33,7 +32,7 @@ func NewZeroTrustDLPDatasetUploadService(opts ...option.RequestOption) (r *ZeroT
 }
 
 // Prepare to upload a new version of a dataset.
-func (r *ZeroTrustDLPDatasetUploadService) New(ctx context.Context, datasetID string, body ZeroTrustDLPDatasetUploadNewParams, opts ...option.RequestOption) (res *ZeroTrustDLPDatasetUploadNewResponse, err error) {
+func (r *ZeroTrustDLPDatasetUploadService) New(ctx context.Context, datasetID string, body ZeroTrustDLPDatasetUploadNewParams, opts ...option.RequestOption) (res *DLPDatasetNewVersion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustDLPDatasetUploadNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s/upload", body.AccountID, datasetID)
@@ -46,7 +45,7 @@ func (r *ZeroTrustDLPDatasetUploadService) New(ctx context.Context, datasetID st
 }
 
 // Upload a new version of a dataset.
-func (r *ZeroTrustDLPDatasetUploadService) Edit(ctx context.Context, datasetID string, version int64, body ZeroTrustDLPDatasetUploadEditParams, opts ...option.RequestOption) (res *ZeroTrustDLPDatasetUploadEditResponse, err error) {
+func (r *ZeroTrustDLPDatasetUploadService) Edit(ctx context.Context, datasetID string, version int64, body ZeroTrustDLPDatasetUploadEditParams, opts ...option.RequestOption) (res *DLPDataset, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustDLPDatasetUploadEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s/upload/%v", body.AccountID, datasetID, version)
@@ -58,16 +57,16 @@ func (r *ZeroTrustDLPDatasetUploadService) Edit(ctx context.Context, datasetID s
 	return
 }
 
-type ZeroTrustDLPDatasetUploadNewResponse struct {
-	MaxCells int64                                    `json:"max_cells,required"`
-	Version  int64                                    `json:"version,required"`
-	Secret   string                                   `json:"secret" format:"password"`
-	JSON     zeroTrustDLPDatasetUploadNewResponseJSON `json:"-"`
+type DLPDatasetNewVersion struct {
+	MaxCells int64                    `json:"max_cells,required"`
+	Version  int64                    `json:"version,required"`
+	Secret   string                   `json:"secret" format:"password"`
+	JSON     dlpDatasetNewVersionJSON `json:"-"`
 }
 
-// zeroTrustDLPDatasetUploadNewResponseJSON contains the JSON metadata for the
-// struct [ZeroTrustDLPDatasetUploadNewResponse]
-type zeroTrustDLPDatasetUploadNewResponseJSON struct {
+// dlpDatasetNewVersionJSON contains the JSON metadata for the struct
+// [DLPDatasetNewVersion]
+type dlpDatasetNewVersionJSON struct {
 	MaxCells    apijson.Field
 	Version     apijson.Field
 	Secret      apijson.Field
@@ -75,81 +74,9 @@ type zeroTrustDLPDatasetUploadNewResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZeroTrustDLPDatasetUploadNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DLPDatasetNewVersion) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-type ZeroTrustDLPDatasetUploadEditResponse struct {
-	ID          string                                        `json:"id,required" format:"uuid"`
-	CreatedAt   time.Time                                     `json:"created_at,required" format:"date-time"`
-	Name        string                                        `json:"name,required"`
-	NumCells    int64                                         `json:"num_cells,required"`
-	Secret      bool                                          `json:"secret,required"`
-	Status      ZeroTrustDLPDatasetUploadEditResponseStatus   `json:"status,required"`
-	UpdatedAt   time.Time                                     `json:"updated_at,required" format:"date-time"`
-	Uploads     []ZeroTrustDLPDatasetUploadEditResponseUpload `json:"uploads,required"`
-	Description string                                        `json:"description,nullable"`
-	JSON        zeroTrustDLPDatasetUploadEditResponseJSON     `json:"-"`
-}
-
-// zeroTrustDLPDatasetUploadEditResponseJSON contains the JSON metadata for the
-// struct [ZeroTrustDLPDatasetUploadEditResponse]
-type zeroTrustDLPDatasetUploadEditResponseJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	Name        apijson.Field
-	NumCells    apijson.Field
-	Secret      apijson.Field
-	Status      apijson.Field
-	UpdatedAt   apijson.Field
-	Uploads     apijson.Field
-	Description apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustDLPDatasetUploadEditResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZeroTrustDLPDatasetUploadEditResponseStatus string
-
-const (
-	ZeroTrustDLPDatasetUploadEditResponseStatusEmpty     ZeroTrustDLPDatasetUploadEditResponseStatus = "empty"
-	ZeroTrustDLPDatasetUploadEditResponseStatusUploading ZeroTrustDLPDatasetUploadEditResponseStatus = "uploading"
-	ZeroTrustDLPDatasetUploadEditResponseStatusFailed    ZeroTrustDLPDatasetUploadEditResponseStatus = "failed"
-	ZeroTrustDLPDatasetUploadEditResponseStatusComplete  ZeroTrustDLPDatasetUploadEditResponseStatus = "complete"
-)
-
-type ZeroTrustDLPDatasetUploadEditResponseUpload struct {
-	NumCells int64                                              `json:"num_cells,required"`
-	Status   ZeroTrustDLPDatasetUploadEditResponseUploadsStatus `json:"status,required"`
-	Version  int64                                              `json:"version,required"`
-	JSON     zeroTrustDLPDatasetUploadEditResponseUploadJSON    `json:"-"`
-}
-
-// zeroTrustDLPDatasetUploadEditResponseUploadJSON contains the JSON metadata for
-// the struct [ZeroTrustDLPDatasetUploadEditResponseUpload]
-type zeroTrustDLPDatasetUploadEditResponseUploadJSON struct {
-	NumCells    apijson.Field
-	Status      apijson.Field
-	Version     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustDLPDatasetUploadEditResponseUpload) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZeroTrustDLPDatasetUploadEditResponseUploadsStatus string
-
-const (
-	ZeroTrustDLPDatasetUploadEditResponseUploadsStatusEmpty     ZeroTrustDLPDatasetUploadEditResponseUploadsStatus = "empty"
-	ZeroTrustDLPDatasetUploadEditResponseUploadsStatusUploading ZeroTrustDLPDatasetUploadEditResponseUploadsStatus = "uploading"
-	ZeroTrustDLPDatasetUploadEditResponseUploadsStatusFailed    ZeroTrustDLPDatasetUploadEditResponseUploadsStatus = "failed"
-	ZeroTrustDLPDatasetUploadEditResponseUploadsStatusComplete  ZeroTrustDLPDatasetUploadEditResponseUploadsStatus = "complete"
-)
 
 type ZeroTrustDLPDatasetUploadNewParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -159,7 +86,7 @@ type ZeroTrustDLPDatasetUploadNewResponseEnvelope struct {
 	Errors     []ZeroTrustDLPDatasetUploadNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages   []ZeroTrustDLPDatasetUploadNewResponseEnvelopeMessages `json:"messages,required"`
 	Success    bool                                                   `json:"success,required"`
-	Result     ZeroTrustDLPDatasetUploadNewResponse                   `json:"result"`
+	Result     DLPDatasetNewVersion                                   `json:"result"`
 	ResultInfo ZeroTrustDLPDatasetUploadNewResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       zeroTrustDLPDatasetUploadNewResponseEnvelopeJSON       `json:"-"`
 }
@@ -253,7 +180,7 @@ type ZeroTrustDLPDatasetUploadEditResponseEnvelope struct {
 	Errors     []ZeroTrustDLPDatasetUploadEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages   []ZeroTrustDLPDatasetUploadEditResponseEnvelopeMessages `json:"messages,required"`
 	Success    bool                                                    `json:"success,required"`
-	Result     ZeroTrustDLPDatasetUploadEditResponse                   `json:"result"`
+	Result     DLPDataset                                              `json:"result"`
 	ResultInfo ZeroTrustDLPDatasetUploadEditResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       zeroTrustDLPDatasetUploadEditResponseEnvelopeJSON       `json:"-"`
 }

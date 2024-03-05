@@ -34,7 +34,7 @@ func NewZeroTrustSeatService(opts ...option.RequestOption) (r *ZeroTrustSeatServ
 
 // Removes a user from a Zero Trust seat when both `access_seat` and `gateway_seat`
 // are set to false.
-func (r *ZeroTrustSeatService) Edit(ctx context.Context, identifier string, body ZeroTrustSeatEditParams, opts ...option.RequestOption) (res *[]ZeroTrustSeatEditResponse, err error) {
+func (r *ZeroTrustSeatService) Edit(ctx context.Context, identifier string, body ZeroTrustSeatEditParams, opts ...option.RequestOption) (res *[]AccessSeats, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustSeatEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/seats", identifier)
@@ -46,21 +46,20 @@ func (r *ZeroTrustSeatService) Edit(ctx context.Context, identifier string, body
 	return
 }
 
-type ZeroTrustSeatEditResponse struct {
+type AccessSeats struct {
 	// True if the seat is part of Access.
 	AccessSeat bool      `json:"access_seat"`
 	CreatedAt  time.Time `json:"created_at" format:"date-time"`
 	// True if the seat is part of Gateway.
 	GatewaySeat bool `json:"gateway_seat"`
 	// Identifier
-	SeatUid   string                        `json:"seat_uid"`
-	UpdatedAt time.Time                     `json:"updated_at" format:"date-time"`
-	JSON      zeroTrustSeatEditResponseJSON `json:"-"`
+	SeatUid   string          `json:"seat_uid"`
+	UpdatedAt time.Time       `json:"updated_at" format:"date-time"`
+	JSON      accessSeatsJSON `json:"-"`
 }
 
-// zeroTrustSeatEditResponseJSON contains the JSON metadata for the struct
-// [ZeroTrustSeatEditResponse]
-type zeroTrustSeatEditResponseJSON struct {
+// accessSeatsJSON contains the JSON metadata for the struct [AccessSeats]
+type accessSeatsJSON struct {
 	AccessSeat  apijson.Field
 	CreatedAt   apijson.Field
 	GatewaySeat apijson.Field
@@ -70,7 +69,7 @@ type zeroTrustSeatEditResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZeroTrustSeatEditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessSeats) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -96,7 +95,7 @@ func (r ZeroTrustSeatEditParamsBody) MarshalJSON() (data []byte, err error) {
 type ZeroTrustSeatEditResponseEnvelope struct {
 	Errors   []ZeroTrustSeatEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustSeatEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   []ZeroTrustSeatEditResponse                 `json:"result,required,nullable"`
+	Result   []AccessSeats                               `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    ZeroTrustSeatEditResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ZeroTrustSeatEditResponseEnvelopeResultInfo `json:"result_info"`

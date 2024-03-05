@@ -38,7 +38,7 @@ func NewZoneSettingDevelopmentModeService(opts ...option.RequestOption) (r *Zone
 // changes to cacheable content (like images, css, or JavaScript) and would like to
 // see those changes right away. Once entered, development mode will last for 3
 // hours and then automatically toggle off.
-func (r *ZoneSettingDevelopmentModeService) Edit(ctx context.Context, params ZoneSettingDevelopmentModeEditParams, opts ...option.RequestOption) (res *ZoneSettingDevelopmentModeEditResponse, err error) {
+func (r *ZoneSettingDevelopmentModeService) Edit(ctx context.Context, params ZoneSettingDevelopmentModeEditParams, opts ...option.RequestOption) (res *ZonesDevelopmentMode, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingDevelopmentModeEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/development_mode", params.ZoneID)
@@ -56,7 +56,7 @@ func (r *ZoneSettingDevelopmentModeService) Edit(ctx context.Context, params Zon
 // changes to cacheable content (like images, css, or JavaScript) and would like to
 // see those changes right away. Once entered, development mode will last for 3
 // hours and then automatically toggle off.
-func (r *ZoneSettingDevelopmentModeService) Get(ctx context.Context, query ZoneSettingDevelopmentModeGetParams, opts ...option.RequestOption) (res *ZoneSettingDevelopmentModeGetResponse, err error) {
+func (r *ZoneSettingDevelopmentModeService) Get(ctx context.Context, query ZoneSettingDevelopmentModeGetParams, opts ...option.RequestOption) (res *ZonesDevelopmentMode, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingDevelopmentModeGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/development_mode", query.ZoneID)
@@ -74,26 +74,26 @@ func (r *ZoneSettingDevelopmentModeService) Get(ctx context.Context, query ZoneS
 // changes to cacheable content (like images, css, or JavaScript) and would like to
 // see those changes right away. Once entered, development mode will last for 3
 // hours and then automatically toggle off.
-type ZoneSettingDevelopmentModeEditResponse struct {
+type ZonesDevelopmentMode struct {
 	// ID of the zone setting.
-	ID ZoneSettingDevelopmentModeEditResponseID `json:"id,required"`
+	ID ZonesDevelopmentModeID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingDevelopmentModeEditResponseValue `json:"value,required"`
+	Value ZonesDevelopmentModeValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingDevelopmentModeEditResponseEditable `json:"editable"`
+	Editable ZonesDevelopmentModeEditable `json:"editable"`
 	// last time this setting was modified.
 	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
 	// Value of the zone setting. Notes: The interval (in seconds) from when
 	// development mode expires (positive integer) or last expired (negative integer)
 	// for the domain. If development mode has never been enabled, this value is false.
-	TimeRemaining float64                                    `json:"time_remaining"`
-	JSON          zoneSettingDevelopmentModeEditResponseJSON `json:"-"`
+	TimeRemaining float64                  `json:"time_remaining"`
+	JSON          zonesDevelopmentModeJSON `json:"-"`
 }
 
-// zoneSettingDevelopmentModeEditResponseJSON contains the JSON metadata for the
-// struct [ZoneSettingDevelopmentModeEditResponse]
-type zoneSettingDevelopmentModeEditResponseJSON struct {
+// zonesDevelopmentModeJSON contains the JSON metadata for the struct
+// [ZonesDevelopmentMode]
+type zonesDevelopmentModeJSON struct {
 	ID            apijson.Field
 	Value         apijson.Field
 	Editable      apijson.Field
@@ -103,32 +103,36 @@ type zoneSettingDevelopmentModeEditResponseJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *ZoneSettingDevelopmentModeEditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonesDevelopmentMode) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r ZonesDevelopmentMode) implementsZoneSettingEditResponse() {}
+
+func (r ZonesDevelopmentMode) implementsZoneSettingGetResponse() {}
+
 // ID of the zone setting.
-type ZoneSettingDevelopmentModeEditResponseID string
+type ZonesDevelopmentModeID string
 
 const (
-	ZoneSettingDevelopmentModeEditResponseIDDevelopmentMode ZoneSettingDevelopmentModeEditResponseID = "development_mode"
+	ZonesDevelopmentModeIDDevelopmentMode ZonesDevelopmentModeID = "development_mode"
 )
 
 // Current value of the zone setting.
-type ZoneSettingDevelopmentModeEditResponseValue string
+type ZonesDevelopmentModeValue string
 
 const (
-	ZoneSettingDevelopmentModeEditResponseValueOn  ZoneSettingDevelopmentModeEditResponseValue = "on"
-	ZoneSettingDevelopmentModeEditResponseValueOff ZoneSettingDevelopmentModeEditResponseValue = "off"
+	ZonesDevelopmentModeValueOn  ZonesDevelopmentModeValue = "on"
+	ZonesDevelopmentModeValueOff ZonesDevelopmentModeValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingDevelopmentModeEditResponseEditable bool
+type ZonesDevelopmentModeEditable bool
 
 const (
-	ZoneSettingDevelopmentModeEditResponseEditableTrue  ZoneSettingDevelopmentModeEditResponseEditable = true
-	ZoneSettingDevelopmentModeEditResponseEditableFalse ZoneSettingDevelopmentModeEditResponseEditable = false
+	ZonesDevelopmentModeEditableTrue  ZonesDevelopmentModeEditable = true
+	ZonesDevelopmentModeEditableFalse ZonesDevelopmentModeEditable = false
 )
 
 // Development Mode temporarily allows you to enter development mode for your
@@ -137,62 +141,18 @@ const (
 // changes to cacheable content (like images, css, or JavaScript) and would like to
 // see those changes right away. Once entered, development mode will last for 3
 // hours and then automatically toggle off.
-type ZoneSettingDevelopmentModeGetResponse struct {
+type ZonesDevelopmentModeParam struct {
 	// ID of the zone setting.
-	ID ZoneSettingDevelopmentModeGetResponseID `json:"id,required"`
+	ID param.Field[ZonesDevelopmentModeID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingDevelopmentModeGetResponseValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingDevelopmentModeGetResponseEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time `json:"modified_on,nullable" format:"date-time"`
-	// Value of the zone setting. Notes: The interval (in seconds) from when
-	// development mode expires (positive integer) or last expired (negative integer)
-	// for the domain. If development mode has never been enabled, this value is false.
-	TimeRemaining float64                                   `json:"time_remaining"`
-	JSON          zoneSettingDevelopmentModeGetResponseJSON `json:"-"`
+	Value param.Field[ZonesDevelopmentModeValue] `json:"value,required"`
 }
 
-// zoneSettingDevelopmentModeGetResponseJSON contains the JSON metadata for the
-// struct [ZoneSettingDevelopmentModeGetResponse]
-type zoneSettingDevelopmentModeGetResponseJSON struct {
-	ID            apijson.Field
-	Value         apijson.Field
-	Editable      apijson.Field
-	ModifiedOn    apijson.Field
-	TimeRemaining apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
+func (r ZonesDevelopmentModeParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *ZoneSettingDevelopmentModeGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// ID of the zone setting.
-type ZoneSettingDevelopmentModeGetResponseID string
-
-const (
-	ZoneSettingDevelopmentModeGetResponseIDDevelopmentMode ZoneSettingDevelopmentModeGetResponseID = "development_mode"
-)
-
-// Current value of the zone setting.
-type ZoneSettingDevelopmentModeGetResponseValue string
-
-const (
-	ZoneSettingDevelopmentModeGetResponseValueOn  ZoneSettingDevelopmentModeGetResponseValue = "on"
-	ZoneSettingDevelopmentModeGetResponseValueOff ZoneSettingDevelopmentModeGetResponseValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingDevelopmentModeGetResponseEditable bool
-
-const (
-	ZoneSettingDevelopmentModeGetResponseEditableTrue  ZoneSettingDevelopmentModeGetResponseEditable = true
-	ZoneSettingDevelopmentModeGetResponseEditableFalse ZoneSettingDevelopmentModeGetResponseEditable = false
-)
+func (r ZonesDevelopmentModeParam) implementsZoneSettingEditParamsItem() {}
 
 type ZoneSettingDevelopmentModeEditParams struct {
 	// Identifier
@@ -224,7 +184,7 @@ type ZoneSettingDevelopmentModeEditResponseEnvelope struct {
 	// changes to cacheable content (like images, css, or JavaScript) and would like to
 	// see those changes right away. Once entered, development mode will last for 3
 	// hours and then automatically toggle off.
-	Result ZoneSettingDevelopmentModeEditResponse             `json:"result"`
+	Result ZonesDevelopmentMode                               `json:"result"`
 	JSON   zoneSettingDevelopmentModeEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -297,7 +257,7 @@ type ZoneSettingDevelopmentModeGetResponseEnvelope struct {
 	// changes to cacheable content (like images, css, or JavaScript) and would like to
 	// see those changes right away. Once entered, development mode will last for 3
 	// hours and then automatically toggle off.
-	Result ZoneSettingDevelopmentModeGetResponse             `json:"result"`
+	Result ZonesDevelopmentMode                              `json:"result"`
 	JSON   zoneSettingDevelopmentModeGetResponseEnvelopeJSON `json:"-"`
 }
 

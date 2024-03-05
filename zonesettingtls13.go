@@ -33,7 +33,7 @@ func NewZoneSettingTLS1_3Service(opts ...option.RequestOption) (r *ZoneSettingTL
 }
 
 // Changes TLS 1.3 setting.
-func (r *ZoneSettingTLS1_3Service) Edit(ctx context.Context, params ZoneSettingTLS1_3EditParams, opts ...option.RequestOption) (res *ZoneSettingTls1_3EditResponse, err error) {
+func (r *ZoneSettingTLS1_3Service) Edit(ctx context.Context, params ZoneSettingTLS1_3EditParams, opts ...option.RequestOption) (res *ZonesTLS1_3, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingTls1_3EditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/tls_1_3", params.ZoneID)
@@ -46,7 +46,7 @@ func (r *ZoneSettingTLS1_3Service) Edit(ctx context.Context, params ZoneSettingT
 }
 
 // Gets TLS 1.3 setting enabled for a zone.
-func (r *ZoneSettingTLS1_3Service) Get(ctx context.Context, query ZoneSettingTLS1_3GetParams, opts ...option.RequestOption) (res *ZoneSettingTls1_3GetResponse, err error) {
+func (r *ZoneSettingTLS1_3Service) Get(ctx context.Context, query ZoneSettingTLS1_3GetParams, opts ...option.RequestOption) (res *ZonesTLS1_3, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingTls1_3GetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/tls_1_3", query.ZoneID)
@@ -59,22 +59,21 @@ func (r *ZoneSettingTLS1_3Service) Get(ctx context.Context, query ZoneSettingTLS
 }
 
 // Enables Crypto TLS 1.3 feature for a zone.
-type ZoneSettingTls1_3EditResponse struct {
+type ZonesTLS1_3 struct {
 	// ID of the zone setting.
-	ID ZoneSettingTls1_3EditResponseID `json:"id,required"`
+	ID ZonesTLS1_3ID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingTls1_3EditResponseValue `json:"value,required"`
+	Value ZonesTLS1_3Value `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingTls1_3EditResponseEditable `json:"editable"`
+	Editable ZonesTLS1_3Editable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                         `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingTls1_3EditResponseJSON `json:"-"`
+	ModifiedOn time.Time       `json:"modified_on,nullable" format:"date-time"`
+	JSON       zonesTls1_3JSON `json:"-"`
 }
 
-// zoneSettingTls1_3EditResponseJSON contains the JSON metadata for the struct
-// [ZoneSettingTls1_3EditResponse]
-type zoneSettingTls1_3EditResponseJSON struct {
+// zonesTls1_3JSON contains the JSON metadata for the struct [ZonesTLS1_3]
+type zonesTls1_3JSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -83,88 +82,52 @@ type zoneSettingTls1_3EditResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingTls1_3EditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonesTLS1_3) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r ZonesTLS1_3) implementsZoneSettingEditResponse() {}
+
+func (r ZonesTLS1_3) implementsZoneSettingGetResponse() {}
+
 // ID of the zone setting.
-type ZoneSettingTls1_3EditResponseID string
+type ZonesTLS1_3ID string
 
 const (
-	ZoneSettingTls1_3EditResponseIDTLS1_3 ZoneSettingTls1_3EditResponseID = "tls_1_3"
+	ZonesTLS1_3IDTLS1_3 ZonesTLS1_3ID = "tls_1_3"
 )
 
 // Current value of the zone setting.
-type ZoneSettingTls1_3EditResponseValue string
+type ZonesTLS1_3Value string
 
 const (
-	ZoneSettingTls1_3EditResponseValueOn  ZoneSettingTls1_3EditResponseValue = "on"
-	ZoneSettingTls1_3EditResponseValueOff ZoneSettingTls1_3EditResponseValue = "off"
-	ZoneSettingTls1_3EditResponseValueZrt ZoneSettingTls1_3EditResponseValue = "zrt"
+	ZonesTLS1_3ValueOn  ZonesTLS1_3Value = "on"
+	ZonesTLS1_3ValueOff ZonesTLS1_3Value = "off"
+	ZonesTLS1_3ValueZrt ZonesTLS1_3Value = "zrt"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingTls1_3EditResponseEditable bool
+type ZonesTLS1_3Editable bool
 
 const (
-	ZoneSettingTls1_3EditResponseEditableTrue  ZoneSettingTls1_3EditResponseEditable = true
-	ZoneSettingTls1_3EditResponseEditableFalse ZoneSettingTls1_3EditResponseEditable = false
+	ZonesTLS1_3EditableTrue  ZonesTLS1_3Editable = true
+	ZonesTLS1_3EditableFalse ZonesTLS1_3Editable = false
 )
 
 // Enables Crypto TLS 1.3 feature for a zone.
-type ZoneSettingTls1_3GetResponse struct {
+type ZonesTLS1_3Param struct {
 	// ID of the zone setting.
-	ID ZoneSettingTls1_3GetResponseID `json:"id,required"`
+	ID param.Field[ZonesTLS1_3ID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingTls1_3GetResponseValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingTls1_3GetResponseEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                        `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingTls1_3GetResponseJSON `json:"-"`
+	Value param.Field[ZonesTLS1_3Value] `json:"value,required"`
 }
 
-// zoneSettingTls1_3GetResponseJSON contains the JSON metadata for the struct
-// [ZoneSettingTls1_3GetResponse]
-type zoneSettingTls1_3GetResponseJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+func (r ZonesTLS1_3Param) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *ZoneSettingTls1_3GetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// ID of the zone setting.
-type ZoneSettingTls1_3GetResponseID string
-
-const (
-	ZoneSettingTls1_3GetResponseIDTLS1_3 ZoneSettingTls1_3GetResponseID = "tls_1_3"
-)
-
-// Current value of the zone setting.
-type ZoneSettingTls1_3GetResponseValue string
-
-const (
-	ZoneSettingTls1_3GetResponseValueOn  ZoneSettingTls1_3GetResponseValue = "on"
-	ZoneSettingTls1_3GetResponseValueOff ZoneSettingTls1_3GetResponseValue = "off"
-	ZoneSettingTls1_3GetResponseValueZrt ZoneSettingTls1_3GetResponseValue = "zrt"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingTls1_3GetResponseEditable bool
-
-const (
-	ZoneSettingTls1_3GetResponseEditableTrue  ZoneSettingTls1_3GetResponseEditable = true
-	ZoneSettingTls1_3GetResponseEditableFalse ZoneSettingTls1_3GetResponseEditable = false
-)
+func (r ZonesTLS1_3Param) implementsZoneSettingEditParamsItem() {}
 
 type ZoneSettingTLS1_3EditParams struct {
 	// Identifier
@@ -194,7 +157,7 @@ type ZoneSettingTls1_3EditResponseEnvelope struct {
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Enables Crypto TLS 1.3 feature for a zone.
-	Result ZoneSettingTls1_3EditResponse             `json:"result"`
+	Result ZonesTLS1_3                               `json:"result"`
 	JSON   zoneSettingTls1_3EditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -262,7 +225,7 @@ type ZoneSettingTls1_3GetResponseEnvelope struct {
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Enables Crypto TLS 1.3 feature for a zone.
-	Result ZoneSettingTls1_3GetResponse             `json:"result"`
+	Result ZonesTLS1_3                              `json:"result"`
 	JSON   zoneSettingTls1_3GetResponseEnvelopeJSON `json:"-"`
 }
 

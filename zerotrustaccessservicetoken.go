@@ -57,7 +57,7 @@ func (r *ZeroTrustAccessServiceTokenService) New(ctx context.Context, params Zer
 }
 
 // Updates a configured service token.
-func (r *ZeroTrustAccessServiceTokenService) Update(ctx context.Context, uuid string, params ZeroTrustAccessServiceTokenUpdateParams, opts ...option.RequestOption) (res *ZeroTrustAccessServiceTokenUpdateResponse, err error) {
+func (r *ZeroTrustAccessServiceTokenService) Update(ctx context.Context, uuid string, params ZeroTrustAccessServiceTokenUpdateParams, opts ...option.RequestOption) (res *AccessServiceTokens, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustAccessServiceTokenUpdateResponseEnvelope
 	var accountOrZone string
@@ -79,7 +79,7 @@ func (r *ZeroTrustAccessServiceTokenService) Update(ctx context.Context, uuid st
 }
 
 // Lists all service tokens.
-func (r *ZeroTrustAccessServiceTokenService) List(ctx context.Context, query ZeroTrustAccessServiceTokenListParams, opts ...option.RequestOption) (res *[]ZeroTrustAccessServiceTokenListResponse, err error) {
+func (r *ZeroTrustAccessServiceTokenService) List(ctx context.Context, query ZeroTrustAccessServiceTokenListParams, opts ...option.RequestOption) (res *[]AccessServiceTokens, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustAccessServiceTokenListResponseEnvelope
 	var accountOrZone string
@@ -101,7 +101,7 @@ func (r *ZeroTrustAccessServiceTokenService) List(ctx context.Context, query Zer
 }
 
 // Deletes a service token.
-func (r *ZeroTrustAccessServiceTokenService) Delete(ctx context.Context, uuid string, body ZeroTrustAccessServiceTokenDeleteParams, opts ...option.RequestOption) (res *ZeroTrustAccessServiceTokenDeleteResponse, err error) {
+func (r *ZeroTrustAccessServiceTokenService) Delete(ctx context.Context, uuid string, body ZeroTrustAccessServiceTokenDeleteParams, opts ...option.RequestOption) (res *AccessServiceTokens, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustAccessServiceTokenDeleteResponseEnvelope
 	var accountOrZone string
@@ -123,7 +123,7 @@ func (r *ZeroTrustAccessServiceTokenService) Delete(ctx context.Context, uuid st
 }
 
 // Refreshes the expiration of a service token.
-func (r *ZeroTrustAccessServiceTokenService) Refresh(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *ZeroTrustAccessServiceTokenRefreshResponse, err error) {
+func (r *ZeroTrustAccessServiceTokenService) Refresh(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *AccessServiceTokens, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustAccessServiceTokenRefreshResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/service_tokens/%s/refresh", identifier, uuid)
@@ -146,6 +146,40 @@ func (r *ZeroTrustAccessServiceTokenService) Rotate(ctx context.Context, identif
 	}
 	res = &env.Result
 	return
+}
+
+type AccessServiceTokens struct {
+	// The ID of the service token.
+	ID interface{} `json:"id"`
+	// The Client ID for the service token. Access will check for this value in the
+	// `CF-Access-Client-ID` request header.
+	ClientID  string    `json:"client_id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The duration for how long the service token will be valid. Must be in the format
+	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
+	// default is 1 year in hours (8760h).
+	Duration string `json:"duration"`
+	// The name of the service token.
+	Name      string                  `json:"name"`
+	UpdatedAt time.Time               `json:"updated_at" format:"date-time"`
+	JSON      accessServiceTokensJSON `json:"-"`
+}
+
+// accessServiceTokensJSON contains the JSON metadata for the struct
+// [AccessServiceTokens]
+type accessServiceTokensJSON struct {
+	ID          apijson.Field
+	ClientID    apijson.Field
+	CreatedAt   apijson.Field
+	Duration    apijson.Field
+	Name        apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessServiceTokens) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type ZeroTrustAccessServiceTokenNewResponse struct {
@@ -183,142 +217,6 @@ type zeroTrustAccessServiceTokenNewResponseJSON struct {
 }
 
 func (r *ZeroTrustAccessServiceTokenNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZeroTrustAccessServiceTokenUpdateResponse struct {
-	// The ID of the service token.
-	ID interface{} `json:"id"`
-	// The Client ID for the service token. Access will check for this value in the
-	// `CF-Access-Client-ID` request header.
-	ClientID  string    `json:"client_id"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The duration for how long the service token will be valid. Must be in the format
-	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
-	// default is 1 year in hours (8760h).
-	Duration string `json:"duration"`
-	// The name of the service token.
-	Name      string                                        `json:"name"`
-	UpdatedAt time.Time                                     `json:"updated_at" format:"date-time"`
-	JSON      zeroTrustAccessServiceTokenUpdateResponseJSON `json:"-"`
-}
-
-// zeroTrustAccessServiceTokenUpdateResponseJSON contains the JSON metadata for the
-// struct [ZeroTrustAccessServiceTokenUpdateResponse]
-type zeroTrustAccessServiceTokenUpdateResponseJSON struct {
-	ID          apijson.Field
-	ClientID    apijson.Field
-	CreatedAt   apijson.Field
-	Duration    apijson.Field
-	Name        apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustAccessServiceTokenUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZeroTrustAccessServiceTokenListResponse struct {
-	// The ID of the service token.
-	ID interface{} `json:"id"`
-	// The Client ID for the service token. Access will check for this value in the
-	// `CF-Access-Client-ID` request header.
-	ClientID  string    `json:"client_id"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The duration for how long the service token will be valid. Must be in the format
-	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
-	// default is 1 year in hours (8760h).
-	Duration string `json:"duration"`
-	// The name of the service token.
-	Name      string                                      `json:"name"`
-	UpdatedAt time.Time                                   `json:"updated_at" format:"date-time"`
-	JSON      zeroTrustAccessServiceTokenListResponseJSON `json:"-"`
-}
-
-// zeroTrustAccessServiceTokenListResponseJSON contains the JSON metadata for the
-// struct [ZeroTrustAccessServiceTokenListResponse]
-type zeroTrustAccessServiceTokenListResponseJSON struct {
-	ID          apijson.Field
-	ClientID    apijson.Field
-	CreatedAt   apijson.Field
-	Duration    apijson.Field
-	Name        apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustAccessServiceTokenListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZeroTrustAccessServiceTokenDeleteResponse struct {
-	// The ID of the service token.
-	ID interface{} `json:"id"`
-	// The Client ID for the service token. Access will check for this value in the
-	// `CF-Access-Client-ID` request header.
-	ClientID  string    `json:"client_id"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The duration for how long the service token will be valid. Must be in the format
-	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
-	// default is 1 year in hours (8760h).
-	Duration string `json:"duration"`
-	// The name of the service token.
-	Name      string                                        `json:"name"`
-	UpdatedAt time.Time                                     `json:"updated_at" format:"date-time"`
-	JSON      zeroTrustAccessServiceTokenDeleteResponseJSON `json:"-"`
-}
-
-// zeroTrustAccessServiceTokenDeleteResponseJSON contains the JSON metadata for the
-// struct [ZeroTrustAccessServiceTokenDeleteResponse]
-type zeroTrustAccessServiceTokenDeleteResponseJSON struct {
-	ID          apijson.Field
-	ClientID    apijson.Field
-	CreatedAt   apijson.Field
-	Duration    apijson.Field
-	Name        apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustAccessServiceTokenDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type ZeroTrustAccessServiceTokenRefreshResponse struct {
-	// The ID of the service token.
-	ID interface{} `json:"id"`
-	// The Client ID for the service token. Access will check for this value in the
-	// `CF-Access-Client-ID` request header.
-	ClientID  string    `json:"client_id"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The duration for how long the service token will be valid. Must be in the format
-	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
-	// default is 1 year in hours (8760h).
-	Duration string `json:"duration"`
-	// The name of the service token.
-	Name      string                                         `json:"name"`
-	UpdatedAt time.Time                                      `json:"updated_at" format:"date-time"`
-	JSON      zeroTrustAccessServiceTokenRefreshResponseJSON `json:"-"`
-}
-
-// zeroTrustAccessServiceTokenRefreshResponseJSON contains the JSON metadata for
-// the struct [ZeroTrustAccessServiceTokenRefreshResponse]
-type zeroTrustAccessServiceTokenRefreshResponseJSON struct {
-	ID          apijson.Field
-	ClientID    apijson.Field
-	CreatedAt   apijson.Field
-	Duration    apijson.Field
-	Name        apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustAccessServiceTokenRefreshResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -466,7 +364,7 @@ func (r ZeroTrustAccessServiceTokenUpdateParams) MarshalJSON() (data []byte, err
 type ZeroTrustAccessServiceTokenUpdateResponseEnvelope struct {
 	Errors   []ZeroTrustAccessServiceTokenUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustAccessServiceTokenUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustAccessServiceTokenUpdateResponse                   `json:"result,required"`
+	Result   AccessServiceTokens                                         `json:"result,required"`
 	// Whether the API call was successful
 	Success ZeroTrustAccessServiceTokenUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustAccessServiceTokenUpdateResponseEnvelopeJSON    `json:"-"`
@@ -544,7 +442,7 @@ type ZeroTrustAccessServiceTokenListParams struct {
 type ZeroTrustAccessServiceTokenListResponseEnvelope struct {
 	Errors   []ZeroTrustAccessServiceTokenListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustAccessServiceTokenListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []ZeroTrustAccessServiceTokenListResponse                 `json:"result,required,nullable"`
+	Result   []AccessServiceTokens                                     `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    ZeroTrustAccessServiceTokenListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ZeroTrustAccessServiceTokenListResponseEnvelopeResultInfo `json:"result_info"`
@@ -651,7 +549,7 @@ type ZeroTrustAccessServiceTokenDeleteParams struct {
 type ZeroTrustAccessServiceTokenDeleteResponseEnvelope struct {
 	Errors   []ZeroTrustAccessServiceTokenDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustAccessServiceTokenDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustAccessServiceTokenDeleteResponse                   `json:"result,required"`
+	Result   AccessServiceTokens                                         `json:"result,required"`
 	// Whether the API call was successful
 	Success ZeroTrustAccessServiceTokenDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustAccessServiceTokenDeleteResponseEnvelopeJSON    `json:"-"`
@@ -722,7 +620,7 @@ const (
 type ZeroTrustAccessServiceTokenRefreshResponseEnvelope struct {
 	Errors   []ZeroTrustAccessServiceTokenRefreshResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustAccessServiceTokenRefreshResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustAccessServiceTokenRefreshResponse                   `json:"result,required"`
+	Result   AccessServiceTokens                                          `json:"result,required"`
 	// Whether the API call was successful
 	Success ZeroTrustAccessServiceTokenRefreshResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustAccessServiceTokenRefreshResponseEnvelopeJSON    `json:"-"`

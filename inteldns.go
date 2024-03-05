@@ -34,7 +34,7 @@ func NewIntelDNSService(opts ...option.RequestOption) (r *IntelDNSService) {
 }
 
 // Get Passive DNS by IP
-func (r *IntelDNSService) Get(ctx context.Context, params IntelDNSGetParams, opts ...option.RequestOption) (res *IntelDNSGetResponse, err error) {
+func (r *IntelDNSService) Get(ctx context.Context, params IntelDNSGetParams, opts ...option.RequestOption) (res *IntelPassiveDNSByIP, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IntelDNSGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/dns", params.AccountID)
@@ -46,7 +46,7 @@ func (r *IntelDNSService) Get(ctx context.Context, params IntelDNSGetParams, opt
 	return
 }
 
-type IntelDNSGetResponse struct {
+type IntelPassiveDNSByIP struct {
 	// Total results returned based on your search parameters.
 	Count float64 `json:"count"`
 	// Current page within paginated list of results.
@@ -54,13 +54,13 @@ type IntelDNSGetResponse struct {
 	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
 	// Reverse DNS look-ups observed during the time period.
-	ReverseRecords []IntelDNSGetResponseReverseRecord `json:"reverse_records"`
-	JSON           intelDNSGetResponseJSON            `json:"-"`
+	ReverseRecords []IntelPassiveDNSByIPReverseRecord `json:"reverse_records"`
+	JSON           intelPassiveDNSByIPJSON            `json:"-"`
 }
 
-// intelDNSGetResponseJSON contains the JSON metadata for the struct
-// [IntelDNSGetResponse]
-type intelDNSGetResponseJSON struct {
+// intelPassiveDNSByIPJSON contains the JSON metadata for the struct
+// [IntelPassiveDNSByIP]
+type intelPassiveDNSByIPJSON struct {
 	Count          apijson.Field
 	Page           apijson.Field
 	PerPage        apijson.Field
@@ -69,23 +69,23 @@ type intelDNSGetResponseJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *IntelDNSGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelPassiveDNSByIP) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type IntelDNSGetResponseReverseRecord struct {
+type IntelPassiveDNSByIPReverseRecord struct {
 	// First seen date of the DNS record during the time period.
 	FirstSeen time.Time `json:"first_seen" format:"date"`
 	// Hostname that the IP was observed resolving to.
 	Hostname interface{} `json:"hostname"`
 	// Last seen date of the DNS record during the time period.
 	LastSeen time.Time                            `json:"last_seen" format:"date"`
-	JSON     intelDNSGetResponseReverseRecordJSON `json:"-"`
+	JSON     intelPassiveDNSByIPReverseRecordJSON `json:"-"`
 }
 
-// intelDNSGetResponseReverseRecordJSON contains the JSON metadata for the struct
-// [IntelDNSGetResponseReverseRecord]
-type intelDNSGetResponseReverseRecordJSON struct {
+// intelPassiveDNSByIPReverseRecordJSON contains the JSON metadata for the struct
+// [IntelPassiveDNSByIPReverseRecord]
+type intelPassiveDNSByIPReverseRecordJSON struct {
 	FirstSeen   apijson.Field
 	Hostname    apijson.Field
 	LastSeen    apijson.Field
@@ -93,7 +93,7 @@ type intelDNSGetResponseReverseRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelDNSGetResponseReverseRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelPassiveDNSByIPReverseRecord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -135,7 +135,7 @@ func (r IntelDNSGetParamsStartEndParams) URLQuery() (v url.Values) {
 type IntelDNSGetResponseEnvelope struct {
 	Errors   []IntelDNSGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []IntelDNSGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   IntelDNSGetResponse                   `json:"result,required"`
+	Result   IntelPassiveDNSByIP                   `json:"result,required"`
 	// Whether the API call was successful
 	Success IntelDNSGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    intelDNSGetResponseEnvelopeJSON    `json:"-"`

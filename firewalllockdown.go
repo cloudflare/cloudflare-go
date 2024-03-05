@@ -37,7 +37,7 @@ func NewFirewallLockdownService(opts ...option.RequestOption) (r *FirewallLockdo
 }
 
 // Creates a new Zone Lockdown rule.
-func (r *FirewallLockdownService) New(ctx context.Context, zoneIdentifier string, body FirewallLockdownNewParams, opts ...option.RequestOption) (res *FirewallLockdownNewResponse, err error) {
+func (r *FirewallLockdownService) New(ctx context.Context, zoneIdentifier string, body FirewallLockdownNewParams, opts ...option.RequestOption) (res *LegacyJhsZonelockdown, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FirewallLockdownNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/lockdowns", zoneIdentifier)
@@ -50,7 +50,7 @@ func (r *FirewallLockdownService) New(ctx context.Context, zoneIdentifier string
 }
 
 // Updates an existing Zone Lockdown rule.
-func (r *FirewallLockdownService) Update(ctx context.Context, zoneIdentifier string, id string, body FirewallLockdownUpdateParams, opts ...option.RequestOption) (res *FirewallLockdownUpdateResponse, err error) {
+func (r *FirewallLockdownService) Update(ctx context.Context, zoneIdentifier string, id string, body FirewallLockdownUpdateParams, opts ...option.RequestOption) (res *LegacyJhsZonelockdown, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FirewallLockdownUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/lockdowns/%s", zoneIdentifier, id)
@@ -64,7 +64,7 @@ func (r *FirewallLockdownService) Update(ctx context.Context, zoneIdentifier str
 
 // Fetches Zone Lockdown rules. You can filter the results using several optional
 // parameters.
-func (r *FirewallLockdownService) List(ctx context.Context, zoneIdentifier string, query FirewallLockdownListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[FirewallLockdownListResponse], err error) {
+func (r *FirewallLockdownService) List(ctx context.Context, zoneIdentifier string, query FirewallLockdownListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[LegacyJhsZonelockdown], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -83,7 +83,7 @@ func (r *FirewallLockdownService) List(ctx context.Context, zoneIdentifier strin
 
 // Fetches Zone Lockdown rules. You can filter the results using several optional
 // parameters.
-func (r *FirewallLockdownService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query FirewallLockdownListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[FirewallLockdownListResponse] {
+func (r *FirewallLockdownService) ListAutoPaging(ctx context.Context, zoneIdentifier string, query FirewallLockdownListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[LegacyJhsZonelockdown] {
 	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, zoneIdentifier, query, opts...))
 }
 
@@ -101,7 +101,7 @@ func (r *FirewallLockdownService) Delete(ctx context.Context, zoneIdentifier str
 }
 
 // Fetches the details of a Zone Lockdown rule.
-func (r *FirewallLockdownService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *FirewallLockdownGetResponse, err error) {
+func (r *FirewallLockdownService) Get(ctx context.Context, zoneIdentifier string, id string, opts ...option.RequestOption) (res *LegacyJhsZonelockdown, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FirewallLockdownGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/lockdowns/%s", zoneIdentifier, id)
@@ -113,13 +113,13 @@ func (r *FirewallLockdownService) Get(ctx context.Context, zoneIdentifier string
 	return
 }
 
-type FirewallLockdownNewResponse struct {
+type LegacyJhsZonelockdown struct {
 	// The unique identifier of the Zone Lockdown rule.
 	ID string `json:"id,required"`
 	// A list of IP addresses or CIDR ranges that will be allowed to access the URLs
 	// specified in the Zone Lockdown rule. You can include any number of `ip` or
 	// `ip_range` configurations.
-	Configurations FirewallLockdownNewResponseConfigurations `json:"configurations,required"`
+	Configurations LegacyJhsZonelockdownConfigurations `json:"configurations,required"`
 	// The timestamp of when the rule was created.
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
 	// An informative summary of the rule.
@@ -131,13 +131,13 @@ type FirewallLockdownNewResponse struct {
 	// The URLs to include in the rule definition. You can use wildcards. Each entered
 	// URL will be escaped before use, which means you can only use simple wildcard
 	// patterns.
-	URLs []string                        `json:"urls,required"`
-	JSON firewallLockdownNewResponseJSON `json:"-"`
+	URLs []string                  `json:"urls,required"`
+	JSON legacyJhsZonelockdownJSON `json:"-"`
 }
 
-// firewallLockdownNewResponseJSON contains the JSON metadata for the struct
-// [FirewallLockdownNewResponse]
-type firewallLockdownNewResponseJSON struct {
+// legacyJhsZonelockdownJSON contains the JSON metadata for the struct
+// [LegacyJhsZonelockdown]
+type legacyJhsZonelockdownJSON struct {
 	ID             apijson.Field
 	Configurations apijson.Field
 	CreatedOn      apijson.Field
@@ -149,7 +149,7 @@ type firewallLockdownNewResponseJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *FirewallLockdownNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *LegacyJhsZonelockdown) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -158,331 +158,83 @@ func (r *FirewallLockdownNewResponse) UnmarshalJSON(data []byte) (err error) {
 // `ip_range` configurations.
 //
 // Union satisfied by
-// [FirewallLockdownNewResponseConfigurationsLegacyJhsSchemasIPConfiguration] or
-// [FirewallLockdownNewResponseConfigurationsLegacyJhsSchemasCidrConfiguration].
-type FirewallLockdownNewResponseConfigurations interface {
-	implementsFirewallLockdownNewResponseConfigurations()
+// [LegacyJhsZonelockdownConfigurationsLegacyJhsSchemasIPConfiguration] or
+// [LegacyJhsZonelockdownConfigurationsLegacyJhsSchemasCidrConfiguration].
+type LegacyJhsZonelockdownConfigurations interface {
+	implementsLegacyJhsZonelockdownConfigurations()
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*FirewallLockdownNewResponseConfigurations)(nil)).Elem(), "")
+	apijson.RegisterUnion(reflect.TypeOf((*LegacyJhsZonelockdownConfigurations)(nil)).Elem(), "")
 }
 
-type FirewallLockdownNewResponseConfigurationsLegacyJhsSchemasIPConfiguration struct {
+type LegacyJhsZonelockdownConfigurationsLegacyJhsSchemasIPConfiguration struct {
 	// The configuration target. You must set the target to `ip` when specifying an IP
 	// address in the Zone Lockdown rule.
-	Target FirewallLockdownNewResponseConfigurationsLegacyJhsSchemasIPConfigurationTarget `json:"target"`
+	Target LegacyJhsZonelockdownConfigurationsLegacyJhsSchemasIPConfigurationTarget `json:"target"`
 	// The IP address to match. This address will be compared to the IP address of
 	// incoming requests.
-	Value string                                                                       `json:"value"`
-	JSON  firewallLockdownNewResponseConfigurationsLegacyJhsSchemasIPConfigurationJSON `json:"-"`
+	Value string                                                                 `json:"value"`
+	JSON  legacyJhsZonelockdownConfigurationsLegacyJhsSchemasIPConfigurationJSON `json:"-"`
 }
 
-// firewallLockdownNewResponseConfigurationsLegacyJhsSchemasIPConfigurationJSON
-// contains the JSON metadata for the struct
-// [FirewallLockdownNewResponseConfigurationsLegacyJhsSchemasIPConfiguration]
-type firewallLockdownNewResponseConfigurationsLegacyJhsSchemasIPConfigurationJSON struct {
+// legacyJhsZonelockdownConfigurationsLegacyJhsSchemasIPConfigurationJSON contains
+// the JSON metadata for the struct
+// [LegacyJhsZonelockdownConfigurationsLegacyJhsSchemasIPConfiguration]
+type legacyJhsZonelockdownConfigurationsLegacyJhsSchemasIPConfigurationJSON struct {
 	Target      apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FirewallLockdownNewResponseConfigurationsLegacyJhsSchemasIPConfiguration) UnmarshalJSON(data []byte) (err error) {
+func (r *LegacyJhsZonelockdownConfigurationsLegacyJhsSchemasIPConfiguration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r FirewallLockdownNewResponseConfigurationsLegacyJhsSchemasIPConfiguration) implementsFirewallLockdownNewResponseConfigurations() {
+func (r LegacyJhsZonelockdownConfigurationsLegacyJhsSchemasIPConfiguration) implementsLegacyJhsZonelockdownConfigurations() {
 }
 
 // The configuration target. You must set the target to `ip` when specifying an IP
 // address in the Zone Lockdown rule.
-type FirewallLockdownNewResponseConfigurationsLegacyJhsSchemasIPConfigurationTarget string
+type LegacyJhsZonelockdownConfigurationsLegacyJhsSchemasIPConfigurationTarget string
 
 const (
-	FirewallLockdownNewResponseConfigurationsLegacyJhsSchemasIPConfigurationTargetIP FirewallLockdownNewResponseConfigurationsLegacyJhsSchemasIPConfigurationTarget = "ip"
+	LegacyJhsZonelockdownConfigurationsLegacyJhsSchemasIPConfigurationTargetIP LegacyJhsZonelockdownConfigurationsLegacyJhsSchemasIPConfigurationTarget = "ip"
 )
 
-type FirewallLockdownNewResponseConfigurationsLegacyJhsSchemasCidrConfiguration struct {
+type LegacyJhsZonelockdownConfigurationsLegacyJhsSchemasCidrConfiguration struct {
 	// The configuration target. You must set the target to `ip_range` when specifying
 	// an IP address range in the Zone Lockdown rule.
-	Target FirewallLockdownNewResponseConfigurationsLegacyJhsSchemasCidrConfigurationTarget `json:"target"`
+	Target LegacyJhsZonelockdownConfigurationsLegacyJhsSchemasCidrConfigurationTarget `json:"target"`
 	// The IP address range to match. You can only use prefix lengths `/16` and `/24`.
-	Value string                                                                         `json:"value"`
-	JSON  firewallLockdownNewResponseConfigurationsLegacyJhsSchemasCidrConfigurationJSON `json:"-"`
+	Value string                                                                   `json:"value"`
+	JSON  legacyJhsZonelockdownConfigurationsLegacyJhsSchemasCidrConfigurationJSON `json:"-"`
 }
 
-// firewallLockdownNewResponseConfigurationsLegacyJhsSchemasCidrConfigurationJSON
+// legacyJhsZonelockdownConfigurationsLegacyJhsSchemasCidrConfigurationJSON
 // contains the JSON metadata for the struct
-// [FirewallLockdownNewResponseConfigurationsLegacyJhsSchemasCidrConfiguration]
-type firewallLockdownNewResponseConfigurationsLegacyJhsSchemasCidrConfigurationJSON struct {
+// [LegacyJhsZonelockdownConfigurationsLegacyJhsSchemasCidrConfiguration]
+type legacyJhsZonelockdownConfigurationsLegacyJhsSchemasCidrConfigurationJSON struct {
 	Target      apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *FirewallLockdownNewResponseConfigurationsLegacyJhsSchemasCidrConfiguration) UnmarshalJSON(data []byte) (err error) {
+func (r *LegacyJhsZonelockdownConfigurationsLegacyJhsSchemasCidrConfiguration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r FirewallLockdownNewResponseConfigurationsLegacyJhsSchemasCidrConfiguration) implementsFirewallLockdownNewResponseConfigurations() {
+func (r LegacyJhsZonelockdownConfigurationsLegacyJhsSchemasCidrConfiguration) implementsLegacyJhsZonelockdownConfigurations() {
 }
 
 // The configuration target. You must set the target to `ip_range` when specifying
 // an IP address range in the Zone Lockdown rule.
-type FirewallLockdownNewResponseConfigurationsLegacyJhsSchemasCidrConfigurationTarget string
+type LegacyJhsZonelockdownConfigurationsLegacyJhsSchemasCidrConfigurationTarget string
 
 const (
-	FirewallLockdownNewResponseConfigurationsLegacyJhsSchemasCidrConfigurationTargetIPRange FirewallLockdownNewResponseConfigurationsLegacyJhsSchemasCidrConfigurationTarget = "ip_range"
-)
-
-type FirewallLockdownUpdateResponse struct {
-	// The unique identifier of the Zone Lockdown rule.
-	ID string `json:"id,required"`
-	// A list of IP addresses or CIDR ranges that will be allowed to access the URLs
-	// specified in the Zone Lockdown rule. You can include any number of `ip` or
-	// `ip_range` configurations.
-	Configurations FirewallLockdownUpdateResponseConfigurations `json:"configurations,required"`
-	// The timestamp of when the rule was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	// An informative summary of the rule.
-	Description string `json:"description,required"`
-	// The timestamp of when the rule was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// When true, indicates that the rule is currently paused.
-	Paused bool `json:"paused,required"`
-	// The URLs to include in the rule definition. You can use wildcards. Each entered
-	// URL will be escaped before use, which means you can only use simple wildcard
-	// patterns.
-	URLs []string                           `json:"urls,required"`
-	JSON firewallLockdownUpdateResponseJSON `json:"-"`
-}
-
-// firewallLockdownUpdateResponseJSON contains the JSON metadata for the struct
-// [FirewallLockdownUpdateResponse]
-type firewallLockdownUpdateResponseJSON struct {
-	ID             apijson.Field
-	Configurations apijson.Field
-	CreatedOn      apijson.Field
-	Description    apijson.Field
-	ModifiedOn     apijson.Field
-	Paused         apijson.Field
-	URLs           apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *FirewallLockdownUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// A list of IP addresses or CIDR ranges that will be allowed to access the URLs
-// specified in the Zone Lockdown rule. You can include any number of `ip` or
-// `ip_range` configurations.
-//
-// Union satisfied by
-// [FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasIPConfiguration] or
-// [FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasCidrConfiguration].
-type FirewallLockdownUpdateResponseConfigurations interface {
-	implementsFirewallLockdownUpdateResponseConfigurations()
-}
-
-func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*FirewallLockdownUpdateResponseConfigurations)(nil)).Elem(), "")
-}
-
-type FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasIPConfiguration struct {
-	// The configuration target. You must set the target to `ip` when specifying an IP
-	// address in the Zone Lockdown rule.
-	Target FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasIPConfigurationTarget `json:"target"`
-	// The IP address to match. This address will be compared to the IP address of
-	// incoming requests.
-	Value string                                                                          `json:"value"`
-	JSON  firewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasIPConfigurationJSON `json:"-"`
-}
-
-// firewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasIPConfigurationJSON
-// contains the JSON metadata for the struct
-// [FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasIPConfiguration]
-type firewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasIPConfigurationJSON struct {
-	Target      apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasIPConfiguration) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasIPConfiguration) implementsFirewallLockdownUpdateResponseConfigurations() {
-}
-
-// The configuration target. You must set the target to `ip` when specifying an IP
-// address in the Zone Lockdown rule.
-type FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasIPConfigurationTarget string
-
-const (
-	FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasIPConfigurationTargetIP FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasIPConfigurationTarget = "ip"
-)
-
-type FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasCidrConfiguration struct {
-	// The configuration target. You must set the target to `ip_range` when specifying
-	// an IP address range in the Zone Lockdown rule.
-	Target FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasCidrConfigurationTarget `json:"target"`
-	// The IP address range to match. You can only use prefix lengths `/16` and `/24`.
-	Value string                                                                            `json:"value"`
-	JSON  firewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasCidrConfigurationJSON `json:"-"`
-}
-
-// firewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasCidrConfigurationJSON
-// contains the JSON metadata for the struct
-// [FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasCidrConfiguration]
-type firewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasCidrConfigurationJSON struct {
-	Target      apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasCidrConfiguration) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasCidrConfiguration) implementsFirewallLockdownUpdateResponseConfigurations() {
-}
-
-// The configuration target. You must set the target to `ip_range` when specifying
-// an IP address range in the Zone Lockdown rule.
-type FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasCidrConfigurationTarget string
-
-const (
-	FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasCidrConfigurationTargetIPRange FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasCidrConfigurationTarget = "ip_range"
-)
-
-type FirewallLockdownListResponse struct {
-	// The unique identifier of the Zone Lockdown rule.
-	ID string `json:"id,required"`
-	// A list of IP addresses or CIDR ranges that will be allowed to access the URLs
-	// specified in the Zone Lockdown rule. You can include any number of `ip` or
-	// `ip_range` configurations.
-	Configurations FirewallLockdownListResponseConfigurations `json:"configurations,required"`
-	// The timestamp of when the rule was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	// An informative summary of the rule.
-	Description string `json:"description,required"`
-	// The timestamp of when the rule was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// When true, indicates that the rule is currently paused.
-	Paused bool `json:"paused,required"`
-	// The URLs to include in the rule definition. You can use wildcards. Each entered
-	// URL will be escaped before use, which means you can only use simple wildcard
-	// patterns.
-	URLs []string                         `json:"urls,required"`
-	JSON firewallLockdownListResponseJSON `json:"-"`
-}
-
-// firewallLockdownListResponseJSON contains the JSON metadata for the struct
-// [FirewallLockdownListResponse]
-type firewallLockdownListResponseJSON struct {
-	ID             apijson.Field
-	Configurations apijson.Field
-	CreatedOn      apijson.Field
-	Description    apijson.Field
-	ModifiedOn     apijson.Field
-	Paused         apijson.Field
-	URLs           apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *FirewallLockdownListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// A list of IP addresses or CIDR ranges that will be allowed to access the URLs
-// specified in the Zone Lockdown rule. You can include any number of `ip` or
-// `ip_range` configurations.
-//
-// Union satisfied by
-// [FirewallLockdownListResponseConfigurationsLegacyJhsSchemasIPConfiguration] or
-// [FirewallLockdownListResponseConfigurationsLegacyJhsSchemasCidrConfiguration].
-type FirewallLockdownListResponseConfigurations interface {
-	implementsFirewallLockdownListResponseConfigurations()
-}
-
-func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*FirewallLockdownListResponseConfigurations)(nil)).Elem(), "")
-}
-
-type FirewallLockdownListResponseConfigurationsLegacyJhsSchemasIPConfiguration struct {
-	// The configuration target. You must set the target to `ip` when specifying an IP
-	// address in the Zone Lockdown rule.
-	Target FirewallLockdownListResponseConfigurationsLegacyJhsSchemasIPConfigurationTarget `json:"target"`
-	// The IP address to match. This address will be compared to the IP address of
-	// incoming requests.
-	Value string                                                                        `json:"value"`
-	JSON  firewallLockdownListResponseConfigurationsLegacyJhsSchemasIPConfigurationJSON `json:"-"`
-}
-
-// firewallLockdownListResponseConfigurationsLegacyJhsSchemasIPConfigurationJSON
-// contains the JSON metadata for the struct
-// [FirewallLockdownListResponseConfigurationsLegacyJhsSchemasIPConfiguration]
-type firewallLockdownListResponseConfigurationsLegacyJhsSchemasIPConfigurationJSON struct {
-	Target      apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallLockdownListResponseConfigurationsLegacyJhsSchemasIPConfiguration) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r FirewallLockdownListResponseConfigurationsLegacyJhsSchemasIPConfiguration) implementsFirewallLockdownListResponseConfigurations() {
-}
-
-// The configuration target. You must set the target to `ip` when specifying an IP
-// address in the Zone Lockdown rule.
-type FirewallLockdownListResponseConfigurationsLegacyJhsSchemasIPConfigurationTarget string
-
-const (
-	FirewallLockdownListResponseConfigurationsLegacyJhsSchemasIPConfigurationTargetIP FirewallLockdownListResponseConfigurationsLegacyJhsSchemasIPConfigurationTarget = "ip"
-)
-
-type FirewallLockdownListResponseConfigurationsLegacyJhsSchemasCidrConfiguration struct {
-	// The configuration target. You must set the target to `ip_range` when specifying
-	// an IP address range in the Zone Lockdown rule.
-	Target FirewallLockdownListResponseConfigurationsLegacyJhsSchemasCidrConfigurationTarget `json:"target"`
-	// The IP address range to match. You can only use prefix lengths `/16` and `/24`.
-	Value string                                                                          `json:"value"`
-	JSON  firewallLockdownListResponseConfigurationsLegacyJhsSchemasCidrConfigurationJSON `json:"-"`
-}
-
-// firewallLockdownListResponseConfigurationsLegacyJhsSchemasCidrConfigurationJSON
-// contains the JSON metadata for the struct
-// [FirewallLockdownListResponseConfigurationsLegacyJhsSchemasCidrConfiguration]
-type firewallLockdownListResponseConfigurationsLegacyJhsSchemasCidrConfigurationJSON struct {
-	Target      apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallLockdownListResponseConfigurationsLegacyJhsSchemasCidrConfiguration) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r FirewallLockdownListResponseConfigurationsLegacyJhsSchemasCidrConfiguration) implementsFirewallLockdownListResponseConfigurations() {
-}
-
-// The configuration target. You must set the target to `ip_range` when specifying
-// an IP address range in the Zone Lockdown rule.
-type FirewallLockdownListResponseConfigurationsLegacyJhsSchemasCidrConfigurationTarget string
-
-const (
-	FirewallLockdownListResponseConfigurationsLegacyJhsSchemasCidrConfigurationTargetIPRange FirewallLockdownListResponseConfigurationsLegacyJhsSchemasCidrConfigurationTarget = "ip_range"
+	LegacyJhsZonelockdownConfigurationsLegacyJhsSchemasCidrConfigurationTargetIPRange LegacyJhsZonelockdownConfigurationsLegacyJhsSchemasCidrConfigurationTarget = "ip_range"
 )
 
 type FirewallLockdownDeleteResponse struct {
@@ -503,130 +255,6 @@ func (r *FirewallLockdownDeleteResponse) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type FirewallLockdownGetResponse struct {
-	// The unique identifier of the Zone Lockdown rule.
-	ID string `json:"id,required"`
-	// A list of IP addresses or CIDR ranges that will be allowed to access the URLs
-	// specified in the Zone Lockdown rule. You can include any number of `ip` or
-	// `ip_range` configurations.
-	Configurations FirewallLockdownGetResponseConfigurations `json:"configurations,required"`
-	// The timestamp of when the rule was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	// An informative summary of the rule.
-	Description string `json:"description,required"`
-	// The timestamp of when the rule was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// When true, indicates that the rule is currently paused.
-	Paused bool `json:"paused,required"`
-	// The URLs to include in the rule definition. You can use wildcards. Each entered
-	// URL will be escaped before use, which means you can only use simple wildcard
-	// patterns.
-	URLs []string                        `json:"urls,required"`
-	JSON firewallLockdownGetResponseJSON `json:"-"`
-}
-
-// firewallLockdownGetResponseJSON contains the JSON metadata for the struct
-// [FirewallLockdownGetResponse]
-type firewallLockdownGetResponseJSON struct {
-	ID             apijson.Field
-	Configurations apijson.Field
-	CreatedOn      apijson.Field
-	Description    apijson.Field
-	ModifiedOn     apijson.Field
-	Paused         apijson.Field
-	URLs           apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *FirewallLockdownGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// A list of IP addresses or CIDR ranges that will be allowed to access the URLs
-// specified in the Zone Lockdown rule. You can include any number of `ip` or
-// `ip_range` configurations.
-//
-// Union satisfied by
-// [FirewallLockdownGetResponseConfigurationsLegacyJhsSchemasIPConfiguration] or
-// [FirewallLockdownGetResponseConfigurationsLegacyJhsSchemasCidrConfiguration].
-type FirewallLockdownGetResponseConfigurations interface {
-	implementsFirewallLockdownGetResponseConfigurations()
-}
-
-func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*FirewallLockdownGetResponseConfigurations)(nil)).Elem(), "")
-}
-
-type FirewallLockdownGetResponseConfigurationsLegacyJhsSchemasIPConfiguration struct {
-	// The configuration target. You must set the target to `ip` when specifying an IP
-	// address in the Zone Lockdown rule.
-	Target FirewallLockdownGetResponseConfigurationsLegacyJhsSchemasIPConfigurationTarget `json:"target"`
-	// The IP address to match. This address will be compared to the IP address of
-	// incoming requests.
-	Value string                                                                       `json:"value"`
-	JSON  firewallLockdownGetResponseConfigurationsLegacyJhsSchemasIPConfigurationJSON `json:"-"`
-}
-
-// firewallLockdownGetResponseConfigurationsLegacyJhsSchemasIPConfigurationJSON
-// contains the JSON metadata for the struct
-// [FirewallLockdownGetResponseConfigurationsLegacyJhsSchemasIPConfiguration]
-type firewallLockdownGetResponseConfigurationsLegacyJhsSchemasIPConfigurationJSON struct {
-	Target      apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallLockdownGetResponseConfigurationsLegacyJhsSchemasIPConfiguration) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r FirewallLockdownGetResponseConfigurationsLegacyJhsSchemasIPConfiguration) implementsFirewallLockdownGetResponseConfigurations() {
-}
-
-// The configuration target. You must set the target to `ip` when specifying an IP
-// address in the Zone Lockdown rule.
-type FirewallLockdownGetResponseConfigurationsLegacyJhsSchemasIPConfigurationTarget string
-
-const (
-	FirewallLockdownGetResponseConfigurationsLegacyJhsSchemasIPConfigurationTargetIP FirewallLockdownGetResponseConfigurationsLegacyJhsSchemasIPConfigurationTarget = "ip"
-)
-
-type FirewallLockdownGetResponseConfigurationsLegacyJhsSchemasCidrConfiguration struct {
-	// The configuration target. You must set the target to `ip_range` when specifying
-	// an IP address range in the Zone Lockdown rule.
-	Target FirewallLockdownGetResponseConfigurationsLegacyJhsSchemasCidrConfigurationTarget `json:"target"`
-	// The IP address range to match. You can only use prefix lengths `/16` and `/24`.
-	Value string                                                                         `json:"value"`
-	JSON  firewallLockdownGetResponseConfigurationsLegacyJhsSchemasCidrConfigurationJSON `json:"-"`
-}
-
-// firewallLockdownGetResponseConfigurationsLegacyJhsSchemasCidrConfigurationJSON
-// contains the JSON metadata for the struct
-// [FirewallLockdownGetResponseConfigurationsLegacyJhsSchemasCidrConfiguration]
-type firewallLockdownGetResponseConfigurationsLegacyJhsSchemasCidrConfigurationJSON struct {
-	Target      apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallLockdownGetResponseConfigurationsLegacyJhsSchemasCidrConfiguration) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r FirewallLockdownGetResponseConfigurationsLegacyJhsSchemasCidrConfiguration) implementsFirewallLockdownGetResponseConfigurations() {
-}
-
-// The configuration target. You must set the target to `ip_range` when specifying
-// an IP address range in the Zone Lockdown rule.
-type FirewallLockdownGetResponseConfigurationsLegacyJhsSchemasCidrConfigurationTarget string
-
-const (
-	FirewallLockdownGetResponseConfigurationsLegacyJhsSchemasCidrConfigurationTargetIPRange FirewallLockdownGetResponseConfigurationsLegacyJhsSchemasCidrConfigurationTarget = "ip_range"
-)
-
 type FirewallLockdownNewParams struct {
 	Body param.Field[interface{}] `json:"body,required"`
 }
@@ -638,7 +266,7 @@ func (r FirewallLockdownNewParams) MarshalJSON() (data []byte, err error) {
 type FirewallLockdownNewResponseEnvelope struct {
 	Errors   []FirewallLockdownNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []FirewallLockdownNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   FirewallLockdownNewResponse                   `json:"result,required,nullable"`
+	Result   LegacyJhsZonelockdown                         `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success FirewallLockdownNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    firewallLockdownNewResponseEnvelopeJSON    `json:"-"`
@@ -715,7 +343,7 @@ func (r FirewallLockdownUpdateParams) MarshalJSON() (data []byte, err error) {
 type FirewallLockdownUpdateResponseEnvelope struct {
 	Errors   []FirewallLockdownUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []FirewallLockdownUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   FirewallLockdownUpdateResponse                   `json:"result,required,nullable"`
+	Result   LegacyJhsZonelockdown                            `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success FirewallLockdownUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    firewallLockdownUpdateResponseEnvelopeJSON    `json:"-"`
@@ -834,7 +462,7 @@ func (r *FirewallLockdownDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err
 type FirewallLockdownGetResponseEnvelope struct {
 	Errors   []FirewallLockdownGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []FirewallLockdownGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   FirewallLockdownGetResponse                   `json:"result,required,nullable"`
+	Result   LegacyJhsZonelockdown                         `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success FirewallLockdownGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    firewallLockdownGetResponseEnvelopeJSON    `json:"-"`

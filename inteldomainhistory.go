@@ -35,7 +35,7 @@ func NewIntelDomainHistoryService(opts ...option.RequestOption) (r *IntelDomainH
 }
 
 // Get Domain History
-func (r *IntelDomainHistoryService) Get(ctx context.Context, params IntelDomainHistoryGetParams, opts ...option.RequestOption) (res *[]IntelDomainHistoryGetResponse, err error) {
+func (r *IntelDomainHistoryService) Get(ctx context.Context, params IntelDomainHistoryGetParams, opts ...option.RequestOption) (res *[]IntelDomainHistory, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IntelDomainHistoryGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/domain-history", params.AccountID)
@@ -47,35 +47,35 @@ func (r *IntelDomainHistoryService) Get(ctx context.Context, params IntelDomainH
 	return
 }
 
-type IntelDomainHistoryGetResponse struct {
-	Categorizations []IntelDomainHistoryGetResponseCategorization `json:"categorizations"`
-	Domain          string                                        `json:"domain"`
-	JSON            intelDomainHistoryGetResponseJSON             `json:"-"`
+type IntelDomainHistory struct {
+	Categorizations []IntelDomainHistoryCategorization `json:"categorizations"`
+	Domain          string                             `json:"domain"`
+	JSON            intelDomainHistoryJSON             `json:"-"`
 }
 
-// intelDomainHistoryGetResponseJSON contains the JSON metadata for the struct
-// [IntelDomainHistoryGetResponse]
-type intelDomainHistoryGetResponseJSON struct {
+// intelDomainHistoryJSON contains the JSON metadata for the struct
+// [IntelDomainHistory]
+type intelDomainHistoryJSON struct {
 	Categorizations apijson.Field
 	Domain          apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *IntelDomainHistoryGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelDomainHistory) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type IntelDomainHistoryGetResponseCategorization struct {
-	Categories interface{}                                     `json:"categories"`
-	End        time.Time                                       `json:"end" format:"date"`
-	Start      time.Time                                       `json:"start" format:"date"`
-	JSON       intelDomainHistoryGetResponseCategorizationJSON `json:"-"`
+type IntelDomainHistoryCategorization struct {
+	Categories interface{}                          `json:"categories"`
+	End        time.Time                            `json:"end" format:"date"`
+	Start      time.Time                            `json:"start" format:"date"`
+	JSON       intelDomainHistoryCategorizationJSON `json:"-"`
 }
 
-// intelDomainHistoryGetResponseCategorizationJSON contains the JSON metadata for
-// the struct [IntelDomainHistoryGetResponseCategorization]
-type intelDomainHistoryGetResponseCategorizationJSON struct {
+// intelDomainHistoryCategorizationJSON contains the JSON metadata for the struct
+// [IntelDomainHistoryCategorization]
+type intelDomainHistoryCategorizationJSON struct {
 	Categories  apijson.Field
 	End         apijson.Field
 	Start       apijson.Field
@@ -83,7 +83,7 @@ type intelDomainHistoryGetResponseCategorizationJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelDomainHistoryGetResponseCategorization) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelDomainHistoryCategorization) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -105,7 +105,7 @@ func (r IntelDomainHistoryGetParams) URLQuery() (v url.Values) {
 type IntelDomainHistoryGetResponseEnvelope struct {
 	Errors   []IntelDomainHistoryGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []IntelDomainHistoryGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []IntelDomainHistoryGetResponse                 `json:"result,required,nullable"`
+	Result   []IntelDomainHistory                            `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    IntelDomainHistoryGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo IntelDomainHistoryGetResponseEnvelopeResultInfo `json:"result_info"`

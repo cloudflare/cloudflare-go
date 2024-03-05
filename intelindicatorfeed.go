@@ -35,7 +35,7 @@ func NewIntelIndicatorFeedService(opts ...option.RequestOption) (r *IntelIndicat
 }
 
 // Create new indicator feed
-func (r *IntelIndicatorFeedService) New(ctx context.Context, params IntelIndicatorFeedNewParams, opts ...option.RequestOption) (res *IntelIndicatorFeedNewResponse, err error) {
+func (r *IntelIndicatorFeedService) New(ctx context.Context, params IntelIndicatorFeedNewParams, opts ...option.RequestOption) (res *IntelIndicatorFeedItem, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IntelIndicatorFeedNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds", params.AccountID)
@@ -48,7 +48,7 @@ func (r *IntelIndicatorFeedService) New(ctx context.Context, params IntelIndicat
 }
 
 // Update indicator feed data
-func (r *IntelIndicatorFeedService) Update(ctx context.Context, feedID int64, params IntelIndicatorFeedUpdateParams, opts ...option.RequestOption) (res *IntelIndicatorFeedUpdateResponse, err error) {
+func (r *IntelIndicatorFeedService) Update(ctx context.Context, feedID int64, params IntelIndicatorFeedUpdateParams, opts ...option.RequestOption) (res *IntelUpdateFeed, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IntelIndicatorFeedUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/%v/snapshot", params.AccountID, feedID)
@@ -61,7 +61,7 @@ func (r *IntelIndicatorFeedService) Update(ctx context.Context, feedID int64, pa
 }
 
 // Get indicator feeds owned by this account
-func (r *IntelIndicatorFeedService) List(ctx context.Context, query IntelIndicatorFeedListParams, opts ...option.RequestOption) (res *[]IntelIndicatorFeedListResponse, err error) {
+func (r *IntelIndicatorFeedService) List(ctx context.Context, query IntelIndicatorFeedListParams, opts ...option.RequestOption) (res *[]IntelIndicatorFeedItem, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IntelIndicatorFeedListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds", query.AccountID)
@@ -83,7 +83,7 @@ func (r *IntelIndicatorFeedService) Data(ctx context.Context, feedID int64, quer
 }
 
 // Get indicator feed metadata
-func (r *IntelIndicatorFeedService) Get(ctx context.Context, feedID int64, query IntelIndicatorFeedGetParams, opts ...option.RequestOption) (res *IntelIndicatorFeedGetResponse, err error) {
+func (r *IntelIndicatorFeedService) Get(ctx context.Context, feedID int64, query IntelIndicatorFeedGetParams, opts ...option.RequestOption) (res *IntelIndicatorFeedMetadata, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IntelIndicatorFeedGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/%v", query.AccountID, feedID)
@@ -95,7 +95,7 @@ func (r *IntelIndicatorFeedService) Get(ctx context.Context, feedID int64, query
 	return
 }
 
-type IntelIndicatorFeedNewResponse struct {
+type IntelIndicatorFeedItem struct {
 	// The unique identifier for the indicator feed
 	ID int64 `json:"id"`
 	// The date and time when the data entry was created
@@ -105,13 +105,13 @@ type IntelIndicatorFeedNewResponse struct {
 	// The date and time when the data entry was last modified
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// The name of the indicator feed
-	Name string                            `json:"name"`
-	JSON intelIndicatorFeedNewResponseJSON `json:"-"`
+	Name string                     `json:"name"`
+	JSON intelIndicatorFeedItemJSON `json:"-"`
 }
 
-// intelIndicatorFeedNewResponseJSON contains the JSON metadata for the struct
-// [IntelIndicatorFeedNewResponse]
-type intelIndicatorFeedNewResponseJSON struct {
+// intelIndicatorFeedItemJSON contains the JSON metadata for the struct
+// [IntelIndicatorFeedItem]
+type intelIndicatorFeedItemJSON struct {
 	ID          apijson.Field
 	CreatedOn   apijson.Field
 	Description apijson.Field
@@ -121,65 +121,11 @@ type intelIndicatorFeedNewResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelIndicatorFeedNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelIndicatorFeedItem) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type IntelIndicatorFeedUpdateResponse struct {
-	// Feed id
-	FileID int64 `json:"file_id"`
-	// Name of the file unified in our system
-	Filename string `json:"filename"`
-	// Current status of upload, should be unified
-	Status string                               `json:"status"`
-	JSON   intelIndicatorFeedUpdateResponseJSON `json:"-"`
-}
-
-// intelIndicatorFeedUpdateResponseJSON contains the JSON metadata for the struct
-// [IntelIndicatorFeedUpdateResponse]
-type intelIndicatorFeedUpdateResponseJSON struct {
-	FileID      apijson.Field
-	Filename    apijson.Field
-	Status      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IntelIndicatorFeedUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type IntelIndicatorFeedListResponse struct {
-	// The unique identifier for the indicator feed
-	ID int64 `json:"id"`
-	// The date and time when the data entry was created
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// The description of the example test
-	Description string `json:"description"`
-	// The date and time when the data entry was last modified
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// The name of the indicator feed
-	Name string                             `json:"name"`
-	JSON intelIndicatorFeedListResponseJSON `json:"-"`
-}
-
-// intelIndicatorFeedListResponseJSON contains the JSON metadata for the struct
-// [IntelIndicatorFeedListResponse]
-type intelIndicatorFeedListResponseJSON struct {
-	ID          apijson.Field
-	CreatedOn   apijson.Field
-	Description apijson.Field
-	ModifiedOn  apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *IntelIndicatorFeedListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type IntelIndicatorFeedGetResponse struct {
+type IntelIndicatorFeedMetadata struct {
 	// The unique identifier for the indicator feed
 	ID int64 `json:"id"`
 	// The date and time when the data entry was created
@@ -187,17 +133,17 @@ type IntelIndicatorFeedGetResponse struct {
 	// The description of the example test
 	Description string `json:"description"`
 	// Status of the latest snapshot uploaded
-	LatestUploadStatus IntelIndicatorFeedGetResponseLatestUploadStatus `json:"latest_upload_status"`
+	LatestUploadStatus IntelIndicatorFeedMetadataLatestUploadStatus `json:"latest_upload_status"`
 	// The date and time when the data entry was last modified
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// The name of the indicator feed
-	Name string                            `json:"name"`
-	JSON intelIndicatorFeedGetResponseJSON `json:"-"`
+	Name string                         `json:"name"`
+	JSON intelIndicatorFeedMetadataJSON `json:"-"`
 }
 
-// intelIndicatorFeedGetResponseJSON contains the JSON metadata for the struct
-// [IntelIndicatorFeedGetResponse]
-type intelIndicatorFeedGetResponseJSON struct {
+// intelIndicatorFeedMetadataJSON contains the JSON metadata for the struct
+// [IntelIndicatorFeedMetadata]
+type intelIndicatorFeedMetadataJSON struct {
 	ID                 apijson.Field
 	CreatedOn          apijson.Field
 	Description        apijson.Field
@@ -208,21 +154,44 @@ type intelIndicatorFeedGetResponseJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *IntelIndicatorFeedGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelIndicatorFeedMetadata) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Status of the latest snapshot uploaded
-type IntelIndicatorFeedGetResponseLatestUploadStatus string
+type IntelIndicatorFeedMetadataLatestUploadStatus string
 
 const (
-	IntelIndicatorFeedGetResponseLatestUploadStatusMirroring    IntelIndicatorFeedGetResponseLatestUploadStatus = "Mirroring"
-	IntelIndicatorFeedGetResponseLatestUploadStatusUnifying     IntelIndicatorFeedGetResponseLatestUploadStatus = "Unifying"
-	IntelIndicatorFeedGetResponseLatestUploadStatusLoading      IntelIndicatorFeedGetResponseLatestUploadStatus = "Loading"
-	IntelIndicatorFeedGetResponseLatestUploadStatusProvisioning IntelIndicatorFeedGetResponseLatestUploadStatus = "Provisioning"
-	IntelIndicatorFeedGetResponseLatestUploadStatusComplete     IntelIndicatorFeedGetResponseLatestUploadStatus = "Complete"
-	IntelIndicatorFeedGetResponseLatestUploadStatusError        IntelIndicatorFeedGetResponseLatestUploadStatus = "Error"
+	IntelIndicatorFeedMetadataLatestUploadStatusMirroring    IntelIndicatorFeedMetadataLatestUploadStatus = "Mirroring"
+	IntelIndicatorFeedMetadataLatestUploadStatusUnifying     IntelIndicatorFeedMetadataLatestUploadStatus = "Unifying"
+	IntelIndicatorFeedMetadataLatestUploadStatusLoading      IntelIndicatorFeedMetadataLatestUploadStatus = "Loading"
+	IntelIndicatorFeedMetadataLatestUploadStatusProvisioning IntelIndicatorFeedMetadataLatestUploadStatus = "Provisioning"
+	IntelIndicatorFeedMetadataLatestUploadStatusComplete     IntelIndicatorFeedMetadataLatestUploadStatus = "Complete"
+	IntelIndicatorFeedMetadataLatestUploadStatusError        IntelIndicatorFeedMetadataLatestUploadStatus = "Error"
 )
+
+type IntelUpdateFeed struct {
+	// Feed id
+	FileID int64 `json:"file_id"`
+	// Name of the file unified in our system
+	Filename string `json:"filename"`
+	// Current status of upload, should be unified
+	Status string              `json:"status"`
+	JSON   intelUpdateFeedJSON `json:"-"`
+}
+
+// intelUpdateFeedJSON contains the JSON metadata for the struct [IntelUpdateFeed]
+type intelUpdateFeedJSON struct {
+	FileID      apijson.Field
+	Filename    apijson.Field
+	Status      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IntelUpdateFeed) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type IntelIndicatorFeedNewParams struct {
 	// Identifier
@@ -240,7 +209,7 @@ func (r IntelIndicatorFeedNewParams) MarshalJSON() (data []byte, err error) {
 type IntelIndicatorFeedNewResponseEnvelope struct {
 	Errors   []IntelIndicatorFeedNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []IntelIndicatorFeedNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   IntelIndicatorFeedNewResponse                   `json:"result,required"`
+	Result   IntelIndicatorFeedItem                          `json:"result,required"`
 	// Whether the API call was successful
 	Success IntelIndicatorFeedNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    intelIndicatorFeedNewResponseEnvelopeJSON    `json:"-"`
@@ -320,7 +289,7 @@ func (r IntelIndicatorFeedUpdateParams) MarshalJSON() (data []byte, err error) {
 type IntelIndicatorFeedUpdateResponseEnvelope struct {
 	Errors   []IntelIndicatorFeedUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []IntelIndicatorFeedUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   IntelIndicatorFeedUpdateResponse                   `json:"result,required"`
+	Result   IntelUpdateFeed                                    `json:"result,required"`
 	// Whether the API call was successful
 	Success IntelIndicatorFeedUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    intelIndicatorFeedUpdateResponseEnvelopeJSON    `json:"-"`
@@ -394,7 +363,7 @@ type IntelIndicatorFeedListParams struct {
 type IntelIndicatorFeedListResponseEnvelope struct {
 	Errors   []IntelIndicatorFeedListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []IntelIndicatorFeedListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []IntelIndicatorFeedListResponse                 `json:"result,required"`
+	Result   []IntelIndicatorFeedItem                         `json:"result,required"`
 	// Whether the API call was successful
 	Success IntelIndicatorFeedListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    intelIndicatorFeedListResponseEnvelopeJSON    `json:"-"`
@@ -473,7 +442,7 @@ type IntelIndicatorFeedGetParams struct {
 type IntelIndicatorFeedGetResponseEnvelope struct {
 	Errors   []IntelIndicatorFeedGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []IntelIndicatorFeedGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   IntelIndicatorFeedGetResponse                   `json:"result,required"`
+	Result   IntelIndicatorFeedMetadata                      `json:"result,required"`
 	// Whether the API call was successful
 	Success IntelIndicatorFeedGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    intelIndicatorFeedGetResponseEnvelopeJSON    `json:"-"`

@@ -33,7 +33,7 @@ func NewZeroTrustAccessCustomPageService(opts ...option.RequestOption) (r *ZeroT
 }
 
 // Create a custom page
-func (r *ZeroTrustAccessCustomPageService) New(ctx context.Context, identifier string, body ZeroTrustAccessCustomPageNewParams, opts ...option.RequestOption) (res *ZeroTrustAccessCustomPageNewResponse, err error) {
+func (r *ZeroTrustAccessCustomPageService) New(ctx context.Context, identifier string, body ZeroTrustAccessCustomPageNewParams, opts ...option.RequestOption) (res *AccessCustomPageWithoutHTML, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustAccessCustomPageNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/custom_pages", identifier)
@@ -46,7 +46,7 @@ func (r *ZeroTrustAccessCustomPageService) New(ctx context.Context, identifier s
 }
 
 // Update a custom page
-func (r *ZeroTrustAccessCustomPageService) Update(ctx context.Context, identifier string, uuid string, body ZeroTrustAccessCustomPageUpdateParams, opts ...option.RequestOption) (res *ZeroTrustAccessCustomPageUpdateResponse, err error) {
+func (r *ZeroTrustAccessCustomPageService) Update(ctx context.Context, identifier string, uuid string, body ZeroTrustAccessCustomPageUpdateParams, opts ...option.RequestOption) (res *AccessCustomPageWithoutHTML, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustAccessCustomPageUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/custom_pages/%s", identifier, uuid)
@@ -59,7 +59,7 @@ func (r *ZeroTrustAccessCustomPageService) Update(ctx context.Context, identifie
 }
 
 // List custom pages
-func (r *ZeroTrustAccessCustomPageService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *[]ZeroTrustAccessCustomPageListResponse, err error) {
+func (r *ZeroTrustAccessCustomPageService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *[]AccessCustomPageWithoutHTML, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustAccessCustomPageListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/custom_pages", identifier)
@@ -85,7 +85,7 @@ func (r *ZeroTrustAccessCustomPageService) Delete(ctx context.Context, identifie
 }
 
 // Fetches a custom page and also returns its HTML.
-func (r *ZeroTrustAccessCustomPageService) Get(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *ZeroTrustAccessCustomPageGetResponse, err error) {
+func (r *ZeroTrustAccessCustomPageService) Get(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *AccessCustomPage, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustAccessCustomPageGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/custom_pages/%s", identifier, uuid)
@@ -97,23 +97,26 @@ func (r *ZeroTrustAccessCustomPageService) Get(ctx context.Context, identifier s
 	return
 }
 
-type ZeroTrustAccessCustomPageNewResponse struct {
+type AccessCustomPage struct {
+	// Custom page HTML.
+	CustomHTML string `json:"custom_html,required"`
 	// Custom page name.
 	Name string `json:"name,required"`
 	// Custom page type.
-	Type ZeroTrustAccessCustomPageNewResponseType `json:"type,required"`
+	Type AccessCustomPageType `json:"type,required"`
 	// Number of apps the custom page is assigned to.
 	AppCount  int64     `json:"app_count"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// UUID
-	Uid       string                                   `json:"uid"`
-	UpdatedAt time.Time                                `json:"updated_at" format:"date-time"`
-	JSON      zeroTrustAccessCustomPageNewResponseJSON `json:"-"`
+	Uid       string               `json:"uid"`
+	UpdatedAt time.Time            `json:"updated_at" format:"date-time"`
+	JSON      accessCustomPageJSON `json:"-"`
 }
 
-// zeroTrustAccessCustomPageNewResponseJSON contains the JSON metadata for the
-// struct [ZeroTrustAccessCustomPageNewResponse]
-type zeroTrustAccessCustomPageNewResponseJSON struct {
+// accessCustomPageJSON contains the JSON metadata for the struct
+// [AccessCustomPage]
+type accessCustomPageJSON struct {
+	CustomHTML  apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
 	AppCount    apijson.Field
@@ -124,35 +127,35 @@ type zeroTrustAccessCustomPageNewResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZeroTrustAccessCustomPageNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessCustomPage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Custom page type.
-type ZeroTrustAccessCustomPageNewResponseType string
+type AccessCustomPageType string
 
 const (
-	ZeroTrustAccessCustomPageNewResponseTypeIdentityDenied ZeroTrustAccessCustomPageNewResponseType = "identity_denied"
-	ZeroTrustAccessCustomPageNewResponseTypeForbidden      ZeroTrustAccessCustomPageNewResponseType = "forbidden"
+	AccessCustomPageTypeIdentityDenied AccessCustomPageType = "identity_denied"
+	AccessCustomPageTypeForbidden      AccessCustomPageType = "forbidden"
 )
 
-type ZeroTrustAccessCustomPageUpdateResponse struct {
+type AccessCustomPageWithoutHTML struct {
 	// Custom page name.
 	Name string `json:"name,required"`
 	// Custom page type.
-	Type ZeroTrustAccessCustomPageUpdateResponseType `json:"type,required"`
+	Type AccessCustomPageWithoutHTMLType `json:"type,required"`
 	// Number of apps the custom page is assigned to.
 	AppCount  int64     `json:"app_count"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// UUID
-	Uid       string                                      `json:"uid"`
-	UpdatedAt time.Time                                   `json:"updated_at" format:"date-time"`
-	JSON      zeroTrustAccessCustomPageUpdateResponseJSON `json:"-"`
+	Uid       string                          `json:"uid"`
+	UpdatedAt time.Time                       `json:"updated_at" format:"date-time"`
+	JSON      accessCustomPageWithoutHTMLJSON `json:"-"`
 }
 
-// zeroTrustAccessCustomPageUpdateResponseJSON contains the JSON metadata for the
-// struct [ZeroTrustAccessCustomPageUpdateResponse]
-type zeroTrustAccessCustomPageUpdateResponseJSON struct {
+// accessCustomPageWithoutHTMLJSON contains the JSON metadata for the struct
+// [AccessCustomPageWithoutHTML]
+type accessCustomPageWithoutHTMLJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	AppCount    apijson.Field
@@ -163,55 +166,16 @@ type zeroTrustAccessCustomPageUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZeroTrustAccessCustomPageUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessCustomPageWithoutHTML) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Custom page type.
-type ZeroTrustAccessCustomPageUpdateResponseType string
+type AccessCustomPageWithoutHTMLType string
 
 const (
-	ZeroTrustAccessCustomPageUpdateResponseTypeIdentityDenied ZeroTrustAccessCustomPageUpdateResponseType = "identity_denied"
-	ZeroTrustAccessCustomPageUpdateResponseTypeForbidden      ZeroTrustAccessCustomPageUpdateResponseType = "forbidden"
-)
-
-type ZeroTrustAccessCustomPageListResponse struct {
-	// Custom page name.
-	Name string `json:"name,required"`
-	// Custom page type.
-	Type ZeroTrustAccessCustomPageListResponseType `json:"type,required"`
-	// Number of apps the custom page is assigned to.
-	AppCount  int64     `json:"app_count"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// UUID
-	Uid       string                                    `json:"uid"`
-	UpdatedAt time.Time                                 `json:"updated_at" format:"date-time"`
-	JSON      zeroTrustAccessCustomPageListResponseJSON `json:"-"`
-}
-
-// zeroTrustAccessCustomPageListResponseJSON contains the JSON metadata for the
-// struct [ZeroTrustAccessCustomPageListResponse]
-type zeroTrustAccessCustomPageListResponseJSON struct {
-	Name        apijson.Field
-	Type        apijson.Field
-	AppCount    apijson.Field
-	CreatedAt   apijson.Field
-	Uid         apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustAccessCustomPageListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Custom page type.
-type ZeroTrustAccessCustomPageListResponseType string
-
-const (
-	ZeroTrustAccessCustomPageListResponseTypeIdentityDenied ZeroTrustAccessCustomPageListResponseType = "identity_denied"
-	ZeroTrustAccessCustomPageListResponseTypeForbidden      ZeroTrustAccessCustomPageListResponseType = "forbidden"
+	AccessCustomPageWithoutHTMLTypeIdentityDenied AccessCustomPageWithoutHTMLType = "identity_denied"
+	AccessCustomPageWithoutHTMLTypeForbidden      AccessCustomPageWithoutHTMLType = "forbidden"
 )
 
 type ZeroTrustAccessCustomPageDeleteResponse struct {
@@ -231,48 +195,6 @@ type zeroTrustAccessCustomPageDeleteResponseJSON struct {
 func (r *ZeroTrustAccessCustomPageDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-type ZeroTrustAccessCustomPageGetResponse struct {
-	// Custom page HTML.
-	CustomHTML string `json:"custom_html,required"`
-	// Custom page name.
-	Name string `json:"name,required"`
-	// Custom page type.
-	Type ZeroTrustAccessCustomPageGetResponseType `json:"type,required"`
-	// Number of apps the custom page is assigned to.
-	AppCount  int64     `json:"app_count"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// UUID
-	Uid       string                                   `json:"uid"`
-	UpdatedAt time.Time                                `json:"updated_at" format:"date-time"`
-	JSON      zeroTrustAccessCustomPageGetResponseJSON `json:"-"`
-}
-
-// zeroTrustAccessCustomPageGetResponseJSON contains the JSON metadata for the
-// struct [ZeroTrustAccessCustomPageGetResponse]
-type zeroTrustAccessCustomPageGetResponseJSON struct {
-	CustomHTML  apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	AppCount    apijson.Field
-	CreatedAt   apijson.Field
-	Uid         apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustAccessCustomPageGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Custom page type.
-type ZeroTrustAccessCustomPageGetResponseType string
-
-const (
-	ZeroTrustAccessCustomPageGetResponseTypeIdentityDenied ZeroTrustAccessCustomPageGetResponseType = "identity_denied"
-	ZeroTrustAccessCustomPageGetResponseTypeForbidden      ZeroTrustAccessCustomPageGetResponseType = "forbidden"
-)
 
 type ZeroTrustAccessCustomPageNewParams struct {
 	// Custom page HTML.
@@ -300,7 +222,7 @@ const (
 type ZeroTrustAccessCustomPageNewResponseEnvelope struct {
 	Errors   []ZeroTrustAccessCustomPageNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustAccessCustomPageNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustAccessCustomPageNewResponse                   `json:"result,required"`
+	Result   AccessCustomPageWithoutHTML                            `json:"result,required"`
 	// Whether the API call was successful
 	Success ZeroTrustAccessCustomPageNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustAccessCustomPageNewResponseEnvelopeJSON    `json:"-"`
@@ -392,7 +314,7 @@ const (
 type ZeroTrustAccessCustomPageUpdateResponseEnvelope struct {
 	Errors   []ZeroTrustAccessCustomPageUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustAccessCustomPageUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustAccessCustomPageUpdateResponse                   `json:"result,required"`
+	Result   AccessCustomPageWithoutHTML                               `json:"result,required"`
 	// Whether the API call was successful
 	Success ZeroTrustAccessCustomPageUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustAccessCustomPageUpdateResponseEnvelopeJSON    `json:"-"`
@@ -462,7 +384,7 @@ const (
 type ZeroTrustAccessCustomPageListResponseEnvelope struct {
 	Errors   []ZeroTrustAccessCustomPageListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustAccessCustomPageListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []ZeroTrustAccessCustomPageListResponse                 `json:"result,required,nullable"`
+	Result   []AccessCustomPageWithoutHTML                           `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    ZeroTrustAccessCustomPageListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ZeroTrustAccessCustomPageListResponseEnvelopeResultInfo `json:"result_info"`
@@ -631,7 +553,7 @@ const (
 type ZeroTrustAccessCustomPageGetResponseEnvelope struct {
 	Errors   []ZeroTrustAccessCustomPageGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustAccessCustomPageGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustAccessCustomPageGetResponse                   `json:"result,required"`
+	Result   AccessCustomPage                                       `json:"result,required"`
 	// Whether the API call was successful
 	Success ZeroTrustAccessCustomPageGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustAccessCustomPageGetResponseEnvelopeJSON    `json:"-"`

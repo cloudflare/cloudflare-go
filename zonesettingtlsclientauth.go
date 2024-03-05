@@ -34,7 +34,7 @@ func NewZoneSettingTLSClientAuthService(opts ...option.RequestOption) (r *ZoneSe
 
 // TLS Client Auth requires Cloudflare to connect to your origin server using a
 // client certificate (Enterprise Only).
-func (r *ZoneSettingTLSClientAuthService) Edit(ctx context.Context, params ZoneSettingTLSClientAuthEditParams, opts ...option.RequestOption) (res *ZoneSettingTLSClientAuthEditResponse, err error) {
+func (r *ZoneSettingTLSClientAuthService) Edit(ctx context.Context, params ZoneSettingTLSClientAuthEditParams, opts ...option.RequestOption) (res *ZonesTLSClientAuth, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingTLSClientAuthEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/tls_client_auth", params.ZoneID)
@@ -48,7 +48,7 @@ func (r *ZoneSettingTLSClientAuthService) Edit(ctx context.Context, params ZoneS
 
 // TLS Client Auth requires Cloudflare to connect to your origin server using a
 // client certificate (Enterprise Only).
-func (r *ZoneSettingTLSClientAuthService) Get(ctx context.Context, query ZoneSettingTLSClientAuthGetParams, opts ...option.RequestOption) (res *ZoneSettingTLSClientAuthGetResponse, err error) {
+func (r *ZoneSettingTLSClientAuthService) Get(ctx context.Context, query ZoneSettingTLSClientAuthGetParams, opts ...option.RequestOption) (res *ZonesTLSClientAuth, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingTLSClientAuthGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/tls_client_auth", query.ZoneID)
@@ -62,22 +62,22 @@ func (r *ZoneSettingTLSClientAuthService) Get(ctx context.Context, query ZoneSet
 
 // TLS Client Auth requires Cloudflare to connect to your origin server using a
 // client certificate (Enterprise Only).
-type ZoneSettingTLSClientAuthEditResponse struct {
+type ZonesTLSClientAuth struct {
 	// ID of the zone setting.
-	ID ZoneSettingTLSClientAuthEditResponseID `json:"id,required"`
+	ID ZonesTLSClientAuthID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingTLSClientAuthEditResponseValue `json:"value,required"`
+	Value ZonesTLSClientAuthValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingTLSClientAuthEditResponseEditable `json:"editable"`
+	Editable ZonesTLSClientAuthEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingTLSClientAuthEditResponseJSON `json:"-"`
+	ModifiedOn time.Time              `json:"modified_on,nullable" format:"date-time"`
+	JSON       zonesTLSClientAuthJSON `json:"-"`
 }
 
-// zoneSettingTLSClientAuthEditResponseJSON contains the JSON metadata for the
-// struct [ZoneSettingTLSClientAuthEditResponse]
-type zoneSettingTLSClientAuthEditResponseJSON struct {
+// zonesTLSClientAuthJSON contains the JSON metadata for the struct
+// [ZonesTLSClientAuth]
+type zonesTLSClientAuthJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -86,87 +86,52 @@ type zoneSettingTLSClientAuthEditResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingTLSClientAuthEditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonesTLSClientAuth) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r ZonesTLSClientAuth) implementsZoneSettingEditResponse() {}
+
+func (r ZonesTLSClientAuth) implementsZoneSettingGetResponse() {}
+
 // ID of the zone setting.
-type ZoneSettingTLSClientAuthEditResponseID string
+type ZonesTLSClientAuthID string
 
 const (
-	ZoneSettingTLSClientAuthEditResponseIDTLSClientAuth ZoneSettingTLSClientAuthEditResponseID = "tls_client_auth"
+	ZonesTLSClientAuthIDTLSClientAuth ZonesTLSClientAuthID = "tls_client_auth"
 )
 
 // Current value of the zone setting.
-type ZoneSettingTLSClientAuthEditResponseValue string
+type ZonesTLSClientAuthValue string
 
 const (
-	ZoneSettingTLSClientAuthEditResponseValueOn  ZoneSettingTLSClientAuthEditResponseValue = "on"
-	ZoneSettingTLSClientAuthEditResponseValueOff ZoneSettingTLSClientAuthEditResponseValue = "off"
+	ZonesTLSClientAuthValueOn  ZonesTLSClientAuthValue = "on"
+	ZonesTLSClientAuthValueOff ZonesTLSClientAuthValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingTLSClientAuthEditResponseEditable bool
+type ZonesTLSClientAuthEditable bool
 
 const (
-	ZoneSettingTLSClientAuthEditResponseEditableTrue  ZoneSettingTLSClientAuthEditResponseEditable = true
-	ZoneSettingTLSClientAuthEditResponseEditableFalse ZoneSettingTLSClientAuthEditResponseEditable = false
+	ZonesTLSClientAuthEditableTrue  ZonesTLSClientAuthEditable = true
+	ZonesTLSClientAuthEditableFalse ZonesTLSClientAuthEditable = false
 )
 
 // TLS Client Auth requires Cloudflare to connect to your origin server using a
 // client certificate (Enterprise Only).
-type ZoneSettingTLSClientAuthGetResponse struct {
+type ZonesTLSClientAuthParam struct {
 	// ID of the zone setting.
-	ID ZoneSettingTLSClientAuthGetResponseID `json:"id,required"`
+	ID param.Field[ZonesTLSClientAuthID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingTLSClientAuthGetResponseValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingTLSClientAuthGetResponseEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                               `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingTLSClientAuthGetResponseJSON `json:"-"`
+	Value param.Field[ZonesTLSClientAuthValue] `json:"value,required"`
 }
 
-// zoneSettingTLSClientAuthGetResponseJSON contains the JSON metadata for the
-// struct [ZoneSettingTLSClientAuthGetResponse]
-type zoneSettingTLSClientAuthGetResponseJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+func (r ZonesTLSClientAuthParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *ZoneSettingTLSClientAuthGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// ID of the zone setting.
-type ZoneSettingTLSClientAuthGetResponseID string
-
-const (
-	ZoneSettingTLSClientAuthGetResponseIDTLSClientAuth ZoneSettingTLSClientAuthGetResponseID = "tls_client_auth"
-)
-
-// Current value of the zone setting.
-type ZoneSettingTLSClientAuthGetResponseValue string
-
-const (
-	ZoneSettingTLSClientAuthGetResponseValueOn  ZoneSettingTLSClientAuthGetResponseValue = "on"
-	ZoneSettingTLSClientAuthGetResponseValueOff ZoneSettingTLSClientAuthGetResponseValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingTLSClientAuthGetResponseEditable bool
-
-const (
-	ZoneSettingTLSClientAuthGetResponseEditableTrue  ZoneSettingTLSClientAuthGetResponseEditable = true
-	ZoneSettingTLSClientAuthGetResponseEditableFalse ZoneSettingTLSClientAuthGetResponseEditable = false
-)
+func (r ZonesTLSClientAuthParam) implementsZoneSettingEditParamsItem() {}
 
 type ZoneSettingTLSClientAuthEditParams struct {
 	// Identifier
@@ -194,7 +159,7 @@ type ZoneSettingTLSClientAuthEditResponseEnvelope struct {
 	Success bool `json:"success,required"`
 	// TLS Client Auth requires Cloudflare to connect to your origin server using a
 	// client certificate (Enterprise Only).
-	Result ZoneSettingTLSClientAuthEditResponse             `json:"result"`
+	Result ZonesTLSClientAuth                               `json:"result"`
 	JSON   zoneSettingTLSClientAuthEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -263,7 +228,7 @@ type ZoneSettingTLSClientAuthGetResponseEnvelope struct {
 	Success bool `json:"success,required"`
 	// TLS Client Auth requires Cloudflare to connect to your origin server using a
 	// client certificate (Enterprise Only).
-	Result ZoneSettingTLSClientAuthGetResponse             `json:"result"`
+	Result ZonesTLSClientAuth                              `json:"result"`
 	JSON   zoneSettingTLSClientAuthGetResponseEnvelopeJSON `json:"-"`
 }
 

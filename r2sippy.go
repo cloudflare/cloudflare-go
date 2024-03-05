@@ -31,7 +31,7 @@ func NewR2SippyService(opts ...option.RequestOption) (r *R2SippyService) {
 }
 
 // Sets configuration for Sippy for an existing R2 bucket.
-func (r *R2SippyService) Update(ctx context.Context, bucketName string, params R2SippyUpdateParams, opts ...option.RequestOption) (res *R2SippyUpdateResponse, err error) {
+func (r *R2SippyService) Update(ctx context.Context, bucketName string, params R2SippyUpdateParams, opts ...option.RequestOption) (res *R2Sippy, err error) {
 	opts = append(r.Options[:], opts...)
 	var env R2SippyUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/sippy", params.AccountID, bucketName)
@@ -57,7 +57,7 @@ func (r *R2SippyService) Delete(ctx context.Context, bucketName string, body R2S
 }
 
 // Gets configuration for Sippy for an existing R2 bucket.
-func (r *R2SippyService) Get(ctx context.Context, bucketName string, query R2SippyGetParams, opts ...option.RequestOption) (res *R2SippyGetResponse, err error) {
+func (r *R2SippyService) Get(ctx context.Context, bucketName string, query R2SippyGetParams, opts ...option.RequestOption) (res *R2Sippy, err error) {
 	opts = append(r.Options[:], opts...)
 	var env R2SippyGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/sippy", query.AccountID, bucketName)
@@ -69,19 +69,18 @@ func (r *R2SippyService) Get(ctx context.Context, bucketName string, query R2Sip
 	return
 }
 
-type R2SippyUpdateResponse struct {
+type R2Sippy struct {
 	// Details about the configured destination bucket
-	Destination R2SippyUpdateResponseDestination `json:"destination"`
+	Destination R2SippyDestination `json:"destination"`
 	// State of Sippy for this bucket
 	Enabled bool `json:"enabled"`
 	// Details about the configured source bucket
-	Source R2SippyUpdateResponseSource `json:"source"`
-	JSON   r2SippyUpdateResponseJSON   `json:"-"`
+	Source R2SippySource `json:"source"`
+	JSON   r2SippyJSON   `json:"-"`
 }
 
-// r2SippyUpdateResponseJSON contains the JSON metadata for the struct
-// [R2SippyUpdateResponse]
-type r2SippyUpdateResponseJSON struct {
+// r2SippyJSON contains the JSON metadata for the struct [R2Sippy]
+type r2SippyJSON struct {
 	Destination apijson.Field
 	Enabled     apijson.Field
 	Source      apijson.Field
@@ -89,24 +88,24 @@ type r2SippyUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *R2SippyUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *R2Sippy) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Details about the configured destination bucket
-type R2SippyUpdateResponseDestination struct {
+type R2SippyDestination struct {
 	// ID of the Cloudflare API token used when writing objects to this bucket
 	AccessKeyID string `json:"accessKeyId"`
 	Account     string `json:"account"`
 	// Name of the bucket on the provider
-	Bucket   string                                   `json:"bucket"`
-	Provider R2SippyUpdateResponseDestinationProvider `json:"provider"`
-	JSON     r2SippyUpdateResponseDestinationJSON     `json:"-"`
+	Bucket   string                     `json:"bucket"`
+	Provider R2SippyDestinationProvider `json:"provider"`
+	JSON     r2SippyDestinationJSON     `json:"-"`
 }
 
-// r2SippyUpdateResponseDestinationJSON contains the JSON metadata for the struct
-// [R2SippyUpdateResponseDestination]
-type r2SippyUpdateResponseDestinationJSON struct {
+// r2SippyDestinationJSON contains the JSON metadata for the struct
+// [R2SippyDestination]
+type r2SippyDestinationJSON struct {
 	AccessKeyID apijson.Field
 	Account     apijson.Field
 	Bucket      apijson.Field
@@ -115,29 +114,28 @@ type r2SippyUpdateResponseDestinationJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *R2SippyUpdateResponseDestination) UnmarshalJSON(data []byte) (err error) {
+func (r *R2SippyDestination) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type R2SippyUpdateResponseDestinationProvider string
+type R2SippyDestinationProvider string
 
 const (
-	R2SippyUpdateResponseDestinationProviderR2 R2SippyUpdateResponseDestinationProvider = "r2"
+	R2SippyDestinationProviderR2 R2SippyDestinationProvider = "r2"
 )
 
 // Details about the configured source bucket
-type R2SippyUpdateResponseSource struct {
+type R2SippySource struct {
 	// Name of the bucket on the provider
-	Bucket   string                              `json:"bucket"`
-	Provider R2SippyUpdateResponseSourceProvider `json:"provider"`
+	Bucket   string                `json:"bucket"`
+	Provider R2SippySourceProvider `json:"provider"`
 	// Region where the bucket resides (AWS only)
-	Region string                          `json:"region,nullable"`
-	JSON   r2SippyUpdateResponseSourceJSON `json:"-"`
+	Region string            `json:"region,nullable"`
+	JSON   r2SippySourceJSON `json:"-"`
 }
 
-// r2SippyUpdateResponseSourceJSON contains the JSON metadata for the struct
-// [R2SippyUpdateResponseSource]
-type r2SippyUpdateResponseSourceJSON struct {
+// r2SippySourceJSON contains the JSON metadata for the struct [R2SippySource]
+type r2SippySourceJSON struct {
 	Bucket      apijson.Field
 	Provider    apijson.Field
 	Region      apijson.Field
@@ -145,15 +143,15 @@ type r2SippyUpdateResponseSourceJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *R2SippyUpdateResponseSource) UnmarshalJSON(data []byte) (err error) {
+func (r *R2SippySource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type R2SippyUpdateResponseSourceProvider string
+type R2SippySourceProvider string
 
 const (
-	R2SippyUpdateResponseSourceProviderAws R2SippyUpdateResponseSourceProvider = "aws"
-	R2SippyUpdateResponseSourceProviderGcs R2SippyUpdateResponseSourceProvider = "gcs"
+	R2SippySourceProviderAws R2SippySourceProvider = "aws"
+	R2SippySourceProviderGcs R2SippySourceProvider = "gcs"
 )
 
 type R2SippyDeleteResponse struct {
@@ -177,93 +175,6 @@ type R2SippyDeleteResponseEnabled bool
 
 const (
 	R2SippyDeleteResponseEnabledFalse R2SippyDeleteResponseEnabled = false
-)
-
-type R2SippyGetResponse struct {
-	// Details about the configured destination bucket
-	Destination R2SippyGetResponseDestination `json:"destination"`
-	// State of Sippy for this bucket
-	Enabled bool `json:"enabled"`
-	// Details about the configured source bucket
-	Source R2SippyGetResponseSource `json:"source"`
-	JSON   r2SippyGetResponseJSON   `json:"-"`
-}
-
-// r2SippyGetResponseJSON contains the JSON metadata for the struct
-// [R2SippyGetResponse]
-type r2SippyGetResponseJSON struct {
-	Destination apijson.Field
-	Enabled     apijson.Field
-	Source      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *R2SippyGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Details about the configured destination bucket
-type R2SippyGetResponseDestination struct {
-	// ID of the Cloudflare API token used when writing objects to this bucket
-	AccessKeyID string `json:"accessKeyId"`
-	Account     string `json:"account"`
-	// Name of the bucket on the provider
-	Bucket   string                                `json:"bucket"`
-	Provider R2SippyGetResponseDestinationProvider `json:"provider"`
-	JSON     r2SippyGetResponseDestinationJSON     `json:"-"`
-}
-
-// r2SippyGetResponseDestinationJSON contains the JSON metadata for the struct
-// [R2SippyGetResponseDestination]
-type r2SippyGetResponseDestinationJSON struct {
-	AccessKeyID apijson.Field
-	Account     apijson.Field
-	Bucket      apijson.Field
-	Provider    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *R2SippyGetResponseDestination) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type R2SippyGetResponseDestinationProvider string
-
-const (
-	R2SippyGetResponseDestinationProviderR2 R2SippyGetResponseDestinationProvider = "r2"
-)
-
-// Details about the configured source bucket
-type R2SippyGetResponseSource struct {
-	// Name of the bucket on the provider
-	Bucket   string                           `json:"bucket"`
-	Provider R2SippyGetResponseSourceProvider `json:"provider"`
-	// Region where the bucket resides (AWS only)
-	Region string                       `json:"region,nullable"`
-	JSON   r2SippyGetResponseSourceJSON `json:"-"`
-}
-
-// r2SippyGetResponseSourceJSON contains the JSON metadata for the struct
-// [R2SippyGetResponseSource]
-type r2SippyGetResponseSourceJSON struct {
-	Bucket      apijson.Field
-	Provider    apijson.Field
-	Region      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *R2SippyGetResponseSource) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type R2SippyGetResponseSourceProvider string
-
-const (
-	R2SippyGetResponseSourceProviderAws R2SippyGetResponseSourceProvider = "aws"
-	R2SippyGetResponseSourceProviderGcs R2SippyGetResponseSourceProvider = "gcs"
 )
 
 type R2SippyUpdateParams struct {
@@ -334,7 +245,7 @@ const (
 type R2SippyUpdateResponseEnvelope struct {
 	Errors   []R2SippyUpdateResponseEnvelopeErrors `json:"errors,required"`
 	Messages []string                              `json:"messages,required"`
-	Result   R2SippyUpdateResponse                 `json:"result,required"`
+	Result   R2Sippy                               `json:"result,required"`
 	// Whether the API call was successful
 	Success R2SippyUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    r2SippyUpdateResponseEnvelopeJSON    `json:"-"`
@@ -444,7 +355,7 @@ type R2SippyGetParams struct {
 type R2SippyGetResponseEnvelope struct {
 	Errors   []R2SippyGetResponseEnvelopeErrors `json:"errors,required"`
 	Messages []string                           `json:"messages,required"`
-	Result   R2SippyGetResponse                 `json:"result,required"`
+	Result   R2Sippy                            `json:"result,required"`
 	// Whether the API call was successful
 	Success R2SippyGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    r2SippyGetResponseEnvelopeJSON    `json:"-"`

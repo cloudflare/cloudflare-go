@@ -35,7 +35,7 @@ func NewZeroTrustDevicePostureIntegrationService(opts ...option.RequestOption) (
 }
 
 // Create a new device posture integration.
-func (r *ZeroTrustDevicePostureIntegrationService) New(ctx context.Context, params ZeroTrustDevicePostureIntegrationNewParams, opts ...option.RequestOption) (res *ZeroTrustDevicePostureIntegrationNewResponse, err error) {
+func (r *ZeroTrustDevicePostureIntegrationService) New(ctx context.Context, params ZeroTrustDevicePostureIntegrationNewParams, opts ...option.RequestOption) (res *TeamsDevicesDevicePostureIntegrations, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustDevicePostureIntegrationNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/posture/integration", params.AccountID)
@@ -48,7 +48,7 @@ func (r *ZeroTrustDevicePostureIntegrationService) New(ctx context.Context, para
 }
 
 // Fetches the list of device posture integrations for an account.
-func (r *ZeroTrustDevicePostureIntegrationService) List(ctx context.Context, query ZeroTrustDevicePostureIntegrationListParams, opts ...option.RequestOption) (res *[]ZeroTrustDevicePostureIntegrationListResponse, err error) {
+func (r *ZeroTrustDevicePostureIntegrationService) List(ctx context.Context, query ZeroTrustDevicePostureIntegrationListParams, opts ...option.RequestOption) (res *[]TeamsDevicesDevicePostureIntegrations, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustDevicePostureIntegrationListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/posture/integration", query.AccountID)
@@ -74,7 +74,7 @@ func (r *ZeroTrustDevicePostureIntegrationService) Delete(ctx context.Context, i
 }
 
 // Updates a configured device posture integration.
-func (r *ZeroTrustDevicePostureIntegrationService) Edit(ctx context.Context, integrationID string, params ZeroTrustDevicePostureIntegrationEditParams, opts ...option.RequestOption) (res *ZeroTrustDevicePostureIntegrationEditResponse, err error) {
+func (r *ZeroTrustDevicePostureIntegrationService) Edit(ctx context.Context, integrationID string, params ZeroTrustDevicePostureIntegrationEditParams, opts ...option.RequestOption) (res *TeamsDevicesDevicePostureIntegrations, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustDevicePostureIntegrationEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/posture/integration/%s", params.AccountID, integrationID)
@@ -87,7 +87,7 @@ func (r *ZeroTrustDevicePostureIntegrationService) Edit(ctx context.Context, int
 }
 
 // Fetches details for a single device posture integration.
-func (r *ZeroTrustDevicePostureIntegrationService) Get(ctx context.Context, integrationID string, query ZeroTrustDevicePostureIntegrationGetParams, opts ...option.RequestOption) (res *ZeroTrustDevicePostureIntegrationGetResponse, err error) {
+func (r *ZeroTrustDevicePostureIntegrationService) Get(ctx context.Context, integrationID string, query ZeroTrustDevicePostureIntegrationGetParams, opts ...option.RequestOption) (res *TeamsDevicesDevicePostureIntegrations, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustDevicePostureIntegrationGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/posture/integration/%s", query.AccountID, integrationID)
@@ -99,24 +99,24 @@ func (r *ZeroTrustDevicePostureIntegrationService) Get(ctx context.Context, inte
 	return
 }
 
-type ZeroTrustDevicePostureIntegrationNewResponse struct {
+type TeamsDevicesDevicePostureIntegrations struct {
 	// API UUID.
 	ID string `json:"id"`
 	// The configuration object containing third-party integration information.
-	Config ZeroTrustDevicePostureIntegrationNewResponseConfig `json:"config"`
+	Config TeamsDevicesDevicePostureIntegrationsConfig `json:"config"`
 	// The interval between each posture check with the third-party API. Use `m` for
 	// minutes (e.g. `5m`) and `h` for hours (e.g. `12h`).
 	Interval string `json:"interval"`
 	// The name of the device posture integration.
 	Name string `json:"name"`
 	// The type of device posture integration.
-	Type ZeroTrustDevicePostureIntegrationNewResponseType `json:"type"`
-	JSON zeroTrustDevicePostureIntegrationNewResponseJSON `json:"-"`
+	Type TeamsDevicesDevicePostureIntegrationsType `json:"type"`
+	JSON teamsDevicesDevicePostureIntegrationsJSON `json:"-"`
 }
 
-// zeroTrustDevicePostureIntegrationNewResponseJSON contains the JSON metadata for
-// the struct [ZeroTrustDevicePostureIntegrationNewResponse]
-type zeroTrustDevicePostureIntegrationNewResponseJSON struct {
+// teamsDevicesDevicePostureIntegrationsJSON contains the JSON metadata for the
+// struct [TeamsDevicesDevicePostureIntegrations]
+type teamsDevicesDevicePostureIntegrationsJSON struct {
 	ID          apijson.Field
 	Config      apijson.Field
 	Interval    apijson.Field
@@ -126,24 +126,24 @@ type zeroTrustDevicePostureIntegrationNewResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZeroTrustDevicePostureIntegrationNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *TeamsDevicesDevicePostureIntegrations) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The configuration object containing third-party integration information.
-type ZeroTrustDevicePostureIntegrationNewResponseConfig struct {
+type TeamsDevicesDevicePostureIntegrationsConfig struct {
 	// The Workspace One API URL provided in the Workspace One Admin Dashboard.
 	APIURL string `json:"api_url,required"`
 	// The Workspace One Authorization URL depending on your region.
 	AuthURL string `json:"auth_url,required"`
 	// The Workspace One client ID provided in the Workspace One Admin Dashboard.
-	ClientID string                                                 `json:"client_id,required"`
-	JSON     zeroTrustDevicePostureIntegrationNewResponseConfigJSON `json:"-"`
+	ClientID string                                          `json:"client_id,required"`
+	JSON     teamsDevicesDevicePostureIntegrationsConfigJSON `json:"-"`
 }
 
-// zeroTrustDevicePostureIntegrationNewResponseConfigJSON contains the JSON
-// metadata for the struct [ZeroTrustDevicePostureIntegrationNewResponseConfig]
-type zeroTrustDevicePostureIntegrationNewResponseConfigJSON struct {
+// teamsDevicesDevicePostureIntegrationsConfigJSON contains the JSON metadata for
+// the struct [TeamsDevicesDevicePostureIntegrationsConfig]
+type teamsDevicesDevicePostureIntegrationsConfigJSON struct {
 	APIURL      apijson.Field
 	AuthURL     apijson.Field
 	ClientID    apijson.Field
@@ -151,90 +151,21 @@ type zeroTrustDevicePostureIntegrationNewResponseConfigJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZeroTrustDevicePostureIntegrationNewResponseConfig) UnmarshalJSON(data []byte) (err error) {
+func (r *TeamsDevicesDevicePostureIntegrationsConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The type of device posture integration.
-type ZeroTrustDevicePostureIntegrationNewResponseType string
+type TeamsDevicesDevicePostureIntegrationsType string
 
 const (
-	ZeroTrustDevicePostureIntegrationNewResponseTypeWorkspaceOne   ZeroTrustDevicePostureIntegrationNewResponseType = "workspace_one"
-	ZeroTrustDevicePostureIntegrationNewResponseTypeCrowdstrikeS2s ZeroTrustDevicePostureIntegrationNewResponseType = "crowdstrike_s2s"
-	ZeroTrustDevicePostureIntegrationNewResponseTypeUptycs         ZeroTrustDevicePostureIntegrationNewResponseType = "uptycs"
-	ZeroTrustDevicePostureIntegrationNewResponseTypeIntune         ZeroTrustDevicePostureIntegrationNewResponseType = "intune"
-	ZeroTrustDevicePostureIntegrationNewResponseTypeKolide         ZeroTrustDevicePostureIntegrationNewResponseType = "kolide"
-	ZeroTrustDevicePostureIntegrationNewResponseTypeTanium         ZeroTrustDevicePostureIntegrationNewResponseType = "tanium"
-	ZeroTrustDevicePostureIntegrationNewResponseTypeSentineloneS2s ZeroTrustDevicePostureIntegrationNewResponseType = "sentinelone_s2s"
-)
-
-type ZeroTrustDevicePostureIntegrationListResponse struct {
-	// API UUID.
-	ID string `json:"id"`
-	// The configuration object containing third-party integration information.
-	Config ZeroTrustDevicePostureIntegrationListResponseConfig `json:"config"`
-	// The interval between each posture check with the third-party API. Use `m` for
-	// minutes (e.g. `5m`) and `h` for hours (e.g. `12h`).
-	Interval string `json:"interval"`
-	// The name of the device posture integration.
-	Name string `json:"name"`
-	// The type of device posture integration.
-	Type ZeroTrustDevicePostureIntegrationListResponseType `json:"type"`
-	JSON zeroTrustDevicePostureIntegrationListResponseJSON `json:"-"`
-}
-
-// zeroTrustDevicePostureIntegrationListResponseJSON contains the JSON metadata for
-// the struct [ZeroTrustDevicePostureIntegrationListResponse]
-type zeroTrustDevicePostureIntegrationListResponseJSON struct {
-	ID          apijson.Field
-	Config      apijson.Field
-	Interval    apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustDevicePostureIntegrationListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The configuration object containing third-party integration information.
-type ZeroTrustDevicePostureIntegrationListResponseConfig struct {
-	// The Workspace One API URL provided in the Workspace One Admin Dashboard.
-	APIURL string `json:"api_url,required"`
-	// The Workspace One Authorization URL depending on your region.
-	AuthURL string `json:"auth_url,required"`
-	// The Workspace One client ID provided in the Workspace One Admin Dashboard.
-	ClientID string                                                  `json:"client_id,required"`
-	JSON     zeroTrustDevicePostureIntegrationListResponseConfigJSON `json:"-"`
-}
-
-// zeroTrustDevicePostureIntegrationListResponseConfigJSON contains the JSON
-// metadata for the struct [ZeroTrustDevicePostureIntegrationListResponseConfig]
-type zeroTrustDevicePostureIntegrationListResponseConfigJSON struct {
-	APIURL      apijson.Field
-	AuthURL     apijson.Field
-	ClientID    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustDevicePostureIntegrationListResponseConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of device posture integration.
-type ZeroTrustDevicePostureIntegrationListResponseType string
-
-const (
-	ZeroTrustDevicePostureIntegrationListResponseTypeWorkspaceOne   ZeroTrustDevicePostureIntegrationListResponseType = "workspace_one"
-	ZeroTrustDevicePostureIntegrationListResponseTypeCrowdstrikeS2s ZeroTrustDevicePostureIntegrationListResponseType = "crowdstrike_s2s"
-	ZeroTrustDevicePostureIntegrationListResponseTypeUptycs         ZeroTrustDevicePostureIntegrationListResponseType = "uptycs"
-	ZeroTrustDevicePostureIntegrationListResponseTypeIntune         ZeroTrustDevicePostureIntegrationListResponseType = "intune"
-	ZeroTrustDevicePostureIntegrationListResponseTypeKolide         ZeroTrustDevicePostureIntegrationListResponseType = "kolide"
-	ZeroTrustDevicePostureIntegrationListResponseTypeTanium         ZeroTrustDevicePostureIntegrationListResponseType = "tanium"
-	ZeroTrustDevicePostureIntegrationListResponseTypeSentineloneS2s ZeroTrustDevicePostureIntegrationListResponseType = "sentinelone_s2s"
+	TeamsDevicesDevicePostureIntegrationsTypeWorkspaceOne   TeamsDevicesDevicePostureIntegrationsType = "workspace_one"
+	TeamsDevicesDevicePostureIntegrationsTypeCrowdstrikeS2s TeamsDevicesDevicePostureIntegrationsType = "crowdstrike_s2s"
+	TeamsDevicesDevicePostureIntegrationsTypeUptycs         TeamsDevicesDevicePostureIntegrationsType = "uptycs"
+	TeamsDevicesDevicePostureIntegrationsTypeIntune         TeamsDevicesDevicePostureIntegrationsType = "intune"
+	TeamsDevicesDevicePostureIntegrationsTypeKolide         TeamsDevicesDevicePostureIntegrationsType = "kolide"
+	TeamsDevicesDevicePostureIntegrationsTypeTanium         TeamsDevicesDevicePostureIntegrationsType = "tanium"
+	TeamsDevicesDevicePostureIntegrationsTypeSentineloneS2s TeamsDevicesDevicePostureIntegrationsType = "sentinelone_s2s"
 )
 
 // Union satisfied by [ZeroTrustDevicePostureIntegrationDeleteResponseUnknown] or
@@ -253,144 +184,6 @@ func init() {
 		},
 	)
 }
-
-type ZeroTrustDevicePostureIntegrationEditResponse struct {
-	// API UUID.
-	ID string `json:"id"`
-	// The configuration object containing third-party integration information.
-	Config ZeroTrustDevicePostureIntegrationEditResponseConfig `json:"config"`
-	// The interval between each posture check with the third-party API. Use `m` for
-	// minutes (e.g. `5m`) and `h` for hours (e.g. `12h`).
-	Interval string `json:"interval"`
-	// The name of the device posture integration.
-	Name string `json:"name"`
-	// The type of device posture integration.
-	Type ZeroTrustDevicePostureIntegrationEditResponseType `json:"type"`
-	JSON zeroTrustDevicePostureIntegrationEditResponseJSON `json:"-"`
-}
-
-// zeroTrustDevicePostureIntegrationEditResponseJSON contains the JSON metadata for
-// the struct [ZeroTrustDevicePostureIntegrationEditResponse]
-type zeroTrustDevicePostureIntegrationEditResponseJSON struct {
-	ID          apijson.Field
-	Config      apijson.Field
-	Interval    apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustDevicePostureIntegrationEditResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The configuration object containing third-party integration information.
-type ZeroTrustDevicePostureIntegrationEditResponseConfig struct {
-	// The Workspace One API URL provided in the Workspace One Admin Dashboard.
-	APIURL string `json:"api_url,required"`
-	// The Workspace One Authorization URL depending on your region.
-	AuthURL string `json:"auth_url,required"`
-	// The Workspace One client ID provided in the Workspace One Admin Dashboard.
-	ClientID string                                                  `json:"client_id,required"`
-	JSON     zeroTrustDevicePostureIntegrationEditResponseConfigJSON `json:"-"`
-}
-
-// zeroTrustDevicePostureIntegrationEditResponseConfigJSON contains the JSON
-// metadata for the struct [ZeroTrustDevicePostureIntegrationEditResponseConfig]
-type zeroTrustDevicePostureIntegrationEditResponseConfigJSON struct {
-	APIURL      apijson.Field
-	AuthURL     apijson.Field
-	ClientID    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustDevicePostureIntegrationEditResponseConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of device posture integration.
-type ZeroTrustDevicePostureIntegrationEditResponseType string
-
-const (
-	ZeroTrustDevicePostureIntegrationEditResponseTypeWorkspaceOne   ZeroTrustDevicePostureIntegrationEditResponseType = "workspace_one"
-	ZeroTrustDevicePostureIntegrationEditResponseTypeCrowdstrikeS2s ZeroTrustDevicePostureIntegrationEditResponseType = "crowdstrike_s2s"
-	ZeroTrustDevicePostureIntegrationEditResponseTypeUptycs         ZeroTrustDevicePostureIntegrationEditResponseType = "uptycs"
-	ZeroTrustDevicePostureIntegrationEditResponseTypeIntune         ZeroTrustDevicePostureIntegrationEditResponseType = "intune"
-	ZeroTrustDevicePostureIntegrationEditResponseTypeKolide         ZeroTrustDevicePostureIntegrationEditResponseType = "kolide"
-	ZeroTrustDevicePostureIntegrationEditResponseTypeTanium         ZeroTrustDevicePostureIntegrationEditResponseType = "tanium"
-	ZeroTrustDevicePostureIntegrationEditResponseTypeSentineloneS2s ZeroTrustDevicePostureIntegrationEditResponseType = "sentinelone_s2s"
-)
-
-type ZeroTrustDevicePostureIntegrationGetResponse struct {
-	// API UUID.
-	ID string `json:"id"`
-	// The configuration object containing third-party integration information.
-	Config ZeroTrustDevicePostureIntegrationGetResponseConfig `json:"config"`
-	// The interval between each posture check with the third-party API. Use `m` for
-	// minutes (e.g. `5m`) and `h` for hours (e.g. `12h`).
-	Interval string `json:"interval"`
-	// The name of the device posture integration.
-	Name string `json:"name"`
-	// The type of device posture integration.
-	Type ZeroTrustDevicePostureIntegrationGetResponseType `json:"type"`
-	JSON zeroTrustDevicePostureIntegrationGetResponseJSON `json:"-"`
-}
-
-// zeroTrustDevicePostureIntegrationGetResponseJSON contains the JSON metadata for
-// the struct [ZeroTrustDevicePostureIntegrationGetResponse]
-type zeroTrustDevicePostureIntegrationGetResponseJSON struct {
-	ID          apijson.Field
-	Config      apijson.Field
-	Interval    apijson.Field
-	Name        apijson.Field
-	Type        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustDevicePostureIntegrationGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The configuration object containing third-party integration information.
-type ZeroTrustDevicePostureIntegrationGetResponseConfig struct {
-	// The Workspace One API URL provided in the Workspace One Admin Dashboard.
-	APIURL string `json:"api_url,required"`
-	// The Workspace One Authorization URL depending on your region.
-	AuthURL string `json:"auth_url,required"`
-	// The Workspace One client ID provided in the Workspace One Admin Dashboard.
-	ClientID string                                                 `json:"client_id,required"`
-	JSON     zeroTrustDevicePostureIntegrationGetResponseConfigJSON `json:"-"`
-}
-
-// zeroTrustDevicePostureIntegrationGetResponseConfigJSON contains the JSON
-// metadata for the struct [ZeroTrustDevicePostureIntegrationGetResponseConfig]
-type zeroTrustDevicePostureIntegrationGetResponseConfigJSON struct {
-	APIURL      apijson.Field
-	AuthURL     apijson.Field
-	ClientID    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ZeroTrustDevicePostureIntegrationGetResponseConfig) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of device posture integration.
-type ZeroTrustDevicePostureIntegrationGetResponseType string
-
-const (
-	ZeroTrustDevicePostureIntegrationGetResponseTypeWorkspaceOne   ZeroTrustDevicePostureIntegrationGetResponseType = "workspace_one"
-	ZeroTrustDevicePostureIntegrationGetResponseTypeCrowdstrikeS2s ZeroTrustDevicePostureIntegrationGetResponseType = "crowdstrike_s2s"
-	ZeroTrustDevicePostureIntegrationGetResponseTypeUptycs         ZeroTrustDevicePostureIntegrationGetResponseType = "uptycs"
-	ZeroTrustDevicePostureIntegrationGetResponseTypeIntune         ZeroTrustDevicePostureIntegrationGetResponseType = "intune"
-	ZeroTrustDevicePostureIntegrationGetResponseTypeKolide         ZeroTrustDevicePostureIntegrationGetResponseType = "kolide"
-	ZeroTrustDevicePostureIntegrationGetResponseTypeTanium         ZeroTrustDevicePostureIntegrationGetResponseType = "tanium"
-	ZeroTrustDevicePostureIntegrationGetResponseTypeSentineloneS2s ZeroTrustDevicePostureIntegrationGetResponseType = "sentinelone_s2s"
-)
 
 type ZeroTrustDevicePostureIntegrationNewParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
@@ -557,7 +350,7 @@ const (
 type ZeroTrustDevicePostureIntegrationNewResponseEnvelope struct {
 	Errors   []ZeroTrustDevicePostureIntegrationNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustDevicePostureIntegrationNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustDevicePostureIntegrationNewResponse                   `json:"result,required,nullable"`
+	Result   TeamsDevicesDevicePostureIntegrations                          `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success ZeroTrustDevicePostureIntegrationNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustDevicePostureIntegrationNewResponseEnvelopeJSON    `json:"-"`
@@ -632,7 +425,7 @@ type ZeroTrustDevicePostureIntegrationListParams struct {
 type ZeroTrustDevicePostureIntegrationListResponseEnvelope struct {
 	Errors   []ZeroTrustDevicePostureIntegrationListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustDevicePostureIntegrationListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []ZeroTrustDevicePostureIntegrationListResponse                 `json:"result,required,nullable"`
+	Result   []TeamsDevicesDevicePostureIntegrations                         `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    ZeroTrustDevicePostureIntegrationListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ZeroTrustDevicePostureIntegrationListResponseEnvelopeResultInfo `json:"result_info"`
@@ -971,7 +764,7 @@ const (
 type ZeroTrustDevicePostureIntegrationEditResponseEnvelope struct {
 	Errors   []ZeroTrustDevicePostureIntegrationEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustDevicePostureIntegrationEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustDevicePostureIntegrationEditResponse                   `json:"result,required,nullable"`
+	Result   TeamsDevicesDevicePostureIntegrations                           `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success ZeroTrustDevicePostureIntegrationEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustDevicePostureIntegrationEditResponseEnvelopeJSON    `json:"-"`
@@ -1046,7 +839,7 @@ type ZeroTrustDevicePostureIntegrationGetParams struct {
 type ZeroTrustDevicePostureIntegrationGetResponseEnvelope struct {
 	Errors   []ZeroTrustDevicePostureIntegrationGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustDevicePostureIntegrationGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustDevicePostureIntegrationGetResponse                   `json:"result,required,nullable"`
+	Result   TeamsDevicesDevicePostureIntegrations                          `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success ZeroTrustDevicePostureIntegrationGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustDevicePostureIntegrationGetResponseEnvelopeJSON    `json:"-"`

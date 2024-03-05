@@ -35,7 +35,7 @@ func NewZoneSettingWebsocketService(opts ...option.RequestOption) (r *ZoneSettin
 // Changes Websockets setting. For more information about Websockets, please refer
 // to
 // [Using Cloudflare with WebSockets](https://support.cloudflare.com/hc/en-us/articles/200169466-Using-Cloudflare-with-WebSockets).
-func (r *ZoneSettingWebsocketService) Edit(ctx context.Context, params ZoneSettingWebsocketEditParams, opts ...option.RequestOption) (res *ZoneSettingWebsocketEditResponse, err error) {
+func (r *ZoneSettingWebsocketService) Edit(ctx context.Context, params ZoneSettingWebsocketEditParams, opts ...option.RequestOption) (res *ZonesWebsockets, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingWebsocketEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/websockets", params.ZoneID)
@@ -49,7 +49,7 @@ func (r *ZoneSettingWebsocketService) Edit(ctx context.Context, params ZoneSetti
 
 // Gets Websockets setting. For more information about Websockets, please refer to
 // [Using Cloudflare with WebSockets](https://support.cloudflare.com/hc/en-us/articles/200169466-Using-Cloudflare-with-WebSockets).
-func (r *ZoneSettingWebsocketService) Get(ctx context.Context, query ZoneSettingWebsocketGetParams, opts ...option.RequestOption) (res *ZoneSettingWebsocketGetResponse, err error) {
+func (r *ZoneSettingWebsocketService) Get(ctx context.Context, query ZoneSettingWebsocketGetParams, opts ...option.RequestOption) (res *ZonesWebsockets, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingWebsocketGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/websockets", query.ZoneID)
@@ -68,22 +68,21 @@ func (r *ZoneSettingWebsocketService) Get(ctx context.Context, query ZoneSetting
 // real-time applications such as live chat and gaming. For more information refer
 // to
 // [Can I use Cloudflare with Websockets](https://support.cloudflare.com/hc/en-us/articles/200169466-Can-I-use-Cloudflare-with-WebSockets-).
-type ZoneSettingWebsocketEditResponse struct {
+type ZonesWebsockets struct {
 	// ID of the zone setting.
-	ID ZoneSettingWebsocketEditResponseID `json:"id,required"`
+	ID ZonesWebsocketsID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingWebsocketEditResponseValue `json:"value,required"`
+	Value ZonesWebsocketsValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZoneSettingWebsocketEditResponseEditable `json:"editable"`
+	Editable ZonesWebsocketsEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                            `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingWebsocketEditResponseJSON `json:"-"`
+	ModifiedOn time.Time           `json:"modified_on,nullable" format:"date-time"`
+	JSON       zonesWebsocketsJSON `json:"-"`
 }
 
-// zoneSettingWebsocketEditResponseJSON contains the JSON metadata for the struct
-// [ZoneSettingWebsocketEditResponse]
-type zoneSettingWebsocketEditResponseJSON struct {
+// zonesWebsocketsJSON contains the JSON metadata for the struct [ZonesWebsockets]
+type zonesWebsocketsJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -92,32 +91,36 @@ type zoneSettingWebsocketEditResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZoneSettingWebsocketEditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonesWebsockets) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r ZonesWebsockets) implementsZoneSettingEditResponse() {}
+
+func (r ZonesWebsockets) implementsZoneSettingGetResponse() {}
+
 // ID of the zone setting.
-type ZoneSettingWebsocketEditResponseID string
+type ZonesWebsocketsID string
 
 const (
-	ZoneSettingWebsocketEditResponseIDWebsockets ZoneSettingWebsocketEditResponseID = "websockets"
+	ZonesWebsocketsIDWebsockets ZonesWebsocketsID = "websockets"
 )
 
 // Current value of the zone setting.
-type ZoneSettingWebsocketEditResponseValue string
+type ZonesWebsocketsValue string
 
 const (
-	ZoneSettingWebsocketEditResponseValueOff ZoneSettingWebsocketEditResponseValue = "off"
-	ZoneSettingWebsocketEditResponseValueOn  ZoneSettingWebsocketEditResponseValue = "on"
+	ZonesWebsocketsValueOff ZonesWebsocketsValue = "off"
+	ZonesWebsocketsValueOn  ZonesWebsocketsValue = "on"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZoneSettingWebsocketEditResponseEditable bool
+type ZonesWebsocketsEditable bool
 
 const (
-	ZoneSettingWebsocketEditResponseEditableTrue  ZoneSettingWebsocketEditResponseEditable = true
-	ZoneSettingWebsocketEditResponseEditableFalse ZoneSettingWebsocketEditResponseEditable = false
+	ZonesWebsocketsEditableTrue  ZonesWebsocketsEditable = true
+	ZonesWebsocketsEditableFalse ZonesWebsocketsEditable = false
 )
 
 // WebSockets are open connections sustained between the client and the origin
@@ -127,57 +130,18 @@ const (
 // real-time applications such as live chat and gaming. For more information refer
 // to
 // [Can I use Cloudflare with Websockets](https://support.cloudflare.com/hc/en-us/articles/200169466-Can-I-use-Cloudflare-with-WebSockets-).
-type ZoneSettingWebsocketGetResponse struct {
+type ZonesWebsocketsParam struct {
 	// ID of the zone setting.
-	ID ZoneSettingWebsocketGetResponseID `json:"id,required"`
+	ID param.Field[ZonesWebsocketsID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZoneSettingWebsocketGetResponseValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable ZoneSettingWebsocketGetResponseEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                           `json:"modified_on,nullable" format:"date-time"`
-	JSON       zoneSettingWebsocketGetResponseJSON `json:"-"`
+	Value param.Field[ZonesWebsocketsValue] `json:"value,required"`
 }
 
-// zoneSettingWebsocketGetResponseJSON contains the JSON metadata for the struct
-// [ZoneSettingWebsocketGetResponse]
-type zoneSettingWebsocketGetResponseJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+func (r ZonesWebsocketsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *ZoneSettingWebsocketGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// ID of the zone setting.
-type ZoneSettingWebsocketGetResponseID string
-
-const (
-	ZoneSettingWebsocketGetResponseIDWebsockets ZoneSettingWebsocketGetResponseID = "websockets"
-)
-
-// Current value of the zone setting.
-type ZoneSettingWebsocketGetResponseValue string
-
-const (
-	ZoneSettingWebsocketGetResponseValueOff ZoneSettingWebsocketGetResponseValue = "off"
-	ZoneSettingWebsocketGetResponseValueOn  ZoneSettingWebsocketGetResponseValue = "on"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type ZoneSettingWebsocketGetResponseEditable bool
-
-const (
-	ZoneSettingWebsocketGetResponseEditableTrue  ZoneSettingWebsocketGetResponseEditable = true
-	ZoneSettingWebsocketGetResponseEditableFalse ZoneSettingWebsocketGetResponseEditable = false
-)
+func (r ZonesWebsocketsParam) implementsZoneSettingEditParamsItem() {}
 
 type ZoneSettingWebsocketEditParams struct {
 	// Identifier
@@ -210,7 +174,7 @@ type ZoneSettingWebsocketEditResponseEnvelope struct {
 	// real-time applications such as live chat and gaming. For more information refer
 	// to
 	// [Can I use Cloudflare with Websockets](https://support.cloudflare.com/hc/en-us/articles/200169466-Can-I-use-Cloudflare-with-WebSockets-).
-	Result ZoneSettingWebsocketEditResponse             `json:"result"`
+	Result ZonesWebsockets                              `json:"result"`
 	JSON   zoneSettingWebsocketEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -284,7 +248,7 @@ type ZoneSettingWebsocketGetResponseEnvelope struct {
 	// real-time applications such as live chat and gaming. For more information refer
 	// to
 	// [Can I use Cloudflare with Websockets](https://support.cloudflare.com/hc/en-us/articles/200169466-Can-I-use-Cloudflare-with-WebSockets-).
-	Result ZoneSettingWebsocketGetResponse             `json:"result"`
+	Result ZonesWebsockets                             `json:"result"`
 	JSON   zoneSettingWebsocketGetResponseEnvelopeJSON `json:"-"`
 }
 

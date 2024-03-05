@@ -35,7 +35,7 @@ func NewZeroTrustDEXFleetStatusDeviceService(opts ...option.RequestOption) (r *Z
 }
 
 // List details for devices using WARP
-func (r *ZeroTrustDEXFleetStatusDeviceService) List(ctx context.Context, params ZeroTrustDEXFleetStatusDeviceListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[ZeroTrustDEXFleetStatusDeviceListResponse], err error) {
+func (r *ZeroTrustDEXFleetStatusDeviceService) List(ctx context.Context, params ZeroTrustDEXFleetStatusDeviceListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[DigitalExperienceMonitoringDevice], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -53,11 +53,11 @@ func (r *ZeroTrustDEXFleetStatusDeviceService) List(ctx context.Context, params 
 }
 
 // List details for devices using WARP
-func (r *ZeroTrustDEXFleetStatusDeviceService) ListAutoPaging(ctx context.Context, params ZeroTrustDEXFleetStatusDeviceListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[ZeroTrustDEXFleetStatusDeviceListResponse] {
+func (r *ZeroTrustDEXFleetStatusDeviceService) ListAutoPaging(ctx context.Context, params ZeroTrustDEXFleetStatusDeviceListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[DigitalExperienceMonitoringDevice] {
 	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-type ZeroTrustDEXFleetStatusDeviceListResponse struct {
+type DigitalExperienceMonitoringDevice struct {
 	// Cloudflare colo
 	Colo string `json:"colo,required"`
 	// Device identifier (UUID v4)
@@ -71,13 +71,13 @@ type ZeroTrustDEXFleetStatusDeviceListResponse struct {
 	// Device identifier (human readable)
 	DeviceName string `json:"deviceName"`
 	// User contact email address
-	PersonEmail string                                        `json:"personEmail"`
-	JSON        zeroTrustDEXFleetStatusDeviceListResponseJSON `json:"-"`
+	PersonEmail string                                `json:"personEmail"`
+	JSON        digitalExperienceMonitoringDeviceJSON `json:"-"`
 }
 
-// zeroTrustDEXFleetStatusDeviceListResponseJSON contains the JSON metadata for the
-// struct [ZeroTrustDEXFleetStatusDeviceListResponse]
-type zeroTrustDEXFleetStatusDeviceListResponseJSON struct {
+// digitalExperienceMonitoringDeviceJSON contains the JSON metadata for the struct
+// [DigitalExperienceMonitoringDevice]
+type digitalExperienceMonitoringDeviceJSON struct {
 	Colo        apijson.Field
 	DeviceID    apijson.Field
 	Platform    apijson.Field
@@ -89,7 +89,7 @@ type zeroTrustDEXFleetStatusDeviceListResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZeroTrustDEXFleetStatusDeviceListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DigitalExperienceMonitoringDevice) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
