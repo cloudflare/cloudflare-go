@@ -74,19 +74,6 @@ func (r *CloudforceOneRequestPriorityService) Delete(ctx context.Context, accoun
 	return
 }
 
-// List Priority Intelligence Requirements
-func (r *CloudforceOneRequestPriorityService) DoSomethingUnknown(ctx context.Context, accountIdentifier string, body CloudforceOneRequestPriorityDoSomethingUnknownParams, opts ...option.RequestOption) (res *[]CloudforceOneRequestPriorityDoSomethingUnknownResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env CloudforceOneRequestPriorityDoSomethingUnknownResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/priority", accountIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
-	if err != nil {
-		return
-	}
-	res = &env.Result
-	return
-}
-
 // Get a Priority Intelligence Requirement
 func (r *CloudforceOneRequestPriorityService) Get(ctx context.Context, accountIdentifier string, priorityIdentifer string, opts ...option.RequestOption) (res *CloudforceOneRequestPriorityGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
@@ -254,53 +241,6 @@ type CloudforceOneRequestPriorityDeleteResponseArray []interface{}
 
 func (r CloudforceOneRequestPriorityDeleteResponseArray) ImplementsCloudforceOneRequestPriorityDeleteResponse() {
 }
-
-type CloudforceOneRequestPriorityDoSomethingUnknownResponse struct {
-	// UUID
-	ID string `json:"id,required"`
-	// Priority creation time
-	Created time.Time `json:"created,required" format:"date-time"`
-	// List of labels
-	Labels []string `json:"labels,required"`
-	// Priority
-	Priority int64 `json:"priority,required"`
-	// Requirement
-	Requirement string `json:"requirement,required"`
-	// The CISA defined Traffic Light Protocol (TLP)
-	Tlp CloudforceOneRequestPriorityDoSomethingUnknownResponseTlp `json:"tlp,required"`
-	// Priority last updated time
-	Updated time.Time                                                  `json:"updated,required" format:"date-time"`
-	JSON    cloudforceOneRequestPriorityDoSomethingUnknownResponseJSON `json:"-"`
-}
-
-// cloudforceOneRequestPriorityDoSomethingUnknownResponseJSON contains the JSON
-// metadata for the struct [CloudforceOneRequestPriorityDoSomethingUnknownResponse]
-type cloudforceOneRequestPriorityDoSomethingUnknownResponseJSON struct {
-	ID          apijson.Field
-	Created     apijson.Field
-	Labels      apijson.Field
-	Priority    apijson.Field
-	Requirement apijson.Field
-	Tlp         apijson.Field
-	Updated     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CloudforceOneRequestPriorityDoSomethingUnknownResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The CISA defined Traffic Light Protocol (TLP)
-type CloudforceOneRequestPriorityDoSomethingUnknownResponseTlp string
-
-const (
-	CloudforceOneRequestPriorityDoSomethingUnknownResponseTlpClear       CloudforceOneRequestPriorityDoSomethingUnknownResponseTlp = "clear"
-	CloudforceOneRequestPriorityDoSomethingUnknownResponseTlpAmber       CloudforceOneRequestPriorityDoSomethingUnknownResponseTlp = "amber"
-	CloudforceOneRequestPriorityDoSomethingUnknownResponseTlpAmberStrict CloudforceOneRequestPriorityDoSomethingUnknownResponseTlp = "amber-strict"
-	CloudforceOneRequestPriorityDoSomethingUnknownResponseTlpGreen       CloudforceOneRequestPriorityDoSomethingUnknownResponseTlp = "green"
-	CloudforceOneRequestPriorityDoSomethingUnknownResponseTlpRed         CloudforceOneRequestPriorityDoSomethingUnknownResponseTlp = "red"
-)
 
 type CloudforceOneRequestPriorityGetResponse struct {
 	// UUID
@@ -664,89 +604,6 @@ type CloudforceOneRequestPriorityDeleteResponseEnvelopeSuccess bool
 
 const (
 	CloudforceOneRequestPriorityDeleteResponseEnvelopeSuccessTrue CloudforceOneRequestPriorityDeleteResponseEnvelopeSuccess = true
-)
-
-type CloudforceOneRequestPriorityDoSomethingUnknownParams struct {
-	// Page number of results
-	Page param.Field[int64] `json:"page,required"`
-	// Number of results per page
-	PerPage param.Field[int64] `json:"per_page,required"`
-}
-
-func (r CloudforceOneRequestPriorityDoSomethingUnknownParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type CloudforceOneRequestPriorityDoSomethingUnknownResponseEnvelope struct {
-	Errors   []CloudforceOneRequestPriorityDoSomethingUnknownResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []CloudforceOneRequestPriorityDoSomethingUnknownResponseEnvelopeMessages `json:"messages,required"`
-	Result   []CloudforceOneRequestPriorityDoSomethingUnknownResponse                 `json:"result,required"`
-	// Whether the API call was successful
-	Success CloudforceOneRequestPriorityDoSomethingUnknownResponseEnvelopeSuccess `json:"success,required"`
-	JSON    cloudforceOneRequestPriorityDoSomethingUnknownResponseEnvelopeJSON    `json:"-"`
-}
-
-// cloudforceOneRequestPriorityDoSomethingUnknownResponseEnvelopeJSON contains the
-// JSON metadata for the struct
-// [CloudforceOneRequestPriorityDoSomethingUnknownResponseEnvelope]
-type cloudforceOneRequestPriorityDoSomethingUnknownResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CloudforceOneRequestPriorityDoSomethingUnknownResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CloudforceOneRequestPriorityDoSomethingUnknownResponseEnvelopeErrors struct {
-	Code    int64                                                                    `json:"code,required"`
-	Message string                                                                   `json:"message,required"`
-	JSON    cloudforceOneRequestPriorityDoSomethingUnknownResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// cloudforceOneRequestPriorityDoSomethingUnknownResponseEnvelopeErrorsJSON
-// contains the JSON metadata for the struct
-// [CloudforceOneRequestPriorityDoSomethingUnknownResponseEnvelopeErrors]
-type cloudforceOneRequestPriorityDoSomethingUnknownResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CloudforceOneRequestPriorityDoSomethingUnknownResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type CloudforceOneRequestPriorityDoSomethingUnknownResponseEnvelopeMessages struct {
-	Code    int64                                                                      `json:"code,required"`
-	Message string                                                                     `json:"message,required"`
-	JSON    cloudforceOneRequestPriorityDoSomethingUnknownResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// cloudforceOneRequestPriorityDoSomethingUnknownResponseEnvelopeMessagesJSON
-// contains the JSON metadata for the struct
-// [CloudforceOneRequestPriorityDoSomethingUnknownResponseEnvelopeMessages]
-type cloudforceOneRequestPriorityDoSomethingUnknownResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CloudforceOneRequestPriorityDoSomethingUnknownResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Whether the API call was successful
-type CloudforceOneRequestPriorityDoSomethingUnknownResponseEnvelopeSuccess bool
-
-const (
-	CloudforceOneRequestPriorityDoSomethingUnknownResponseEnvelopeSuccessTrue CloudforceOneRequestPriorityDoSomethingUnknownResponseEnvelopeSuccess = true
 )
 
 type CloudforceOneRequestPriorityGetResponseEnvelope struct {
