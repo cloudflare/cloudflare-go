@@ -504,6 +504,30 @@ func TestGetWorker_Module(t *testing.T) {
 	}
 }
 
+func TestGetWorkerWithDispatchNamespace_Module(t *testing.T) {
+	setup()
+	defer teardown()
+
+	mux.HandleFunc("/accounts/"+testAccountID+"/workers/dispatch/namespaces/bar/scripts/foo/content", func(w http.ResponseWriter, r *http.Request) {
+		assert.Equal(t, http.MethodGet, r.Method, "Expected method 'GET', got %s", r.Method)
+		w.Header().Set("content-type", "multipart/form-data; boundary=workermodulescriptdownload")
+		fmt.Fprint(w, workerModuleScriptDownloadResponse)
+	})
+
+	res, err := client.GetWorkerWithDispatchNamespace(context.Background(), AccountIdentifier(testAccountID), "foo", "bar")
+	want := WorkerScriptResponse{
+		successResponse,
+		true,
+		WorkerScript{
+			Script: workerModuleScript,
+		},
+	}
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, want.Script, res.Script)
+	}
+}
+
 func TestGetWorkersScriptContent(t *testing.T) {
 	setup()
 	defer teardown()
