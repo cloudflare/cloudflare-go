@@ -24,6 +24,8 @@ func TestZoneSettingIPV6Edit(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Zones.Settings.IPV6.Edit(context.TODO(), cloudflare.ZoneSettingIPV6EditParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -49,6 +51,8 @@ func TestZoneSettingIPV6Get(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Zones.Settings.IPV6.Get(context.TODO(), cloudflare.ZoneSettingIPV6GetParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),

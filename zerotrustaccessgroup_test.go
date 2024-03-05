@@ -24,6 +24,8 @@ func TestZeroTrustAccessGroupNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Groups.New(context.TODO(), cloudflare.ZeroTrustAccessGroupNewParams{
 		Include: cloudflare.F([]cloudflare.ZeroTrustAccessGroupNewParamsInclude{cloudflare.ZeroTrustAccessGroupNewParamsIncludeAccessEmailRule(cloudflare.ZeroTrustAccessGroupNewParamsIncludeAccessEmailRule{
@@ -90,6 +92,8 @@ func TestZeroTrustAccessGroupUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Groups.Update(
 		context.TODO(),
@@ -160,6 +164,8 @@ func TestZeroTrustAccessGroupListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Groups.List(context.TODO(), cloudflare.ZeroTrustAccessGroupListParams{
 		AccountID: cloudflare.F("string"),
@@ -185,6 +191,8 @@ func TestZeroTrustAccessGroupDeleteWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Groups.Delete(
 		context.TODO(),
@@ -214,6 +222,8 @@ func TestZeroTrustAccessGroupGetWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Groups.Get(
 		context.TODO(),

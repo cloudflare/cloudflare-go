@@ -24,6 +24,8 @@ func TestZeroTrustDeviceNetworkNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Devices.Networks.New(context.TODO(), cloudflare.ZeroTrustDeviceNetworkNewParams{
 		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
@@ -54,6 +56,8 @@ func TestZeroTrustDeviceNetworkUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Devices.Networks.Update(
 		context.TODO(),
@@ -88,6 +92,8 @@ func TestZeroTrustDeviceNetworkList(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Devices.Networks.List(context.TODO(), cloudflare.ZeroTrustDeviceNetworkListParams{
 		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
@@ -112,6 +118,8 @@ func TestZeroTrustDeviceNetworkDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Devices.Networks.Delete(
 		context.TODO(),
@@ -140,6 +148,8 @@ func TestZeroTrustDeviceNetworkGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Devices.Networks.Get(
 		context.TODO(),

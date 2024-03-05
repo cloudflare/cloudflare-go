@@ -24,6 +24,8 @@ func TestPageShieldPolicyNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.PageShield.Policies.New(context.TODO(), cloudflare.PageShieldPolicyNewParams{
 		ZoneID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -53,6 +55,8 @@ func TestPageShieldPolicyUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.PageShield.Policies.Update(
 		context.TODO(),
@@ -86,6 +90,8 @@ func TestPageShieldPolicyList(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.PageShield.Policies.List(context.TODO(), cloudflare.PageShieldPolicyListParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -110,6 +116,8 @@ func TestPageShieldPolicyDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	err := client.PageShield.Policies.Delete(
 		context.TODO(),
@@ -138,6 +146,8 @@ func TestPageShieldPolicyGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.PageShield.Policies.Get(
 		context.TODO(),

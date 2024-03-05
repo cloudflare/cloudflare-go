@@ -24,6 +24,8 @@ func TestCloudforceOneRequestPriorityNew(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CloudforceOne.Requests.Priority.New(
 		context.TODO(),
@@ -55,6 +57,8 @@ func TestCloudforceOneRequestPriorityUpdate(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CloudforceOne.Requests.Priority.Update(
 		context.TODO(),
@@ -87,6 +91,8 @@ func TestCloudforceOneRequestPriorityDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CloudforceOne.Requests.Priority.Delete(
 		context.TODO(),
@@ -113,6 +119,8 @@ func TestCloudforceOneRequestPriorityDoSomethingUnknown(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CloudforceOne.Requests.Priority.DoSomethingUnknown(
 		context.TODO(),
@@ -142,6 +150,8 @@ func TestCloudforceOneRequestPriorityGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CloudforceOne.Requests.Priority.Get(
 		context.TODO(),
@@ -168,6 +178,8 @@ func TestCloudforceOneRequestPriorityQuota(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CloudforceOne.Requests.Priority.Quota(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {

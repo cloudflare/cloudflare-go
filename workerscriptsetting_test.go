@@ -24,6 +24,8 @@ func TestWorkerScriptSettingEditWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Workers.Scripts.Settings.Edit(
 		context.TODO(),
@@ -134,6 +136,8 @@ func TestWorkerScriptSettingGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Workers.Scripts.Settings.Get(
 		context.TODO(),

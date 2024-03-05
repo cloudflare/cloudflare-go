@@ -24,6 +24,8 @@ func TestStreamLiveInputNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Stream.LiveInputs.New(context.TODO(), cloudflare.StreamLiveInputNewParams{
 		AccountID:                cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -59,6 +61,8 @@ func TestStreamLiveInputUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Stream.LiveInputs.Update(
 		context.TODO(),
@@ -98,6 +102,8 @@ func TestStreamLiveInputListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Stream.LiveInputs.List(context.TODO(), cloudflare.StreamLiveInputListParams{
 		AccountID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -123,6 +129,8 @@ func TestStreamLiveInputDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	err := client.Stream.LiveInputs.Delete(
 		context.TODO(),
@@ -151,6 +159,8 @@ func TestStreamLiveInputGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Stream.LiveInputs.Get(
 		context.TODO(),

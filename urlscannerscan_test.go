@@ -28,6 +28,8 @@ func TestURLScannerScanNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.URLScanner.Scans.New(
 		context.TODO(),
@@ -61,6 +63,8 @@ func TestURLScannerScanGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.URLScanner.Scans.Get(
 		context.TODO(),
@@ -87,6 +91,8 @@ func TestURLScannerScanHar(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.URLScanner.Scans.Har(
 		context.TODO(),
@@ -112,6 +118,8 @@ func TestURLScannerScanScreenshotWithOptionalParams(t *testing.T) {
 	baseURL := server.URL
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	resp, err := client.URLScanner.Scans.Screenshot(
 		context.TODO(),

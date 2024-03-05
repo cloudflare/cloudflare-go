@@ -24,6 +24,8 @@ func TestHostnameSettingTLSUpdate(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Hostnames.Settings.TLS.Update(
 		context.TODO(),
@@ -54,6 +56,8 @@ func TestHostnameSettingTLSDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Hostnames.Settings.TLS.Delete(
 		context.TODO(),
@@ -83,6 +87,8 @@ func TestHostnameSettingTLSGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Hostnames.Settings.TLS.Get(
 		context.TODO(),

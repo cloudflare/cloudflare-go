@@ -24,6 +24,8 @@ func TestZoneSettingCacheLevelEdit(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Zones.Settings.CacheLevel.Edit(context.TODO(), cloudflare.ZoneSettingCacheLevelEditParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -49,6 +51,8 @@ func TestZoneSettingCacheLevelGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Zones.Settings.CacheLevel.Get(context.TODO(), cloudflare.ZoneSettingCacheLevelGetParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),

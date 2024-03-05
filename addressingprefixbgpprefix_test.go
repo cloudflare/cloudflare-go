@@ -24,6 +24,8 @@ func TestAddressingPrefixBGPPrefixList(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Addressing.Prefixes.BGP.Prefixes.List(
 		context.TODO(),
@@ -52,6 +54,8 @@ func TestAddressingPrefixBGPPrefixEditWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Addressing.Prefixes.BGP.Prefixes.Edit(
 		context.TODO(),
@@ -84,6 +88,8 @@ func TestAddressingPrefixBGPPrefixGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Addressing.Prefixes.BGP.Prefixes.Get(
 		context.TODO(),

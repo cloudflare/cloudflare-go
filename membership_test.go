@@ -24,6 +24,8 @@ func TestMembershipUpdate(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Memberships.Update(
 		context.TODO(),
@@ -52,6 +54,8 @@ func TestMembershipListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Memberships.List(context.TODO(), cloudflare.MembershipListParams{
 		Account: cloudflare.F(cloudflare.MembershipListParamsAccount{
@@ -84,6 +88,8 @@ func TestMembershipDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Memberships.Delete(context.TODO(), "4536bcfad5faccb111b47003c79917fa")
 	if err != nil {
@@ -106,6 +112,8 @@ func TestMembershipGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Memberships.Get(context.TODO(), "4536bcfad5faccb111b47003c79917fa")
 	if err != nil {

@@ -24,6 +24,8 @@ func TestOriginTLSClientAuthNew(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.OriginTLSClientAuth.New(context.TODO(), cloudflare.OriginTLSClientAuthNewParams{
 		ZoneID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -50,6 +52,8 @@ func TestOriginTLSClientAuthList(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.OriginTLSClientAuth.List(context.TODO(), cloudflare.OriginTLSClientAuthListParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -74,6 +78,8 @@ func TestOriginTLSClientAuthDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.OriginTLSClientAuth.Delete(
 		context.TODO(),
@@ -102,6 +108,8 @@ func TestOriginTLSClientAuthGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.OriginTLSClientAuth.Get(
 		context.TODO(),

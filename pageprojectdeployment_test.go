@@ -24,6 +24,8 @@ func TestPageProjectDeploymentNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Pages.Projects.Deployments.New(
 		context.TODO(),
@@ -53,6 +55,8 @@ func TestPageProjectDeploymentList(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Pages.Projects.Deployments.List(
 		context.TODO(),
@@ -81,6 +85,8 @@ func TestPageProjectDeploymentDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Pages.Projects.Deployments.Delete(
 		context.TODO(),
@@ -110,6 +116,8 @@ func TestPageProjectDeploymentGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Pages.Projects.Deployments.Get(
 		context.TODO(),
@@ -139,6 +147,8 @@ func TestPageProjectDeploymentRetry(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Pages.Projects.Deployments.Retry(
 		context.TODO(),
@@ -168,6 +178,8 @@ func TestPageProjectDeploymentRollback(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Pages.Projects.Deployments.Rollback(
 		context.TODO(),

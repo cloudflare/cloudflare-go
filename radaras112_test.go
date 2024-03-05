@@ -25,6 +25,8 @@ func TestRadarAS112TimeseriesWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AS112.Timeseries(context.TODO(), cloudflare.RadarAS112TimeseriesParams{
 		AggInterval: cloudflare.F(cloudflare.RadarAS112TimeseriesParamsAggInterval1h),

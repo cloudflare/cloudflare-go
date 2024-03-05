@@ -25,6 +25,8 @@ func TestRadarHTTPTopBrowserFamiliesWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.HTTP.Top.BrowserFamilies(context.TODO(), cloudflare.RadarHTTPTopBrowserFamiliesParams{
 		ASN:          cloudflare.F([]string{"string", "string", "string"}),
@@ -64,6 +66,8 @@ func TestRadarHTTPTopBrowsersWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.HTTP.Top.Browsers(context.TODO(), cloudflare.RadarHTTPTopBrowsersParams{
 		ASN:          cloudflare.F([]string{"string", "string", "string"}),

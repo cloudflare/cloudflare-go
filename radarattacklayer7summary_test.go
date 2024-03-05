@@ -25,6 +25,8 @@ func TestRadarAttackLayer7SummaryGetWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer7.Summary.Get(context.TODO(), cloudflare.RadarAttackLayer7SummaryGetParams{
 		ASN:       cloudflare.F([]string{"string", "string", "string"}),
@@ -56,6 +58,8 @@ func TestRadarAttackLayer7SummaryHTTPMethodWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer7.Summary.HTTPMethod(context.TODO(), cloudflare.RadarAttackLayer7SummaryHTTPMethodParams{
 		ASN:               cloudflare.F([]string{"string", "string", "string"}),
@@ -90,6 +94,8 @@ func TestRadarAttackLayer7SummaryHTTPVersionWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer7.Summary.HTTPVersion(context.TODO(), cloudflare.RadarAttackLayer7SummaryHTTPVersionParams{
 		ASN:               cloudflare.F([]string{"string", "string", "string"}),
@@ -124,6 +130,8 @@ func TestRadarAttackLayer7SummaryIPVersionWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer7.Summary.IPVersion(context.TODO(), cloudflare.RadarAttackLayer7SummaryIPVersionParams{
 		ASN:               cloudflare.F([]string{"string", "string", "string"}),
@@ -158,6 +166,8 @@ func TestRadarAttackLayer7SummaryManagedRulesWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer7.Summary.ManagedRules(context.TODO(), cloudflare.RadarAttackLayer7SummaryManagedRulesParams{
 		ASN:               cloudflare.F([]string{"string", "string", "string"}),
@@ -193,6 +203,8 @@ func TestRadarAttackLayer7SummaryMitigationProductWithOptionalParams(t *testing.
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer7.Summary.MitigationProduct(context.TODO(), cloudflare.RadarAttackLayer7SummaryMitigationProductParams{
 		ASN:         cloudflare.F([]string{"string", "string", "string"}),

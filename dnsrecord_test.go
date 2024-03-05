@@ -25,6 +25,8 @@ func TestDNSRecordNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.DNS.Records.New(context.TODO(), cloudflare.DNSRecordNewParams{
 		ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -101,6 +103,8 @@ func TestDNSRecordUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.DNS.Records.Update(
 		context.TODO(),
@@ -181,6 +185,8 @@ func TestDNSRecordListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.DNS.Records.List(context.TODO(), cloudflare.DNSRecordListParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -232,6 +238,8 @@ func TestDNSRecordDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.DNS.Records.Delete(
 		context.TODO(),
@@ -260,6 +268,8 @@ func TestDNSRecordEditWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.DNS.Records.Edit(
 		context.TODO(),
@@ -340,6 +350,8 @@ func TestDNSRecordExport(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.DNS.Records.Export(context.TODO(), cloudflare.DNSRecordExportParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -364,6 +376,8 @@ func TestDNSRecordGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.DNS.Records.Get(
 		context.TODO(),
@@ -392,6 +406,8 @@ func TestDNSRecordImportWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.DNS.Records.Import(context.TODO(), cloudflare.DNSRecordImportParams{
 		ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -418,6 +434,8 @@ func TestDNSRecordScan(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.DNS.Records.Scan(context.TODO(), cloudflare.DNSRecordScanParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),

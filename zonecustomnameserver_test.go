@@ -24,6 +24,8 @@ func TestZoneCustomNameserverUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Zones.CustomNameservers.Update(context.TODO(), cloudflare.ZoneCustomNameserverUpdateParams{
 		ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -50,6 +52,8 @@ func TestZoneCustomNameserverGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Zones.CustomNameservers.Get(context.TODO(), cloudflare.ZoneCustomNameserverGetParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),

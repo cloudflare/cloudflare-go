@@ -25,6 +25,8 @@ func TestUserLoadBalancerAnalyticsEventListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.User.LoadBalancers.Analytics.Events.List(context.TODO(), cloudflare.UserLoadBalancerAnalyticsEventListParams{
 		OriginHealthy: cloudflare.F(true),

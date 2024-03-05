@@ -24,6 +24,8 @@ func TestZeroTrustNetworkRouteNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Networks.Routes.New(context.TODO(), cloudflare.ZeroTrustNetworkRouteNewParams{
 		AccountID:        cloudflare.F("699d98642c564d2e855e9661899b7252"),
@@ -51,6 +53,8 @@ func TestZeroTrustNetworkRouteListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Networks.Routes.List(context.TODO(), cloudflare.ZeroTrustNetworkRouteListParams{
 		AccountID:        cloudflare.F("699d98642c564d2e855e9661899b7252"),
@@ -85,6 +89,8 @@ func TestZeroTrustNetworkRouteDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Networks.Routes.Delete(
 		context.TODO(),
@@ -113,6 +119,8 @@ func TestZeroTrustNetworkRouteEditWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Networks.Routes.Edit(
 		context.TODO(),

@@ -24,6 +24,8 @@ func TestZeroTrustIdentityProviderNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.IdentityProviders.New(context.TODO(), cloudflare.ZeroTrustIdentityProviderNewParams{
 		Config: cloudflare.F(cloudflare.ZeroTrustIdentityProviderNewParamsConfig{
@@ -94,6 +96,8 @@ func TestZeroTrustIdentityProviderUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.IdentityProviders.Update(
 		context.TODO(),
@@ -168,6 +172,8 @@ func TestZeroTrustIdentityProviderListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.IdentityProviders.List(context.TODO(), cloudflare.ZeroTrustIdentityProviderListParams{
 		AccountID: cloudflare.F("string"),
@@ -193,6 +199,8 @@ func TestZeroTrustIdentityProviderDeleteWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.IdentityProviders.Delete(
 		context.TODO(),
@@ -222,6 +230,8 @@ func TestZeroTrustIdentityProviderGetWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.IdentityProviders.Get(
 		context.TODO(),

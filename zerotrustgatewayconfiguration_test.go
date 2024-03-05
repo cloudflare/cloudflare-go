@@ -24,6 +24,8 @@ func TestZeroTrustGatewayConfigurationUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Gateway.Configurations.Update(context.TODO(), cloudflare.ZeroTrustGatewayConfigurationUpdateParams{
 		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
@@ -97,6 +99,8 @@ func TestZeroTrustGatewayConfigurationEditWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Gateway.Configurations.Edit(context.TODO(), cloudflare.ZeroTrustGatewayConfigurationEditParams{
 		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
@@ -170,6 +174,8 @@ func TestZeroTrustGatewayConfigurationGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Gateway.Configurations.Get(context.TODO(), cloudflare.ZeroTrustGatewayConfigurationGetParams{
 		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),

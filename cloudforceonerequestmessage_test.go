@@ -25,6 +25,8 @@ func TestCloudforceOneRequestMessageNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CloudforceOne.Requests.Message.New(
 		context.TODO(),
@@ -54,6 +56,8 @@ func TestCloudforceOneRequestMessageUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CloudforceOne.Requests.Message.Update(
 		context.TODO(),
@@ -88,6 +92,8 @@ func TestCloudforceOneRequestMessageDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CloudforceOne.Requests.Message.Delete(
 		context.TODO(),
@@ -115,6 +121,8 @@ func TestCloudforceOneRequestMessageGetWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CloudforceOne.Requests.Message.Get(
 		context.TODO(),

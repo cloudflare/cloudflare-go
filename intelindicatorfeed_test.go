@@ -24,6 +24,8 @@ func TestIntelIndicatorFeedNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Intel.IndicatorFeeds.New(context.TODO(), cloudflare.IntelIndicatorFeedNewParams{
 		AccountID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -50,6 +52,8 @@ func TestIntelIndicatorFeedUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Intel.IndicatorFeeds.Update(
 		context.TODO(),
@@ -79,6 +83,8 @@ func TestIntelIndicatorFeedList(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Intel.IndicatorFeeds.List(context.TODO(), cloudflare.IntelIndicatorFeedListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -103,6 +109,8 @@ func TestIntelIndicatorFeedData(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Intel.IndicatorFeeds.Data(
 		context.TODO(),
@@ -131,6 +139,8 @@ func TestIntelIndicatorFeedGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Intel.IndicatorFeeds.Get(
 		context.TODO(),

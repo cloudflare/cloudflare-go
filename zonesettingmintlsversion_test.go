@@ -24,6 +24,8 @@ func TestZoneSettingMinTLSVersionEdit(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Zones.Settings.MinTLSVersion.Edit(context.TODO(), cloudflare.ZoneSettingMinTLSVersionEditParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -49,6 +51,8 @@ func TestZoneSettingMinTLSVersionGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Zones.Settings.MinTLSVersion.Get(context.TODO(), cloudflare.ZoneSettingMinTLSVersionGetParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),

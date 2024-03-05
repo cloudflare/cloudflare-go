@@ -25,6 +25,8 @@ func TestZeroTrustTunnelNew(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Tunnels.New(context.TODO(), cloudflare.ZeroTrustTunnelNewParams{
 		AccountID:    cloudflare.F("699d98642c564d2e855e9661899b7252"),
@@ -51,6 +53,8 @@ func TestZeroTrustTunnelListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Tunnels.List(context.TODO(), cloudflare.ZeroTrustTunnelListParams{
 		AccountID:     cloudflare.F("699d98642c564d2e855e9661899b7252"),
@@ -85,6 +89,8 @@ func TestZeroTrustTunnelDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Tunnels.Delete(
 		context.TODO(),
@@ -114,6 +120,8 @@ func TestZeroTrustTunnelEditWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Tunnels.Edit(
 		context.TODO(),
@@ -144,6 +152,8 @@ func TestZeroTrustTunnelGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Tunnels.Get(
 		context.TODO(),

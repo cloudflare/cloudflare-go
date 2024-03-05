@@ -24,6 +24,8 @@ func TestSecondaryDNSForceAxfrNew(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.SecondaryDNS.ForceAxfrs.New(context.TODO(), cloudflare.SecondaryDNSForceAxfrNewParams{
 		ZoneID: cloudflare.F[any]("269d8f4853475ca241c4e730be286b20"),

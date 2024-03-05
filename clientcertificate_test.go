@@ -24,6 +24,8 @@ func TestClientCertificateNew(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ClientCertificates.New(context.TODO(), cloudflare.ClientCertificateNewParams{
 		ZoneID:       cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -50,6 +52,8 @@ func TestClientCertificateListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ClientCertificates.List(context.TODO(), cloudflare.ClientCertificateListParams{
 		ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -79,6 +83,8 @@ func TestClientCertificateDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ClientCertificates.Delete(
 		context.TODO(),
@@ -107,6 +113,8 @@ func TestClientCertificateEdit(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ClientCertificates.Edit(
 		context.TODO(),
@@ -135,6 +143,8 @@ func TestClientCertificateGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ClientCertificates.Get(
 		context.TODO(),

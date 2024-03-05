@@ -24,6 +24,8 @@ func TestLoadBalancerNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.LoadBalancers.New(context.TODO(), cloudflare.LoadBalancerNewParams{
 		ZoneID:       cloudflare.F("699d98642c564d2e855e9661899b7252"),
@@ -330,6 +332,8 @@ func TestLoadBalancerUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.LoadBalancers.Update(
 		context.TODO(),
@@ -641,6 +645,8 @@ func TestLoadBalancerList(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.LoadBalancers.List(context.TODO(), cloudflare.LoadBalancerListParams{
 		ZoneID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
@@ -665,6 +671,8 @@ func TestLoadBalancerDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.LoadBalancers.Delete(
 		context.TODO(),
@@ -693,6 +701,8 @@ func TestLoadBalancerEditWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.LoadBalancers.Edit(
 		context.TODO(),
@@ -1004,6 +1014,8 @@ func TestLoadBalancerGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.LoadBalancers.Get(
 		context.TODO(),

@@ -25,6 +25,8 @@ func TestRadarAttackLayer7TimeseriesGroupGetWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer7.TimeseriesGroups.Get(context.TODO(), cloudflare.RadarAttackLayer7TimeseriesGroupGetParams{
 		AggInterval: cloudflare.F(cloudflare.RadarAttackLayer7TimeseriesGroupGetParamsAggInterval1h),
@@ -57,6 +59,8 @@ func TestRadarAttackLayer7TimeseriesGroupHTTPMethodWithOptionalParams(t *testing
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer7.TimeseriesGroups.HTTPMethod(context.TODO(), cloudflare.RadarAttackLayer7TimeseriesGroupHTTPMethodParams{
 		AggInterval:       cloudflare.F(cloudflare.RadarAttackLayer7TimeseriesGroupHTTPMethodParamsAggInterval1h),
@@ -93,6 +97,8 @@ func TestRadarAttackLayer7TimeseriesGroupHTTPVersionWithOptionalParams(t *testin
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer7.TimeseriesGroups.HTTPVersion(context.TODO(), cloudflare.RadarAttackLayer7TimeseriesGroupHTTPVersionParams{
 		AggInterval:       cloudflare.F(cloudflare.RadarAttackLayer7TimeseriesGroupHTTPVersionParamsAggInterval1h),
@@ -129,6 +135,8 @@ func TestRadarAttackLayer7TimeseriesGroupIndustryWithOptionalParams(t *testing.T
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer7.TimeseriesGroups.Industry(context.TODO(), cloudflare.RadarAttackLayer7TimeseriesGroupIndustryParams{
 		AggInterval:       cloudflare.F(cloudflare.RadarAttackLayer7TimeseriesGroupIndustryParamsAggInterval1h),
@@ -167,6 +175,8 @@ func TestRadarAttackLayer7TimeseriesGroupIPVersionWithOptionalParams(t *testing.
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer7.TimeseriesGroups.IPVersion(context.TODO(), cloudflare.RadarAttackLayer7TimeseriesGroupIPVersionParams{
 		AggInterval:       cloudflare.F(cloudflare.RadarAttackLayer7TimeseriesGroupIPVersionParamsAggInterval1h),
@@ -203,6 +213,8 @@ func TestRadarAttackLayer7TimeseriesGroupManagedRulesWithOptionalParams(t *testi
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer7.TimeseriesGroups.ManagedRules(context.TODO(), cloudflare.RadarAttackLayer7TimeseriesGroupManagedRulesParams{
 		AggInterval:       cloudflare.F(cloudflare.RadarAttackLayer7TimeseriesGroupManagedRulesParamsAggInterval1h),
@@ -240,6 +252,8 @@ func TestRadarAttackLayer7TimeseriesGroupMitigationProductWithOptionalParams(t *
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer7.TimeseriesGroups.MitigationProduct(context.TODO(), cloudflare.RadarAttackLayer7TimeseriesGroupMitigationProductParams{
 		AggInterval:   cloudflare.F(cloudflare.RadarAttackLayer7TimeseriesGroupMitigationProductParamsAggInterval1h),
@@ -276,6 +290,8 @@ func TestRadarAttackLayer7TimeseriesGroupVerticalWithOptionalParams(t *testing.T
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer7.TimeseriesGroups.Vertical(context.TODO(), cloudflare.RadarAttackLayer7TimeseriesGroupVerticalParams{
 		AggInterval:       cloudflare.F(cloudflare.RadarAttackLayer7TimeseriesGroupVerticalParamsAggInterval1h),

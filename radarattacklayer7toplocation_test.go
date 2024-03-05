@@ -25,6 +25,8 @@ func TestRadarAttackLayer7TopLocationOriginWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer7.Top.Locations.Origin(context.TODO(), cloudflare.RadarAttackLayer7TopLocationOriginParams{
 		ASN:       cloudflare.F([]string{"string", "string", "string"}),
@@ -56,6 +58,8 @@ func TestRadarAttackLayer7TopLocationTargetWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer7.Top.Locations.Target(context.TODO(), cloudflare.RadarAttackLayer7TopLocationTargetParams{
 		Continent: cloudflare.F([]string{"string", "string", "string"}),

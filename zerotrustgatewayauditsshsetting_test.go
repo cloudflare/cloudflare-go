@@ -24,6 +24,8 @@ func TestZeroTrustGatewayAuditSSHSettingUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Gateway.AuditSSHSettings.Update(context.TODO(), cloudflare.ZeroTrustGatewayAuditSSHSettingUpdateParams{
 		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
@@ -50,6 +52,8 @@ func TestZeroTrustGatewayAuditSSHSettingGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Gateway.AuditSSHSettings.Get(context.TODO(), cloudflare.ZeroTrustGatewayAuditSSHSettingGetParams{
 		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),

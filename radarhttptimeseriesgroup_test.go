@@ -25,6 +25,8 @@ func TestRadarHTTPTimeseriesGroupBotClassWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.HTTP.TimeseriesGroups.BotClass(context.TODO(), cloudflare.RadarHTTPTimeseriesGroupBotClassParams{
 		AggInterval:  cloudflare.F(cloudflare.RadarHTTPTimeseriesGroupBotClassParamsAggInterval1h),
@@ -63,6 +65,8 @@ func TestRadarHTTPTimeseriesGroupBrowserWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.HTTP.TimeseriesGroups.Browser(context.TODO(), cloudflare.RadarHTTPTimeseriesGroupBrowserParams{
 		AggInterval:   cloudflare.F(cloudflare.RadarHTTPTimeseriesGroupBrowserParamsAggInterval1h),
@@ -103,6 +107,8 @@ func TestRadarHTTPTimeseriesGroupBrowserFamilyWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.HTTP.TimeseriesGroups.BrowserFamily(context.TODO(), cloudflare.RadarHTTPTimeseriesGroupBrowserFamilyParams{
 		AggInterval:  cloudflare.F(cloudflare.RadarHTTPTimeseriesGroupBrowserFamilyParamsAggInterval1h),
@@ -142,6 +148,8 @@ func TestRadarHTTPTimeseriesGroupDeviceTypeWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.HTTP.TimeseriesGroups.DeviceType(context.TODO(), cloudflare.RadarHTTPTimeseriesGroupDeviceTypeParams{
 		AggInterval:  cloudflare.F(cloudflare.RadarHTTPTimeseriesGroupDeviceTypeParamsAggInterval1h),
@@ -180,6 +188,8 @@ func TestRadarHTTPTimeseriesGroupHTTPProtocolWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.HTTP.TimeseriesGroups.HTTPProtocol(context.TODO(), cloudflare.RadarHTTPTimeseriesGroupHTTPProtocolParams{
 		AggInterval: cloudflare.F(cloudflare.RadarHTTPTimeseriesGroupHTTPProtocolParamsAggInterval1h),
@@ -218,6 +228,8 @@ func TestRadarHTTPTimeseriesGroupHTTPVersionWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.HTTP.TimeseriesGroups.HTTPVersion(context.TODO(), cloudflare.RadarHTTPTimeseriesGroupHTTPVersionParams{
 		AggInterval:  cloudflare.F(cloudflare.RadarHTTPTimeseriesGroupHTTPVersionParamsAggInterval1h),
@@ -256,6 +268,8 @@ func TestRadarHTTPTimeseriesGroupIPVersionWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.HTTP.TimeseriesGroups.IPVersion(context.TODO(), cloudflare.RadarHTTPTimeseriesGroupIPVersionParams{
 		AggInterval:  cloudflare.F(cloudflare.RadarHTTPTimeseriesGroupIPVersionParamsAggInterval1h),
@@ -294,6 +308,8 @@ func TestRadarHTTPTimeseriesGroupOSWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.HTTP.TimeseriesGroups.OS(context.TODO(), cloudflare.RadarHTTPTimeseriesGroupOSParams{
 		AggInterval:  cloudflare.F(cloudflare.RadarHTTPTimeseriesGroupOSParamsAggInterval1h),
@@ -332,6 +348,8 @@ func TestRadarHTTPTimeseriesGroupTLSVersionWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.HTTP.TimeseriesGroups.TLSVersion(context.TODO(), cloudflare.RadarHTTPTimeseriesGroupTLSVersionParams{
 		AggInterval:  cloudflare.F(cloudflare.RadarHTTPTimeseriesGroupTLSVersionParamsAggInterval1h),

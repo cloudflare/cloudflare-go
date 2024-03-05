@@ -24,6 +24,8 @@ func TestZeroTrustAccessCertificateNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Certificates.New(context.TODO(), cloudflare.ZeroTrustAccessCertificateNewParams{
 		Certificate:         cloudflare.F("-----BEGIN CERTIFICATE-----\nMIIGAjCCA+qgAwIBAgIJAI7kymlF7CWT...N4RI7KKB7nikiuUf8vhULKy5IX10\nDrUtmu/B\n-----END CERTIFICATE-----"),
@@ -52,6 +54,8 @@ func TestZeroTrustAccessCertificateUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Certificates.Update(
 		context.TODO(),
@@ -83,6 +87,8 @@ func TestZeroTrustAccessCertificateListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Certificates.List(context.TODO(), cloudflare.ZeroTrustAccessCertificateListParams{
 		AccountID: cloudflare.F("string"),
@@ -108,6 +114,8 @@ func TestZeroTrustAccessCertificateDeleteWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Certificates.Delete(
 		context.TODO(),
@@ -137,6 +145,8 @@ func TestZeroTrustAccessCertificateGetWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Certificates.Get(
 		context.TODO(),

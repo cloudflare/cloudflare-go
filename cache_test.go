@@ -25,6 +25,8 @@ func TestCachePurgeWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Cache.Purge(context.TODO(), cloudflare.CachePurgeParams{
 		ZoneID:          cloudflare.F("string"),

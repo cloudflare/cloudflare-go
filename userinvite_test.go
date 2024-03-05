@@ -24,6 +24,8 @@ func TestUserInviteList(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.User.Invites.List(context.TODO())
 	if err != nil {
@@ -46,6 +48,8 @@ func TestUserInviteEdit(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.User.Invites.Edit(
 		context.TODO(),
@@ -74,6 +78,8 @@ func TestUserInviteGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.User.Invites.Get(context.TODO(), "4f5f0c14a2a41d5063dd301b2f829f04")
 	if err != nil {

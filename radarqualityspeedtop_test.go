@@ -25,6 +25,8 @@ func TestRadarQualitySpeedTopAsesWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Quality.Speed.Top.Ases(context.TODO(), cloudflare.RadarQualitySpeedTopAsesParams{
 		ASN:       cloudflare.F([]string{"string", "string", "string"}),
@@ -57,6 +59,8 @@ func TestRadarQualitySpeedTopLocationsWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Quality.Speed.Top.Locations(context.TODO(), cloudflare.RadarQualitySpeedTopLocationsParams{
 		ASN:       cloudflare.F([]string{"string", "string", "string"}),

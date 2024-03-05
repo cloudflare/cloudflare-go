@@ -25,6 +25,8 @@ func TestRadarAS112SummaryDNSSECWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AS112.Summary.DNSSEC(context.TODO(), cloudflare.RadarAS112SummaryDNSSECParams{
 		ASN:       cloudflare.F([]string{"string", "string", "string"}),
@@ -56,6 +58,8 @@ func TestRadarAS112SummaryEdnsWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AS112.Summary.Edns(context.TODO(), cloudflare.RadarAS112SummaryEdnsParams{
 		ASN:       cloudflare.F([]string{"string", "string", "string"}),
@@ -87,6 +91,8 @@ func TestRadarAS112SummaryIPVersionWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AS112.Summary.IPVersion(context.TODO(), cloudflare.RadarAS112SummaryIPVersionParams{
 		ASN:       cloudflare.F([]string{"string", "string", "string"}),
@@ -118,6 +124,8 @@ func TestRadarAS112SummaryProtocolWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AS112.Summary.Protocol(context.TODO(), cloudflare.RadarAS112SummaryProtocolParams{
 		ASN:       cloudflare.F([]string{"string", "string", "string"}),
@@ -149,6 +157,8 @@ func TestRadarAS112SummaryQueryTypeWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AS112.Summary.QueryType(context.TODO(), cloudflare.RadarAS112SummaryQueryTypeParams{
 		ASN:       cloudflare.F([]string{"string", "string", "string"}),
@@ -180,6 +190,8 @@ func TestRadarAS112SummaryResponseCodesWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AS112.Summary.ResponseCodes(context.TODO(), cloudflare.RadarAS112SummaryResponseCodesParams{
 		ASN:       cloudflare.F([]string{"string", "string", "string"}),

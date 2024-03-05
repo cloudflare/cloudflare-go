@@ -25,6 +25,8 @@ func TestRadarVerifiedBotTopBotsWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.VerifiedBots.Top.Bots(context.TODO(), cloudflare.RadarVerifiedBotTopBotsParams{
 		ASN:       cloudflare.F([]string{"string", "string", "string"}),
@@ -57,6 +59,8 @@ func TestRadarVerifiedBotTopCategoriesWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.VerifiedBots.Top.Categories(context.TODO(), cloudflare.RadarVerifiedBotTopCategoriesParams{
 		ASN:       cloudflare.F([]string{"string", "string", "string"}),

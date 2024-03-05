@@ -24,6 +24,8 @@ func TestWeb3HostnameIPFSUniversalPathContentListUpdate(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Web3.Hostnames.IPFSUniversalPaths.ContentLists.Update(
 		context.TODO(),
@@ -66,6 +68,8 @@ func TestWeb3HostnameIPFSUniversalPathContentListList(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Web3.Hostnames.IPFSUniversalPaths.ContentLists.List(
 		context.TODO(),

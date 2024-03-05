@@ -24,6 +24,8 @@ func TestRuleListBulkOperationGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Rules.Lists.BulkOperations.Get(
 		context.TODO(),

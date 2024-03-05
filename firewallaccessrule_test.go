@@ -24,6 +24,8 @@ func TestFirewallAccessRuleNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Firewall.AccessRules.New(context.TODO(), cloudflare.FirewallAccessRuleNewParams{
 		Configuration: cloudflare.F[cloudflare.FirewallAccessRuleNewParamsConfiguration](cloudflare.FirewallAccessRuleNewParamsConfigurationLegacyJhsIPConfiguration(cloudflare.FirewallAccessRuleNewParamsConfigurationLegacyJhsIPConfiguration{
@@ -55,6 +57,8 @@ func TestFirewallAccessRuleListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Firewall.AccessRules.List(context.TODO(), cloudflare.FirewallAccessRuleListParams{
 		AccountID: cloudflare.F("string"),
@@ -97,6 +101,8 @@ func TestFirewallAccessRuleDeleteWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Firewall.AccessRules.Delete(
 		context.TODO(),
@@ -126,6 +132,8 @@ func TestFirewallAccessRuleEditWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Firewall.AccessRules.Edit(
 		context.TODO(),
@@ -161,6 +169,8 @@ func TestFirewallAccessRuleGetWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Firewall.AccessRules.Get(
 		context.TODO(),

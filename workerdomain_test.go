@@ -24,6 +24,8 @@ func TestWorkerDomainUpdate(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Workers.Domains.Update(context.TODO(), cloudflare.WorkerDomainUpdateParams{
 		AccountID:   cloudflare.F[any]("9a7806061c88ada191ed06f989cc3dac"),
@@ -52,6 +54,8 @@ func TestWorkerDomainListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Workers.Domains.List(context.TODO(), cloudflare.WorkerDomainListParams{
 		AccountID:   cloudflare.F[any]("9a7806061c88ada191ed06f989cc3dac"),
@@ -81,6 +85,8 @@ func TestWorkerDomainDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	err := client.Workers.Domains.Delete(
 		context.TODO(),
@@ -109,6 +115,8 @@ func TestWorkerDomainGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Workers.Domains.Get(
 		context.TODO(),

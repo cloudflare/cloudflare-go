@@ -25,6 +25,8 @@ func TestRadarAttackLayer3SummaryBitrateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer3.Summary.Bitrate(context.TODO(), cloudflare.RadarAttackLayer3SummaryBitrateParams{
 		Continent: cloudflare.F([]string{"string", "string", "string"}),
@@ -58,6 +60,8 @@ func TestRadarAttackLayer3SummaryDurationWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer3.Summary.Duration(context.TODO(), cloudflare.RadarAttackLayer3SummaryDurationParams{
 		Continent: cloudflare.F([]string{"string", "string", "string"}),
@@ -91,6 +95,8 @@ func TestRadarAttackLayer3SummaryGetWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer3.Summary.Get(context.TODO(), cloudflare.RadarAttackLayer3SummaryGetParams{
 		ASN:       cloudflare.F([]string{"string", "string", "string"}),
@@ -122,6 +128,8 @@ func TestRadarAttackLayer3SummaryIPVersionWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer3.Summary.IPVersion(context.TODO(), cloudflare.RadarAttackLayer3SummaryIPVersionParams{
 		Continent: cloudflare.F([]string{"string", "string", "string"}),
@@ -154,6 +162,8 @@ func TestRadarAttackLayer3SummaryProtocolWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer3.Summary.Protocol(context.TODO(), cloudflare.RadarAttackLayer3SummaryProtocolParams{
 		Continent: cloudflare.F([]string{"string", "string", "string"}),
@@ -186,6 +196,8 @@ func TestRadarAttackLayer3SummaryVectorWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer3.Summary.Vector(context.TODO(), cloudflare.RadarAttackLayer3SummaryVectorParams{
 		Continent: cloudflare.F([]string{"string", "string", "string"}),

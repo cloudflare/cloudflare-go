@@ -24,6 +24,8 @@ func TestStreamWebhookUpdate(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Stream.Webhooks.Update(context.TODO(), cloudflare.StreamWebhookUpdateParams{
 		AccountID:       cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -49,6 +51,8 @@ func TestStreamWebhookDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Stream.Webhooks.Delete(context.TODO(), cloudflare.StreamWebhookDeleteParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -73,6 +77,8 @@ func TestStreamWebhookGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Stream.Webhooks.Get(context.TODO(), cloudflare.StreamWebhookGetParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),

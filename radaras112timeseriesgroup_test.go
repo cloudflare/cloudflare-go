@@ -25,6 +25,8 @@ func TestRadarAS112TimeseriesGroupDNSSECWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AS112.TimeseriesGroups.DNSSEC(context.TODO(), cloudflare.RadarAS112TimeseriesGroupDNSSECParams{
 		AggInterval: cloudflare.F(cloudflare.RadarAS112TimeseriesGroupDNSSECParamsAggInterval1h),
@@ -57,6 +59,8 @@ func TestRadarAS112TimeseriesGroupEdnsWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AS112.TimeseriesGroups.Edns(context.TODO(), cloudflare.RadarAS112TimeseriesGroupEdnsParams{
 		AggInterval: cloudflare.F(cloudflare.RadarAS112TimeseriesGroupEdnsParamsAggInterval1h),
@@ -89,6 +93,8 @@ func TestRadarAS112TimeseriesGroupIPVersionWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AS112.TimeseriesGroups.IPVersion(context.TODO(), cloudflare.RadarAS112TimeseriesGroupIPVersionParams{
 		AggInterval: cloudflare.F(cloudflare.RadarAS112TimeseriesGroupIPVersionParamsAggInterval1h),
@@ -121,6 +127,8 @@ func TestRadarAS112TimeseriesGroupProtocolWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AS112.TimeseriesGroups.Protocol(context.TODO(), cloudflare.RadarAS112TimeseriesGroupProtocolParams{
 		AggInterval: cloudflare.F(cloudflare.RadarAS112TimeseriesGroupProtocolParamsAggInterval1h),
@@ -153,6 +161,8 @@ func TestRadarAS112TimeseriesGroupQueryTypeWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AS112.TimeseriesGroups.QueryType(context.TODO(), cloudflare.RadarAS112TimeseriesGroupQueryTypeParams{
 		AggInterval: cloudflare.F(cloudflare.RadarAS112TimeseriesGroupQueryTypeParamsAggInterval1h),
@@ -185,6 +195,8 @@ func TestRadarAS112TimeseriesGroupResponseCodesWithOptionalParams(t *testing.T) 
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AS112.TimeseriesGroups.ResponseCodes(context.TODO(), cloudflare.RadarAS112TimeseriesGroupResponseCodesParams{
 		AggInterval: cloudflare.F(cloudflare.RadarAS112TimeseriesGroupResponseCodesParamsAggInterval1h),

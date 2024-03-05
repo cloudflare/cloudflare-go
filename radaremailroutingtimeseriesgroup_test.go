@@ -25,6 +25,8 @@ func TestRadarEmailRoutingTimeseriesGroupARCWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Email.Routing.TimeseriesGroups.ARC(context.TODO(), cloudflare.RadarEmailRoutingTimeseriesGroupARCParams{
 		AggInterval: cloudflare.F(cloudflare.RadarEmailRoutingTimeseriesGroupARCParamsAggInterval1h),
@@ -59,6 +61,8 @@ func TestRadarEmailRoutingTimeseriesGroupDKIMWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Email.Routing.TimeseriesGroups.DKIM(context.TODO(), cloudflare.RadarEmailRoutingTimeseriesGroupDKIMParams{
 		AggInterval: cloudflare.F(cloudflare.RadarEmailRoutingTimeseriesGroupDKIMParamsAggInterval1h),
@@ -93,6 +97,8 @@ func TestRadarEmailRoutingTimeseriesGroupDMARCWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Email.Routing.TimeseriesGroups.DMARC(context.TODO(), cloudflare.RadarEmailRoutingTimeseriesGroupDMARCParams{
 		AggInterval: cloudflare.F(cloudflare.RadarEmailRoutingTimeseriesGroupDMARCParamsAggInterval1h),
@@ -127,6 +133,8 @@ func TestRadarEmailRoutingTimeseriesGroupEncryptedWithOptionalParams(t *testing.
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Email.Routing.TimeseriesGroups.Encrypted(context.TODO(), cloudflare.RadarEmailRoutingTimeseriesGroupEncryptedParams{
 		AggInterval: cloudflare.F(cloudflare.RadarEmailRoutingTimeseriesGroupEncryptedParamsAggInterval1h),
@@ -161,6 +169,8 @@ func TestRadarEmailRoutingTimeseriesGroupIPVersionWithOptionalParams(t *testing.
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Email.Routing.TimeseriesGroups.IPVersion(context.TODO(), cloudflare.RadarEmailRoutingTimeseriesGroupIPVersionParams{
 		AggInterval: cloudflare.F(cloudflare.RadarEmailRoutingTimeseriesGroupIPVersionParamsAggInterval1h),
@@ -195,6 +205,8 @@ func TestRadarEmailRoutingTimeseriesGroupSPFWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Email.Routing.TimeseriesGroups.SPF(context.TODO(), cloudflare.RadarEmailRoutingTimeseriesGroupSPFParams{
 		AggInterval: cloudflare.F(cloudflare.RadarEmailRoutingTimeseriesGroupSPFParamsAggInterval1h),

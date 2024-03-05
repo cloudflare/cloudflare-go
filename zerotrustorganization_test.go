@@ -24,6 +24,8 @@ func TestZeroTrustOrganizationNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Organizations.New(context.TODO(), cloudflare.ZeroTrustOrganizationNewParams{
 		AuthDomain:               cloudflare.F("test.cloudflareaccess.com"),
@@ -65,6 +67,8 @@ func TestZeroTrustOrganizationUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Organizations.Update(context.TODO(), cloudflare.ZeroTrustOrganizationUpdateParams{
 		AccountID:                cloudflare.F("string"),
@@ -110,6 +114,8 @@ func TestZeroTrustOrganizationListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Organizations.List(context.TODO(), cloudflare.ZeroTrustOrganizationListParams{
 		AccountID: cloudflare.F("string"),
@@ -135,6 +141,8 @@ func TestZeroTrustOrganizationRevokeUsersWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Organizations.RevokeUsers(context.TODO(), cloudflare.ZeroTrustOrganizationRevokeUsersParams{
 		Email:     cloudflare.F("test@example.com"),

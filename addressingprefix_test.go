@@ -24,6 +24,8 @@ func TestAddressingPrefixNew(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Addressing.Prefixes.New(context.TODO(), cloudflare.AddressingPrefixNewParams{
 		AccountID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -51,6 +53,8 @@ func TestAddressingPrefixList(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Addressing.Prefixes.List(context.TODO(), cloudflare.AddressingPrefixListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -75,6 +79,8 @@ func TestAddressingPrefixDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Addressing.Prefixes.Delete(
 		context.TODO(),
@@ -103,6 +109,8 @@ func TestAddressingPrefixEdit(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Addressing.Prefixes.Edit(
 		context.TODO(),
@@ -132,6 +140,8 @@ func TestAddressingPrefixGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Addressing.Prefixes.Get(
 		context.TODO(),

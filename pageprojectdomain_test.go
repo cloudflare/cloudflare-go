@@ -24,6 +24,8 @@ func TestPageProjectDomainNew(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Pages.Projects.Domains.New(
 		context.TODO(),
@@ -55,6 +57,8 @@ func TestPageProjectDomainList(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Pages.Projects.Domains.List(
 		context.TODO(),
@@ -83,6 +87,8 @@ func TestPageProjectDomainDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Pages.Projects.Domains.Delete(
 		context.TODO(),
@@ -112,6 +118,8 @@ func TestPageProjectDomainEdit(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Pages.Projects.Domains.Edit(
 		context.TODO(),
@@ -141,6 +149,8 @@ func TestPageProjectDomainGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Pages.Projects.Domains.Get(
 		context.TODO(),

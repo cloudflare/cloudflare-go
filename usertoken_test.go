@@ -25,6 +25,8 @@ func TestUserTokenNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.User.Tokens.New(context.TODO(), cloudflare.UserTokenNewParams{
 		Name: cloudflare.F("readonly token"),
@@ -79,6 +81,8 @@ func TestUserTokenUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.User.Tokens.Update(
 		context.TODO(),
@@ -138,6 +142,8 @@ func TestUserTokenListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.User.Tokens.List(context.TODO(), cloudflare.UserTokenListParams{
 		Direction: cloudflare.F(cloudflare.UserTokenListParamsDirectionDesc),
@@ -164,6 +170,8 @@ func TestUserTokenDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.User.Tokens.Delete(context.TODO(), map[string]interface{}{})
 	if err != nil {
@@ -186,6 +194,8 @@ func TestUserTokenGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.User.Tokens.Get(context.TODO(), map[string]interface{}{})
 	if err != nil {
@@ -208,6 +218,8 @@ func TestUserTokenVerify(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.User.Tokens.Verify(context.TODO())
 	if err != nil {

@@ -24,6 +24,8 @@ func TestAccountMemberNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Accounts.Members.New(context.TODO(), cloudflare.AccountMemberNewParams{
 		AccountID: cloudflare.F[any](map[string]interface{}{}),
@@ -51,6 +53,8 @@ func TestAccountMemberUpdate(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Accounts.Members.Update(
 		context.TODO(),
@@ -86,6 +90,8 @@ func TestAccountMemberListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Accounts.Members.List(context.TODO(), cloudflare.AccountMemberListParams{
 		AccountID: cloudflare.F[any](map[string]interface{}{}),
@@ -115,6 +121,8 @@ func TestAccountMemberDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Accounts.Members.Delete(
 		context.TODO(),
@@ -143,6 +151,8 @@ func TestAccountMemberGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Accounts.Members.Get(
 		context.TODO(),

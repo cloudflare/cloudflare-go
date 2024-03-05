@@ -25,6 +25,8 @@ func TestRadarAttackLayer3TopAttacksWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer3.Top.Attacks(context.TODO(), cloudflare.RadarAttackLayer3TopAttacksParams{
 		Continent:        cloudflare.F([]string{"string", "string", "string"}),
@@ -60,6 +62,8 @@ func TestRadarAttackLayer3TopIndustryWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer3.Top.Industry(context.TODO(), cloudflare.RadarAttackLayer3TopIndustryParams{
 		Continent: cloudflare.F([]string{"string", "string", "string"}),
@@ -93,6 +97,8 @@ func TestRadarAttackLayer3TopVerticalWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer3.Top.Vertical(context.TODO(), cloudflare.RadarAttackLayer3TopVerticalParams{
 		Continent: cloudflare.F([]string{"string", "string", "string"}),

@@ -24,6 +24,8 @@ func TestMagicTransitIPSECTunnelNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.MagicTransit.IPSECTunnels.New(
 		context.TODO(),
@@ -65,6 +67,8 @@ func TestMagicTransitIPSECTunnelUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.MagicTransit.IPSECTunnels.Update(
 		context.TODO(),
@@ -107,6 +111,8 @@ func TestMagicTransitIPSECTunnelList(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.MagicTransit.IPSECTunnels.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
@@ -129,6 +135,8 @@ func TestMagicTransitIPSECTunnelDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.MagicTransit.IPSECTunnels.Delete(
 		context.TODO(),
@@ -155,6 +163,8 @@ func TestMagicTransitIPSECTunnelGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.MagicTransit.IPSECTunnels.Get(
 		context.TODO(),

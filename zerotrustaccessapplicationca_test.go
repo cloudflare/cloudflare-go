@@ -24,6 +24,8 @@ func TestZeroTrustAccessApplicationCANewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Applications.CAs.New(
 		context.TODO(),
@@ -53,6 +55,8 @@ func TestZeroTrustAccessApplicationCAListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Applications.CAs.List(context.TODO(), cloudflare.ZeroTrustAccessApplicationCAListParams{
 		AccountID: cloudflare.F("string"),
@@ -78,6 +82,8 @@ func TestZeroTrustAccessApplicationCADeleteWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Applications.CAs.Delete(
 		context.TODO(),
@@ -107,6 +113,8 @@ func TestZeroTrustAccessApplicationCAGetWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Applications.CAs.Get(
 		context.TODO(),

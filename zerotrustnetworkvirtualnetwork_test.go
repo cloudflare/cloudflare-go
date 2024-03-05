@@ -24,6 +24,8 @@ func TestZeroTrustNetworkVirtualNetworkNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Networks.VirtualNetworks.New(context.TODO(), cloudflare.ZeroTrustNetworkVirtualNetworkNewParams{
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
@@ -51,6 +53,8 @@ func TestZeroTrustNetworkVirtualNetworkListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Networks.VirtualNetworks.List(context.TODO(), cloudflare.ZeroTrustNetworkVirtualNetworkListParams{
 		AccountID: cloudflare.F("699d98642c564d2e855e9661899b7252"),
@@ -79,6 +83,8 @@ func TestZeroTrustNetworkVirtualNetworkDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Networks.VirtualNetworks.Delete(
 		context.TODO(),
@@ -107,6 +113,8 @@ func TestZeroTrustNetworkVirtualNetworkEditWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Networks.VirtualNetworks.Edit(
 		context.TODO(),

@@ -24,6 +24,8 @@ func TestWorkerScriptTailNew(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Workers.Scripts.Tail.New(
 		context.TODO(),
@@ -52,6 +54,8 @@ func TestWorkerScriptTailList(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Workers.Scripts.Tail.List(
 		context.TODO(),
@@ -80,6 +84,8 @@ func TestWorkerScriptTailDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Workers.Scripts.Tail.Delete(
 		context.TODO(),

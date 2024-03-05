@@ -25,6 +25,8 @@ func TestZeroTrustAccessApplicationNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Applications.New(context.TODO(), cloudflare.ZeroTrustAccessApplicationNewParams{
 		AccountID:                cloudflare.F("string"),
@@ -99,6 +101,8 @@ func TestZeroTrustAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Applications.Update(
 		context.TODO(),
@@ -177,6 +181,8 @@ func TestZeroTrustAccessApplicationListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Applications.List(context.TODO(), cloudflare.ZeroTrustAccessApplicationListParams{
 		AccountID: cloudflare.F("string"),
@@ -202,6 +208,8 @@ func TestZeroTrustAccessApplicationDeleteWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Applications.Delete(
 		context.TODO(),
@@ -231,6 +239,8 @@ func TestZeroTrustAccessApplicationGetWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Applications.Get(
 		context.TODO(),
@@ -260,6 +270,8 @@ func TestZeroTrustAccessApplicationRevokeTokensWithOptionalParams(t *testing.T) 
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Applications.RevokeTokens(
 		context.TODO(),

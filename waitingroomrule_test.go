@@ -24,6 +24,8 @@ func TestWaitingRoomRuleNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.WaitingRooms.Rules.New(
 		context.TODO(),
@@ -56,6 +58,8 @@ func TestWaitingRoomRuleUpdate(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.WaitingRooms.Rules.Update(
 		context.TODO(),
@@ -100,6 +104,8 @@ func TestWaitingRoomRuleList(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.WaitingRooms.Rules.List(
 		context.TODO(),
@@ -126,6 +132,8 @@ func TestWaitingRoomRuleDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.WaitingRooms.Rules.Delete(
 		context.TODO(),
@@ -153,6 +161,8 @@ func TestWaitingRoomRuleEditWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.WaitingRooms.Rules.Edit(
 		context.TODO(),

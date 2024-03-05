@@ -25,6 +25,8 @@ func TestRadarConnectionTamperingSummaryWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.ConnectionTampering.Summary(context.TODO(), cloudflare.RadarConnectionTamperingSummaryParams{
 		ASN:       cloudflare.F([]string{"string", "string", "string"}),
@@ -56,6 +58,8 @@ func TestRadarConnectionTamperingTimeseriesGroupsWithOptionalParams(t *testing.T
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.ConnectionTampering.TimeseriesGroups(context.TODO(), cloudflare.RadarConnectionTamperingTimeseriesGroupsParams{
 		AggInterval: cloudflare.F(cloudflare.RadarConnectionTamperingTimeseriesGroupsParamsAggInterval1h),

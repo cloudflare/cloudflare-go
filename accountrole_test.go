@@ -24,6 +24,8 @@ func TestAccountRoleList(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Accounts.Roles.List(context.TODO(), cloudflare.AccountRoleListParams{
 		AccountID: cloudflare.F[any](map[string]interface{}{}),
@@ -48,6 +50,8 @@ func TestAccountRoleGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Accounts.Roles.Get(
 		context.TODO(),

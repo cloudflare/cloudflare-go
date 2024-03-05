@@ -25,6 +25,8 @@ func TestRadarAS112TopDNSSECWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AS112.Top.DNSSEC(
 		context.TODO(),
@@ -61,6 +63,8 @@ func TestRadarAS112TopEdnsWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AS112.Top.Edns(
 		context.TODO(),
@@ -97,6 +101,8 @@ func TestRadarAS112TopIPVersionWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AS112.Top.IPVersion(
 		context.TODO(),
@@ -133,6 +139,8 @@ func TestRadarAS112TopLocationsWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.AS112.Top.Locations(context.TODO(), cloudflare.RadarAS112TopLocationsParams{
 		ASN:       cloudflare.F([]string{"string", "string", "string"}),

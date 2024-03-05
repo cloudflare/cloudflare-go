@@ -24,6 +24,8 @@ func TestLogpushValidateDestinationWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Logpush.Validate.Destination(context.TODO(), cloudflare.LogpushValidateDestinationParams{
 		DestinationConf: cloudflare.F("s3://mybucket/logs?region=us-west-2"),
@@ -50,6 +52,8 @@ func TestLogpushValidateOriginWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Logpush.Validate.Origin(context.TODO(), cloudflare.LogpushValidateOriginParams{
 		LogpullOptions: cloudflare.F("fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339"),

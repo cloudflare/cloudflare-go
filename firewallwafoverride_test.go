@@ -24,6 +24,8 @@ func TestFirewallWAFOverrideNew(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Firewall.WAF.Overrides.New(
 		context.TODO(),
@@ -52,6 +54,8 @@ func TestFirewallWAFOverrideUpdate(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Firewall.WAF.Overrides.Update(
 		context.TODO(),
@@ -81,6 +85,8 @@ func TestFirewallWAFOverrideListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Firewall.WAF.Overrides.List(
 		context.TODO(),
@@ -110,6 +116,8 @@ func TestFirewallWAFOverrideDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Firewall.WAF.Overrides.Delete(
 		context.TODO(),
@@ -136,6 +144,8 @@ func TestFirewallWAFOverrideGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Firewall.WAF.Overrides.Get(
 		context.TODO(),

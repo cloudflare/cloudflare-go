@@ -24,6 +24,8 @@ func TestUserLoadBalancerPoolNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.User.LoadBalancers.Pools.New(context.TODO(), cloudflare.UserLoadBalancerPoolNewParams{
 		Name: cloudflare.F("primary-dc-1"),
@@ -103,6 +105,8 @@ func TestUserLoadBalancerPoolUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.User.LoadBalancers.Pools.Update(
 		context.TODO(),
@@ -186,6 +190,8 @@ func TestUserLoadBalancerPoolListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.User.LoadBalancers.Pools.List(context.TODO(), cloudflare.UserLoadBalancerPoolListParams{
 		Monitor: cloudflare.F[any](map[string]interface{}{}),
@@ -210,6 +216,8 @@ func TestUserLoadBalancerPoolDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.User.LoadBalancers.Pools.Delete(context.TODO(), "17b5962d775c646f3f9725cbc7a53df4")
 	if err != nil {
@@ -232,6 +240,8 @@ func TestUserLoadBalancerPoolEditWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.User.LoadBalancers.Pools.Edit(
 		context.TODO(),
@@ -315,6 +325,8 @@ func TestUserLoadBalancerPoolGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.User.LoadBalancers.Pools.Get(context.TODO(), "17b5962d775c646f3f9725cbc7a53df4")
 	if err != nil {
@@ -337,6 +349,8 @@ func TestUserLoadBalancerPoolHealth(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.User.LoadBalancers.Pools.Health(context.TODO(), "17b5962d775c646f3f9725cbc7a53df4")
 	if err != nil {
@@ -359,6 +373,8 @@ func TestUserLoadBalancerPoolPreviewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.User.LoadBalancers.Pools.Preview(
 		context.TODO(),
@@ -409,6 +425,8 @@ func TestUserLoadBalancerPoolReferences(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.User.LoadBalancers.Pools.References(context.TODO(), "17b5962d775c646f3f9725cbc7a53df4")
 	if err != nil {

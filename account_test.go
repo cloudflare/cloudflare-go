@@ -24,6 +24,8 @@ func TestAccountUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Accounts.Update(context.TODO(), cloudflare.AccountUpdateParams{
 		AccountID: cloudflare.F[any](map[string]interface{}{}),
@@ -54,6 +56,8 @@ func TestAccountListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Accounts.List(context.TODO(), cloudflare.AccountListParams{
 		Direction: cloudflare.F(cloudflare.AccountListParamsDirectionDesc),
@@ -80,6 +84,8 @@ func TestAccountGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Accounts.Get(context.TODO(), cloudflare.AccountGetParams{
 		AccountID: cloudflare.F[any](map[string]interface{}{}),

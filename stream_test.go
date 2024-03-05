@@ -25,6 +25,8 @@ func TestStreamNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	err := client.Stream.New(context.TODO(), cloudflare.StreamNewParams{
 		AccountID:      cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -53,6 +55,8 @@ func TestStreamListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Stream.List(context.TODO(), cloudflare.StreamListParams{
 		AccountID:     cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -85,6 +89,8 @@ func TestStreamDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	err := client.Stream.Delete(
 		context.TODO(),
@@ -113,6 +119,8 @@ func TestStreamGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Stream.Get(
 		context.TODO(),

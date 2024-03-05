@@ -26,6 +26,8 @@ func TestWorkersForPlatformDispatchNamespaceScriptUpdateWithOptionalParams(t *te
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.WorkersForPlatforms.Dispatch.Namespaces.Scripts.Update(
 		context.TODO(),
@@ -114,6 +116,8 @@ func TestWorkersForPlatformDispatchNamespaceScriptDeleteWithOptionalParams(t *te
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	err := client.WorkersForPlatforms.Dispatch.Namespaces.Scripts.Delete(
 		context.TODO(),
@@ -144,6 +148,8 @@ func TestWorkersForPlatformDispatchNamespaceScriptGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.WorkersForPlatforms.Dispatch.Namespaces.Scripts.Get(
 		context.TODO(),

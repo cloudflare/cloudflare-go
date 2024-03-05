@@ -25,6 +25,8 @@ func TestRadarQualitySpeedHistogramWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Quality.Speed.Histogram(context.TODO(), cloudflare.RadarQualitySpeedHistogramParams{
 		ASN:         cloudflare.F([]string{"string", "string", "string"}),
@@ -56,6 +58,8 @@ func TestRadarQualitySpeedSummaryWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Quality.Speed.Summary(context.TODO(), cloudflare.RadarQualitySpeedSummaryParams{
 		ASN:       cloudflare.F([]string{"string", "string", "string"}),

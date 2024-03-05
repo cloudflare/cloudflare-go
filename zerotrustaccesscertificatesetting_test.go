@@ -24,6 +24,8 @@ func TestZeroTrustAccessCertificateSettingUpdateWithOptionalParams(t *testing.T)
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Certificates.Settings.Update(context.TODO(), cloudflare.ZeroTrustAccessCertificateSettingUpdateParams{
 		Settings: cloudflare.F([]cloudflare.ZeroTrustAccessCertificateSettingUpdateParamsSetting{{
@@ -62,6 +64,8 @@ func TestZeroTrustAccessCertificateSettingListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Certificates.Settings.List(context.TODO(), cloudflare.ZeroTrustAccessCertificateSettingListParams{
 		AccountID: cloudflare.F("string"),

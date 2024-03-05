@@ -24,6 +24,8 @@ func TestSecondaryDNSOutgoingNew(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.SecondaryDNS.Outgoing.New(context.TODO(), cloudflare.SecondaryDNSOutgoingNewParams{
 		ZoneID: cloudflare.F[any]("269d8f4853475ca241c4e730be286b20"),
@@ -50,6 +52,8 @@ func TestSecondaryDNSOutgoingUpdate(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.SecondaryDNS.Outgoing.Update(context.TODO(), cloudflare.SecondaryDNSOutgoingUpdateParams{
 		ZoneID: cloudflare.F[any]("269d8f4853475ca241c4e730be286b20"),
@@ -76,6 +80,8 @@ func TestSecondaryDNSOutgoingDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.SecondaryDNS.Outgoing.Delete(context.TODO(), cloudflare.SecondaryDNSOutgoingDeleteParams{
 		ZoneID: cloudflare.F[any]("269d8f4853475ca241c4e730be286b20"),
@@ -100,6 +106,8 @@ func TestSecondaryDNSOutgoingDisable(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.SecondaryDNS.Outgoing.Disable(context.TODO(), cloudflare.SecondaryDNSOutgoingDisableParams{
 		ZoneID: cloudflare.F[any]("269d8f4853475ca241c4e730be286b20"),
@@ -124,6 +132,8 @@ func TestSecondaryDNSOutgoingEnable(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.SecondaryDNS.Outgoing.Enable(context.TODO(), cloudflare.SecondaryDNSOutgoingEnableParams{
 		ZoneID: cloudflare.F[any]("269d8f4853475ca241c4e730be286b20"),
@@ -148,6 +158,8 @@ func TestSecondaryDNSOutgoingForceNotify(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.SecondaryDNS.Outgoing.ForceNotify(context.TODO(), cloudflare.SecondaryDNSOutgoingForceNotifyParams{
 		ZoneID: cloudflare.F[any]("269d8f4853475ca241c4e730be286b20"),
@@ -172,6 +184,8 @@ func TestSecondaryDNSOutgoingGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.SecondaryDNS.Outgoing.Get(context.TODO(), cloudflare.SecondaryDNSOutgoingGetParams{
 		ZoneID: cloudflare.F[any]("269d8f4853475ca241c4e730be286b20"),

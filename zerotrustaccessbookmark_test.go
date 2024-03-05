@@ -24,6 +24,8 @@ func TestZeroTrustAccessBookmarkNew(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Bookmarks.New(
 		context.TODO(),
@@ -50,6 +52,8 @@ func TestZeroTrustAccessBookmarkUpdate(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Bookmarks.Update(
 		context.TODO(),
@@ -76,6 +80,8 @@ func TestZeroTrustAccessBookmarkList(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Bookmarks.List(context.TODO(), "699d98642c564d2e855e9661899b7252")
 	if err != nil {
@@ -98,6 +104,8 @@ func TestZeroTrustAccessBookmarkDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Bookmarks.Delete(
 		context.TODO(),
@@ -124,6 +132,8 @@ func TestZeroTrustAccessBookmarkGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Bookmarks.Get(
 		context.TODO(),

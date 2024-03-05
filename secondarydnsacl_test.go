@@ -24,6 +24,8 @@ func TestSecondaryDNSACLNew(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.SecondaryDNS.ACLs.New(context.TODO(), cloudflare.SecondaryDNSACLNewParams{
 		AccountID: cloudflare.F[any]("01a7362d577a6c3019a474fd6f485823"),
@@ -49,6 +51,8 @@ func TestSecondaryDNSACLUpdate(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.SecondaryDNS.ACLs.Update(
 		context.TODO(),
@@ -79,6 +83,8 @@ func TestSecondaryDNSACLList(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.SecondaryDNS.ACLs.List(context.TODO(), cloudflare.SecondaryDNSACLListParams{
 		AccountID: cloudflare.F[any]("01a7362d577a6c3019a474fd6f485823"),
@@ -103,6 +109,8 @@ func TestSecondaryDNSACLDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.SecondaryDNS.ACLs.Delete(
 		context.TODO(),
@@ -131,6 +139,8 @@ func TestSecondaryDNSACLGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.SecondaryDNS.ACLs.Get(
 		context.TODO(),

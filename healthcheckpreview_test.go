@@ -24,6 +24,8 @@ func TestHealthcheckPreviewNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Healthchecks.Previews.New(
 		context.TODO(),
@@ -83,6 +85,8 @@ func TestHealthcheckPreviewDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Healthchecks.Previews.Delete(
 		context.TODO(),
@@ -109,6 +113,8 @@ func TestHealthcheckPreviewGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Healthchecks.Previews.Get(
 		context.TODO(),

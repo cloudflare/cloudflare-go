@@ -24,6 +24,8 @@ func TestPCAPNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.PCAPs.New(context.TODO(), cloudflare.PCAPNewParams{
 		AccountID:       cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -62,6 +64,8 @@ func TestPCAPList(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.PCAPs.List(context.TODO(), cloudflare.PCAPListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -86,6 +90,8 @@ func TestPCAPGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.PCAPs.Get(
 		context.TODO(),

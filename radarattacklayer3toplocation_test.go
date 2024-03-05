@@ -25,6 +25,8 @@ func TestRadarAttackLayer3TopLocationOriginWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer3.Top.Locations.Origin(context.TODO(), cloudflare.RadarAttackLayer3TopLocationOriginParams{
 		Continent: cloudflare.F([]string{"string", "string", "string"}),
@@ -58,6 +60,8 @@ func TestRadarAttackLayer3TopLocationTargetWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer3.Top.Locations.Target(context.TODO(), cloudflare.RadarAttackLayer3TopLocationTargetParams{
 		Continent: cloudflare.F([]string{"string", "string", "string"}),

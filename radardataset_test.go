@@ -24,6 +24,8 @@ func TestRadarDatasetListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Datasets.List(context.TODO(), cloudflare.RadarDatasetListParams{
 		DatasetType: cloudflare.F(cloudflare.RadarDatasetListParamsDatasetTypeRankingBucket),
@@ -51,6 +53,8 @@ func TestRadarDatasetDownloadWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Datasets.Download(context.TODO(), cloudflare.RadarDatasetDownloadParams{
 		DatasetID: cloudflare.F(int64(3)),
@@ -76,6 +80,8 @@ func TestRadarDatasetGetWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Datasets.Get(
 		context.TODO(),

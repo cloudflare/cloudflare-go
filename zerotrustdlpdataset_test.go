@@ -24,6 +24,8 @@ func TestZeroTrustDLPDatasetNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.DLP.Datasets.New(context.TODO(), cloudflare.ZeroTrustDLPDatasetNewParams{
 		AccountID:   cloudflare.F("string"),
@@ -51,6 +53,8 @@ func TestZeroTrustDLPDatasetUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.DLP.Datasets.Update(
 		context.TODO(),
@@ -81,6 +85,8 @@ func TestZeroTrustDLPDatasetList(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.DLP.Datasets.List(context.TODO(), cloudflare.ZeroTrustDLPDatasetListParams{
 		AccountID: cloudflare.F("string"),
@@ -105,6 +111,8 @@ func TestZeroTrustDLPDatasetDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	err := client.ZeroTrust.DLP.Datasets.Delete(
 		context.TODO(),
@@ -133,6 +141,8 @@ func TestZeroTrustDLPDatasetGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.DLP.Datasets.Get(
 		context.TODO(),

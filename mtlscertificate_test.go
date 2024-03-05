@@ -24,6 +24,8 @@ func TestMTLSCertificateNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.MTLSCertificates.New(context.TODO(), cloudflare.MTLSCertificateNewParams{
 		AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -52,6 +54,8 @@ func TestMTLSCertificateList(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.MTLSCertificates.List(context.TODO(), cloudflare.MTLSCertificateListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -76,6 +80,8 @@ func TestMTLSCertificateDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.MTLSCertificates.Delete(
 		context.TODO(),
@@ -104,6 +110,8 @@ func TestMTLSCertificateGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.MTLSCertificates.Get(
 		context.TODO(),

@@ -24,6 +24,8 @@ func TestZeroTrustDLPProfilePredefinedUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.DLP.Profiles.Predefineds.Update(
 		context.TODO(),
@@ -66,6 +68,8 @@ func TestZeroTrustDLPProfilePredefinedGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.DLP.Profiles.Predefineds.Get(
 		context.TODO(),

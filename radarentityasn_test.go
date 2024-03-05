@@ -24,6 +24,8 @@ func TestRadarEntityASNListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Entities.ASNs.List(context.TODO(), cloudflare.RadarEntityASNListParams{
 		ASN:      cloudflare.F("174,7922"),
@@ -53,6 +55,8 @@ func TestRadarEntityASNGetWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Entities.ASNs.Get(
 		context.TODO(),
@@ -81,6 +85,8 @@ func TestRadarEntityASNIPWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Entities.ASNs.IP(context.TODO(), cloudflare.RadarEntityASNIPParams{
 		IP:     cloudflare.F("8.8.8.8"),
@@ -106,6 +112,8 @@ func TestRadarEntityASNRelWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Entities.ASNs.Rel(
 		context.TODO(),

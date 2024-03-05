@@ -24,6 +24,8 @@ func TestR2BucketNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.R2.Buckets.New(context.TODO(), cloudflare.R2BucketNewParams{
 		AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -50,6 +52,8 @@ func TestR2BucketListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.R2.Buckets.List(context.TODO(), cloudflare.R2BucketListParams{
 		AccountID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -80,6 +84,8 @@ func TestR2BucketDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.R2.Buckets.Delete(
 		context.TODO(),
@@ -108,6 +114,8 @@ func TestR2BucketGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.R2.Buckets.Get(
 		context.TODO(),

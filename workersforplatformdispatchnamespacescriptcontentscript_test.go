@@ -28,6 +28,8 @@ func TestWorkersForPlatformDispatchNamespaceScriptContentScriptUpdateWithOptiona
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.WorkersForPlatforms.Dispatch.Namespaces.Scripts.Content.Scripts.Update(
 		context.TODO(),
@@ -63,6 +65,8 @@ func TestWorkersForPlatformDispatchNamespaceScriptContentScriptGet(t *testing.T)
 	baseURL := server.URL
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	resp, err := client.WorkersForPlatforms.Dispatch.Namespaces.Scripts.Content.Scripts.Get(
 		context.TODO(),

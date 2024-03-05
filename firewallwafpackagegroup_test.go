@@ -24,6 +24,8 @@ func TestFirewallWAFPackageGroupListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Firewall.WAF.Packages.Groups.List(
 		context.TODO(),
@@ -58,6 +60,8 @@ func TestFirewallWAFPackageGroupEditWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Firewall.WAF.Packages.Groups.Edit(
 		context.TODO(),
@@ -88,6 +92,8 @@ func TestFirewallWAFPackageGroupGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Firewall.WAF.Packages.Groups.Get(
 		context.TODO(),

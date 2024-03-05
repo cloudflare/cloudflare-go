@@ -24,6 +24,8 @@ func TestAlertingV3DestinationPagerdutyNew(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Alerting.V3.Destinations.Pagerduty.New(context.TODO(), cloudflare.AlertingV3DestinationPagerdutyNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -48,6 +50,8 @@ func TestAlertingV3DestinationPagerdutyDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Alerting.V3.Destinations.Pagerduty.Delete(context.TODO(), cloudflare.AlertingV3DestinationPagerdutyDeleteParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -72,6 +76,8 @@ func TestAlertingV3DestinationPagerdutyGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Alerting.V3.Destinations.Pagerduty.Get(context.TODO(), cloudflare.AlertingV3DestinationPagerdutyGetParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -96,6 +102,8 @@ func TestAlertingV3DestinationPagerdutyLink(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Alerting.V3.Destinations.Pagerduty.Link(
 		context.TODO(),

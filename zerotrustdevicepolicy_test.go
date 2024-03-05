@@ -24,6 +24,8 @@ func TestZeroTrustDevicePolicyNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Devices.Policies.New(context.TODO(), cloudflare.ZeroTrustDevicePolicyNewParams{
 		AccountID:           cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
@@ -68,6 +70,8 @@ func TestZeroTrustDevicePolicyList(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Devices.Policies.List(context.TODO(), cloudflare.ZeroTrustDevicePolicyListParams{
 		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
@@ -92,6 +96,8 @@ func TestZeroTrustDevicePolicyDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Devices.Policies.Delete(
 		context.TODO(),
@@ -120,6 +126,8 @@ func TestZeroTrustDevicePolicyEditWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Devices.Policies.Edit(
 		context.TODO(),
@@ -166,6 +174,8 @@ func TestZeroTrustDevicePolicyGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Devices.Policies.Get(
 		context.TODO(),

@@ -24,6 +24,8 @@ func TestRadarEntityGetWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Entities.Get(context.TODO(), cloudflare.RadarEntityGetParams{
 		IP:     cloudflare.F("8.8.8.8"),

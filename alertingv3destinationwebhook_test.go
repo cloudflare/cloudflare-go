@@ -24,6 +24,8 @@ func TestAlertingV3DestinationWebhookNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Alerting.V3.Destinations.Webhooks.New(context.TODO(), cloudflare.AlertingV3DestinationWebhookNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -51,6 +53,8 @@ func TestAlertingV3DestinationWebhookUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Alerting.V3.Destinations.Webhooks.Update(
 		context.TODO(),
@@ -82,6 +86,8 @@ func TestAlertingV3DestinationWebhookList(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Alerting.V3.Destinations.Webhooks.List(context.TODO(), cloudflare.AlertingV3DestinationWebhookListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -106,6 +112,8 @@ func TestAlertingV3DestinationWebhookDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Alerting.V3.Destinations.Webhooks.Delete(
 		context.TODO(),
@@ -134,6 +142,8 @@ func TestAlertingV3DestinationWebhookGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Alerting.V3.Destinations.Webhooks.Get(
 		context.TODO(),

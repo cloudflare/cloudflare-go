@@ -25,6 +25,8 @@ func TestRadarEmailRoutingSummaryARCWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Email.Routing.Summary.ARC(context.TODO(), cloudflare.RadarEmailRoutingSummaryARCParams{
 		DateEnd:   cloudflare.F([]time.Time{time.Now(), time.Now(), time.Now()}),
@@ -58,6 +60,8 @@ func TestRadarEmailRoutingSummaryDKIMWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Email.Routing.Summary.DKIM(context.TODO(), cloudflare.RadarEmailRoutingSummaryDKIMParams{
 		ARC:       cloudflare.F([]cloudflare.RadarEmailRoutingSummaryDKIMParamsARC{cloudflare.RadarEmailRoutingSummaryDKIMParamsARCPass, cloudflare.RadarEmailRoutingSummaryDKIMParamsARCNone, cloudflare.RadarEmailRoutingSummaryDKIMParamsARCFail}),
@@ -91,6 +95,8 @@ func TestRadarEmailRoutingSummaryDMARCWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Email.Routing.Summary.DMARC(context.TODO(), cloudflare.RadarEmailRoutingSummaryDMARCParams{
 		ARC:       cloudflare.F([]cloudflare.RadarEmailRoutingSummaryDMARCParamsARC{cloudflare.RadarEmailRoutingSummaryDMARCParamsARCPass, cloudflare.RadarEmailRoutingSummaryDMARCParamsARCNone, cloudflare.RadarEmailRoutingSummaryDMARCParamsARCFail}),
@@ -124,6 +130,8 @@ func TestRadarEmailRoutingSummaryEncryptedWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Email.Routing.Summary.Encrypted(context.TODO(), cloudflare.RadarEmailRoutingSummaryEncryptedParams{
 		ARC:       cloudflare.F([]cloudflare.RadarEmailRoutingSummaryEncryptedParamsARC{cloudflare.RadarEmailRoutingSummaryEncryptedParamsARCPass, cloudflare.RadarEmailRoutingSummaryEncryptedParamsARCNone, cloudflare.RadarEmailRoutingSummaryEncryptedParamsARCFail}),
@@ -157,6 +165,8 @@ func TestRadarEmailRoutingSummaryIPVersionWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Email.Routing.Summary.IPVersion(context.TODO(), cloudflare.RadarEmailRoutingSummaryIPVersionParams{
 		ARC:       cloudflare.F([]cloudflare.RadarEmailRoutingSummaryIPVersionParamsARC{cloudflare.RadarEmailRoutingSummaryIPVersionParamsARCPass, cloudflare.RadarEmailRoutingSummaryIPVersionParamsARCNone, cloudflare.RadarEmailRoutingSummaryIPVersionParamsARCFail}),
@@ -190,6 +200,8 @@ func TestRadarEmailRoutingSummarySPFWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Email.Routing.Summary.SPF(context.TODO(), cloudflare.RadarEmailRoutingSummarySPFParams{
 		ARC:       cloudflare.F([]cloudflare.RadarEmailRoutingSummarySPFParamsARC{cloudflare.RadarEmailRoutingSummarySPFParamsARCPass, cloudflare.RadarEmailRoutingSummarySPFParamsARCNone, cloudflare.RadarEmailRoutingSummarySPFParamsARCFail}),

@@ -24,6 +24,8 @@ func TestZeroTrustGatewayProxyEndpointNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Gateway.ProxyEndpoints.New(context.TODO(), cloudflare.ZeroTrustGatewayProxyEndpointNewParams{
 		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
@@ -51,6 +53,8 @@ func TestZeroTrustGatewayProxyEndpointList(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Gateway.ProxyEndpoints.List(context.TODO(), cloudflare.ZeroTrustGatewayProxyEndpointListParams{
 		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
@@ -75,6 +79,8 @@ func TestZeroTrustGatewayProxyEndpointDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Gateway.ProxyEndpoints.Delete(
 		context.TODO(),
@@ -103,6 +109,8 @@ func TestZeroTrustGatewayProxyEndpointEditWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Gateway.ProxyEndpoints.Edit(
 		context.TODO(),
@@ -134,6 +142,8 @@ func TestZeroTrustGatewayProxyEndpointGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Gateway.ProxyEndpoints.Get(
 		context.TODO(),

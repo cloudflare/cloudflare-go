@@ -24,6 +24,8 @@ func TestLoadBalancerMonitorNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.LoadBalancers.Monitors.New(context.TODO(), cloudflare.LoadBalancerMonitorNewParams{
 		AccountID:       cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -71,6 +73,8 @@ func TestLoadBalancerMonitorUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.LoadBalancers.Monitors.Update(
 		context.TODO(),
@@ -122,6 +126,8 @@ func TestLoadBalancerMonitorList(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.LoadBalancers.Monitors.List(context.TODO(), cloudflare.LoadBalancerMonitorListParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -146,6 +152,8 @@ func TestLoadBalancerMonitorDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.LoadBalancers.Monitors.Delete(
 		context.TODO(),
@@ -174,6 +182,8 @@ func TestLoadBalancerMonitorEditWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.LoadBalancers.Monitors.Edit(
 		context.TODO(),
@@ -225,6 +235,8 @@ func TestLoadBalancerMonitorGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.LoadBalancers.Monitors.Get(
 		context.TODO(),

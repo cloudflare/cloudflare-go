@@ -24,6 +24,8 @@ func TestCustomNameserverNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CustomNameservers.New(context.TODO(), cloudflare.CustomNameserverNewParams{
 		AccountID: cloudflare.F("372e67954025e0ba6aaa6d586b9e0b59"),
@@ -50,6 +52,8 @@ func TestCustomNameserverList(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CustomNameservers.List(context.TODO(), cloudflare.CustomNameserverListParams{
 		AccountID: cloudflare.F("372e67954025e0ba6aaa6d586b9e0b59"),
@@ -74,6 +78,8 @@ func TestCustomNameserverDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CustomNameservers.Delete(
 		context.TODO(),
@@ -102,6 +108,8 @@ func TestCustomNameserverAvailabilty(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CustomNameservers.Availabilty(context.TODO(), cloudflare.CustomNameserverAvailabiltyParams{
 		AccountID: cloudflare.F("372e67954025e0ba6aaa6d586b9e0b59"),
@@ -126,6 +134,8 @@ func TestCustomNameserverVerify(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CustomNameservers.Verify(context.TODO(), cloudflare.CustomNameserverVerifyParams{
 		AccountID: cloudflare.F("372e67954025e0ba6aaa6d586b9e0b59"),

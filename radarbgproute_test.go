@@ -25,6 +25,8 @@ func TestRadarBGPRouteMoasWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.BGP.Routes.Moas(context.TODO(), cloudflare.RadarBGPRouteMoasParams{
 		Format:      cloudflare.F(cloudflare.RadarBGPRouteMoasParamsFormatJson),
@@ -52,6 +54,8 @@ func TestRadarBGPRoutePfx2asWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.BGP.Routes.Pfx2as(context.TODO(), cloudflare.RadarBGPRoutePfx2asParams{
 		Format:     cloudflare.F(cloudflare.RadarBGPRoutePfx2asParamsFormatJson),
@@ -79,6 +83,8 @@ func TestRadarBGPRouteStatsWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.BGP.Routes.Stats(context.TODO(), cloudflare.RadarBGPRouteStatsParams{
 		ASN:      cloudflare.F(int64(0)),
@@ -105,6 +111,8 @@ func TestRadarBGPRouteTimeseriesWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.BGP.Routes.Timeseries(context.TODO(), cloudflare.RadarBGPRouteTimeseriesParams{
 		ASN:       cloudflare.F(int64(0)),

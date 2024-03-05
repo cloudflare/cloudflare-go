@@ -25,6 +25,8 @@ func TestRadarAttackLayer3TimeseriesWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Attacks.Layer3.Timeseries(context.TODO(), cloudflare.RadarAttackLayer3TimeseriesParams{
 		AggInterval:   cloudflare.F(cloudflare.RadarAttackLayer3TimeseriesParamsAggInterval1h),

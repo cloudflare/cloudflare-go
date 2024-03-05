@@ -24,6 +24,8 @@ func TestAddressingPrefixBGPBindingNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Addressing.Prefixes.BGP.Bindings.New(
 		context.TODO(),
@@ -54,6 +56,8 @@ func TestAddressingPrefixBGPBindingList(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Addressing.Prefixes.BGP.Bindings.List(
 		context.TODO(),
@@ -82,6 +86,8 @@ func TestAddressingPrefixBGPBindingDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Addressing.Prefixes.BGP.Bindings.Delete(
 		context.TODO(),
@@ -111,6 +117,8 @@ func TestAddressingPrefixBGPBindingGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Addressing.Prefixes.BGP.Bindings.Get(
 		context.TODO(),

@@ -24,6 +24,8 @@ func TestSecondaryDNSPeerNew(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.SecondaryDNS.Peers.New(context.TODO(), cloudflare.SecondaryDNSPeerNewParams{
 		AccountID: cloudflare.F[any]("01a7362d577a6c3019a474fd6f485823"),
@@ -49,6 +51,8 @@ func TestSecondaryDNSPeerUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.SecondaryDNS.Peers.Update(
 		context.TODO(),
@@ -82,6 +86,8 @@ func TestSecondaryDNSPeerList(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.SecondaryDNS.Peers.List(context.TODO(), cloudflare.SecondaryDNSPeerListParams{
 		AccountID: cloudflare.F[any]("01a7362d577a6c3019a474fd6f485823"),
@@ -106,6 +112,8 @@ func TestSecondaryDNSPeerDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.SecondaryDNS.Peers.Delete(
 		context.TODO(),
@@ -134,6 +142,8 @@ func TestSecondaryDNSPeerGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.SecondaryDNS.Peers.Get(
 		context.TODO(),

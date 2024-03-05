@@ -24,6 +24,8 @@ func TestLogpushJobNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Logpush.Jobs.New(context.TODO(), cloudflare.LogpushJobNewParams{
 		DestinationConf: cloudflare.F("s3://mybucket/logs?region=us-west-2"),
@@ -70,6 +72,8 @@ func TestLogpushJobUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Logpush.Jobs.Update(
 		context.TODO(),
@@ -118,6 +122,8 @@ func TestLogpushJobListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Logpush.Jobs.List(context.TODO(), cloudflare.LogpushJobListParams{
 		AccountID: cloudflare.F("string"),
@@ -143,6 +149,8 @@ func TestLogpushJobDeleteWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Logpush.Jobs.Delete(
 		context.TODO(),
@@ -172,6 +180,8 @@ func TestLogpushJobGetWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Logpush.Jobs.Get(
 		context.TODO(),

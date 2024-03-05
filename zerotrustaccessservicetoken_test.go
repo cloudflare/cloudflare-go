@@ -24,6 +24,8 @@ func TestZeroTrustAccessServiceTokenNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.ServiceTokens.New(context.TODO(), cloudflare.ZeroTrustAccessServiceTokenNewParams{
 		Name:      cloudflare.F("CI/CD token"),
@@ -51,6 +53,8 @@ func TestZeroTrustAccessServiceTokenUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.ServiceTokens.Update(
 		context.TODO(),
@@ -82,6 +86,8 @@ func TestZeroTrustAccessServiceTokenListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.ServiceTokens.List(context.TODO(), cloudflare.ZeroTrustAccessServiceTokenListParams{
 		AccountID: cloudflare.F("string"),
@@ -107,6 +113,8 @@ func TestZeroTrustAccessServiceTokenDeleteWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.ServiceTokens.Delete(
 		context.TODO(),
@@ -136,6 +144,8 @@ func TestZeroTrustAccessServiceTokenRefresh(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.ServiceTokens.Refresh(
 		context.TODO(),
@@ -162,6 +172,8 @@ func TestZeroTrustAccessServiceTokenRotate(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.ServiceTokens.Rotate(
 		context.TODO(),

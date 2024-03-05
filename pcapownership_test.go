@@ -24,6 +24,8 @@ func TestPCAPOwnershipNew(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.PCAPs.Ownerships.New(context.TODO(), cloudflare.PCAPOwnershipNewParams{
 		AccountID:       cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -49,6 +51,8 @@ func TestPCAPOwnershipDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	err := client.PCAPs.Ownerships.Delete(
 		context.TODO(),
@@ -77,6 +81,8 @@ func TestPCAPOwnershipGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.PCAPs.Ownerships.Get(context.TODO(), cloudflare.PCAPOwnershipGetParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -101,6 +107,8 @@ func TestPCAPOwnershipValidate(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.PCAPs.Ownerships.Validate(context.TODO(), cloudflare.PCAPOwnershipValidateParams{
 		AccountID:          cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),

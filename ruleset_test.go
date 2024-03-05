@@ -24,6 +24,8 @@ func TestRulesetNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Rulesets.New(context.TODO(), cloudflare.RulesetNewParams{
 		Kind:  cloudflare.F(cloudflare.RulesetNewParamsKindRoot),
@@ -105,6 +107,8 @@ func TestRulesetUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Rulesets.Update(
 		context.TODO(),
@@ -191,6 +195,8 @@ func TestRulesetListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Rulesets.List(context.TODO(), cloudflare.RulesetListParams{
 		AccountID: cloudflare.F("string"),
@@ -216,6 +222,8 @@ func TestRulesetDeleteWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	err := client.Rulesets.Delete(
 		context.TODO(),
@@ -245,6 +253,8 @@ func TestRulesetGetWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Rulesets.Get(
 		context.TODO(),

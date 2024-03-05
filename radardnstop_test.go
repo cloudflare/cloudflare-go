@@ -25,6 +25,8 @@ func TestRadarDNSTopAsesWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.DNS.Top.Ases(context.TODO(), cloudflare.RadarDNSTopAsesParams{
 		Domain:    cloudflare.F([]string{"string", "string", "string"}),
@@ -58,6 +60,8 @@ func TestRadarDNSTopLocationsWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.DNS.Top.Locations(context.TODO(), cloudflare.RadarDNSTopLocationsParams{
 		Domain:    cloudflare.F([]string{"string", "string", "string"}),

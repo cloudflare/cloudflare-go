@@ -25,6 +25,8 @@ func TestRadarAnnotationOutageGetWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Annotations.Outages.Get(context.TODO(), cloudflare.RadarAnnotationOutageGetParams{
 		ASN:       cloudflare.F(int64(0)),
@@ -56,6 +58,8 @@ func TestRadarAnnotationOutageLocationsWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.Annotations.Outages.Locations(context.TODO(), cloudflare.RadarAnnotationOutageLocationsParams{
 		DateEnd:   cloudflare.F(time.Now()),

@@ -24,6 +24,8 @@ func TestWeb3HostnameIPFSUniversalPathContentListEntryNewWithOptionalParams(t *t
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Web3.Hostnames.IPFSUniversalPaths.ContentLists.Entries.New(
 		context.TODO(),
@@ -55,6 +57,8 @@ func TestWeb3HostnameIPFSUniversalPathContentListEntryUpdateWithOptionalParams(t
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Web3.Hostnames.IPFSUniversalPaths.ContentLists.Entries.Update(
 		context.TODO(),
@@ -87,6 +91,8 @@ func TestWeb3HostnameIPFSUniversalPathContentListEntryList(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Web3.Hostnames.IPFSUniversalPaths.ContentLists.Entries.List(
 		context.TODO(),
@@ -113,6 +119,8 @@ func TestWeb3HostnameIPFSUniversalPathContentListEntryDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Web3.Hostnames.IPFSUniversalPaths.ContentLists.Entries.Delete(
 		context.TODO(),
@@ -140,6 +148,8 @@ func TestWeb3HostnameIPFSUniversalPathContentListEntryGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Web3.Hostnames.IPFSUniversalPaths.ContentLists.Entries.Get(
 		context.TODO(),

@@ -24,6 +24,8 @@ func TestEmailRoutingRoutingRuleNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.EmailRouting.Routing.Rules.New(
 		context.TODO(),
@@ -77,6 +79,8 @@ func TestEmailRoutingRoutingRuleUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.EmailRouting.Routing.Rules.Update(
 		context.TODO(),
@@ -131,6 +135,8 @@ func TestEmailRoutingRoutingRuleListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.EmailRouting.Routing.Rules.List(
 		context.TODO(),
@@ -161,6 +167,8 @@ func TestEmailRoutingRoutingRuleDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.EmailRouting.Routing.Rules.Delete(
 		context.TODO(),
@@ -187,6 +195,8 @@ func TestEmailRoutingRoutingRuleGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.EmailRouting.Routing.Rules.Get(
 		context.TODO(),

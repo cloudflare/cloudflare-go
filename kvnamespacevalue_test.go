@@ -24,6 +24,8 @@ func TestKVNamespaceValueUpdate(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.KV.Namespaces.Values.Update(
 		context.TODO(),
@@ -55,6 +57,8 @@ func TestKVNamespaceValueDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.KV.Namespaces.Values.Delete(
 		context.TODO(),
@@ -84,6 +88,8 @@ func TestKVNamespaceValueGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.KV.Namespaces.Values.Get(
 		context.TODO(),

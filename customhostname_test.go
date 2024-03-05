@@ -24,6 +24,8 @@ func TestCustomHostnameNewWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CustomHostnames.New(context.TODO(), cloudflare.CustomHostnameNewParams{
 		ZoneID:   cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -68,6 +70,8 @@ func TestCustomHostnameListWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CustomHostnames.List(context.TODO(), cloudflare.CustomHostnameListParams{
 		ZoneID:    cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
@@ -99,6 +103,8 @@ func TestCustomHostnameDelete(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CustomHostnames.Delete(
 		context.TODO(),
@@ -127,6 +133,8 @@ func TestCustomHostnameEditWithOptionalParams(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CustomHostnames.Edit(
 		context.TODO(),
@@ -176,6 +184,8 @@ func TestCustomHostnameGet(t *testing.T) {
 	}
 	client := cloudflare.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.CustomHostnames.Get(
 		context.TODO(),
