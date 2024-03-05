@@ -12,6 +12,7 @@ BUG FIXES:
 DEPENDENCIES:
 
 * deps: bumps github.com/stretchr/testify from 1.8.4 to 1.9.0 ([#1511](https://github.com/cloudflare/cloudflare-go/issues/1511))
+* deps: bumps golang.org/x/net from 0.21.0 to 0.22.0 ([#1513](https://github.com/cloudflare/cloudflare-go/issues/1513))
 
 ## 0.89.0 (February 28th, 2024)
 
