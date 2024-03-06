@@ -190,41 +190,134 @@ func (r *DNSRecordService) Scan(ctx context.Context, body DNSRecordScanParams, o
 	return
 }
 
-// Union satisfied by [DNSRecordNewResponseDNSRecordsARecord],
-// [DNSRecordNewResponseDNSRecordsAAAARecord],
-// [DNSRecordNewResponseDNSRecordsCAARecord],
-// [DNSRecordNewResponseDNSRecordsCertRecord],
-// [DNSRecordNewResponseDNSRecordsCNAMERecord],
-// [DNSRecordNewResponseDNSRecordsDNSKEYRecord],
-// [DNSRecordNewResponseDNSRecordsDSRecord],
-// [DNSRecordNewResponseDNSRecordsHTTPSRecord],
-// [DNSRecordNewResponseDNSRecordsLOCRecord],
-// [DNSRecordNewResponseDNSRecordsMXRecord],
-// [DNSRecordNewResponseDNSRecordsNAPTRRecord],
-// [DNSRecordNewResponseDNSRecordsNSRecord],
-// [DNSRecordNewResponseDNSRecordsPTRRecord],
-// [DNSRecordNewResponseDNSRecordsSmimeaRecord],
-// [DNSRecordNewResponseDNSRecordsSRVRecord],
-// [DNSRecordNewResponseDNSRecordsSSHFPRecord],
-// [DNSRecordNewResponseDNSRecordsSVCBRecord],
-// [DNSRecordNewResponseDNSRecordsTLSARecord],
-// [DNSRecordNewResponseDNSRecordsTXTRecord] or
-// [DNSRecordNewResponseDNSRecordsURIRecord].
+// Union satisfied by [DNSRecordNewResponseA], [DNSRecordNewResponseAAAA],
+// [DNSRecordNewResponseCAA], [DNSRecordNewResponseCert],
+// [DNSRecordNewResponseCNAME], [DNSRecordNewResponseDNSKEY],
+// [DNSRecordNewResponseDS], [DNSRecordNewResponseHTTPS],
+// [DNSRecordNewResponseLOC], [DNSRecordNewResponseMX],
+// [DNSRecordNewResponseNAPTR], [DNSRecordNewResponseNS],
+// [DNSRecordNewResponsePTR], [DNSRecordNewResponseSmimea],
+// [DNSRecordNewResponseSRV], [DNSRecordNewResponseSSHFP],
+// [DNSRecordNewResponseSVCB], [DNSRecordNewResponseTLSA],
+// [DNSRecordNewResponseTXT] or [DNSRecordNewResponseURI].
 type DNSRecordNewResponse interface {
 	implementsDNSRecordNewResponse()
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*DNSRecordNewResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DNSRecordNewResponse)(nil)).Elem(),
+		"type",
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordNewResponseA{}),
+			DiscriminatorValue: "A",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordNewResponseAAAA{}),
+			DiscriminatorValue: "AAAA",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordNewResponseCAA{}),
+			DiscriminatorValue: "CAA",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordNewResponseCert{}),
+			DiscriminatorValue: "CERT",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordNewResponseCNAME{}),
+			DiscriminatorValue: "CNAME",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordNewResponseDNSKEY{}),
+			DiscriminatorValue: "DNSKEY",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordNewResponseDS{}),
+			DiscriminatorValue: "DS",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordNewResponseHTTPS{}),
+			DiscriminatorValue: "HTTPS",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordNewResponseLOC{}),
+			DiscriminatorValue: "LOC",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordNewResponseMX{}),
+			DiscriminatorValue: "MX",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordNewResponseNAPTR{}),
+			DiscriminatorValue: "NAPTR",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordNewResponseNS{}),
+			DiscriminatorValue: "NS",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordNewResponsePTR{}),
+			DiscriminatorValue: "PTR",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordNewResponseSmimea{}),
+			DiscriminatorValue: "SMIMEA",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordNewResponseSRV{}),
+			DiscriminatorValue: "SRV",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordNewResponseSSHFP{}),
+			DiscriminatorValue: "SSHFP",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordNewResponseSVCB{}),
+			DiscriminatorValue: "SVCB",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordNewResponseTLSA{}),
+			DiscriminatorValue: "TLSA",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordNewResponseTXT{}),
+			DiscriminatorValue: "TXT",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordNewResponseURI{}),
+			DiscriminatorValue: "URI",
+		},
+	)
 }
 
-type DNSRecordNewResponseDNSRecordsARecord struct {
+type DNSRecordNewResponseA struct {
 	// A valid IPv4 address.
 	Content string `json:"content,required" format:"ipv4"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordNewResponseDNSRecordsARecordType `json:"type,required"`
+	Type DNSRecordNewResponseAType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -236,7 +329,7 @@ type DNSRecordNewResponseDNSRecordsARecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordNewResponseDNSRecordsARecordMeta `json:"meta"`
+	Meta DNSRecordNewResponseAMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -249,17 +342,17 @@ type DNSRecordNewResponseDNSRecordsARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordNewResponseDNSRecordsARecordTTL `json:"ttl"`
+	TTL DNSRecordNewResponseATTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                    `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordNewResponseDNSRecordsARecordJSON `json:"-"`
+	ZoneName string                    `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordNewResponseAJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsARecordJSON contains the JSON metadata for the
-// struct [DNSRecordNewResponseDNSRecordsARecord]
-type dnsRecordNewResponseDNSRecordsARecordJSON struct {
+// dnsRecordNewResponseAJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseA]
+type dnsRecordNewResponseAJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -279,39 +372,39 @@ type dnsRecordNewResponseDNSRecordsARecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsARecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordNewResponseDNSRecordsARecord) implementsDNSRecordNewResponse() {}
+func (r DNSRecordNewResponseA) implementsDNSRecordNewResponse() {}
 
 // Record type.
-type DNSRecordNewResponseDNSRecordsARecordType string
+type DNSRecordNewResponseAType string
 
 const (
-	DNSRecordNewResponseDNSRecordsARecordTypeA DNSRecordNewResponseDNSRecordsARecordType = "A"
+	DNSRecordNewResponseATypeA DNSRecordNewResponseAType = "A"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordNewResponseDNSRecordsARecordMeta struct {
+type DNSRecordNewResponseAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                        `json:"source"`
-	JSON   dnsRecordNewResponseDNSRecordsARecordMetaJSON `json:"-"`
+	Source string                        `json:"source"`
+	JSON   dnsRecordNewResponseAMetaJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsARecordMetaJSON contains the JSON metadata for the
-// struct [DNSRecordNewResponseDNSRecordsARecordMeta]
-type dnsRecordNewResponseDNSRecordsARecordMetaJSON struct {
+// dnsRecordNewResponseAMetaJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseAMeta]
+type dnsRecordNewResponseAMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsARecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -319,15 +412,14 @@ func (r *DNSRecordNewResponseDNSRecordsARecordMeta) UnmarshalJSON(data []byte) (
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordNewResponseDNSRecordsARecordTTLNumber].
-type DNSRecordNewResponseDNSRecordsARecordTTL interface {
-	ImplementsDNSRecordNewResponseDNSRecordsARecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordNewResponseATTLNumber].
+type DNSRecordNewResponseATTL interface {
+	ImplementsDNSRecordNewResponseAttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordNewResponseDNSRecordsARecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordNewResponseATTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -336,19 +428,19 @@ func init() {
 	)
 }
 
-type DNSRecordNewResponseDNSRecordsARecordTTLNumber float64
+type DNSRecordNewResponseATTLNumber float64
 
 const (
-	DNSRecordNewResponseDNSRecordsARecordTTLNumber1 DNSRecordNewResponseDNSRecordsARecordTTLNumber = 1
+	DNSRecordNewResponseATTLNumber1 DNSRecordNewResponseATTLNumber = 1
 )
 
-type DNSRecordNewResponseDNSRecordsAAAARecord struct {
+type DNSRecordNewResponseAAAA struct {
 	// A valid IPv6 address.
 	Content string `json:"content,required" format:"ipv6"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordNewResponseDNSRecordsAAAARecordType `json:"type,required"`
+	Type DNSRecordNewResponseAAAAType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -360,7 +452,7 @@ type DNSRecordNewResponseDNSRecordsAAAARecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordNewResponseDNSRecordsAAAARecordMeta `json:"meta"`
+	Meta DNSRecordNewResponseAAAAMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -373,17 +465,17 @@ type DNSRecordNewResponseDNSRecordsAAAARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordNewResponseDNSRecordsAAAARecordTTL `json:"ttl"`
+	TTL DNSRecordNewResponseAAAATTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                       `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordNewResponseDNSRecordsAAAARecordJSON `json:"-"`
+	ZoneName string                       `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordNewResponseAAAAJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsAAAARecordJSON contains the JSON metadata for the
-// struct [DNSRecordNewResponseDNSRecordsAAAARecord]
-type dnsRecordNewResponseDNSRecordsAAAARecordJSON struct {
+// dnsRecordNewResponseAAAAJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseAAAA]
+type dnsRecordNewResponseAAAAJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -403,39 +495,39 @@ type dnsRecordNewResponseDNSRecordsAAAARecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsAAAARecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseAAAA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordNewResponseDNSRecordsAAAARecord) implementsDNSRecordNewResponse() {}
+func (r DNSRecordNewResponseAAAA) implementsDNSRecordNewResponse() {}
 
 // Record type.
-type DNSRecordNewResponseDNSRecordsAAAARecordType string
+type DNSRecordNewResponseAAAAType string
 
 const (
-	DNSRecordNewResponseDNSRecordsAAAARecordTypeAAAA DNSRecordNewResponseDNSRecordsAAAARecordType = "AAAA"
+	DNSRecordNewResponseAAAATypeAAAA DNSRecordNewResponseAAAAType = "AAAA"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordNewResponseDNSRecordsAAAARecordMeta struct {
+type DNSRecordNewResponseAAAAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                           `json:"source"`
-	JSON   dnsRecordNewResponseDNSRecordsAAAARecordMetaJSON `json:"-"`
+	Source string                           `json:"source"`
+	JSON   dnsRecordNewResponseAAAAMetaJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsAAAARecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordNewResponseDNSRecordsAAAARecordMeta]
-type dnsRecordNewResponseDNSRecordsAAAARecordMetaJSON struct {
+// dnsRecordNewResponseAAAAMetaJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseAAAAMeta]
+type dnsRecordNewResponseAAAAMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsAAAARecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseAAAAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -443,15 +535,14 @@ func (r *DNSRecordNewResponseDNSRecordsAAAARecordMeta) UnmarshalJSON(data []byte
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordNewResponseDNSRecordsAAAARecordTTLNumber].
-type DNSRecordNewResponseDNSRecordsAAAARecordTTL interface {
-	ImplementsDNSRecordNewResponseDNSRecordsAAAARecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordNewResponseAAAATTLNumber].
+type DNSRecordNewResponseAAAATTL interface {
+	ImplementsDNSRecordNewResponseAaaattl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordNewResponseDNSRecordsAAAARecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordNewResponseAAAATTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -460,19 +551,19 @@ func init() {
 	)
 }
 
-type DNSRecordNewResponseDNSRecordsAAAARecordTTLNumber float64
+type DNSRecordNewResponseAAAATTLNumber float64
 
 const (
-	DNSRecordNewResponseDNSRecordsAAAARecordTTLNumber1 DNSRecordNewResponseDNSRecordsAAAARecordTTLNumber = 1
+	DNSRecordNewResponseAAAATTLNumber1 DNSRecordNewResponseAAAATTLNumber = 1
 )
 
-type DNSRecordNewResponseDNSRecordsCAARecord struct {
+type DNSRecordNewResponseCAA struct {
 	// Components of a CAA record.
-	Data DNSRecordNewResponseDNSRecordsCAARecordData `json:"data,required"`
+	Data DNSRecordNewResponseCAAData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordNewResponseDNSRecordsCAARecordType `json:"type,required"`
+	Type DNSRecordNewResponseCAAType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -486,7 +577,7 @@ type DNSRecordNewResponseDNSRecordsCAARecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordNewResponseDNSRecordsCAARecordMeta `json:"meta"`
+	Meta DNSRecordNewResponseCAAMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -496,17 +587,17 @@ type DNSRecordNewResponseDNSRecordsCAARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordNewResponseDNSRecordsCAARecordTTL `json:"ttl"`
+	TTL DNSRecordNewResponseCAATTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                      `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordNewResponseDNSRecordsCAARecordJSON `json:"-"`
+	ZoneName string                      `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordNewResponseCAAJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsCAARecordJSON contains the JSON metadata for the
-// struct [DNSRecordNewResponseDNSRecordsCAARecord]
-type dnsRecordNewResponseDNSRecordsCAARecordJSON struct {
+// dnsRecordNewResponseCAAJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseCAA]
+type dnsRecordNewResponseCAAJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -526,26 +617,26 @@ type dnsRecordNewResponseDNSRecordsCAARecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsCAARecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseCAA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordNewResponseDNSRecordsCAARecord) implementsDNSRecordNewResponse() {}
+func (r DNSRecordNewResponseCAA) implementsDNSRecordNewResponse() {}
 
 // Components of a CAA record.
-type DNSRecordNewResponseDNSRecordsCAARecordData struct {
+type DNSRecordNewResponseCAAData struct {
 	// Flags for the CAA record.
 	Flags float64 `json:"flags"`
 	// Name of the property controlled by this record (e.g.: issue, issuewild, iodef).
 	Tag string `json:"tag"`
 	// Value of the record. This field's semantics depend on the chosen tag.
-	Value string                                          `json:"value"`
-	JSON  dnsRecordNewResponseDNSRecordsCAARecordDataJSON `json:"-"`
+	Value string                          `json:"value"`
+	JSON  dnsRecordNewResponseCAADataJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsCAARecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordNewResponseDNSRecordsCAARecordData]
-type dnsRecordNewResponseDNSRecordsCAARecordDataJSON struct {
+// dnsRecordNewResponseCAADataJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseCAAData]
+type dnsRecordNewResponseCAADataJSON struct {
 	Flags       apijson.Field
 	Tag         apijson.Field
 	Value       apijson.Field
@@ -553,37 +644,37 @@ type dnsRecordNewResponseDNSRecordsCAARecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsCAARecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseCAAData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordNewResponseDNSRecordsCAARecordType string
+type DNSRecordNewResponseCAAType string
 
 const (
-	DNSRecordNewResponseDNSRecordsCAARecordTypeCAA DNSRecordNewResponseDNSRecordsCAARecordType = "CAA"
+	DNSRecordNewResponseCAATypeCAA DNSRecordNewResponseCAAType = "CAA"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordNewResponseDNSRecordsCAARecordMeta struct {
+type DNSRecordNewResponseCAAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                          `json:"source"`
-	JSON   dnsRecordNewResponseDNSRecordsCAARecordMetaJSON `json:"-"`
+	Source string                          `json:"source"`
+	JSON   dnsRecordNewResponseCAAMetaJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsCAARecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordNewResponseDNSRecordsCAARecordMeta]
-type dnsRecordNewResponseDNSRecordsCAARecordMetaJSON struct {
+// dnsRecordNewResponseCAAMetaJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseCAAMeta]
+type dnsRecordNewResponseCAAMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsCAARecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseCAAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -591,15 +682,14 @@ func (r *DNSRecordNewResponseDNSRecordsCAARecordMeta) UnmarshalJSON(data []byte)
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordNewResponseDNSRecordsCAARecordTTLNumber].
-type DNSRecordNewResponseDNSRecordsCAARecordTTL interface {
-	ImplementsDNSRecordNewResponseDNSRecordsCAARecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordNewResponseCAATTLNumber].
+type DNSRecordNewResponseCAATTL interface {
+	ImplementsDNSRecordNewResponseCaattl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordNewResponseDNSRecordsCAARecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordNewResponseCAATTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -608,19 +698,19 @@ func init() {
 	)
 }
 
-type DNSRecordNewResponseDNSRecordsCAARecordTTLNumber float64
+type DNSRecordNewResponseCAATTLNumber float64
 
 const (
-	DNSRecordNewResponseDNSRecordsCAARecordTTLNumber1 DNSRecordNewResponseDNSRecordsCAARecordTTLNumber = 1
+	DNSRecordNewResponseCAATTLNumber1 DNSRecordNewResponseCAATTLNumber = 1
 )
 
-type DNSRecordNewResponseDNSRecordsCertRecord struct {
+type DNSRecordNewResponseCert struct {
 	// Components of a CERT record.
-	Data DNSRecordNewResponseDNSRecordsCertRecordData `json:"data,required"`
+	Data DNSRecordNewResponseCertData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordNewResponseDNSRecordsCertRecordType `json:"type,required"`
+	Type DNSRecordNewResponseCertType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -634,7 +724,7 @@ type DNSRecordNewResponseDNSRecordsCertRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordNewResponseDNSRecordsCertRecordMeta `json:"meta"`
+	Meta DNSRecordNewResponseCertMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -644,17 +734,17 @@ type DNSRecordNewResponseDNSRecordsCertRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordNewResponseDNSRecordsCertRecordTTL `json:"ttl"`
+	TTL DNSRecordNewResponseCertTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                       `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordNewResponseDNSRecordsCertRecordJSON `json:"-"`
+	ZoneName string                       `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordNewResponseCertJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsCertRecordJSON contains the JSON metadata for the
-// struct [DNSRecordNewResponseDNSRecordsCertRecord]
-type dnsRecordNewResponseDNSRecordsCertRecordJSON struct {
+// dnsRecordNewResponseCertJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseCert]
+type dnsRecordNewResponseCertJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -674,14 +764,14 @@ type dnsRecordNewResponseDNSRecordsCertRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsCertRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseCert) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordNewResponseDNSRecordsCertRecord) implementsDNSRecordNewResponse() {}
+func (r DNSRecordNewResponseCert) implementsDNSRecordNewResponse() {}
 
 // Components of a CERT record.
-type DNSRecordNewResponseDNSRecordsCertRecordData struct {
+type DNSRecordNewResponseCertData struct {
 	// Algorithm.
 	Algorithm float64 `json:"algorithm"`
 	// Certificate.
@@ -689,13 +779,13 @@ type DNSRecordNewResponseDNSRecordsCertRecordData struct {
 	// Key Tag.
 	KeyTag float64 `json:"key_tag"`
 	// Type.
-	Type float64                                          `json:"type"`
-	JSON dnsRecordNewResponseDNSRecordsCertRecordDataJSON `json:"-"`
+	Type float64                          `json:"type"`
+	JSON dnsRecordNewResponseCertDataJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsCertRecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordNewResponseDNSRecordsCertRecordData]
-type dnsRecordNewResponseDNSRecordsCertRecordDataJSON struct {
+// dnsRecordNewResponseCertDataJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseCertData]
+type dnsRecordNewResponseCertDataJSON struct {
 	Algorithm   apijson.Field
 	Certificate apijson.Field
 	KeyTag      apijson.Field
@@ -704,37 +794,37 @@ type dnsRecordNewResponseDNSRecordsCertRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsCertRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseCertData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordNewResponseDNSRecordsCertRecordType string
+type DNSRecordNewResponseCertType string
 
 const (
-	DNSRecordNewResponseDNSRecordsCertRecordTypeCert DNSRecordNewResponseDNSRecordsCertRecordType = "CERT"
+	DNSRecordNewResponseCertTypeCert DNSRecordNewResponseCertType = "CERT"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordNewResponseDNSRecordsCertRecordMeta struct {
+type DNSRecordNewResponseCertMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                           `json:"source"`
-	JSON   dnsRecordNewResponseDNSRecordsCertRecordMetaJSON `json:"-"`
+	Source string                           `json:"source"`
+	JSON   dnsRecordNewResponseCertMetaJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsCertRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordNewResponseDNSRecordsCertRecordMeta]
-type dnsRecordNewResponseDNSRecordsCertRecordMetaJSON struct {
+// dnsRecordNewResponseCertMetaJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseCertMeta]
+type dnsRecordNewResponseCertMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsCertRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseCertMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -742,15 +832,14 @@ func (r *DNSRecordNewResponseDNSRecordsCertRecordMeta) UnmarshalJSON(data []byte
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordNewResponseDNSRecordsCertRecordTTLNumber].
-type DNSRecordNewResponseDNSRecordsCertRecordTTL interface {
-	ImplementsDNSRecordNewResponseDNSRecordsCertRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordNewResponseCertTTLNumber].
+type DNSRecordNewResponseCertTTL interface {
+	ImplementsDNSRecordNewResponseCertTTL()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordNewResponseDNSRecordsCertRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordNewResponseCertTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -759,19 +848,19 @@ func init() {
 	)
 }
 
-type DNSRecordNewResponseDNSRecordsCertRecordTTLNumber float64
+type DNSRecordNewResponseCertTTLNumber float64
 
 const (
-	DNSRecordNewResponseDNSRecordsCertRecordTTLNumber1 DNSRecordNewResponseDNSRecordsCertRecordTTLNumber = 1
+	DNSRecordNewResponseCertTTLNumber1 DNSRecordNewResponseCertTTLNumber = 1
 )
 
-type DNSRecordNewResponseDNSRecordsCNAMERecord struct {
+type DNSRecordNewResponseCNAME struct {
 	// A valid hostname. Must not match the record's name.
 	Content interface{} `json:"content,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordNewResponseDNSRecordsCNAMERecordType `json:"type,required"`
+	Type DNSRecordNewResponseCNAMEType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -783,7 +872,7 @@ type DNSRecordNewResponseDNSRecordsCNAMERecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordNewResponseDNSRecordsCNAMERecordMeta `json:"meta"`
+	Meta DNSRecordNewResponseCNAMEMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -796,17 +885,17 @@ type DNSRecordNewResponseDNSRecordsCNAMERecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordNewResponseDNSRecordsCNAMERecordTTL `json:"ttl"`
+	TTL DNSRecordNewResponseCNAMETTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                        `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordNewResponseDNSRecordsCNAMERecordJSON `json:"-"`
+	ZoneName string                        `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordNewResponseCNAMEJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsCNAMERecordJSON contains the JSON metadata for the
-// struct [DNSRecordNewResponseDNSRecordsCNAMERecord]
-type dnsRecordNewResponseDNSRecordsCNAMERecordJSON struct {
+// dnsRecordNewResponseCNAMEJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseCNAME]
+type dnsRecordNewResponseCNAMEJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -826,39 +915,39 @@ type dnsRecordNewResponseDNSRecordsCNAMERecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsCNAMERecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseCNAME) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordNewResponseDNSRecordsCNAMERecord) implementsDNSRecordNewResponse() {}
+func (r DNSRecordNewResponseCNAME) implementsDNSRecordNewResponse() {}
 
 // Record type.
-type DNSRecordNewResponseDNSRecordsCNAMERecordType string
+type DNSRecordNewResponseCNAMEType string
 
 const (
-	DNSRecordNewResponseDNSRecordsCNAMERecordTypeCNAME DNSRecordNewResponseDNSRecordsCNAMERecordType = "CNAME"
+	DNSRecordNewResponseCNAMETypeCNAME DNSRecordNewResponseCNAMEType = "CNAME"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordNewResponseDNSRecordsCNAMERecordMeta struct {
+type DNSRecordNewResponseCNAMEMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                            `json:"source"`
-	JSON   dnsRecordNewResponseDNSRecordsCNAMERecordMetaJSON `json:"-"`
+	Source string                            `json:"source"`
+	JSON   dnsRecordNewResponseCNAMEMetaJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsCNAMERecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordNewResponseDNSRecordsCNAMERecordMeta]
-type dnsRecordNewResponseDNSRecordsCNAMERecordMetaJSON struct {
+// dnsRecordNewResponseCNAMEMetaJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseCNAMEMeta]
+type dnsRecordNewResponseCNAMEMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsCNAMERecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseCNAMEMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -866,15 +955,14 @@ func (r *DNSRecordNewResponseDNSRecordsCNAMERecordMeta) UnmarshalJSON(data []byt
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordNewResponseDNSRecordsCNAMERecordTTLNumber].
-type DNSRecordNewResponseDNSRecordsCNAMERecordTTL interface {
-	ImplementsDNSRecordNewResponseDNSRecordsCNAMERecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordNewResponseCNAMETTLNumber].
+type DNSRecordNewResponseCNAMETTL interface {
+	ImplementsDNSRecordNewResponseCnamettl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordNewResponseDNSRecordsCNAMERecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordNewResponseCNAMETTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -883,19 +971,19 @@ func init() {
 	)
 }
 
-type DNSRecordNewResponseDNSRecordsCNAMERecordTTLNumber float64
+type DNSRecordNewResponseCNAMETTLNumber float64
 
 const (
-	DNSRecordNewResponseDNSRecordsCNAMERecordTTLNumber1 DNSRecordNewResponseDNSRecordsCNAMERecordTTLNumber = 1
+	DNSRecordNewResponseCNAMETTLNumber1 DNSRecordNewResponseCNAMETTLNumber = 1
 )
 
-type DNSRecordNewResponseDNSRecordsDNSKEYRecord struct {
+type DNSRecordNewResponseDNSKEY struct {
 	// Components of a DNSKEY record.
-	Data DNSRecordNewResponseDNSRecordsDNSKEYRecordData `json:"data,required"`
+	Data DNSRecordNewResponseDNSKEYData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordNewResponseDNSRecordsDNSKEYRecordType `json:"type,required"`
+	Type DNSRecordNewResponseDNSKEYType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -909,7 +997,7 @@ type DNSRecordNewResponseDNSRecordsDNSKEYRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordNewResponseDNSRecordsDNSKEYRecordMeta `json:"meta"`
+	Meta DNSRecordNewResponseDNSKEYMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -919,17 +1007,17 @@ type DNSRecordNewResponseDNSRecordsDNSKEYRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordNewResponseDNSRecordsDNSKEYRecordTTL `json:"ttl"`
+	TTL DNSRecordNewResponseDNSKEYTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                         `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordNewResponseDNSRecordsDNSKEYRecordJSON `json:"-"`
+	ZoneName string                         `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordNewResponseDNSKEYJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsDNSKEYRecordJSON contains the JSON metadata for
-// the struct [DNSRecordNewResponseDNSRecordsDNSKEYRecord]
-type dnsRecordNewResponseDNSRecordsDNSKEYRecordJSON struct {
+// dnsRecordNewResponseDNSKEYJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseDNSKEY]
+type dnsRecordNewResponseDNSKEYJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -949,14 +1037,14 @@ type dnsRecordNewResponseDNSRecordsDNSKEYRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsDNSKEYRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseDNSKEY) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordNewResponseDNSRecordsDNSKEYRecord) implementsDNSRecordNewResponse() {}
+func (r DNSRecordNewResponseDNSKEY) implementsDNSRecordNewResponse() {}
 
 // Components of a DNSKEY record.
-type DNSRecordNewResponseDNSRecordsDNSKEYRecordData struct {
+type DNSRecordNewResponseDNSKEYData struct {
 	// Algorithm.
 	Algorithm float64 `json:"algorithm"`
 	// Flags.
@@ -964,13 +1052,13 @@ type DNSRecordNewResponseDNSRecordsDNSKEYRecordData struct {
 	// Protocol.
 	Protocol float64 `json:"protocol"`
 	// Public Key.
-	PublicKey string                                             `json:"public_key"`
-	JSON      dnsRecordNewResponseDNSRecordsDNSKEYRecordDataJSON `json:"-"`
+	PublicKey string                             `json:"public_key"`
+	JSON      dnsRecordNewResponseDNSKEYDataJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsDNSKEYRecordDataJSON contains the JSON metadata
-// for the struct [DNSRecordNewResponseDNSRecordsDNSKEYRecordData]
-type dnsRecordNewResponseDNSRecordsDNSKEYRecordDataJSON struct {
+// dnsRecordNewResponseDNSKEYDataJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseDNSKEYData]
+type dnsRecordNewResponseDNSKEYDataJSON struct {
 	Algorithm   apijson.Field
 	Flags       apijson.Field
 	Protocol    apijson.Field
@@ -979,37 +1067,37 @@ type dnsRecordNewResponseDNSRecordsDNSKEYRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsDNSKEYRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseDNSKEYData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordNewResponseDNSRecordsDNSKEYRecordType string
+type DNSRecordNewResponseDNSKEYType string
 
 const (
-	DNSRecordNewResponseDNSRecordsDNSKEYRecordTypeDNSKEY DNSRecordNewResponseDNSRecordsDNSKEYRecordType = "DNSKEY"
+	DNSRecordNewResponseDNSKEYTypeDNSKEY DNSRecordNewResponseDNSKEYType = "DNSKEY"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordNewResponseDNSRecordsDNSKEYRecordMeta struct {
+type DNSRecordNewResponseDNSKEYMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                             `json:"source"`
-	JSON   dnsRecordNewResponseDNSRecordsDNSKEYRecordMetaJSON `json:"-"`
+	Source string                             `json:"source"`
+	JSON   dnsRecordNewResponseDNSKEYMetaJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsDNSKEYRecordMetaJSON contains the JSON metadata
-// for the struct [DNSRecordNewResponseDNSRecordsDNSKEYRecordMeta]
-type dnsRecordNewResponseDNSRecordsDNSKEYRecordMetaJSON struct {
+// dnsRecordNewResponseDNSKEYMetaJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseDNSKEYMeta]
+type dnsRecordNewResponseDNSKEYMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsDNSKEYRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseDNSKEYMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1017,15 +1105,14 @@ func (r *DNSRecordNewResponseDNSRecordsDNSKEYRecordMeta) UnmarshalJSON(data []by
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordNewResponseDNSRecordsDNSKEYRecordTTLNumber].
-type DNSRecordNewResponseDNSRecordsDNSKEYRecordTTL interface {
-	ImplementsDNSRecordNewResponseDNSRecordsDNSKEYRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordNewResponseDNSKEYTTLNumber].
+type DNSRecordNewResponseDNSKEYTTL interface {
+	ImplementsDNSRecordNewResponseDnskeyttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordNewResponseDNSRecordsDNSKEYRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordNewResponseDNSKEYTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -1034,19 +1121,19 @@ func init() {
 	)
 }
 
-type DNSRecordNewResponseDNSRecordsDNSKEYRecordTTLNumber float64
+type DNSRecordNewResponseDNSKEYTTLNumber float64
 
 const (
-	DNSRecordNewResponseDNSRecordsDNSKEYRecordTTLNumber1 DNSRecordNewResponseDNSRecordsDNSKEYRecordTTLNumber = 1
+	DNSRecordNewResponseDNSKEYTTLNumber1 DNSRecordNewResponseDNSKEYTTLNumber = 1
 )
 
-type DNSRecordNewResponseDNSRecordsDSRecord struct {
+type DNSRecordNewResponseDS struct {
 	// Components of a DS record.
-	Data DNSRecordNewResponseDNSRecordsDSRecordData `json:"data,required"`
+	Data DNSRecordNewResponseDSData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordNewResponseDNSRecordsDSRecordType `json:"type,required"`
+	Type DNSRecordNewResponseDSType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -1060,7 +1147,7 @@ type DNSRecordNewResponseDNSRecordsDSRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordNewResponseDNSRecordsDSRecordMeta `json:"meta"`
+	Meta DNSRecordNewResponseDSMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -1070,17 +1157,17 @@ type DNSRecordNewResponseDNSRecordsDSRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordNewResponseDNSRecordsDSRecordTTL `json:"ttl"`
+	TTL DNSRecordNewResponseDSTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                     `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordNewResponseDNSRecordsDSRecordJSON `json:"-"`
+	ZoneName string                     `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordNewResponseDSJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsDSRecordJSON contains the JSON metadata for the
-// struct [DNSRecordNewResponseDNSRecordsDSRecord]
-type dnsRecordNewResponseDNSRecordsDSRecordJSON struct {
+// dnsRecordNewResponseDSJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseDS]
+type dnsRecordNewResponseDSJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -1100,14 +1187,14 @@ type dnsRecordNewResponseDNSRecordsDSRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsDSRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseDS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordNewResponseDNSRecordsDSRecord) implementsDNSRecordNewResponse() {}
+func (r DNSRecordNewResponseDS) implementsDNSRecordNewResponse() {}
 
 // Components of a DS record.
-type DNSRecordNewResponseDNSRecordsDSRecordData struct {
+type DNSRecordNewResponseDSData struct {
 	// Algorithm.
 	Algorithm float64 `json:"algorithm"`
 	// Digest.
@@ -1115,13 +1202,13 @@ type DNSRecordNewResponseDNSRecordsDSRecordData struct {
 	// Digest Type.
 	DigestType float64 `json:"digest_type"`
 	// Key Tag.
-	KeyTag float64                                        `json:"key_tag"`
-	JSON   dnsRecordNewResponseDNSRecordsDSRecordDataJSON `json:"-"`
+	KeyTag float64                        `json:"key_tag"`
+	JSON   dnsRecordNewResponseDSDataJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsDSRecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordNewResponseDNSRecordsDSRecordData]
-type dnsRecordNewResponseDNSRecordsDSRecordDataJSON struct {
+// dnsRecordNewResponseDSDataJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseDSData]
+type dnsRecordNewResponseDSDataJSON struct {
 	Algorithm   apijson.Field
 	Digest      apijson.Field
 	DigestType  apijson.Field
@@ -1130,37 +1217,37 @@ type dnsRecordNewResponseDNSRecordsDSRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsDSRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseDSData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordNewResponseDNSRecordsDSRecordType string
+type DNSRecordNewResponseDSType string
 
 const (
-	DNSRecordNewResponseDNSRecordsDSRecordTypeDS DNSRecordNewResponseDNSRecordsDSRecordType = "DS"
+	DNSRecordNewResponseDSTypeDS DNSRecordNewResponseDSType = "DS"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordNewResponseDNSRecordsDSRecordMeta struct {
+type DNSRecordNewResponseDSMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                         `json:"source"`
-	JSON   dnsRecordNewResponseDNSRecordsDSRecordMetaJSON `json:"-"`
+	Source string                         `json:"source"`
+	JSON   dnsRecordNewResponseDSMetaJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsDSRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordNewResponseDNSRecordsDSRecordMeta]
-type dnsRecordNewResponseDNSRecordsDSRecordMetaJSON struct {
+// dnsRecordNewResponseDSMetaJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseDSMeta]
+type dnsRecordNewResponseDSMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsDSRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseDSMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1168,15 +1255,14 @@ func (r *DNSRecordNewResponseDNSRecordsDSRecordMeta) UnmarshalJSON(data []byte) 
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordNewResponseDNSRecordsDSRecordTTLNumber].
-type DNSRecordNewResponseDNSRecordsDSRecordTTL interface {
-	ImplementsDNSRecordNewResponseDNSRecordsDSRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordNewResponseDSTTLNumber].
+type DNSRecordNewResponseDSTTL interface {
+	ImplementsDNSRecordNewResponseDsttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordNewResponseDNSRecordsDSRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordNewResponseDSTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -1185,19 +1271,19 @@ func init() {
 	)
 }
 
-type DNSRecordNewResponseDNSRecordsDSRecordTTLNumber float64
+type DNSRecordNewResponseDSTTLNumber float64
 
 const (
-	DNSRecordNewResponseDNSRecordsDSRecordTTLNumber1 DNSRecordNewResponseDNSRecordsDSRecordTTLNumber = 1
+	DNSRecordNewResponseDSTTLNumber1 DNSRecordNewResponseDSTTLNumber = 1
 )
 
-type DNSRecordNewResponseDNSRecordsHTTPSRecord struct {
+type DNSRecordNewResponseHTTPS struct {
 	// Components of a HTTPS record.
-	Data DNSRecordNewResponseDNSRecordsHTTPSRecordData `json:"data,required"`
+	Data DNSRecordNewResponseHTTPSData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordNewResponseDNSRecordsHTTPSRecordType `json:"type,required"`
+	Type DNSRecordNewResponseHTTPSType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -1211,7 +1297,7 @@ type DNSRecordNewResponseDNSRecordsHTTPSRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordNewResponseDNSRecordsHTTPSRecordMeta `json:"meta"`
+	Meta DNSRecordNewResponseHTTPSMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -1221,17 +1307,17 @@ type DNSRecordNewResponseDNSRecordsHTTPSRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordNewResponseDNSRecordsHTTPSRecordTTL `json:"ttl"`
+	TTL DNSRecordNewResponseHTTPSTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                        `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordNewResponseDNSRecordsHTTPSRecordJSON `json:"-"`
+	ZoneName string                        `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordNewResponseHTTPSJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsHTTPSRecordJSON contains the JSON metadata for the
-// struct [DNSRecordNewResponseDNSRecordsHTTPSRecord]
-type dnsRecordNewResponseDNSRecordsHTTPSRecordJSON struct {
+// dnsRecordNewResponseHTTPSJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseHTTPS]
+type dnsRecordNewResponseHTTPSJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -1251,26 +1337,26 @@ type dnsRecordNewResponseDNSRecordsHTTPSRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsHTTPSRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseHTTPS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordNewResponseDNSRecordsHTTPSRecord) implementsDNSRecordNewResponse() {}
+func (r DNSRecordNewResponseHTTPS) implementsDNSRecordNewResponse() {}
 
 // Components of a HTTPS record.
-type DNSRecordNewResponseDNSRecordsHTTPSRecordData struct {
+type DNSRecordNewResponseHTTPSData struct {
 	// priority.
 	Priority float64 `json:"priority"`
 	// target.
 	Target string `json:"target"`
 	// value.
-	Value string                                            `json:"value"`
-	JSON  dnsRecordNewResponseDNSRecordsHTTPSRecordDataJSON `json:"-"`
+	Value string                            `json:"value"`
+	JSON  dnsRecordNewResponseHTTPSDataJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsHTTPSRecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordNewResponseDNSRecordsHTTPSRecordData]
-type dnsRecordNewResponseDNSRecordsHTTPSRecordDataJSON struct {
+// dnsRecordNewResponseHTTPSDataJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseHTTPSData]
+type dnsRecordNewResponseHTTPSDataJSON struct {
 	Priority    apijson.Field
 	Target      apijson.Field
 	Value       apijson.Field
@@ -1278,37 +1364,37 @@ type dnsRecordNewResponseDNSRecordsHTTPSRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsHTTPSRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseHTTPSData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordNewResponseDNSRecordsHTTPSRecordType string
+type DNSRecordNewResponseHTTPSType string
 
 const (
-	DNSRecordNewResponseDNSRecordsHTTPSRecordTypeHTTPS DNSRecordNewResponseDNSRecordsHTTPSRecordType = "HTTPS"
+	DNSRecordNewResponseHTTPSTypeHTTPS DNSRecordNewResponseHTTPSType = "HTTPS"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordNewResponseDNSRecordsHTTPSRecordMeta struct {
+type DNSRecordNewResponseHTTPSMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                            `json:"source"`
-	JSON   dnsRecordNewResponseDNSRecordsHTTPSRecordMetaJSON `json:"-"`
+	Source string                            `json:"source"`
+	JSON   dnsRecordNewResponseHTTPSMetaJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsHTTPSRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordNewResponseDNSRecordsHTTPSRecordMeta]
-type dnsRecordNewResponseDNSRecordsHTTPSRecordMetaJSON struct {
+// dnsRecordNewResponseHTTPSMetaJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseHTTPSMeta]
+type dnsRecordNewResponseHTTPSMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsHTTPSRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseHTTPSMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1316,15 +1402,14 @@ func (r *DNSRecordNewResponseDNSRecordsHTTPSRecordMeta) UnmarshalJSON(data []byt
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordNewResponseDNSRecordsHTTPSRecordTTLNumber].
-type DNSRecordNewResponseDNSRecordsHTTPSRecordTTL interface {
-	ImplementsDNSRecordNewResponseDNSRecordsHTTPSRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordNewResponseHTTPSTTLNumber].
+type DNSRecordNewResponseHTTPSTTL interface {
+	ImplementsDNSRecordNewResponseHttpsttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordNewResponseDNSRecordsHTTPSRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordNewResponseHTTPSTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -1333,19 +1418,19 @@ func init() {
 	)
 }
 
-type DNSRecordNewResponseDNSRecordsHTTPSRecordTTLNumber float64
+type DNSRecordNewResponseHTTPSTTLNumber float64
 
 const (
-	DNSRecordNewResponseDNSRecordsHTTPSRecordTTLNumber1 DNSRecordNewResponseDNSRecordsHTTPSRecordTTLNumber = 1
+	DNSRecordNewResponseHTTPSTTLNumber1 DNSRecordNewResponseHTTPSTTLNumber = 1
 )
 
-type DNSRecordNewResponseDNSRecordsLOCRecord struct {
+type DNSRecordNewResponseLOC struct {
 	// Components of a LOC record.
-	Data DNSRecordNewResponseDNSRecordsLOCRecordData `json:"data,required"`
+	Data DNSRecordNewResponseLOCData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordNewResponseDNSRecordsLOCRecordType `json:"type,required"`
+	Type DNSRecordNewResponseLOCType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -1359,7 +1444,7 @@ type DNSRecordNewResponseDNSRecordsLOCRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordNewResponseDNSRecordsLOCRecordMeta `json:"meta"`
+	Meta DNSRecordNewResponseLOCMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -1369,17 +1454,17 @@ type DNSRecordNewResponseDNSRecordsLOCRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordNewResponseDNSRecordsLOCRecordTTL `json:"ttl"`
+	TTL DNSRecordNewResponseLOCTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                      `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordNewResponseDNSRecordsLOCRecordJSON `json:"-"`
+	ZoneName string                      `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordNewResponseLOCJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsLOCRecordJSON contains the JSON metadata for the
-// struct [DNSRecordNewResponseDNSRecordsLOCRecord]
-type dnsRecordNewResponseDNSRecordsLOCRecordJSON struct {
+// dnsRecordNewResponseLOCJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseLOC]
+type dnsRecordNewResponseLOCJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -1399,20 +1484,20 @@ type dnsRecordNewResponseDNSRecordsLOCRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsLOCRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseLOC) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordNewResponseDNSRecordsLOCRecord) implementsDNSRecordNewResponse() {}
+func (r DNSRecordNewResponseLOC) implementsDNSRecordNewResponse() {}
 
 // Components of a LOC record.
-type DNSRecordNewResponseDNSRecordsLOCRecordData struct {
+type DNSRecordNewResponseLOCData struct {
 	// Altitude of location in meters.
 	Altitude float64 `json:"altitude"`
 	// Degrees of latitude.
 	LatDegrees float64 `json:"lat_degrees"`
 	// Latitude direction.
-	LatDirection DNSRecordNewResponseDNSRecordsLOCRecordDataLatDirection `json:"lat_direction"`
+	LatDirection DNSRecordNewResponseLOCDataLatDirection `json:"lat_direction"`
 	// Minutes of latitude.
 	LatMinutes float64 `json:"lat_minutes"`
 	// Seconds of latitude.
@@ -1420,7 +1505,7 @@ type DNSRecordNewResponseDNSRecordsLOCRecordData struct {
 	// Degrees of longitude.
 	LongDegrees float64 `json:"long_degrees"`
 	// Longitude direction.
-	LongDirection DNSRecordNewResponseDNSRecordsLOCRecordDataLongDirection `json:"long_direction"`
+	LongDirection DNSRecordNewResponseLOCDataLongDirection `json:"long_direction"`
 	// Minutes of longitude.
 	LongMinutes float64 `json:"long_minutes"`
 	// Seconds of longitude.
@@ -1430,13 +1515,13 @@ type DNSRecordNewResponseDNSRecordsLOCRecordData struct {
 	// Vertical precision of location.
 	PrecisionVert float64 `json:"precision_vert"`
 	// Size of location in meters.
-	Size float64                                         `json:"size"`
-	JSON dnsRecordNewResponseDNSRecordsLOCRecordDataJSON `json:"-"`
+	Size float64                         `json:"size"`
+	JSON dnsRecordNewResponseLOCDataJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsLOCRecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordNewResponseDNSRecordsLOCRecordData]
-type dnsRecordNewResponseDNSRecordsLOCRecordDataJSON struct {
+// dnsRecordNewResponseLOCDataJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseLOCData]
+type dnsRecordNewResponseLOCDataJSON struct {
 	Altitude      apijson.Field
 	LatDegrees    apijson.Field
 	LatDirection  apijson.Field
@@ -1453,53 +1538,53 @@ type dnsRecordNewResponseDNSRecordsLOCRecordDataJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsLOCRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseLOCData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Latitude direction.
-type DNSRecordNewResponseDNSRecordsLOCRecordDataLatDirection string
+type DNSRecordNewResponseLOCDataLatDirection string
 
 const (
-	DNSRecordNewResponseDNSRecordsLOCRecordDataLatDirectionN DNSRecordNewResponseDNSRecordsLOCRecordDataLatDirection = "N"
-	DNSRecordNewResponseDNSRecordsLOCRecordDataLatDirectionS DNSRecordNewResponseDNSRecordsLOCRecordDataLatDirection = "S"
+	DNSRecordNewResponseLOCDataLatDirectionN DNSRecordNewResponseLOCDataLatDirection = "N"
+	DNSRecordNewResponseLOCDataLatDirectionS DNSRecordNewResponseLOCDataLatDirection = "S"
 )
 
 // Longitude direction.
-type DNSRecordNewResponseDNSRecordsLOCRecordDataLongDirection string
+type DNSRecordNewResponseLOCDataLongDirection string
 
 const (
-	DNSRecordNewResponseDNSRecordsLOCRecordDataLongDirectionE DNSRecordNewResponseDNSRecordsLOCRecordDataLongDirection = "E"
-	DNSRecordNewResponseDNSRecordsLOCRecordDataLongDirectionW DNSRecordNewResponseDNSRecordsLOCRecordDataLongDirection = "W"
+	DNSRecordNewResponseLOCDataLongDirectionE DNSRecordNewResponseLOCDataLongDirection = "E"
+	DNSRecordNewResponseLOCDataLongDirectionW DNSRecordNewResponseLOCDataLongDirection = "W"
 )
 
 // Record type.
-type DNSRecordNewResponseDNSRecordsLOCRecordType string
+type DNSRecordNewResponseLOCType string
 
 const (
-	DNSRecordNewResponseDNSRecordsLOCRecordTypeLOC DNSRecordNewResponseDNSRecordsLOCRecordType = "LOC"
+	DNSRecordNewResponseLOCTypeLOC DNSRecordNewResponseLOCType = "LOC"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordNewResponseDNSRecordsLOCRecordMeta struct {
+type DNSRecordNewResponseLOCMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                          `json:"source"`
-	JSON   dnsRecordNewResponseDNSRecordsLOCRecordMetaJSON `json:"-"`
+	Source string                          `json:"source"`
+	JSON   dnsRecordNewResponseLOCMetaJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsLOCRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordNewResponseDNSRecordsLOCRecordMeta]
-type dnsRecordNewResponseDNSRecordsLOCRecordMetaJSON struct {
+// dnsRecordNewResponseLOCMetaJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseLOCMeta]
+type dnsRecordNewResponseLOCMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsLOCRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseLOCMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1507,15 +1592,14 @@ func (r *DNSRecordNewResponseDNSRecordsLOCRecordMeta) UnmarshalJSON(data []byte)
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordNewResponseDNSRecordsLOCRecordTTLNumber].
-type DNSRecordNewResponseDNSRecordsLOCRecordTTL interface {
-	ImplementsDNSRecordNewResponseDNSRecordsLOCRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordNewResponseLOCTTLNumber].
+type DNSRecordNewResponseLOCTTL interface {
+	ImplementsDNSRecordNewResponseLocttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordNewResponseDNSRecordsLOCRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordNewResponseLOCTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -1524,13 +1608,13 @@ func init() {
 	)
 }
 
-type DNSRecordNewResponseDNSRecordsLOCRecordTTLNumber float64
+type DNSRecordNewResponseLOCTTLNumber float64
 
 const (
-	DNSRecordNewResponseDNSRecordsLOCRecordTTLNumber1 DNSRecordNewResponseDNSRecordsLOCRecordTTLNumber = 1
+	DNSRecordNewResponseLOCTTLNumber1 DNSRecordNewResponseLOCTTLNumber = 1
 )
 
-type DNSRecordNewResponseDNSRecordsMXRecord struct {
+type DNSRecordNewResponseMX struct {
 	// A valid mail server hostname.
 	Content string `json:"content,required" format:"hostname"`
 	// DNS record name (or @ for the zone apex) in Punycode.
@@ -1539,7 +1623,7 @@ type DNSRecordNewResponseDNSRecordsMXRecord struct {
 	// lower priorities are preferred.
 	Priority float64 `json:"priority,required"`
 	// Record type.
-	Type DNSRecordNewResponseDNSRecordsMXRecordType `json:"type,required"`
+	Type DNSRecordNewResponseMXType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -1551,7 +1635,7 @@ type DNSRecordNewResponseDNSRecordsMXRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordNewResponseDNSRecordsMXRecordMeta `json:"meta"`
+	Meta DNSRecordNewResponseMXMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -1561,17 +1645,17 @@ type DNSRecordNewResponseDNSRecordsMXRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordNewResponseDNSRecordsMXRecordTTL `json:"ttl"`
+	TTL DNSRecordNewResponseMXTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                     `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordNewResponseDNSRecordsMXRecordJSON `json:"-"`
+	ZoneName string                     `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordNewResponseMXJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsMXRecordJSON contains the JSON metadata for the
-// struct [DNSRecordNewResponseDNSRecordsMXRecord]
-type dnsRecordNewResponseDNSRecordsMXRecordJSON struct {
+// dnsRecordNewResponseMXJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseMX]
+type dnsRecordNewResponseMXJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Priority    apijson.Field
@@ -1591,39 +1675,39 @@ type dnsRecordNewResponseDNSRecordsMXRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsMXRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseMX) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordNewResponseDNSRecordsMXRecord) implementsDNSRecordNewResponse() {}
+func (r DNSRecordNewResponseMX) implementsDNSRecordNewResponse() {}
 
 // Record type.
-type DNSRecordNewResponseDNSRecordsMXRecordType string
+type DNSRecordNewResponseMXType string
 
 const (
-	DNSRecordNewResponseDNSRecordsMXRecordTypeMX DNSRecordNewResponseDNSRecordsMXRecordType = "MX"
+	DNSRecordNewResponseMXTypeMX DNSRecordNewResponseMXType = "MX"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordNewResponseDNSRecordsMXRecordMeta struct {
+type DNSRecordNewResponseMXMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                         `json:"source"`
-	JSON   dnsRecordNewResponseDNSRecordsMXRecordMetaJSON `json:"-"`
+	Source string                         `json:"source"`
+	JSON   dnsRecordNewResponseMXMetaJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsMXRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordNewResponseDNSRecordsMXRecordMeta]
-type dnsRecordNewResponseDNSRecordsMXRecordMetaJSON struct {
+// dnsRecordNewResponseMXMetaJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseMXMeta]
+type dnsRecordNewResponseMXMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsMXRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseMXMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1631,15 +1715,14 @@ func (r *DNSRecordNewResponseDNSRecordsMXRecordMeta) UnmarshalJSON(data []byte) 
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordNewResponseDNSRecordsMXRecordTTLNumber].
-type DNSRecordNewResponseDNSRecordsMXRecordTTL interface {
-	ImplementsDNSRecordNewResponseDNSRecordsMXRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordNewResponseMXTTLNumber].
+type DNSRecordNewResponseMXTTL interface {
+	ImplementsDNSRecordNewResponseMxttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordNewResponseDNSRecordsMXRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordNewResponseMXTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -1648,19 +1731,19 @@ func init() {
 	)
 }
 
-type DNSRecordNewResponseDNSRecordsMXRecordTTLNumber float64
+type DNSRecordNewResponseMXTTLNumber float64
 
 const (
-	DNSRecordNewResponseDNSRecordsMXRecordTTLNumber1 DNSRecordNewResponseDNSRecordsMXRecordTTLNumber = 1
+	DNSRecordNewResponseMXTTLNumber1 DNSRecordNewResponseMXTTLNumber = 1
 )
 
-type DNSRecordNewResponseDNSRecordsNAPTRRecord struct {
+type DNSRecordNewResponseNAPTR struct {
 	// Components of a NAPTR record.
-	Data DNSRecordNewResponseDNSRecordsNAPTRRecordData `json:"data,required"`
+	Data DNSRecordNewResponseNAPTRData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordNewResponseDNSRecordsNAPTRRecordType `json:"type,required"`
+	Type DNSRecordNewResponseNAPTRType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -1674,7 +1757,7 @@ type DNSRecordNewResponseDNSRecordsNAPTRRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordNewResponseDNSRecordsNAPTRRecordMeta `json:"meta"`
+	Meta DNSRecordNewResponseNAPTRMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -1684,17 +1767,17 @@ type DNSRecordNewResponseDNSRecordsNAPTRRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordNewResponseDNSRecordsNAPTRRecordTTL `json:"ttl"`
+	TTL DNSRecordNewResponseNAPTRTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                        `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordNewResponseDNSRecordsNAPTRRecordJSON `json:"-"`
+	ZoneName string                        `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordNewResponseNAPTRJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsNAPTRRecordJSON contains the JSON metadata for the
-// struct [DNSRecordNewResponseDNSRecordsNAPTRRecord]
-type dnsRecordNewResponseDNSRecordsNAPTRRecordJSON struct {
+// dnsRecordNewResponseNAPTRJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseNAPTR]
+type dnsRecordNewResponseNAPTRJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -1714,14 +1797,14 @@ type dnsRecordNewResponseDNSRecordsNAPTRRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsNAPTRRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseNAPTR) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordNewResponseDNSRecordsNAPTRRecord) implementsDNSRecordNewResponse() {}
+func (r DNSRecordNewResponseNAPTR) implementsDNSRecordNewResponse() {}
 
 // Components of a NAPTR record.
-type DNSRecordNewResponseDNSRecordsNAPTRRecordData struct {
+type DNSRecordNewResponseNAPTRData struct {
 	// Flags.
 	Flags string `json:"flags"`
 	// Order.
@@ -1733,13 +1816,13 @@ type DNSRecordNewResponseDNSRecordsNAPTRRecordData struct {
 	// Replacement.
 	Replacement string `json:"replacement"`
 	// Service.
-	Service string                                            `json:"service"`
-	JSON    dnsRecordNewResponseDNSRecordsNAPTRRecordDataJSON `json:"-"`
+	Service string                            `json:"service"`
+	JSON    dnsRecordNewResponseNAPTRDataJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsNAPTRRecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordNewResponseDNSRecordsNAPTRRecordData]
-type dnsRecordNewResponseDNSRecordsNAPTRRecordDataJSON struct {
+// dnsRecordNewResponseNAPTRDataJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseNAPTRData]
+type dnsRecordNewResponseNAPTRDataJSON struct {
 	Flags       apijson.Field
 	Order       apijson.Field
 	Preference  apijson.Field
@@ -1750,37 +1833,37 @@ type dnsRecordNewResponseDNSRecordsNAPTRRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsNAPTRRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseNAPTRData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordNewResponseDNSRecordsNAPTRRecordType string
+type DNSRecordNewResponseNAPTRType string
 
 const (
-	DNSRecordNewResponseDNSRecordsNAPTRRecordTypeNAPTR DNSRecordNewResponseDNSRecordsNAPTRRecordType = "NAPTR"
+	DNSRecordNewResponseNAPTRTypeNAPTR DNSRecordNewResponseNAPTRType = "NAPTR"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordNewResponseDNSRecordsNAPTRRecordMeta struct {
+type DNSRecordNewResponseNAPTRMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                            `json:"source"`
-	JSON   dnsRecordNewResponseDNSRecordsNAPTRRecordMetaJSON `json:"-"`
+	Source string                            `json:"source"`
+	JSON   dnsRecordNewResponseNAPTRMetaJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsNAPTRRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordNewResponseDNSRecordsNAPTRRecordMeta]
-type dnsRecordNewResponseDNSRecordsNAPTRRecordMetaJSON struct {
+// dnsRecordNewResponseNAPTRMetaJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseNAPTRMeta]
+type dnsRecordNewResponseNAPTRMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsNAPTRRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseNAPTRMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1788,15 +1871,14 @@ func (r *DNSRecordNewResponseDNSRecordsNAPTRRecordMeta) UnmarshalJSON(data []byt
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordNewResponseDNSRecordsNAPTRRecordTTLNumber].
-type DNSRecordNewResponseDNSRecordsNAPTRRecordTTL interface {
-	ImplementsDNSRecordNewResponseDNSRecordsNAPTRRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordNewResponseNAPTRTTLNumber].
+type DNSRecordNewResponseNAPTRTTL interface {
+	ImplementsDNSRecordNewResponseNaptrttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordNewResponseDNSRecordsNAPTRRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordNewResponseNAPTRTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -1805,19 +1887,19 @@ func init() {
 	)
 }
 
-type DNSRecordNewResponseDNSRecordsNAPTRRecordTTLNumber float64
+type DNSRecordNewResponseNAPTRTTLNumber float64
 
 const (
-	DNSRecordNewResponseDNSRecordsNAPTRRecordTTLNumber1 DNSRecordNewResponseDNSRecordsNAPTRRecordTTLNumber = 1
+	DNSRecordNewResponseNAPTRTTLNumber1 DNSRecordNewResponseNAPTRTTLNumber = 1
 )
 
-type DNSRecordNewResponseDNSRecordsNSRecord struct {
+type DNSRecordNewResponseNS struct {
 	// A valid name server host name.
 	Content interface{} `json:"content,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordNewResponseDNSRecordsNSRecordType `json:"type,required"`
+	Type DNSRecordNewResponseNSType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -1829,7 +1911,7 @@ type DNSRecordNewResponseDNSRecordsNSRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordNewResponseDNSRecordsNSRecordMeta `json:"meta"`
+	Meta DNSRecordNewResponseNSMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -1839,17 +1921,17 @@ type DNSRecordNewResponseDNSRecordsNSRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordNewResponseDNSRecordsNSRecordTTL `json:"ttl"`
+	TTL DNSRecordNewResponseNSTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                     `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordNewResponseDNSRecordsNSRecordJSON `json:"-"`
+	ZoneName string                     `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordNewResponseNSJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsNSRecordJSON contains the JSON metadata for the
-// struct [DNSRecordNewResponseDNSRecordsNSRecord]
-type dnsRecordNewResponseDNSRecordsNSRecordJSON struct {
+// dnsRecordNewResponseNSJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseNS]
+type dnsRecordNewResponseNSJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -1868,39 +1950,39 @@ type dnsRecordNewResponseDNSRecordsNSRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsNSRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseNS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordNewResponseDNSRecordsNSRecord) implementsDNSRecordNewResponse() {}
+func (r DNSRecordNewResponseNS) implementsDNSRecordNewResponse() {}
 
 // Record type.
-type DNSRecordNewResponseDNSRecordsNSRecordType string
+type DNSRecordNewResponseNSType string
 
 const (
-	DNSRecordNewResponseDNSRecordsNSRecordTypeNS DNSRecordNewResponseDNSRecordsNSRecordType = "NS"
+	DNSRecordNewResponseNSTypeNS DNSRecordNewResponseNSType = "NS"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordNewResponseDNSRecordsNSRecordMeta struct {
+type DNSRecordNewResponseNSMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                         `json:"source"`
-	JSON   dnsRecordNewResponseDNSRecordsNSRecordMetaJSON `json:"-"`
+	Source string                         `json:"source"`
+	JSON   dnsRecordNewResponseNSMetaJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsNSRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordNewResponseDNSRecordsNSRecordMeta]
-type dnsRecordNewResponseDNSRecordsNSRecordMetaJSON struct {
+// dnsRecordNewResponseNSMetaJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseNSMeta]
+type dnsRecordNewResponseNSMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsNSRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseNSMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -1908,15 +1990,14 @@ func (r *DNSRecordNewResponseDNSRecordsNSRecordMeta) UnmarshalJSON(data []byte) 
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordNewResponseDNSRecordsNSRecordTTLNumber].
-type DNSRecordNewResponseDNSRecordsNSRecordTTL interface {
-	ImplementsDNSRecordNewResponseDNSRecordsNSRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordNewResponseNSTTLNumber].
+type DNSRecordNewResponseNSTTL interface {
+	ImplementsDNSRecordNewResponseNsttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordNewResponseDNSRecordsNSRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordNewResponseNSTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -1925,19 +2006,19 @@ func init() {
 	)
 }
 
-type DNSRecordNewResponseDNSRecordsNSRecordTTLNumber float64
+type DNSRecordNewResponseNSTTLNumber float64
 
 const (
-	DNSRecordNewResponseDNSRecordsNSRecordTTLNumber1 DNSRecordNewResponseDNSRecordsNSRecordTTLNumber = 1
+	DNSRecordNewResponseNSTTLNumber1 DNSRecordNewResponseNSTTLNumber = 1
 )
 
-type DNSRecordNewResponseDNSRecordsPTRRecord struct {
+type DNSRecordNewResponsePTR struct {
 	// Domain name pointing to the address.
 	Content string `json:"content,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordNewResponseDNSRecordsPTRRecordType `json:"type,required"`
+	Type DNSRecordNewResponsePTRType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -1949,7 +2030,7 @@ type DNSRecordNewResponseDNSRecordsPTRRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordNewResponseDNSRecordsPTRRecordMeta `json:"meta"`
+	Meta DNSRecordNewResponsePTRMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -1959,17 +2040,17 @@ type DNSRecordNewResponseDNSRecordsPTRRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordNewResponseDNSRecordsPTRRecordTTL `json:"ttl"`
+	TTL DNSRecordNewResponsePTRTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                      `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordNewResponseDNSRecordsPTRRecordJSON `json:"-"`
+	ZoneName string                      `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordNewResponsePTRJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsPTRRecordJSON contains the JSON metadata for the
-// struct [DNSRecordNewResponseDNSRecordsPTRRecord]
-type dnsRecordNewResponseDNSRecordsPTRRecordJSON struct {
+// dnsRecordNewResponsePTRJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponsePTR]
+type dnsRecordNewResponsePTRJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -1988,39 +2069,39 @@ type dnsRecordNewResponseDNSRecordsPTRRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsPTRRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponsePTR) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordNewResponseDNSRecordsPTRRecord) implementsDNSRecordNewResponse() {}
+func (r DNSRecordNewResponsePTR) implementsDNSRecordNewResponse() {}
 
 // Record type.
-type DNSRecordNewResponseDNSRecordsPTRRecordType string
+type DNSRecordNewResponsePTRType string
 
 const (
-	DNSRecordNewResponseDNSRecordsPTRRecordTypePTR DNSRecordNewResponseDNSRecordsPTRRecordType = "PTR"
+	DNSRecordNewResponsePTRTypePTR DNSRecordNewResponsePTRType = "PTR"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordNewResponseDNSRecordsPTRRecordMeta struct {
+type DNSRecordNewResponsePTRMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                          `json:"source"`
-	JSON   dnsRecordNewResponseDNSRecordsPTRRecordMetaJSON `json:"-"`
+	Source string                          `json:"source"`
+	JSON   dnsRecordNewResponsePTRMetaJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsPTRRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordNewResponseDNSRecordsPTRRecordMeta]
-type dnsRecordNewResponseDNSRecordsPTRRecordMetaJSON struct {
+// dnsRecordNewResponsePTRMetaJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponsePTRMeta]
+type dnsRecordNewResponsePTRMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsPTRRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponsePTRMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -2028,15 +2109,14 @@ func (r *DNSRecordNewResponseDNSRecordsPTRRecordMeta) UnmarshalJSON(data []byte)
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordNewResponseDNSRecordsPTRRecordTTLNumber].
-type DNSRecordNewResponseDNSRecordsPTRRecordTTL interface {
-	ImplementsDNSRecordNewResponseDNSRecordsPTRRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordNewResponsePTRTTLNumber].
+type DNSRecordNewResponsePTRTTL interface {
+	ImplementsDNSRecordNewResponsePtrttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordNewResponseDNSRecordsPTRRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordNewResponsePTRTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -2045,19 +2125,19 @@ func init() {
 	)
 }
 
-type DNSRecordNewResponseDNSRecordsPTRRecordTTLNumber float64
+type DNSRecordNewResponsePTRTTLNumber float64
 
 const (
-	DNSRecordNewResponseDNSRecordsPTRRecordTTLNumber1 DNSRecordNewResponseDNSRecordsPTRRecordTTLNumber = 1
+	DNSRecordNewResponsePTRTTLNumber1 DNSRecordNewResponsePTRTTLNumber = 1
 )
 
-type DNSRecordNewResponseDNSRecordsSmimeaRecord struct {
+type DNSRecordNewResponseSmimea struct {
 	// Components of a SMIMEA record.
-	Data DNSRecordNewResponseDNSRecordsSmimeaRecordData `json:"data,required"`
+	Data DNSRecordNewResponseSmimeaData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordNewResponseDNSRecordsSmimeaRecordType `json:"type,required"`
+	Type DNSRecordNewResponseSmimeaType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -2071,7 +2151,7 @@ type DNSRecordNewResponseDNSRecordsSmimeaRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordNewResponseDNSRecordsSmimeaRecordMeta `json:"meta"`
+	Meta DNSRecordNewResponseSmimeaMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -2081,17 +2161,17 @@ type DNSRecordNewResponseDNSRecordsSmimeaRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordNewResponseDNSRecordsSmimeaRecordTTL `json:"ttl"`
+	TTL DNSRecordNewResponseSmimeaTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                         `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordNewResponseDNSRecordsSmimeaRecordJSON `json:"-"`
+	ZoneName string                         `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordNewResponseSmimeaJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsSmimeaRecordJSON contains the JSON metadata for
-// the struct [DNSRecordNewResponseDNSRecordsSmimeaRecord]
-type dnsRecordNewResponseDNSRecordsSmimeaRecordJSON struct {
+// dnsRecordNewResponseSmimeaJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseSmimea]
+type dnsRecordNewResponseSmimeaJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -2111,14 +2191,14 @@ type dnsRecordNewResponseDNSRecordsSmimeaRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsSmimeaRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseSmimea) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordNewResponseDNSRecordsSmimeaRecord) implementsDNSRecordNewResponse() {}
+func (r DNSRecordNewResponseSmimea) implementsDNSRecordNewResponse() {}
 
 // Components of a SMIMEA record.
-type DNSRecordNewResponseDNSRecordsSmimeaRecordData struct {
+type DNSRecordNewResponseSmimeaData struct {
 	// Certificate.
 	Certificate string `json:"certificate"`
 	// Matching Type.
@@ -2126,13 +2206,13 @@ type DNSRecordNewResponseDNSRecordsSmimeaRecordData struct {
 	// Selector.
 	Selector float64 `json:"selector"`
 	// Usage.
-	Usage float64                                            `json:"usage"`
-	JSON  dnsRecordNewResponseDNSRecordsSmimeaRecordDataJSON `json:"-"`
+	Usage float64                            `json:"usage"`
+	JSON  dnsRecordNewResponseSmimeaDataJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsSmimeaRecordDataJSON contains the JSON metadata
-// for the struct [DNSRecordNewResponseDNSRecordsSmimeaRecordData]
-type dnsRecordNewResponseDNSRecordsSmimeaRecordDataJSON struct {
+// dnsRecordNewResponseSmimeaDataJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseSmimeaData]
+type dnsRecordNewResponseSmimeaDataJSON struct {
 	Certificate  apijson.Field
 	MatchingType apijson.Field
 	Selector     apijson.Field
@@ -2141,37 +2221,37 @@ type dnsRecordNewResponseDNSRecordsSmimeaRecordDataJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsSmimeaRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseSmimeaData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordNewResponseDNSRecordsSmimeaRecordType string
+type DNSRecordNewResponseSmimeaType string
 
 const (
-	DNSRecordNewResponseDNSRecordsSmimeaRecordTypeSmimea DNSRecordNewResponseDNSRecordsSmimeaRecordType = "SMIMEA"
+	DNSRecordNewResponseSmimeaTypeSmimea DNSRecordNewResponseSmimeaType = "SMIMEA"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordNewResponseDNSRecordsSmimeaRecordMeta struct {
+type DNSRecordNewResponseSmimeaMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                             `json:"source"`
-	JSON   dnsRecordNewResponseDNSRecordsSmimeaRecordMetaJSON `json:"-"`
+	Source string                             `json:"source"`
+	JSON   dnsRecordNewResponseSmimeaMetaJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsSmimeaRecordMetaJSON contains the JSON metadata
-// for the struct [DNSRecordNewResponseDNSRecordsSmimeaRecordMeta]
-type dnsRecordNewResponseDNSRecordsSmimeaRecordMetaJSON struct {
+// dnsRecordNewResponseSmimeaMetaJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseSmimeaMeta]
+type dnsRecordNewResponseSmimeaMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsSmimeaRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseSmimeaMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -2179,15 +2259,14 @@ func (r *DNSRecordNewResponseDNSRecordsSmimeaRecordMeta) UnmarshalJSON(data []by
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordNewResponseDNSRecordsSmimeaRecordTTLNumber].
-type DNSRecordNewResponseDNSRecordsSmimeaRecordTTL interface {
-	ImplementsDNSRecordNewResponseDNSRecordsSmimeaRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordNewResponseSmimeaTTLNumber].
+type DNSRecordNewResponseSmimeaTTL interface {
+	ImplementsDNSRecordNewResponseSmimeaTTL()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordNewResponseDNSRecordsSmimeaRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordNewResponseSmimeaTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -2196,21 +2275,21 @@ func init() {
 	)
 }
 
-type DNSRecordNewResponseDNSRecordsSmimeaRecordTTLNumber float64
+type DNSRecordNewResponseSmimeaTTLNumber float64
 
 const (
-	DNSRecordNewResponseDNSRecordsSmimeaRecordTTLNumber1 DNSRecordNewResponseDNSRecordsSmimeaRecordTTLNumber = 1
+	DNSRecordNewResponseSmimeaTTLNumber1 DNSRecordNewResponseSmimeaTTLNumber = 1
 )
 
-type DNSRecordNewResponseDNSRecordsSRVRecord struct {
+type DNSRecordNewResponseSRV struct {
 	// Components of a SRV record.
-	Data DNSRecordNewResponseDNSRecordsSRVRecordData `json:"data,required"`
+	Data DNSRecordNewResponseSRVData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode. For SRV records, the first
 	// label is normally a service and the second a protocol name, each starting with
 	// an underscore.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordNewResponseDNSRecordsSRVRecordType `json:"type,required"`
+	Type DNSRecordNewResponseSRVType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -2225,7 +2304,7 @@ type DNSRecordNewResponseDNSRecordsSRVRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordNewResponseDNSRecordsSRVRecordMeta `json:"meta"`
+	Meta DNSRecordNewResponseSRVMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -2235,17 +2314,17 @@ type DNSRecordNewResponseDNSRecordsSRVRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordNewResponseDNSRecordsSRVRecordTTL `json:"ttl"`
+	TTL DNSRecordNewResponseSRVTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                      `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordNewResponseDNSRecordsSRVRecordJSON `json:"-"`
+	ZoneName string                      `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordNewResponseSRVJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsSRVRecordJSON contains the JSON metadata for the
-// struct [DNSRecordNewResponseDNSRecordsSRVRecord]
-type dnsRecordNewResponseDNSRecordsSRVRecordJSON struct {
+// dnsRecordNewResponseSRVJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseSRV]
+type dnsRecordNewResponseSRVJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -2265,14 +2344,14 @@ type dnsRecordNewResponseDNSRecordsSRVRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsSRVRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseSRV) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordNewResponseDNSRecordsSRVRecord) implementsDNSRecordNewResponse() {}
+func (r DNSRecordNewResponseSRV) implementsDNSRecordNewResponse() {}
 
 // Components of a SRV record.
-type DNSRecordNewResponseDNSRecordsSRVRecordData struct {
+type DNSRecordNewResponseSRVData struct {
 	// A valid hostname. Deprecated in favor of the regular 'name' outside the data
 	// map. This data map field represents the remainder of the full 'name' after the
 	// service and protocol.
@@ -2293,13 +2372,13 @@ type DNSRecordNewResponseDNSRecordsSRVRecordData struct {
 	// A valid hostname.
 	Target string `json:"target" format:"hostname"`
 	// The record weight.
-	Weight float64                                         `json:"weight"`
-	JSON   dnsRecordNewResponseDNSRecordsSRVRecordDataJSON `json:"-"`
+	Weight float64                         `json:"weight"`
+	JSON   dnsRecordNewResponseSRVDataJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsSRVRecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordNewResponseDNSRecordsSRVRecordData]
-type dnsRecordNewResponseDNSRecordsSRVRecordDataJSON struct {
+// dnsRecordNewResponseSRVDataJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseSRVData]
+type dnsRecordNewResponseSRVDataJSON struct {
 	Name        apijson.Field
 	Port        apijson.Field
 	Priority    apijson.Field
@@ -2311,37 +2390,37 @@ type dnsRecordNewResponseDNSRecordsSRVRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsSRVRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseSRVData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordNewResponseDNSRecordsSRVRecordType string
+type DNSRecordNewResponseSRVType string
 
 const (
-	DNSRecordNewResponseDNSRecordsSRVRecordTypeSRV DNSRecordNewResponseDNSRecordsSRVRecordType = "SRV"
+	DNSRecordNewResponseSRVTypeSRV DNSRecordNewResponseSRVType = "SRV"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordNewResponseDNSRecordsSRVRecordMeta struct {
+type DNSRecordNewResponseSRVMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                          `json:"source"`
-	JSON   dnsRecordNewResponseDNSRecordsSRVRecordMetaJSON `json:"-"`
+	Source string                          `json:"source"`
+	JSON   dnsRecordNewResponseSRVMetaJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsSRVRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordNewResponseDNSRecordsSRVRecordMeta]
-type dnsRecordNewResponseDNSRecordsSRVRecordMetaJSON struct {
+// dnsRecordNewResponseSRVMetaJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseSRVMeta]
+type dnsRecordNewResponseSRVMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsSRVRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseSRVMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -2349,15 +2428,14 @@ func (r *DNSRecordNewResponseDNSRecordsSRVRecordMeta) UnmarshalJSON(data []byte)
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordNewResponseDNSRecordsSRVRecordTTLNumber].
-type DNSRecordNewResponseDNSRecordsSRVRecordTTL interface {
-	ImplementsDNSRecordNewResponseDNSRecordsSRVRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordNewResponseSRVTTLNumber].
+type DNSRecordNewResponseSRVTTL interface {
+	ImplementsDNSRecordNewResponseSrvttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordNewResponseDNSRecordsSRVRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordNewResponseSRVTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -2366,19 +2444,19 @@ func init() {
 	)
 }
 
-type DNSRecordNewResponseDNSRecordsSRVRecordTTLNumber float64
+type DNSRecordNewResponseSRVTTLNumber float64
 
 const (
-	DNSRecordNewResponseDNSRecordsSRVRecordTTLNumber1 DNSRecordNewResponseDNSRecordsSRVRecordTTLNumber = 1
+	DNSRecordNewResponseSRVTTLNumber1 DNSRecordNewResponseSRVTTLNumber = 1
 )
 
-type DNSRecordNewResponseDNSRecordsSSHFPRecord struct {
+type DNSRecordNewResponseSSHFP struct {
 	// Components of a SSHFP record.
-	Data DNSRecordNewResponseDNSRecordsSSHFPRecordData `json:"data,required"`
+	Data DNSRecordNewResponseSSHFPData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordNewResponseDNSRecordsSSHFPRecordType `json:"type,required"`
+	Type DNSRecordNewResponseSSHFPType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -2392,7 +2470,7 @@ type DNSRecordNewResponseDNSRecordsSSHFPRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordNewResponseDNSRecordsSSHFPRecordMeta `json:"meta"`
+	Meta DNSRecordNewResponseSSHFPMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -2402,17 +2480,17 @@ type DNSRecordNewResponseDNSRecordsSSHFPRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordNewResponseDNSRecordsSSHFPRecordTTL `json:"ttl"`
+	TTL DNSRecordNewResponseSSHFPTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                        `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordNewResponseDNSRecordsSSHFPRecordJSON `json:"-"`
+	ZoneName string                        `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordNewResponseSSHFPJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsSSHFPRecordJSON contains the JSON metadata for the
-// struct [DNSRecordNewResponseDNSRecordsSSHFPRecord]
-type dnsRecordNewResponseDNSRecordsSSHFPRecordJSON struct {
+// dnsRecordNewResponseSSHFPJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseSSHFP]
+type dnsRecordNewResponseSSHFPJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -2432,26 +2510,26 @@ type dnsRecordNewResponseDNSRecordsSSHFPRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsSSHFPRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseSSHFP) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordNewResponseDNSRecordsSSHFPRecord) implementsDNSRecordNewResponse() {}
+func (r DNSRecordNewResponseSSHFP) implementsDNSRecordNewResponse() {}
 
 // Components of a SSHFP record.
-type DNSRecordNewResponseDNSRecordsSSHFPRecordData struct {
+type DNSRecordNewResponseSSHFPData struct {
 	// algorithm.
 	Algorithm float64 `json:"algorithm"`
 	// fingerprint.
 	Fingerprint string `json:"fingerprint"`
 	// type.
-	Type float64                                           `json:"type"`
-	JSON dnsRecordNewResponseDNSRecordsSSHFPRecordDataJSON `json:"-"`
+	Type float64                           `json:"type"`
+	JSON dnsRecordNewResponseSSHFPDataJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsSSHFPRecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordNewResponseDNSRecordsSSHFPRecordData]
-type dnsRecordNewResponseDNSRecordsSSHFPRecordDataJSON struct {
+// dnsRecordNewResponseSSHFPDataJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseSSHFPData]
+type dnsRecordNewResponseSSHFPDataJSON struct {
 	Algorithm   apijson.Field
 	Fingerprint apijson.Field
 	Type        apijson.Field
@@ -2459,37 +2537,37 @@ type dnsRecordNewResponseDNSRecordsSSHFPRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsSSHFPRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseSSHFPData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordNewResponseDNSRecordsSSHFPRecordType string
+type DNSRecordNewResponseSSHFPType string
 
 const (
-	DNSRecordNewResponseDNSRecordsSSHFPRecordTypeSSHFP DNSRecordNewResponseDNSRecordsSSHFPRecordType = "SSHFP"
+	DNSRecordNewResponseSSHFPTypeSSHFP DNSRecordNewResponseSSHFPType = "SSHFP"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordNewResponseDNSRecordsSSHFPRecordMeta struct {
+type DNSRecordNewResponseSSHFPMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                            `json:"source"`
-	JSON   dnsRecordNewResponseDNSRecordsSSHFPRecordMetaJSON `json:"-"`
+	Source string                            `json:"source"`
+	JSON   dnsRecordNewResponseSSHFPMetaJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsSSHFPRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordNewResponseDNSRecordsSSHFPRecordMeta]
-type dnsRecordNewResponseDNSRecordsSSHFPRecordMetaJSON struct {
+// dnsRecordNewResponseSSHFPMetaJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseSSHFPMeta]
+type dnsRecordNewResponseSSHFPMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsSSHFPRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseSSHFPMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -2497,15 +2575,14 @@ func (r *DNSRecordNewResponseDNSRecordsSSHFPRecordMeta) UnmarshalJSON(data []byt
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordNewResponseDNSRecordsSSHFPRecordTTLNumber].
-type DNSRecordNewResponseDNSRecordsSSHFPRecordTTL interface {
-	ImplementsDNSRecordNewResponseDNSRecordsSSHFPRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordNewResponseSSHFPTTLNumber].
+type DNSRecordNewResponseSSHFPTTL interface {
+	ImplementsDNSRecordNewResponseSshfpttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordNewResponseDNSRecordsSSHFPRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordNewResponseSSHFPTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -2514,19 +2591,19 @@ func init() {
 	)
 }
 
-type DNSRecordNewResponseDNSRecordsSSHFPRecordTTLNumber float64
+type DNSRecordNewResponseSSHFPTTLNumber float64
 
 const (
-	DNSRecordNewResponseDNSRecordsSSHFPRecordTTLNumber1 DNSRecordNewResponseDNSRecordsSSHFPRecordTTLNumber = 1
+	DNSRecordNewResponseSSHFPTTLNumber1 DNSRecordNewResponseSSHFPTTLNumber = 1
 )
 
-type DNSRecordNewResponseDNSRecordsSVCBRecord struct {
+type DNSRecordNewResponseSVCB struct {
 	// Components of a SVCB record.
-	Data DNSRecordNewResponseDNSRecordsSVCBRecordData `json:"data,required"`
+	Data DNSRecordNewResponseSVCBData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordNewResponseDNSRecordsSVCBRecordType `json:"type,required"`
+	Type DNSRecordNewResponseSVCBType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -2540,7 +2617,7 @@ type DNSRecordNewResponseDNSRecordsSVCBRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordNewResponseDNSRecordsSVCBRecordMeta `json:"meta"`
+	Meta DNSRecordNewResponseSVCBMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -2550,17 +2627,17 @@ type DNSRecordNewResponseDNSRecordsSVCBRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordNewResponseDNSRecordsSVCBRecordTTL `json:"ttl"`
+	TTL DNSRecordNewResponseSVCBTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                       `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordNewResponseDNSRecordsSVCBRecordJSON `json:"-"`
+	ZoneName string                       `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordNewResponseSVCBJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsSVCBRecordJSON contains the JSON metadata for the
-// struct [DNSRecordNewResponseDNSRecordsSVCBRecord]
-type dnsRecordNewResponseDNSRecordsSVCBRecordJSON struct {
+// dnsRecordNewResponseSVCBJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseSVCB]
+type dnsRecordNewResponseSVCBJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -2580,26 +2657,26 @@ type dnsRecordNewResponseDNSRecordsSVCBRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsSVCBRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseSVCB) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordNewResponseDNSRecordsSVCBRecord) implementsDNSRecordNewResponse() {}
+func (r DNSRecordNewResponseSVCB) implementsDNSRecordNewResponse() {}
 
 // Components of a SVCB record.
-type DNSRecordNewResponseDNSRecordsSVCBRecordData struct {
+type DNSRecordNewResponseSVCBData struct {
 	// priority.
 	Priority float64 `json:"priority"`
 	// target.
 	Target string `json:"target"`
 	// value.
-	Value string                                           `json:"value"`
-	JSON  dnsRecordNewResponseDNSRecordsSVCBRecordDataJSON `json:"-"`
+	Value string                           `json:"value"`
+	JSON  dnsRecordNewResponseSVCBDataJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsSVCBRecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordNewResponseDNSRecordsSVCBRecordData]
-type dnsRecordNewResponseDNSRecordsSVCBRecordDataJSON struct {
+// dnsRecordNewResponseSVCBDataJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseSVCBData]
+type dnsRecordNewResponseSVCBDataJSON struct {
 	Priority    apijson.Field
 	Target      apijson.Field
 	Value       apijson.Field
@@ -2607,37 +2684,37 @@ type dnsRecordNewResponseDNSRecordsSVCBRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsSVCBRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseSVCBData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordNewResponseDNSRecordsSVCBRecordType string
+type DNSRecordNewResponseSVCBType string
 
 const (
-	DNSRecordNewResponseDNSRecordsSVCBRecordTypeSVCB DNSRecordNewResponseDNSRecordsSVCBRecordType = "SVCB"
+	DNSRecordNewResponseSVCBTypeSVCB DNSRecordNewResponseSVCBType = "SVCB"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordNewResponseDNSRecordsSVCBRecordMeta struct {
+type DNSRecordNewResponseSVCBMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                           `json:"source"`
-	JSON   dnsRecordNewResponseDNSRecordsSVCBRecordMetaJSON `json:"-"`
+	Source string                           `json:"source"`
+	JSON   dnsRecordNewResponseSVCBMetaJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsSVCBRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordNewResponseDNSRecordsSVCBRecordMeta]
-type dnsRecordNewResponseDNSRecordsSVCBRecordMetaJSON struct {
+// dnsRecordNewResponseSVCBMetaJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseSVCBMeta]
+type dnsRecordNewResponseSVCBMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsSVCBRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseSVCBMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -2645,15 +2722,14 @@ func (r *DNSRecordNewResponseDNSRecordsSVCBRecordMeta) UnmarshalJSON(data []byte
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordNewResponseDNSRecordsSVCBRecordTTLNumber].
-type DNSRecordNewResponseDNSRecordsSVCBRecordTTL interface {
-	ImplementsDNSRecordNewResponseDNSRecordsSVCBRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordNewResponseSVCBTTLNumber].
+type DNSRecordNewResponseSVCBTTL interface {
+	ImplementsDNSRecordNewResponseSvcbttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordNewResponseDNSRecordsSVCBRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordNewResponseSVCBTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -2662,19 +2738,19 @@ func init() {
 	)
 }
 
-type DNSRecordNewResponseDNSRecordsSVCBRecordTTLNumber float64
+type DNSRecordNewResponseSVCBTTLNumber float64
 
 const (
-	DNSRecordNewResponseDNSRecordsSVCBRecordTTLNumber1 DNSRecordNewResponseDNSRecordsSVCBRecordTTLNumber = 1
+	DNSRecordNewResponseSVCBTTLNumber1 DNSRecordNewResponseSVCBTTLNumber = 1
 )
 
-type DNSRecordNewResponseDNSRecordsTLSARecord struct {
+type DNSRecordNewResponseTLSA struct {
 	// Components of a TLSA record.
-	Data DNSRecordNewResponseDNSRecordsTLSARecordData `json:"data,required"`
+	Data DNSRecordNewResponseTLSAData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordNewResponseDNSRecordsTLSARecordType `json:"type,required"`
+	Type DNSRecordNewResponseTLSAType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -2688,7 +2764,7 @@ type DNSRecordNewResponseDNSRecordsTLSARecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordNewResponseDNSRecordsTLSARecordMeta `json:"meta"`
+	Meta DNSRecordNewResponseTLSAMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -2698,17 +2774,17 @@ type DNSRecordNewResponseDNSRecordsTLSARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordNewResponseDNSRecordsTLSARecordTTL `json:"ttl"`
+	TTL DNSRecordNewResponseTLSATTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                       `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordNewResponseDNSRecordsTLSARecordJSON `json:"-"`
+	ZoneName string                       `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordNewResponseTLSAJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsTLSARecordJSON contains the JSON metadata for the
-// struct [DNSRecordNewResponseDNSRecordsTLSARecord]
-type dnsRecordNewResponseDNSRecordsTLSARecordJSON struct {
+// dnsRecordNewResponseTLSAJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseTLSA]
+type dnsRecordNewResponseTLSAJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -2728,14 +2804,14 @@ type dnsRecordNewResponseDNSRecordsTLSARecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsTLSARecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseTLSA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordNewResponseDNSRecordsTLSARecord) implementsDNSRecordNewResponse() {}
+func (r DNSRecordNewResponseTLSA) implementsDNSRecordNewResponse() {}
 
 // Components of a TLSA record.
-type DNSRecordNewResponseDNSRecordsTLSARecordData struct {
+type DNSRecordNewResponseTLSAData struct {
 	// certificate.
 	Certificate string `json:"certificate"`
 	// Matching Type.
@@ -2743,13 +2819,13 @@ type DNSRecordNewResponseDNSRecordsTLSARecordData struct {
 	// Selector.
 	Selector float64 `json:"selector"`
 	// Usage.
-	Usage float64                                          `json:"usage"`
-	JSON  dnsRecordNewResponseDNSRecordsTLSARecordDataJSON `json:"-"`
+	Usage float64                          `json:"usage"`
+	JSON  dnsRecordNewResponseTLSADataJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsTLSARecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordNewResponseDNSRecordsTLSARecordData]
-type dnsRecordNewResponseDNSRecordsTLSARecordDataJSON struct {
+// dnsRecordNewResponseTLSADataJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseTLSAData]
+type dnsRecordNewResponseTLSADataJSON struct {
 	Certificate  apijson.Field
 	MatchingType apijson.Field
 	Selector     apijson.Field
@@ -2758,37 +2834,37 @@ type dnsRecordNewResponseDNSRecordsTLSARecordDataJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsTLSARecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseTLSAData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordNewResponseDNSRecordsTLSARecordType string
+type DNSRecordNewResponseTLSAType string
 
 const (
-	DNSRecordNewResponseDNSRecordsTLSARecordTypeTLSA DNSRecordNewResponseDNSRecordsTLSARecordType = "TLSA"
+	DNSRecordNewResponseTLSATypeTLSA DNSRecordNewResponseTLSAType = "TLSA"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordNewResponseDNSRecordsTLSARecordMeta struct {
+type DNSRecordNewResponseTLSAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                           `json:"source"`
-	JSON   dnsRecordNewResponseDNSRecordsTLSARecordMetaJSON `json:"-"`
+	Source string                           `json:"source"`
+	JSON   dnsRecordNewResponseTLSAMetaJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsTLSARecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordNewResponseDNSRecordsTLSARecordMeta]
-type dnsRecordNewResponseDNSRecordsTLSARecordMetaJSON struct {
+// dnsRecordNewResponseTLSAMetaJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseTLSAMeta]
+type dnsRecordNewResponseTLSAMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsTLSARecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseTLSAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -2796,15 +2872,14 @@ func (r *DNSRecordNewResponseDNSRecordsTLSARecordMeta) UnmarshalJSON(data []byte
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordNewResponseDNSRecordsTLSARecordTTLNumber].
-type DNSRecordNewResponseDNSRecordsTLSARecordTTL interface {
-	ImplementsDNSRecordNewResponseDNSRecordsTLSARecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordNewResponseTLSATTLNumber].
+type DNSRecordNewResponseTLSATTL interface {
+	ImplementsDNSRecordNewResponseTlsattl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordNewResponseDNSRecordsTLSARecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordNewResponseTLSATTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -2813,19 +2888,19 @@ func init() {
 	)
 }
 
-type DNSRecordNewResponseDNSRecordsTLSARecordTTLNumber float64
+type DNSRecordNewResponseTLSATTLNumber float64
 
 const (
-	DNSRecordNewResponseDNSRecordsTLSARecordTTLNumber1 DNSRecordNewResponseDNSRecordsTLSARecordTTLNumber = 1
+	DNSRecordNewResponseTLSATTLNumber1 DNSRecordNewResponseTLSATTLNumber = 1
 )
 
-type DNSRecordNewResponseDNSRecordsTXTRecord struct {
+type DNSRecordNewResponseTXT struct {
 	// Text content for the record.
 	Content string `json:"content,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordNewResponseDNSRecordsTXTRecordType `json:"type,required"`
+	Type DNSRecordNewResponseTXTType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -2837,7 +2912,7 @@ type DNSRecordNewResponseDNSRecordsTXTRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordNewResponseDNSRecordsTXTRecordMeta `json:"meta"`
+	Meta DNSRecordNewResponseTXTMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -2847,17 +2922,17 @@ type DNSRecordNewResponseDNSRecordsTXTRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordNewResponseDNSRecordsTXTRecordTTL `json:"ttl"`
+	TTL DNSRecordNewResponseTXTTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                      `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordNewResponseDNSRecordsTXTRecordJSON `json:"-"`
+	ZoneName string                      `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordNewResponseTXTJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsTXTRecordJSON contains the JSON metadata for the
-// struct [DNSRecordNewResponseDNSRecordsTXTRecord]
-type dnsRecordNewResponseDNSRecordsTXTRecordJSON struct {
+// dnsRecordNewResponseTXTJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseTXT]
+type dnsRecordNewResponseTXTJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -2876,39 +2951,39 @@ type dnsRecordNewResponseDNSRecordsTXTRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsTXTRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseTXT) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordNewResponseDNSRecordsTXTRecord) implementsDNSRecordNewResponse() {}
+func (r DNSRecordNewResponseTXT) implementsDNSRecordNewResponse() {}
 
 // Record type.
-type DNSRecordNewResponseDNSRecordsTXTRecordType string
+type DNSRecordNewResponseTXTType string
 
 const (
-	DNSRecordNewResponseDNSRecordsTXTRecordTypeTXT DNSRecordNewResponseDNSRecordsTXTRecordType = "TXT"
+	DNSRecordNewResponseTXTTypeTXT DNSRecordNewResponseTXTType = "TXT"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordNewResponseDNSRecordsTXTRecordMeta struct {
+type DNSRecordNewResponseTXTMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                          `json:"source"`
-	JSON   dnsRecordNewResponseDNSRecordsTXTRecordMetaJSON `json:"-"`
+	Source string                          `json:"source"`
+	JSON   dnsRecordNewResponseTXTMetaJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsTXTRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordNewResponseDNSRecordsTXTRecordMeta]
-type dnsRecordNewResponseDNSRecordsTXTRecordMetaJSON struct {
+// dnsRecordNewResponseTXTMetaJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseTXTMeta]
+type dnsRecordNewResponseTXTMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsTXTRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseTXTMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -2916,15 +2991,14 @@ func (r *DNSRecordNewResponseDNSRecordsTXTRecordMeta) UnmarshalJSON(data []byte)
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordNewResponseDNSRecordsTXTRecordTTLNumber].
-type DNSRecordNewResponseDNSRecordsTXTRecordTTL interface {
-	ImplementsDNSRecordNewResponseDNSRecordsTXTRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordNewResponseTXTTTLNumber].
+type DNSRecordNewResponseTXTTTL interface {
+	ImplementsDNSRecordNewResponseTxtttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordNewResponseDNSRecordsTXTRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordNewResponseTXTTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -2933,22 +3007,22 @@ func init() {
 	)
 }
 
-type DNSRecordNewResponseDNSRecordsTXTRecordTTLNumber float64
+type DNSRecordNewResponseTXTTTLNumber float64
 
 const (
-	DNSRecordNewResponseDNSRecordsTXTRecordTTLNumber1 DNSRecordNewResponseDNSRecordsTXTRecordTTLNumber = 1
+	DNSRecordNewResponseTXTTTLNumber1 DNSRecordNewResponseTXTTTLNumber = 1
 )
 
-type DNSRecordNewResponseDNSRecordsURIRecord struct {
+type DNSRecordNewResponseURI struct {
 	// Components of a URI record.
-	Data DNSRecordNewResponseDNSRecordsURIRecordData `json:"data,required"`
+	Data DNSRecordNewResponseURIData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
 	Priority float64 `json:"priority,required"`
 	// Record type.
-	Type DNSRecordNewResponseDNSRecordsURIRecordType `json:"type,required"`
+	Type DNSRecordNewResponseURIType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -2962,7 +3036,7 @@ type DNSRecordNewResponseDNSRecordsURIRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordNewResponseDNSRecordsURIRecordMeta `json:"meta"`
+	Meta DNSRecordNewResponseURIMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -2972,17 +3046,17 @@ type DNSRecordNewResponseDNSRecordsURIRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordNewResponseDNSRecordsURIRecordTTL `json:"ttl"`
+	TTL DNSRecordNewResponseURITTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                      `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordNewResponseDNSRecordsURIRecordJSON `json:"-"`
+	ZoneName string                      `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordNewResponseURIJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsURIRecordJSON contains the JSON metadata for the
-// struct [DNSRecordNewResponseDNSRecordsURIRecord]
-type dnsRecordNewResponseDNSRecordsURIRecordJSON struct {
+// dnsRecordNewResponseURIJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseURI]
+type dnsRecordNewResponseURIJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Priority    apijson.Field
@@ -3003,61 +3077,61 @@ type dnsRecordNewResponseDNSRecordsURIRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsURIRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseURI) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordNewResponseDNSRecordsURIRecord) implementsDNSRecordNewResponse() {}
+func (r DNSRecordNewResponseURI) implementsDNSRecordNewResponse() {}
 
 // Components of a URI record.
-type DNSRecordNewResponseDNSRecordsURIRecordData struct {
+type DNSRecordNewResponseURIData struct {
 	// The record content.
 	Content string `json:"content"`
 	// The record weight.
-	Weight float64                                         `json:"weight"`
-	JSON   dnsRecordNewResponseDNSRecordsURIRecordDataJSON `json:"-"`
+	Weight float64                         `json:"weight"`
+	JSON   dnsRecordNewResponseURIDataJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsURIRecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordNewResponseDNSRecordsURIRecordData]
-type dnsRecordNewResponseDNSRecordsURIRecordDataJSON struct {
+// dnsRecordNewResponseURIDataJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseURIData]
+type dnsRecordNewResponseURIDataJSON struct {
 	Content     apijson.Field
 	Weight      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsURIRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseURIData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordNewResponseDNSRecordsURIRecordType string
+type DNSRecordNewResponseURIType string
 
 const (
-	DNSRecordNewResponseDNSRecordsURIRecordTypeURI DNSRecordNewResponseDNSRecordsURIRecordType = "URI"
+	DNSRecordNewResponseURITypeURI DNSRecordNewResponseURIType = "URI"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordNewResponseDNSRecordsURIRecordMeta struct {
+type DNSRecordNewResponseURIMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                          `json:"source"`
-	JSON   dnsRecordNewResponseDNSRecordsURIRecordMetaJSON `json:"-"`
+	Source string                          `json:"source"`
+	JSON   dnsRecordNewResponseURIMetaJSON `json:"-"`
 }
 
-// dnsRecordNewResponseDNSRecordsURIRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordNewResponseDNSRecordsURIRecordMeta]
-type dnsRecordNewResponseDNSRecordsURIRecordMetaJSON struct {
+// dnsRecordNewResponseURIMetaJSON contains the JSON metadata for the struct
+// [DNSRecordNewResponseURIMeta]
+type dnsRecordNewResponseURIMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordNewResponseDNSRecordsURIRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordNewResponseURIMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -3065,15 +3139,14 @@ func (r *DNSRecordNewResponseDNSRecordsURIRecordMeta) UnmarshalJSON(data []byte)
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordNewResponseDNSRecordsURIRecordTTLNumber].
-type DNSRecordNewResponseDNSRecordsURIRecordTTL interface {
-	ImplementsDNSRecordNewResponseDNSRecordsURIRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordNewResponseURITTLNumber].
+type DNSRecordNewResponseURITTL interface {
+	ImplementsDNSRecordNewResponseUrittl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordNewResponseDNSRecordsURIRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordNewResponseURITTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -3082,47 +3155,140 @@ func init() {
 	)
 }
 
-type DNSRecordNewResponseDNSRecordsURIRecordTTLNumber float64
+type DNSRecordNewResponseURITTLNumber float64
 
 const (
-	DNSRecordNewResponseDNSRecordsURIRecordTTLNumber1 DNSRecordNewResponseDNSRecordsURIRecordTTLNumber = 1
+	DNSRecordNewResponseURITTLNumber1 DNSRecordNewResponseURITTLNumber = 1
 )
 
-// Union satisfied by [DNSRecordUpdateResponseDNSRecordsARecord],
-// [DNSRecordUpdateResponseDNSRecordsAAAARecord],
-// [DNSRecordUpdateResponseDNSRecordsCAARecord],
-// [DNSRecordUpdateResponseDNSRecordsCertRecord],
-// [DNSRecordUpdateResponseDNSRecordsCNAMERecord],
-// [DNSRecordUpdateResponseDNSRecordsDNSKEYRecord],
-// [DNSRecordUpdateResponseDNSRecordsDSRecord],
-// [DNSRecordUpdateResponseDNSRecordsHTTPSRecord],
-// [DNSRecordUpdateResponseDNSRecordsLOCRecord],
-// [DNSRecordUpdateResponseDNSRecordsMXRecord],
-// [DNSRecordUpdateResponseDNSRecordsNAPTRRecord],
-// [DNSRecordUpdateResponseDNSRecordsNSRecord],
-// [DNSRecordUpdateResponseDNSRecordsPTRRecord],
-// [DNSRecordUpdateResponseDNSRecordsSmimeaRecord],
-// [DNSRecordUpdateResponseDNSRecordsSRVRecord],
-// [DNSRecordUpdateResponseDNSRecordsSSHFPRecord],
-// [DNSRecordUpdateResponseDNSRecordsSVCBRecord],
-// [DNSRecordUpdateResponseDNSRecordsTLSARecord],
-// [DNSRecordUpdateResponseDNSRecordsTXTRecord] or
-// [DNSRecordUpdateResponseDNSRecordsURIRecord].
+// Union satisfied by [DNSRecordUpdateResponseA], [DNSRecordUpdateResponseAAAA],
+// [DNSRecordUpdateResponseCAA], [DNSRecordUpdateResponseCert],
+// [DNSRecordUpdateResponseCNAME], [DNSRecordUpdateResponseDNSKEY],
+// [DNSRecordUpdateResponseDS], [DNSRecordUpdateResponseHTTPS],
+// [DNSRecordUpdateResponseLOC], [DNSRecordUpdateResponseMX],
+// [DNSRecordUpdateResponseNAPTR], [DNSRecordUpdateResponseNS],
+// [DNSRecordUpdateResponsePTR], [DNSRecordUpdateResponseSmimea],
+// [DNSRecordUpdateResponseSRV], [DNSRecordUpdateResponseSSHFP],
+// [DNSRecordUpdateResponseSVCB], [DNSRecordUpdateResponseTLSA],
+// [DNSRecordUpdateResponseTXT] or [DNSRecordUpdateResponseURI].
 type DNSRecordUpdateResponse interface {
 	implementsDNSRecordUpdateResponse()
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*DNSRecordUpdateResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DNSRecordUpdateResponse)(nil)).Elem(),
+		"type",
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordUpdateResponseA{}),
+			DiscriminatorValue: "A",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordUpdateResponseAAAA{}),
+			DiscriminatorValue: "AAAA",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordUpdateResponseCAA{}),
+			DiscriminatorValue: "CAA",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordUpdateResponseCert{}),
+			DiscriminatorValue: "CERT",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordUpdateResponseCNAME{}),
+			DiscriminatorValue: "CNAME",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordUpdateResponseDNSKEY{}),
+			DiscriminatorValue: "DNSKEY",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordUpdateResponseDS{}),
+			DiscriminatorValue: "DS",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordUpdateResponseHTTPS{}),
+			DiscriminatorValue: "HTTPS",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordUpdateResponseLOC{}),
+			DiscriminatorValue: "LOC",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordUpdateResponseMX{}),
+			DiscriminatorValue: "MX",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordUpdateResponseNAPTR{}),
+			DiscriminatorValue: "NAPTR",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordUpdateResponseNS{}),
+			DiscriminatorValue: "NS",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordUpdateResponsePTR{}),
+			DiscriminatorValue: "PTR",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordUpdateResponseSmimea{}),
+			DiscriminatorValue: "SMIMEA",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordUpdateResponseSRV{}),
+			DiscriminatorValue: "SRV",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordUpdateResponseSSHFP{}),
+			DiscriminatorValue: "SSHFP",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordUpdateResponseSVCB{}),
+			DiscriminatorValue: "SVCB",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordUpdateResponseTLSA{}),
+			DiscriminatorValue: "TLSA",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordUpdateResponseTXT{}),
+			DiscriminatorValue: "TXT",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordUpdateResponseURI{}),
+			DiscriminatorValue: "URI",
+		},
+	)
 }
 
-type DNSRecordUpdateResponseDNSRecordsARecord struct {
+type DNSRecordUpdateResponseA struct {
 	// A valid IPv4 address.
 	Content string `json:"content,required" format:"ipv4"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordUpdateResponseDNSRecordsARecordType `json:"type,required"`
+	Type DNSRecordUpdateResponseAType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -3134,7 +3300,7 @@ type DNSRecordUpdateResponseDNSRecordsARecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordUpdateResponseDNSRecordsARecordMeta `json:"meta"`
+	Meta DNSRecordUpdateResponseAMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -3147,17 +3313,17 @@ type DNSRecordUpdateResponseDNSRecordsARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordUpdateResponseDNSRecordsARecordTTL `json:"ttl"`
+	TTL DNSRecordUpdateResponseATTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                       `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordUpdateResponseDNSRecordsARecordJSON `json:"-"`
+	ZoneName string                       `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordUpdateResponseAJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsARecordJSON contains the JSON metadata for the
-// struct [DNSRecordUpdateResponseDNSRecordsARecord]
-type dnsRecordUpdateResponseDNSRecordsARecordJSON struct {
+// dnsRecordUpdateResponseAJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseA]
+type dnsRecordUpdateResponseAJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -3177,39 +3343,39 @@ type dnsRecordUpdateResponseDNSRecordsARecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsARecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordUpdateResponseDNSRecordsARecord) implementsDNSRecordUpdateResponse() {}
+func (r DNSRecordUpdateResponseA) implementsDNSRecordUpdateResponse() {}
 
 // Record type.
-type DNSRecordUpdateResponseDNSRecordsARecordType string
+type DNSRecordUpdateResponseAType string
 
 const (
-	DNSRecordUpdateResponseDNSRecordsARecordTypeA DNSRecordUpdateResponseDNSRecordsARecordType = "A"
+	DNSRecordUpdateResponseATypeA DNSRecordUpdateResponseAType = "A"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordUpdateResponseDNSRecordsARecordMeta struct {
+type DNSRecordUpdateResponseAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                           `json:"source"`
-	JSON   dnsRecordUpdateResponseDNSRecordsARecordMetaJSON `json:"-"`
+	Source string                           `json:"source"`
+	JSON   dnsRecordUpdateResponseAMetaJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsARecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordUpdateResponseDNSRecordsARecordMeta]
-type dnsRecordUpdateResponseDNSRecordsARecordMetaJSON struct {
+// dnsRecordUpdateResponseAMetaJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseAMeta]
+type dnsRecordUpdateResponseAMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsARecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -3217,15 +3383,14 @@ func (r *DNSRecordUpdateResponseDNSRecordsARecordMeta) UnmarshalJSON(data []byte
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordUpdateResponseDNSRecordsARecordTTLNumber].
-type DNSRecordUpdateResponseDNSRecordsARecordTTL interface {
-	ImplementsDNSRecordUpdateResponseDNSRecordsARecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordUpdateResponseATTLNumber].
+type DNSRecordUpdateResponseATTL interface {
+	ImplementsDNSRecordUpdateResponseAttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordUpdateResponseDNSRecordsARecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordUpdateResponseATTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -3234,19 +3399,19 @@ func init() {
 	)
 }
 
-type DNSRecordUpdateResponseDNSRecordsARecordTTLNumber float64
+type DNSRecordUpdateResponseATTLNumber float64
 
 const (
-	DNSRecordUpdateResponseDNSRecordsARecordTTLNumber1 DNSRecordUpdateResponseDNSRecordsARecordTTLNumber = 1
+	DNSRecordUpdateResponseATTLNumber1 DNSRecordUpdateResponseATTLNumber = 1
 )
 
-type DNSRecordUpdateResponseDNSRecordsAAAARecord struct {
+type DNSRecordUpdateResponseAAAA struct {
 	// A valid IPv6 address.
 	Content string `json:"content,required" format:"ipv6"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordUpdateResponseDNSRecordsAAAARecordType `json:"type,required"`
+	Type DNSRecordUpdateResponseAAAAType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -3258,7 +3423,7 @@ type DNSRecordUpdateResponseDNSRecordsAAAARecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordUpdateResponseDNSRecordsAAAARecordMeta `json:"meta"`
+	Meta DNSRecordUpdateResponseAAAAMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -3271,17 +3436,17 @@ type DNSRecordUpdateResponseDNSRecordsAAAARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordUpdateResponseDNSRecordsAAAARecordTTL `json:"ttl"`
+	TTL DNSRecordUpdateResponseAAAATTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                          `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordUpdateResponseDNSRecordsAAAARecordJSON `json:"-"`
+	ZoneName string                          `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordUpdateResponseAAAAJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsAAAARecordJSON contains the JSON metadata for
-// the struct [DNSRecordUpdateResponseDNSRecordsAAAARecord]
-type dnsRecordUpdateResponseDNSRecordsAAAARecordJSON struct {
+// dnsRecordUpdateResponseAAAAJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseAAAA]
+type dnsRecordUpdateResponseAAAAJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -3301,39 +3466,39 @@ type dnsRecordUpdateResponseDNSRecordsAAAARecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsAAAARecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseAAAA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordUpdateResponseDNSRecordsAAAARecord) implementsDNSRecordUpdateResponse() {}
+func (r DNSRecordUpdateResponseAAAA) implementsDNSRecordUpdateResponse() {}
 
 // Record type.
-type DNSRecordUpdateResponseDNSRecordsAAAARecordType string
+type DNSRecordUpdateResponseAAAAType string
 
 const (
-	DNSRecordUpdateResponseDNSRecordsAAAARecordTypeAAAA DNSRecordUpdateResponseDNSRecordsAAAARecordType = "AAAA"
+	DNSRecordUpdateResponseAAAATypeAAAA DNSRecordUpdateResponseAAAAType = "AAAA"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordUpdateResponseDNSRecordsAAAARecordMeta struct {
+type DNSRecordUpdateResponseAAAAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                              `json:"source"`
-	JSON   dnsRecordUpdateResponseDNSRecordsAAAARecordMetaJSON `json:"-"`
+	Source string                              `json:"source"`
+	JSON   dnsRecordUpdateResponseAAAAMetaJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsAAAARecordMetaJSON contains the JSON metadata
-// for the struct [DNSRecordUpdateResponseDNSRecordsAAAARecordMeta]
-type dnsRecordUpdateResponseDNSRecordsAAAARecordMetaJSON struct {
+// dnsRecordUpdateResponseAAAAMetaJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseAAAAMeta]
+type dnsRecordUpdateResponseAAAAMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsAAAARecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseAAAAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -3342,14 +3507,14 @@ func (r *DNSRecordUpdateResponseDNSRecordsAAAARecordMeta) UnmarshalJSON(data []b
 // Enterprise zones.
 //
 // Union satisfied by [shared.UnionFloat] or
-// [DNSRecordUpdateResponseDNSRecordsAAAARecordTTLNumber].
-type DNSRecordUpdateResponseDNSRecordsAAAARecordTTL interface {
-	ImplementsDNSRecordUpdateResponseDNSRecordsAAAARecordTTL()
+// [DNSRecordUpdateResponseAAAATTLNumber].
+type DNSRecordUpdateResponseAAAATTL interface {
+	ImplementsDNSRecordUpdateResponseAaaattl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordUpdateResponseDNSRecordsAAAARecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordUpdateResponseAAAATTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -3358,19 +3523,19 @@ func init() {
 	)
 }
 
-type DNSRecordUpdateResponseDNSRecordsAAAARecordTTLNumber float64
+type DNSRecordUpdateResponseAAAATTLNumber float64
 
 const (
-	DNSRecordUpdateResponseDNSRecordsAAAARecordTTLNumber1 DNSRecordUpdateResponseDNSRecordsAAAARecordTTLNumber = 1
+	DNSRecordUpdateResponseAAAATTLNumber1 DNSRecordUpdateResponseAAAATTLNumber = 1
 )
 
-type DNSRecordUpdateResponseDNSRecordsCAARecord struct {
+type DNSRecordUpdateResponseCAA struct {
 	// Components of a CAA record.
-	Data DNSRecordUpdateResponseDNSRecordsCAARecordData `json:"data,required"`
+	Data DNSRecordUpdateResponseCAAData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordUpdateResponseDNSRecordsCAARecordType `json:"type,required"`
+	Type DNSRecordUpdateResponseCAAType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -3384,7 +3549,7 @@ type DNSRecordUpdateResponseDNSRecordsCAARecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordUpdateResponseDNSRecordsCAARecordMeta `json:"meta"`
+	Meta DNSRecordUpdateResponseCAAMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -3394,17 +3559,17 @@ type DNSRecordUpdateResponseDNSRecordsCAARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordUpdateResponseDNSRecordsCAARecordTTL `json:"ttl"`
+	TTL DNSRecordUpdateResponseCAATTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                         `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordUpdateResponseDNSRecordsCAARecordJSON `json:"-"`
+	ZoneName string                         `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordUpdateResponseCAAJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsCAARecordJSON contains the JSON metadata for
-// the struct [DNSRecordUpdateResponseDNSRecordsCAARecord]
-type dnsRecordUpdateResponseDNSRecordsCAARecordJSON struct {
+// dnsRecordUpdateResponseCAAJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseCAA]
+type dnsRecordUpdateResponseCAAJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -3424,26 +3589,26 @@ type dnsRecordUpdateResponseDNSRecordsCAARecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsCAARecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseCAA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordUpdateResponseDNSRecordsCAARecord) implementsDNSRecordUpdateResponse() {}
+func (r DNSRecordUpdateResponseCAA) implementsDNSRecordUpdateResponse() {}
 
 // Components of a CAA record.
-type DNSRecordUpdateResponseDNSRecordsCAARecordData struct {
+type DNSRecordUpdateResponseCAAData struct {
 	// Flags for the CAA record.
 	Flags float64 `json:"flags"`
 	// Name of the property controlled by this record (e.g.: issue, issuewild, iodef).
 	Tag string `json:"tag"`
 	// Value of the record. This field's semantics depend on the chosen tag.
-	Value string                                             `json:"value"`
-	JSON  dnsRecordUpdateResponseDNSRecordsCAARecordDataJSON `json:"-"`
+	Value string                             `json:"value"`
+	JSON  dnsRecordUpdateResponseCAADataJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsCAARecordDataJSON contains the JSON metadata
-// for the struct [DNSRecordUpdateResponseDNSRecordsCAARecordData]
-type dnsRecordUpdateResponseDNSRecordsCAARecordDataJSON struct {
+// dnsRecordUpdateResponseCAADataJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseCAAData]
+type dnsRecordUpdateResponseCAADataJSON struct {
 	Flags       apijson.Field
 	Tag         apijson.Field
 	Value       apijson.Field
@@ -3451,37 +3616,37 @@ type dnsRecordUpdateResponseDNSRecordsCAARecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsCAARecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseCAAData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordUpdateResponseDNSRecordsCAARecordType string
+type DNSRecordUpdateResponseCAAType string
 
 const (
-	DNSRecordUpdateResponseDNSRecordsCAARecordTypeCAA DNSRecordUpdateResponseDNSRecordsCAARecordType = "CAA"
+	DNSRecordUpdateResponseCAATypeCAA DNSRecordUpdateResponseCAAType = "CAA"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordUpdateResponseDNSRecordsCAARecordMeta struct {
+type DNSRecordUpdateResponseCAAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                             `json:"source"`
-	JSON   dnsRecordUpdateResponseDNSRecordsCAARecordMetaJSON `json:"-"`
+	Source string                             `json:"source"`
+	JSON   dnsRecordUpdateResponseCAAMetaJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsCAARecordMetaJSON contains the JSON metadata
-// for the struct [DNSRecordUpdateResponseDNSRecordsCAARecordMeta]
-type dnsRecordUpdateResponseDNSRecordsCAARecordMetaJSON struct {
+// dnsRecordUpdateResponseCAAMetaJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseCAAMeta]
+type dnsRecordUpdateResponseCAAMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsCAARecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseCAAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -3489,15 +3654,14 @@ func (r *DNSRecordUpdateResponseDNSRecordsCAARecordMeta) UnmarshalJSON(data []by
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordUpdateResponseDNSRecordsCAARecordTTLNumber].
-type DNSRecordUpdateResponseDNSRecordsCAARecordTTL interface {
-	ImplementsDNSRecordUpdateResponseDNSRecordsCAARecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordUpdateResponseCAATTLNumber].
+type DNSRecordUpdateResponseCAATTL interface {
+	ImplementsDNSRecordUpdateResponseCaattl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordUpdateResponseDNSRecordsCAARecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordUpdateResponseCAATTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -3506,19 +3670,19 @@ func init() {
 	)
 }
 
-type DNSRecordUpdateResponseDNSRecordsCAARecordTTLNumber float64
+type DNSRecordUpdateResponseCAATTLNumber float64
 
 const (
-	DNSRecordUpdateResponseDNSRecordsCAARecordTTLNumber1 DNSRecordUpdateResponseDNSRecordsCAARecordTTLNumber = 1
+	DNSRecordUpdateResponseCAATTLNumber1 DNSRecordUpdateResponseCAATTLNumber = 1
 )
 
-type DNSRecordUpdateResponseDNSRecordsCertRecord struct {
+type DNSRecordUpdateResponseCert struct {
 	// Components of a CERT record.
-	Data DNSRecordUpdateResponseDNSRecordsCertRecordData `json:"data,required"`
+	Data DNSRecordUpdateResponseCertData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordUpdateResponseDNSRecordsCertRecordType `json:"type,required"`
+	Type DNSRecordUpdateResponseCertType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -3532,7 +3696,7 @@ type DNSRecordUpdateResponseDNSRecordsCertRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordUpdateResponseDNSRecordsCertRecordMeta `json:"meta"`
+	Meta DNSRecordUpdateResponseCertMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -3542,17 +3706,17 @@ type DNSRecordUpdateResponseDNSRecordsCertRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordUpdateResponseDNSRecordsCertRecordTTL `json:"ttl"`
+	TTL DNSRecordUpdateResponseCertTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                          `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordUpdateResponseDNSRecordsCertRecordJSON `json:"-"`
+	ZoneName string                          `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordUpdateResponseCertJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsCertRecordJSON contains the JSON metadata for
-// the struct [DNSRecordUpdateResponseDNSRecordsCertRecord]
-type dnsRecordUpdateResponseDNSRecordsCertRecordJSON struct {
+// dnsRecordUpdateResponseCertJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseCert]
+type dnsRecordUpdateResponseCertJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -3572,14 +3736,14 @@ type dnsRecordUpdateResponseDNSRecordsCertRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsCertRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseCert) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordUpdateResponseDNSRecordsCertRecord) implementsDNSRecordUpdateResponse() {}
+func (r DNSRecordUpdateResponseCert) implementsDNSRecordUpdateResponse() {}
 
 // Components of a CERT record.
-type DNSRecordUpdateResponseDNSRecordsCertRecordData struct {
+type DNSRecordUpdateResponseCertData struct {
 	// Algorithm.
 	Algorithm float64 `json:"algorithm"`
 	// Certificate.
@@ -3587,13 +3751,13 @@ type DNSRecordUpdateResponseDNSRecordsCertRecordData struct {
 	// Key Tag.
 	KeyTag float64 `json:"key_tag"`
 	// Type.
-	Type float64                                             `json:"type"`
-	JSON dnsRecordUpdateResponseDNSRecordsCertRecordDataJSON `json:"-"`
+	Type float64                             `json:"type"`
+	JSON dnsRecordUpdateResponseCertDataJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsCertRecordDataJSON contains the JSON metadata
-// for the struct [DNSRecordUpdateResponseDNSRecordsCertRecordData]
-type dnsRecordUpdateResponseDNSRecordsCertRecordDataJSON struct {
+// dnsRecordUpdateResponseCertDataJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseCertData]
+type dnsRecordUpdateResponseCertDataJSON struct {
 	Algorithm   apijson.Field
 	Certificate apijson.Field
 	KeyTag      apijson.Field
@@ -3602,37 +3766,37 @@ type dnsRecordUpdateResponseDNSRecordsCertRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsCertRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseCertData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordUpdateResponseDNSRecordsCertRecordType string
+type DNSRecordUpdateResponseCertType string
 
 const (
-	DNSRecordUpdateResponseDNSRecordsCertRecordTypeCert DNSRecordUpdateResponseDNSRecordsCertRecordType = "CERT"
+	DNSRecordUpdateResponseCertTypeCert DNSRecordUpdateResponseCertType = "CERT"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordUpdateResponseDNSRecordsCertRecordMeta struct {
+type DNSRecordUpdateResponseCertMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                              `json:"source"`
-	JSON   dnsRecordUpdateResponseDNSRecordsCertRecordMetaJSON `json:"-"`
+	Source string                              `json:"source"`
+	JSON   dnsRecordUpdateResponseCertMetaJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsCertRecordMetaJSON contains the JSON metadata
-// for the struct [DNSRecordUpdateResponseDNSRecordsCertRecordMeta]
-type dnsRecordUpdateResponseDNSRecordsCertRecordMetaJSON struct {
+// dnsRecordUpdateResponseCertMetaJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseCertMeta]
+type dnsRecordUpdateResponseCertMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsCertRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseCertMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -3641,14 +3805,14 @@ func (r *DNSRecordUpdateResponseDNSRecordsCertRecordMeta) UnmarshalJSON(data []b
 // Enterprise zones.
 //
 // Union satisfied by [shared.UnionFloat] or
-// [DNSRecordUpdateResponseDNSRecordsCertRecordTTLNumber].
-type DNSRecordUpdateResponseDNSRecordsCertRecordTTL interface {
-	ImplementsDNSRecordUpdateResponseDNSRecordsCertRecordTTL()
+// [DNSRecordUpdateResponseCertTTLNumber].
+type DNSRecordUpdateResponseCertTTL interface {
+	ImplementsDNSRecordUpdateResponseCertTTL()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordUpdateResponseDNSRecordsCertRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordUpdateResponseCertTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -3657,19 +3821,19 @@ func init() {
 	)
 }
 
-type DNSRecordUpdateResponseDNSRecordsCertRecordTTLNumber float64
+type DNSRecordUpdateResponseCertTTLNumber float64
 
 const (
-	DNSRecordUpdateResponseDNSRecordsCertRecordTTLNumber1 DNSRecordUpdateResponseDNSRecordsCertRecordTTLNumber = 1
+	DNSRecordUpdateResponseCertTTLNumber1 DNSRecordUpdateResponseCertTTLNumber = 1
 )
 
-type DNSRecordUpdateResponseDNSRecordsCNAMERecord struct {
+type DNSRecordUpdateResponseCNAME struct {
 	// A valid hostname. Must not match the record's name.
 	Content interface{} `json:"content,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordUpdateResponseDNSRecordsCNAMERecordType `json:"type,required"`
+	Type DNSRecordUpdateResponseCNAMEType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -3681,7 +3845,7 @@ type DNSRecordUpdateResponseDNSRecordsCNAMERecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordUpdateResponseDNSRecordsCNAMERecordMeta `json:"meta"`
+	Meta DNSRecordUpdateResponseCNAMEMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -3694,17 +3858,17 @@ type DNSRecordUpdateResponseDNSRecordsCNAMERecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordUpdateResponseDNSRecordsCNAMERecordTTL `json:"ttl"`
+	TTL DNSRecordUpdateResponseCNAMETTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                           `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordUpdateResponseDNSRecordsCNAMERecordJSON `json:"-"`
+	ZoneName string                           `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordUpdateResponseCNAMEJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsCNAMERecordJSON contains the JSON metadata for
-// the struct [DNSRecordUpdateResponseDNSRecordsCNAMERecord]
-type dnsRecordUpdateResponseDNSRecordsCNAMERecordJSON struct {
+// dnsRecordUpdateResponseCNAMEJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseCNAME]
+type dnsRecordUpdateResponseCNAMEJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -3724,39 +3888,39 @@ type dnsRecordUpdateResponseDNSRecordsCNAMERecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsCNAMERecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseCNAME) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordUpdateResponseDNSRecordsCNAMERecord) implementsDNSRecordUpdateResponse() {}
+func (r DNSRecordUpdateResponseCNAME) implementsDNSRecordUpdateResponse() {}
 
 // Record type.
-type DNSRecordUpdateResponseDNSRecordsCNAMERecordType string
+type DNSRecordUpdateResponseCNAMEType string
 
 const (
-	DNSRecordUpdateResponseDNSRecordsCNAMERecordTypeCNAME DNSRecordUpdateResponseDNSRecordsCNAMERecordType = "CNAME"
+	DNSRecordUpdateResponseCNAMETypeCNAME DNSRecordUpdateResponseCNAMEType = "CNAME"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordUpdateResponseDNSRecordsCNAMERecordMeta struct {
+type DNSRecordUpdateResponseCNAMEMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                               `json:"source"`
-	JSON   dnsRecordUpdateResponseDNSRecordsCNAMERecordMetaJSON `json:"-"`
+	Source string                               `json:"source"`
+	JSON   dnsRecordUpdateResponseCNAMEMetaJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsCNAMERecordMetaJSON contains the JSON metadata
-// for the struct [DNSRecordUpdateResponseDNSRecordsCNAMERecordMeta]
-type dnsRecordUpdateResponseDNSRecordsCNAMERecordMetaJSON struct {
+// dnsRecordUpdateResponseCNAMEMetaJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseCNAMEMeta]
+type dnsRecordUpdateResponseCNAMEMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsCNAMERecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseCNAMEMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -3765,14 +3929,14 @@ func (r *DNSRecordUpdateResponseDNSRecordsCNAMERecordMeta) UnmarshalJSON(data []
 // Enterprise zones.
 //
 // Union satisfied by [shared.UnionFloat] or
-// [DNSRecordUpdateResponseDNSRecordsCNAMERecordTTLNumber].
-type DNSRecordUpdateResponseDNSRecordsCNAMERecordTTL interface {
-	ImplementsDNSRecordUpdateResponseDNSRecordsCNAMERecordTTL()
+// [DNSRecordUpdateResponseCNAMETTLNumber].
+type DNSRecordUpdateResponseCNAMETTL interface {
+	ImplementsDNSRecordUpdateResponseCnamettl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordUpdateResponseDNSRecordsCNAMERecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordUpdateResponseCNAMETTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -3781,19 +3945,19 @@ func init() {
 	)
 }
 
-type DNSRecordUpdateResponseDNSRecordsCNAMERecordTTLNumber float64
+type DNSRecordUpdateResponseCNAMETTLNumber float64
 
 const (
-	DNSRecordUpdateResponseDNSRecordsCNAMERecordTTLNumber1 DNSRecordUpdateResponseDNSRecordsCNAMERecordTTLNumber = 1
+	DNSRecordUpdateResponseCNAMETTLNumber1 DNSRecordUpdateResponseCNAMETTLNumber = 1
 )
 
-type DNSRecordUpdateResponseDNSRecordsDNSKEYRecord struct {
+type DNSRecordUpdateResponseDNSKEY struct {
 	// Components of a DNSKEY record.
-	Data DNSRecordUpdateResponseDNSRecordsDNSKEYRecordData `json:"data,required"`
+	Data DNSRecordUpdateResponseDNSKEYData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordUpdateResponseDNSRecordsDNSKEYRecordType `json:"type,required"`
+	Type DNSRecordUpdateResponseDNSKEYType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -3807,7 +3971,7 @@ type DNSRecordUpdateResponseDNSRecordsDNSKEYRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordUpdateResponseDNSRecordsDNSKEYRecordMeta `json:"meta"`
+	Meta DNSRecordUpdateResponseDNSKEYMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -3817,17 +3981,17 @@ type DNSRecordUpdateResponseDNSRecordsDNSKEYRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordUpdateResponseDNSRecordsDNSKEYRecordTTL `json:"ttl"`
+	TTL DNSRecordUpdateResponseDNSKEYTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                            `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordUpdateResponseDNSRecordsDNSKEYRecordJSON `json:"-"`
+	ZoneName string                            `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordUpdateResponseDNSKEYJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsDNSKEYRecordJSON contains the JSON metadata for
-// the struct [DNSRecordUpdateResponseDNSRecordsDNSKEYRecord]
-type dnsRecordUpdateResponseDNSRecordsDNSKEYRecordJSON struct {
+// dnsRecordUpdateResponseDNSKEYJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseDNSKEY]
+type dnsRecordUpdateResponseDNSKEYJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -3847,14 +4011,14 @@ type dnsRecordUpdateResponseDNSRecordsDNSKEYRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsDNSKEYRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseDNSKEY) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordUpdateResponseDNSRecordsDNSKEYRecord) implementsDNSRecordUpdateResponse() {}
+func (r DNSRecordUpdateResponseDNSKEY) implementsDNSRecordUpdateResponse() {}
 
 // Components of a DNSKEY record.
-type DNSRecordUpdateResponseDNSRecordsDNSKEYRecordData struct {
+type DNSRecordUpdateResponseDNSKEYData struct {
 	// Algorithm.
 	Algorithm float64 `json:"algorithm"`
 	// Flags.
@@ -3862,13 +4026,13 @@ type DNSRecordUpdateResponseDNSRecordsDNSKEYRecordData struct {
 	// Protocol.
 	Protocol float64 `json:"protocol"`
 	// Public Key.
-	PublicKey string                                                `json:"public_key"`
-	JSON      dnsRecordUpdateResponseDNSRecordsDNSKEYRecordDataJSON `json:"-"`
+	PublicKey string                                `json:"public_key"`
+	JSON      dnsRecordUpdateResponseDNSKEYDataJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsDNSKEYRecordDataJSON contains the JSON metadata
-// for the struct [DNSRecordUpdateResponseDNSRecordsDNSKEYRecordData]
-type dnsRecordUpdateResponseDNSRecordsDNSKEYRecordDataJSON struct {
+// dnsRecordUpdateResponseDNSKEYDataJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseDNSKEYData]
+type dnsRecordUpdateResponseDNSKEYDataJSON struct {
 	Algorithm   apijson.Field
 	Flags       apijson.Field
 	Protocol    apijson.Field
@@ -3877,37 +4041,37 @@ type dnsRecordUpdateResponseDNSRecordsDNSKEYRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsDNSKEYRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseDNSKEYData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordUpdateResponseDNSRecordsDNSKEYRecordType string
+type DNSRecordUpdateResponseDNSKEYType string
 
 const (
-	DNSRecordUpdateResponseDNSRecordsDNSKEYRecordTypeDNSKEY DNSRecordUpdateResponseDNSRecordsDNSKEYRecordType = "DNSKEY"
+	DNSRecordUpdateResponseDNSKEYTypeDNSKEY DNSRecordUpdateResponseDNSKEYType = "DNSKEY"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordUpdateResponseDNSRecordsDNSKEYRecordMeta struct {
+type DNSRecordUpdateResponseDNSKEYMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                                `json:"source"`
-	JSON   dnsRecordUpdateResponseDNSRecordsDNSKEYRecordMetaJSON `json:"-"`
+	Source string                                `json:"source"`
+	JSON   dnsRecordUpdateResponseDNSKEYMetaJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsDNSKEYRecordMetaJSON contains the JSON metadata
-// for the struct [DNSRecordUpdateResponseDNSRecordsDNSKEYRecordMeta]
-type dnsRecordUpdateResponseDNSRecordsDNSKEYRecordMetaJSON struct {
+// dnsRecordUpdateResponseDNSKEYMetaJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseDNSKEYMeta]
+type dnsRecordUpdateResponseDNSKEYMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsDNSKEYRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseDNSKEYMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -3916,14 +4080,14 @@ func (r *DNSRecordUpdateResponseDNSRecordsDNSKEYRecordMeta) UnmarshalJSON(data [
 // Enterprise zones.
 //
 // Union satisfied by [shared.UnionFloat] or
-// [DNSRecordUpdateResponseDNSRecordsDNSKEYRecordTTLNumber].
-type DNSRecordUpdateResponseDNSRecordsDNSKEYRecordTTL interface {
-	ImplementsDNSRecordUpdateResponseDNSRecordsDNSKEYRecordTTL()
+// [DNSRecordUpdateResponseDNSKEYTTLNumber].
+type DNSRecordUpdateResponseDNSKEYTTL interface {
+	ImplementsDNSRecordUpdateResponseDnskeyttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordUpdateResponseDNSRecordsDNSKEYRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordUpdateResponseDNSKEYTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -3932,19 +4096,19 @@ func init() {
 	)
 }
 
-type DNSRecordUpdateResponseDNSRecordsDNSKEYRecordTTLNumber float64
+type DNSRecordUpdateResponseDNSKEYTTLNumber float64
 
 const (
-	DNSRecordUpdateResponseDNSRecordsDNSKEYRecordTTLNumber1 DNSRecordUpdateResponseDNSRecordsDNSKEYRecordTTLNumber = 1
+	DNSRecordUpdateResponseDNSKEYTTLNumber1 DNSRecordUpdateResponseDNSKEYTTLNumber = 1
 )
 
-type DNSRecordUpdateResponseDNSRecordsDSRecord struct {
+type DNSRecordUpdateResponseDS struct {
 	// Components of a DS record.
-	Data DNSRecordUpdateResponseDNSRecordsDSRecordData `json:"data,required"`
+	Data DNSRecordUpdateResponseDSData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordUpdateResponseDNSRecordsDSRecordType `json:"type,required"`
+	Type DNSRecordUpdateResponseDSType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -3958,7 +4122,7 @@ type DNSRecordUpdateResponseDNSRecordsDSRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordUpdateResponseDNSRecordsDSRecordMeta `json:"meta"`
+	Meta DNSRecordUpdateResponseDSMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -3968,17 +4132,17 @@ type DNSRecordUpdateResponseDNSRecordsDSRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordUpdateResponseDNSRecordsDSRecordTTL `json:"ttl"`
+	TTL DNSRecordUpdateResponseDSTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                        `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordUpdateResponseDNSRecordsDSRecordJSON `json:"-"`
+	ZoneName string                        `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordUpdateResponseDSJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsDSRecordJSON contains the JSON metadata for the
-// struct [DNSRecordUpdateResponseDNSRecordsDSRecord]
-type dnsRecordUpdateResponseDNSRecordsDSRecordJSON struct {
+// dnsRecordUpdateResponseDSJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseDS]
+type dnsRecordUpdateResponseDSJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -3998,14 +4162,14 @@ type dnsRecordUpdateResponseDNSRecordsDSRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsDSRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseDS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordUpdateResponseDNSRecordsDSRecord) implementsDNSRecordUpdateResponse() {}
+func (r DNSRecordUpdateResponseDS) implementsDNSRecordUpdateResponse() {}
 
 // Components of a DS record.
-type DNSRecordUpdateResponseDNSRecordsDSRecordData struct {
+type DNSRecordUpdateResponseDSData struct {
 	// Algorithm.
 	Algorithm float64 `json:"algorithm"`
 	// Digest.
@@ -4013,13 +4177,13 @@ type DNSRecordUpdateResponseDNSRecordsDSRecordData struct {
 	// Digest Type.
 	DigestType float64 `json:"digest_type"`
 	// Key Tag.
-	KeyTag float64                                           `json:"key_tag"`
-	JSON   dnsRecordUpdateResponseDNSRecordsDSRecordDataJSON `json:"-"`
+	KeyTag float64                           `json:"key_tag"`
+	JSON   dnsRecordUpdateResponseDSDataJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsDSRecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordUpdateResponseDNSRecordsDSRecordData]
-type dnsRecordUpdateResponseDNSRecordsDSRecordDataJSON struct {
+// dnsRecordUpdateResponseDSDataJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseDSData]
+type dnsRecordUpdateResponseDSDataJSON struct {
 	Algorithm   apijson.Field
 	Digest      apijson.Field
 	DigestType  apijson.Field
@@ -4028,37 +4192,37 @@ type dnsRecordUpdateResponseDNSRecordsDSRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsDSRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseDSData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordUpdateResponseDNSRecordsDSRecordType string
+type DNSRecordUpdateResponseDSType string
 
 const (
-	DNSRecordUpdateResponseDNSRecordsDSRecordTypeDS DNSRecordUpdateResponseDNSRecordsDSRecordType = "DS"
+	DNSRecordUpdateResponseDSTypeDS DNSRecordUpdateResponseDSType = "DS"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordUpdateResponseDNSRecordsDSRecordMeta struct {
+type DNSRecordUpdateResponseDSMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                            `json:"source"`
-	JSON   dnsRecordUpdateResponseDNSRecordsDSRecordMetaJSON `json:"-"`
+	Source string                            `json:"source"`
+	JSON   dnsRecordUpdateResponseDSMetaJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsDSRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordUpdateResponseDNSRecordsDSRecordMeta]
-type dnsRecordUpdateResponseDNSRecordsDSRecordMetaJSON struct {
+// dnsRecordUpdateResponseDSMetaJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseDSMeta]
+type dnsRecordUpdateResponseDSMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsDSRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseDSMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -4066,15 +4230,14 @@ func (r *DNSRecordUpdateResponseDNSRecordsDSRecordMeta) UnmarshalJSON(data []byt
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordUpdateResponseDNSRecordsDSRecordTTLNumber].
-type DNSRecordUpdateResponseDNSRecordsDSRecordTTL interface {
-	ImplementsDNSRecordUpdateResponseDNSRecordsDSRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordUpdateResponseDSTTLNumber].
+type DNSRecordUpdateResponseDSTTL interface {
+	ImplementsDNSRecordUpdateResponseDsttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordUpdateResponseDNSRecordsDSRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordUpdateResponseDSTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -4083,19 +4246,19 @@ func init() {
 	)
 }
 
-type DNSRecordUpdateResponseDNSRecordsDSRecordTTLNumber float64
+type DNSRecordUpdateResponseDSTTLNumber float64
 
 const (
-	DNSRecordUpdateResponseDNSRecordsDSRecordTTLNumber1 DNSRecordUpdateResponseDNSRecordsDSRecordTTLNumber = 1
+	DNSRecordUpdateResponseDSTTLNumber1 DNSRecordUpdateResponseDSTTLNumber = 1
 )
 
-type DNSRecordUpdateResponseDNSRecordsHTTPSRecord struct {
+type DNSRecordUpdateResponseHTTPS struct {
 	// Components of a HTTPS record.
-	Data DNSRecordUpdateResponseDNSRecordsHTTPSRecordData `json:"data,required"`
+	Data DNSRecordUpdateResponseHTTPSData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordUpdateResponseDNSRecordsHTTPSRecordType `json:"type,required"`
+	Type DNSRecordUpdateResponseHTTPSType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -4109,7 +4272,7 @@ type DNSRecordUpdateResponseDNSRecordsHTTPSRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordUpdateResponseDNSRecordsHTTPSRecordMeta `json:"meta"`
+	Meta DNSRecordUpdateResponseHTTPSMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -4119,17 +4282,17 @@ type DNSRecordUpdateResponseDNSRecordsHTTPSRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordUpdateResponseDNSRecordsHTTPSRecordTTL `json:"ttl"`
+	TTL DNSRecordUpdateResponseHTTPSTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                           `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordUpdateResponseDNSRecordsHTTPSRecordJSON `json:"-"`
+	ZoneName string                           `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordUpdateResponseHTTPSJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsHTTPSRecordJSON contains the JSON metadata for
-// the struct [DNSRecordUpdateResponseDNSRecordsHTTPSRecord]
-type dnsRecordUpdateResponseDNSRecordsHTTPSRecordJSON struct {
+// dnsRecordUpdateResponseHTTPSJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseHTTPS]
+type dnsRecordUpdateResponseHTTPSJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -4149,26 +4312,26 @@ type dnsRecordUpdateResponseDNSRecordsHTTPSRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsHTTPSRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseHTTPS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordUpdateResponseDNSRecordsHTTPSRecord) implementsDNSRecordUpdateResponse() {}
+func (r DNSRecordUpdateResponseHTTPS) implementsDNSRecordUpdateResponse() {}
 
 // Components of a HTTPS record.
-type DNSRecordUpdateResponseDNSRecordsHTTPSRecordData struct {
+type DNSRecordUpdateResponseHTTPSData struct {
 	// priority.
 	Priority float64 `json:"priority"`
 	// target.
 	Target string `json:"target"`
 	// value.
-	Value string                                               `json:"value"`
-	JSON  dnsRecordUpdateResponseDNSRecordsHTTPSRecordDataJSON `json:"-"`
+	Value string                               `json:"value"`
+	JSON  dnsRecordUpdateResponseHTTPSDataJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsHTTPSRecordDataJSON contains the JSON metadata
-// for the struct [DNSRecordUpdateResponseDNSRecordsHTTPSRecordData]
-type dnsRecordUpdateResponseDNSRecordsHTTPSRecordDataJSON struct {
+// dnsRecordUpdateResponseHTTPSDataJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseHTTPSData]
+type dnsRecordUpdateResponseHTTPSDataJSON struct {
 	Priority    apijson.Field
 	Target      apijson.Field
 	Value       apijson.Field
@@ -4176,37 +4339,37 @@ type dnsRecordUpdateResponseDNSRecordsHTTPSRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsHTTPSRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseHTTPSData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordUpdateResponseDNSRecordsHTTPSRecordType string
+type DNSRecordUpdateResponseHTTPSType string
 
 const (
-	DNSRecordUpdateResponseDNSRecordsHTTPSRecordTypeHTTPS DNSRecordUpdateResponseDNSRecordsHTTPSRecordType = "HTTPS"
+	DNSRecordUpdateResponseHTTPSTypeHTTPS DNSRecordUpdateResponseHTTPSType = "HTTPS"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordUpdateResponseDNSRecordsHTTPSRecordMeta struct {
+type DNSRecordUpdateResponseHTTPSMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                               `json:"source"`
-	JSON   dnsRecordUpdateResponseDNSRecordsHTTPSRecordMetaJSON `json:"-"`
+	Source string                               `json:"source"`
+	JSON   dnsRecordUpdateResponseHTTPSMetaJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsHTTPSRecordMetaJSON contains the JSON metadata
-// for the struct [DNSRecordUpdateResponseDNSRecordsHTTPSRecordMeta]
-type dnsRecordUpdateResponseDNSRecordsHTTPSRecordMetaJSON struct {
+// dnsRecordUpdateResponseHTTPSMetaJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseHTTPSMeta]
+type dnsRecordUpdateResponseHTTPSMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsHTTPSRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseHTTPSMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -4215,14 +4378,14 @@ func (r *DNSRecordUpdateResponseDNSRecordsHTTPSRecordMeta) UnmarshalJSON(data []
 // Enterprise zones.
 //
 // Union satisfied by [shared.UnionFloat] or
-// [DNSRecordUpdateResponseDNSRecordsHTTPSRecordTTLNumber].
-type DNSRecordUpdateResponseDNSRecordsHTTPSRecordTTL interface {
-	ImplementsDNSRecordUpdateResponseDNSRecordsHTTPSRecordTTL()
+// [DNSRecordUpdateResponseHTTPSTTLNumber].
+type DNSRecordUpdateResponseHTTPSTTL interface {
+	ImplementsDNSRecordUpdateResponseHttpsttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordUpdateResponseDNSRecordsHTTPSRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordUpdateResponseHTTPSTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -4231,19 +4394,19 @@ func init() {
 	)
 }
 
-type DNSRecordUpdateResponseDNSRecordsHTTPSRecordTTLNumber float64
+type DNSRecordUpdateResponseHTTPSTTLNumber float64
 
 const (
-	DNSRecordUpdateResponseDNSRecordsHTTPSRecordTTLNumber1 DNSRecordUpdateResponseDNSRecordsHTTPSRecordTTLNumber = 1
+	DNSRecordUpdateResponseHTTPSTTLNumber1 DNSRecordUpdateResponseHTTPSTTLNumber = 1
 )
 
-type DNSRecordUpdateResponseDNSRecordsLOCRecord struct {
+type DNSRecordUpdateResponseLOC struct {
 	// Components of a LOC record.
-	Data DNSRecordUpdateResponseDNSRecordsLOCRecordData `json:"data,required"`
+	Data DNSRecordUpdateResponseLOCData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordUpdateResponseDNSRecordsLOCRecordType `json:"type,required"`
+	Type DNSRecordUpdateResponseLOCType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -4257,7 +4420,7 @@ type DNSRecordUpdateResponseDNSRecordsLOCRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordUpdateResponseDNSRecordsLOCRecordMeta `json:"meta"`
+	Meta DNSRecordUpdateResponseLOCMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -4267,17 +4430,17 @@ type DNSRecordUpdateResponseDNSRecordsLOCRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordUpdateResponseDNSRecordsLOCRecordTTL `json:"ttl"`
+	TTL DNSRecordUpdateResponseLOCTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                         `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordUpdateResponseDNSRecordsLOCRecordJSON `json:"-"`
+	ZoneName string                         `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordUpdateResponseLOCJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsLOCRecordJSON contains the JSON metadata for
-// the struct [DNSRecordUpdateResponseDNSRecordsLOCRecord]
-type dnsRecordUpdateResponseDNSRecordsLOCRecordJSON struct {
+// dnsRecordUpdateResponseLOCJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseLOC]
+type dnsRecordUpdateResponseLOCJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -4297,20 +4460,20 @@ type dnsRecordUpdateResponseDNSRecordsLOCRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsLOCRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseLOC) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordUpdateResponseDNSRecordsLOCRecord) implementsDNSRecordUpdateResponse() {}
+func (r DNSRecordUpdateResponseLOC) implementsDNSRecordUpdateResponse() {}
 
 // Components of a LOC record.
-type DNSRecordUpdateResponseDNSRecordsLOCRecordData struct {
+type DNSRecordUpdateResponseLOCData struct {
 	// Altitude of location in meters.
 	Altitude float64 `json:"altitude"`
 	// Degrees of latitude.
 	LatDegrees float64 `json:"lat_degrees"`
 	// Latitude direction.
-	LatDirection DNSRecordUpdateResponseDNSRecordsLOCRecordDataLatDirection `json:"lat_direction"`
+	LatDirection DNSRecordUpdateResponseLOCDataLatDirection `json:"lat_direction"`
 	// Minutes of latitude.
 	LatMinutes float64 `json:"lat_minutes"`
 	// Seconds of latitude.
@@ -4318,7 +4481,7 @@ type DNSRecordUpdateResponseDNSRecordsLOCRecordData struct {
 	// Degrees of longitude.
 	LongDegrees float64 `json:"long_degrees"`
 	// Longitude direction.
-	LongDirection DNSRecordUpdateResponseDNSRecordsLOCRecordDataLongDirection `json:"long_direction"`
+	LongDirection DNSRecordUpdateResponseLOCDataLongDirection `json:"long_direction"`
 	// Minutes of longitude.
 	LongMinutes float64 `json:"long_minutes"`
 	// Seconds of longitude.
@@ -4328,13 +4491,13 @@ type DNSRecordUpdateResponseDNSRecordsLOCRecordData struct {
 	// Vertical precision of location.
 	PrecisionVert float64 `json:"precision_vert"`
 	// Size of location in meters.
-	Size float64                                            `json:"size"`
-	JSON dnsRecordUpdateResponseDNSRecordsLOCRecordDataJSON `json:"-"`
+	Size float64                            `json:"size"`
+	JSON dnsRecordUpdateResponseLOCDataJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsLOCRecordDataJSON contains the JSON metadata
-// for the struct [DNSRecordUpdateResponseDNSRecordsLOCRecordData]
-type dnsRecordUpdateResponseDNSRecordsLOCRecordDataJSON struct {
+// dnsRecordUpdateResponseLOCDataJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseLOCData]
+type dnsRecordUpdateResponseLOCDataJSON struct {
 	Altitude      apijson.Field
 	LatDegrees    apijson.Field
 	LatDirection  apijson.Field
@@ -4351,53 +4514,53 @@ type dnsRecordUpdateResponseDNSRecordsLOCRecordDataJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsLOCRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseLOCData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Latitude direction.
-type DNSRecordUpdateResponseDNSRecordsLOCRecordDataLatDirection string
+type DNSRecordUpdateResponseLOCDataLatDirection string
 
 const (
-	DNSRecordUpdateResponseDNSRecordsLOCRecordDataLatDirectionN DNSRecordUpdateResponseDNSRecordsLOCRecordDataLatDirection = "N"
-	DNSRecordUpdateResponseDNSRecordsLOCRecordDataLatDirectionS DNSRecordUpdateResponseDNSRecordsLOCRecordDataLatDirection = "S"
+	DNSRecordUpdateResponseLOCDataLatDirectionN DNSRecordUpdateResponseLOCDataLatDirection = "N"
+	DNSRecordUpdateResponseLOCDataLatDirectionS DNSRecordUpdateResponseLOCDataLatDirection = "S"
 )
 
 // Longitude direction.
-type DNSRecordUpdateResponseDNSRecordsLOCRecordDataLongDirection string
+type DNSRecordUpdateResponseLOCDataLongDirection string
 
 const (
-	DNSRecordUpdateResponseDNSRecordsLOCRecordDataLongDirectionE DNSRecordUpdateResponseDNSRecordsLOCRecordDataLongDirection = "E"
-	DNSRecordUpdateResponseDNSRecordsLOCRecordDataLongDirectionW DNSRecordUpdateResponseDNSRecordsLOCRecordDataLongDirection = "W"
+	DNSRecordUpdateResponseLOCDataLongDirectionE DNSRecordUpdateResponseLOCDataLongDirection = "E"
+	DNSRecordUpdateResponseLOCDataLongDirectionW DNSRecordUpdateResponseLOCDataLongDirection = "W"
 )
 
 // Record type.
-type DNSRecordUpdateResponseDNSRecordsLOCRecordType string
+type DNSRecordUpdateResponseLOCType string
 
 const (
-	DNSRecordUpdateResponseDNSRecordsLOCRecordTypeLOC DNSRecordUpdateResponseDNSRecordsLOCRecordType = "LOC"
+	DNSRecordUpdateResponseLOCTypeLOC DNSRecordUpdateResponseLOCType = "LOC"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordUpdateResponseDNSRecordsLOCRecordMeta struct {
+type DNSRecordUpdateResponseLOCMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                             `json:"source"`
-	JSON   dnsRecordUpdateResponseDNSRecordsLOCRecordMetaJSON `json:"-"`
+	Source string                             `json:"source"`
+	JSON   dnsRecordUpdateResponseLOCMetaJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsLOCRecordMetaJSON contains the JSON metadata
-// for the struct [DNSRecordUpdateResponseDNSRecordsLOCRecordMeta]
-type dnsRecordUpdateResponseDNSRecordsLOCRecordMetaJSON struct {
+// dnsRecordUpdateResponseLOCMetaJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseLOCMeta]
+type dnsRecordUpdateResponseLOCMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsLOCRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseLOCMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -4405,15 +4568,14 @@ func (r *DNSRecordUpdateResponseDNSRecordsLOCRecordMeta) UnmarshalJSON(data []by
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordUpdateResponseDNSRecordsLOCRecordTTLNumber].
-type DNSRecordUpdateResponseDNSRecordsLOCRecordTTL interface {
-	ImplementsDNSRecordUpdateResponseDNSRecordsLOCRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordUpdateResponseLOCTTLNumber].
+type DNSRecordUpdateResponseLOCTTL interface {
+	ImplementsDNSRecordUpdateResponseLocttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordUpdateResponseDNSRecordsLOCRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordUpdateResponseLOCTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -4422,13 +4584,13 @@ func init() {
 	)
 }
 
-type DNSRecordUpdateResponseDNSRecordsLOCRecordTTLNumber float64
+type DNSRecordUpdateResponseLOCTTLNumber float64
 
 const (
-	DNSRecordUpdateResponseDNSRecordsLOCRecordTTLNumber1 DNSRecordUpdateResponseDNSRecordsLOCRecordTTLNumber = 1
+	DNSRecordUpdateResponseLOCTTLNumber1 DNSRecordUpdateResponseLOCTTLNumber = 1
 )
 
-type DNSRecordUpdateResponseDNSRecordsMXRecord struct {
+type DNSRecordUpdateResponseMX struct {
 	// A valid mail server hostname.
 	Content string `json:"content,required" format:"hostname"`
 	// DNS record name (or @ for the zone apex) in Punycode.
@@ -4437,7 +4599,7 @@ type DNSRecordUpdateResponseDNSRecordsMXRecord struct {
 	// lower priorities are preferred.
 	Priority float64 `json:"priority,required"`
 	// Record type.
-	Type DNSRecordUpdateResponseDNSRecordsMXRecordType `json:"type,required"`
+	Type DNSRecordUpdateResponseMXType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -4449,7 +4611,7 @@ type DNSRecordUpdateResponseDNSRecordsMXRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordUpdateResponseDNSRecordsMXRecordMeta `json:"meta"`
+	Meta DNSRecordUpdateResponseMXMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -4459,17 +4621,17 @@ type DNSRecordUpdateResponseDNSRecordsMXRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordUpdateResponseDNSRecordsMXRecordTTL `json:"ttl"`
+	TTL DNSRecordUpdateResponseMXTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                        `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordUpdateResponseDNSRecordsMXRecordJSON `json:"-"`
+	ZoneName string                        `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordUpdateResponseMXJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsMXRecordJSON contains the JSON metadata for the
-// struct [DNSRecordUpdateResponseDNSRecordsMXRecord]
-type dnsRecordUpdateResponseDNSRecordsMXRecordJSON struct {
+// dnsRecordUpdateResponseMXJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseMX]
+type dnsRecordUpdateResponseMXJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Priority    apijson.Field
@@ -4489,39 +4651,39 @@ type dnsRecordUpdateResponseDNSRecordsMXRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsMXRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseMX) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordUpdateResponseDNSRecordsMXRecord) implementsDNSRecordUpdateResponse() {}
+func (r DNSRecordUpdateResponseMX) implementsDNSRecordUpdateResponse() {}
 
 // Record type.
-type DNSRecordUpdateResponseDNSRecordsMXRecordType string
+type DNSRecordUpdateResponseMXType string
 
 const (
-	DNSRecordUpdateResponseDNSRecordsMXRecordTypeMX DNSRecordUpdateResponseDNSRecordsMXRecordType = "MX"
+	DNSRecordUpdateResponseMXTypeMX DNSRecordUpdateResponseMXType = "MX"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordUpdateResponseDNSRecordsMXRecordMeta struct {
+type DNSRecordUpdateResponseMXMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                            `json:"source"`
-	JSON   dnsRecordUpdateResponseDNSRecordsMXRecordMetaJSON `json:"-"`
+	Source string                            `json:"source"`
+	JSON   dnsRecordUpdateResponseMXMetaJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsMXRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordUpdateResponseDNSRecordsMXRecordMeta]
-type dnsRecordUpdateResponseDNSRecordsMXRecordMetaJSON struct {
+// dnsRecordUpdateResponseMXMetaJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseMXMeta]
+type dnsRecordUpdateResponseMXMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsMXRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseMXMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -4529,15 +4691,14 @@ func (r *DNSRecordUpdateResponseDNSRecordsMXRecordMeta) UnmarshalJSON(data []byt
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordUpdateResponseDNSRecordsMXRecordTTLNumber].
-type DNSRecordUpdateResponseDNSRecordsMXRecordTTL interface {
-	ImplementsDNSRecordUpdateResponseDNSRecordsMXRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordUpdateResponseMXTTLNumber].
+type DNSRecordUpdateResponseMXTTL interface {
+	ImplementsDNSRecordUpdateResponseMxttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordUpdateResponseDNSRecordsMXRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordUpdateResponseMXTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -4546,19 +4707,19 @@ func init() {
 	)
 }
 
-type DNSRecordUpdateResponseDNSRecordsMXRecordTTLNumber float64
+type DNSRecordUpdateResponseMXTTLNumber float64
 
 const (
-	DNSRecordUpdateResponseDNSRecordsMXRecordTTLNumber1 DNSRecordUpdateResponseDNSRecordsMXRecordTTLNumber = 1
+	DNSRecordUpdateResponseMXTTLNumber1 DNSRecordUpdateResponseMXTTLNumber = 1
 )
 
-type DNSRecordUpdateResponseDNSRecordsNAPTRRecord struct {
+type DNSRecordUpdateResponseNAPTR struct {
 	// Components of a NAPTR record.
-	Data DNSRecordUpdateResponseDNSRecordsNAPTRRecordData `json:"data,required"`
+	Data DNSRecordUpdateResponseNAPTRData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordUpdateResponseDNSRecordsNAPTRRecordType `json:"type,required"`
+	Type DNSRecordUpdateResponseNAPTRType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -4572,7 +4733,7 @@ type DNSRecordUpdateResponseDNSRecordsNAPTRRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordUpdateResponseDNSRecordsNAPTRRecordMeta `json:"meta"`
+	Meta DNSRecordUpdateResponseNAPTRMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -4582,17 +4743,17 @@ type DNSRecordUpdateResponseDNSRecordsNAPTRRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordUpdateResponseDNSRecordsNAPTRRecordTTL `json:"ttl"`
+	TTL DNSRecordUpdateResponseNAPTRTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                           `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordUpdateResponseDNSRecordsNAPTRRecordJSON `json:"-"`
+	ZoneName string                           `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordUpdateResponseNAPTRJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsNAPTRRecordJSON contains the JSON metadata for
-// the struct [DNSRecordUpdateResponseDNSRecordsNAPTRRecord]
-type dnsRecordUpdateResponseDNSRecordsNAPTRRecordJSON struct {
+// dnsRecordUpdateResponseNAPTRJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseNAPTR]
+type dnsRecordUpdateResponseNAPTRJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -4612,14 +4773,14 @@ type dnsRecordUpdateResponseDNSRecordsNAPTRRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsNAPTRRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseNAPTR) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordUpdateResponseDNSRecordsNAPTRRecord) implementsDNSRecordUpdateResponse() {}
+func (r DNSRecordUpdateResponseNAPTR) implementsDNSRecordUpdateResponse() {}
 
 // Components of a NAPTR record.
-type DNSRecordUpdateResponseDNSRecordsNAPTRRecordData struct {
+type DNSRecordUpdateResponseNAPTRData struct {
 	// Flags.
 	Flags string `json:"flags"`
 	// Order.
@@ -4631,13 +4792,13 @@ type DNSRecordUpdateResponseDNSRecordsNAPTRRecordData struct {
 	// Replacement.
 	Replacement string `json:"replacement"`
 	// Service.
-	Service string                                               `json:"service"`
-	JSON    dnsRecordUpdateResponseDNSRecordsNAPTRRecordDataJSON `json:"-"`
+	Service string                               `json:"service"`
+	JSON    dnsRecordUpdateResponseNAPTRDataJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsNAPTRRecordDataJSON contains the JSON metadata
-// for the struct [DNSRecordUpdateResponseDNSRecordsNAPTRRecordData]
-type dnsRecordUpdateResponseDNSRecordsNAPTRRecordDataJSON struct {
+// dnsRecordUpdateResponseNAPTRDataJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseNAPTRData]
+type dnsRecordUpdateResponseNAPTRDataJSON struct {
 	Flags       apijson.Field
 	Order       apijson.Field
 	Preference  apijson.Field
@@ -4648,37 +4809,37 @@ type dnsRecordUpdateResponseDNSRecordsNAPTRRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsNAPTRRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseNAPTRData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordUpdateResponseDNSRecordsNAPTRRecordType string
+type DNSRecordUpdateResponseNAPTRType string
 
 const (
-	DNSRecordUpdateResponseDNSRecordsNAPTRRecordTypeNAPTR DNSRecordUpdateResponseDNSRecordsNAPTRRecordType = "NAPTR"
+	DNSRecordUpdateResponseNAPTRTypeNAPTR DNSRecordUpdateResponseNAPTRType = "NAPTR"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordUpdateResponseDNSRecordsNAPTRRecordMeta struct {
+type DNSRecordUpdateResponseNAPTRMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                               `json:"source"`
-	JSON   dnsRecordUpdateResponseDNSRecordsNAPTRRecordMetaJSON `json:"-"`
+	Source string                               `json:"source"`
+	JSON   dnsRecordUpdateResponseNAPTRMetaJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsNAPTRRecordMetaJSON contains the JSON metadata
-// for the struct [DNSRecordUpdateResponseDNSRecordsNAPTRRecordMeta]
-type dnsRecordUpdateResponseDNSRecordsNAPTRRecordMetaJSON struct {
+// dnsRecordUpdateResponseNAPTRMetaJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseNAPTRMeta]
+type dnsRecordUpdateResponseNAPTRMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsNAPTRRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseNAPTRMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -4687,14 +4848,14 @@ func (r *DNSRecordUpdateResponseDNSRecordsNAPTRRecordMeta) UnmarshalJSON(data []
 // Enterprise zones.
 //
 // Union satisfied by [shared.UnionFloat] or
-// [DNSRecordUpdateResponseDNSRecordsNAPTRRecordTTLNumber].
-type DNSRecordUpdateResponseDNSRecordsNAPTRRecordTTL interface {
-	ImplementsDNSRecordUpdateResponseDNSRecordsNAPTRRecordTTL()
+// [DNSRecordUpdateResponseNAPTRTTLNumber].
+type DNSRecordUpdateResponseNAPTRTTL interface {
+	ImplementsDNSRecordUpdateResponseNaptrttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordUpdateResponseDNSRecordsNAPTRRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordUpdateResponseNAPTRTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -4703,19 +4864,19 @@ func init() {
 	)
 }
 
-type DNSRecordUpdateResponseDNSRecordsNAPTRRecordTTLNumber float64
+type DNSRecordUpdateResponseNAPTRTTLNumber float64
 
 const (
-	DNSRecordUpdateResponseDNSRecordsNAPTRRecordTTLNumber1 DNSRecordUpdateResponseDNSRecordsNAPTRRecordTTLNumber = 1
+	DNSRecordUpdateResponseNAPTRTTLNumber1 DNSRecordUpdateResponseNAPTRTTLNumber = 1
 )
 
-type DNSRecordUpdateResponseDNSRecordsNSRecord struct {
+type DNSRecordUpdateResponseNS struct {
 	// A valid name server host name.
 	Content interface{} `json:"content,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordUpdateResponseDNSRecordsNSRecordType `json:"type,required"`
+	Type DNSRecordUpdateResponseNSType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -4727,7 +4888,7 @@ type DNSRecordUpdateResponseDNSRecordsNSRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordUpdateResponseDNSRecordsNSRecordMeta `json:"meta"`
+	Meta DNSRecordUpdateResponseNSMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -4737,17 +4898,17 @@ type DNSRecordUpdateResponseDNSRecordsNSRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordUpdateResponseDNSRecordsNSRecordTTL `json:"ttl"`
+	TTL DNSRecordUpdateResponseNSTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                        `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordUpdateResponseDNSRecordsNSRecordJSON `json:"-"`
+	ZoneName string                        `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordUpdateResponseNSJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsNSRecordJSON contains the JSON metadata for the
-// struct [DNSRecordUpdateResponseDNSRecordsNSRecord]
-type dnsRecordUpdateResponseDNSRecordsNSRecordJSON struct {
+// dnsRecordUpdateResponseNSJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseNS]
+type dnsRecordUpdateResponseNSJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -4766,39 +4927,39 @@ type dnsRecordUpdateResponseDNSRecordsNSRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsNSRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseNS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordUpdateResponseDNSRecordsNSRecord) implementsDNSRecordUpdateResponse() {}
+func (r DNSRecordUpdateResponseNS) implementsDNSRecordUpdateResponse() {}
 
 // Record type.
-type DNSRecordUpdateResponseDNSRecordsNSRecordType string
+type DNSRecordUpdateResponseNSType string
 
 const (
-	DNSRecordUpdateResponseDNSRecordsNSRecordTypeNS DNSRecordUpdateResponseDNSRecordsNSRecordType = "NS"
+	DNSRecordUpdateResponseNSTypeNS DNSRecordUpdateResponseNSType = "NS"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordUpdateResponseDNSRecordsNSRecordMeta struct {
+type DNSRecordUpdateResponseNSMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                            `json:"source"`
-	JSON   dnsRecordUpdateResponseDNSRecordsNSRecordMetaJSON `json:"-"`
+	Source string                            `json:"source"`
+	JSON   dnsRecordUpdateResponseNSMetaJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsNSRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordUpdateResponseDNSRecordsNSRecordMeta]
-type dnsRecordUpdateResponseDNSRecordsNSRecordMetaJSON struct {
+// dnsRecordUpdateResponseNSMetaJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseNSMeta]
+type dnsRecordUpdateResponseNSMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsNSRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseNSMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -4806,15 +4967,14 @@ func (r *DNSRecordUpdateResponseDNSRecordsNSRecordMeta) UnmarshalJSON(data []byt
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordUpdateResponseDNSRecordsNSRecordTTLNumber].
-type DNSRecordUpdateResponseDNSRecordsNSRecordTTL interface {
-	ImplementsDNSRecordUpdateResponseDNSRecordsNSRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordUpdateResponseNSTTLNumber].
+type DNSRecordUpdateResponseNSTTL interface {
+	ImplementsDNSRecordUpdateResponseNsttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordUpdateResponseDNSRecordsNSRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordUpdateResponseNSTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -4823,19 +4983,19 @@ func init() {
 	)
 }
 
-type DNSRecordUpdateResponseDNSRecordsNSRecordTTLNumber float64
+type DNSRecordUpdateResponseNSTTLNumber float64
 
 const (
-	DNSRecordUpdateResponseDNSRecordsNSRecordTTLNumber1 DNSRecordUpdateResponseDNSRecordsNSRecordTTLNumber = 1
+	DNSRecordUpdateResponseNSTTLNumber1 DNSRecordUpdateResponseNSTTLNumber = 1
 )
 
-type DNSRecordUpdateResponseDNSRecordsPTRRecord struct {
+type DNSRecordUpdateResponsePTR struct {
 	// Domain name pointing to the address.
 	Content string `json:"content,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordUpdateResponseDNSRecordsPTRRecordType `json:"type,required"`
+	Type DNSRecordUpdateResponsePTRType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -4847,7 +5007,7 @@ type DNSRecordUpdateResponseDNSRecordsPTRRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordUpdateResponseDNSRecordsPTRRecordMeta `json:"meta"`
+	Meta DNSRecordUpdateResponsePTRMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -4857,17 +5017,17 @@ type DNSRecordUpdateResponseDNSRecordsPTRRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordUpdateResponseDNSRecordsPTRRecordTTL `json:"ttl"`
+	TTL DNSRecordUpdateResponsePTRTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                         `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordUpdateResponseDNSRecordsPTRRecordJSON `json:"-"`
+	ZoneName string                         `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordUpdateResponsePTRJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsPTRRecordJSON contains the JSON metadata for
-// the struct [DNSRecordUpdateResponseDNSRecordsPTRRecord]
-type dnsRecordUpdateResponseDNSRecordsPTRRecordJSON struct {
+// dnsRecordUpdateResponsePTRJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponsePTR]
+type dnsRecordUpdateResponsePTRJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -4886,39 +5046,39 @@ type dnsRecordUpdateResponseDNSRecordsPTRRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsPTRRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponsePTR) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordUpdateResponseDNSRecordsPTRRecord) implementsDNSRecordUpdateResponse() {}
+func (r DNSRecordUpdateResponsePTR) implementsDNSRecordUpdateResponse() {}
 
 // Record type.
-type DNSRecordUpdateResponseDNSRecordsPTRRecordType string
+type DNSRecordUpdateResponsePTRType string
 
 const (
-	DNSRecordUpdateResponseDNSRecordsPTRRecordTypePTR DNSRecordUpdateResponseDNSRecordsPTRRecordType = "PTR"
+	DNSRecordUpdateResponsePTRTypePTR DNSRecordUpdateResponsePTRType = "PTR"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordUpdateResponseDNSRecordsPTRRecordMeta struct {
+type DNSRecordUpdateResponsePTRMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                             `json:"source"`
-	JSON   dnsRecordUpdateResponseDNSRecordsPTRRecordMetaJSON `json:"-"`
+	Source string                             `json:"source"`
+	JSON   dnsRecordUpdateResponsePTRMetaJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsPTRRecordMetaJSON contains the JSON metadata
-// for the struct [DNSRecordUpdateResponseDNSRecordsPTRRecordMeta]
-type dnsRecordUpdateResponseDNSRecordsPTRRecordMetaJSON struct {
+// dnsRecordUpdateResponsePTRMetaJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponsePTRMeta]
+type dnsRecordUpdateResponsePTRMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsPTRRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponsePTRMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -4926,15 +5086,14 @@ func (r *DNSRecordUpdateResponseDNSRecordsPTRRecordMeta) UnmarshalJSON(data []by
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordUpdateResponseDNSRecordsPTRRecordTTLNumber].
-type DNSRecordUpdateResponseDNSRecordsPTRRecordTTL interface {
-	ImplementsDNSRecordUpdateResponseDNSRecordsPTRRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordUpdateResponsePTRTTLNumber].
+type DNSRecordUpdateResponsePTRTTL interface {
+	ImplementsDNSRecordUpdateResponsePtrttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordUpdateResponseDNSRecordsPTRRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordUpdateResponsePTRTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -4943,19 +5102,19 @@ func init() {
 	)
 }
 
-type DNSRecordUpdateResponseDNSRecordsPTRRecordTTLNumber float64
+type DNSRecordUpdateResponsePTRTTLNumber float64
 
 const (
-	DNSRecordUpdateResponseDNSRecordsPTRRecordTTLNumber1 DNSRecordUpdateResponseDNSRecordsPTRRecordTTLNumber = 1
+	DNSRecordUpdateResponsePTRTTLNumber1 DNSRecordUpdateResponsePTRTTLNumber = 1
 )
 
-type DNSRecordUpdateResponseDNSRecordsSmimeaRecord struct {
+type DNSRecordUpdateResponseSmimea struct {
 	// Components of a SMIMEA record.
-	Data DNSRecordUpdateResponseDNSRecordsSmimeaRecordData `json:"data,required"`
+	Data DNSRecordUpdateResponseSmimeaData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordUpdateResponseDNSRecordsSmimeaRecordType `json:"type,required"`
+	Type DNSRecordUpdateResponseSmimeaType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -4969,7 +5128,7 @@ type DNSRecordUpdateResponseDNSRecordsSmimeaRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordUpdateResponseDNSRecordsSmimeaRecordMeta `json:"meta"`
+	Meta DNSRecordUpdateResponseSmimeaMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -4979,17 +5138,17 @@ type DNSRecordUpdateResponseDNSRecordsSmimeaRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordUpdateResponseDNSRecordsSmimeaRecordTTL `json:"ttl"`
+	TTL DNSRecordUpdateResponseSmimeaTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                            `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordUpdateResponseDNSRecordsSmimeaRecordJSON `json:"-"`
+	ZoneName string                            `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordUpdateResponseSmimeaJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsSmimeaRecordJSON contains the JSON metadata for
-// the struct [DNSRecordUpdateResponseDNSRecordsSmimeaRecord]
-type dnsRecordUpdateResponseDNSRecordsSmimeaRecordJSON struct {
+// dnsRecordUpdateResponseSmimeaJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseSmimea]
+type dnsRecordUpdateResponseSmimeaJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -5009,14 +5168,14 @@ type dnsRecordUpdateResponseDNSRecordsSmimeaRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsSmimeaRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseSmimea) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordUpdateResponseDNSRecordsSmimeaRecord) implementsDNSRecordUpdateResponse() {}
+func (r DNSRecordUpdateResponseSmimea) implementsDNSRecordUpdateResponse() {}
 
 // Components of a SMIMEA record.
-type DNSRecordUpdateResponseDNSRecordsSmimeaRecordData struct {
+type DNSRecordUpdateResponseSmimeaData struct {
 	// Certificate.
 	Certificate string `json:"certificate"`
 	// Matching Type.
@@ -5024,13 +5183,13 @@ type DNSRecordUpdateResponseDNSRecordsSmimeaRecordData struct {
 	// Selector.
 	Selector float64 `json:"selector"`
 	// Usage.
-	Usage float64                                               `json:"usage"`
-	JSON  dnsRecordUpdateResponseDNSRecordsSmimeaRecordDataJSON `json:"-"`
+	Usage float64                               `json:"usage"`
+	JSON  dnsRecordUpdateResponseSmimeaDataJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsSmimeaRecordDataJSON contains the JSON metadata
-// for the struct [DNSRecordUpdateResponseDNSRecordsSmimeaRecordData]
-type dnsRecordUpdateResponseDNSRecordsSmimeaRecordDataJSON struct {
+// dnsRecordUpdateResponseSmimeaDataJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseSmimeaData]
+type dnsRecordUpdateResponseSmimeaDataJSON struct {
 	Certificate  apijson.Field
 	MatchingType apijson.Field
 	Selector     apijson.Field
@@ -5039,37 +5198,37 @@ type dnsRecordUpdateResponseDNSRecordsSmimeaRecordDataJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsSmimeaRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseSmimeaData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordUpdateResponseDNSRecordsSmimeaRecordType string
+type DNSRecordUpdateResponseSmimeaType string
 
 const (
-	DNSRecordUpdateResponseDNSRecordsSmimeaRecordTypeSmimea DNSRecordUpdateResponseDNSRecordsSmimeaRecordType = "SMIMEA"
+	DNSRecordUpdateResponseSmimeaTypeSmimea DNSRecordUpdateResponseSmimeaType = "SMIMEA"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordUpdateResponseDNSRecordsSmimeaRecordMeta struct {
+type DNSRecordUpdateResponseSmimeaMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                                `json:"source"`
-	JSON   dnsRecordUpdateResponseDNSRecordsSmimeaRecordMetaJSON `json:"-"`
+	Source string                                `json:"source"`
+	JSON   dnsRecordUpdateResponseSmimeaMetaJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsSmimeaRecordMetaJSON contains the JSON metadata
-// for the struct [DNSRecordUpdateResponseDNSRecordsSmimeaRecordMeta]
-type dnsRecordUpdateResponseDNSRecordsSmimeaRecordMetaJSON struct {
+// dnsRecordUpdateResponseSmimeaMetaJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseSmimeaMeta]
+type dnsRecordUpdateResponseSmimeaMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsSmimeaRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseSmimeaMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -5078,14 +5237,14 @@ func (r *DNSRecordUpdateResponseDNSRecordsSmimeaRecordMeta) UnmarshalJSON(data [
 // Enterprise zones.
 //
 // Union satisfied by [shared.UnionFloat] or
-// [DNSRecordUpdateResponseDNSRecordsSmimeaRecordTTLNumber].
-type DNSRecordUpdateResponseDNSRecordsSmimeaRecordTTL interface {
-	ImplementsDNSRecordUpdateResponseDNSRecordsSmimeaRecordTTL()
+// [DNSRecordUpdateResponseSmimeaTTLNumber].
+type DNSRecordUpdateResponseSmimeaTTL interface {
+	ImplementsDNSRecordUpdateResponseSmimeaTTL()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordUpdateResponseDNSRecordsSmimeaRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordUpdateResponseSmimeaTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -5094,21 +5253,21 @@ func init() {
 	)
 }
 
-type DNSRecordUpdateResponseDNSRecordsSmimeaRecordTTLNumber float64
+type DNSRecordUpdateResponseSmimeaTTLNumber float64
 
 const (
-	DNSRecordUpdateResponseDNSRecordsSmimeaRecordTTLNumber1 DNSRecordUpdateResponseDNSRecordsSmimeaRecordTTLNumber = 1
+	DNSRecordUpdateResponseSmimeaTTLNumber1 DNSRecordUpdateResponseSmimeaTTLNumber = 1
 )
 
-type DNSRecordUpdateResponseDNSRecordsSRVRecord struct {
+type DNSRecordUpdateResponseSRV struct {
 	// Components of a SRV record.
-	Data DNSRecordUpdateResponseDNSRecordsSRVRecordData `json:"data,required"`
+	Data DNSRecordUpdateResponseSRVData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode. For SRV records, the first
 	// label is normally a service and the second a protocol name, each starting with
 	// an underscore.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordUpdateResponseDNSRecordsSRVRecordType `json:"type,required"`
+	Type DNSRecordUpdateResponseSRVType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -5123,7 +5282,7 @@ type DNSRecordUpdateResponseDNSRecordsSRVRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordUpdateResponseDNSRecordsSRVRecordMeta `json:"meta"`
+	Meta DNSRecordUpdateResponseSRVMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -5133,17 +5292,17 @@ type DNSRecordUpdateResponseDNSRecordsSRVRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordUpdateResponseDNSRecordsSRVRecordTTL `json:"ttl"`
+	TTL DNSRecordUpdateResponseSRVTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                         `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordUpdateResponseDNSRecordsSRVRecordJSON `json:"-"`
+	ZoneName string                         `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordUpdateResponseSRVJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsSRVRecordJSON contains the JSON metadata for
-// the struct [DNSRecordUpdateResponseDNSRecordsSRVRecord]
-type dnsRecordUpdateResponseDNSRecordsSRVRecordJSON struct {
+// dnsRecordUpdateResponseSRVJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseSRV]
+type dnsRecordUpdateResponseSRVJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -5163,14 +5322,14 @@ type dnsRecordUpdateResponseDNSRecordsSRVRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsSRVRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseSRV) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordUpdateResponseDNSRecordsSRVRecord) implementsDNSRecordUpdateResponse() {}
+func (r DNSRecordUpdateResponseSRV) implementsDNSRecordUpdateResponse() {}
 
 // Components of a SRV record.
-type DNSRecordUpdateResponseDNSRecordsSRVRecordData struct {
+type DNSRecordUpdateResponseSRVData struct {
 	// A valid hostname. Deprecated in favor of the regular 'name' outside the data
 	// map. This data map field represents the remainder of the full 'name' after the
 	// service and protocol.
@@ -5191,13 +5350,13 @@ type DNSRecordUpdateResponseDNSRecordsSRVRecordData struct {
 	// A valid hostname.
 	Target string `json:"target" format:"hostname"`
 	// The record weight.
-	Weight float64                                            `json:"weight"`
-	JSON   dnsRecordUpdateResponseDNSRecordsSRVRecordDataJSON `json:"-"`
+	Weight float64                            `json:"weight"`
+	JSON   dnsRecordUpdateResponseSRVDataJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsSRVRecordDataJSON contains the JSON metadata
-// for the struct [DNSRecordUpdateResponseDNSRecordsSRVRecordData]
-type dnsRecordUpdateResponseDNSRecordsSRVRecordDataJSON struct {
+// dnsRecordUpdateResponseSRVDataJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseSRVData]
+type dnsRecordUpdateResponseSRVDataJSON struct {
 	Name        apijson.Field
 	Port        apijson.Field
 	Priority    apijson.Field
@@ -5209,37 +5368,37 @@ type dnsRecordUpdateResponseDNSRecordsSRVRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsSRVRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseSRVData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordUpdateResponseDNSRecordsSRVRecordType string
+type DNSRecordUpdateResponseSRVType string
 
 const (
-	DNSRecordUpdateResponseDNSRecordsSRVRecordTypeSRV DNSRecordUpdateResponseDNSRecordsSRVRecordType = "SRV"
+	DNSRecordUpdateResponseSRVTypeSRV DNSRecordUpdateResponseSRVType = "SRV"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordUpdateResponseDNSRecordsSRVRecordMeta struct {
+type DNSRecordUpdateResponseSRVMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                             `json:"source"`
-	JSON   dnsRecordUpdateResponseDNSRecordsSRVRecordMetaJSON `json:"-"`
+	Source string                             `json:"source"`
+	JSON   dnsRecordUpdateResponseSRVMetaJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsSRVRecordMetaJSON contains the JSON metadata
-// for the struct [DNSRecordUpdateResponseDNSRecordsSRVRecordMeta]
-type dnsRecordUpdateResponseDNSRecordsSRVRecordMetaJSON struct {
+// dnsRecordUpdateResponseSRVMetaJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseSRVMeta]
+type dnsRecordUpdateResponseSRVMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsSRVRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseSRVMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -5247,15 +5406,14 @@ func (r *DNSRecordUpdateResponseDNSRecordsSRVRecordMeta) UnmarshalJSON(data []by
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordUpdateResponseDNSRecordsSRVRecordTTLNumber].
-type DNSRecordUpdateResponseDNSRecordsSRVRecordTTL interface {
-	ImplementsDNSRecordUpdateResponseDNSRecordsSRVRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordUpdateResponseSRVTTLNumber].
+type DNSRecordUpdateResponseSRVTTL interface {
+	ImplementsDNSRecordUpdateResponseSrvttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordUpdateResponseDNSRecordsSRVRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordUpdateResponseSRVTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -5264,19 +5422,19 @@ func init() {
 	)
 }
 
-type DNSRecordUpdateResponseDNSRecordsSRVRecordTTLNumber float64
+type DNSRecordUpdateResponseSRVTTLNumber float64
 
 const (
-	DNSRecordUpdateResponseDNSRecordsSRVRecordTTLNumber1 DNSRecordUpdateResponseDNSRecordsSRVRecordTTLNumber = 1
+	DNSRecordUpdateResponseSRVTTLNumber1 DNSRecordUpdateResponseSRVTTLNumber = 1
 )
 
-type DNSRecordUpdateResponseDNSRecordsSSHFPRecord struct {
+type DNSRecordUpdateResponseSSHFP struct {
 	// Components of a SSHFP record.
-	Data DNSRecordUpdateResponseDNSRecordsSSHFPRecordData `json:"data,required"`
+	Data DNSRecordUpdateResponseSSHFPData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordUpdateResponseDNSRecordsSSHFPRecordType `json:"type,required"`
+	Type DNSRecordUpdateResponseSSHFPType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -5290,7 +5448,7 @@ type DNSRecordUpdateResponseDNSRecordsSSHFPRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordUpdateResponseDNSRecordsSSHFPRecordMeta `json:"meta"`
+	Meta DNSRecordUpdateResponseSSHFPMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -5300,17 +5458,17 @@ type DNSRecordUpdateResponseDNSRecordsSSHFPRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordUpdateResponseDNSRecordsSSHFPRecordTTL `json:"ttl"`
+	TTL DNSRecordUpdateResponseSSHFPTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                           `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordUpdateResponseDNSRecordsSSHFPRecordJSON `json:"-"`
+	ZoneName string                           `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordUpdateResponseSSHFPJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsSSHFPRecordJSON contains the JSON metadata for
-// the struct [DNSRecordUpdateResponseDNSRecordsSSHFPRecord]
-type dnsRecordUpdateResponseDNSRecordsSSHFPRecordJSON struct {
+// dnsRecordUpdateResponseSSHFPJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseSSHFP]
+type dnsRecordUpdateResponseSSHFPJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -5330,26 +5488,26 @@ type dnsRecordUpdateResponseDNSRecordsSSHFPRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsSSHFPRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseSSHFP) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordUpdateResponseDNSRecordsSSHFPRecord) implementsDNSRecordUpdateResponse() {}
+func (r DNSRecordUpdateResponseSSHFP) implementsDNSRecordUpdateResponse() {}
 
 // Components of a SSHFP record.
-type DNSRecordUpdateResponseDNSRecordsSSHFPRecordData struct {
+type DNSRecordUpdateResponseSSHFPData struct {
 	// algorithm.
 	Algorithm float64 `json:"algorithm"`
 	// fingerprint.
 	Fingerprint string `json:"fingerprint"`
 	// type.
-	Type float64                                              `json:"type"`
-	JSON dnsRecordUpdateResponseDNSRecordsSSHFPRecordDataJSON `json:"-"`
+	Type float64                              `json:"type"`
+	JSON dnsRecordUpdateResponseSSHFPDataJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsSSHFPRecordDataJSON contains the JSON metadata
-// for the struct [DNSRecordUpdateResponseDNSRecordsSSHFPRecordData]
-type dnsRecordUpdateResponseDNSRecordsSSHFPRecordDataJSON struct {
+// dnsRecordUpdateResponseSSHFPDataJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseSSHFPData]
+type dnsRecordUpdateResponseSSHFPDataJSON struct {
 	Algorithm   apijson.Field
 	Fingerprint apijson.Field
 	Type        apijson.Field
@@ -5357,37 +5515,37 @@ type dnsRecordUpdateResponseDNSRecordsSSHFPRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsSSHFPRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseSSHFPData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordUpdateResponseDNSRecordsSSHFPRecordType string
+type DNSRecordUpdateResponseSSHFPType string
 
 const (
-	DNSRecordUpdateResponseDNSRecordsSSHFPRecordTypeSSHFP DNSRecordUpdateResponseDNSRecordsSSHFPRecordType = "SSHFP"
+	DNSRecordUpdateResponseSSHFPTypeSSHFP DNSRecordUpdateResponseSSHFPType = "SSHFP"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordUpdateResponseDNSRecordsSSHFPRecordMeta struct {
+type DNSRecordUpdateResponseSSHFPMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                               `json:"source"`
-	JSON   dnsRecordUpdateResponseDNSRecordsSSHFPRecordMetaJSON `json:"-"`
+	Source string                               `json:"source"`
+	JSON   dnsRecordUpdateResponseSSHFPMetaJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsSSHFPRecordMetaJSON contains the JSON metadata
-// for the struct [DNSRecordUpdateResponseDNSRecordsSSHFPRecordMeta]
-type dnsRecordUpdateResponseDNSRecordsSSHFPRecordMetaJSON struct {
+// dnsRecordUpdateResponseSSHFPMetaJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseSSHFPMeta]
+type dnsRecordUpdateResponseSSHFPMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsSSHFPRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseSSHFPMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -5396,14 +5554,14 @@ func (r *DNSRecordUpdateResponseDNSRecordsSSHFPRecordMeta) UnmarshalJSON(data []
 // Enterprise zones.
 //
 // Union satisfied by [shared.UnionFloat] or
-// [DNSRecordUpdateResponseDNSRecordsSSHFPRecordTTLNumber].
-type DNSRecordUpdateResponseDNSRecordsSSHFPRecordTTL interface {
-	ImplementsDNSRecordUpdateResponseDNSRecordsSSHFPRecordTTL()
+// [DNSRecordUpdateResponseSSHFPTTLNumber].
+type DNSRecordUpdateResponseSSHFPTTL interface {
+	ImplementsDNSRecordUpdateResponseSshfpttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordUpdateResponseDNSRecordsSSHFPRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordUpdateResponseSSHFPTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -5412,19 +5570,19 @@ func init() {
 	)
 }
 
-type DNSRecordUpdateResponseDNSRecordsSSHFPRecordTTLNumber float64
+type DNSRecordUpdateResponseSSHFPTTLNumber float64
 
 const (
-	DNSRecordUpdateResponseDNSRecordsSSHFPRecordTTLNumber1 DNSRecordUpdateResponseDNSRecordsSSHFPRecordTTLNumber = 1
+	DNSRecordUpdateResponseSSHFPTTLNumber1 DNSRecordUpdateResponseSSHFPTTLNumber = 1
 )
 
-type DNSRecordUpdateResponseDNSRecordsSVCBRecord struct {
+type DNSRecordUpdateResponseSVCB struct {
 	// Components of a SVCB record.
-	Data DNSRecordUpdateResponseDNSRecordsSVCBRecordData `json:"data,required"`
+	Data DNSRecordUpdateResponseSVCBData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordUpdateResponseDNSRecordsSVCBRecordType `json:"type,required"`
+	Type DNSRecordUpdateResponseSVCBType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -5438,7 +5596,7 @@ type DNSRecordUpdateResponseDNSRecordsSVCBRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordUpdateResponseDNSRecordsSVCBRecordMeta `json:"meta"`
+	Meta DNSRecordUpdateResponseSVCBMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -5448,17 +5606,17 @@ type DNSRecordUpdateResponseDNSRecordsSVCBRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordUpdateResponseDNSRecordsSVCBRecordTTL `json:"ttl"`
+	TTL DNSRecordUpdateResponseSVCBTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                          `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordUpdateResponseDNSRecordsSVCBRecordJSON `json:"-"`
+	ZoneName string                          `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordUpdateResponseSVCBJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsSVCBRecordJSON contains the JSON metadata for
-// the struct [DNSRecordUpdateResponseDNSRecordsSVCBRecord]
-type dnsRecordUpdateResponseDNSRecordsSVCBRecordJSON struct {
+// dnsRecordUpdateResponseSVCBJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseSVCB]
+type dnsRecordUpdateResponseSVCBJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -5478,26 +5636,26 @@ type dnsRecordUpdateResponseDNSRecordsSVCBRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsSVCBRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseSVCB) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordUpdateResponseDNSRecordsSVCBRecord) implementsDNSRecordUpdateResponse() {}
+func (r DNSRecordUpdateResponseSVCB) implementsDNSRecordUpdateResponse() {}
 
 // Components of a SVCB record.
-type DNSRecordUpdateResponseDNSRecordsSVCBRecordData struct {
+type DNSRecordUpdateResponseSVCBData struct {
 	// priority.
 	Priority float64 `json:"priority"`
 	// target.
 	Target string `json:"target"`
 	// value.
-	Value string                                              `json:"value"`
-	JSON  dnsRecordUpdateResponseDNSRecordsSVCBRecordDataJSON `json:"-"`
+	Value string                              `json:"value"`
+	JSON  dnsRecordUpdateResponseSVCBDataJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsSVCBRecordDataJSON contains the JSON metadata
-// for the struct [DNSRecordUpdateResponseDNSRecordsSVCBRecordData]
-type dnsRecordUpdateResponseDNSRecordsSVCBRecordDataJSON struct {
+// dnsRecordUpdateResponseSVCBDataJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseSVCBData]
+type dnsRecordUpdateResponseSVCBDataJSON struct {
 	Priority    apijson.Field
 	Target      apijson.Field
 	Value       apijson.Field
@@ -5505,37 +5663,37 @@ type dnsRecordUpdateResponseDNSRecordsSVCBRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsSVCBRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseSVCBData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordUpdateResponseDNSRecordsSVCBRecordType string
+type DNSRecordUpdateResponseSVCBType string
 
 const (
-	DNSRecordUpdateResponseDNSRecordsSVCBRecordTypeSVCB DNSRecordUpdateResponseDNSRecordsSVCBRecordType = "SVCB"
+	DNSRecordUpdateResponseSVCBTypeSVCB DNSRecordUpdateResponseSVCBType = "SVCB"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordUpdateResponseDNSRecordsSVCBRecordMeta struct {
+type DNSRecordUpdateResponseSVCBMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                              `json:"source"`
-	JSON   dnsRecordUpdateResponseDNSRecordsSVCBRecordMetaJSON `json:"-"`
+	Source string                              `json:"source"`
+	JSON   dnsRecordUpdateResponseSVCBMetaJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsSVCBRecordMetaJSON contains the JSON metadata
-// for the struct [DNSRecordUpdateResponseDNSRecordsSVCBRecordMeta]
-type dnsRecordUpdateResponseDNSRecordsSVCBRecordMetaJSON struct {
+// dnsRecordUpdateResponseSVCBMetaJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseSVCBMeta]
+type dnsRecordUpdateResponseSVCBMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsSVCBRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseSVCBMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -5544,14 +5702,14 @@ func (r *DNSRecordUpdateResponseDNSRecordsSVCBRecordMeta) UnmarshalJSON(data []b
 // Enterprise zones.
 //
 // Union satisfied by [shared.UnionFloat] or
-// [DNSRecordUpdateResponseDNSRecordsSVCBRecordTTLNumber].
-type DNSRecordUpdateResponseDNSRecordsSVCBRecordTTL interface {
-	ImplementsDNSRecordUpdateResponseDNSRecordsSVCBRecordTTL()
+// [DNSRecordUpdateResponseSVCBTTLNumber].
+type DNSRecordUpdateResponseSVCBTTL interface {
+	ImplementsDNSRecordUpdateResponseSvcbttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordUpdateResponseDNSRecordsSVCBRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordUpdateResponseSVCBTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -5560,19 +5718,19 @@ func init() {
 	)
 }
 
-type DNSRecordUpdateResponseDNSRecordsSVCBRecordTTLNumber float64
+type DNSRecordUpdateResponseSVCBTTLNumber float64
 
 const (
-	DNSRecordUpdateResponseDNSRecordsSVCBRecordTTLNumber1 DNSRecordUpdateResponseDNSRecordsSVCBRecordTTLNumber = 1
+	DNSRecordUpdateResponseSVCBTTLNumber1 DNSRecordUpdateResponseSVCBTTLNumber = 1
 )
 
-type DNSRecordUpdateResponseDNSRecordsTLSARecord struct {
+type DNSRecordUpdateResponseTLSA struct {
 	// Components of a TLSA record.
-	Data DNSRecordUpdateResponseDNSRecordsTLSARecordData `json:"data,required"`
+	Data DNSRecordUpdateResponseTLSAData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordUpdateResponseDNSRecordsTLSARecordType `json:"type,required"`
+	Type DNSRecordUpdateResponseTLSAType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -5586,7 +5744,7 @@ type DNSRecordUpdateResponseDNSRecordsTLSARecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordUpdateResponseDNSRecordsTLSARecordMeta `json:"meta"`
+	Meta DNSRecordUpdateResponseTLSAMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -5596,17 +5754,17 @@ type DNSRecordUpdateResponseDNSRecordsTLSARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordUpdateResponseDNSRecordsTLSARecordTTL `json:"ttl"`
+	TTL DNSRecordUpdateResponseTLSATTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                          `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordUpdateResponseDNSRecordsTLSARecordJSON `json:"-"`
+	ZoneName string                          `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordUpdateResponseTLSAJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsTLSARecordJSON contains the JSON metadata for
-// the struct [DNSRecordUpdateResponseDNSRecordsTLSARecord]
-type dnsRecordUpdateResponseDNSRecordsTLSARecordJSON struct {
+// dnsRecordUpdateResponseTLSAJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseTLSA]
+type dnsRecordUpdateResponseTLSAJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -5626,14 +5784,14 @@ type dnsRecordUpdateResponseDNSRecordsTLSARecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsTLSARecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseTLSA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordUpdateResponseDNSRecordsTLSARecord) implementsDNSRecordUpdateResponse() {}
+func (r DNSRecordUpdateResponseTLSA) implementsDNSRecordUpdateResponse() {}
 
 // Components of a TLSA record.
-type DNSRecordUpdateResponseDNSRecordsTLSARecordData struct {
+type DNSRecordUpdateResponseTLSAData struct {
 	// certificate.
 	Certificate string `json:"certificate"`
 	// Matching Type.
@@ -5641,13 +5799,13 @@ type DNSRecordUpdateResponseDNSRecordsTLSARecordData struct {
 	// Selector.
 	Selector float64 `json:"selector"`
 	// Usage.
-	Usage float64                                             `json:"usage"`
-	JSON  dnsRecordUpdateResponseDNSRecordsTLSARecordDataJSON `json:"-"`
+	Usage float64                             `json:"usage"`
+	JSON  dnsRecordUpdateResponseTLSADataJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsTLSARecordDataJSON contains the JSON metadata
-// for the struct [DNSRecordUpdateResponseDNSRecordsTLSARecordData]
-type dnsRecordUpdateResponseDNSRecordsTLSARecordDataJSON struct {
+// dnsRecordUpdateResponseTLSADataJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseTLSAData]
+type dnsRecordUpdateResponseTLSADataJSON struct {
 	Certificate  apijson.Field
 	MatchingType apijson.Field
 	Selector     apijson.Field
@@ -5656,37 +5814,37 @@ type dnsRecordUpdateResponseDNSRecordsTLSARecordDataJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsTLSARecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseTLSAData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordUpdateResponseDNSRecordsTLSARecordType string
+type DNSRecordUpdateResponseTLSAType string
 
 const (
-	DNSRecordUpdateResponseDNSRecordsTLSARecordTypeTLSA DNSRecordUpdateResponseDNSRecordsTLSARecordType = "TLSA"
+	DNSRecordUpdateResponseTLSATypeTLSA DNSRecordUpdateResponseTLSAType = "TLSA"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordUpdateResponseDNSRecordsTLSARecordMeta struct {
+type DNSRecordUpdateResponseTLSAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                              `json:"source"`
-	JSON   dnsRecordUpdateResponseDNSRecordsTLSARecordMetaJSON `json:"-"`
+	Source string                              `json:"source"`
+	JSON   dnsRecordUpdateResponseTLSAMetaJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsTLSARecordMetaJSON contains the JSON metadata
-// for the struct [DNSRecordUpdateResponseDNSRecordsTLSARecordMeta]
-type dnsRecordUpdateResponseDNSRecordsTLSARecordMetaJSON struct {
+// dnsRecordUpdateResponseTLSAMetaJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseTLSAMeta]
+type dnsRecordUpdateResponseTLSAMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsTLSARecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseTLSAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -5695,14 +5853,14 @@ func (r *DNSRecordUpdateResponseDNSRecordsTLSARecordMeta) UnmarshalJSON(data []b
 // Enterprise zones.
 //
 // Union satisfied by [shared.UnionFloat] or
-// [DNSRecordUpdateResponseDNSRecordsTLSARecordTTLNumber].
-type DNSRecordUpdateResponseDNSRecordsTLSARecordTTL interface {
-	ImplementsDNSRecordUpdateResponseDNSRecordsTLSARecordTTL()
+// [DNSRecordUpdateResponseTLSATTLNumber].
+type DNSRecordUpdateResponseTLSATTL interface {
+	ImplementsDNSRecordUpdateResponseTlsattl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordUpdateResponseDNSRecordsTLSARecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordUpdateResponseTLSATTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -5711,19 +5869,19 @@ func init() {
 	)
 }
 
-type DNSRecordUpdateResponseDNSRecordsTLSARecordTTLNumber float64
+type DNSRecordUpdateResponseTLSATTLNumber float64
 
 const (
-	DNSRecordUpdateResponseDNSRecordsTLSARecordTTLNumber1 DNSRecordUpdateResponseDNSRecordsTLSARecordTTLNumber = 1
+	DNSRecordUpdateResponseTLSATTLNumber1 DNSRecordUpdateResponseTLSATTLNumber = 1
 )
 
-type DNSRecordUpdateResponseDNSRecordsTXTRecord struct {
+type DNSRecordUpdateResponseTXT struct {
 	// Text content for the record.
 	Content string `json:"content,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordUpdateResponseDNSRecordsTXTRecordType `json:"type,required"`
+	Type DNSRecordUpdateResponseTXTType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -5735,7 +5893,7 @@ type DNSRecordUpdateResponseDNSRecordsTXTRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordUpdateResponseDNSRecordsTXTRecordMeta `json:"meta"`
+	Meta DNSRecordUpdateResponseTXTMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -5745,17 +5903,17 @@ type DNSRecordUpdateResponseDNSRecordsTXTRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordUpdateResponseDNSRecordsTXTRecordTTL `json:"ttl"`
+	TTL DNSRecordUpdateResponseTXTTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                         `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordUpdateResponseDNSRecordsTXTRecordJSON `json:"-"`
+	ZoneName string                         `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordUpdateResponseTXTJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsTXTRecordJSON contains the JSON metadata for
-// the struct [DNSRecordUpdateResponseDNSRecordsTXTRecord]
-type dnsRecordUpdateResponseDNSRecordsTXTRecordJSON struct {
+// dnsRecordUpdateResponseTXTJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseTXT]
+type dnsRecordUpdateResponseTXTJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -5774,39 +5932,39 @@ type dnsRecordUpdateResponseDNSRecordsTXTRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsTXTRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseTXT) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordUpdateResponseDNSRecordsTXTRecord) implementsDNSRecordUpdateResponse() {}
+func (r DNSRecordUpdateResponseTXT) implementsDNSRecordUpdateResponse() {}
 
 // Record type.
-type DNSRecordUpdateResponseDNSRecordsTXTRecordType string
+type DNSRecordUpdateResponseTXTType string
 
 const (
-	DNSRecordUpdateResponseDNSRecordsTXTRecordTypeTXT DNSRecordUpdateResponseDNSRecordsTXTRecordType = "TXT"
+	DNSRecordUpdateResponseTXTTypeTXT DNSRecordUpdateResponseTXTType = "TXT"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordUpdateResponseDNSRecordsTXTRecordMeta struct {
+type DNSRecordUpdateResponseTXTMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                             `json:"source"`
-	JSON   dnsRecordUpdateResponseDNSRecordsTXTRecordMetaJSON `json:"-"`
+	Source string                             `json:"source"`
+	JSON   dnsRecordUpdateResponseTXTMetaJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsTXTRecordMetaJSON contains the JSON metadata
-// for the struct [DNSRecordUpdateResponseDNSRecordsTXTRecordMeta]
-type dnsRecordUpdateResponseDNSRecordsTXTRecordMetaJSON struct {
+// dnsRecordUpdateResponseTXTMetaJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseTXTMeta]
+type dnsRecordUpdateResponseTXTMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsTXTRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseTXTMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -5814,15 +5972,14 @@ func (r *DNSRecordUpdateResponseDNSRecordsTXTRecordMeta) UnmarshalJSON(data []by
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordUpdateResponseDNSRecordsTXTRecordTTLNumber].
-type DNSRecordUpdateResponseDNSRecordsTXTRecordTTL interface {
-	ImplementsDNSRecordUpdateResponseDNSRecordsTXTRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordUpdateResponseTXTTTLNumber].
+type DNSRecordUpdateResponseTXTTTL interface {
+	ImplementsDNSRecordUpdateResponseTxtttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordUpdateResponseDNSRecordsTXTRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordUpdateResponseTXTTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -5831,22 +5988,22 @@ func init() {
 	)
 }
 
-type DNSRecordUpdateResponseDNSRecordsTXTRecordTTLNumber float64
+type DNSRecordUpdateResponseTXTTTLNumber float64
 
 const (
-	DNSRecordUpdateResponseDNSRecordsTXTRecordTTLNumber1 DNSRecordUpdateResponseDNSRecordsTXTRecordTTLNumber = 1
+	DNSRecordUpdateResponseTXTTTLNumber1 DNSRecordUpdateResponseTXTTTLNumber = 1
 )
 
-type DNSRecordUpdateResponseDNSRecordsURIRecord struct {
+type DNSRecordUpdateResponseURI struct {
 	// Components of a URI record.
-	Data DNSRecordUpdateResponseDNSRecordsURIRecordData `json:"data,required"`
+	Data DNSRecordUpdateResponseURIData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
 	Priority float64 `json:"priority,required"`
 	// Record type.
-	Type DNSRecordUpdateResponseDNSRecordsURIRecordType `json:"type,required"`
+	Type DNSRecordUpdateResponseURIType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -5860,7 +6017,7 @@ type DNSRecordUpdateResponseDNSRecordsURIRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordUpdateResponseDNSRecordsURIRecordMeta `json:"meta"`
+	Meta DNSRecordUpdateResponseURIMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -5870,17 +6027,17 @@ type DNSRecordUpdateResponseDNSRecordsURIRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordUpdateResponseDNSRecordsURIRecordTTL `json:"ttl"`
+	TTL DNSRecordUpdateResponseURITTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                         `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordUpdateResponseDNSRecordsURIRecordJSON `json:"-"`
+	ZoneName string                         `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordUpdateResponseURIJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsURIRecordJSON contains the JSON metadata for
-// the struct [DNSRecordUpdateResponseDNSRecordsURIRecord]
-type dnsRecordUpdateResponseDNSRecordsURIRecordJSON struct {
+// dnsRecordUpdateResponseURIJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseURI]
+type dnsRecordUpdateResponseURIJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Priority    apijson.Field
@@ -5901,61 +6058,61 @@ type dnsRecordUpdateResponseDNSRecordsURIRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsURIRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseURI) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordUpdateResponseDNSRecordsURIRecord) implementsDNSRecordUpdateResponse() {}
+func (r DNSRecordUpdateResponseURI) implementsDNSRecordUpdateResponse() {}
 
 // Components of a URI record.
-type DNSRecordUpdateResponseDNSRecordsURIRecordData struct {
+type DNSRecordUpdateResponseURIData struct {
 	// The record content.
 	Content string `json:"content"`
 	// The record weight.
-	Weight float64                                            `json:"weight"`
-	JSON   dnsRecordUpdateResponseDNSRecordsURIRecordDataJSON `json:"-"`
+	Weight float64                            `json:"weight"`
+	JSON   dnsRecordUpdateResponseURIDataJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsURIRecordDataJSON contains the JSON metadata
-// for the struct [DNSRecordUpdateResponseDNSRecordsURIRecordData]
-type dnsRecordUpdateResponseDNSRecordsURIRecordDataJSON struct {
+// dnsRecordUpdateResponseURIDataJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseURIData]
+type dnsRecordUpdateResponseURIDataJSON struct {
 	Content     apijson.Field
 	Weight      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsURIRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseURIData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordUpdateResponseDNSRecordsURIRecordType string
+type DNSRecordUpdateResponseURIType string
 
 const (
-	DNSRecordUpdateResponseDNSRecordsURIRecordTypeURI DNSRecordUpdateResponseDNSRecordsURIRecordType = "URI"
+	DNSRecordUpdateResponseURITypeURI DNSRecordUpdateResponseURIType = "URI"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordUpdateResponseDNSRecordsURIRecordMeta struct {
+type DNSRecordUpdateResponseURIMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                             `json:"source"`
-	JSON   dnsRecordUpdateResponseDNSRecordsURIRecordMetaJSON `json:"-"`
+	Source string                             `json:"source"`
+	JSON   dnsRecordUpdateResponseURIMetaJSON `json:"-"`
 }
 
-// dnsRecordUpdateResponseDNSRecordsURIRecordMetaJSON contains the JSON metadata
-// for the struct [DNSRecordUpdateResponseDNSRecordsURIRecordMeta]
-type dnsRecordUpdateResponseDNSRecordsURIRecordMetaJSON struct {
+// dnsRecordUpdateResponseURIMetaJSON contains the JSON metadata for the struct
+// [DNSRecordUpdateResponseURIMeta]
+type dnsRecordUpdateResponseURIMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordUpdateResponseDNSRecordsURIRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordUpdateResponseURIMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -5963,15 +6120,14 @@ func (r *DNSRecordUpdateResponseDNSRecordsURIRecordMeta) UnmarshalJSON(data []by
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordUpdateResponseDNSRecordsURIRecordTTLNumber].
-type DNSRecordUpdateResponseDNSRecordsURIRecordTTL interface {
-	ImplementsDNSRecordUpdateResponseDNSRecordsURIRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordUpdateResponseURITTLNumber].
+type DNSRecordUpdateResponseURITTL interface {
+	ImplementsDNSRecordUpdateResponseUrittl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordUpdateResponseDNSRecordsURIRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordUpdateResponseURITTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -5980,47 +6136,140 @@ func init() {
 	)
 }
 
-type DNSRecordUpdateResponseDNSRecordsURIRecordTTLNumber float64
+type DNSRecordUpdateResponseURITTLNumber float64
 
 const (
-	DNSRecordUpdateResponseDNSRecordsURIRecordTTLNumber1 DNSRecordUpdateResponseDNSRecordsURIRecordTTLNumber = 1
+	DNSRecordUpdateResponseURITTLNumber1 DNSRecordUpdateResponseURITTLNumber = 1
 )
 
-// Union satisfied by [DNSRecordListResponseDNSRecordsARecord],
-// [DNSRecordListResponseDNSRecordsAAAARecord],
-// [DNSRecordListResponseDNSRecordsCAARecord],
-// [DNSRecordListResponseDNSRecordsCertRecord],
-// [DNSRecordListResponseDNSRecordsCNAMERecord],
-// [DNSRecordListResponseDNSRecordsDNSKEYRecord],
-// [DNSRecordListResponseDNSRecordsDSRecord],
-// [DNSRecordListResponseDNSRecordsHTTPSRecord],
-// [DNSRecordListResponseDNSRecordsLOCRecord],
-// [DNSRecordListResponseDNSRecordsMXRecord],
-// [DNSRecordListResponseDNSRecordsNAPTRRecord],
-// [DNSRecordListResponseDNSRecordsNSRecord],
-// [DNSRecordListResponseDNSRecordsPTRRecord],
-// [DNSRecordListResponseDNSRecordsSmimeaRecord],
-// [DNSRecordListResponseDNSRecordsSRVRecord],
-// [DNSRecordListResponseDNSRecordsSSHFPRecord],
-// [DNSRecordListResponseDNSRecordsSVCBRecord],
-// [DNSRecordListResponseDNSRecordsTLSARecord],
-// [DNSRecordListResponseDNSRecordsTXTRecord] or
-// [DNSRecordListResponseDNSRecordsURIRecord].
+// Union satisfied by [DNSRecordListResponseA], [DNSRecordListResponseAAAA],
+// [DNSRecordListResponseCAA], [DNSRecordListResponseCert],
+// [DNSRecordListResponseCNAME], [DNSRecordListResponseDNSKEY],
+// [DNSRecordListResponseDS], [DNSRecordListResponseHTTPS],
+// [DNSRecordListResponseLOC], [DNSRecordListResponseMX],
+// [DNSRecordListResponseNAPTR], [DNSRecordListResponseNS],
+// [DNSRecordListResponsePTR], [DNSRecordListResponseSmimea],
+// [DNSRecordListResponseSRV], [DNSRecordListResponseSSHFP],
+// [DNSRecordListResponseSVCB], [DNSRecordListResponseTLSA],
+// [DNSRecordListResponseTXT] or [DNSRecordListResponseURI].
 type DNSRecordListResponse interface {
 	implementsDNSRecordListResponse()
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*DNSRecordListResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DNSRecordListResponse)(nil)).Elem(),
+		"type",
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordListResponseA{}),
+			DiscriminatorValue: "A",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordListResponseAAAA{}),
+			DiscriminatorValue: "AAAA",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordListResponseCAA{}),
+			DiscriminatorValue: "CAA",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordListResponseCert{}),
+			DiscriminatorValue: "CERT",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordListResponseCNAME{}),
+			DiscriminatorValue: "CNAME",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordListResponseDNSKEY{}),
+			DiscriminatorValue: "DNSKEY",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordListResponseDS{}),
+			DiscriminatorValue: "DS",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordListResponseHTTPS{}),
+			DiscriminatorValue: "HTTPS",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordListResponseLOC{}),
+			DiscriminatorValue: "LOC",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordListResponseMX{}),
+			DiscriminatorValue: "MX",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordListResponseNAPTR{}),
+			DiscriminatorValue: "NAPTR",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordListResponseNS{}),
+			DiscriminatorValue: "NS",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordListResponsePTR{}),
+			DiscriminatorValue: "PTR",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordListResponseSmimea{}),
+			DiscriminatorValue: "SMIMEA",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordListResponseSRV{}),
+			DiscriminatorValue: "SRV",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordListResponseSSHFP{}),
+			DiscriminatorValue: "SSHFP",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordListResponseSVCB{}),
+			DiscriminatorValue: "SVCB",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordListResponseTLSA{}),
+			DiscriminatorValue: "TLSA",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordListResponseTXT{}),
+			DiscriminatorValue: "TXT",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordListResponseURI{}),
+			DiscriminatorValue: "URI",
+		},
+	)
 }
 
-type DNSRecordListResponseDNSRecordsARecord struct {
+type DNSRecordListResponseA struct {
 	// A valid IPv4 address.
 	Content string `json:"content,required" format:"ipv4"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordListResponseDNSRecordsARecordType `json:"type,required"`
+	Type DNSRecordListResponseAType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -6032,7 +6281,7 @@ type DNSRecordListResponseDNSRecordsARecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordListResponseDNSRecordsARecordMeta `json:"meta"`
+	Meta DNSRecordListResponseAMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -6045,17 +6294,17 @@ type DNSRecordListResponseDNSRecordsARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordListResponseDNSRecordsARecordTTL `json:"ttl"`
+	TTL DNSRecordListResponseATTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                     `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordListResponseDNSRecordsARecordJSON `json:"-"`
+	ZoneName string                     `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordListResponseAJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsARecordJSON contains the JSON metadata for the
-// struct [DNSRecordListResponseDNSRecordsARecord]
-type dnsRecordListResponseDNSRecordsARecordJSON struct {
+// dnsRecordListResponseAJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseA]
+type dnsRecordListResponseAJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -6075,39 +6324,39 @@ type dnsRecordListResponseDNSRecordsARecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsARecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordListResponseDNSRecordsARecord) implementsDNSRecordListResponse() {}
+func (r DNSRecordListResponseA) implementsDNSRecordListResponse() {}
 
 // Record type.
-type DNSRecordListResponseDNSRecordsARecordType string
+type DNSRecordListResponseAType string
 
 const (
-	DNSRecordListResponseDNSRecordsARecordTypeA DNSRecordListResponseDNSRecordsARecordType = "A"
+	DNSRecordListResponseATypeA DNSRecordListResponseAType = "A"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordListResponseDNSRecordsARecordMeta struct {
+type DNSRecordListResponseAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                         `json:"source"`
-	JSON   dnsRecordListResponseDNSRecordsARecordMetaJSON `json:"-"`
+	Source string                         `json:"source"`
+	JSON   dnsRecordListResponseAMetaJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsARecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordListResponseDNSRecordsARecordMeta]
-type dnsRecordListResponseDNSRecordsARecordMetaJSON struct {
+// dnsRecordListResponseAMetaJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseAMeta]
+type dnsRecordListResponseAMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsARecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -6115,15 +6364,14 @@ func (r *DNSRecordListResponseDNSRecordsARecordMeta) UnmarshalJSON(data []byte) 
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordListResponseDNSRecordsARecordTTLNumber].
-type DNSRecordListResponseDNSRecordsARecordTTL interface {
-	ImplementsDNSRecordListResponseDNSRecordsARecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordListResponseATTLNumber].
+type DNSRecordListResponseATTL interface {
+	ImplementsDNSRecordListResponseAttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordListResponseDNSRecordsARecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordListResponseATTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -6132,19 +6380,19 @@ func init() {
 	)
 }
 
-type DNSRecordListResponseDNSRecordsARecordTTLNumber float64
+type DNSRecordListResponseATTLNumber float64
 
 const (
-	DNSRecordListResponseDNSRecordsARecordTTLNumber1 DNSRecordListResponseDNSRecordsARecordTTLNumber = 1
+	DNSRecordListResponseATTLNumber1 DNSRecordListResponseATTLNumber = 1
 )
 
-type DNSRecordListResponseDNSRecordsAAAARecord struct {
+type DNSRecordListResponseAAAA struct {
 	// A valid IPv6 address.
 	Content string `json:"content,required" format:"ipv6"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordListResponseDNSRecordsAAAARecordType `json:"type,required"`
+	Type DNSRecordListResponseAAAAType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -6156,7 +6404,7 @@ type DNSRecordListResponseDNSRecordsAAAARecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordListResponseDNSRecordsAAAARecordMeta `json:"meta"`
+	Meta DNSRecordListResponseAAAAMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -6169,17 +6417,17 @@ type DNSRecordListResponseDNSRecordsAAAARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordListResponseDNSRecordsAAAARecordTTL `json:"ttl"`
+	TTL DNSRecordListResponseAAAATTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                        `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordListResponseDNSRecordsAAAARecordJSON `json:"-"`
+	ZoneName string                        `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordListResponseAAAAJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsAAAARecordJSON contains the JSON metadata for the
-// struct [DNSRecordListResponseDNSRecordsAAAARecord]
-type dnsRecordListResponseDNSRecordsAAAARecordJSON struct {
+// dnsRecordListResponseAAAAJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseAAAA]
+type dnsRecordListResponseAAAAJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -6199,39 +6447,39 @@ type dnsRecordListResponseDNSRecordsAAAARecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsAAAARecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseAAAA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordListResponseDNSRecordsAAAARecord) implementsDNSRecordListResponse() {}
+func (r DNSRecordListResponseAAAA) implementsDNSRecordListResponse() {}
 
 // Record type.
-type DNSRecordListResponseDNSRecordsAAAARecordType string
+type DNSRecordListResponseAAAAType string
 
 const (
-	DNSRecordListResponseDNSRecordsAAAARecordTypeAAAA DNSRecordListResponseDNSRecordsAAAARecordType = "AAAA"
+	DNSRecordListResponseAAAATypeAAAA DNSRecordListResponseAAAAType = "AAAA"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordListResponseDNSRecordsAAAARecordMeta struct {
+type DNSRecordListResponseAAAAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                            `json:"source"`
-	JSON   dnsRecordListResponseDNSRecordsAAAARecordMetaJSON `json:"-"`
+	Source string                            `json:"source"`
+	JSON   dnsRecordListResponseAAAAMetaJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsAAAARecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordListResponseDNSRecordsAAAARecordMeta]
-type dnsRecordListResponseDNSRecordsAAAARecordMetaJSON struct {
+// dnsRecordListResponseAAAAMetaJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseAAAAMeta]
+type dnsRecordListResponseAAAAMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsAAAARecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseAAAAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -6239,15 +6487,14 @@ func (r *DNSRecordListResponseDNSRecordsAAAARecordMeta) UnmarshalJSON(data []byt
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordListResponseDNSRecordsAAAARecordTTLNumber].
-type DNSRecordListResponseDNSRecordsAAAARecordTTL interface {
-	ImplementsDNSRecordListResponseDNSRecordsAAAARecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordListResponseAAAATTLNumber].
+type DNSRecordListResponseAAAATTL interface {
+	ImplementsDNSRecordListResponseAaaattl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordListResponseDNSRecordsAAAARecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordListResponseAAAATTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -6256,19 +6503,19 @@ func init() {
 	)
 }
 
-type DNSRecordListResponseDNSRecordsAAAARecordTTLNumber float64
+type DNSRecordListResponseAAAATTLNumber float64
 
 const (
-	DNSRecordListResponseDNSRecordsAAAARecordTTLNumber1 DNSRecordListResponseDNSRecordsAAAARecordTTLNumber = 1
+	DNSRecordListResponseAAAATTLNumber1 DNSRecordListResponseAAAATTLNumber = 1
 )
 
-type DNSRecordListResponseDNSRecordsCAARecord struct {
+type DNSRecordListResponseCAA struct {
 	// Components of a CAA record.
-	Data DNSRecordListResponseDNSRecordsCAARecordData `json:"data,required"`
+	Data DNSRecordListResponseCAAData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordListResponseDNSRecordsCAARecordType `json:"type,required"`
+	Type DNSRecordListResponseCAAType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -6282,7 +6529,7 @@ type DNSRecordListResponseDNSRecordsCAARecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordListResponseDNSRecordsCAARecordMeta `json:"meta"`
+	Meta DNSRecordListResponseCAAMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -6292,17 +6539,17 @@ type DNSRecordListResponseDNSRecordsCAARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordListResponseDNSRecordsCAARecordTTL `json:"ttl"`
+	TTL DNSRecordListResponseCAATTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                       `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordListResponseDNSRecordsCAARecordJSON `json:"-"`
+	ZoneName string                       `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordListResponseCAAJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsCAARecordJSON contains the JSON metadata for the
-// struct [DNSRecordListResponseDNSRecordsCAARecord]
-type dnsRecordListResponseDNSRecordsCAARecordJSON struct {
+// dnsRecordListResponseCAAJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseCAA]
+type dnsRecordListResponseCAAJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -6322,26 +6569,26 @@ type dnsRecordListResponseDNSRecordsCAARecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsCAARecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseCAA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordListResponseDNSRecordsCAARecord) implementsDNSRecordListResponse() {}
+func (r DNSRecordListResponseCAA) implementsDNSRecordListResponse() {}
 
 // Components of a CAA record.
-type DNSRecordListResponseDNSRecordsCAARecordData struct {
+type DNSRecordListResponseCAAData struct {
 	// Flags for the CAA record.
 	Flags float64 `json:"flags"`
 	// Name of the property controlled by this record (e.g.: issue, issuewild, iodef).
 	Tag string `json:"tag"`
 	// Value of the record. This field's semantics depend on the chosen tag.
-	Value string                                           `json:"value"`
-	JSON  dnsRecordListResponseDNSRecordsCAARecordDataJSON `json:"-"`
+	Value string                           `json:"value"`
+	JSON  dnsRecordListResponseCAADataJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsCAARecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordListResponseDNSRecordsCAARecordData]
-type dnsRecordListResponseDNSRecordsCAARecordDataJSON struct {
+// dnsRecordListResponseCAADataJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseCAAData]
+type dnsRecordListResponseCAADataJSON struct {
 	Flags       apijson.Field
 	Tag         apijson.Field
 	Value       apijson.Field
@@ -6349,37 +6596,37 @@ type dnsRecordListResponseDNSRecordsCAARecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsCAARecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseCAAData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordListResponseDNSRecordsCAARecordType string
+type DNSRecordListResponseCAAType string
 
 const (
-	DNSRecordListResponseDNSRecordsCAARecordTypeCAA DNSRecordListResponseDNSRecordsCAARecordType = "CAA"
+	DNSRecordListResponseCAATypeCAA DNSRecordListResponseCAAType = "CAA"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordListResponseDNSRecordsCAARecordMeta struct {
+type DNSRecordListResponseCAAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                           `json:"source"`
-	JSON   dnsRecordListResponseDNSRecordsCAARecordMetaJSON `json:"-"`
+	Source string                           `json:"source"`
+	JSON   dnsRecordListResponseCAAMetaJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsCAARecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordListResponseDNSRecordsCAARecordMeta]
-type dnsRecordListResponseDNSRecordsCAARecordMetaJSON struct {
+// dnsRecordListResponseCAAMetaJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseCAAMeta]
+type dnsRecordListResponseCAAMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsCAARecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseCAAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -6387,15 +6634,14 @@ func (r *DNSRecordListResponseDNSRecordsCAARecordMeta) UnmarshalJSON(data []byte
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordListResponseDNSRecordsCAARecordTTLNumber].
-type DNSRecordListResponseDNSRecordsCAARecordTTL interface {
-	ImplementsDNSRecordListResponseDNSRecordsCAARecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordListResponseCAATTLNumber].
+type DNSRecordListResponseCAATTL interface {
+	ImplementsDNSRecordListResponseCaattl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordListResponseDNSRecordsCAARecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordListResponseCAATTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -6404,19 +6650,19 @@ func init() {
 	)
 }
 
-type DNSRecordListResponseDNSRecordsCAARecordTTLNumber float64
+type DNSRecordListResponseCAATTLNumber float64
 
 const (
-	DNSRecordListResponseDNSRecordsCAARecordTTLNumber1 DNSRecordListResponseDNSRecordsCAARecordTTLNumber = 1
+	DNSRecordListResponseCAATTLNumber1 DNSRecordListResponseCAATTLNumber = 1
 )
 
-type DNSRecordListResponseDNSRecordsCertRecord struct {
+type DNSRecordListResponseCert struct {
 	// Components of a CERT record.
-	Data DNSRecordListResponseDNSRecordsCertRecordData `json:"data,required"`
+	Data DNSRecordListResponseCertData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordListResponseDNSRecordsCertRecordType `json:"type,required"`
+	Type DNSRecordListResponseCertType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -6430,7 +6676,7 @@ type DNSRecordListResponseDNSRecordsCertRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordListResponseDNSRecordsCertRecordMeta `json:"meta"`
+	Meta DNSRecordListResponseCertMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -6440,17 +6686,17 @@ type DNSRecordListResponseDNSRecordsCertRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordListResponseDNSRecordsCertRecordTTL `json:"ttl"`
+	TTL DNSRecordListResponseCertTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                        `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordListResponseDNSRecordsCertRecordJSON `json:"-"`
+	ZoneName string                        `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordListResponseCertJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsCertRecordJSON contains the JSON metadata for the
-// struct [DNSRecordListResponseDNSRecordsCertRecord]
-type dnsRecordListResponseDNSRecordsCertRecordJSON struct {
+// dnsRecordListResponseCertJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseCert]
+type dnsRecordListResponseCertJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -6470,14 +6716,14 @@ type dnsRecordListResponseDNSRecordsCertRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsCertRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseCert) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordListResponseDNSRecordsCertRecord) implementsDNSRecordListResponse() {}
+func (r DNSRecordListResponseCert) implementsDNSRecordListResponse() {}
 
 // Components of a CERT record.
-type DNSRecordListResponseDNSRecordsCertRecordData struct {
+type DNSRecordListResponseCertData struct {
 	// Algorithm.
 	Algorithm float64 `json:"algorithm"`
 	// Certificate.
@@ -6485,13 +6731,13 @@ type DNSRecordListResponseDNSRecordsCertRecordData struct {
 	// Key Tag.
 	KeyTag float64 `json:"key_tag"`
 	// Type.
-	Type float64                                           `json:"type"`
-	JSON dnsRecordListResponseDNSRecordsCertRecordDataJSON `json:"-"`
+	Type float64                           `json:"type"`
+	JSON dnsRecordListResponseCertDataJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsCertRecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordListResponseDNSRecordsCertRecordData]
-type dnsRecordListResponseDNSRecordsCertRecordDataJSON struct {
+// dnsRecordListResponseCertDataJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseCertData]
+type dnsRecordListResponseCertDataJSON struct {
 	Algorithm   apijson.Field
 	Certificate apijson.Field
 	KeyTag      apijson.Field
@@ -6500,37 +6746,37 @@ type dnsRecordListResponseDNSRecordsCertRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsCertRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseCertData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordListResponseDNSRecordsCertRecordType string
+type DNSRecordListResponseCertType string
 
 const (
-	DNSRecordListResponseDNSRecordsCertRecordTypeCert DNSRecordListResponseDNSRecordsCertRecordType = "CERT"
+	DNSRecordListResponseCertTypeCert DNSRecordListResponseCertType = "CERT"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordListResponseDNSRecordsCertRecordMeta struct {
+type DNSRecordListResponseCertMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                            `json:"source"`
-	JSON   dnsRecordListResponseDNSRecordsCertRecordMetaJSON `json:"-"`
+	Source string                            `json:"source"`
+	JSON   dnsRecordListResponseCertMetaJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsCertRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordListResponseDNSRecordsCertRecordMeta]
-type dnsRecordListResponseDNSRecordsCertRecordMetaJSON struct {
+// dnsRecordListResponseCertMetaJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseCertMeta]
+type dnsRecordListResponseCertMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsCertRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseCertMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -6538,15 +6784,14 @@ func (r *DNSRecordListResponseDNSRecordsCertRecordMeta) UnmarshalJSON(data []byt
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordListResponseDNSRecordsCertRecordTTLNumber].
-type DNSRecordListResponseDNSRecordsCertRecordTTL interface {
-	ImplementsDNSRecordListResponseDNSRecordsCertRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordListResponseCertTTLNumber].
+type DNSRecordListResponseCertTTL interface {
+	ImplementsDNSRecordListResponseCertTTL()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordListResponseDNSRecordsCertRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordListResponseCertTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -6555,19 +6800,19 @@ func init() {
 	)
 }
 
-type DNSRecordListResponseDNSRecordsCertRecordTTLNumber float64
+type DNSRecordListResponseCertTTLNumber float64
 
 const (
-	DNSRecordListResponseDNSRecordsCertRecordTTLNumber1 DNSRecordListResponseDNSRecordsCertRecordTTLNumber = 1
+	DNSRecordListResponseCertTTLNumber1 DNSRecordListResponseCertTTLNumber = 1
 )
 
-type DNSRecordListResponseDNSRecordsCNAMERecord struct {
+type DNSRecordListResponseCNAME struct {
 	// A valid hostname. Must not match the record's name.
 	Content interface{} `json:"content,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordListResponseDNSRecordsCNAMERecordType `json:"type,required"`
+	Type DNSRecordListResponseCNAMEType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -6579,7 +6824,7 @@ type DNSRecordListResponseDNSRecordsCNAMERecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordListResponseDNSRecordsCNAMERecordMeta `json:"meta"`
+	Meta DNSRecordListResponseCNAMEMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -6592,17 +6837,17 @@ type DNSRecordListResponseDNSRecordsCNAMERecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordListResponseDNSRecordsCNAMERecordTTL `json:"ttl"`
+	TTL DNSRecordListResponseCNAMETTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                         `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordListResponseDNSRecordsCNAMERecordJSON `json:"-"`
+	ZoneName string                         `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordListResponseCNAMEJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsCNAMERecordJSON contains the JSON metadata for
-// the struct [DNSRecordListResponseDNSRecordsCNAMERecord]
-type dnsRecordListResponseDNSRecordsCNAMERecordJSON struct {
+// dnsRecordListResponseCNAMEJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseCNAME]
+type dnsRecordListResponseCNAMEJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -6622,39 +6867,39 @@ type dnsRecordListResponseDNSRecordsCNAMERecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsCNAMERecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseCNAME) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordListResponseDNSRecordsCNAMERecord) implementsDNSRecordListResponse() {}
+func (r DNSRecordListResponseCNAME) implementsDNSRecordListResponse() {}
 
 // Record type.
-type DNSRecordListResponseDNSRecordsCNAMERecordType string
+type DNSRecordListResponseCNAMEType string
 
 const (
-	DNSRecordListResponseDNSRecordsCNAMERecordTypeCNAME DNSRecordListResponseDNSRecordsCNAMERecordType = "CNAME"
+	DNSRecordListResponseCNAMETypeCNAME DNSRecordListResponseCNAMEType = "CNAME"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordListResponseDNSRecordsCNAMERecordMeta struct {
+type DNSRecordListResponseCNAMEMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                             `json:"source"`
-	JSON   dnsRecordListResponseDNSRecordsCNAMERecordMetaJSON `json:"-"`
+	Source string                             `json:"source"`
+	JSON   dnsRecordListResponseCNAMEMetaJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsCNAMERecordMetaJSON contains the JSON metadata
-// for the struct [DNSRecordListResponseDNSRecordsCNAMERecordMeta]
-type dnsRecordListResponseDNSRecordsCNAMERecordMetaJSON struct {
+// dnsRecordListResponseCNAMEMetaJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseCNAMEMeta]
+type dnsRecordListResponseCNAMEMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsCNAMERecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseCNAMEMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -6662,15 +6907,14 @@ func (r *DNSRecordListResponseDNSRecordsCNAMERecordMeta) UnmarshalJSON(data []by
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordListResponseDNSRecordsCNAMERecordTTLNumber].
-type DNSRecordListResponseDNSRecordsCNAMERecordTTL interface {
-	ImplementsDNSRecordListResponseDNSRecordsCNAMERecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordListResponseCNAMETTLNumber].
+type DNSRecordListResponseCNAMETTL interface {
+	ImplementsDNSRecordListResponseCnamettl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordListResponseDNSRecordsCNAMERecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordListResponseCNAMETTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -6679,19 +6923,19 @@ func init() {
 	)
 }
 
-type DNSRecordListResponseDNSRecordsCNAMERecordTTLNumber float64
+type DNSRecordListResponseCNAMETTLNumber float64
 
 const (
-	DNSRecordListResponseDNSRecordsCNAMERecordTTLNumber1 DNSRecordListResponseDNSRecordsCNAMERecordTTLNumber = 1
+	DNSRecordListResponseCNAMETTLNumber1 DNSRecordListResponseCNAMETTLNumber = 1
 )
 
-type DNSRecordListResponseDNSRecordsDNSKEYRecord struct {
+type DNSRecordListResponseDNSKEY struct {
 	// Components of a DNSKEY record.
-	Data DNSRecordListResponseDNSRecordsDNSKEYRecordData `json:"data,required"`
+	Data DNSRecordListResponseDNSKEYData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordListResponseDNSRecordsDNSKEYRecordType `json:"type,required"`
+	Type DNSRecordListResponseDNSKEYType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -6705,7 +6949,7 @@ type DNSRecordListResponseDNSRecordsDNSKEYRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordListResponseDNSRecordsDNSKEYRecordMeta `json:"meta"`
+	Meta DNSRecordListResponseDNSKEYMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -6715,17 +6959,17 @@ type DNSRecordListResponseDNSRecordsDNSKEYRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordListResponseDNSRecordsDNSKEYRecordTTL `json:"ttl"`
+	TTL DNSRecordListResponseDNSKEYTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                          `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordListResponseDNSRecordsDNSKEYRecordJSON `json:"-"`
+	ZoneName string                          `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordListResponseDNSKEYJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsDNSKEYRecordJSON contains the JSON metadata for
-// the struct [DNSRecordListResponseDNSRecordsDNSKEYRecord]
-type dnsRecordListResponseDNSRecordsDNSKEYRecordJSON struct {
+// dnsRecordListResponseDNSKEYJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseDNSKEY]
+type dnsRecordListResponseDNSKEYJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -6745,14 +6989,14 @@ type dnsRecordListResponseDNSRecordsDNSKEYRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsDNSKEYRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseDNSKEY) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordListResponseDNSRecordsDNSKEYRecord) implementsDNSRecordListResponse() {}
+func (r DNSRecordListResponseDNSKEY) implementsDNSRecordListResponse() {}
 
 // Components of a DNSKEY record.
-type DNSRecordListResponseDNSRecordsDNSKEYRecordData struct {
+type DNSRecordListResponseDNSKEYData struct {
 	// Algorithm.
 	Algorithm float64 `json:"algorithm"`
 	// Flags.
@@ -6760,13 +7004,13 @@ type DNSRecordListResponseDNSRecordsDNSKEYRecordData struct {
 	// Protocol.
 	Protocol float64 `json:"protocol"`
 	// Public Key.
-	PublicKey string                                              `json:"public_key"`
-	JSON      dnsRecordListResponseDNSRecordsDNSKEYRecordDataJSON `json:"-"`
+	PublicKey string                              `json:"public_key"`
+	JSON      dnsRecordListResponseDNSKEYDataJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsDNSKEYRecordDataJSON contains the JSON metadata
-// for the struct [DNSRecordListResponseDNSRecordsDNSKEYRecordData]
-type dnsRecordListResponseDNSRecordsDNSKEYRecordDataJSON struct {
+// dnsRecordListResponseDNSKEYDataJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseDNSKEYData]
+type dnsRecordListResponseDNSKEYDataJSON struct {
 	Algorithm   apijson.Field
 	Flags       apijson.Field
 	Protocol    apijson.Field
@@ -6775,37 +7019,37 @@ type dnsRecordListResponseDNSRecordsDNSKEYRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsDNSKEYRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseDNSKEYData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordListResponseDNSRecordsDNSKEYRecordType string
+type DNSRecordListResponseDNSKEYType string
 
 const (
-	DNSRecordListResponseDNSRecordsDNSKEYRecordTypeDNSKEY DNSRecordListResponseDNSRecordsDNSKEYRecordType = "DNSKEY"
+	DNSRecordListResponseDNSKEYTypeDNSKEY DNSRecordListResponseDNSKEYType = "DNSKEY"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordListResponseDNSRecordsDNSKEYRecordMeta struct {
+type DNSRecordListResponseDNSKEYMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                              `json:"source"`
-	JSON   dnsRecordListResponseDNSRecordsDNSKEYRecordMetaJSON `json:"-"`
+	Source string                              `json:"source"`
+	JSON   dnsRecordListResponseDNSKEYMetaJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsDNSKEYRecordMetaJSON contains the JSON metadata
-// for the struct [DNSRecordListResponseDNSRecordsDNSKEYRecordMeta]
-type dnsRecordListResponseDNSRecordsDNSKEYRecordMetaJSON struct {
+// dnsRecordListResponseDNSKEYMetaJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseDNSKEYMeta]
+type dnsRecordListResponseDNSKEYMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsDNSKEYRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseDNSKEYMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -6814,14 +7058,14 @@ func (r *DNSRecordListResponseDNSRecordsDNSKEYRecordMeta) UnmarshalJSON(data []b
 // Enterprise zones.
 //
 // Union satisfied by [shared.UnionFloat] or
-// [DNSRecordListResponseDNSRecordsDNSKEYRecordTTLNumber].
-type DNSRecordListResponseDNSRecordsDNSKEYRecordTTL interface {
-	ImplementsDNSRecordListResponseDNSRecordsDNSKEYRecordTTL()
+// [DNSRecordListResponseDNSKEYTTLNumber].
+type DNSRecordListResponseDNSKEYTTL interface {
+	ImplementsDNSRecordListResponseDnskeyttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordListResponseDNSRecordsDNSKEYRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordListResponseDNSKEYTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -6830,19 +7074,19 @@ func init() {
 	)
 }
 
-type DNSRecordListResponseDNSRecordsDNSKEYRecordTTLNumber float64
+type DNSRecordListResponseDNSKEYTTLNumber float64
 
 const (
-	DNSRecordListResponseDNSRecordsDNSKEYRecordTTLNumber1 DNSRecordListResponseDNSRecordsDNSKEYRecordTTLNumber = 1
+	DNSRecordListResponseDNSKEYTTLNumber1 DNSRecordListResponseDNSKEYTTLNumber = 1
 )
 
-type DNSRecordListResponseDNSRecordsDSRecord struct {
+type DNSRecordListResponseDS struct {
 	// Components of a DS record.
-	Data DNSRecordListResponseDNSRecordsDSRecordData `json:"data,required"`
+	Data DNSRecordListResponseDSData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordListResponseDNSRecordsDSRecordType `json:"type,required"`
+	Type DNSRecordListResponseDSType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -6856,7 +7100,7 @@ type DNSRecordListResponseDNSRecordsDSRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordListResponseDNSRecordsDSRecordMeta `json:"meta"`
+	Meta DNSRecordListResponseDSMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -6866,17 +7110,17 @@ type DNSRecordListResponseDNSRecordsDSRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordListResponseDNSRecordsDSRecordTTL `json:"ttl"`
+	TTL DNSRecordListResponseDSTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                      `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordListResponseDNSRecordsDSRecordJSON `json:"-"`
+	ZoneName string                      `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordListResponseDSJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsDSRecordJSON contains the JSON metadata for the
-// struct [DNSRecordListResponseDNSRecordsDSRecord]
-type dnsRecordListResponseDNSRecordsDSRecordJSON struct {
+// dnsRecordListResponseDSJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseDS]
+type dnsRecordListResponseDSJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -6896,14 +7140,14 @@ type dnsRecordListResponseDNSRecordsDSRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsDSRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseDS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordListResponseDNSRecordsDSRecord) implementsDNSRecordListResponse() {}
+func (r DNSRecordListResponseDS) implementsDNSRecordListResponse() {}
 
 // Components of a DS record.
-type DNSRecordListResponseDNSRecordsDSRecordData struct {
+type DNSRecordListResponseDSData struct {
 	// Algorithm.
 	Algorithm float64 `json:"algorithm"`
 	// Digest.
@@ -6911,13 +7155,13 @@ type DNSRecordListResponseDNSRecordsDSRecordData struct {
 	// Digest Type.
 	DigestType float64 `json:"digest_type"`
 	// Key Tag.
-	KeyTag float64                                         `json:"key_tag"`
-	JSON   dnsRecordListResponseDNSRecordsDSRecordDataJSON `json:"-"`
+	KeyTag float64                         `json:"key_tag"`
+	JSON   dnsRecordListResponseDSDataJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsDSRecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordListResponseDNSRecordsDSRecordData]
-type dnsRecordListResponseDNSRecordsDSRecordDataJSON struct {
+// dnsRecordListResponseDSDataJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseDSData]
+type dnsRecordListResponseDSDataJSON struct {
 	Algorithm   apijson.Field
 	Digest      apijson.Field
 	DigestType  apijson.Field
@@ -6926,37 +7170,37 @@ type dnsRecordListResponseDNSRecordsDSRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsDSRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseDSData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordListResponseDNSRecordsDSRecordType string
+type DNSRecordListResponseDSType string
 
 const (
-	DNSRecordListResponseDNSRecordsDSRecordTypeDS DNSRecordListResponseDNSRecordsDSRecordType = "DS"
+	DNSRecordListResponseDSTypeDS DNSRecordListResponseDSType = "DS"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordListResponseDNSRecordsDSRecordMeta struct {
+type DNSRecordListResponseDSMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                          `json:"source"`
-	JSON   dnsRecordListResponseDNSRecordsDSRecordMetaJSON `json:"-"`
+	Source string                          `json:"source"`
+	JSON   dnsRecordListResponseDSMetaJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsDSRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordListResponseDNSRecordsDSRecordMeta]
-type dnsRecordListResponseDNSRecordsDSRecordMetaJSON struct {
+// dnsRecordListResponseDSMetaJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseDSMeta]
+type dnsRecordListResponseDSMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsDSRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseDSMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -6964,15 +7208,14 @@ func (r *DNSRecordListResponseDNSRecordsDSRecordMeta) UnmarshalJSON(data []byte)
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordListResponseDNSRecordsDSRecordTTLNumber].
-type DNSRecordListResponseDNSRecordsDSRecordTTL interface {
-	ImplementsDNSRecordListResponseDNSRecordsDSRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordListResponseDSTTLNumber].
+type DNSRecordListResponseDSTTL interface {
+	ImplementsDNSRecordListResponseDsttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordListResponseDNSRecordsDSRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordListResponseDSTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -6981,19 +7224,19 @@ func init() {
 	)
 }
 
-type DNSRecordListResponseDNSRecordsDSRecordTTLNumber float64
+type DNSRecordListResponseDSTTLNumber float64
 
 const (
-	DNSRecordListResponseDNSRecordsDSRecordTTLNumber1 DNSRecordListResponseDNSRecordsDSRecordTTLNumber = 1
+	DNSRecordListResponseDSTTLNumber1 DNSRecordListResponseDSTTLNumber = 1
 )
 
-type DNSRecordListResponseDNSRecordsHTTPSRecord struct {
+type DNSRecordListResponseHTTPS struct {
 	// Components of a HTTPS record.
-	Data DNSRecordListResponseDNSRecordsHTTPSRecordData `json:"data,required"`
+	Data DNSRecordListResponseHTTPSData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordListResponseDNSRecordsHTTPSRecordType `json:"type,required"`
+	Type DNSRecordListResponseHTTPSType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -7007,7 +7250,7 @@ type DNSRecordListResponseDNSRecordsHTTPSRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordListResponseDNSRecordsHTTPSRecordMeta `json:"meta"`
+	Meta DNSRecordListResponseHTTPSMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -7017,17 +7260,17 @@ type DNSRecordListResponseDNSRecordsHTTPSRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordListResponseDNSRecordsHTTPSRecordTTL `json:"ttl"`
+	TTL DNSRecordListResponseHTTPSTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                         `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordListResponseDNSRecordsHTTPSRecordJSON `json:"-"`
+	ZoneName string                         `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordListResponseHTTPSJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsHTTPSRecordJSON contains the JSON metadata for
-// the struct [DNSRecordListResponseDNSRecordsHTTPSRecord]
-type dnsRecordListResponseDNSRecordsHTTPSRecordJSON struct {
+// dnsRecordListResponseHTTPSJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseHTTPS]
+type dnsRecordListResponseHTTPSJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -7047,26 +7290,26 @@ type dnsRecordListResponseDNSRecordsHTTPSRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsHTTPSRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseHTTPS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordListResponseDNSRecordsHTTPSRecord) implementsDNSRecordListResponse() {}
+func (r DNSRecordListResponseHTTPS) implementsDNSRecordListResponse() {}
 
 // Components of a HTTPS record.
-type DNSRecordListResponseDNSRecordsHTTPSRecordData struct {
+type DNSRecordListResponseHTTPSData struct {
 	// priority.
 	Priority float64 `json:"priority"`
 	// target.
 	Target string `json:"target"`
 	// value.
-	Value string                                             `json:"value"`
-	JSON  dnsRecordListResponseDNSRecordsHTTPSRecordDataJSON `json:"-"`
+	Value string                             `json:"value"`
+	JSON  dnsRecordListResponseHTTPSDataJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsHTTPSRecordDataJSON contains the JSON metadata
-// for the struct [DNSRecordListResponseDNSRecordsHTTPSRecordData]
-type dnsRecordListResponseDNSRecordsHTTPSRecordDataJSON struct {
+// dnsRecordListResponseHTTPSDataJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseHTTPSData]
+type dnsRecordListResponseHTTPSDataJSON struct {
 	Priority    apijson.Field
 	Target      apijson.Field
 	Value       apijson.Field
@@ -7074,37 +7317,37 @@ type dnsRecordListResponseDNSRecordsHTTPSRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsHTTPSRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseHTTPSData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordListResponseDNSRecordsHTTPSRecordType string
+type DNSRecordListResponseHTTPSType string
 
 const (
-	DNSRecordListResponseDNSRecordsHTTPSRecordTypeHTTPS DNSRecordListResponseDNSRecordsHTTPSRecordType = "HTTPS"
+	DNSRecordListResponseHTTPSTypeHTTPS DNSRecordListResponseHTTPSType = "HTTPS"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordListResponseDNSRecordsHTTPSRecordMeta struct {
+type DNSRecordListResponseHTTPSMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                             `json:"source"`
-	JSON   dnsRecordListResponseDNSRecordsHTTPSRecordMetaJSON `json:"-"`
+	Source string                             `json:"source"`
+	JSON   dnsRecordListResponseHTTPSMetaJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsHTTPSRecordMetaJSON contains the JSON metadata
-// for the struct [DNSRecordListResponseDNSRecordsHTTPSRecordMeta]
-type dnsRecordListResponseDNSRecordsHTTPSRecordMetaJSON struct {
+// dnsRecordListResponseHTTPSMetaJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseHTTPSMeta]
+type dnsRecordListResponseHTTPSMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsHTTPSRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseHTTPSMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -7112,15 +7355,14 @@ func (r *DNSRecordListResponseDNSRecordsHTTPSRecordMeta) UnmarshalJSON(data []by
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordListResponseDNSRecordsHTTPSRecordTTLNumber].
-type DNSRecordListResponseDNSRecordsHTTPSRecordTTL interface {
-	ImplementsDNSRecordListResponseDNSRecordsHTTPSRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordListResponseHTTPSTTLNumber].
+type DNSRecordListResponseHTTPSTTL interface {
+	ImplementsDNSRecordListResponseHttpsttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordListResponseDNSRecordsHTTPSRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordListResponseHTTPSTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -7129,19 +7371,19 @@ func init() {
 	)
 }
 
-type DNSRecordListResponseDNSRecordsHTTPSRecordTTLNumber float64
+type DNSRecordListResponseHTTPSTTLNumber float64
 
 const (
-	DNSRecordListResponseDNSRecordsHTTPSRecordTTLNumber1 DNSRecordListResponseDNSRecordsHTTPSRecordTTLNumber = 1
+	DNSRecordListResponseHTTPSTTLNumber1 DNSRecordListResponseHTTPSTTLNumber = 1
 )
 
-type DNSRecordListResponseDNSRecordsLOCRecord struct {
+type DNSRecordListResponseLOC struct {
 	// Components of a LOC record.
-	Data DNSRecordListResponseDNSRecordsLOCRecordData `json:"data,required"`
+	Data DNSRecordListResponseLOCData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordListResponseDNSRecordsLOCRecordType `json:"type,required"`
+	Type DNSRecordListResponseLOCType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -7155,7 +7397,7 @@ type DNSRecordListResponseDNSRecordsLOCRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordListResponseDNSRecordsLOCRecordMeta `json:"meta"`
+	Meta DNSRecordListResponseLOCMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -7165,17 +7407,17 @@ type DNSRecordListResponseDNSRecordsLOCRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordListResponseDNSRecordsLOCRecordTTL `json:"ttl"`
+	TTL DNSRecordListResponseLOCTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                       `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordListResponseDNSRecordsLOCRecordJSON `json:"-"`
+	ZoneName string                       `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordListResponseLOCJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsLOCRecordJSON contains the JSON metadata for the
-// struct [DNSRecordListResponseDNSRecordsLOCRecord]
-type dnsRecordListResponseDNSRecordsLOCRecordJSON struct {
+// dnsRecordListResponseLOCJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseLOC]
+type dnsRecordListResponseLOCJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -7195,20 +7437,20 @@ type dnsRecordListResponseDNSRecordsLOCRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsLOCRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseLOC) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordListResponseDNSRecordsLOCRecord) implementsDNSRecordListResponse() {}
+func (r DNSRecordListResponseLOC) implementsDNSRecordListResponse() {}
 
 // Components of a LOC record.
-type DNSRecordListResponseDNSRecordsLOCRecordData struct {
+type DNSRecordListResponseLOCData struct {
 	// Altitude of location in meters.
 	Altitude float64 `json:"altitude"`
 	// Degrees of latitude.
 	LatDegrees float64 `json:"lat_degrees"`
 	// Latitude direction.
-	LatDirection DNSRecordListResponseDNSRecordsLOCRecordDataLatDirection `json:"lat_direction"`
+	LatDirection DNSRecordListResponseLOCDataLatDirection `json:"lat_direction"`
 	// Minutes of latitude.
 	LatMinutes float64 `json:"lat_minutes"`
 	// Seconds of latitude.
@@ -7216,7 +7458,7 @@ type DNSRecordListResponseDNSRecordsLOCRecordData struct {
 	// Degrees of longitude.
 	LongDegrees float64 `json:"long_degrees"`
 	// Longitude direction.
-	LongDirection DNSRecordListResponseDNSRecordsLOCRecordDataLongDirection `json:"long_direction"`
+	LongDirection DNSRecordListResponseLOCDataLongDirection `json:"long_direction"`
 	// Minutes of longitude.
 	LongMinutes float64 `json:"long_minutes"`
 	// Seconds of longitude.
@@ -7226,13 +7468,13 @@ type DNSRecordListResponseDNSRecordsLOCRecordData struct {
 	// Vertical precision of location.
 	PrecisionVert float64 `json:"precision_vert"`
 	// Size of location in meters.
-	Size float64                                          `json:"size"`
-	JSON dnsRecordListResponseDNSRecordsLOCRecordDataJSON `json:"-"`
+	Size float64                          `json:"size"`
+	JSON dnsRecordListResponseLOCDataJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsLOCRecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordListResponseDNSRecordsLOCRecordData]
-type dnsRecordListResponseDNSRecordsLOCRecordDataJSON struct {
+// dnsRecordListResponseLOCDataJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseLOCData]
+type dnsRecordListResponseLOCDataJSON struct {
 	Altitude      apijson.Field
 	LatDegrees    apijson.Field
 	LatDirection  apijson.Field
@@ -7249,53 +7491,53 @@ type dnsRecordListResponseDNSRecordsLOCRecordDataJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsLOCRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseLOCData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Latitude direction.
-type DNSRecordListResponseDNSRecordsLOCRecordDataLatDirection string
+type DNSRecordListResponseLOCDataLatDirection string
 
 const (
-	DNSRecordListResponseDNSRecordsLOCRecordDataLatDirectionN DNSRecordListResponseDNSRecordsLOCRecordDataLatDirection = "N"
-	DNSRecordListResponseDNSRecordsLOCRecordDataLatDirectionS DNSRecordListResponseDNSRecordsLOCRecordDataLatDirection = "S"
+	DNSRecordListResponseLOCDataLatDirectionN DNSRecordListResponseLOCDataLatDirection = "N"
+	DNSRecordListResponseLOCDataLatDirectionS DNSRecordListResponseLOCDataLatDirection = "S"
 )
 
 // Longitude direction.
-type DNSRecordListResponseDNSRecordsLOCRecordDataLongDirection string
+type DNSRecordListResponseLOCDataLongDirection string
 
 const (
-	DNSRecordListResponseDNSRecordsLOCRecordDataLongDirectionE DNSRecordListResponseDNSRecordsLOCRecordDataLongDirection = "E"
-	DNSRecordListResponseDNSRecordsLOCRecordDataLongDirectionW DNSRecordListResponseDNSRecordsLOCRecordDataLongDirection = "W"
+	DNSRecordListResponseLOCDataLongDirectionE DNSRecordListResponseLOCDataLongDirection = "E"
+	DNSRecordListResponseLOCDataLongDirectionW DNSRecordListResponseLOCDataLongDirection = "W"
 )
 
 // Record type.
-type DNSRecordListResponseDNSRecordsLOCRecordType string
+type DNSRecordListResponseLOCType string
 
 const (
-	DNSRecordListResponseDNSRecordsLOCRecordTypeLOC DNSRecordListResponseDNSRecordsLOCRecordType = "LOC"
+	DNSRecordListResponseLOCTypeLOC DNSRecordListResponseLOCType = "LOC"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordListResponseDNSRecordsLOCRecordMeta struct {
+type DNSRecordListResponseLOCMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                           `json:"source"`
-	JSON   dnsRecordListResponseDNSRecordsLOCRecordMetaJSON `json:"-"`
+	Source string                           `json:"source"`
+	JSON   dnsRecordListResponseLOCMetaJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsLOCRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordListResponseDNSRecordsLOCRecordMeta]
-type dnsRecordListResponseDNSRecordsLOCRecordMetaJSON struct {
+// dnsRecordListResponseLOCMetaJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseLOCMeta]
+type dnsRecordListResponseLOCMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsLOCRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseLOCMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -7303,15 +7545,14 @@ func (r *DNSRecordListResponseDNSRecordsLOCRecordMeta) UnmarshalJSON(data []byte
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordListResponseDNSRecordsLOCRecordTTLNumber].
-type DNSRecordListResponseDNSRecordsLOCRecordTTL interface {
-	ImplementsDNSRecordListResponseDNSRecordsLOCRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordListResponseLOCTTLNumber].
+type DNSRecordListResponseLOCTTL interface {
+	ImplementsDNSRecordListResponseLocttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordListResponseDNSRecordsLOCRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordListResponseLOCTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -7320,13 +7561,13 @@ func init() {
 	)
 }
 
-type DNSRecordListResponseDNSRecordsLOCRecordTTLNumber float64
+type DNSRecordListResponseLOCTTLNumber float64
 
 const (
-	DNSRecordListResponseDNSRecordsLOCRecordTTLNumber1 DNSRecordListResponseDNSRecordsLOCRecordTTLNumber = 1
+	DNSRecordListResponseLOCTTLNumber1 DNSRecordListResponseLOCTTLNumber = 1
 )
 
-type DNSRecordListResponseDNSRecordsMXRecord struct {
+type DNSRecordListResponseMX struct {
 	// A valid mail server hostname.
 	Content string `json:"content,required" format:"hostname"`
 	// DNS record name (or @ for the zone apex) in Punycode.
@@ -7335,7 +7576,7 @@ type DNSRecordListResponseDNSRecordsMXRecord struct {
 	// lower priorities are preferred.
 	Priority float64 `json:"priority,required"`
 	// Record type.
-	Type DNSRecordListResponseDNSRecordsMXRecordType `json:"type,required"`
+	Type DNSRecordListResponseMXType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -7347,7 +7588,7 @@ type DNSRecordListResponseDNSRecordsMXRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordListResponseDNSRecordsMXRecordMeta `json:"meta"`
+	Meta DNSRecordListResponseMXMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -7357,17 +7598,17 @@ type DNSRecordListResponseDNSRecordsMXRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordListResponseDNSRecordsMXRecordTTL `json:"ttl"`
+	TTL DNSRecordListResponseMXTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                      `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordListResponseDNSRecordsMXRecordJSON `json:"-"`
+	ZoneName string                      `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordListResponseMXJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsMXRecordJSON contains the JSON metadata for the
-// struct [DNSRecordListResponseDNSRecordsMXRecord]
-type dnsRecordListResponseDNSRecordsMXRecordJSON struct {
+// dnsRecordListResponseMXJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseMX]
+type dnsRecordListResponseMXJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Priority    apijson.Field
@@ -7387,39 +7628,39 @@ type dnsRecordListResponseDNSRecordsMXRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsMXRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseMX) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordListResponseDNSRecordsMXRecord) implementsDNSRecordListResponse() {}
+func (r DNSRecordListResponseMX) implementsDNSRecordListResponse() {}
 
 // Record type.
-type DNSRecordListResponseDNSRecordsMXRecordType string
+type DNSRecordListResponseMXType string
 
 const (
-	DNSRecordListResponseDNSRecordsMXRecordTypeMX DNSRecordListResponseDNSRecordsMXRecordType = "MX"
+	DNSRecordListResponseMXTypeMX DNSRecordListResponseMXType = "MX"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordListResponseDNSRecordsMXRecordMeta struct {
+type DNSRecordListResponseMXMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                          `json:"source"`
-	JSON   dnsRecordListResponseDNSRecordsMXRecordMetaJSON `json:"-"`
+	Source string                          `json:"source"`
+	JSON   dnsRecordListResponseMXMetaJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsMXRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordListResponseDNSRecordsMXRecordMeta]
-type dnsRecordListResponseDNSRecordsMXRecordMetaJSON struct {
+// dnsRecordListResponseMXMetaJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseMXMeta]
+type dnsRecordListResponseMXMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsMXRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseMXMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -7427,15 +7668,14 @@ func (r *DNSRecordListResponseDNSRecordsMXRecordMeta) UnmarshalJSON(data []byte)
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordListResponseDNSRecordsMXRecordTTLNumber].
-type DNSRecordListResponseDNSRecordsMXRecordTTL interface {
-	ImplementsDNSRecordListResponseDNSRecordsMXRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordListResponseMXTTLNumber].
+type DNSRecordListResponseMXTTL interface {
+	ImplementsDNSRecordListResponseMxttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordListResponseDNSRecordsMXRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordListResponseMXTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -7444,19 +7684,19 @@ func init() {
 	)
 }
 
-type DNSRecordListResponseDNSRecordsMXRecordTTLNumber float64
+type DNSRecordListResponseMXTTLNumber float64
 
 const (
-	DNSRecordListResponseDNSRecordsMXRecordTTLNumber1 DNSRecordListResponseDNSRecordsMXRecordTTLNumber = 1
+	DNSRecordListResponseMXTTLNumber1 DNSRecordListResponseMXTTLNumber = 1
 )
 
-type DNSRecordListResponseDNSRecordsNAPTRRecord struct {
+type DNSRecordListResponseNAPTR struct {
 	// Components of a NAPTR record.
-	Data DNSRecordListResponseDNSRecordsNAPTRRecordData `json:"data,required"`
+	Data DNSRecordListResponseNAPTRData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordListResponseDNSRecordsNAPTRRecordType `json:"type,required"`
+	Type DNSRecordListResponseNAPTRType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -7470,7 +7710,7 @@ type DNSRecordListResponseDNSRecordsNAPTRRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordListResponseDNSRecordsNAPTRRecordMeta `json:"meta"`
+	Meta DNSRecordListResponseNAPTRMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -7480,17 +7720,17 @@ type DNSRecordListResponseDNSRecordsNAPTRRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordListResponseDNSRecordsNAPTRRecordTTL `json:"ttl"`
+	TTL DNSRecordListResponseNAPTRTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                         `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordListResponseDNSRecordsNAPTRRecordJSON `json:"-"`
+	ZoneName string                         `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordListResponseNAPTRJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsNAPTRRecordJSON contains the JSON metadata for
-// the struct [DNSRecordListResponseDNSRecordsNAPTRRecord]
-type dnsRecordListResponseDNSRecordsNAPTRRecordJSON struct {
+// dnsRecordListResponseNAPTRJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseNAPTR]
+type dnsRecordListResponseNAPTRJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -7510,14 +7750,14 @@ type dnsRecordListResponseDNSRecordsNAPTRRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsNAPTRRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseNAPTR) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordListResponseDNSRecordsNAPTRRecord) implementsDNSRecordListResponse() {}
+func (r DNSRecordListResponseNAPTR) implementsDNSRecordListResponse() {}
 
 // Components of a NAPTR record.
-type DNSRecordListResponseDNSRecordsNAPTRRecordData struct {
+type DNSRecordListResponseNAPTRData struct {
 	// Flags.
 	Flags string `json:"flags"`
 	// Order.
@@ -7529,13 +7769,13 @@ type DNSRecordListResponseDNSRecordsNAPTRRecordData struct {
 	// Replacement.
 	Replacement string `json:"replacement"`
 	// Service.
-	Service string                                             `json:"service"`
-	JSON    dnsRecordListResponseDNSRecordsNAPTRRecordDataJSON `json:"-"`
+	Service string                             `json:"service"`
+	JSON    dnsRecordListResponseNAPTRDataJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsNAPTRRecordDataJSON contains the JSON metadata
-// for the struct [DNSRecordListResponseDNSRecordsNAPTRRecordData]
-type dnsRecordListResponseDNSRecordsNAPTRRecordDataJSON struct {
+// dnsRecordListResponseNAPTRDataJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseNAPTRData]
+type dnsRecordListResponseNAPTRDataJSON struct {
 	Flags       apijson.Field
 	Order       apijson.Field
 	Preference  apijson.Field
@@ -7546,37 +7786,37 @@ type dnsRecordListResponseDNSRecordsNAPTRRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsNAPTRRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseNAPTRData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordListResponseDNSRecordsNAPTRRecordType string
+type DNSRecordListResponseNAPTRType string
 
 const (
-	DNSRecordListResponseDNSRecordsNAPTRRecordTypeNAPTR DNSRecordListResponseDNSRecordsNAPTRRecordType = "NAPTR"
+	DNSRecordListResponseNAPTRTypeNAPTR DNSRecordListResponseNAPTRType = "NAPTR"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordListResponseDNSRecordsNAPTRRecordMeta struct {
+type DNSRecordListResponseNAPTRMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                             `json:"source"`
-	JSON   dnsRecordListResponseDNSRecordsNAPTRRecordMetaJSON `json:"-"`
+	Source string                             `json:"source"`
+	JSON   dnsRecordListResponseNAPTRMetaJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsNAPTRRecordMetaJSON contains the JSON metadata
-// for the struct [DNSRecordListResponseDNSRecordsNAPTRRecordMeta]
-type dnsRecordListResponseDNSRecordsNAPTRRecordMetaJSON struct {
+// dnsRecordListResponseNAPTRMetaJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseNAPTRMeta]
+type dnsRecordListResponseNAPTRMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsNAPTRRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseNAPTRMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -7584,15 +7824,14 @@ func (r *DNSRecordListResponseDNSRecordsNAPTRRecordMeta) UnmarshalJSON(data []by
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordListResponseDNSRecordsNAPTRRecordTTLNumber].
-type DNSRecordListResponseDNSRecordsNAPTRRecordTTL interface {
-	ImplementsDNSRecordListResponseDNSRecordsNAPTRRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordListResponseNAPTRTTLNumber].
+type DNSRecordListResponseNAPTRTTL interface {
+	ImplementsDNSRecordListResponseNaptrttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordListResponseDNSRecordsNAPTRRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordListResponseNAPTRTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -7601,19 +7840,19 @@ func init() {
 	)
 }
 
-type DNSRecordListResponseDNSRecordsNAPTRRecordTTLNumber float64
+type DNSRecordListResponseNAPTRTTLNumber float64
 
 const (
-	DNSRecordListResponseDNSRecordsNAPTRRecordTTLNumber1 DNSRecordListResponseDNSRecordsNAPTRRecordTTLNumber = 1
+	DNSRecordListResponseNAPTRTTLNumber1 DNSRecordListResponseNAPTRTTLNumber = 1
 )
 
-type DNSRecordListResponseDNSRecordsNSRecord struct {
+type DNSRecordListResponseNS struct {
 	// A valid name server host name.
 	Content interface{} `json:"content,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordListResponseDNSRecordsNSRecordType `json:"type,required"`
+	Type DNSRecordListResponseNSType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -7625,7 +7864,7 @@ type DNSRecordListResponseDNSRecordsNSRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordListResponseDNSRecordsNSRecordMeta `json:"meta"`
+	Meta DNSRecordListResponseNSMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -7635,17 +7874,17 @@ type DNSRecordListResponseDNSRecordsNSRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordListResponseDNSRecordsNSRecordTTL `json:"ttl"`
+	TTL DNSRecordListResponseNSTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                      `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordListResponseDNSRecordsNSRecordJSON `json:"-"`
+	ZoneName string                      `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordListResponseNSJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsNSRecordJSON contains the JSON metadata for the
-// struct [DNSRecordListResponseDNSRecordsNSRecord]
-type dnsRecordListResponseDNSRecordsNSRecordJSON struct {
+// dnsRecordListResponseNSJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseNS]
+type dnsRecordListResponseNSJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -7664,39 +7903,39 @@ type dnsRecordListResponseDNSRecordsNSRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsNSRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseNS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordListResponseDNSRecordsNSRecord) implementsDNSRecordListResponse() {}
+func (r DNSRecordListResponseNS) implementsDNSRecordListResponse() {}
 
 // Record type.
-type DNSRecordListResponseDNSRecordsNSRecordType string
+type DNSRecordListResponseNSType string
 
 const (
-	DNSRecordListResponseDNSRecordsNSRecordTypeNS DNSRecordListResponseDNSRecordsNSRecordType = "NS"
+	DNSRecordListResponseNSTypeNS DNSRecordListResponseNSType = "NS"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordListResponseDNSRecordsNSRecordMeta struct {
+type DNSRecordListResponseNSMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                          `json:"source"`
-	JSON   dnsRecordListResponseDNSRecordsNSRecordMetaJSON `json:"-"`
+	Source string                          `json:"source"`
+	JSON   dnsRecordListResponseNSMetaJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsNSRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordListResponseDNSRecordsNSRecordMeta]
-type dnsRecordListResponseDNSRecordsNSRecordMetaJSON struct {
+// dnsRecordListResponseNSMetaJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseNSMeta]
+type dnsRecordListResponseNSMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsNSRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseNSMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -7704,15 +7943,14 @@ func (r *DNSRecordListResponseDNSRecordsNSRecordMeta) UnmarshalJSON(data []byte)
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordListResponseDNSRecordsNSRecordTTLNumber].
-type DNSRecordListResponseDNSRecordsNSRecordTTL interface {
-	ImplementsDNSRecordListResponseDNSRecordsNSRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordListResponseNSTTLNumber].
+type DNSRecordListResponseNSTTL interface {
+	ImplementsDNSRecordListResponseNsttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordListResponseDNSRecordsNSRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordListResponseNSTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -7721,19 +7959,19 @@ func init() {
 	)
 }
 
-type DNSRecordListResponseDNSRecordsNSRecordTTLNumber float64
+type DNSRecordListResponseNSTTLNumber float64
 
 const (
-	DNSRecordListResponseDNSRecordsNSRecordTTLNumber1 DNSRecordListResponseDNSRecordsNSRecordTTLNumber = 1
+	DNSRecordListResponseNSTTLNumber1 DNSRecordListResponseNSTTLNumber = 1
 )
 
-type DNSRecordListResponseDNSRecordsPTRRecord struct {
+type DNSRecordListResponsePTR struct {
 	// Domain name pointing to the address.
 	Content string `json:"content,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordListResponseDNSRecordsPTRRecordType `json:"type,required"`
+	Type DNSRecordListResponsePTRType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -7745,7 +7983,7 @@ type DNSRecordListResponseDNSRecordsPTRRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordListResponseDNSRecordsPTRRecordMeta `json:"meta"`
+	Meta DNSRecordListResponsePTRMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -7755,17 +7993,17 @@ type DNSRecordListResponseDNSRecordsPTRRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordListResponseDNSRecordsPTRRecordTTL `json:"ttl"`
+	TTL DNSRecordListResponsePTRTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                       `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordListResponseDNSRecordsPTRRecordJSON `json:"-"`
+	ZoneName string                       `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordListResponsePTRJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsPTRRecordJSON contains the JSON metadata for the
-// struct [DNSRecordListResponseDNSRecordsPTRRecord]
-type dnsRecordListResponseDNSRecordsPTRRecordJSON struct {
+// dnsRecordListResponsePTRJSON contains the JSON metadata for the struct
+// [DNSRecordListResponsePTR]
+type dnsRecordListResponsePTRJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -7784,39 +8022,39 @@ type dnsRecordListResponseDNSRecordsPTRRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsPTRRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponsePTR) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordListResponseDNSRecordsPTRRecord) implementsDNSRecordListResponse() {}
+func (r DNSRecordListResponsePTR) implementsDNSRecordListResponse() {}
 
 // Record type.
-type DNSRecordListResponseDNSRecordsPTRRecordType string
+type DNSRecordListResponsePTRType string
 
 const (
-	DNSRecordListResponseDNSRecordsPTRRecordTypePTR DNSRecordListResponseDNSRecordsPTRRecordType = "PTR"
+	DNSRecordListResponsePTRTypePTR DNSRecordListResponsePTRType = "PTR"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordListResponseDNSRecordsPTRRecordMeta struct {
+type DNSRecordListResponsePTRMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                           `json:"source"`
-	JSON   dnsRecordListResponseDNSRecordsPTRRecordMetaJSON `json:"-"`
+	Source string                           `json:"source"`
+	JSON   dnsRecordListResponsePTRMetaJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsPTRRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordListResponseDNSRecordsPTRRecordMeta]
-type dnsRecordListResponseDNSRecordsPTRRecordMetaJSON struct {
+// dnsRecordListResponsePTRMetaJSON contains the JSON metadata for the struct
+// [DNSRecordListResponsePTRMeta]
+type dnsRecordListResponsePTRMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsPTRRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponsePTRMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -7824,15 +8062,14 @@ func (r *DNSRecordListResponseDNSRecordsPTRRecordMeta) UnmarshalJSON(data []byte
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordListResponseDNSRecordsPTRRecordTTLNumber].
-type DNSRecordListResponseDNSRecordsPTRRecordTTL interface {
-	ImplementsDNSRecordListResponseDNSRecordsPTRRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordListResponsePTRTTLNumber].
+type DNSRecordListResponsePTRTTL interface {
+	ImplementsDNSRecordListResponsePtrttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordListResponseDNSRecordsPTRRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordListResponsePTRTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -7841,19 +8078,19 @@ func init() {
 	)
 }
 
-type DNSRecordListResponseDNSRecordsPTRRecordTTLNumber float64
+type DNSRecordListResponsePTRTTLNumber float64
 
 const (
-	DNSRecordListResponseDNSRecordsPTRRecordTTLNumber1 DNSRecordListResponseDNSRecordsPTRRecordTTLNumber = 1
+	DNSRecordListResponsePTRTTLNumber1 DNSRecordListResponsePTRTTLNumber = 1
 )
 
-type DNSRecordListResponseDNSRecordsSmimeaRecord struct {
+type DNSRecordListResponseSmimea struct {
 	// Components of a SMIMEA record.
-	Data DNSRecordListResponseDNSRecordsSmimeaRecordData `json:"data,required"`
+	Data DNSRecordListResponseSmimeaData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordListResponseDNSRecordsSmimeaRecordType `json:"type,required"`
+	Type DNSRecordListResponseSmimeaType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -7867,7 +8104,7 @@ type DNSRecordListResponseDNSRecordsSmimeaRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordListResponseDNSRecordsSmimeaRecordMeta `json:"meta"`
+	Meta DNSRecordListResponseSmimeaMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -7877,17 +8114,17 @@ type DNSRecordListResponseDNSRecordsSmimeaRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordListResponseDNSRecordsSmimeaRecordTTL `json:"ttl"`
+	TTL DNSRecordListResponseSmimeaTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                          `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordListResponseDNSRecordsSmimeaRecordJSON `json:"-"`
+	ZoneName string                          `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordListResponseSmimeaJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsSmimeaRecordJSON contains the JSON metadata for
-// the struct [DNSRecordListResponseDNSRecordsSmimeaRecord]
-type dnsRecordListResponseDNSRecordsSmimeaRecordJSON struct {
+// dnsRecordListResponseSmimeaJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseSmimea]
+type dnsRecordListResponseSmimeaJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -7907,14 +8144,14 @@ type dnsRecordListResponseDNSRecordsSmimeaRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsSmimeaRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseSmimea) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordListResponseDNSRecordsSmimeaRecord) implementsDNSRecordListResponse() {}
+func (r DNSRecordListResponseSmimea) implementsDNSRecordListResponse() {}
 
 // Components of a SMIMEA record.
-type DNSRecordListResponseDNSRecordsSmimeaRecordData struct {
+type DNSRecordListResponseSmimeaData struct {
 	// Certificate.
 	Certificate string `json:"certificate"`
 	// Matching Type.
@@ -7922,13 +8159,13 @@ type DNSRecordListResponseDNSRecordsSmimeaRecordData struct {
 	// Selector.
 	Selector float64 `json:"selector"`
 	// Usage.
-	Usage float64                                             `json:"usage"`
-	JSON  dnsRecordListResponseDNSRecordsSmimeaRecordDataJSON `json:"-"`
+	Usage float64                             `json:"usage"`
+	JSON  dnsRecordListResponseSmimeaDataJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsSmimeaRecordDataJSON contains the JSON metadata
-// for the struct [DNSRecordListResponseDNSRecordsSmimeaRecordData]
-type dnsRecordListResponseDNSRecordsSmimeaRecordDataJSON struct {
+// dnsRecordListResponseSmimeaDataJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseSmimeaData]
+type dnsRecordListResponseSmimeaDataJSON struct {
 	Certificate  apijson.Field
 	MatchingType apijson.Field
 	Selector     apijson.Field
@@ -7937,37 +8174,37 @@ type dnsRecordListResponseDNSRecordsSmimeaRecordDataJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsSmimeaRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseSmimeaData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordListResponseDNSRecordsSmimeaRecordType string
+type DNSRecordListResponseSmimeaType string
 
 const (
-	DNSRecordListResponseDNSRecordsSmimeaRecordTypeSmimea DNSRecordListResponseDNSRecordsSmimeaRecordType = "SMIMEA"
+	DNSRecordListResponseSmimeaTypeSmimea DNSRecordListResponseSmimeaType = "SMIMEA"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordListResponseDNSRecordsSmimeaRecordMeta struct {
+type DNSRecordListResponseSmimeaMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                              `json:"source"`
-	JSON   dnsRecordListResponseDNSRecordsSmimeaRecordMetaJSON `json:"-"`
+	Source string                              `json:"source"`
+	JSON   dnsRecordListResponseSmimeaMetaJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsSmimeaRecordMetaJSON contains the JSON metadata
-// for the struct [DNSRecordListResponseDNSRecordsSmimeaRecordMeta]
-type dnsRecordListResponseDNSRecordsSmimeaRecordMetaJSON struct {
+// dnsRecordListResponseSmimeaMetaJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseSmimeaMeta]
+type dnsRecordListResponseSmimeaMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsSmimeaRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseSmimeaMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -7976,14 +8213,14 @@ func (r *DNSRecordListResponseDNSRecordsSmimeaRecordMeta) UnmarshalJSON(data []b
 // Enterprise zones.
 //
 // Union satisfied by [shared.UnionFloat] or
-// [DNSRecordListResponseDNSRecordsSmimeaRecordTTLNumber].
-type DNSRecordListResponseDNSRecordsSmimeaRecordTTL interface {
-	ImplementsDNSRecordListResponseDNSRecordsSmimeaRecordTTL()
+// [DNSRecordListResponseSmimeaTTLNumber].
+type DNSRecordListResponseSmimeaTTL interface {
+	ImplementsDNSRecordListResponseSmimeaTTL()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordListResponseDNSRecordsSmimeaRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordListResponseSmimeaTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -7992,21 +8229,21 @@ func init() {
 	)
 }
 
-type DNSRecordListResponseDNSRecordsSmimeaRecordTTLNumber float64
+type DNSRecordListResponseSmimeaTTLNumber float64
 
 const (
-	DNSRecordListResponseDNSRecordsSmimeaRecordTTLNumber1 DNSRecordListResponseDNSRecordsSmimeaRecordTTLNumber = 1
+	DNSRecordListResponseSmimeaTTLNumber1 DNSRecordListResponseSmimeaTTLNumber = 1
 )
 
-type DNSRecordListResponseDNSRecordsSRVRecord struct {
+type DNSRecordListResponseSRV struct {
 	// Components of a SRV record.
-	Data DNSRecordListResponseDNSRecordsSRVRecordData `json:"data,required"`
+	Data DNSRecordListResponseSRVData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode. For SRV records, the first
 	// label is normally a service and the second a protocol name, each starting with
 	// an underscore.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordListResponseDNSRecordsSRVRecordType `json:"type,required"`
+	Type DNSRecordListResponseSRVType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -8021,7 +8258,7 @@ type DNSRecordListResponseDNSRecordsSRVRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordListResponseDNSRecordsSRVRecordMeta `json:"meta"`
+	Meta DNSRecordListResponseSRVMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -8031,17 +8268,17 @@ type DNSRecordListResponseDNSRecordsSRVRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordListResponseDNSRecordsSRVRecordTTL `json:"ttl"`
+	TTL DNSRecordListResponseSRVTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                       `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordListResponseDNSRecordsSRVRecordJSON `json:"-"`
+	ZoneName string                       `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordListResponseSRVJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsSRVRecordJSON contains the JSON metadata for the
-// struct [DNSRecordListResponseDNSRecordsSRVRecord]
-type dnsRecordListResponseDNSRecordsSRVRecordJSON struct {
+// dnsRecordListResponseSRVJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseSRV]
+type dnsRecordListResponseSRVJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -8061,14 +8298,14 @@ type dnsRecordListResponseDNSRecordsSRVRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsSRVRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseSRV) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordListResponseDNSRecordsSRVRecord) implementsDNSRecordListResponse() {}
+func (r DNSRecordListResponseSRV) implementsDNSRecordListResponse() {}
 
 // Components of a SRV record.
-type DNSRecordListResponseDNSRecordsSRVRecordData struct {
+type DNSRecordListResponseSRVData struct {
 	// A valid hostname. Deprecated in favor of the regular 'name' outside the data
 	// map. This data map field represents the remainder of the full 'name' after the
 	// service and protocol.
@@ -8089,13 +8326,13 @@ type DNSRecordListResponseDNSRecordsSRVRecordData struct {
 	// A valid hostname.
 	Target string `json:"target" format:"hostname"`
 	// The record weight.
-	Weight float64                                          `json:"weight"`
-	JSON   dnsRecordListResponseDNSRecordsSRVRecordDataJSON `json:"-"`
+	Weight float64                          `json:"weight"`
+	JSON   dnsRecordListResponseSRVDataJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsSRVRecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordListResponseDNSRecordsSRVRecordData]
-type dnsRecordListResponseDNSRecordsSRVRecordDataJSON struct {
+// dnsRecordListResponseSRVDataJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseSRVData]
+type dnsRecordListResponseSRVDataJSON struct {
 	Name        apijson.Field
 	Port        apijson.Field
 	Priority    apijson.Field
@@ -8107,37 +8344,37 @@ type dnsRecordListResponseDNSRecordsSRVRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsSRVRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseSRVData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordListResponseDNSRecordsSRVRecordType string
+type DNSRecordListResponseSRVType string
 
 const (
-	DNSRecordListResponseDNSRecordsSRVRecordTypeSRV DNSRecordListResponseDNSRecordsSRVRecordType = "SRV"
+	DNSRecordListResponseSRVTypeSRV DNSRecordListResponseSRVType = "SRV"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordListResponseDNSRecordsSRVRecordMeta struct {
+type DNSRecordListResponseSRVMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                           `json:"source"`
-	JSON   dnsRecordListResponseDNSRecordsSRVRecordMetaJSON `json:"-"`
+	Source string                           `json:"source"`
+	JSON   dnsRecordListResponseSRVMetaJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsSRVRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordListResponseDNSRecordsSRVRecordMeta]
-type dnsRecordListResponseDNSRecordsSRVRecordMetaJSON struct {
+// dnsRecordListResponseSRVMetaJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseSRVMeta]
+type dnsRecordListResponseSRVMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsSRVRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseSRVMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -8145,15 +8382,14 @@ func (r *DNSRecordListResponseDNSRecordsSRVRecordMeta) UnmarshalJSON(data []byte
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordListResponseDNSRecordsSRVRecordTTLNumber].
-type DNSRecordListResponseDNSRecordsSRVRecordTTL interface {
-	ImplementsDNSRecordListResponseDNSRecordsSRVRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordListResponseSRVTTLNumber].
+type DNSRecordListResponseSRVTTL interface {
+	ImplementsDNSRecordListResponseSrvttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordListResponseDNSRecordsSRVRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordListResponseSRVTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -8162,19 +8398,19 @@ func init() {
 	)
 }
 
-type DNSRecordListResponseDNSRecordsSRVRecordTTLNumber float64
+type DNSRecordListResponseSRVTTLNumber float64
 
 const (
-	DNSRecordListResponseDNSRecordsSRVRecordTTLNumber1 DNSRecordListResponseDNSRecordsSRVRecordTTLNumber = 1
+	DNSRecordListResponseSRVTTLNumber1 DNSRecordListResponseSRVTTLNumber = 1
 )
 
-type DNSRecordListResponseDNSRecordsSSHFPRecord struct {
+type DNSRecordListResponseSSHFP struct {
 	// Components of a SSHFP record.
-	Data DNSRecordListResponseDNSRecordsSSHFPRecordData `json:"data,required"`
+	Data DNSRecordListResponseSSHFPData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordListResponseDNSRecordsSSHFPRecordType `json:"type,required"`
+	Type DNSRecordListResponseSSHFPType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -8188,7 +8424,7 @@ type DNSRecordListResponseDNSRecordsSSHFPRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordListResponseDNSRecordsSSHFPRecordMeta `json:"meta"`
+	Meta DNSRecordListResponseSSHFPMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -8198,17 +8434,17 @@ type DNSRecordListResponseDNSRecordsSSHFPRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordListResponseDNSRecordsSSHFPRecordTTL `json:"ttl"`
+	TTL DNSRecordListResponseSSHFPTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                         `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordListResponseDNSRecordsSSHFPRecordJSON `json:"-"`
+	ZoneName string                         `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordListResponseSSHFPJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsSSHFPRecordJSON contains the JSON metadata for
-// the struct [DNSRecordListResponseDNSRecordsSSHFPRecord]
-type dnsRecordListResponseDNSRecordsSSHFPRecordJSON struct {
+// dnsRecordListResponseSSHFPJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseSSHFP]
+type dnsRecordListResponseSSHFPJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -8228,26 +8464,26 @@ type dnsRecordListResponseDNSRecordsSSHFPRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsSSHFPRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseSSHFP) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordListResponseDNSRecordsSSHFPRecord) implementsDNSRecordListResponse() {}
+func (r DNSRecordListResponseSSHFP) implementsDNSRecordListResponse() {}
 
 // Components of a SSHFP record.
-type DNSRecordListResponseDNSRecordsSSHFPRecordData struct {
+type DNSRecordListResponseSSHFPData struct {
 	// algorithm.
 	Algorithm float64 `json:"algorithm"`
 	// fingerprint.
 	Fingerprint string `json:"fingerprint"`
 	// type.
-	Type float64                                            `json:"type"`
-	JSON dnsRecordListResponseDNSRecordsSSHFPRecordDataJSON `json:"-"`
+	Type float64                            `json:"type"`
+	JSON dnsRecordListResponseSSHFPDataJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsSSHFPRecordDataJSON contains the JSON metadata
-// for the struct [DNSRecordListResponseDNSRecordsSSHFPRecordData]
-type dnsRecordListResponseDNSRecordsSSHFPRecordDataJSON struct {
+// dnsRecordListResponseSSHFPDataJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseSSHFPData]
+type dnsRecordListResponseSSHFPDataJSON struct {
 	Algorithm   apijson.Field
 	Fingerprint apijson.Field
 	Type        apijson.Field
@@ -8255,37 +8491,37 @@ type dnsRecordListResponseDNSRecordsSSHFPRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsSSHFPRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseSSHFPData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordListResponseDNSRecordsSSHFPRecordType string
+type DNSRecordListResponseSSHFPType string
 
 const (
-	DNSRecordListResponseDNSRecordsSSHFPRecordTypeSSHFP DNSRecordListResponseDNSRecordsSSHFPRecordType = "SSHFP"
+	DNSRecordListResponseSSHFPTypeSSHFP DNSRecordListResponseSSHFPType = "SSHFP"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordListResponseDNSRecordsSSHFPRecordMeta struct {
+type DNSRecordListResponseSSHFPMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                             `json:"source"`
-	JSON   dnsRecordListResponseDNSRecordsSSHFPRecordMetaJSON `json:"-"`
+	Source string                             `json:"source"`
+	JSON   dnsRecordListResponseSSHFPMetaJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsSSHFPRecordMetaJSON contains the JSON metadata
-// for the struct [DNSRecordListResponseDNSRecordsSSHFPRecordMeta]
-type dnsRecordListResponseDNSRecordsSSHFPRecordMetaJSON struct {
+// dnsRecordListResponseSSHFPMetaJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseSSHFPMeta]
+type dnsRecordListResponseSSHFPMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsSSHFPRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseSSHFPMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -8293,15 +8529,14 @@ func (r *DNSRecordListResponseDNSRecordsSSHFPRecordMeta) UnmarshalJSON(data []by
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordListResponseDNSRecordsSSHFPRecordTTLNumber].
-type DNSRecordListResponseDNSRecordsSSHFPRecordTTL interface {
-	ImplementsDNSRecordListResponseDNSRecordsSSHFPRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordListResponseSSHFPTTLNumber].
+type DNSRecordListResponseSSHFPTTL interface {
+	ImplementsDNSRecordListResponseSshfpttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordListResponseDNSRecordsSSHFPRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordListResponseSSHFPTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -8310,19 +8545,19 @@ func init() {
 	)
 }
 
-type DNSRecordListResponseDNSRecordsSSHFPRecordTTLNumber float64
+type DNSRecordListResponseSSHFPTTLNumber float64
 
 const (
-	DNSRecordListResponseDNSRecordsSSHFPRecordTTLNumber1 DNSRecordListResponseDNSRecordsSSHFPRecordTTLNumber = 1
+	DNSRecordListResponseSSHFPTTLNumber1 DNSRecordListResponseSSHFPTTLNumber = 1
 )
 
-type DNSRecordListResponseDNSRecordsSVCBRecord struct {
+type DNSRecordListResponseSVCB struct {
 	// Components of a SVCB record.
-	Data DNSRecordListResponseDNSRecordsSVCBRecordData `json:"data,required"`
+	Data DNSRecordListResponseSVCBData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordListResponseDNSRecordsSVCBRecordType `json:"type,required"`
+	Type DNSRecordListResponseSVCBType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -8336,7 +8571,7 @@ type DNSRecordListResponseDNSRecordsSVCBRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordListResponseDNSRecordsSVCBRecordMeta `json:"meta"`
+	Meta DNSRecordListResponseSVCBMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -8346,17 +8581,17 @@ type DNSRecordListResponseDNSRecordsSVCBRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordListResponseDNSRecordsSVCBRecordTTL `json:"ttl"`
+	TTL DNSRecordListResponseSVCBTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                        `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordListResponseDNSRecordsSVCBRecordJSON `json:"-"`
+	ZoneName string                        `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordListResponseSVCBJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsSVCBRecordJSON contains the JSON metadata for the
-// struct [DNSRecordListResponseDNSRecordsSVCBRecord]
-type dnsRecordListResponseDNSRecordsSVCBRecordJSON struct {
+// dnsRecordListResponseSVCBJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseSVCB]
+type dnsRecordListResponseSVCBJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -8376,26 +8611,26 @@ type dnsRecordListResponseDNSRecordsSVCBRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsSVCBRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseSVCB) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordListResponseDNSRecordsSVCBRecord) implementsDNSRecordListResponse() {}
+func (r DNSRecordListResponseSVCB) implementsDNSRecordListResponse() {}
 
 // Components of a SVCB record.
-type DNSRecordListResponseDNSRecordsSVCBRecordData struct {
+type DNSRecordListResponseSVCBData struct {
 	// priority.
 	Priority float64 `json:"priority"`
 	// target.
 	Target string `json:"target"`
 	// value.
-	Value string                                            `json:"value"`
-	JSON  dnsRecordListResponseDNSRecordsSVCBRecordDataJSON `json:"-"`
+	Value string                            `json:"value"`
+	JSON  dnsRecordListResponseSVCBDataJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsSVCBRecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordListResponseDNSRecordsSVCBRecordData]
-type dnsRecordListResponseDNSRecordsSVCBRecordDataJSON struct {
+// dnsRecordListResponseSVCBDataJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseSVCBData]
+type dnsRecordListResponseSVCBDataJSON struct {
 	Priority    apijson.Field
 	Target      apijson.Field
 	Value       apijson.Field
@@ -8403,37 +8638,37 @@ type dnsRecordListResponseDNSRecordsSVCBRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsSVCBRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseSVCBData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordListResponseDNSRecordsSVCBRecordType string
+type DNSRecordListResponseSVCBType string
 
 const (
-	DNSRecordListResponseDNSRecordsSVCBRecordTypeSVCB DNSRecordListResponseDNSRecordsSVCBRecordType = "SVCB"
+	DNSRecordListResponseSVCBTypeSVCB DNSRecordListResponseSVCBType = "SVCB"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordListResponseDNSRecordsSVCBRecordMeta struct {
+type DNSRecordListResponseSVCBMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                            `json:"source"`
-	JSON   dnsRecordListResponseDNSRecordsSVCBRecordMetaJSON `json:"-"`
+	Source string                            `json:"source"`
+	JSON   dnsRecordListResponseSVCBMetaJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsSVCBRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordListResponseDNSRecordsSVCBRecordMeta]
-type dnsRecordListResponseDNSRecordsSVCBRecordMetaJSON struct {
+// dnsRecordListResponseSVCBMetaJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseSVCBMeta]
+type dnsRecordListResponseSVCBMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsSVCBRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseSVCBMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -8441,15 +8676,14 @@ func (r *DNSRecordListResponseDNSRecordsSVCBRecordMeta) UnmarshalJSON(data []byt
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordListResponseDNSRecordsSVCBRecordTTLNumber].
-type DNSRecordListResponseDNSRecordsSVCBRecordTTL interface {
-	ImplementsDNSRecordListResponseDNSRecordsSVCBRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordListResponseSVCBTTLNumber].
+type DNSRecordListResponseSVCBTTL interface {
+	ImplementsDNSRecordListResponseSvcbttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordListResponseDNSRecordsSVCBRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordListResponseSVCBTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -8458,19 +8692,19 @@ func init() {
 	)
 }
 
-type DNSRecordListResponseDNSRecordsSVCBRecordTTLNumber float64
+type DNSRecordListResponseSVCBTTLNumber float64
 
 const (
-	DNSRecordListResponseDNSRecordsSVCBRecordTTLNumber1 DNSRecordListResponseDNSRecordsSVCBRecordTTLNumber = 1
+	DNSRecordListResponseSVCBTTLNumber1 DNSRecordListResponseSVCBTTLNumber = 1
 )
 
-type DNSRecordListResponseDNSRecordsTLSARecord struct {
+type DNSRecordListResponseTLSA struct {
 	// Components of a TLSA record.
-	Data DNSRecordListResponseDNSRecordsTLSARecordData `json:"data,required"`
+	Data DNSRecordListResponseTLSAData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordListResponseDNSRecordsTLSARecordType `json:"type,required"`
+	Type DNSRecordListResponseTLSAType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -8484,7 +8718,7 @@ type DNSRecordListResponseDNSRecordsTLSARecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordListResponseDNSRecordsTLSARecordMeta `json:"meta"`
+	Meta DNSRecordListResponseTLSAMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -8494,17 +8728,17 @@ type DNSRecordListResponseDNSRecordsTLSARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordListResponseDNSRecordsTLSARecordTTL `json:"ttl"`
+	TTL DNSRecordListResponseTLSATTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                        `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordListResponseDNSRecordsTLSARecordJSON `json:"-"`
+	ZoneName string                        `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordListResponseTLSAJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsTLSARecordJSON contains the JSON metadata for the
-// struct [DNSRecordListResponseDNSRecordsTLSARecord]
-type dnsRecordListResponseDNSRecordsTLSARecordJSON struct {
+// dnsRecordListResponseTLSAJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseTLSA]
+type dnsRecordListResponseTLSAJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -8524,14 +8758,14 @@ type dnsRecordListResponseDNSRecordsTLSARecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsTLSARecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseTLSA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordListResponseDNSRecordsTLSARecord) implementsDNSRecordListResponse() {}
+func (r DNSRecordListResponseTLSA) implementsDNSRecordListResponse() {}
 
 // Components of a TLSA record.
-type DNSRecordListResponseDNSRecordsTLSARecordData struct {
+type DNSRecordListResponseTLSAData struct {
 	// certificate.
 	Certificate string `json:"certificate"`
 	// Matching Type.
@@ -8539,13 +8773,13 @@ type DNSRecordListResponseDNSRecordsTLSARecordData struct {
 	// Selector.
 	Selector float64 `json:"selector"`
 	// Usage.
-	Usage float64                                           `json:"usage"`
-	JSON  dnsRecordListResponseDNSRecordsTLSARecordDataJSON `json:"-"`
+	Usage float64                           `json:"usage"`
+	JSON  dnsRecordListResponseTLSADataJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsTLSARecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordListResponseDNSRecordsTLSARecordData]
-type dnsRecordListResponseDNSRecordsTLSARecordDataJSON struct {
+// dnsRecordListResponseTLSADataJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseTLSAData]
+type dnsRecordListResponseTLSADataJSON struct {
 	Certificate  apijson.Field
 	MatchingType apijson.Field
 	Selector     apijson.Field
@@ -8554,37 +8788,37 @@ type dnsRecordListResponseDNSRecordsTLSARecordDataJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsTLSARecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseTLSAData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordListResponseDNSRecordsTLSARecordType string
+type DNSRecordListResponseTLSAType string
 
 const (
-	DNSRecordListResponseDNSRecordsTLSARecordTypeTLSA DNSRecordListResponseDNSRecordsTLSARecordType = "TLSA"
+	DNSRecordListResponseTLSATypeTLSA DNSRecordListResponseTLSAType = "TLSA"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordListResponseDNSRecordsTLSARecordMeta struct {
+type DNSRecordListResponseTLSAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                            `json:"source"`
-	JSON   dnsRecordListResponseDNSRecordsTLSARecordMetaJSON `json:"-"`
+	Source string                            `json:"source"`
+	JSON   dnsRecordListResponseTLSAMetaJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsTLSARecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordListResponseDNSRecordsTLSARecordMeta]
-type dnsRecordListResponseDNSRecordsTLSARecordMetaJSON struct {
+// dnsRecordListResponseTLSAMetaJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseTLSAMeta]
+type dnsRecordListResponseTLSAMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsTLSARecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseTLSAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -8592,15 +8826,14 @@ func (r *DNSRecordListResponseDNSRecordsTLSARecordMeta) UnmarshalJSON(data []byt
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordListResponseDNSRecordsTLSARecordTTLNumber].
-type DNSRecordListResponseDNSRecordsTLSARecordTTL interface {
-	ImplementsDNSRecordListResponseDNSRecordsTLSARecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordListResponseTLSATTLNumber].
+type DNSRecordListResponseTLSATTL interface {
+	ImplementsDNSRecordListResponseTlsattl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordListResponseDNSRecordsTLSARecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordListResponseTLSATTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -8609,19 +8842,19 @@ func init() {
 	)
 }
 
-type DNSRecordListResponseDNSRecordsTLSARecordTTLNumber float64
+type DNSRecordListResponseTLSATTLNumber float64
 
 const (
-	DNSRecordListResponseDNSRecordsTLSARecordTTLNumber1 DNSRecordListResponseDNSRecordsTLSARecordTTLNumber = 1
+	DNSRecordListResponseTLSATTLNumber1 DNSRecordListResponseTLSATTLNumber = 1
 )
 
-type DNSRecordListResponseDNSRecordsTXTRecord struct {
+type DNSRecordListResponseTXT struct {
 	// Text content for the record.
 	Content string `json:"content,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordListResponseDNSRecordsTXTRecordType `json:"type,required"`
+	Type DNSRecordListResponseTXTType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -8633,7 +8866,7 @@ type DNSRecordListResponseDNSRecordsTXTRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordListResponseDNSRecordsTXTRecordMeta `json:"meta"`
+	Meta DNSRecordListResponseTXTMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -8643,17 +8876,17 @@ type DNSRecordListResponseDNSRecordsTXTRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordListResponseDNSRecordsTXTRecordTTL `json:"ttl"`
+	TTL DNSRecordListResponseTXTTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                       `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordListResponseDNSRecordsTXTRecordJSON `json:"-"`
+	ZoneName string                       `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordListResponseTXTJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsTXTRecordJSON contains the JSON metadata for the
-// struct [DNSRecordListResponseDNSRecordsTXTRecord]
-type dnsRecordListResponseDNSRecordsTXTRecordJSON struct {
+// dnsRecordListResponseTXTJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseTXT]
+type dnsRecordListResponseTXTJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -8672,39 +8905,39 @@ type dnsRecordListResponseDNSRecordsTXTRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsTXTRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseTXT) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordListResponseDNSRecordsTXTRecord) implementsDNSRecordListResponse() {}
+func (r DNSRecordListResponseTXT) implementsDNSRecordListResponse() {}
 
 // Record type.
-type DNSRecordListResponseDNSRecordsTXTRecordType string
+type DNSRecordListResponseTXTType string
 
 const (
-	DNSRecordListResponseDNSRecordsTXTRecordTypeTXT DNSRecordListResponseDNSRecordsTXTRecordType = "TXT"
+	DNSRecordListResponseTXTTypeTXT DNSRecordListResponseTXTType = "TXT"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordListResponseDNSRecordsTXTRecordMeta struct {
+type DNSRecordListResponseTXTMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                           `json:"source"`
-	JSON   dnsRecordListResponseDNSRecordsTXTRecordMetaJSON `json:"-"`
+	Source string                           `json:"source"`
+	JSON   dnsRecordListResponseTXTMetaJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsTXTRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordListResponseDNSRecordsTXTRecordMeta]
-type dnsRecordListResponseDNSRecordsTXTRecordMetaJSON struct {
+// dnsRecordListResponseTXTMetaJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseTXTMeta]
+type dnsRecordListResponseTXTMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsTXTRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseTXTMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -8712,15 +8945,14 @@ func (r *DNSRecordListResponseDNSRecordsTXTRecordMeta) UnmarshalJSON(data []byte
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordListResponseDNSRecordsTXTRecordTTLNumber].
-type DNSRecordListResponseDNSRecordsTXTRecordTTL interface {
-	ImplementsDNSRecordListResponseDNSRecordsTXTRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordListResponseTXTTTLNumber].
+type DNSRecordListResponseTXTTTL interface {
+	ImplementsDNSRecordListResponseTxtttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordListResponseDNSRecordsTXTRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordListResponseTXTTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -8729,22 +8961,22 @@ func init() {
 	)
 }
 
-type DNSRecordListResponseDNSRecordsTXTRecordTTLNumber float64
+type DNSRecordListResponseTXTTTLNumber float64
 
 const (
-	DNSRecordListResponseDNSRecordsTXTRecordTTLNumber1 DNSRecordListResponseDNSRecordsTXTRecordTTLNumber = 1
+	DNSRecordListResponseTXTTTLNumber1 DNSRecordListResponseTXTTTLNumber = 1
 )
 
-type DNSRecordListResponseDNSRecordsURIRecord struct {
+type DNSRecordListResponseURI struct {
 	// Components of a URI record.
-	Data DNSRecordListResponseDNSRecordsURIRecordData `json:"data,required"`
+	Data DNSRecordListResponseURIData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
 	Priority float64 `json:"priority,required"`
 	// Record type.
-	Type DNSRecordListResponseDNSRecordsURIRecordType `json:"type,required"`
+	Type DNSRecordListResponseURIType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -8758,7 +8990,7 @@ type DNSRecordListResponseDNSRecordsURIRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordListResponseDNSRecordsURIRecordMeta `json:"meta"`
+	Meta DNSRecordListResponseURIMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -8768,17 +9000,17 @@ type DNSRecordListResponseDNSRecordsURIRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordListResponseDNSRecordsURIRecordTTL `json:"ttl"`
+	TTL DNSRecordListResponseURITTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                       `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordListResponseDNSRecordsURIRecordJSON `json:"-"`
+	ZoneName string                       `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordListResponseURIJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsURIRecordJSON contains the JSON metadata for the
-// struct [DNSRecordListResponseDNSRecordsURIRecord]
-type dnsRecordListResponseDNSRecordsURIRecordJSON struct {
+// dnsRecordListResponseURIJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseURI]
+type dnsRecordListResponseURIJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Priority    apijson.Field
@@ -8799,61 +9031,61 @@ type dnsRecordListResponseDNSRecordsURIRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsURIRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseURI) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordListResponseDNSRecordsURIRecord) implementsDNSRecordListResponse() {}
+func (r DNSRecordListResponseURI) implementsDNSRecordListResponse() {}
 
 // Components of a URI record.
-type DNSRecordListResponseDNSRecordsURIRecordData struct {
+type DNSRecordListResponseURIData struct {
 	// The record content.
 	Content string `json:"content"`
 	// The record weight.
-	Weight float64                                          `json:"weight"`
-	JSON   dnsRecordListResponseDNSRecordsURIRecordDataJSON `json:"-"`
+	Weight float64                          `json:"weight"`
+	JSON   dnsRecordListResponseURIDataJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsURIRecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordListResponseDNSRecordsURIRecordData]
-type dnsRecordListResponseDNSRecordsURIRecordDataJSON struct {
+// dnsRecordListResponseURIDataJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseURIData]
+type dnsRecordListResponseURIDataJSON struct {
 	Content     apijson.Field
 	Weight      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsURIRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseURIData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordListResponseDNSRecordsURIRecordType string
+type DNSRecordListResponseURIType string
 
 const (
-	DNSRecordListResponseDNSRecordsURIRecordTypeURI DNSRecordListResponseDNSRecordsURIRecordType = "URI"
+	DNSRecordListResponseURITypeURI DNSRecordListResponseURIType = "URI"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordListResponseDNSRecordsURIRecordMeta struct {
+type DNSRecordListResponseURIMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                           `json:"source"`
-	JSON   dnsRecordListResponseDNSRecordsURIRecordMetaJSON `json:"-"`
+	Source string                           `json:"source"`
+	JSON   dnsRecordListResponseURIMetaJSON `json:"-"`
 }
 
-// dnsRecordListResponseDNSRecordsURIRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordListResponseDNSRecordsURIRecordMeta]
-type dnsRecordListResponseDNSRecordsURIRecordMetaJSON struct {
+// dnsRecordListResponseURIMetaJSON contains the JSON metadata for the struct
+// [DNSRecordListResponseURIMeta]
+type dnsRecordListResponseURIMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordListResponseDNSRecordsURIRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordListResponseURIMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -8861,15 +9093,14 @@ func (r *DNSRecordListResponseDNSRecordsURIRecordMeta) UnmarshalJSON(data []byte
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordListResponseDNSRecordsURIRecordTTLNumber].
-type DNSRecordListResponseDNSRecordsURIRecordTTL interface {
-	ImplementsDNSRecordListResponseDNSRecordsURIRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordListResponseURITTLNumber].
+type DNSRecordListResponseURITTL interface {
+	ImplementsDNSRecordListResponseUrittl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordListResponseDNSRecordsURIRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordListResponseURITTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -8878,10 +9109,10 @@ func init() {
 	)
 }
 
-type DNSRecordListResponseDNSRecordsURIRecordTTLNumber float64
+type DNSRecordListResponseURITTLNumber float64
 
 const (
-	DNSRecordListResponseDNSRecordsURIRecordTTLNumber1 DNSRecordListResponseDNSRecordsURIRecordTTLNumber = 1
+	DNSRecordListResponseURITTLNumber1 DNSRecordListResponseURITTLNumber = 1
 )
 
 type DNSRecordDeleteResponse struct {
@@ -8902,41 +9133,134 @@ func (r *DNSRecordDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Union satisfied by [DNSRecordEditResponseDNSRecordsARecord],
-// [DNSRecordEditResponseDNSRecordsAAAARecord],
-// [DNSRecordEditResponseDNSRecordsCAARecord],
-// [DNSRecordEditResponseDNSRecordsCertRecord],
-// [DNSRecordEditResponseDNSRecordsCNAMERecord],
-// [DNSRecordEditResponseDNSRecordsDNSKEYRecord],
-// [DNSRecordEditResponseDNSRecordsDSRecord],
-// [DNSRecordEditResponseDNSRecordsHTTPSRecord],
-// [DNSRecordEditResponseDNSRecordsLOCRecord],
-// [DNSRecordEditResponseDNSRecordsMXRecord],
-// [DNSRecordEditResponseDNSRecordsNAPTRRecord],
-// [DNSRecordEditResponseDNSRecordsNSRecord],
-// [DNSRecordEditResponseDNSRecordsPTRRecord],
-// [DNSRecordEditResponseDNSRecordsSmimeaRecord],
-// [DNSRecordEditResponseDNSRecordsSRVRecord],
-// [DNSRecordEditResponseDNSRecordsSSHFPRecord],
-// [DNSRecordEditResponseDNSRecordsSVCBRecord],
-// [DNSRecordEditResponseDNSRecordsTLSARecord],
-// [DNSRecordEditResponseDNSRecordsTXTRecord] or
-// [DNSRecordEditResponseDNSRecordsURIRecord].
+// Union satisfied by [DNSRecordEditResponseA], [DNSRecordEditResponseAAAA],
+// [DNSRecordEditResponseCAA], [DNSRecordEditResponseCert],
+// [DNSRecordEditResponseCNAME], [DNSRecordEditResponseDNSKEY],
+// [DNSRecordEditResponseDS], [DNSRecordEditResponseHTTPS],
+// [DNSRecordEditResponseLOC], [DNSRecordEditResponseMX],
+// [DNSRecordEditResponseNAPTR], [DNSRecordEditResponseNS],
+// [DNSRecordEditResponsePTR], [DNSRecordEditResponseSmimea],
+// [DNSRecordEditResponseSRV], [DNSRecordEditResponseSSHFP],
+// [DNSRecordEditResponseSVCB], [DNSRecordEditResponseTLSA],
+// [DNSRecordEditResponseTXT] or [DNSRecordEditResponseURI].
 type DNSRecordEditResponse interface {
 	implementsDNSRecordEditResponse()
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*DNSRecordEditResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DNSRecordEditResponse)(nil)).Elem(),
+		"type",
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordEditResponseA{}),
+			DiscriminatorValue: "A",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordEditResponseAAAA{}),
+			DiscriminatorValue: "AAAA",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordEditResponseCAA{}),
+			DiscriminatorValue: "CAA",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordEditResponseCert{}),
+			DiscriminatorValue: "CERT",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordEditResponseCNAME{}),
+			DiscriminatorValue: "CNAME",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordEditResponseDNSKEY{}),
+			DiscriminatorValue: "DNSKEY",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordEditResponseDS{}),
+			DiscriminatorValue: "DS",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordEditResponseHTTPS{}),
+			DiscriminatorValue: "HTTPS",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordEditResponseLOC{}),
+			DiscriminatorValue: "LOC",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordEditResponseMX{}),
+			DiscriminatorValue: "MX",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordEditResponseNAPTR{}),
+			DiscriminatorValue: "NAPTR",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordEditResponseNS{}),
+			DiscriminatorValue: "NS",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordEditResponsePTR{}),
+			DiscriminatorValue: "PTR",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordEditResponseSmimea{}),
+			DiscriminatorValue: "SMIMEA",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordEditResponseSRV{}),
+			DiscriminatorValue: "SRV",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordEditResponseSSHFP{}),
+			DiscriminatorValue: "SSHFP",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordEditResponseSVCB{}),
+			DiscriminatorValue: "SVCB",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordEditResponseTLSA{}),
+			DiscriminatorValue: "TLSA",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordEditResponseTXT{}),
+			DiscriminatorValue: "TXT",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordEditResponseURI{}),
+			DiscriminatorValue: "URI",
+		},
+	)
 }
 
-type DNSRecordEditResponseDNSRecordsARecord struct {
+type DNSRecordEditResponseA struct {
 	// A valid IPv4 address.
 	Content string `json:"content,required" format:"ipv4"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordEditResponseDNSRecordsARecordType `json:"type,required"`
+	Type DNSRecordEditResponseAType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -8948,7 +9272,7 @@ type DNSRecordEditResponseDNSRecordsARecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordEditResponseDNSRecordsARecordMeta `json:"meta"`
+	Meta DNSRecordEditResponseAMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -8961,17 +9285,17 @@ type DNSRecordEditResponseDNSRecordsARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordEditResponseDNSRecordsARecordTTL `json:"ttl"`
+	TTL DNSRecordEditResponseATTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                     `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordEditResponseDNSRecordsARecordJSON `json:"-"`
+	ZoneName string                     `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordEditResponseAJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsARecordJSON contains the JSON metadata for the
-// struct [DNSRecordEditResponseDNSRecordsARecord]
-type dnsRecordEditResponseDNSRecordsARecordJSON struct {
+// dnsRecordEditResponseAJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseA]
+type dnsRecordEditResponseAJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -8991,39 +9315,39 @@ type dnsRecordEditResponseDNSRecordsARecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsARecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordEditResponseDNSRecordsARecord) implementsDNSRecordEditResponse() {}
+func (r DNSRecordEditResponseA) implementsDNSRecordEditResponse() {}
 
 // Record type.
-type DNSRecordEditResponseDNSRecordsARecordType string
+type DNSRecordEditResponseAType string
 
 const (
-	DNSRecordEditResponseDNSRecordsARecordTypeA DNSRecordEditResponseDNSRecordsARecordType = "A"
+	DNSRecordEditResponseATypeA DNSRecordEditResponseAType = "A"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordEditResponseDNSRecordsARecordMeta struct {
+type DNSRecordEditResponseAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                         `json:"source"`
-	JSON   dnsRecordEditResponseDNSRecordsARecordMetaJSON `json:"-"`
+	Source string                         `json:"source"`
+	JSON   dnsRecordEditResponseAMetaJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsARecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordEditResponseDNSRecordsARecordMeta]
-type dnsRecordEditResponseDNSRecordsARecordMetaJSON struct {
+// dnsRecordEditResponseAMetaJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseAMeta]
+type dnsRecordEditResponseAMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsARecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -9031,15 +9355,14 @@ func (r *DNSRecordEditResponseDNSRecordsARecordMeta) UnmarshalJSON(data []byte) 
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordEditResponseDNSRecordsARecordTTLNumber].
-type DNSRecordEditResponseDNSRecordsARecordTTL interface {
-	ImplementsDNSRecordEditResponseDNSRecordsARecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordEditResponseATTLNumber].
+type DNSRecordEditResponseATTL interface {
+	ImplementsDNSRecordEditResponseAttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordEditResponseDNSRecordsARecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordEditResponseATTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -9048,19 +9371,19 @@ func init() {
 	)
 }
 
-type DNSRecordEditResponseDNSRecordsARecordTTLNumber float64
+type DNSRecordEditResponseATTLNumber float64
 
 const (
-	DNSRecordEditResponseDNSRecordsARecordTTLNumber1 DNSRecordEditResponseDNSRecordsARecordTTLNumber = 1
+	DNSRecordEditResponseATTLNumber1 DNSRecordEditResponseATTLNumber = 1
 )
 
-type DNSRecordEditResponseDNSRecordsAAAARecord struct {
+type DNSRecordEditResponseAAAA struct {
 	// A valid IPv6 address.
 	Content string `json:"content,required" format:"ipv6"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordEditResponseDNSRecordsAAAARecordType `json:"type,required"`
+	Type DNSRecordEditResponseAAAAType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -9072,7 +9395,7 @@ type DNSRecordEditResponseDNSRecordsAAAARecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordEditResponseDNSRecordsAAAARecordMeta `json:"meta"`
+	Meta DNSRecordEditResponseAAAAMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -9085,17 +9408,17 @@ type DNSRecordEditResponseDNSRecordsAAAARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordEditResponseDNSRecordsAAAARecordTTL `json:"ttl"`
+	TTL DNSRecordEditResponseAAAATTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                        `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordEditResponseDNSRecordsAAAARecordJSON `json:"-"`
+	ZoneName string                        `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordEditResponseAAAAJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsAAAARecordJSON contains the JSON metadata for the
-// struct [DNSRecordEditResponseDNSRecordsAAAARecord]
-type dnsRecordEditResponseDNSRecordsAAAARecordJSON struct {
+// dnsRecordEditResponseAAAAJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseAAAA]
+type dnsRecordEditResponseAAAAJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -9115,39 +9438,39 @@ type dnsRecordEditResponseDNSRecordsAAAARecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsAAAARecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseAAAA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordEditResponseDNSRecordsAAAARecord) implementsDNSRecordEditResponse() {}
+func (r DNSRecordEditResponseAAAA) implementsDNSRecordEditResponse() {}
 
 // Record type.
-type DNSRecordEditResponseDNSRecordsAAAARecordType string
+type DNSRecordEditResponseAAAAType string
 
 const (
-	DNSRecordEditResponseDNSRecordsAAAARecordTypeAAAA DNSRecordEditResponseDNSRecordsAAAARecordType = "AAAA"
+	DNSRecordEditResponseAAAATypeAAAA DNSRecordEditResponseAAAAType = "AAAA"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordEditResponseDNSRecordsAAAARecordMeta struct {
+type DNSRecordEditResponseAAAAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                            `json:"source"`
-	JSON   dnsRecordEditResponseDNSRecordsAAAARecordMetaJSON `json:"-"`
+	Source string                            `json:"source"`
+	JSON   dnsRecordEditResponseAAAAMetaJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsAAAARecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordEditResponseDNSRecordsAAAARecordMeta]
-type dnsRecordEditResponseDNSRecordsAAAARecordMetaJSON struct {
+// dnsRecordEditResponseAAAAMetaJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseAAAAMeta]
+type dnsRecordEditResponseAAAAMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsAAAARecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseAAAAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -9155,15 +9478,14 @@ func (r *DNSRecordEditResponseDNSRecordsAAAARecordMeta) UnmarshalJSON(data []byt
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordEditResponseDNSRecordsAAAARecordTTLNumber].
-type DNSRecordEditResponseDNSRecordsAAAARecordTTL interface {
-	ImplementsDNSRecordEditResponseDNSRecordsAAAARecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordEditResponseAAAATTLNumber].
+type DNSRecordEditResponseAAAATTL interface {
+	ImplementsDNSRecordEditResponseAaaattl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordEditResponseDNSRecordsAAAARecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordEditResponseAAAATTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -9172,19 +9494,19 @@ func init() {
 	)
 }
 
-type DNSRecordEditResponseDNSRecordsAAAARecordTTLNumber float64
+type DNSRecordEditResponseAAAATTLNumber float64
 
 const (
-	DNSRecordEditResponseDNSRecordsAAAARecordTTLNumber1 DNSRecordEditResponseDNSRecordsAAAARecordTTLNumber = 1
+	DNSRecordEditResponseAAAATTLNumber1 DNSRecordEditResponseAAAATTLNumber = 1
 )
 
-type DNSRecordEditResponseDNSRecordsCAARecord struct {
+type DNSRecordEditResponseCAA struct {
 	// Components of a CAA record.
-	Data DNSRecordEditResponseDNSRecordsCAARecordData `json:"data,required"`
+	Data DNSRecordEditResponseCAAData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordEditResponseDNSRecordsCAARecordType `json:"type,required"`
+	Type DNSRecordEditResponseCAAType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -9198,7 +9520,7 @@ type DNSRecordEditResponseDNSRecordsCAARecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordEditResponseDNSRecordsCAARecordMeta `json:"meta"`
+	Meta DNSRecordEditResponseCAAMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -9208,17 +9530,17 @@ type DNSRecordEditResponseDNSRecordsCAARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordEditResponseDNSRecordsCAARecordTTL `json:"ttl"`
+	TTL DNSRecordEditResponseCAATTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                       `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordEditResponseDNSRecordsCAARecordJSON `json:"-"`
+	ZoneName string                       `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordEditResponseCAAJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsCAARecordJSON contains the JSON metadata for the
-// struct [DNSRecordEditResponseDNSRecordsCAARecord]
-type dnsRecordEditResponseDNSRecordsCAARecordJSON struct {
+// dnsRecordEditResponseCAAJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseCAA]
+type dnsRecordEditResponseCAAJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -9238,26 +9560,26 @@ type dnsRecordEditResponseDNSRecordsCAARecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsCAARecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseCAA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordEditResponseDNSRecordsCAARecord) implementsDNSRecordEditResponse() {}
+func (r DNSRecordEditResponseCAA) implementsDNSRecordEditResponse() {}
 
 // Components of a CAA record.
-type DNSRecordEditResponseDNSRecordsCAARecordData struct {
+type DNSRecordEditResponseCAAData struct {
 	// Flags for the CAA record.
 	Flags float64 `json:"flags"`
 	// Name of the property controlled by this record (e.g.: issue, issuewild, iodef).
 	Tag string `json:"tag"`
 	// Value of the record. This field's semantics depend on the chosen tag.
-	Value string                                           `json:"value"`
-	JSON  dnsRecordEditResponseDNSRecordsCAARecordDataJSON `json:"-"`
+	Value string                           `json:"value"`
+	JSON  dnsRecordEditResponseCAADataJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsCAARecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordEditResponseDNSRecordsCAARecordData]
-type dnsRecordEditResponseDNSRecordsCAARecordDataJSON struct {
+// dnsRecordEditResponseCAADataJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseCAAData]
+type dnsRecordEditResponseCAADataJSON struct {
 	Flags       apijson.Field
 	Tag         apijson.Field
 	Value       apijson.Field
@@ -9265,37 +9587,37 @@ type dnsRecordEditResponseDNSRecordsCAARecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsCAARecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseCAAData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordEditResponseDNSRecordsCAARecordType string
+type DNSRecordEditResponseCAAType string
 
 const (
-	DNSRecordEditResponseDNSRecordsCAARecordTypeCAA DNSRecordEditResponseDNSRecordsCAARecordType = "CAA"
+	DNSRecordEditResponseCAATypeCAA DNSRecordEditResponseCAAType = "CAA"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordEditResponseDNSRecordsCAARecordMeta struct {
+type DNSRecordEditResponseCAAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                           `json:"source"`
-	JSON   dnsRecordEditResponseDNSRecordsCAARecordMetaJSON `json:"-"`
+	Source string                           `json:"source"`
+	JSON   dnsRecordEditResponseCAAMetaJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsCAARecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordEditResponseDNSRecordsCAARecordMeta]
-type dnsRecordEditResponseDNSRecordsCAARecordMetaJSON struct {
+// dnsRecordEditResponseCAAMetaJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseCAAMeta]
+type dnsRecordEditResponseCAAMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsCAARecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseCAAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -9303,15 +9625,14 @@ func (r *DNSRecordEditResponseDNSRecordsCAARecordMeta) UnmarshalJSON(data []byte
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordEditResponseDNSRecordsCAARecordTTLNumber].
-type DNSRecordEditResponseDNSRecordsCAARecordTTL interface {
-	ImplementsDNSRecordEditResponseDNSRecordsCAARecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordEditResponseCAATTLNumber].
+type DNSRecordEditResponseCAATTL interface {
+	ImplementsDNSRecordEditResponseCaattl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordEditResponseDNSRecordsCAARecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordEditResponseCAATTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -9320,19 +9641,19 @@ func init() {
 	)
 }
 
-type DNSRecordEditResponseDNSRecordsCAARecordTTLNumber float64
+type DNSRecordEditResponseCAATTLNumber float64
 
 const (
-	DNSRecordEditResponseDNSRecordsCAARecordTTLNumber1 DNSRecordEditResponseDNSRecordsCAARecordTTLNumber = 1
+	DNSRecordEditResponseCAATTLNumber1 DNSRecordEditResponseCAATTLNumber = 1
 )
 
-type DNSRecordEditResponseDNSRecordsCertRecord struct {
+type DNSRecordEditResponseCert struct {
 	// Components of a CERT record.
-	Data DNSRecordEditResponseDNSRecordsCertRecordData `json:"data,required"`
+	Data DNSRecordEditResponseCertData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordEditResponseDNSRecordsCertRecordType `json:"type,required"`
+	Type DNSRecordEditResponseCertType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -9346,7 +9667,7 @@ type DNSRecordEditResponseDNSRecordsCertRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordEditResponseDNSRecordsCertRecordMeta `json:"meta"`
+	Meta DNSRecordEditResponseCertMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -9356,17 +9677,17 @@ type DNSRecordEditResponseDNSRecordsCertRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordEditResponseDNSRecordsCertRecordTTL `json:"ttl"`
+	TTL DNSRecordEditResponseCertTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                        `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordEditResponseDNSRecordsCertRecordJSON `json:"-"`
+	ZoneName string                        `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordEditResponseCertJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsCertRecordJSON contains the JSON metadata for the
-// struct [DNSRecordEditResponseDNSRecordsCertRecord]
-type dnsRecordEditResponseDNSRecordsCertRecordJSON struct {
+// dnsRecordEditResponseCertJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseCert]
+type dnsRecordEditResponseCertJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -9386,14 +9707,14 @@ type dnsRecordEditResponseDNSRecordsCertRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsCertRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseCert) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordEditResponseDNSRecordsCertRecord) implementsDNSRecordEditResponse() {}
+func (r DNSRecordEditResponseCert) implementsDNSRecordEditResponse() {}
 
 // Components of a CERT record.
-type DNSRecordEditResponseDNSRecordsCertRecordData struct {
+type DNSRecordEditResponseCertData struct {
 	// Algorithm.
 	Algorithm float64 `json:"algorithm"`
 	// Certificate.
@@ -9401,13 +9722,13 @@ type DNSRecordEditResponseDNSRecordsCertRecordData struct {
 	// Key Tag.
 	KeyTag float64 `json:"key_tag"`
 	// Type.
-	Type float64                                           `json:"type"`
-	JSON dnsRecordEditResponseDNSRecordsCertRecordDataJSON `json:"-"`
+	Type float64                           `json:"type"`
+	JSON dnsRecordEditResponseCertDataJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsCertRecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordEditResponseDNSRecordsCertRecordData]
-type dnsRecordEditResponseDNSRecordsCertRecordDataJSON struct {
+// dnsRecordEditResponseCertDataJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseCertData]
+type dnsRecordEditResponseCertDataJSON struct {
 	Algorithm   apijson.Field
 	Certificate apijson.Field
 	KeyTag      apijson.Field
@@ -9416,37 +9737,37 @@ type dnsRecordEditResponseDNSRecordsCertRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsCertRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseCertData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordEditResponseDNSRecordsCertRecordType string
+type DNSRecordEditResponseCertType string
 
 const (
-	DNSRecordEditResponseDNSRecordsCertRecordTypeCert DNSRecordEditResponseDNSRecordsCertRecordType = "CERT"
+	DNSRecordEditResponseCertTypeCert DNSRecordEditResponseCertType = "CERT"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordEditResponseDNSRecordsCertRecordMeta struct {
+type DNSRecordEditResponseCertMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                            `json:"source"`
-	JSON   dnsRecordEditResponseDNSRecordsCertRecordMetaJSON `json:"-"`
+	Source string                            `json:"source"`
+	JSON   dnsRecordEditResponseCertMetaJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsCertRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordEditResponseDNSRecordsCertRecordMeta]
-type dnsRecordEditResponseDNSRecordsCertRecordMetaJSON struct {
+// dnsRecordEditResponseCertMetaJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseCertMeta]
+type dnsRecordEditResponseCertMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsCertRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseCertMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -9454,15 +9775,14 @@ func (r *DNSRecordEditResponseDNSRecordsCertRecordMeta) UnmarshalJSON(data []byt
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordEditResponseDNSRecordsCertRecordTTLNumber].
-type DNSRecordEditResponseDNSRecordsCertRecordTTL interface {
-	ImplementsDNSRecordEditResponseDNSRecordsCertRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordEditResponseCertTTLNumber].
+type DNSRecordEditResponseCertTTL interface {
+	ImplementsDNSRecordEditResponseCertTTL()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordEditResponseDNSRecordsCertRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordEditResponseCertTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -9471,19 +9791,19 @@ func init() {
 	)
 }
 
-type DNSRecordEditResponseDNSRecordsCertRecordTTLNumber float64
+type DNSRecordEditResponseCertTTLNumber float64
 
 const (
-	DNSRecordEditResponseDNSRecordsCertRecordTTLNumber1 DNSRecordEditResponseDNSRecordsCertRecordTTLNumber = 1
+	DNSRecordEditResponseCertTTLNumber1 DNSRecordEditResponseCertTTLNumber = 1
 )
 
-type DNSRecordEditResponseDNSRecordsCNAMERecord struct {
+type DNSRecordEditResponseCNAME struct {
 	// A valid hostname. Must not match the record's name.
 	Content interface{} `json:"content,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordEditResponseDNSRecordsCNAMERecordType `json:"type,required"`
+	Type DNSRecordEditResponseCNAMEType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -9495,7 +9815,7 @@ type DNSRecordEditResponseDNSRecordsCNAMERecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordEditResponseDNSRecordsCNAMERecordMeta `json:"meta"`
+	Meta DNSRecordEditResponseCNAMEMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -9508,17 +9828,17 @@ type DNSRecordEditResponseDNSRecordsCNAMERecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordEditResponseDNSRecordsCNAMERecordTTL `json:"ttl"`
+	TTL DNSRecordEditResponseCNAMETTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                         `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordEditResponseDNSRecordsCNAMERecordJSON `json:"-"`
+	ZoneName string                         `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordEditResponseCNAMEJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsCNAMERecordJSON contains the JSON metadata for
-// the struct [DNSRecordEditResponseDNSRecordsCNAMERecord]
-type dnsRecordEditResponseDNSRecordsCNAMERecordJSON struct {
+// dnsRecordEditResponseCNAMEJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseCNAME]
+type dnsRecordEditResponseCNAMEJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -9538,39 +9858,39 @@ type dnsRecordEditResponseDNSRecordsCNAMERecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsCNAMERecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseCNAME) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordEditResponseDNSRecordsCNAMERecord) implementsDNSRecordEditResponse() {}
+func (r DNSRecordEditResponseCNAME) implementsDNSRecordEditResponse() {}
 
 // Record type.
-type DNSRecordEditResponseDNSRecordsCNAMERecordType string
+type DNSRecordEditResponseCNAMEType string
 
 const (
-	DNSRecordEditResponseDNSRecordsCNAMERecordTypeCNAME DNSRecordEditResponseDNSRecordsCNAMERecordType = "CNAME"
+	DNSRecordEditResponseCNAMETypeCNAME DNSRecordEditResponseCNAMEType = "CNAME"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordEditResponseDNSRecordsCNAMERecordMeta struct {
+type DNSRecordEditResponseCNAMEMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                             `json:"source"`
-	JSON   dnsRecordEditResponseDNSRecordsCNAMERecordMetaJSON `json:"-"`
+	Source string                             `json:"source"`
+	JSON   dnsRecordEditResponseCNAMEMetaJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsCNAMERecordMetaJSON contains the JSON metadata
-// for the struct [DNSRecordEditResponseDNSRecordsCNAMERecordMeta]
-type dnsRecordEditResponseDNSRecordsCNAMERecordMetaJSON struct {
+// dnsRecordEditResponseCNAMEMetaJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseCNAMEMeta]
+type dnsRecordEditResponseCNAMEMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsCNAMERecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseCNAMEMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -9578,15 +9898,14 @@ func (r *DNSRecordEditResponseDNSRecordsCNAMERecordMeta) UnmarshalJSON(data []by
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordEditResponseDNSRecordsCNAMERecordTTLNumber].
-type DNSRecordEditResponseDNSRecordsCNAMERecordTTL interface {
-	ImplementsDNSRecordEditResponseDNSRecordsCNAMERecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordEditResponseCNAMETTLNumber].
+type DNSRecordEditResponseCNAMETTL interface {
+	ImplementsDNSRecordEditResponseCnamettl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordEditResponseDNSRecordsCNAMERecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordEditResponseCNAMETTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -9595,19 +9914,19 @@ func init() {
 	)
 }
 
-type DNSRecordEditResponseDNSRecordsCNAMERecordTTLNumber float64
+type DNSRecordEditResponseCNAMETTLNumber float64
 
 const (
-	DNSRecordEditResponseDNSRecordsCNAMERecordTTLNumber1 DNSRecordEditResponseDNSRecordsCNAMERecordTTLNumber = 1
+	DNSRecordEditResponseCNAMETTLNumber1 DNSRecordEditResponseCNAMETTLNumber = 1
 )
 
-type DNSRecordEditResponseDNSRecordsDNSKEYRecord struct {
+type DNSRecordEditResponseDNSKEY struct {
 	// Components of a DNSKEY record.
-	Data DNSRecordEditResponseDNSRecordsDNSKEYRecordData `json:"data,required"`
+	Data DNSRecordEditResponseDNSKEYData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordEditResponseDNSRecordsDNSKEYRecordType `json:"type,required"`
+	Type DNSRecordEditResponseDNSKEYType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -9621,7 +9940,7 @@ type DNSRecordEditResponseDNSRecordsDNSKEYRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordEditResponseDNSRecordsDNSKEYRecordMeta `json:"meta"`
+	Meta DNSRecordEditResponseDNSKEYMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -9631,17 +9950,17 @@ type DNSRecordEditResponseDNSRecordsDNSKEYRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordEditResponseDNSRecordsDNSKEYRecordTTL `json:"ttl"`
+	TTL DNSRecordEditResponseDNSKEYTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                          `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordEditResponseDNSRecordsDNSKEYRecordJSON `json:"-"`
+	ZoneName string                          `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordEditResponseDNSKEYJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsDNSKEYRecordJSON contains the JSON metadata for
-// the struct [DNSRecordEditResponseDNSRecordsDNSKEYRecord]
-type dnsRecordEditResponseDNSRecordsDNSKEYRecordJSON struct {
+// dnsRecordEditResponseDNSKEYJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseDNSKEY]
+type dnsRecordEditResponseDNSKEYJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -9661,14 +9980,14 @@ type dnsRecordEditResponseDNSRecordsDNSKEYRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsDNSKEYRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseDNSKEY) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordEditResponseDNSRecordsDNSKEYRecord) implementsDNSRecordEditResponse() {}
+func (r DNSRecordEditResponseDNSKEY) implementsDNSRecordEditResponse() {}
 
 // Components of a DNSKEY record.
-type DNSRecordEditResponseDNSRecordsDNSKEYRecordData struct {
+type DNSRecordEditResponseDNSKEYData struct {
 	// Algorithm.
 	Algorithm float64 `json:"algorithm"`
 	// Flags.
@@ -9676,13 +9995,13 @@ type DNSRecordEditResponseDNSRecordsDNSKEYRecordData struct {
 	// Protocol.
 	Protocol float64 `json:"protocol"`
 	// Public Key.
-	PublicKey string                                              `json:"public_key"`
-	JSON      dnsRecordEditResponseDNSRecordsDNSKEYRecordDataJSON `json:"-"`
+	PublicKey string                              `json:"public_key"`
+	JSON      dnsRecordEditResponseDNSKEYDataJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsDNSKEYRecordDataJSON contains the JSON metadata
-// for the struct [DNSRecordEditResponseDNSRecordsDNSKEYRecordData]
-type dnsRecordEditResponseDNSRecordsDNSKEYRecordDataJSON struct {
+// dnsRecordEditResponseDNSKEYDataJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseDNSKEYData]
+type dnsRecordEditResponseDNSKEYDataJSON struct {
 	Algorithm   apijson.Field
 	Flags       apijson.Field
 	Protocol    apijson.Field
@@ -9691,37 +10010,37 @@ type dnsRecordEditResponseDNSRecordsDNSKEYRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsDNSKEYRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseDNSKEYData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordEditResponseDNSRecordsDNSKEYRecordType string
+type DNSRecordEditResponseDNSKEYType string
 
 const (
-	DNSRecordEditResponseDNSRecordsDNSKEYRecordTypeDNSKEY DNSRecordEditResponseDNSRecordsDNSKEYRecordType = "DNSKEY"
+	DNSRecordEditResponseDNSKEYTypeDNSKEY DNSRecordEditResponseDNSKEYType = "DNSKEY"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordEditResponseDNSRecordsDNSKEYRecordMeta struct {
+type DNSRecordEditResponseDNSKEYMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                              `json:"source"`
-	JSON   dnsRecordEditResponseDNSRecordsDNSKEYRecordMetaJSON `json:"-"`
+	Source string                              `json:"source"`
+	JSON   dnsRecordEditResponseDNSKEYMetaJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsDNSKEYRecordMetaJSON contains the JSON metadata
-// for the struct [DNSRecordEditResponseDNSRecordsDNSKEYRecordMeta]
-type dnsRecordEditResponseDNSRecordsDNSKEYRecordMetaJSON struct {
+// dnsRecordEditResponseDNSKEYMetaJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseDNSKEYMeta]
+type dnsRecordEditResponseDNSKEYMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsDNSKEYRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseDNSKEYMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -9730,14 +10049,14 @@ func (r *DNSRecordEditResponseDNSRecordsDNSKEYRecordMeta) UnmarshalJSON(data []b
 // Enterprise zones.
 //
 // Union satisfied by [shared.UnionFloat] or
-// [DNSRecordEditResponseDNSRecordsDNSKEYRecordTTLNumber].
-type DNSRecordEditResponseDNSRecordsDNSKEYRecordTTL interface {
-	ImplementsDNSRecordEditResponseDNSRecordsDNSKEYRecordTTL()
+// [DNSRecordEditResponseDNSKEYTTLNumber].
+type DNSRecordEditResponseDNSKEYTTL interface {
+	ImplementsDNSRecordEditResponseDnskeyttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordEditResponseDNSRecordsDNSKEYRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordEditResponseDNSKEYTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -9746,19 +10065,19 @@ func init() {
 	)
 }
 
-type DNSRecordEditResponseDNSRecordsDNSKEYRecordTTLNumber float64
+type DNSRecordEditResponseDNSKEYTTLNumber float64
 
 const (
-	DNSRecordEditResponseDNSRecordsDNSKEYRecordTTLNumber1 DNSRecordEditResponseDNSRecordsDNSKEYRecordTTLNumber = 1
+	DNSRecordEditResponseDNSKEYTTLNumber1 DNSRecordEditResponseDNSKEYTTLNumber = 1
 )
 
-type DNSRecordEditResponseDNSRecordsDSRecord struct {
+type DNSRecordEditResponseDS struct {
 	// Components of a DS record.
-	Data DNSRecordEditResponseDNSRecordsDSRecordData `json:"data,required"`
+	Data DNSRecordEditResponseDSData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordEditResponseDNSRecordsDSRecordType `json:"type,required"`
+	Type DNSRecordEditResponseDSType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -9772,7 +10091,7 @@ type DNSRecordEditResponseDNSRecordsDSRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordEditResponseDNSRecordsDSRecordMeta `json:"meta"`
+	Meta DNSRecordEditResponseDSMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -9782,17 +10101,17 @@ type DNSRecordEditResponseDNSRecordsDSRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordEditResponseDNSRecordsDSRecordTTL `json:"ttl"`
+	TTL DNSRecordEditResponseDSTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                      `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordEditResponseDNSRecordsDSRecordJSON `json:"-"`
+	ZoneName string                      `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordEditResponseDSJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsDSRecordJSON contains the JSON metadata for the
-// struct [DNSRecordEditResponseDNSRecordsDSRecord]
-type dnsRecordEditResponseDNSRecordsDSRecordJSON struct {
+// dnsRecordEditResponseDSJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseDS]
+type dnsRecordEditResponseDSJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -9812,14 +10131,14 @@ type dnsRecordEditResponseDNSRecordsDSRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsDSRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseDS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordEditResponseDNSRecordsDSRecord) implementsDNSRecordEditResponse() {}
+func (r DNSRecordEditResponseDS) implementsDNSRecordEditResponse() {}
 
 // Components of a DS record.
-type DNSRecordEditResponseDNSRecordsDSRecordData struct {
+type DNSRecordEditResponseDSData struct {
 	// Algorithm.
 	Algorithm float64 `json:"algorithm"`
 	// Digest.
@@ -9827,13 +10146,13 @@ type DNSRecordEditResponseDNSRecordsDSRecordData struct {
 	// Digest Type.
 	DigestType float64 `json:"digest_type"`
 	// Key Tag.
-	KeyTag float64                                         `json:"key_tag"`
-	JSON   dnsRecordEditResponseDNSRecordsDSRecordDataJSON `json:"-"`
+	KeyTag float64                         `json:"key_tag"`
+	JSON   dnsRecordEditResponseDSDataJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsDSRecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordEditResponseDNSRecordsDSRecordData]
-type dnsRecordEditResponseDNSRecordsDSRecordDataJSON struct {
+// dnsRecordEditResponseDSDataJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseDSData]
+type dnsRecordEditResponseDSDataJSON struct {
 	Algorithm   apijson.Field
 	Digest      apijson.Field
 	DigestType  apijson.Field
@@ -9842,37 +10161,37 @@ type dnsRecordEditResponseDNSRecordsDSRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsDSRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseDSData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordEditResponseDNSRecordsDSRecordType string
+type DNSRecordEditResponseDSType string
 
 const (
-	DNSRecordEditResponseDNSRecordsDSRecordTypeDS DNSRecordEditResponseDNSRecordsDSRecordType = "DS"
+	DNSRecordEditResponseDSTypeDS DNSRecordEditResponseDSType = "DS"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordEditResponseDNSRecordsDSRecordMeta struct {
+type DNSRecordEditResponseDSMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                          `json:"source"`
-	JSON   dnsRecordEditResponseDNSRecordsDSRecordMetaJSON `json:"-"`
+	Source string                          `json:"source"`
+	JSON   dnsRecordEditResponseDSMetaJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsDSRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordEditResponseDNSRecordsDSRecordMeta]
-type dnsRecordEditResponseDNSRecordsDSRecordMetaJSON struct {
+// dnsRecordEditResponseDSMetaJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseDSMeta]
+type dnsRecordEditResponseDSMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsDSRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseDSMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -9880,15 +10199,14 @@ func (r *DNSRecordEditResponseDNSRecordsDSRecordMeta) UnmarshalJSON(data []byte)
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordEditResponseDNSRecordsDSRecordTTLNumber].
-type DNSRecordEditResponseDNSRecordsDSRecordTTL interface {
-	ImplementsDNSRecordEditResponseDNSRecordsDSRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordEditResponseDSTTLNumber].
+type DNSRecordEditResponseDSTTL interface {
+	ImplementsDNSRecordEditResponseDsttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordEditResponseDNSRecordsDSRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordEditResponseDSTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -9897,19 +10215,19 @@ func init() {
 	)
 }
 
-type DNSRecordEditResponseDNSRecordsDSRecordTTLNumber float64
+type DNSRecordEditResponseDSTTLNumber float64
 
 const (
-	DNSRecordEditResponseDNSRecordsDSRecordTTLNumber1 DNSRecordEditResponseDNSRecordsDSRecordTTLNumber = 1
+	DNSRecordEditResponseDSTTLNumber1 DNSRecordEditResponseDSTTLNumber = 1
 )
 
-type DNSRecordEditResponseDNSRecordsHTTPSRecord struct {
+type DNSRecordEditResponseHTTPS struct {
 	// Components of a HTTPS record.
-	Data DNSRecordEditResponseDNSRecordsHTTPSRecordData `json:"data,required"`
+	Data DNSRecordEditResponseHTTPSData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordEditResponseDNSRecordsHTTPSRecordType `json:"type,required"`
+	Type DNSRecordEditResponseHTTPSType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -9923,7 +10241,7 @@ type DNSRecordEditResponseDNSRecordsHTTPSRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordEditResponseDNSRecordsHTTPSRecordMeta `json:"meta"`
+	Meta DNSRecordEditResponseHTTPSMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -9933,17 +10251,17 @@ type DNSRecordEditResponseDNSRecordsHTTPSRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordEditResponseDNSRecordsHTTPSRecordTTL `json:"ttl"`
+	TTL DNSRecordEditResponseHTTPSTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                         `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordEditResponseDNSRecordsHTTPSRecordJSON `json:"-"`
+	ZoneName string                         `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordEditResponseHTTPSJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsHTTPSRecordJSON contains the JSON metadata for
-// the struct [DNSRecordEditResponseDNSRecordsHTTPSRecord]
-type dnsRecordEditResponseDNSRecordsHTTPSRecordJSON struct {
+// dnsRecordEditResponseHTTPSJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseHTTPS]
+type dnsRecordEditResponseHTTPSJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -9963,26 +10281,26 @@ type dnsRecordEditResponseDNSRecordsHTTPSRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsHTTPSRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseHTTPS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordEditResponseDNSRecordsHTTPSRecord) implementsDNSRecordEditResponse() {}
+func (r DNSRecordEditResponseHTTPS) implementsDNSRecordEditResponse() {}
 
 // Components of a HTTPS record.
-type DNSRecordEditResponseDNSRecordsHTTPSRecordData struct {
+type DNSRecordEditResponseHTTPSData struct {
 	// priority.
 	Priority float64 `json:"priority"`
 	// target.
 	Target string `json:"target"`
 	// value.
-	Value string                                             `json:"value"`
-	JSON  dnsRecordEditResponseDNSRecordsHTTPSRecordDataJSON `json:"-"`
+	Value string                             `json:"value"`
+	JSON  dnsRecordEditResponseHTTPSDataJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsHTTPSRecordDataJSON contains the JSON metadata
-// for the struct [DNSRecordEditResponseDNSRecordsHTTPSRecordData]
-type dnsRecordEditResponseDNSRecordsHTTPSRecordDataJSON struct {
+// dnsRecordEditResponseHTTPSDataJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseHTTPSData]
+type dnsRecordEditResponseHTTPSDataJSON struct {
 	Priority    apijson.Field
 	Target      apijson.Field
 	Value       apijson.Field
@@ -9990,37 +10308,37 @@ type dnsRecordEditResponseDNSRecordsHTTPSRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsHTTPSRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseHTTPSData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordEditResponseDNSRecordsHTTPSRecordType string
+type DNSRecordEditResponseHTTPSType string
 
 const (
-	DNSRecordEditResponseDNSRecordsHTTPSRecordTypeHTTPS DNSRecordEditResponseDNSRecordsHTTPSRecordType = "HTTPS"
+	DNSRecordEditResponseHTTPSTypeHTTPS DNSRecordEditResponseHTTPSType = "HTTPS"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordEditResponseDNSRecordsHTTPSRecordMeta struct {
+type DNSRecordEditResponseHTTPSMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                             `json:"source"`
-	JSON   dnsRecordEditResponseDNSRecordsHTTPSRecordMetaJSON `json:"-"`
+	Source string                             `json:"source"`
+	JSON   dnsRecordEditResponseHTTPSMetaJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsHTTPSRecordMetaJSON contains the JSON metadata
-// for the struct [DNSRecordEditResponseDNSRecordsHTTPSRecordMeta]
-type dnsRecordEditResponseDNSRecordsHTTPSRecordMetaJSON struct {
+// dnsRecordEditResponseHTTPSMetaJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseHTTPSMeta]
+type dnsRecordEditResponseHTTPSMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsHTTPSRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseHTTPSMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -10028,15 +10346,14 @@ func (r *DNSRecordEditResponseDNSRecordsHTTPSRecordMeta) UnmarshalJSON(data []by
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordEditResponseDNSRecordsHTTPSRecordTTLNumber].
-type DNSRecordEditResponseDNSRecordsHTTPSRecordTTL interface {
-	ImplementsDNSRecordEditResponseDNSRecordsHTTPSRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordEditResponseHTTPSTTLNumber].
+type DNSRecordEditResponseHTTPSTTL interface {
+	ImplementsDNSRecordEditResponseHttpsttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordEditResponseDNSRecordsHTTPSRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordEditResponseHTTPSTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -10045,19 +10362,19 @@ func init() {
 	)
 }
 
-type DNSRecordEditResponseDNSRecordsHTTPSRecordTTLNumber float64
+type DNSRecordEditResponseHTTPSTTLNumber float64
 
 const (
-	DNSRecordEditResponseDNSRecordsHTTPSRecordTTLNumber1 DNSRecordEditResponseDNSRecordsHTTPSRecordTTLNumber = 1
+	DNSRecordEditResponseHTTPSTTLNumber1 DNSRecordEditResponseHTTPSTTLNumber = 1
 )
 
-type DNSRecordEditResponseDNSRecordsLOCRecord struct {
+type DNSRecordEditResponseLOC struct {
 	// Components of a LOC record.
-	Data DNSRecordEditResponseDNSRecordsLOCRecordData `json:"data,required"`
+	Data DNSRecordEditResponseLOCData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordEditResponseDNSRecordsLOCRecordType `json:"type,required"`
+	Type DNSRecordEditResponseLOCType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -10071,7 +10388,7 @@ type DNSRecordEditResponseDNSRecordsLOCRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordEditResponseDNSRecordsLOCRecordMeta `json:"meta"`
+	Meta DNSRecordEditResponseLOCMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -10081,17 +10398,17 @@ type DNSRecordEditResponseDNSRecordsLOCRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordEditResponseDNSRecordsLOCRecordTTL `json:"ttl"`
+	TTL DNSRecordEditResponseLOCTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                       `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordEditResponseDNSRecordsLOCRecordJSON `json:"-"`
+	ZoneName string                       `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordEditResponseLOCJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsLOCRecordJSON contains the JSON metadata for the
-// struct [DNSRecordEditResponseDNSRecordsLOCRecord]
-type dnsRecordEditResponseDNSRecordsLOCRecordJSON struct {
+// dnsRecordEditResponseLOCJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseLOC]
+type dnsRecordEditResponseLOCJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -10111,20 +10428,20 @@ type dnsRecordEditResponseDNSRecordsLOCRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsLOCRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseLOC) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordEditResponseDNSRecordsLOCRecord) implementsDNSRecordEditResponse() {}
+func (r DNSRecordEditResponseLOC) implementsDNSRecordEditResponse() {}
 
 // Components of a LOC record.
-type DNSRecordEditResponseDNSRecordsLOCRecordData struct {
+type DNSRecordEditResponseLOCData struct {
 	// Altitude of location in meters.
 	Altitude float64 `json:"altitude"`
 	// Degrees of latitude.
 	LatDegrees float64 `json:"lat_degrees"`
 	// Latitude direction.
-	LatDirection DNSRecordEditResponseDNSRecordsLOCRecordDataLatDirection `json:"lat_direction"`
+	LatDirection DNSRecordEditResponseLOCDataLatDirection `json:"lat_direction"`
 	// Minutes of latitude.
 	LatMinutes float64 `json:"lat_minutes"`
 	// Seconds of latitude.
@@ -10132,7 +10449,7 @@ type DNSRecordEditResponseDNSRecordsLOCRecordData struct {
 	// Degrees of longitude.
 	LongDegrees float64 `json:"long_degrees"`
 	// Longitude direction.
-	LongDirection DNSRecordEditResponseDNSRecordsLOCRecordDataLongDirection `json:"long_direction"`
+	LongDirection DNSRecordEditResponseLOCDataLongDirection `json:"long_direction"`
 	// Minutes of longitude.
 	LongMinutes float64 `json:"long_minutes"`
 	// Seconds of longitude.
@@ -10142,13 +10459,13 @@ type DNSRecordEditResponseDNSRecordsLOCRecordData struct {
 	// Vertical precision of location.
 	PrecisionVert float64 `json:"precision_vert"`
 	// Size of location in meters.
-	Size float64                                          `json:"size"`
-	JSON dnsRecordEditResponseDNSRecordsLOCRecordDataJSON `json:"-"`
+	Size float64                          `json:"size"`
+	JSON dnsRecordEditResponseLOCDataJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsLOCRecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordEditResponseDNSRecordsLOCRecordData]
-type dnsRecordEditResponseDNSRecordsLOCRecordDataJSON struct {
+// dnsRecordEditResponseLOCDataJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseLOCData]
+type dnsRecordEditResponseLOCDataJSON struct {
 	Altitude      apijson.Field
 	LatDegrees    apijson.Field
 	LatDirection  apijson.Field
@@ -10165,53 +10482,53 @@ type dnsRecordEditResponseDNSRecordsLOCRecordDataJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsLOCRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseLOCData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Latitude direction.
-type DNSRecordEditResponseDNSRecordsLOCRecordDataLatDirection string
+type DNSRecordEditResponseLOCDataLatDirection string
 
 const (
-	DNSRecordEditResponseDNSRecordsLOCRecordDataLatDirectionN DNSRecordEditResponseDNSRecordsLOCRecordDataLatDirection = "N"
-	DNSRecordEditResponseDNSRecordsLOCRecordDataLatDirectionS DNSRecordEditResponseDNSRecordsLOCRecordDataLatDirection = "S"
+	DNSRecordEditResponseLOCDataLatDirectionN DNSRecordEditResponseLOCDataLatDirection = "N"
+	DNSRecordEditResponseLOCDataLatDirectionS DNSRecordEditResponseLOCDataLatDirection = "S"
 )
 
 // Longitude direction.
-type DNSRecordEditResponseDNSRecordsLOCRecordDataLongDirection string
+type DNSRecordEditResponseLOCDataLongDirection string
 
 const (
-	DNSRecordEditResponseDNSRecordsLOCRecordDataLongDirectionE DNSRecordEditResponseDNSRecordsLOCRecordDataLongDirection = "E"
-	DNSRecordEditResponseDNSRecordsLOCRecordDataLongDirectionW DNSRecordEditResponseDNSRecordsLOCRecordDataLongDirection = "W"
+	DNSRecordEditResponseLOCDataLongDirectionE DNSRecordEditResponseLOCDataLongDirection = "E"
+	DNSRecordEditResponseLOCDataLongDirectionW DNSRecordEditResponseLOCDataLongDirection = "W"
 )
 
 // Record type.
-type DNSRecordEditResponseDNSRecordsLOCRecordType string
+type DNSRecordEditResponseLOCType string
 
 const (
-	DNSRecordEditResponseDNSRecordsLOCRecordTypeLOC DNSRecordEditResponseDNSRecordsLOCRecordType = "LOC"
+	DNSRecordEditResponseLOCTypeLOC DNSRecordEditResponseLOCType = "LOC"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordEditResponseDNSRecordsLOCRecordMeta struct {
+type DNSRecordEditResponseLOCMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                           `json:"source"`
-	JSON   dnsRecordEditResponseDNSRecordsLOCRecordMetaJSON `json:"-"`
+	Source string                           `json:"source"`
+	JSON   dnsRecordEditResponseLOCMetaJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsLOCRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordEditResponseDNSRecordsLOCRecordMeta]
-type dnsRecordEditResponseDNSRecordsLOCRecordMetaJSON struct {
+// dnsRecordEditResponseLOCMetaJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseLOCMeta]
+type dnsRecordEditResponseLOCMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsLOCRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseLOCMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -10219,15 +10536,14 @@ func (r *DNSRecordEditResponseDNSRecordsLOCRecordMeta) UnmarshalJSON(data []byte
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordEditResponseDNSRecordsLOCRecordTTLNumber].
-type DNSRecordEditResponseDNSRecordsLOCRecordTTL interface {
-	ImplementsDNSRecordEditResponseDNSRecordsLOCRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordEditResponseLOCTTLNumber].
+type DNSRecordEditResponseLOCTTL interface {
+	ImplementsDNSRecordEditResponseLocttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordEditResponseDNSRecordsLOCRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordEditResponseLOCTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -10236,13 +10552,13 @@ func init() {
 	)
 }
 
-type DNSRecordEditResponseDNSRecordsLOCRecordTTLNumber float64
+type DNSRecordEditResponseLOCTTLNumber float64
 
 const (
-	DNSRecordEditResponseDNSRecordsLOCRecordTTLNumber1 DNSRecordEditResponseDNSRecordsLOCRecordTTLNumber = 1
+	DNSRecordEditResponseLOCTTLNumber1 DNSRecordEditResponseLOCTTLNumber = 1
 )
 
-type DNSRecordEditResponseDNSRecordsMXRecord struct {
+type DNSRecordEditResponseMX struct {
 	// A valid mail server hostname.
 	Content string `json:"content,required" format:"hostname"`
 	// DNS record name (or @ for the zone apex) in Punycode.
@@ -10251,7 +10567,7 @@ type DNSRecordEditResponseDNSRecordsMXRecord struct {
 	// lower priorities are preferred.
 	Priority float64 `json:"priority,required"`
 	// Record type.
-	Type DNSRecordEditResponseDNSRecordsMXRecordType `json:"type,required"`
+	Type DNSRecordEditResponseMXType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -10263,7 +10579,7 @@ type DNSRecordEditResponseDNSRecordsMXRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordEditResponseDNSRecordsMXRecordMeta `json:"meta"`
+	Meta DNSRecordEditResponseMXMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -10273,17 +10589,17 @@ type DNSRecordEditResponseDNSRecordsMXRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordEditResponseDNSRecordsMXRecordTTL `json:"ttl"`
+	TTL DNSRecordEditResponseMXTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                      `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordEditResponseDNSRecordsMXRecordJSON `json:"-"`
+	ZoneName string                      `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordEditResponseMXJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsMXRecordJSON contains the JSON metadata for the
-// struct [DNSRecordEditResponseDNSRecordsMXRecord]
-type dnsRecordEditResponseDNSRecordsMXRecordJSON struct {
+// dnsRecordEditResponseMXJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseMX]
+type dnsRecordEditResponseMXJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Priority    apijson.Field
@@ -10303,39 +10619,39 @@ type dnsRecordEditResponseDNSRecordsMXRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsMXRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseMX) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordEditResponseDNSRecordsMXRecord) implementsDNSRecordEditResponse() {}
+func (r DNSRecordEditResponseMX) implementsDNSRecordEditResponse() {}
 
 // Record type.
-type DNSRecordEditResponseDNSRecordsMXRecordType string
+type DNSRecordEditResponseMXType string
 
 const (
-	DNSRecordEditResponseDNSRecordsMXRecordTypeMX DNSRecordEditResponseDNSRecordsMXRecordType = "MX"
+	DNSRecordEditResponseMXTypeMX DNSRecordEditResponseMXType = "MX"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordEditResponseDNSRecordsMXRecordMeta struct {
+type DNSRecordEditResponseMXMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                          `json:"source"`
-	JSON   dnsRecordEditResponseDNSRecordsMXRecordMetaJSON `json:"-"`
+	Source string                          `json:"source"`
+	JSON   dnsRecordEditResponseMXMetaJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsMXRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordEditResponseDNSRecordsMXRecordMeta]
-type dnsRecordEditResponseDNSRecordsMXRecordMetaJSON struct {
+// dnsRecordEditResponseMXMetaJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseMXMeta]
+type dnsRecordEditResponseMXMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsMXRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseMXMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -10343,15 +10659,14 @@ func (r *DNSRecordEditResponseDNSRecordsMXRecordMeta) UnmarshalJSON(data []byte)
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordEditResponseDNSRecordsMXRecordTTLNumber].
-type DNSRecordEditResponseDNSRecordsMXRecordTTL interface {
-	ImplementsDNSRecordEditResponseDNSRecordsMXRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordEditResponseMXTTLNumber].
+type DNSRecordEditResponseMXTTL interface {
+	ImplementsDNSRecordEditResponseMxttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordEditResponseDNSRecordsMXRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordEditResponseMXTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -10360,19 +10675,19 @@ func init() {
 	)
 }
 
-type DNSRecordEditResponseDNSRecordsMXRecordTTLNumber float64
+type DNSRecordEditResponseMXTTLNumber float64
 
 const (
-	DNSRecordEditResponseDNSRecordsMXRecordTTLNumber1 DNSRecordEditResponseDNSRecordsMXRecordTTLNumber = 1
+	DNSRecordEditResponseMXTTLNumber1 DNSRecordEditResponseMXTTLNumber = 1
 )
 
-type DNSRecordEditResponseDNSRecordsNAPTRRecord struct {
+type DNSRecordEditResponseNAPTR struct {
 	// Components of a NAPTR record.
-	Data DNSRecordEditResponseDNSRecordsNAPTRRecordData `json:"data,required"`
+	Data DNSRecordEditResponseNAPTRData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordEditResponseDNSRecordsNAPTRRecordType `json:"type,required"`
+	Type DNSRecordEditResponseNAPTRType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -10386,7 +10701,7 @@ type DNSRecordEditResponseDNSRecordsNAPTRRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordEditResponseDNSRecordsNAPTRRecordMeta `json:"meta"`
+	Meta DNSRecordEditResponseNAPTRMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -10396,17 +10711,17 @@ type DNSRecordEditResponseDNSRecordsNAPTRRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordEditResponseDNSRecordsNAPTRRecordTTL `json:"ttl"`
+	TTL DNSRecordEditResponseNAPTRTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                         `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordEditResponseDNSRecordsNAPTRRecordJSON `json:"-"`
+	ZoneName string                         `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordEditResponseNAPTRJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsNAPTRRecordJSON contains the JSON metadata for
-// the struct [DNSRecordEditResponseDNSRecordsNAPTRRecord]
-type dnsRecordEditResponseDNSRecordsNAPTRRecordJSON struct {
+// dnsRecordEditResponseNAPTRJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseNAPTR]
+type dnsRecordEditResponseNAPTRJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -10426,14 +10741,14 @@ type dnsRecordEditResponseDNSRecordsNAPTRRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsNAPTRRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseNAPTR) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordEditResponseDNSRecordsNAPTRRecord) implementsDNSRecordEditResponse() {}
+func (r DNSRecordEditResponseNAPTR) implementsDNSRecordEditResponse() {}
 
 // Components of a NAPTR record.
-type DNSRecordEditResponseDNSRecordsNAPTRRecordData struct {
+type DNSRecordEditResponseNAPTRData struct {
 	// Flags.
 	Flags string `json:"flags"`
 	// Order.
@@ -10445,13 +10760,13 @@ type DNSRecordEditResponseDNSRecordsNAPTRRecordData struct {
 	// Replacement.
 	Replacement string `json:"replacement"`
 	// Service.
-	Service string                                             `json:"service"`
-	JSON    dnsRecordEditResponseDNSRecordsNAPTRRecordDataJSON `json:"-"`
+	Service string                             `json:"service"`
+	JSON    dnsRecordEditResponseNAPTRDataJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsNAPTRRecordDataJSON contains the JSON metadata
-// for the struct [DNSRecordEditResponseDNSRecordsNAPTRRecordData]
-type dnsRecordEditResponseDNSRecordsNAPTRRecordDataJSON struct {
+// dnsRecordEditResponseNAPTRDataJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseNAPTRData]
+type dnsRecordEditResponseNAPTRDataJSON struct {
 	Flags       apijson.Field
 	Order       apijson.Field
 	Preference  apijson.Field
@@ -10462,37 +10777,37 @@ type dnsRecordEditResponseDNSRecordsNAPTRRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsNAPTRRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseNAPTRData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordEditResponseDNSRecordsNAPTRRecordType string
+type DNSRecordEditResponseNAPTRType string
 
 const (
-	DNSRecordEditResponseDNSRecordsNAPTRRecordTypeNAPTR DNSRecordEditResponseDNSRecordsNAPTRRecordType = "NAPTR"
+	DNSRecordEditResponseNAPTRTypeNAPTR DNSRecordEditResponseNAPTRType = "NAPTR"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordEditResponseDNSRecordsNAPTRRecordMeta struct {
+type DNSRecordEditResponseNAPTRMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                             `json:"source"`
-	JSON   dnsRecordEditResponseDNSRecordsNAPTRRecordMetaJSON `json:"-"`
+	Source string                             `json:"source"`
+	JSON   dnsRecordEditResponseNAPTRMetaJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsNAPTRRecordMetaJSON contains the JSON metadata
-// for the struct [DNSRecordEditResponseDNSRecordsNAPTRRecordMeta]
-type dnsRecordEditResponseDNSRecordsNAPTRRecordMetaJSON struct {
+// dnsRecordEditResponseNAPTRMetaJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseNAPTRMeta]
+type dnsRecordEditResponseNAPTRMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsNAPTRRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseNAPTRMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -10500,15 +10815,14 @@ func (r *DNSRecordEditResponseDNSRecordsNAPTRRecordMeta) UnmarshalJSON(data []by
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordEditResponseDNSRecordsNAPTRRecordTTLNumber].
-type DNSRecordEditResponseDNSRecordsNAPTRRecordTTL interface {
-	ImplementsDNSRecordEditResponseDNSRecordsNAPTRRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordEditResponseNAPTRTTLNumber].
+type DNSRecordEditResponseNAPTRTTL interface {
+	ImplementsDNSRecordEditResponseNaptrttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordEditResponseDNSRecordsNAPTRRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordEditResponseNAPTRTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -10517,19 +10831,19 @@ func init() {
 	)
 }
 
-type DNSRecordEditResponseDNSRecordsNAPTRRecordTTLNumber float64
+type DNSRecordEditResponseNAPTRTTLNumber float64
 
 const (
-	DNSRecordEditResponseDNSRecordsNAPTRRecordTTLNumber1 DNSRecordEditResponseDNSRecordsNAPTRRecordTTLNumber = 1
+	DNSRecordEditResponseNAPTRTTLNumber1 DNSRecordEditResponseNAPTRTTLNumber = 1
 )
 
-type DNSRecordEditResponseDNSRecordsNSRecord struct {
+type DNSRecordEditResponseNS struct {
 	// A valid name server host name.
 	Content interface{} `json:"content,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordEditResponseDNSRecordsNSRecordType `json:"type,required"`
+	Type DNSRecordEditResponseNSType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -10541,7 +10855,7 @@ type DNSRecordEditResponseDNSRecordsNSRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordEditResponseDNSRecordsNSRecordMeta `json:"meta"`
+	Meta DNSRecordEditResponseNSMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -10551,17 +10865,17 @@ type DNSRecordEditResponseDNSRecordsNSRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordEditResponseDNSRecordsNSRecordTTL `json:"ttl"`
+	TTL DNSRecordEditResponseNSTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                      `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordEditResponseDNSRecordsNSRecordJSON `json:"-"`
+	ZoneName string                      `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordEditResponseNSJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsNSRecordJSON contains the JSON metadata for the
-// struct [DNSRecordEditResponseDNSRecordsNSRecord]
-type dnsRecordEditResponseDNSRecordsNSRecordJSON struct {
+// dnsRecordEditResponseNSJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseNS]
+type dnsRecordEditResponseNSJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -10580,39 +10894,39 @@ type dnsRecordEditResponseDNSRecordsNSRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsNSRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseNS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordEditResponseDNSRecordsNSRecord) implementsDNSRecordEditResponse() {}
+func (r DNSRecordEditResponseNS) implementsDNSRecordEditResponse() {}
 
 // Record type.
-type DNSRecordEditResponseDNSRecordsNSRecordType string
+type DNSRecordEditResponseNSType string
 
 const (
-	DNSRecordEditResponseDNSRecordsNSRecordTypeNS DNSRecordEditResponseDNSRecordsNSRecordType = "NS"
+	DNSRecordEditResponseNSTypeNS DNSRecordEditResponseNSType = "NS"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordEditResponseDNSRecordsNSRecordMeta struct {
+type DNSRecordEditResponseNSMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                          `json:"source"`
-	JSON   dnsRecordEditResponseDNSRecordsNSRecordMetaJSON `json:"-"`
+	Source string                          `json:"source"`
+	JSON   dnsRecordEditResponseNSMetaJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsNSRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordEditResponseDNSRecordsNSRecordMeta]
-type dnsRecordEditResponseDNSRecordsNSRecordMetaJSON struct {
+// dnsRecordEditResponseNSMetaJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseNSMeta]
+type dnsRecordEditResponseNSMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsNSRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseNSMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -10620,15 +10934,14 @@ func (r *DNSRecordEditResponseDNSRecordsNSRecordMeta) UnmarshalJSON(data []byte)
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordEditResponseDNSRecordsNSRecordTTLNumber].
-type DNSRecordEditResponseDNSRecordsNSRecordTTL interface {
-	ImplementsDNSRecordEditResponseDNSRecordsNSRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordEditResponseNSTTLNumber].
+type DNSRecordEditResponseNSTTL interface {
+	ImplementsDNSRecordEditResponseNsttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordEditResponseDNSRecordsNSRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordEditResponseNSTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -10637,19 +10950,19 @@ func init() {
 	)
 }
 
-type DNSRecordEditResponseDNSRecordsNSRecordTTLNumber float64
+type DNSRecordEditResponseNSTTLNumber float64
 
 const (
-	DNSRecordEditResponseDNSRecordsNSRecordTTLNumber1 DNSRecordEditResponseDNSRecordsNSRecordTTLNumber = 1
+	DNSRecordEditResponseNSTTLNumber1 DNSRecordEditResponseNSTTLNumber = 1
 )
 
-type DNSRecordEditResponseDNSRecordsPTRRecord struct {
+type DNSRecordEditResponsePTR struct {
 	// Domain name pointing to the address.
 	Content string `json:"content,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordEditResponseDNSRecordsPTRRecordType `json:"type,required"`
+	Type DNSRecordEditResponsePTRType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -10661,7 +10974,7 @@ type DNSRecordEditResponseDNSRecordsPTRRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordEditResponseDNSRecordsPTRRecordMeta `json:"meta"`
+	Meta DNSRecordEditResponsePTRMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -10671,17 +10984,17 @@ type DNSRecordEditResponseDNSRecordsPTRRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordEditResponseDNSRecordsPTRRecordTTL `json:"ttl"`
+	TTL DNSRecordEditResponsePTRTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                       `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordEditResponseDNSRecordsPTRRecordJSON `json:"-"`
+	ZoneName string                       `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordEditResponsePTRJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsPTRRecordJSON contains the JSON metadata for the
-// struct [DNSRecordEditResponseDNSRecordsPTRRecord]
-type dnsRecordEditResponseDNSRecordsPTRRecordJSON struct {
+// dnsRecordEditResponsePTRJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponsePTR]
+type dnsRecordEditResponsePTRJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -10700,39 +11013,39 @@ type dnsRecordEditResponseDNSRecordsPTRRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsPTRRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponsePTR) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordEditResponseDNSRecordsPTRRecord) implementsDNSRecordEditResponse() {}
+func (r DNSRecordEditResponsePTR) implementsDNSRecordEditResponse() {}
 
 // Record type.
-type DNSRecordEditResponseDNSRecordsPTRRecordType string
+type DNSRecordEditResponsePTRType string
 
 const (
-	DNSRecordEditResponseDNSRecordsPTRRecordTypePTR DNSRecordEditResponseDNSRecordsPTRRecordType = "PTR"
+	DNSRecordEditResponsePTRTypePTR DNSRecordEditResponsePTRType = "PTR"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordEditResponseDNSRecordsPTRRecordMeta struct {
+type DNSRecordEditResponsePTRMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                           `json:"source"`
-	JSON   dnsRecordEditResponseDNSRecordsPTRRecordMetaJSON `json:"-"`
+	Source string                           `json:"source"`
+	JSON   dnsRecordEditResponsePTRMetaJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsPTRRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordEditResponseDNSRecordsPTRRecordMeta]
-type dnsRecordEditResponseDNSRecordsPTRRecordMetaJSON struct {
+// dnsRecordEditResponsePTRMetaJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponsePTRMeta]
+type dnsRecordEditResponsePTRMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsPTRRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponsePTRMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -10740,15 +11053,14 @@ func (r *DNSRecordEditResponseDNSRecordsPTRRecordMeta) UnmarshalJSON(data []byte
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordEditResponseDNSRecordsPTRRecordTTLNumber].
-type DNSRecordEditResponseDNSRecordsPTRRecordTTL interface {
-	ImplementsDNSRecordEditResponseDNSRecordsPTRRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordEditResponsePTRTTLNumber].
+type DNSRecordEditResponsePTRTTL interface {
+	ImplementsDNSRecordEditResponsePtrttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordEditResponseDNSRecordsPTRRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordEditResponsePTRTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -10757,19 +11069,19 @@ func init() {
 	)
 }
 
-type DNSRecordEditResponseDNSRecordsPTRRecordTTLNumber float64
+type DNSRecordEditResponsePTRTTLNumber float64
 
 const (
-	DNSRecordEditResponseDNSRecordsPTRRecordTTLNumber1 DNSRecordEditResponseDNSRecordsPTRRecordTTLNumber = 1
+	DNSRecordEditResponsePTRTTLNumber1 DNSRecordEditResponsePTRTTLNumber = 1
 )
 
-type DNSRecordEditResponseDNSRecordsSmimeaRecord struct {
+type DNSRecordEditResponseSmimea struct {
 	// Components of a SMIMEA record.
-	Data DNSRecordEditResponseDNSRecordsSmimeaRecordData `json:"data,required"`
+	Data DNSRecordEditResponseSmimeaData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordEditResponseDNSRecordsSmimeaRecordType `json:"type,required"`
+	Type DNSRecordEditResponseSmimeaType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -10783,7 +11095,7 @@ type DNSRecordEditResponseDNSRecordsSmimeaRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordEditResponseDNSRecordsSmimeaRecordMeta `json:"meta"`
+	Meta DNSRecordEditResponseSmimeaMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -10793,17 +11105,17 @@ type DNSRecordEditResponseDNSRecordsSmimeaRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordEditResponseDNSRecordsSmimeaRecordTTL `json:"ttl"`
+	TTL DNSRecordEditResponseSmimeaTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                          `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordEditResponseDNSRecordsSmimeaRecordJSON `json:"-"`
+	ZoneName string                          `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordEditResponseSmimeaJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsSmimeaRecordJSON contains the JSON metadata for
-// the struct [DNSRecordEditResponseDNSRecordsSmimeaRecord]
-type dnsRecordEditResponseDNSRecordsSmimeaRecordJSON struct {
+// dnsRecordEditResponseSmimeaJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseSmimea]
+type dnsRecordEditResponseSmimeaJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -10823,14 +11135,14 @@ type dnsRecordEditResponseDNSRecordsSmimeaRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsSmimeaRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseSmimea) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordEditResponseDNSRecordsSmimeaRecord) implementsDNSRecordEditResponse() {}
+func (r DNSRecordEditResponseSmimea) implementsDNSRecordEditResponse() {}
 
 // Components of a SMIMEA record.
-type DNSRecordEditResponseDNSRecordsSmimeaRecordData struct {
+type DNSRecordEditResponseSmimeaData struct {
 	// Certificate.
 	Certificate string `json:"certificate"`
 	// Matching Type.
@@ -10838,13 +11150,13 @@ type DNSRecordEditResponseDNSRecordsSmimeaRecordData struct {
 	// Selector.
 	Selector float64 `json:"selector"`
 	// Usage.
-	Usage float64                                             `json:"usage"`
-	JSON  dnsRecordEditResponseDNSRecordsSmimeaRecordDataJSON `json:"-"`
+	Usage float64                             `json:"usage"`
+	JSON  dnsRecordEditResponseSmimeaDataJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsSmimeaRecordDataJSON contains the JSON metadata
-// for the struct [DNSRecordEditResponseDNSRecordsSmimeaRecordData]
-type dnsRecordEditResponseDNSRecordsSmimeaRecordDataJSON struct {
+// dnsRecordEditResponseSmimeaDataJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseSmimeaData]
+type dnsRecordEditResponseSmimeaDataJSON struct {
 	Certificate  apijson.Field
 	MatchingType apijson.Field
 	Selector     apijson.Field
@@ -10853,37 +11165,37 @@ type dnsRecordEditResponseDNSRecordsSmimeaRecordDataJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsSmimeaRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseSmimeaData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordEditResponseDNSRecordsSmimeaRecordType string
+type DNSRecordEditResponseSmimeaType string
 
 const (
-	DNSRecordEditResponseDNSRecordsSmimeaRecordTypeSmimea DNSRecordEditResponseDNSRecordsSmimeaRecordType = "SMIMEA"
+	DNSRecordEditResponseSmimeaTypeSmimea DNSRecordEditResponseSmimeaType = "SMIMEA"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordEditResponseDNSRecordsSmimeaRecordMeta struct {
+type DNSRecordEditResponseSmimeaMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                              `json:"source"`
-	JSON   dnsRecordEditResponseDNSRecordsSmimeaRecordMetaJSON `json:"-"`
+	Source string                              `json:"source"`
+	JSON   dnsRecordEditResponseSmimeaMetaJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsSmimeaRecordMetaJSON contains the JSON metadata
-// for the struct [DNSRecordEditResponseDNSRecordsSmimeaRecordMeta]
-type dnsRecordEditResponseDNSRecordsSmimeaRecordMetaJSON struct {
+// dnsRecordEditResponseSmimeaMetaJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseSmimeaMeta]
+type dnsRecordEditResponseSmimeaMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsSmimeaRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseSmimeaMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -10892,14 +11204,14 @@ func (r *DNSRecordEditResponseDNSRecordsSmimeaRecordMeta) UnmarshalJSON(data []b
 // Enterprise zones.
 //
 // Union satisfied by [shared.UnionFloat] or
-// [DNSRecordEditResponseDNSRecordsSmimeaRecordTTLNumber].
-type DNSRecordEditResponseDNSRecordsSmimeaRecordTTL interface {
-	ImplementsDNSRecordEditResponseDNSRecordsSmimeaRecordTTL()
+// [DNSRecordEditResponseSmimeaTTLNumber].
+type DNSRecordEditResponseSmimeaTTL interface {
+	ImplementsDNSRecordEditResponseSmimeaTTL()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordEditResponseDNSRecordsSmimeaRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordEditResponseSmimeaTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -10908,21 +11220,21 @@ func init() {
 	)
 }
 
-type DNSRecordEditResponseDNSRecordsSmimeaRecordTTLNumber float64
+type DNSRecordEditResponseSmimeaTTLNumber float64
 
 const (
-	DNSRecordEditResponseDNSRecordsSmimeaRecordTTLNumber1 DNSRecordEditResponseDNSRecordsSmimeaRecordTTLNumber = 1
+	DNSRecordEditResponseSmimeaTTLNumber1 DNSRecordEditResponseSmimeaTTLNumber = 1
 )
 
-type DNSRecordEditResponseDNSRecordsSRVRecord struct {
+type DNSRecordEditResponseSRV struct {
 	// Components of a SRV record.
-	Data DNSRecordEditResponseDNSRecordsSRVRecordData `json:"data,required"`
+	Data DNSRecordEditResponseSRVData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode. For SRV records, the first
 	// label is normally a service and the second a protocol name, each starting with
 	// an underscore.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordEditResponseDNSRecordsSRVRecordType `json:"type,required"`
+	Type DNSRecordEditResponseSRVType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -10937,7 +11249,7 @@ type DNSRecordEditResponseDNSRecordsSRVRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordEditResponseDNSRecordsSRVRecordMeta `json:"meta"`
+	Meta DNSRecordEditResponseSRVMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -10947,17 +11259,17 @@ type DNSRecordEditResponseDNSRecordsSRVRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordEditResponseDNSRecordsSRVRecordTTL `json:"ttl"`
+	TTL DNSRecordEditResponseSRVTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                       `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordEditResponseDNSRecordsSRVRecordJSON `json:"-"`
+	ZoneName string                       `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordEditResponseSRVJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsSRVRecordJSON contains the JSON metadata for the
-// struct [DNSRecordEditResponseDNSRecordsSRVRecord]
-type dnsRecordEditResponseDNSRecordsSRVRecordJSON struct {
+// dnsRecordEditResponseSRVJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseSRV]
+type dnsRecordEditResponseSRVJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -10977,14 +11289,14 @@ type dnsRecordEditResponseDNSRecordsSRVRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsSRVRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseSRV) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordEditResponseDNSRecordsSRVRecord) implementsDNSRecordEditResponse() {}
+func (r DNSRecordEditResponseSRV) implementsDNSRecordEditResponse() {}
 
 // Components of a SRV record.
-type DNSRecordEditResponseDNSRecordsSRVRecordData struct {
+type DNSRecordEditResponseSRVData struct {
 	// A valid hostname. Deprecated in favor of the regular 'name' outside the data
 	// map. This data map field represents the remainder of the full 'name' after the
 	// service and protocol.
@@ -11005,13 +11317,13 @@ type DNSRecordEditResponseDNSRecordsSRVRecordData struct {
 	// A valid hostname.
 	Target string `json:"target" format:"hostname"`
 	// The record weight.
-	Weight float64                                          `json:"weight"`
-	JSON   dnsRecordEditResponseDNSRecordsSRVRecordDataJSON `json:"-"`
+	Weight float64                          `json:"weight"`
+	JSON   dnsRecordEditResponseSRVDataJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsSRVRecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordEditResponseDNSRecordsSRVRecordData]
-type dnsRecordEditResponseDNSRecordsSRVRecordDataJSON struct {
+// dnsRecordEditResponseSRVDataJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseSRVData]
+type dnsRecordEditResponseSRVDataJSON struct {
 	Name        apijson.Field
 	Port        apijson.Field
 	Priority    apijson.Field
@@ -11023,37 +11335,37 @@ type dnsRecordEditResponseDNSRecordsSRVRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsSRVRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseSRVData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordEditResponseDNSRecordsSRVRecordType string
+type DNSRecordEditResponseSRVType string
 
 const (
-	DNSRecordEditResponseDNSRecordsSRVRecordTypeSRV DNSRecordEditResponseDNSRecordsSRVRecordType = "SRV"
+	DNSRecordEditResponseSRVTypeSRV DNSRecordEditResponseSRVType = "SRV"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordEditResponseDNSRecordsSRVRecordMeta struct {
+type DNSRecordEditResponseSRVMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                           `json:"source"`
-	JSON   dnsRecordEditResponseDNSRecordsSRVRecordMetaJSON `json:"-"`
+	Source string                           `json:"source"`
+	JSON   dnsRecordEditResponseSRVMetaJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsSRVRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordEditResponseDNSRecordsSRVRecordMeta]
-type dnsRecordEditResponseDNSRecordsSRVRecordMetaJSON struct {
+// dnsRecordEditResponseSRVMetaJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseSRVMeta]
+type dnsRecordEditResponseSRVMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsSRVRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseSRVMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -11061,15 +11373,14 @@ func (r *DNSRecordEditResponseDNSRecordsSRVRecordMeta) UnmarshalJSON(data []byte
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordEditResponseDNSRecordsSRVRecordTTLNumber].
-type DNSRecordEditResponseDNSRecordsSRVRecordTTL interface {
-	ImplementsDNSRecordEditResponseDNSRecordsSRVRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordEditResponseSRVTTLNumber].
+type DNSRecordEditResponseSRVTTL interface {
+	ImplementsDNSRecordEditResponseSrvttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordEditResponseDNSRecordsSRVRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordEditResponseSRVTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -11078,19 +11389,19 @@ func init() {
 	)
 }
 
-type DNSRecordEditResponseDNSRecordsSRVRecordTTLNumber float64
+type DNSRecordEditResponseSRVTTLNumber float64
 
 const (
-	DNSRecordEditResponseDNSRecordsSRVRecordTTLNumber1 DNSRecordEditResponseDNSRecordsSRVRecordTTLNumber = 1
+	DNSRecordEditResponseSRVTTLNumber1 DNSRecordEditResponseSRVTTLNumber = 1
 )
 
-type DNSRecordEditResponseDNSRecordsSSHFPRecord struct {
+type DNSRecordEditResponseSSHFP struct {
 	// Components of a SSHFP record.
-	Data DNSRecordEditResponseDNSRecordsSSHFPRecordData `json:"data,required"`
+	Data DNSRecordEditResponseSSHFPData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordEditResponseDNSRecordsSSHFPRecordType `json:"type,required"`
+	Type DNSRecordEditResponseSSHFPType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -11104,7 +11415,7 @@ type DNSRecordEditResponseDNSRecordsSSHFPRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordEditResponseDNSRecordsSSHFPRecordMeta `json:"meta"`
+	Meta DNSRecordEditResponseSSHFPMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -11114,17 +11425,17 @@ type DNSRecordEditResponseDNSRecordsSSHFPRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordEditResponseDNSRecordsSSHFPRecordTTL `json:"ttl"`
+	TTL DNSRecordEditResponseSSHFPTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                         `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordEditResponseDNSRecordsSSHFPRecordJSON `json:"-"`
+	ZoneName string                         `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordEditResponseSSHFPJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsSSHFPRecordJSON contains the JSON metadata for
-// the struct [DNSRecordEditResponseDNSRecordsSSHFPRecord]
-type dnsRecordEditResponseDNSRecordsSSHFPRecordJSON struct {
+// dnsRecordEditResponseSSHFPJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseSSHFP]
+type dnsRecordEditResponseSSHFPJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -11144,26 +11455,26 @@ type dnsRecordEditResponseDNSRecordsSSHFPRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsSSHFPRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseSSHFP) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordEditResponseDNSRecordsSSHFPRecord) implementsDNSRecordEditResponse() {}
+func (r DNSRecordEditResponseSSHFP) implementsDNSRecordEditResponse() {}
 
 // Components of a SSHFP record.
-type DNSRecordEditResponseDNSRecordsSSHFPRecordData struct {
+type DNSRecordEditResponseSSHFPData struct {
 	// algorithm.
 	Algorithm float64 `json:"algorithm"`
 	// fingerprint.
 	Fingerprint string `json:"fingerprint"`
 	// type.
-	Type float64                                            `json:"type"`
-	JSON dnsRecordEditResponseDNSRecordsSSHFPRecordDataJSON `json:"-"`
+	Type float64                            `json:"type"`
+	JSON dnsRecordEditResponseSSHFPDataJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsSSHFPRecordDataJSON contains the JSON metadata
-// for the struct [DNSRecordEditResponseDNSRecordsSSHFPRecordData]
-type dnsRecordEditResponseDNSRecordsSSHFPRecordDataJSON struct {
+// dnsRecordEditResponseSSHFPDataJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseSSHFPData]
+type dnsRecordEditResponseSSHFPDataJSON struct {
 	Algorithm   apijson.Field
 	Fingerprint apijson.Field
 	Type        apijson.Field
@@ -11171,37 +11482,37 @@ type dnsRecordEditResponseDNSRecordsSSHFPRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsSSHFPRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseSSHFPData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordEditResponseDNSRecordsSSHFPRecordType string
+type DNSRecordEditResponseSSHFPType string
 
 const (
-	DNSRecordEditResponseDNSRecordsSSHFPRecordTypeSSHFP DNSRecordEditResponseDNSRecordsSSHFPRecordType = "SSHFP"
+	DNSRecordEditResponseSSHFPTypeSSHFP DNSRecordEditResponseSSHFPType = "SSHFP"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordEditResponseDNSRecordsSSHFPRecordMeta struct {
+type DNSRecordEditResponseSSHFPMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                             `json:"source"`
-	JSON   dnsRecordEditResponseDNSRecordsSSHFPRecordMetaJSON `json:"-"`
+	Source string                             `json:"source"`
+	JSON   dnsRecordEditResponseSSHFPMetaJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsSSHFPRecordMetaJSON contains the JSON metadata
-// for the struct [DNSRecordEditResponseDNSRecordsSSHFPRecordMeta]
-type dnsRecordEditResponseDNSRecordsSSHFPRecordMetaJSON struct {
+// dnsRecordEditResponseSSHFPMetaJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseSSHFPMeta]
+type dnsRecordEditResponseSSHFPMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsSSHFPRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseSSHFPMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -11209,15 +11520,14 @@ func (r *DNSRecordEditResponseDNSRecordsSSHFPRecordMeta) UnmarshalJSON(data []by
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordEditResponseDNSRecordsSSHFPRecordTTLNumber].
-type DNSRecordEditResponseDNSRecordsSSHFPRecordTTL interface {
-	ImplementsDNSRecordEditResponseDNSRecordsSSHFPRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordEditResponseSSHFPTTLNumber].
+type DNSRecordEditResponseSSHFPTTL interface {
+	ImplementsDNSRecordEditResponseSshfpttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordEditResponseDNSRecordsSSHFPRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordEditResponseSSHFPTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -11226,19 +11536,19 @@ func init() {
 	)
 }
 
-type DNSRecordEditResponseDNSRecordsSSHFPRecordTTLNumber float64
+type DNSRecordEditResponseSSHFPTTLNumber float64
 
 const (
-	DNSRecordEditResponseDNSRecordsSSHFPRecordTTLNumber1 DNSRecordEditResponseDNSRecordsSSHFPRecordTTLNumber = 1
+	DNSRecordEditResponseSSHFPTTLNumber1 DNSRecordEditResponseSSHFPTTLNumber = 1
 )
 
-type DNSRecordEditResponseDNSRecordsSVCBRecord struct {
+type DNSRecordEditResponseSVCB struct {
 	// Components of a SVCB record.
-	Data DNSRecordEditResponseDNSRecordsSVCBRecordData `json:"data,required"`
+	Data DNSRecordEditResponseSVCBData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordEditResponseDNSRecordsSVCBRecordType `json:"type,required"`
+	Type DNSRecordEditResponseSVCBType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -11252,7 +11562,7 @@ type DNSRecordEditResponseDNSRecordsSVCBRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordEditResponseDNSRecordsSVCBRecordMeta `json:"meta"`
+	Meta DNSRecordEditResponseSVCBMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -11262,17 +11572,17 @@ type DNSRecordEditResponseDNSRecordsSVCBRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordEditResponseDNSRecordsSVCBRecordTTL `json:"ttl"`
+	TTL DNSRecordEditResponseSVCBTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                        `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordEditResponseDNSRecordsSVCBRecordJSON `json:"-"`
+	ZoneName string                        `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordEditResponseSVCBJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsSVCBRecordJSON contains the JSON metadata for the
-// struct [DNSRecordEditResponseDNSRecordsSVCBRecord]
-type dnsRecordEditResponseDNSRecordsSVCBRecordJSON struct {
+// dnsRecordEditResponseSVCBJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseSVCB]
+type dnsRecordEditResponseSVCBJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -11292,26 +11602,26 @@ type dnsRecordEditResponseDNSRecordsSVCBRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsSVCBRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseSVCB) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordEditResponseDNSRecordsSVCBRecord) implementsDNSRecordEditResponse() {}
+func (r DNSRecordEditResponseSVCB) implementsDNSRecordEditResponse() {}
 
 // Components of a SVCB record.
-type DNSRecordEditResponseDNSRecordsSVCBRecordData struct {
+type DNSRecordEditResponseSVCBData struct {
 	// priority.
 	Priority float64 `json:"priority"`
 	// target.
 	Target string `json:"target"`
 	// value.
-	Value string                                            `json:"value"`
-	JSON  dnsRecordEditResponseDNSRecordsSVCBRecordDataJSON `json:"-"`
+	Value string                            `json:"value"`
+	JSON  dnsRecordEditResponseSVCBDataJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsSVCBRecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordEditResponseDNSRecordsSVCBRecordData]
-type dnsRecordEditResponseDNSRecordsSVCBRecordDataJSON struct {
+// dnsRecordEditResponseSVCBDataJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseSVCBData]
+type dnsRecordEditResponseSVCBDataJSON struct {
 	Priority    apijson.Field
 	Target      apijson.Field
 	Value       apijson.Field
@@ -11319,37 +11629,37 @@ type dnsRecordEditResponseDNSRecordsSVCBRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsSVCBRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseSVCBData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordEditResponseDNSRecordsSVCBRecordType string
+type DNSRecordEditResponseSVCBType string
 
 const (
-	DNSRecordEditResponseDNSRecordsSVCBRecordTypeSVCB DNSRecordEditResponseDNSRecordsSVCBRecordType = "SVCB"
+	DNSRecordEditResponseSVCBTypeSVCB DNSRecordEditResponseSVCBType = "SVCB"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordEditResponseDNSRecordsSVCBRecordMeta struct {
+type DNSRecordEditResponseSVCBMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                            `json:"source"`
-	JSON   dnsRecordEditResponseDNSRecordsSVCBRecordMetaJSON `json:"-"`
+	Source string                            `json:"source"`
+	JSON   dnsRecordEditResponseSVCBMetaJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsSVCBRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordEditResponseDNSRecordsSVCBRecordMeta]
-type dnsRecordEditResponseDNSRecordsSVCBRecordMetaJSON struct {
+// dnsRecordEditResponseSVCBMetaJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseSVCBMeta]
+type dnsRecordEditResponseSVCBMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsSVCBRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseSVCBMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -11357,15 +11667,14 @@ func (r *DNSRecordEditResponseDNSRecordsSVCBRecordMeta) UnmarshalJSON(data []byt
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordEditResponseDNSRecordsSVCBRecordTTLNumber].
-type DNSRecordEditResponseDNSRecordsSVCBRecordTTL interface {
-	ImplementsDNSRecordEditResponseDNSRecordsSVCBRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordEditResponseSVCBTTLNumber].
+type DNSRecordEditResponseSVCBTTL interface {
+	ImplementsDNSRecordEditResponseSvcbttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordEditResponseDNSRecordsSVCBRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordEditResponseSVCBTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -11374,19 +11683,19 @@ func init() {
 	)
 }
 
-type DNSRecordEditResponseDNSRecordsSVCBRecordTTLNumber float64
+type DNSRecordEditResponseSVCBTTLNumber float64
 
 const (
-	DNSRecordEditResponseDNSRecordsSVCBRecordTTLNumber1 DNSRecordEditResponseDNSRecordsSVCBRecordTTLNumber = 1
+	DNSRecordEditResponseSVCBTTLNumber1 DNSRecordEditResponseSVCBTTLNumber = 1
 )
 
-type DNSRecordEditResponseDNSRecordsTLSARecord struct {
+type DNSRecordEditResponseTLSA struct {
 	// Components of a TLSA record.
-	Data DNSRecordEditResponseDNSRecordsTLSARecordData `json:"data,required"`
+	Data DNSRecordEditResponseTLSAData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordEditResponseDNSRecordsTLSARecordType `json:"type,required"`
+	Type DNSRecordEditResponseTLSAType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -11400,7 +11709,7 @@ type DNSRecordEditResponseDNSRecordsTLSARecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordEditResponseDNSRecordsTLSARecordMeta `json:"meta"`
+	Meta DNSRecordEditResponseTLSAMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -11410,17 +11719,17 @@ type DNSRecordEditResponseDNSRecordsTLSARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordEditResponseDNSRecordsTLSARecordTTL `json:"ttl"`
+	TTL DNSRecordEditResponseTLSATTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                        `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordEditResponseDNSRecordsTLSARecordJSON `json:"-"`
+	ZoneName string                        `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordEditResponseTLSAJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsTLSARecordJSON contains the JSON metadata for the
-// struct [DNSRecordEditResponseDNSRecordsTLSARecord]
-type dnsRecordEditResponseDNSRecordsTLSARecordJSON struct {
+// dnsRecordEditResponseTLSAJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseTLSA]
+type dnsRecordEditResponseTLSAJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -11440,14 +11749,14 @@ type dnsRecordEditResponseDNSRecordsTLSARecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsTLSARecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseTLSA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordEditResponseDNSRecordsTLSARecord) implementsDNSRecordEditResponse() {}
+func (r DNSRecordEditResponseTLSA) implementsDNSRecordEditResponse() {}
 
 // Components of a TLSA record.
-type DNSRecordEditResponseDNSRecordsTLSARecordData struct {
+type DNSRecordEditResponseTLSAData struct {
 	// certificate.
 	Certificate string `json:"certificate"`
 	// Matching Type.
@@ -11455,13 +11764,13 @@ type DNSRecordEditResponseDNSRecordsTLSARecordData struct {
 	// Selector.
 	Selector float64 `json:"selector"`
 	// Usage.
-	Usage float64                                           `json:"usage"`
-	JSON  dnsRecordEditResponseDNSRecordsTLSARecordDataJSON `json:"-"`
+	Usage float64                           `json:"usage"`
+	JSON  dnsRecordEditResponseTLSADataJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsTLSARecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordEditResponseDNSRecordsTLSARecordData]
-type dnsRecordEditResponseDNSRecordsTLSARecordDataJSON struct {
+// dnsRecordEditResponseTLSADataJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseTLSAData]
+type dnsRecordEditResponseTLSADataJSON struct {
 	Certificate  apijson.Field
 	MatchingType apijson.Field
 	Selector     apijson.Field
@@ -11470,37 +11779,37 @@ type dnsRecordEditResponseDNSRecordsTLSARecordDataJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsTLSARecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseTLSAData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordEditResponseDNSRecordsTLSARecordType string
+type DNSRecordEditResponseTLSAType string
 
 const (
-	DNSRecordEditResponseDNSRecordsTLSARecordTypeTLSA DNSRecordEditResponseDNSRecordsTLSARecordType = "TLSA"
+	DNSRecordEditResponseTLSATypeTLSA DNSRecordEditResponseTLSAType = "TLSA"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordEditResponseDNSRecordsTLSARecordMeta struct {
+type DNSRecordEditResponseTLSAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                            `json:"source"`
-	JSON   dnsRecordEditResponseDNSRecordsTLSARecordMetaJSON `json:"-"`
+	Source string                            `json:"source"`
+	JSON   dnsRecordEditResponseTLSAMetaJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsTLSARecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordEditResponseDNSRecordsTLSARecordMeta]
-type dnsRecordEditResponseDNSRecordsTLSARecordMetaJSON struct {
+// dnsRecordEditResponseTLSAMetaJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseTLSAMeta]
+type dnsRecordEditResponseTLSAMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsTLSARecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseTLSAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -11508,15 +11817,14 @@ func (r *DNSRecordEditResponseDNSRecordsTLSARecordMeta) UnmarshalJSON(data []byt
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordEditResponseDNSRecordsTLSARecordTTLNumber].
-type DNSRecordEditResponseDNSRecordsTLSARecordTTL interface {
-	ImplementsDNSRecordEditResponseDNSRecordsTLSARecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordEditResponseTLSATTLNumber].
+type DNSRecordEditResponseTLSATTL interface {
+	ImplementsDNSRecordEditResponseTlsattl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordEditResponseDNSRecordsTLSARecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordEditResponseTLSATTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -11525,19 +11833,19 @@ func init() {
 	)
 }
 
-type DNSRecordEditResponseDNSRecordsTLSARecordTTLNumber float64
+type DNSRecordEditResponseTLSATTLNumber float64
 
 const (
-	DNSRecordEditResponseDNSRecordsTLSARecordTTLNumber1 DNSRecordEditResponseDNSRecordsTLSARecordTTLNumber = 1
+	DNSRecordEditResponseTLSATTLNumber1 DNSRecordEditResponseTLSATTLNumber = 1
 )
 
-type DNSRecordEditResponseDNSRecordsTXTRecord struct {
+type DNSRecordEditResponseTXT struct {
 	// Text content for the record.
 	Content string `json:"content,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordEditResponseDNSRecordsTXTRecordType `json:"type,required"`
+	Type DNSRecordEditResponseTXTType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -11549,7 +11857,7 @@ type DNSRecordEditResponseDNSRecordsTXTRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordEditResponseDNSRecordsTXTRecordMeta `json:"meta"`
+	Meta DNSRecordEditResponseTXTMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -11559,17 +11867,17 @@ type DNSRecordEditResponseDNSRecordsTXTRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordEditResponseDNSRecordsTXTRecordTTL `json:"ttl"`
+	TTL DNSRecordEditResponseTXTTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                       `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordEditResponseDNSRecordsTXTRecordJSON `json:"-"`
+	ZoneName string                       `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordEditResponseTXTJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsTXTRecordJSON contains the JSON metadata for the
-// struct [DNSRecordEditResponseDNSRecordsTXTRecord]
-type dnsRecordEditResponseDNSRecordsTXTRecordJSON struct {
+// dnsRecordEditResponseTXTJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseTXT]
+type dnsRecordEditResponseTXTJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -11588,39 +11896,39 @@ type dnsRecordEditResponseDNSRecordsTXTRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsTXTRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseTXT) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordEditResponseDNSRecordsTXTRecord) implementsDNSRecordEditResponse() {}
+func (r DNSRecordEditResponseTXT) implementsDNSRecordEditResponse() {}
 
 // Record type.
-type DNSRecordEditResponseDNSRecordsTXTRecordType string
+type DNSRecordEditResponseTXTType string
 
 const (
-	DNSRecordEditResponseDNSRecordsTXTRecordTypeTXT DNSRecordEditResponseDNSRecordsTXTRecordType = "TXT"
+	DNSRecordEditResponseTXTTypeTXT DNSRecordEditResponseTXTType = "TXT"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordEditResponseDNSRecordsTXTRecordMeta struct {
+type DNSRecordEditResponseTXTMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                           `json:"source"`
-	JSON   dnsRecordEditResponseDNSRecordsTXTRecordMetaJSON `json:"-"`
+	Source string                           `json:"source"`
+	JSON   dnsRecordEditResponseTXTMetaJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsTXTRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordEditResponseDNSRecordsTXTRecordMeta]
-type dnsRecordEditResponseDNSRecordsTXTRecordMetaJSON struct {
+// dnsRecordEditResponseTXTMetaJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseTXTMeta]
+type dnsRecordEditResponseTXTMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsTXTRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseTXTMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -11628,15 +11936,14 @@ func (r *DNSRecordEditResponseDNSRecordsTXTRecordMeta) UnmarshalJSON(data []byte
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordEditResponseDNSRecordsTXTRecordTTLNumber].
-type DNSRecordEditResponseDNSRecordsTXTRecordTTL interface {
-	ImplementsDNSRecordEditResponseDNSRecordsTXTRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordEditResponseTXTTTLNumber].
+type DNSRecordEditResponseTXTTTL interface {
+	ImplementsDNSRecordEditResponseTxtttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordEditResponseDNSRecordsTXTRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordEditResponseTXTTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -11645,22 +11952,22 @@ func init() {
 	)
 }
 
-type DNSRecordEditResponseDNSRecordsTXTRecordTTLNumber float64
+type DNSRecordEditResponseTXTTTLNumber float64
 
 const (
-	DNSRecordEditResponseDNSRecordsTXTRecordTTLNumber1 DNSRecordEditResponseDNSRecordsTXTRecordTTLNumber = 1
+	DNSRecordEditResponseTXTTTLNumber1 DNSRecordEditResponseTXTTTLNumber = 1
 )
 
-type DNSRecordEditResponseDNSRecordsURIRecord struct {
+type DNSRecordEditResponseURI struct {
 	// Components of a URI record.
-	Data DNSRecordEditResponseDNSRecordsURIRecordData `json:"data,required"`
+	Data DNSRecordEditResponseURIData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
 	Priority float64 `json:"priority,required"`
 	// Record type.
-	Type DNSRecordEditResponseDNSRecordsURIRecordType `json:"type,required"`
+	Type DNSRecordEditResponseURIType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -11674,7 +11981,7 @@ type DNSRecordEditResponseDNSRecordsURIRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordEditResponseDNSRecordsURIRecordMeta `json:"meta"`
+	Meta DNSRecordEditResponseURIMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -11684,17 +11991,17 @@ type DNSRecordEditResponseDNSRecordsURIRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordEditResponseDNSRecordsURIRecordTTL `json:"ttl"`
+	TTL DNSRecordEditResponseURITTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                       `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordEditResponseDNSRecordsURIRecordJSON `json:"-"`
+	ZoneName string                       `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordEditResponseURIJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsURIRecordJSON contains the JSON metadata for the
-// struct [DNSRecordEditResponseDNSRecordsURIRecord]
-type dnsRecordEditResponseDNSRecordsURIRecordJSON struct {
+// dnsRecordEditResponseURIJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseURI]
+type dnsRecordEditResponseURIJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Priority    apijson.Field
@@ -11715,61 +12022,61 @@ type dnsRecordEditResponseDNSRecordsURIRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsURIRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseURI) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordEditResponseDNSRecordsURIRecord) implementsDNSRecordEditResponse() {}
+func (r DNSRecordEditResponseURI) implementsDNSRecordEditResponse() {}
 
 // Components of a URI record.
-type DNSRecordEditResponseDNSRecordsURIRecordData struct {
+type DNSRecordEditResponseURIData struct {
 	// The record content.
 	Content string `json:"content"`
 	// The record weight.
-	Weight float64                                          `json:"weight"`
-	JSON   dnsRecordEditResponseDNSRecordsURIRecordDataJSON `json:"-"`
+	Weight float64                          `json:"weight"`
+	JSON   dnsRecordEditResponseURIDataJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsURIRecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordEditResponseDNSRecordsURIRecordData]
-type dnsRecordEditResponseDNSRecordsURIRecordDataJSON struct {
+// dnsRecordEditResponseURIDataJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseURIData]
+type dnsRecordEditResponseURIDataJSON struct {
 	Content     apijson.Field
 	Weight      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsURIRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseURIData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordEditResponseDNSRecordsURIRecordType string
+type DNSRecordEditResponseURIType string
 
 const (
-	DNSRecordEditResponseDNSRecordsURIRecordTypeURI DNSRecordEditResponseDNSRecordsURIRecordType = "URI"
+	DNSRecordEditResponseURITypeURI DNSRecordEditResponseURIType = "URI"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordEditResponseDNSRecordsURIRecordMeta struct {
+type DNSRecordEditResponseURIMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                           `json:"source"`
-	JSON   dnsRecordEditResponseDNSRecordsURIRecordMetaJSON `json:"-"`
+	Source string                           `json:"source"`
+	JSON   dnsRecordEditResponseURIMetaJSON `json:"-"`
 }
 
-// dnsRecordEditResponseDNSRecordsURIRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordEditResponseDNSRecordsURIRecordMeta]
-type dnsRecordEditResponseDNSRecordsURIRecordMetaJSON struct {
+// dnsRecordEditResponseURIMetaJSON contains the JSON metadata for the struct
+// [DNSRecordEditResponseURIMeta]
+type dnsRecordEditResponseURIMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordEditResponseDNSRecordsURIRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordEditResponseURIMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -11777,15 +12084,14 @@ func (r *DNSRecordEditResponseDNSRecordsURIRecordMeta) UnmarshalJSON(data []byte
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordEditResponseDNSRecordsURIRecordTTLNumber].
-type DNSRecordEditResponseDNSRecordsURIRecordTTL interface {
-	ImplementsDNSRecordEditResponseDNSRecordsURIRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordEditResponseURITTLNumber].
+type DNSRecordEditResponseURITTL interface {
+	ImplementsDNSRecordEditResponseUrittl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordEditResponseDNSRecordsURIRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordEditResponseURITTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -11794,47 +12100,140 @@ func init() {
 	)
 }
 
-type DNSRecordEditResponseDNSRecordsURIRecordTTLNumber float64
+type DNSRecordEditResponseURITTLNumber float64
 
 const (
-	DNSRecordEditResponseDNSRecordsURIRecordTTLNumber1 DNSRecordEditResponseDNSRecordsURIRecordTTLNumber = 1
+	DNSRecordEditResponseURITTLNumber1 DNSRecordEditResponseURITTLNumber = 1
 )
 
-// Union satisfied by [DNSRecordGetResponseDNSRecordsARecord],
-// [DNSRecordGetResponseDNSRecordsAAAARecord],
-// [DNSRecordGetResponseDNSRecordsCAARecord],
-// [DNSRecordGetResponseDNSRecordsCertRecord],
-// [DNSRecordGetResponseDNSRecordsCNAMERecord],
-// [DNSRecordGetResponseDNSRecordsDNSKEYRecord],
-// [DNSRecordGetResponseDNSRecordsDSRecord],
-// [DNSRecordGetResponseDNSRecordsHTTPSRecord],
-// [DNSRecordGetResponseDNSRecordsLOCRecord],
-// [DNSRecordGetResponseDNSRecordsMXRecord],
-// [DNSRecordGetResponseDNSRecordsNAPTRRecord],
-// [DNSRecordGetResponseDNSRecordsNSRecord],
-// [DNSRecordGetResponseDNSRecordsPTRRecord],
-// [DNSRecordGetResponseDNSRecordsSmimeaRecord],
-// [DNSRecordGetResponseDNSRecordsSRVRecord],
-// [DNSRecordGetResponseDNSRecordsSSHFPRecord],
-// [DNSRecordGetResponseDNSRecordsSVCBRecord],
-// [DNSRecordGetResponseDNSRecordsTLSARecord],
-// [DNSRecordGetResponseDNSRecordsTXTRecord] or
-// [DNSRecordGetResponseDNSRecordsURIRecord].
+// Union satisfied by [DNSRecordGetResponseA], [DNSRecordGetResponseAAAA],
+// [DNSRecordGetResponseCAA], [DNSRecordGetResponseCert],
+// [DNSRecordGetResponseCNAME], [DNSRecordGetResponseDNSKEY],
+// [DNSRecordGetResponseDS], [DNSRecordGetResponseHTTPS],
+// [DNSRecordGetResponseLOC], [DNSRecordGetResponseMX],
+// [DNSRecordGetResponseNAPTR], [DNSRecordGetResponseNS],
+// [DNSRecordGetResponsePTR], [DNSRecordGetResponseSmimea],
+// [DNSRecordGetResponseSRV], [DNSRecordGetResponseSSHFP],
+// [DNSRecordGetResponseSVCB], [DNSRecordGetResponseTLSA],
+// [DNSRecordGetResponseTXT] or [DNSRecordGetResponseURI].
 type DNSRecordGetResponse interface {
 	implementsDNSRecordGetResponse()
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*DNSRecordGetResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*DNSRecordGetResponse)(nil)).Elem(),
+		"type",
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordGetResponseA{}),
+			DiscriminatorValue: "A",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordGetResponseAAAA{}),
+			DiscriminatorValue: "AAAA",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordGetResponseCAA{}),
+			DiscriminatorValue: "CAA",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordGetResponseCert{}),
+			DiscriminatorValue: "CERT",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordGetResponseCNAME{}),
+			DiscriminatorValue: "CNAME",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordGetResponseDNSKEY{}),
+			DiscriminatorValue: "DNSKEY",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordGetResponseDS{}),
+			DiscriminatorValue: "DS",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordGetResponseHTTPS{}),
+			DiscriminatorValue: "HTTPS",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordGetResponseLOC{}),
+			DiscriminatorValue: "LOC",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordGetResponseMX{}),
+			DiscriminatorValue: "MX",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordGetResponseNAPTR{}),
+			DiscriminatorValue: "NAPTR",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordGetResponseNS{}),
+			DiscriminatorValue: "NS",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordGetResponsePTR{}),
+			DiscriminatorValue: "PTR",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordGetResponseSmimea{}),
+			DiscriminatorValue: "SMIMEA",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordGetResponseSRV{}),
+			DiscriminatorValue: "SRV",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordGetResponseSSHFP{}),
+			DiscriminatorValue: "SSHFP",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordGetResponseSVCB{}),
+			DiscriminatorValue: "SVCB",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordGetResponseTLSA{}),
+			DiscriminatorValue: "TLSA",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordGetResponseTXT{}),
+			DiscriminatorValue: "TXT",
+		},
+		apijson.UnionVariant{
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(DNSRecordGetResponseURI{}),
+			DiscriminatorValue: "URI",
+		},
+	)
 }
 
-type DNSRecordGetResponseDNSRecordsARecord struct {
+type DNSRecordGetResponseA struct {
 	// A valid IPv4 address.
 	Content string `json:"content,required" format:"ipv4"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordGetResponseDNSRecordsARecordType `json:"type,required"`
+	Type DNSRecordGetResponseAType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -11846,7 +12245,7 @@ type DNSRecordGetResponseDNSRecordsARecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordGetResponseDNSRecordsARecordMeta `json:"meta"`
+	Meta DNSRecordGetResponseAMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -11859,17 +12258,17 @@ type DNSRecordGetResponseDNSRecordsARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordGetResponseDNSRecordsARecordTTL `json:"ttl"`
+	TTL DNSRecordGetResponseATTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                    `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordGetResponseDNSRecordsARecordJSON `json:"-"`
+	ZoneName string                    `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordGetResponseAJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsARecordJSON contains the JSON metadata for the
-// struct [DNSRecordGetResponseDNSRecordsARecord]
-type dnsRecordGetResponseDNSRecordsARecordJSON struct {
+// dnsRecordGetResponseAJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseA]
+type dnsRecordGetResponseAJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -11889,39 +12288,39 @@ type dnsRecordGetResponseDNSRecordsARecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsARecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordGetResponseDNSRecordsARecord) implementsDNSRecordGetResponse() {}
+func (r DNSRecordGetResponseA) implementsDNSRecordGetResponse() {}
 
 // Record type.
-type DNSRecordGetResponseDNSRecordsARecordType string
+type DNSRecordGetResponseAType string
 
 const (
-	DNSRecordGetResponseDNSRecordsARecordTypeA DNSRecordGetResponseDNSRecordsARecordType = "A"
+	DNSRecordGetResponseATypeA DNSRecordGetResponseAType = "A"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordGetResponseDNSRecordsARecordMeta struct {
+type DNSRecordGetResponseAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                        `json:"source"`
-	JSON   dnsRecordGetResponseDNSRecordsARecordMetaJSON `json:"-"`
+	Source string                        `json:"source"`
+	JSON   dnsRecordGetResponseAMetaJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsARecordMetaJSON contains the JSON metadata for the
-// struct [DNSRecordGetResponseDNSRecordsARecordMeta]
-type dnsRecordGetResponseDNSRecordsARecordMetaJSON struct {
+// dnsRecordGetResponseAMetaJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseAMeta]
+type dnsRecordGetResponseAMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsARecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -11929,15 +12328,14 @@ func (r *DNSRecordGetResponseDNSRecordsARecordMeta) UnmarshalJSON(data []byte) (
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordGetResponseDNSRecordsARecordTTLNumber].
-type DNSRecordGetResponseDNSRecordsARecordTTL interface {
-	ImplementsDNSRecordGetResponseDNSRecordsARecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordGetResponseATTLNumber].
+type DNSRecordGetResponseATTL interface {
+	ImplementsDNSRecordGetResponseAttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordGetResponseDNSRecordsARecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordGetResponseATTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -11946,19 +12344,19 @@ func init() {
 	)
 }
 
-type DNSRecordGetResponseDNSRecordsARecordTTLNumber float64
+type DNSRecordGetResponseATTLNumber float64
 
 const (
-	DNSRecordGetResponseDNSRecordsARecordTTLNumber1 DNSRecordGetResponseDNSRecordsARecordTTLNumber = 1
+	DNSRecordGetResponseATTLNumber1 DNSRecordGetResponseATTLNumber = 1
 )
 
-type DNSRecordGetResponseDNSRecordsAAAARecord struct {
+type DNSRecordGetResponseAAAA struct {
 	// A valid IPv6 address.
 	Content string `json:"content,required" format:"ipv6"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordGetResponseDNSRecordsAAAARecordType `json:"type,required"`
+	Type DNSRecordGetResponseAAAAType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -11970,7 +12368,7 @@ type DNSRecordGetResponseDNSRecordsAAAARecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordGetResponseDNSRecordsAAAARecordMeta `json:"meta"`
+	Meta DNSRecordGetResponseAAAAMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -11983,17 +12381,17 @@ type DNSRecordGetResponseDNSRecordsAAAARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordGetResponseDNSRecordsAAAARecordTTL `json:"ttl"`
+	TTL DNSRecordGetResponseAAAATTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                       `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordGetResponseDNSRecordsAAAARecordJSON `json:"-"`
+	ZoneName string                       `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordGetResponseAAAAJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsAAAARecordJSON contains the JSON metadata for the
-// struct [DNSRecordGetResponseDNSRecordsAAAARecord]
-type dnsRecordGetResponseDNSRecordsAAAARecordJSON struct {
+// dnsRecordGetResponseAAAAJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseAAAA]
+type dnsRecordGetResponseAAAAJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -12013,39 +12411,39 @@ type dnsRecordGetResponseDNSRecordsAAAARecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsAAAARecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseAAAA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordGetResponseDNSRecordsAAAARecord) implementsDNSRecordGetResponse() {}
+func (r DNSRecordGetResponseAAAA) implementsDNSRecordGetResponse() {}
 
 // Record type.
-type DNSRecordGetResponseDNSRecordsAAAARecordType string
+type DNSRecordGetResponseAAAAType string
 
 const (
-	DNSRecordGetResponseDNSRecordsAAAARecordTypeAAAA DNSRecordGetResponseDNSRecordsAAAARecordType = "AAAA"
+	DNSRecordGetResponseAAAATypeAAAA DNSRecordGetResponseAAAAType = "AAAA"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordGetResponseDNSRecordsAAAARecordMeta struct {
+type DNSRecordGetResponseAAAAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                           `json:"source"`
-	JSON   dnsRecordGetResponseDNSRecordsAAAARecordMetaJSON `json:"-"`
+	Source string                           `json:"source"`
+	JSON   dnsRecordGetResponseAAAAMetaJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsAAAARecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordGetResponseDNSRecordsAAAARecordMeta]
-type dnsRecordGetResponseDNSRecordsAAAARecordMetaJSON struct {
+// dnsRecordGetResponseAAAAMetaJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseAAAAMeta]
+type dnsRecordGetResponseAAAAMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsAAAARecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseAAAAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -12053,15 +12451,14 @@ func (r *DNSRecordGetResponseDNSRecordsAAAARecordMeta) UnmarshalJSON(data []byte
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordGetResponseDNSRecordsAAAARecordTTLNumber].
-type DNSRecordGetResponseDNSRecordsAAAARecordTTL interface {
-	ImplementsDNSRecordGetResponseDNSRecordsAAAARecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordGetResponseAAAATTLNumber].
+type DNSRecordGetResponseAAAATTL interface {
+	ImplementsDNSRecordGetResponseAaaattl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordGetResponseDNSRecordsAAAARecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordGetResponseAAAATTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -12070,19 +12467,19 @@ func init() {
 	)
 }
 
-type DNSRecordGetResponseDNSRecordsAAAARecordTTLNumber float64
+type DNSRecordGetResponseAAAATTLNumber float64
 
 const (
-	DNSRecordGetResponseDNSRecordsAAAARecordTTLNumber1 DNSRecordGetResponseDNSRecordsAAAARecordTTLNumber = 1
+	DNSRecordGetResponseAAAATTLNumber1 DNSRecordGetResponseAAAATTLNumber = 1
 )
 
-type DNSRecordGetResponseDNSRecordsCAARecord struct {
+type DNSRecordGetResponseCAA struct {
 	// Components of a CAA record.
-	Data DNSRecordGetResponseDNSRecordsCAARecordData `json:"data,required"`
+	Data DNSRecordGetResponseCAAData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordGetResponseDNSRecordsCAARecordType `json:"type,required"`
+	Type DNSRecordGetResponseCAAType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -12096,7 +12493,7 @@ type DNSRecordGetResponseDNSRecordsCAARecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordGetResponseDNSRecordsCAARecordMeta `json:"meta"`
+	Meta DNSRecordGetResponseCAAMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -12106,17 +12503,17 @@ type DNSRecordGetResponseDNSRecordsCAARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordGetResponseDNSRecordsCAARecordTTL `json:"ttl"`
+	TTL DNSRecordGetResponseCAATTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                      `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordGetResponseDNSRecordsCAARecordJSON `json:"-"`
+	ZoneName string                      `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordGetResponseCAAJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsCAARecordJSON contains the JSON metadata for the
-// struct [DNSRecordGetResponseDNSRecordsCAARecord]
-type dnsRecordGetResponseDNSRecordsCAARecordJSON struct {
+// dnsRecordGetResponseCAAJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseCAA]
+type dnsRecordGetResponseCAAJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -12136,26 +12533,26 @@ type dnsRecordGetResponseDNSRecordsCAARecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsCAARecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseCAA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordGetResponseDNSRecordsCAARecord) implementsDNSRecordGetResponse() {}
+func (r DNSRecordGetResponseCAA) implementsDNSRecordGetResponse() {}
 
 // Components of a CAA record.
-type DNSRecordGetResponseDNSRecordsCAARecordData struct {
+type DNSRecordGetResponseCAAData struct {
 	// Flags for the CAA record.
 	Flags float64 `json:"flags"`
 	// Name of the property controlled by this record (e.g.: issue, issuewild, iodef).
 	Tag string `json:"tag"`
 	// Value of the record. This field's semantics depend on the chosen tag.
-	Value string                                          `json:"value"`
-	JSON  dnsRecordGetResponseDNSRecordsCAARecordDataJSON `json:"-"`
+	Value string                          `json:"value"`
+	JSON  dnsRecordGetResponseCAADataJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsCAARecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordGetResponseDNSRecordsCAARecordData]
-type dnsRecordGetResponseDNSRecordsCAARecordDataJSON struct {
+// dnsRecordGetResponseCAADataJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseCAAData]
+type dnsRecordGetResponseCAADataJSON struct {
 	Flags       apijson.Field
 	Tag         apijson.Field
 	Value       apijson.Field
@@ -12163,37 +12560,37 @@ type dnsRecordGetResponseDNSRecordsCAARecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsCAARecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseCAAData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordGetResponseDNSRecordsCAARecordType string
+type DNSRecordGetResponseCAAType string
 
 const (
-	DNSRecordGetResponseDNSRecordsCAARecordTypeCAA DNSRecordGetResponseDNSRecordsCAARecordType = "CAA"
+	DNSRecordGetResponseCAATypeCAA DNSRecordGetResponseCAAType = "CAA"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordGetResponseDNSRecordsCAARecordMeta struct {
+type DNSRecordGetResponseCAAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                          `json:"source"`
-	JSON   dnsRecordGetResponseDNSRecordsCAARecordMetaJSON `json:"-"`
+	Source string                          `json:"source"`
+	JSON   dnsRecordGetResponseCAAMetaJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsCAARecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordGetResponseDNSRecordsCAARecordMeta]
-type dnsRecordGetResponseDNSRecordsCAARecordMetaJSON struct {
+// dnsRecordGetResponseCAAMetaJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseCAAMeta]
+type dnsRecordGetResponseCAAMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsCAARecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseCAAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -12201,15 +12598,14 @@ func (r *DNSRecordGetResponseDNSRecordsCAARecordMeta) UnmarshalJSON(data []byte)
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordGetResponseDNSRecordsCAARecordTTLNumber].
-type DNSRecordGetResponseDNSRecordsCAARecordTTL interface {
-	ImplementsDNSRecordGetResponseDNSRecordsCAARecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordGetResponseCAATTLNumber].
+type DNSRecordGetResponseCAATTL interface {
+	ImplementsDNSRecordGetResponseCaattl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordGetResponseDNSRecordsCAARecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordGetResponseCAATTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -12218,19 +12614,19 @@ func init() {
 	)
 }
 
-type DNSRecordGetResponseDNSRecordsCAARecordTTLNumber float64
+type DNSRecordGetResponseCAATTLNumber float64
 
 const (
-	DNSRecordGetResponseDNSRecordsCAARecordTTLNumber1 DNSRecordGetResponseDNSRecordsCAARecordTTLNumber = 1
+	DNSRecordGetResponseCAATTLNumber1 DNSRecordGetResponseCAATTLNumber = 1
 )
 
-type DNSRecordGetResponseDNSRecordsCertRecord struct {
+type DNSRecordGetResponseCert struct {
 	// Components of a CERT record.
-	Data DNSRecordGetResponseDNSRecordsCertRecordData `json:"data,required"`
+	Data DNSRecordGetResponseCertData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordGetResponseDNSRecordsCertRecordType `json:"type,required"`
+	Type DNSRecordGetResponseCertType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -12244,7 +12640,7 @@ type DNSRecordGetResponseDNSRecordsCertRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordGetResponseDNSRecordsCertRecordMeta `json:"meta"`
+	Meta DNSRecordGetResponseCertMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -12254,17 +12650,17 @@ type DNSRecordGetResponseDNSRecordsCertRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordGetResponseDNSRecordsCertRecordTTL `json:"ttl"`
+	TTL DNSRecordGetResponseCertTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                       `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordGetResponseDNSRecordsCertRecordJSON `json:"-"`
+	ZoneName string                       `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordGetResponseCertJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsCertRecordJSON contains the JSON metadata for the
-// struct [DNSRecordGetResponseDNSRecordsCertRecord]
-type dnsRecordGetResponseDNSRecordsCertRecordJSON struct {
+// dnsRecordGetResponseCertJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseCert]
+type dnsRecordGetResponseCertJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -12284,14 +12680,14 @@ type dnsRecordGetResponseDNSRecordsCertRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsCertRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseCert) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordGetResponseDNSRecordsCertRecord) implementsDNSRecordGetResponse() {}
+func (r DNSRecordGetResponseCert) implementsDNSRecordGetResponse() {}
 
 // Components of a CERT record.
-type DNSRecordGetResponseDNSRecordsCertRecordData struct {
+type DNSRecordGetResponseCertData struct {
 	// Algorithm.
 	Algorithm float64 `json:"algorithm"`
 	// Certificate.
@@ -12299,13 +12695,13 @@ type DNSRecordGetResponseDNSRecordsCertRecordData struct {
 	// Key Tag.
 	KeyTag float64 `json:"key_tag"`
 	// Type.
-	Type float64                                          `json:"type"`
-	JSON dnsRecordGetResponseDNSRecordsCertRecordDataJSON `json:"-"`
+	Type float64                          `json:"type"`
+	JSON dnsRecordGetResponseCertDataJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsCertRecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordGetResponseDNSRecordsCertRecordData]
-type dnsRecordGetResponseDNSRecordsCertRecordDataJSON struct {
+// dnsRecordGetResponseCertDataJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseCertData]
+type dnsRecordGetResponseCertDataJSON struct {
 	Algorithm   apijson.Field
 	Certificate apijson.Field
 	KeyTag      apijson.Field
@@ -12314,37 +12710,37 @@ type dnsRecordGetResponseDNSRecordsCertRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsCertRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseCertData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordGetResponseDNSRecordsCertRecordType string
+type DNSRecordGetResponseCertType string
 
 const (
-	DNSRecordGetResponseDNSRecordsCertRecordTypeCert DNSRecordGetResponseDNSRecordsCertRecordType = "CERT"
+	DNSRecordGetResponseCertTypeCert DNSRecordGetResponseCertType = "CERT"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordGetResponseDNSRecordsCertRecordMeta struct {
+type DNSRecordGetResponseCertMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                           `json:"source"`
-	JSON   dnsRecordGetResponseDNSRecordsCertRecordMetaJSON `json:"-"`
+	Source string                           `json:"source"`
+	JSON   dnsRecordGetResponseCertMetaJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsCertRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordGetResponseDNSRecordsCertRecordMeta]
-type dnsRecordGetResponseDNSRecordsCertRecordMetaJSON struct {
+// dnsRecordGetResponseCertMetaJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseCertMeta]
+type dnsRecordGetResponseCertMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsCertRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseCertMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -12352,15 +12748,14 @@ func (r *DNSRecordGetResponseDNSRecordsCertRecordMeta) UnmarshalJSON(data []byte
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordGetResponseDNSRecordsCertRecordTTLNumber].
-type DNSRecordGetResponseDNSRecordsCertRecordTTL interface {
-	ImplementsDNSRecordGetResponseDNSRecordsCertRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordGetResponseCertTTLNumber].
+type DNSRecordGetResponseCertTTL interface {
+	ImplementsDNSRecordGetResponseCertTTL()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordGetResponseDNSRecordsCertRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordGetResponseCertTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -12369,19 +12764,19 @@ func init() {
 	)
 }
 
-type DNSRecordGetResponseDNSRecordsCertRecordTTLNumber float64
+type DNSRecordGetResponseCertTTLNumber float64
 
 const (
-	DNSRecordGetResponseDNSRecordsCertRecordTTLNumber1 DNSRecordGetResponseDNSRecordsCertRecordTTLNumber = 1
+	DNSRecordGetResponseCertTTLNumber1 DNSRecordGetResponseCertTTLNumber = 1
 )
 
-type DNSRecordGetResponseDNSRecordsCNAMERecord struct {
+type DNSRecordGetResponseCNAME struct {
 	// A valid hostname. Must not match the record's name.
 	Content interface{} `json:"content,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordGetResponseDNSRecordsCNAMERecordType `json:"type,required"`
+	Type DNSRecordGetResponseCNAMEType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -12393,7 +12788,7 @@ type DNSRecordGetResponseDNSRecordsCNAMERecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordGetResponseDNSRecordsCNAMERecordMeta `json:"meta"`
+	Meta DNSRecordGetResponseCNAMEMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -12406,17 +12801,17 @@ type DNSRecordGetResponseDNSRecordsCNAMERecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordGetResponseDNSRecordsCNAMERecordTTL `json:"ttl"`
+	TTL DNSRecordGetResponseCNAMETTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                        `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordGetResponseDNSRecordsCNAMERecordJSON `json:"-"`
+	ZoneName string                        `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordGetResponseCNAMEJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsCNAMERecordJSON contains the JSON metadata for the
-// struct [DNSRecordGetResponseDNSRecordsCNAMERecord]
-type dnsRecordGetResponseDNSRecordsCNAMERecordJSON struct {
+// dnsRecordGetResponseCNAMEJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseCNAME]
+type dnsRecordGetResponseCNAMEJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -12436,39 +12831,39 @@ type dnsRecordGetResponseDNSRecordsCNAMERecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsCNAMERecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseCNAME) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordGetResponseDNSRecordsCNAMERecord) implementsDNSRecordGetResponse() {}
+func (r DNSRecordGetResponseCNAME) implementsDNSRecordGetResponse() {}
 
 // Record type.
-type DNSRecordGetResponseDNSRecordsCNAMERecordType string
+type DNSRecordGetResponseCNAMEType string
 
 const (
-	DNSRecordGetResponseDNSRecordsCNAMERecordTypeCNAME DNSRecordGetResponseDNSRecordsCNAMERecordType = "CNAME"
+	DNSRecordGetResponseCNAMETypeCNAME DNSRecordGetResponseCNAMEType = "CNAME"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordGetResponseDNSRecordsCNAMERecordMeta struct {
+type DNSRecordGetResponseCNAMEMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                            `json:"source"`
-	JSON   dnsRecordGetResponseDNSRecordsCNAMERecordMetaJSON `json:"-"`
+	Source string                            `json:"source"`
+	JSON   dnsRecordGetResponseCNAMEMetaJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsCNAMERecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordGetResponseDNSRecordsCNAMERecordMeta]
-type dnsRecordGetResponseDNSRecordsCNAMERecordMetaJSON struct {
+// dnsRecordGetResponseCNAMEMetaJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseCNAMEMeta]
+type dnsRecordGetResponseCNAMEMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsCNAMERecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseCNAMEMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -12476,15 +12871,14 @@ func (r *DNSRecordGetResponseDNSRecordsCNAMERecordMeta) UnmarshalJSON(data []byt
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordGetResponseDNSRecordsCNAMERecordTTLNumber].
-type DNSRecordGetResponseDNSRecordsCNAMERecordTTL interface {
-	ImplementsDNSRecordGetResponseDNSRecordsCNAMERecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordGetResponseCNAMETTLNumber].
+type DNSRecordGetResponseCNAMETTL interface {
+	ImplementsDNSRecordGetResponseCnamettl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordGetResponseDNSRecordsCNAMERecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordGetResponseCNAMETTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -12493,19 +12887,19 @@ func init() {
 	)
 }
 
-type DNSRecordGetResponseDNSRecordsCNAMERecordTTLNumber float64
+type DNSRecordGetResponseCNAMETTLNumber float64
 
 const (
-	DNSRecordGetResponseDNSRecordsCNAMERecordTTLNumber1 DNSRecordGetResponseDNSRecordsCNAMERecordTTLNumber = 1
+	DNSRecordGetResponseCNAMETTLNumber1 DNSRecordGetResponseCNAMETTLNumber = 1
 )
 
-type DNSRecordGetResponseDNSRecordsDNSKEYRecord struct {
+type DNSRecordGetResponseDNSKEY struct {
 	// Components of a DNSKEY record.
-	Data DNSRecordGetResponseDNSRecordsDNSKEYRecordData `json:"data,required"`
+	Data DNSRecordGetResponseDNSKEYData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordGetResponseDNSRecordsDNSKEYRecordType `json:"type,required"`
+	Type DNSRecordGetResponseDNSKEYType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -12519,7 +12913,7 @@ type DNSRecordGetResponseDNSRecordsDNSKEYRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordGetResponseDNSRecordsDNSKEYRecordMeta `json:"meta"`
+	Meta DNSRecordGetResponseDNSKEYMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -12529,17 +12923,17 @@ type DNSRecordGetResponseDNSRecordsDNSKEYRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordGetResponseDNSRecordsDNSKEYRecordTTL `json:"ttl"`
+	TTL DNSRecordGetResponseDNSKEYTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                         `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordGetResponseDNSRecordsDNSKEYRecordJSON `json:"-"`
+	ZoneName string                         `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordGetResponseDNSKEYJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsDNSKEYRecordJSON contains the JSON metadata for
-// the struct [DNSRecordGetResponseDNSRecordsDNSKEYRecord]
-type dnsRecordGetResponseDNSRecordsDNSKEYRecordJSON struct {
+// dnsRecordGetResponseDNSKEYJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseDNSKEY]
+type dnsRecordGetResponseDNSKEYJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -12559,14 +12953,14 @@ type dnsRecordGetResponseDNSRecordsDNSKEYRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsDNSKEYRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseDNSKEY) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordGetResponseDNSRecordsDNSKEYRecord) implementsDNSRecordGetResponse() {}
+func (r DNSRecordGetResponseDNSKEY) implementsDNSRecordGetResponse() {}
 
 // Components of a DNSKEY record.
-type DNSRecordGetResponseDNSRecordsDNSKEYRecordData struct {
+type DNSRecordGetResponseDNSKEYData struct {
 	// Algorithm.
 	Algorithm float64 `json:"algorithm"`
 	// Flags.
@@ -12574,13 +12968,13 @@ type DNSRecordGetResponseDNSRecordsDNSKEYRecordData struct {
 	// Protocol.
 	Protocol float64 `json:"protocol"`
 	// Public Key.
-	PublicKey string                                             `json:"public_key"`
-	JSON      dnsRecordGetResponseDNSRecordsDNSKEYRecordDataJSON `json:"-"`
+	PublicKey string                             `json:"public_key"`
+	JSON      dnsRecordGetResponseDNSKEYDataJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsDNSKEYRecordDataJSON contains the JSON metadata
-// for the struct [DNSRecordGetResponseDNSRecordsDNSKEYRecordData]
-type dnsRecordGetResponseDNSRecordsDNSKEYRecordDataJSON struct {
+// dnsRecordGetResponseDNSKEYDataJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseDNSKEYData]
+type dnsRecordGetResponseDNSKEYDataJSON struct {
 	Algorithm   apijson.Field
 	Flags       apijson.Field
 	Protocol    apijson.Field
@@ -12589,37 +12983,37 @@ type dnsRecordGetResponseDNSRecordsDNSKEYRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsDNSKEYRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseDNSKEYData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordGetResponseDNSRecordsDNSKEYRecordType string
+type DNSRecordGetResponseDNSKEYType string
 
 const (
-	DNSRecordGetResponseDNSRecordsDNSKEYRecordTypeDNSKEY DNSRecordGetResponseDNSRecordsDNSKEYRecordType = "DNSKEY"
+	DNSRecordGetResponseDNSKEYTypeDNSKEY DNSRecordGetResponseDNSKEYType = "DNSKEY"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordGetResponseDNSRecordsDNSKEYRecordMeta struct {
+type DNSRecordGetResponseDNSKEYMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                             `json:"source"`
-	JSON   dnsRecordGetResponseDNSRecordsDNSKEYRecordMetaJSON `json:"-"`
+	Source string                             `json:"source"`
+	JSON   dnsRecordGetResponseDNSKEYMetaJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsDNSKEYRecordMetaJSON contains the JSON metadata
-// for the struct [DNSRecordGetResponseDNSRecordsDNSKEYRecordMeta]
-type dnsRecordGetResponseDNSRecordsDNSKEYRecordMetaJSON struct {
+// dnsRecordGetResponseDNSKEYMetaJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseDNSKEYMeta]
+type dnsRecordGetResponseDNSKEYMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsDNSKEYRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseDNSKEYMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -12627,15 +13021,14 @@ func (r *DNSRecordGetResponseDNSRecordsDNSKEYRecordMeta) UnmarshalJSON(data []by
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordGetResponseDNSRecordsDNSKEYRecordTTLNumber].
-type DNSRecordGetResponseDNSRecordsDNSKEYRecordTTL interface {
-	ImplementsDNSRecordGetResponseDNSRecordsDNSKEYRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordGetResponseDNSKEYTTLNumber].
+type DNSRecordGetResponseDNSKEYTTL interface {
+	ImplementsDNSRecordGetResponseDnskeyttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordGetResponseDNSRecordsDNSKEYRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordGetResponseDNSKEYTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -12644,19 +13037,19 @@ func init() {
 	)
 }
 
-type DNSRecordGetResponseDNSRecordsDNSKEYRecordTTLNumber float64
+type DNSRecordGetResponseDNSKEYTTLNumber float64
 
 const (
-	DNSRecordGetResponseDNSRecordsDNSKEYRecordTTLNumber1 DNSRecordGetResponseDNSRecordsDNSKEYRecordTTLNumber = 1
+	DNSRecordGetResponseDNSKEYTTLNumber1 DNSRecordGetResponseDNSKEYTTLNumber = 1
 )
 
-type DNSRecordGetResponseDNSRecordsDSRecord struct {
+type DNSRecordGetResponseDS struct {
 	// Components of a DS record.
-	Data DNSRecordGetResponseDNSRecordsDSRecordData `json:"data,required"`
+	Data DNSRecordGetResponseDSData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordGetResponseDNSRecordsDSRecordType `json:"type,required"`
+	Type DNSRecordGetResponseDSType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -12670,7 +13063,7 @@ type DNSRecordGetResponseDNSRecordsDSRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordGetResponseDNSRecordsDSRecordMeta `json:"meta"`
+	Meta DNSRecordGetResponseDSMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -12680,17 +13073,17 @@ type DNSRecordGetResponseDNSRecordsDSRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordGetResponseDNSRecordsDSRecordTTL `json:"ttl"`
+	TTL DNSRecordGetResponseDSTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                     `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordGetResponseDNSRecordsDSRecordJSON `json:"-"`
+	ZoneName string                     `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordGetResponseDSJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsDSRecordJSON contains the JSON metadata for the
-// struct [DNSRecordGetResponseDNSRecordsDSRecord]
-type dnsRecordGetResponseDNSRecordsDSRecordJSON struct {
+// dnsRecordGetResponseDSJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseDS]
+type dnsRecordGetResponseDSJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -12710,14 +13103,14 @@ type dnsRecordGetResponseDNSRecordsDSRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsDSRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseDS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordGetResponseDNSRecordsDSRecord) implementsDNSRecordGetResponse() {}
+func (r DNSRecordGetResponseDS) implementsDNSRecordGetResponse() {}
 
 // Components of a DS record.
-type DNSRecordGetResponseDNSRecordsDSRecordData struct {
+type DNSRecordGetResponseDSData struct {
 	// Algorithm.
 	Algorithm float64 `json:"algorithm"`
 	// Digest.
@@ -12725,13 +13118,13 @@ type DNSRecordGetResponseDNSRecordsDSRecordData struct {
 	// Digest Type.
 	DigestType float64 `json:"digest_type"`
 	// Key Tag.
-	KeyTag float64                                        `json:"key_tag"`
-	JSON   dnsRecordGetResponseDNSRecordsDSRecordDataJSON `json:"-"`
+	KeyTag float64                        `json:"key_tag"`
+	JSON   dnsRecordGetResponseDSDataJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsDSRecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordGetResponseDNSRecordsDSRecordData]
-type dnsRecordGetResponseDNSRecordsDSRecordDataJSON struct {
+// dnsRecordGetResponseDSDataJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseDSData]
+type dnsRecordGetResponseDSDataJSON struct {
 	Algorithm   apijson.Field
 	Digest      apijson.Field
 	DigestType  apijson.Field
@@ -12740,37 +13133,37 @@ type dnsRecordGetResponseDNSRecordsDSRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsDSRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseDSData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordGetResponseDNSRecordsDSRecordType string
+type DNSRecordGetResponseDSType string
 
 const (
-	DNSRecordGetResponseDNSRecordsDSRecordTypeDS DNSRecordGetResponseDNSRecordsDSRecordType = "DS"
+	DNSRecordGetResponseDSTypeDS DNSRecordGetResponseDSType = "DS"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordGetResponseDNSRecordsDSRecordMeta struct {
+type DNSRecordGetResponseDSMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                         `json:"source"`
-	JSON   dnsRecordGetResponseDNSRecordsDSRecordMetaJSON `json:"-"`
+	Source string                         `json:"source"`
+	JSON   dnsRecordGetResponseDSMetaJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsDSRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordGetResponseDNSRecordsDSRecordMeta]
-type dnsRecordGetResponseDNSRecordsDSRecordMetaJSON struct {
+// dnsRecordGetResponseDSMetaJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseDSMeta]
+type dnsRecordGetResponseDSMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsDSRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseDSMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -12778,15 +13171,14 @@ func (r *DNSRecordGetResponseDNSRecordsDSRecordMeta) UnmarshalJSON(data []byte) 
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordGetResponseDNSRecordsDSRecordTTLNumber].
-type DNSRecordGetResponseDNSRecordsDSRecordTTL interface {
-	ImplementsDNSRecordGetResponseDNSRecordsDSRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordGetResponseDSTTLNumber].
+type DNSRecordGetResponseDSTTL interface {
+	ImplementsDNSRecordGetResponseDsttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordGetResponseDNSRecordsDSRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordGetResponseDSTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -12795,19 +13187,19 @@ func init() {
 	)
 }
 
-type DNSRecordGetResponseDNSRecordsDSRecordTTLNumber float64
+type DNSRecordGetResponseDSTTLNumber float64
 
 const (
-	DNSRecordGetResponseDNSRecordsDSRecordTTLNumber1 DNSRecordGetResponseDNSRecordsDSRecordTTLNumber = 1
+	DNSRecordGetResponseDSTTLNumber1 DNSRecordGetResponseDSTTLNumber = 1
 )
 
-type DNSRecordGetResponseDNSRecordsHTTPSRecord struct {
+type DNSRecordGetResponseHTTPS struct {
 	// Components of a HTTPS record.
-	Data DNSRecordGetResponseDNSRecordsHTTPSRecordData `json:"data,required"`
+	Data DNSRecordGetResponseHTTPSData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordGetResponseDNSRecordsHTTPSRecordType `json:"type,required"`
+	Type DNSRecordGetResponseHTTPSType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -12821,7 +13213,7 @@ type DNSRecordGetResponseDNSRecordsHTTPSRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordGetResponseDNSRecordsHTTPSRecordMeta `json:"meta"`
+	Meta DNSRecordGetResponseHTTPSMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -12831,17 +13223,17 @@ type DNSRecordGetResponseDNSRecordsHTTPSRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordGetResponseDNSRecordsHTTPSRecordTTL `json:"ttl"`
+	TTL DNSRecordGetResponseHTTPSTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                        `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordGetResponseDNSRecordsHTTPSRecordJSON `json:"-"`
+	ZoneName string                        `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordGetResponseHTTPSJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsHTTPSRecordJSON contains the JSON metadata for the
-// struct [DNSRecordGetResponseDNSRecordsHTTPSRecord]
-type dnsRecordGetResponseDNSRecordsHTTPSRecordJSON struct {
+// dnsRecordGetResponseHTTPSJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseHTTPS]
+type dnsRecordGetResponseHTTPSJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -12861,26 +13253,26 @@ type dnsRecordGetResponseDNSRecordsHTTPSRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsHTTPSRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseHTTPS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordGetResponseDNSRecordsHTTPSRecord) implementsDNSRecordGetResponse() {}
+func (r DNSRecordGetResponseHTTPS) implementsDNSRecordGetResponse() {}
 
 // Components of a HTTPS record.
-type DNSRecordGetResponseDNSRecordsHTTPSRecordData struct {
+type DNSRecordGetResponseHTTPSData struct {
 	// priority.
 	Priority float64 `json:"priority"`
 	// target.
 	Target string `json:"target"`
 	// value.
-	Value string                                            `json:"value"`
-	JSON  dnsRecordGetResponseDNSRecordsHTTPSRecordDataJSON `json:"-"`
+	Value string                            `json:"value"`
+	JSON  dnsRecordGetResponseHTTPSDataJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsHTTPSRecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordGetResponseDNSRecordsHTTPSRecordData]
-type dnsRecordGetResponseDNSRecordsHTTPSRecordDataJSON struct {
+// dnsRecordGetResponseHTTPSDataJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseHTTPSData]
+type dnsRecordGetResponseHTTPSDataJSON struct {
 	Priority    apijson.Field
 	Target      apijson.Field
 	Value       apijson.Field
@@ -12888,37 +13280,37 @@ type dnsRecordGetResponseDNSRecordsHTTPSRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsHTTPSRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseHTTPSData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordGetResponseDNSRecordsHTTPSRecordType string
+type DNSRecordGetResponseHTTPSType string
 
 const (
-	DNSRecordGetResponseDNSRecordsHTTPSRecordTypeHTTPS DNSRecordGetResponseDNSRecordsHTTPSRecordType = "HTTPS"
+	DNSRecordGetResponseHTTPSTypeHTTPS DNSRecordGetResponseHTTPSType = "HTTPS"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordGetResponseDNSRecordsHTTPSRecordMeta struct {
+type DNSRecordGetResponseHTTPSMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                            `json:"source"`
-	JSON   dnsRecordGetResponseDNSRecordsHTTPSRecordMetaJSON `json:"-"`
+	Source string                            `json:"source"`
+	JSON   dnsRecordGetResponseHTTPSMetaJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsHTTPSRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordGetResponseDNSRecordsHTTPSRecordMeta]
-type dnsRecordGetResponseDNSRecordsHTTPSRecordMetaJSON struct {
+// dnsRecordGetResponseHTTPSMetaJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseHTTPSMeta]
+type dnsRecordGetResponseHTTPSMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsHTTPSRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseHTTPSMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -12926,15 +13318,14 @@ func (r *DNSRecordGetResponseDNSRecordsHTTPSRecordMeta) UnmarshalJSON(data []byt
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordGetResponseDNSRecordsHTTPSRecordTTLNumber].
-type DNSRecordGetResponseDNSRecordsHTTPSRecordTTL interface {
-	ImplementsDNSRecordGetResponseDNSRecordsHTTPSRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordGetResponseHTTPSTTLNumber].
+type DNSRecordGetResponseHTTPSTTL interface {
+	ImplementsDNSRecordGetResponseHttpsttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordGetResponseDNSRecordsHTTPSRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordGetResponseHTTPSTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -12943,19 +13334,19 @@ func init() {
 	)
 }
 
-type DNSRecordGetResponseDNSRecordsHTTPSRecordTTLNumber float64
+type DNSRecordGetResponseHTTPSTTLNumber float64
 
 const (
-	DNSRecordGetResponseDNSRecordsHTTPSRecordTTLNumber1 DNSRecordGetResponseDNSRecordsHTTPSRecordTTLNumber = 1
+	DNSRecordGetResponseHTTPSTTLNumber1 DNSRecordGetResponseHTTPSTTLNumber = 1
 )
 
-type DNSRecordGetResponseDNSRecordsLOCRecord struct {
+type DNSRecordGetResponseLOC struct {
 	// Components of a LOC record.
-	Data DNSRecordGetResponseDNSRecordsLOCRecordData `json:"data,required"`
+	Data DNSRecordGetResponseLOCData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordGetResponseDNSRecordsLOCRecordType `json:"type,required"`
+	Type DNSRecordGetResponseLOCType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -12969,7 +13360,7 @@ type DNSRecordGetResponseDNSRecordsLOCRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordGetResponseDNSRecordsLOCRecordMeta `json:"meta"`
+	Meta DNSRecordGetResponseLOCMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -12979,17 +13370,17 @@ type DNSRecordGetResponseDNSRecordsLOCRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordGetResponseDNSRecordsLOCRecordTTL `json:"ttl"`
+	TTL DNSRecordGetResponseLOCTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                      `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordGetResponseDNSRecordsLOCRecordJSON `json:"-"`
+	ZoneName string                      `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordGetResponseLOCJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsLOCRecordJSON contains the JSON metadata for the
-// struct [DNSRecordGetResponseDNSRecordsLOCRecord]
-type dnsRecordGetResponseDNSRecordsLOCRecordJSON struct {
+// dnsRecordGetResponseLOCJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseLOC]
+type dnsRecordGetResponseLOCJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -13009,20 +13400,20 @@ type dnsRecordGetResponseDNSRecordsLOCRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsLOCRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseLOC) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordGetResponseDNSRecordsLOCRecord) implementsDNSRecordGetResponse() {}
+func (r DNSRecordGetResponseLOC) implementsDNSRecordGetResponse() {}
 
 // Components of a LOC record.
-type DNSRecordGetResponseDNSRecordsLOCRecordData struct {
+type DNSRecordGetResponseLOCData struct {
 	// Altitude of location in meters.
 	Altitude float64 `json:"altitude"`
 	// Degrees of latitude.
 	LatDegrees float64 `json:"lat_degrees"`
 	// Latitude direction.
-	LatDirection DNSRecordGetResponseDNSRecordsLOCRecordDataLatDirection `json:"lat_direction"`
+	LatDirection DNSRecordGetResponseLOCDataLatDirection `json:"lat_direction"`
 	// Minutes of latitude.
 	LatMinutes float64 `json:"lat_minutes"`
 	// Seconds of latitude.
@@ -13030,7 +13421,7 @@ type DNSRecordGetResponseDNSRecordsLOCRecordData struct {
 	// Degrees of longitude.
 	LongDegrees float64 `json:"long_degrees"`
 	// Longitude direction.
-	LongDirection DNSRecordGetResponseDNSRecordsLOCRecordDataLongDirection `json:"long_direction"`
+	LongDirection DNSRecordGetResponseLOCDataLongDirection `json:"long_direction"`
 	// Minutes of longitude.
 	LongMinutes float64 `json:"long_minutes"`
 	// Seconds of longitude.
@@ -13040,13 +13431,13 @@ type DNSRecordGetResponseDNSRecordsLOCRecordData struct {
 	// Vertical precision of location.
 	PrecisionVert float64 `json:"precision_vert"`
 	// Size of location in meters.
-	Size float64                                         `json:"size"`
-	JSON dnsRecordGetResponseDNSRecordsLOCRecordDataJSON `json:"-"`
+	Size float64                         `json:"size"`
+	JSON dnsRecordGetResponseLOCDataJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsLOCRecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordGetResponseDNSRecordsLOCRecordData]
-type dnsRecordGetResponseDNSRecordsLOCRecordDataJSON struct {
+// dnsRecordGetResponseLOCDataJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseLOCData]
+type dnsRecordGetResponseLOCDataJSON struct {
 	Altitude      apijson.Field
 	LatDegrees    apijson.Field
 	LatDirection  apijson.Field
@@ -13063,53 +13454,53 @@ type dnsRecordGetResponseDNSRecordsLOCRecordDataJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsLOCRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseLOCData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Latitude direction.
-type DNSRecordGetResponseDNSRecordsLOCRecordDataLatDirection string
+type DNSRecordGetResponseLOCDataLatDirection string
 
 const (
-	DNSRecordGetResponseDNSRecordsLOCRecordDataLatDirectionN DNSRecordGetResponseDNSRecordsLOCRecordDataLatDirection = "N"
-	DNSRecordGetResponseDNSRecordsLOCRecordDataLatDirectionS DNSRecordGetResponseDNSRecordsLOCRecordDataLatDirection = "S"
+	DNSRecordGetResponseLOCDataLatDirectionN DNSRecordGetResponseLOCDataLatDirection = "N"
+	DNSRecordGetResponseLOCDataLatDirectionS DNSRecordGetResponseLOCDataLatDirection = "S"
 )
 
 // Longitude direction.
-type DNSRecordGetResponseDNSRecordsLOCRecordDataLongDirection string
+type DNSRecordGetResponseLOCDataLongDirection string
 
 const (
-	DNSRecordGetResponseDNSRecordsLOCRecordDataLongDirectionE DNSRecordGetResponseDNSRecordsLOCRecordDataLongDirection = "E"
-	DNSRecordGetResponseDNSRecordsLOCRecordDataLongDirectionW DNSRecordGetResponseDNSRecordsLOCRecordDataLongDirection = "W"
+	DNSRecordGetResponseLOCDataLongDirectionE DNSRecordGetResponseLOCDataLongDirection = "E"
+	DNSRecordGetResponseLOCDataLongDirectionW DNSRecordGetResponseLOCDataLongDirection = "W"
 )
 
 // Record type.
-type DNSRecordGetResponseDNSRecordsLOCRecordType string
+type DNSRecordGetResponseLOCType string
 
 const (
-	DNSRecordGetResponseDNSRecordsLOCRecordTypeLOC DNSRecordGetResponseDNSRecordsLOCRecordType = "LOC"
+	DNSRecordGetResponseLOCTypeLOC DNSRecordGetResponseLOCType = "LOC"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordGetResponseDNSRecordsLOCRecordMeta struct {
+type DNSRecordGetResponseLOCMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                          `json:"source"`
-	JSON   dnsRecordGetResponseDNSRecordsLOCRecordMetaJSON `json:"-"`
+	Source string                          `json:"source"`
+	JSON   dnsRecordGetResponseLOCMetaJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsLOCRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordGetResponseDNSRecordsLOCRecordMeta]
-type dnsRecordGetResponseDNSRecordsLOCRecordMetaJSON struct {
+// dnsRecordGetResponseLOCMetaJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseLOCMeta]
+type dnsRecordGetResponseLOCMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsLOCRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseLOCMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -13117,15 +13508,14 @@ func (r *DNSRecordGetResponseDNSRecordsLOCRecordMeta) UnmarshalJSON(data []byte)
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordGetResponseDNSRecordsLOCRecordTTLNumber].
-type DNSRecordGetResponseDNSRecordsLOCRecordTTL interface {
-	ImplementsDNSRecordGetResponseDNSRecordsLOCRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordGetResponseLOCTTLNumber].
+type DNSRecordGetResponseLOCTTL interface {
+	ImplementsDNSRecordGetResponseLocttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordGetResponseDNSRecordsLOCRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordGetResponseLOCTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -13134,13 +13524,13 @@ func init() {
 	)
 }
 
-type DNSRecordGetResponseDNSRecordsLOCRecordTTLNumber float64
+type DNSRecordGetResponseLOCTTLNumber float64
 
 const (
-	DNSRecordGetResponseDNSRecordsLOCRecordTTLNumber1 DNSRecordGetResponseDNSRecordsLOCRecordTTLNumber = 1
+	DNSRecordGetResponseLOCTTLNumber1 DNSRecordGetResponseLOCTTLNumber = 1
 )
 
-type DNSRecordGetResponseDNSRecordsMXRecord struct {
+type DNSRecordGetResponseMX struct {
 	// A valid mail server hostname.
 	Content string `json:"content,required" format:"hostname"`
 	// DNS record name (or @ for the zone apex) in Punycode.
@@ -13149,7 +13539,7 @@ type DNSRecordGetResponseDNSRecordsMXRecord struct {
 	// lower priorities are preferred.
 	Priority float64 `json:"priority,required"`
 	// Record type.
-	Type DNSRecordGetResponseDNSRecordsMXRecordType `json:"type,required"`
+	Type DNSRecordGetResponseMXType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -13161,7 +13551,7 @@ type DNSRecordGetResponseDNSRecordsMXRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordGetResponseDNSRecordsMXRecordMeta `json:"meta"`
+	Meta DNSRecordGetResponseMXMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -13171,17 +13561,17 @@ type DNSRecordGetResponseDNSRecordsMXRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordGetResponseDNSRecordsMXRecordTTL `json:"ttl"`
+	TTL DNSRecordGetResponseMXTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                     `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordGetResponseDNSRecordsMXRecordJSON `json:"-"`
+	ZoneName string                     `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordGetResponseMXJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsMXRecordJSON contains the JSON metadata for the
-// struct [DNSRecordGetResponseDNSRecordsMXRecord]
-type dnsRecordGetResponseDNSRecordsMXRecordJSON struct {
+// dnsRecordGetResponseMXJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseMX]
+type dnsRecordGetResponseMXJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Priority    apijson.Field
@@ -13201,39 +13591,39 @@ type dnsRecordGetResponseDNSRecordsMXRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsMXRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseMX) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordGetResponseDNSRecordsMXRecord) implementsDNSRecordGetResponse() {}
+func (r DNSRecordGetResponseMX) implementsDNSRecordGetResponse() {}
 
 // Record type.
-type DNSRecordGetResponseDNSRecordsMXRecordType string
+type DNSRecordGetResponseMXType string
 
 const (
-	DNSRecordGetResponseDNSRecordsMXRecordTypeMX DNSRecordGetResponseDNSRecordsMXRecordType = "MX"
+	DNSRecordGetResponseMXTypeMX DNSRecordGetResponseMXType = "MX"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordGetResponseDNSRecordsMXRecordMeta struct {
+type DNSRecordGetResponseMXMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                         `json:"source"`
-	JSON   dnsRecordGetResponseDNSRecordsMXRecordMetaJSON `json:"-"`
+	Source string                         `json:"source"`
+	JSON   dnsRecordGetResponseMXMetaJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsMXRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordGetResponseDNSRecordsMXRecordMeta]
-type dnsRecordGetResponseDNSRecordsMXRecordMetaJSON struct {
+// dnsRecordGetResponseMXMetaJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseMXMeta]
+type dnsRecordGetResponseMXMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsMXRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseMXMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -13241,15 +13631,14 @@ func (r *DNSRecordGetResponseDNSRecordsMXRecordMeta) UnmarshalJSON(data []byte) 
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordGetResponseDNSRecordsMXRecordTTLNumber].
-type DNSRecordGetResponseDNSRecordsMXRecordTTL interface {
-	ImplementsDNSRecordGetResponseDNSRecordsMXRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordGetResponseMXTTLNumber].
+type DNSRecordGetResponseMXTTL interface {
+	ImplementsDNSRecordGetResponseMxttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordGetResponseDNSRecordsMXRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordGetResponseMXTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -13258,19 +13647,19 @@ func init() {
 	)
 }
 
-type DNSRecordGetResponseDNSRecordsMXRecordTTLNumber float64
+type DNSRecordGetResponseMXTTLNumber float64
 
 const (
-	DNSRecordGetResponseDNSRecordsMXRecordTTLNumber1 DNSRecordGetResponseDNSRecordsMXRecordTTLNumber = 1
+	DNSRecordGetResponseMXTTLNumber1 DNSRecordGetResponseMXTTLNumber = 1
 )
 
-type DNSRecordGetResponseDNSRecordsNAPTRRecord struct {
+type DNSRecordGetResponseNAPTR struct {
 	// Components of a NAPTR record.
-	Data DNSRecordGetResponseDNSRecordsNAPTRRecordData `json:"data,required"`
+	Data DNSRecordGetResponseNAPTRData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordGetResponseDNSRecordsNAPTRRecordType `json:"type,required"`
+	Type DNSRecordGetResponseNAPTRType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -13284,7 +13673,7 @@ type DNSRecordGetResponseDNSRecordsNAPTRRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordGetResponseDNSRecordsNAPTRRecordMeta `json:"meta"`
+	Meta DNSRecordGetResponseNAPTRMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -13294,17 +13683,17 @@ type DNSRecordGetResponseDNSRecordsNAPTRRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordGetResponseDNSRecordsNAPTRRecordTTL `json:"ttl"`
+	TTL DNSRecordGetResponseNAPTRTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                        `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordGetResponseDNSRecordsNAPTRRecordJSON `json:"-"`
+	ZoneName string                        `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordGetResponseNAPTRJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsNAPTRRecordJSON contains the JSON metadata for the
-// struct [DNSRecordGetResponseDNSRecordsNAPTRRecord]
-type dnsRecordGetResponseDNSRecordsNAPTRRecordJSON struct {
+// dnsRecordGetResponseNAPTRJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseNAPTR]
+type dnsRecordGetResponseNAPTRJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -13324,14 +13713,14 @@ type dnsRecordGetResponseDNSRecordsNAPTRRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsNAPTRRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseNAPTR) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordGetResponseDNSRecordsNAPTRRecord) implementsDNSRecordGetResponse() {}
+func (r DNSRecordGetResponseNAPTR) implementsDNSRecordGetResponse() {}
 
 // Components of a NAPTR record.
-type DNSRecordGetResponseDNSRecordsNAPTRRecordData struct {
+type DNSRecordGetResponseNAPTRData struct {
 	// Flags.
 	Flags string `json:"flags"`
 	// Order.
@@ -13343,13 +13732,13 @@ type DNSRecordGetResponseDNSRecordsNAPTRRecordData struct {
 	// Replacement.
 	Replacement string `json:"replacement"`
 	// Service.
-	Service string                                            `json:"service"`
-	JSON    dnsRecordGetResponseDNSRecordsNAPTRRecordDataJSON `json:"-"`
+	Service string                            `json:"service"`
+	JSON    dnsRecordGetResponseNAPTRDataJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsNAPTRRecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordGetResponseDNSRecordsNAPTRRecordData]
-type dnsRecordGetResponseDNSRecordsNAPTRRecordDataJSON struct {
+// dnsRecordGetResponseNAPTRDataJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseNAPTRData]
+type dnsRecordGetResponseNAPTRDataJSON struct {
 	Flags       apijson.Field
 	Order       apijson.Field
 	Preference  apijson.Field
@@ -13360,37 +13749,37 @@ type dnsRecordGetResponseDNSRecordsNAPTRRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsNAPTRRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseNAPTRData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordGetResponseDNSRecordsNAPTRRecordType string
+type DNSRecordGetResponseNAPTRType string
 
 const (
-	DNSRecordGetResponseDNSRecordsNAPTRRecordTypeNAPTR DNSRecordGetResponseDNSRecordsNAPTRRecordType = "NAPTR"
+	DNSRecordGetResponseNAPTRTypeNAPTR DNSRecordGetResponseNAPTRType = "NAPTR"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordGetResponseDNSRecordsNAPTRRecordMeta struct {
+type DNSRecordGetResponseNAPTRMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                            `json:"source"`
-	JSON   dnsRecordGetResponseDNSRecordsNAPTRRecordMetaJSON `json:"-"`
+	Source string                            `json:"source"`
+	JSON   dnsRecordGetResponseNAPTRMetaJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsNAPTRRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordGetResponseDNSRecordsNAPTRRecordMeta]
-type dnsRecordGetResponseDNSRecordsNAPTRRecordMetaJSON struct {
+// dnsRecordGetResponseNAPTRMetaJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseNAPTRMeta]
+type dnsRecordGetResponseNAPTRMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsNAPTRRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseNAPTRMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -13398,15 +13787,14 @@ func (r *DNSRecordGetResponseDNSRecordsNAPTRRecordMeta) UnmarshalJSON(data []byt
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordGetResponseDNSRecordsNAPTRRecordTTLNumber].
-type DNSRecordGetResponseDNSRecordsNAPTRRecordTTL interface {
-	ImplementsDNSRecordGetResponseDNSRecordsNAPTRRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordGetResponseNAPTRTTLNumber].
+type DNSRecordGetResponseNAPTRTTL interface {
+	ImplementsDNSRecordGetResponseNaptrttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordGetResponseDNSRecordsNAPTRRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordGetResponseNAPTRTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -13415,19 +13803,19 @@ func init() {
 	)
 }
 
-type DNSRecordGetResponseDNSRecordsNAPTRRecordTTLNumber float64
+type DNSRecordGetResponseNAPTRTTLNumber float64
 
 const (
-	DNSRecordGetResponseDNSRecordsNAPTRRecordTTLNumber1 DNSRecordGetResponseDNSRecordsNAPTRRecordTTLNumber = 1
+	DNSRecordGetResponseNAPTRTTLNumber1 DNSRecordGetResponseNAPTRTTLNumber = 1
 )
 
-type DNSRecordGetResponseDNSRecordsNSRecord struct {
+type DNSRecordGetResponseNS struct {
 	// A valid name server host name.
 	Content interface{} `json:"content,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordGetResponseDNSRecordsNSRecordType `json:"type,required"`
+	Type DNSRecordGetResponseNSType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -13439,7 +13827,7 @@ type DNSRecordGetResponseDNSRecordsNSRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordGetResponseDNSRecordsNSRecordMeta `json:"meta"`
+	Meta DNSRecordGetResponseNSMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -13449,17 +13837,17 @@ type DNSRecordGetResponseDNSRecordsNSRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordGetResponseDNSRecordsNSRecordTTL `json:"ttl"`
+	TTL DNSRecordGetResponseNSTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                     `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordGetResponseDNSRecordsNSRecordJSON `json:"-"`
+	ZoneName string                     `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordGetResponseNSJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsNSRecordJSON contains the JSON metadata for the
-// struct [DNSRecordGetResponseDNSRecordsNSRecord]
-type dnsRecordGetResponseDNSRecordsNSRecordJSON struct {
+// dnsRecordGetResponseNSJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseNS]
+type dnsRecordGetResponseNSJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -13478,39 +13866,39 @@ type dnsRecordGetResponseDNSRecordsNSRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsNSRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseNS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordGetResponseDNSRecordsNSRecord) implementsDNSRecordGetResponse() {}
+func (r DNSRecordGetResponseNS) implementsDNSRecordGetResponse() {}
 
 // Record type.
-type DNSRecordGetResponseDNSRecordsNSRecordType string
+type DNSRecordGetResponseNSType string
 
 const (
-	DNSRecordGetResponseDNSRecordsNSRecordTypeNS DNSRecordGetResponseDNSRecordsNSRecordType = "NS"
+	DNSRecordGetResponseNSTypeNS DNSRecordGetResponseNSType = "NS"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordGetResponseDNSRecordsNSRecordMeta struct {
+type DNSRecordGetResponseNSMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                         `json:"source"`
-	JSON   dnsRecordGetResponseDNSRecordsNSRecordMetaJSON `json:"-"`
+	Source string                         `json:"source"`
+	JSON   dnsRecordGetResponseNSMetaJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsNSRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordGetResponseDNSRecordsNSRecordMeta]
-type dnsRecordGetResponseDNSRecordsNSRecordMetaJSON struct {
+// dnsRecordGetResponseNSMetaJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseNSMeta]
+type dnsRecordGetResponseNSMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsNSRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseNSMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -13518,15 +13906,14 @@ func (r *DNSRecordGetResponseDNSRecordsNSRecordMeta) UnmarshalJSON(data []byte) 
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordGetResponseDNSRecordsNSRecordTTLNumber].
-type DNSRecordGetResponseDNSRecordsNSRecordTTL interface {
-	ImplementsDNSRecordGetResponseDNSRecordsNSRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordGetResponseNSTTLNumber].
+type DNSRecordGetResponseNSTTL interface {
+	ImplementsDNSRecordGetResponseNsttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordGetResponseDNSRecordsNSRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordGetResponseNSTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -13535,19 +13922,19 @@ func init() {
 	)
 }
 
-type DNSRecordGetResponseDNSRecordsNSRecordTTLNumber float64
+type DNSRecordGetResponseNSTTLNumber float64
 
 const (
-	DNSRecordGetResponseDNSRecordsNSRecordTTLNumber1 DNSRecordGetResponseDNSRecordsNSRecordTTLNumber = 1
+	DNSRecordGetResponseNSTTLNumber1 DNSRecordGetResponseNSTTLNumber = 1
 )
 
-type DNSRecordGetResponseDNSRecordsPTRRecord struct {
+type DNSRecordGetResponsePTR struct {
 	// Domain name pointing to the address.
 	Content string `json:"content,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordGetResponseDNSRecordsPTRRecordType `json:"type,required"`
+	Type DNSRecordGetResponsePTRType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -13559,7 +13946,7 @@ type DNSRecordGetResponseDNSRecordsPTRRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordGetResponseDNSRecordsPTRRecordMeta `json:"meta"`
+	Meta DNSRecordGetResponsePTRMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -13569,17 +13956,17 @@ type DNSRecordGetResponseDNSRecordsPTRRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordGetResponseDNSRecordsPTRRecordTTL `json:"ttl"`
+	TTL DNSRecordGetResponsePTRTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                      `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordGetResponseDNSRecordsPTRRecordJSON `json:"-"`
+	ZoneName string                      `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordGetResponsePTRJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsPTRRecordJSON contains the JSON metadata for the
-// struct [DNSRecordGetResponseDNSRecordsPTRRecord]
-type dnsRecordGetResponseDNSRecordsPTRRecordJSON struct {
+// dnsRecordGetResponsePTRJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponsePTR]
+type dnsRecordGetResponsePTRJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -13598,39 +13985,39 @@ type dnsRecordGetResponseDNSRecordsPTRRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsPTRRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponsePTR) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordGetResponseDNSRecordsPTRRecord) implementsDNSRecordGetResponse() {}
+func (r DNSRecordGetResponsePTR) implementsDNSRecordGetResponse() {}
 
 // Record type.
-type DNSRecordGetResponseDNSRecordsPTRRecordType string
+type DNSRecordGetResponsePTRType string
 
 const (
-	DNSRecordGetResponseDNSRecordsPTRRecordTypePTR DNSRecordGetResponseDNSRecordsPTRRecordType = "PTR"
+	DNSRecordGetResponsePTRTypePTR DNSRecordGetResponsePTRType = "PTR"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordGetResponseDNSRecordsPTRRecordMeta struct {
+type DNSRecordGetResponsePTRMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                          `json:"source"`
-	JSON   dnsRecordGetResponseDNSRecordsPTRRecordMetaJSON `json:"-"`
+	Source string                          `json:"source"`
+	JSON   dnsRecordGetResponsePTRMetaJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsPTRRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordGetResponseDNSRecordsPTRRecordMeta]
-type dnsRecordGetResponseDNSRecordsPTRRecordMetaJSON struct {
+// dnsRecordGetResponsePTRMetaJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponsePTRMeta]
+type dnsRecordGetResponsePTRMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsPTRRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponsePTRMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -13638,15 +14025,14 @@ func (r *DNSRecordGetResponseDNSRecordsPTRRecordMeta) UnmarshalJSON(data []byte)
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordGetResponseDNSRecordsPTRRecordTTLNumber].
-type DNSRecordGetResponseDNSRecordsPTRRecordTTL interface {
-	ImplementsDNSRecordGetResponseDNSRecordsPTRRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordGetResponsePTRTTLNumber].
+type DNSRecordGetResponsePTRTTL interface {
+	ImplementsDNSRecordGetResponsePtrttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordGetResponseDNSRecordsPTRRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordGetResponsePTRTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -13655,19 +14041,19 @@ func init() {
 	)
 }
 
-type DNSRecordGetResponseDNSRecordsPTRRecordTTLNumber float64
+type DNSRecordGetResponsePTRTTLNumber float64
 
 const (
-	DNSRecordGetResponseDNSRecordsPTRRecordTTLNumber1 DNSRecordGetResponseDNSRecordsPTRRecordTTLNumber = 1
+	DNSRecordGetResponsePTRTTLNumber1 DNSRecordGetResponsePTRTTLNumber = 1
 )
 
-type DNSRecordGetResponseDNSRecordsSmimeaRecord struct {
+type DNSRecordGetResponseSmimea struct {
 	// Components of a SMIMEA record.
-	Data DNSRecordGetResponseDNSRecordsSmimeaRecordData `json:"data,required"`
+	Data DNSRecordGetResponseSmimeaData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordGetResponseDNSRecordsSmimeaRecordType `json:"type,required"`
+	Type DNSRecordGetResponseSmimeaType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -13681,7 +14067,7 @@ type DNSRecordGetResponseDNSRecordsSmimeaRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordGetResponseDNSRecordsSmimeaRecordMeta `json:"meta"`
+	Meta DNSRecordGetResponseSmimeaMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -13691,17 +14077,17 @@ type DNSRecordGetResponseDNSRecordsSmimeaRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordGetResponseDNSRecordsSmimeaRecordTTL `json:"ttl"`
+	TTL DNSRecordGetResponseSmimeaTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                         `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordGetResponseDNSRecordsSmimeaRecordJSON `json:"-"`
+	ZoneName string                         `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordGetResponseSmimeaJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsSmimeaRecordJSON contains the JSON metadata for
-// the struct [DNSRecordGetResponseDNSRecordsSmimeaRecord]
-type dnsRecordGetResponseDNSRecordsSmimeaRecordJSON struct {
+// dnsRecordGetResponseSmimeaJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseSmimea]
+type dnsRecordGetResponseSmimeaJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -13721,14 +14107,14 @@ type dnsRecordGetResponseDNSRecordsSmimeaRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsSmimeaRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseSmimea) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordGetResponseDNSRecordsSmimeaRecord) implementsDNSRecordGetResponse() {}
+func (r DNSRecordGetResponseSmimea) implementsDNSRecordGetResponse() {}
 
 // Components of a SMIMEA record.
-type DNSRecordGetResponseDNSRecordsSmimeaRecordData struct {
+type DNSRecordGetResponseSmimeaData struct {
 	// Certificate.
 	Certificate string `json:"certificate"`
 	// Matching Type.
@@ -13736,13 +14122,13 @@ type DNSRecordGetResponseDNSRecordsSmimeaRecordData struct {
 	// Selector.
 	Selector float64 `json:"selector"`
 	// Usage.
-	Usage float64                                            `json:"usage"`
-	JSON  dnsRecordGetResponseDNSRecordsSmimeaRecordDataJSON `json:"-"`
+	Usage float64                            `json:"usage"`
+	JSON  dnsRecordGetResponseSmimeaDataJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsSmimeaRecordDataJSON contains the JSON metadata
-// for the struct [DNSRecordGetResponseDNSRecordsSmimeaRecordData]
-type dnsRecordGetResponseDNSRecordsSmimeaRecordDataJSON struct {
+// dnsRecordGetResponseSmimeaDataJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseSmimeaData]
+type dnsRecordGetResponseSmimeaDataJSON struct {
 	Certificate  apijson.Field
 	MatchingType apijson.Field
 	Selector     apijson.Field
@@ -13751,37 +14137,37 @@ type dnsRecordGetResponseDNSRecordsSmimeaRecordDataJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsSmimeaRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseSmimeaData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordGetResponseDNSRecordsSmimeaRecordType string
+type DNSRecordGetResponseSmimeaType string
 
 const (
-	DNSRecordGetResponseDNSRecordsSmimeaRecordTypeSmimea DNSRecordGetResponseDNSRecordsSmimeaRecordType = "SMIMEA"
+	DNSRecordGetResponseSmimeaTypeSmimea DNSRecordGetResponseSmimeaType = "SMIMEA"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordGetResponseDNSRecordsSmimeaRecordMeta struct {
+type DNSRecordGetResponseSmimeaMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                             `json:"source"`
-	JSON   dnsRecordGetResponseDNSRecordsSmimeaRecordMetaJSON `json:"-"`
+	Source string                             `json:"source"`
+	JSON   dnsRecordGetResponseSmimeaMetaJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsSmimeaRecordMetaJSON contains the JSON metadata
-// for the struct [DNSRecordGetResponseDNSRecordsSmimeaRecordMeta]
-type dnsRecordGetResponseDNSRecordsSmimeaRecordMetaJSON struct {
+// dnsRecordGetResponseSmimeaMetaJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseSmimeaMeta]
+type dnsRecordGetResponseSmimeaMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsSmimeaRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseSmimeaMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -13789,15 +14175,14 @@ func (r *DNSRecordGetResponseDNSRecordsSmimeaRecordMeta) UnmarshalJSON(data []by
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordGetResponseDNSRecordsSmimeaRecordTTLNumber].
-type DNSRecordGetResponseDNSRecordsSmimeaRecordTTL interface {
-	ImplementsDNSRecordGetResponseDNSRecordsSmimeaRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordGetResponseSmimeaTTLNumber].
+type DNSRecordGetResponseSmimeaTTL interface {
+	ImplementsDNSRecordGetResponseSmimeaTTL()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordGetResponseDNSRecordsSmimeaRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordGetResponseSmimeaTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -13806,21 +14191,21 @@ func init() {
 	)
 }
 
-type DNSRecordGetResponseDNSRecordsSmimeaRecordTTLNumber float64
+type DNSRecordGetResponseSmimeaTTLNumber float64
 
 const (
-	DNSRecordGetResponseDNSRecordsSmimeaRecordTTLNumber1 DNSRecordGetResponseDNSRecordsSmimeaRecordTTLNumber = 1
+	DNSRecordGetResponseSmimeaTTLNumber1 DNSRecordGetResponseSmimeaTTLNumber = 1
 )
 
-type DNSRecordGetResponseDNSRecordsSRVRecord struct {
+type DNSRecordGetResponseSRV struct {
 	// Components of a SRV record.
-	Data DNSRecordGetResponseDNSRecordsSRVRecordData `json:"data,required"`
+	Data DNSRecordGetResponseSRVData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode. For SRV records, the first
 	// label is normally a service and the second a protocol name, each starting with
 	// an underscore.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordGetResponseDNSRecordsSRVRecordType `json:"type,required"`
+	Type DNSRecordGetResponseSRVType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -13835,7 +14220,7 @@ type DNSRecordGetResponseDNSRecordsSRVRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordGetResponseDNSRecordsSRVRecordMeta `json:"meta"`
+	Meta DNSRecordGetResponseSRVMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -13845,17 +14230,17 @@ type DNSRecordGetResponseDNSRecordsSRVRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordGetResponseDNSRecordsSRVRecordTTL `json:"ttl"`
+	TTL DNSRecordGetResponseSRVTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                      `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordGetResponseDNSRecordsSRVRecordJSON `json:"-"`
+	ZoneName string                      `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordGetResponseSRVJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsSRVRecordJSON contains the JSON metadata for the
-// struct [DNSRecordGetResponseDNSRecordsSRVRecord]
-type dnsRecordGetResponseDNSRecordsSRVRecordJSON struct {
+// dnsRecordGetResponseSRVJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseSRV]
+type dnsRecordGetResponseSRVJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -13875,14 +14260,14 @@ type dnsRecordGetResponseDNSRecordsSRVRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsSRVRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseSRV) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordGetResponseDNSRecordsSRVRecord) implementsDNSRecordGetResponse() {}
+func (r DNSRecordGetResponseSRV) implementsDNSRecordGetResponse() {}
 
 // Components of a SRV record.
-type DNSRecordGetResponseDNSRecordsSRVRecordData struct {
+type DNSRecordGetResponseSRVData struct {
 	// A valid hostname. Deprecated in favor of the regular 'name' outside the data
 	// map. This data map field represents the remainder of the full 'name' after the
 	// service and protocol.
@@ -13903,13 +14288,13 @@ type DNSRecordGetResponseDNSRecordsSRVRecordData struct {
 	// A valid hostname.
 	Target string `json:"target" format:"hostname"`
 	// The record weight.
-	Weight float64                                         `json:"weight"`
-	JSON   dnsRecordGetResponseDNSRecordsSRVRecordDataJSON `json:"-"`
+	Weight float64                         `json:"weight"`
+	JSON   dnsRecordGetResponseSRVDataJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsSRVRecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordGetResponseDNSRecordsSRVRecordData]
-type dnsRecordGetResponseDNSRecordsSRVRecordDataJSON struct {
+// dnsRecordGetResponseSRVDataJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseSRVData]
+type dnsRecordGetResponseSRVDataJSON struct {
 	Name        apijson.Field
 	Port        apijson.Field
 	Priority    apijson.Field
@@ -13921,37 +14306,37 @@ type dnsRecordGetResponseDNSRecordsSRVRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsSRVRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseSRVData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordGetResponseDNSRecordsSRVRecordType string
+type DNSRecordGetResponseSRVType string
 
 const (
-	DNSRecordGetResponseDNSRecordsSRVRecordTypeSRV DNSRecordGetResponseDNSRecordsSRVRecordType = "SRV"
+	DNSRecordGetResponseSRVTypeSRV DNSRecordGetResponseSRVType = "SRV"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordGetResponseDNSRecordsSRVRecordMeta struct {
+type DNSRecordGetResponseSRVMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                          `json:"source"`
-	JSON   dnsRecordGetResponseDNSRecordsSRVRecordMetaJSON `json:"-"`
+	Source string                          `json:"source"`
+	JSON   dnsRecordGetResponseSRVMetaJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsSRVRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordGetResponseDNSRecordsSRVRecordMeta]
-type dnsRecordGetResponseDNSRecordsSRVRecordMetaJSON struct {
+// dnsRecordGetResponseSRVMetaJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseSRVMeta]
+type dnsRecordGetResponseSRVMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsSRVRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseSRVMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -13959,15 +14344,14 @@ func (r *DNSRecordGetResponseDNSRecordsSRVRecordMeta) UnmarshalJSON(data []byte)
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordGetResponseDNSRecordsSRVRecordTTLNumber].
-type DNSRecordGetResponseDNSRecordsSRVRecordTTL interface {
-	ImplementsDNSRecordGetResponseDNSRecordsSRVRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordGetResponseSRVTTLNumber].
+type DNSRecordGetResponseSRVTTL interface {
+	ImplementsDNSRecordGetResponseSrvttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordGetResponseDNSRecordsSRVRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordGetResponseSRVTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -13976,19 +14360,19 @@ func init() {
 	)
 }
 
-type DNSRecordGetResponseDNSRecordsSRVRecordTTLNumber float64
+type DNSRecordGetResponseSRVTTLNumber float64
 
 const (
-	DNSRecordGetResponseDNSRecordsSRVRecordTTLNumber1 DNSRecordGetResponseDNSRecordsSRVRecordTTLNumber = 1
+	DNSRecordGetResponseSRVTTLNumber1 DNSRecordGetResponseSRVTTLNumber = 1
 )
 
-type DNSRecordGetResponseDNSRecordsSSHFPRecord struct {
+type DNSRecordGetResponseSSHFP struct {
 	// Components of a SSHFP record.
-	Data DNSRecordGetResponseDNSRecordsSSHFPRecordData `json:"data,required"`
+	Data DNSRecordGetResponseSSHFPData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordGetResponseDNSRecordsSSHFPRecordType `json:"type,required"`
+	Type DNSRecordGetResponseSSHFPType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -14002,7 +14386,7 @@ type DNSRecordGetResponseDNSRecordsSSHFPRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordGetResponseDNSRecordsSSHFPRecordMeta `json:"meta"`
+	Meta DNSRecordGetResponseSSHFPMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -14012,17 +14396,17 @@ type DNSRecordGetResponseDNSRecordsSSHFPRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordGetResponseDNSRecordsSSHFPRecordTTL `json:"ttl"`
+	TTL DNSRecordGetResponseSSHFPTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                        `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordGetResponseDNSRecordsSSHFPRecordJSON `json:"-"`
+	ZoneName string                        `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordGetResponseSSHFPJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsSSHFPRecordJSON contains the JSON metadata for the
-// struct [DNSRecordGetResponseDNSRecordsSSHFPRecord]
-type dnsRecordGetResponseDNSRecordsSSHFPRecordJSON struct {
+// dnsRecordGetResponseSSHFPJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseSSHFP]
+type dnsRecordGetResponseSSHFPJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -14042,26 +14426,26 @@ type dnsRecordGetResponseDNSRecordsSSHFPRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsSSHFPRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseSSHFP) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordGetResponseDNSRecordsSSHFPRecord) implementsDNSRecordGetResponse() {}
+func (r DNSRecordGetResponseSSHFP) implementsDNSRecordGetResponse() {}
 
 // Components of a SSHFP record.
-type DNSRecordGetResponseDNSRecordsSSHFPRecordData struct {
+type DNSRecordGetResponseSSHFPData struct {
 	// algorithm.
 	Algorithm float64 `json:"algorithm"`
 	// fingerprint.
 	Fingerprint string `json:"fingerprint"`
 	// type.
-	Type float64                                           `json:"type"`
-	JSON dnsRecordGetResponseDNSRecordsSSHFPRecordDataJSON `json:"-"`
+	Type float64                           `json:"type"`
+	JSON dnsRecordGetResponseSSHFPDataJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsSSHFPRecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordGetResponseDNSRecordsSSHFPRecordData]
-type dnsRecordGetResponseDNSRecordsSSHFPRecordDataJSON struct {
+// dnsRecordGetResponseSSHFPDataJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseSSHFPData]
+type dnsRecordGetResponseSSHFPDataJSON struct {
 	Algorithm   apijson.Field
 	Fingerprint apijson.Field
 	Type        apijson.Field
@@ -14069,37 +14453,37 @@ type dnsRecordGetResponseDNSRecordsSSHFPRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsSSHFPRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseSSHFPData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordGetResponseDNSRecordsSSHFPRecordType string
+type DNSRecordGetResponseSSHFPType string
 
 const (
-	DNSRecordGetResponseDNSRecordsSSHFPRecordTypeSSHFP DNSRecordGetResponseDNSRecordsSSHFPRecordType = "SSHFP"
+	DNSRecordGetResponseSSHFPTypeSSHFP DNSRecordGetResponseSSHFPType = "SSHFP"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordGetResponseDNSRecordsSSHFPRecordMeta struct {
+type DNSRecordGetResponseSSHFPMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                            `json:"source"`
-	JSON   dnsRecordGetResponseDNSRecordsSSHFPRecordMetaJSON `json:"-"`
+	Source string                            `json:"source"`
+	JSON   dnsRecordGetResponseSSHFPMetaJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsSSHFPRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordGetResponseDNSRecordsSSHFPRecordMeta]
-type dnsRecordGetResponseDNSRecordsSSHFPRecordMetaJSON struct {
+// dnsRecordGetResponseSSHFPMetaJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseSSHFPMeta]
+type dnsRecordGetResponseSSHFPMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsSSHFPRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseSSHFPMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -14107,15 +14491,14 @@ func (r *DNSRecordGetResponseDNSRecordsSSHFPRecordMeta) UnmarshalJSON(data []byt
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordGetResponseDNSRecordsSSHFPRecordTTLNumber].
-type DNSRecordGetResponseDNSRecordsSSHFPRecordTTL interface {
-	ImplementsDNSRecordGetResponseDNSRecordsSSHFPRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordGetResponseSSHFPTTLNumber].
+type DNSRecordGetResponseSSHFPTTL interface {
+	ImplementsDNSRecordGetResponseSshfpttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordGetResponseDNSRecordsSSHFPRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordGetResponseSSHFPTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -14124,19 +14507,19 @@ func init() {
 	)
 }
 
-type DNSRecordGetResponseDNSRecordsSSHFPRecordTTLNumber float64
+type DNSRecordGetResponseSSHFPTTLNumber float64
 
 const (
-	DNSRecordGetResponseDNSRecordsSSHFPRecordTTLNumber1 DNSRecordGetResponseDNSRecordsSSHFPRecordTTLNumber = 1
+	DNSRecordGetResponseSSHFPTTLNumber1 DNSRecordGetResponseSSHFPTTLNumber = 1
 )
 
-type DNSRecordGetResponseDNSRecordsSVCBRecord struct {
+type DNSRecordGetResponseSVCB struct {
 	// Components of a SVCB record.
-	Data DNSRecordGetResponseDNSRecordsSVCBRecordData `json:"data,required"`
+	Data DNSRecordGetResponseSVCBData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordGetResponseDNSRecordsSVCBRecordType `json:"type,required"`
+	Type DNSRecordGetResponseSVCBType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -14150,7 +14533,7 @@ type DNSRecordGetResponseDNSRecordsSVCBRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordGetResponseDNSRecordsSVCBRecordMeta `json:"meta"`
+	Meta DNSRecordGetResponseSVCBMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -14160,17 +14543,17 @@ type DNSRecordGetResponseDNSRecordsSVCBRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordGetResponseDNSRecordsSVCBRecordTTL `json:"ttl"`
+	TTL DNSRecordGetResponseSVCBTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                       `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordGetResponseDNSRecordsSVCBRecordJSON `json:"-"`
+	ZoneName string                       `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordGetResponseSVCBJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsSVCBRecordJSON contains the JSON metadata for the
-// struct [DNSRecordGetResponseDNSRecordsSVCBRecord]
-type dnsRecordGetResponseDNSRecordsSVCBRecordJSON struct {
+// dnsRecordGetResponseSVCBJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseSVCB]
+type dnsRecordGetResponseSVCBJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -14190,26 +14573,26 @@ type dnsRecordGetResponseDNSRecordsSVCBRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsSVCBRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseSVCB) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordGetResponseDNSRecordsSVCBRecord) implementsDNSRecordGetResponse() {}
+func (r DNSRecordGetResponseSVCB) implementsDNSRecordGetResponse() {}
 
 // Components of a SVCB record.
-type DNSRecordGetResponseDNSRecordsSVCBRecordData struct {
+type DNSRecordGetResponseSVCBData struct {
 	// priority.
 	Priority float64 `json:"priority"`
 	// target.
 	Target string `json:"target"`
 	// value.
-	Value string                                           `json:"value"`
-	JSON  dnsRecordGetResponseDNSRecordsSVCBRecordDataJSON `json:"-"`
+	Value string                           `json:"value"`
+	JSON  dnsRecordGetResponseSVCBDataJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsSVCBRecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordGetResponseDNSRecordsSVCBRecordData]
-type dnsRecordGetResponseDNSRecordsSVCBRecordDataJSON struct {
+// dnsRecordGetResponseSVCBDataJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseSVCBData]
+type dnsRecordGetResponseSVCBDataJSON struct {
 	Priority    apijson.Field
 	Target      apijson.Field
 	Value       apijson.Field
@@ -14217,37 +14600,37 @@ type dnsRecordGetResponseDNSRecordsSVCBRecordDataJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsSVCBRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseSVCBData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordGetResponseDNSRecordsSVCBRecordType string
+type DNSRecordGetResponseSVCBType string
 
 const (
-	DNSRecordGetResponseDNSRecordsSVCBRecordTypeSVCB DNSRecordGetResponseDNSRecordsSVCBRecordType = "SVCB"
+	DNSRecordGetResponseSVCBTypeSVCB DNSRecordGetResponseSVCBType = "SVCB"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordGetResponseDNSRecordsSVCBRecordMeta struct {
+type DNSRecordGetResponseSVCBMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                           `json:"source"`
-	JSON   dnsRecordGetResponseDNSRecordsSVCBRecordMetaJSON `json:"-"`
+	Source string                           `json:"source"`
+	JSON   dnsRecordGetResponseSVCBMetaJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsSVCBRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordGetResponseDNSRecordsSVCBRecordMeta]
-type dnsRecordGetResponseDNSRecordsSVCBRecordMetaJSON struct {
+// dnsRecordGetResponseSVCBMetaJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseSVCBMeta]
+type dnsRecordGetResponseSVCBMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsSVCBRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseSVCBMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -14255,15 +14638,14 @@ func (r *DNSRecordGetResponseDNSRecordsSVCBRecordMeta) UnmarshalJSON(data []byte
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordGetResponseDNSRecordsSVCBRecordTTLNumber].
-type DNSRecordGetResponseDNSRecordsSVCBRecordTTL interface {
-	ImplementsDNSRecordGetResponseDNSRecordsSVCBRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordGetResponseSVCBTTLNumber].
+type DNSRecordGetResponseSVCBTTL interface {
+	ImplementsDNSRecordGetResponseSvcbttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordGetResponseDNSRecordsSVCBRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordGetResponseSVCBTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -14272,19 +14654,19 @@ func init() {
 	)
 }
 
-type DNSRecordGetResponseDNSRecordsSVCBRecordTTLNumber float64
+type DNSRecordGetResponseSVCBTTLNumber float64
 
 const (
-	DNSRecordGetResponseDNSRecordsSVCBRecordTTLNumber1 DNSRecordGetResponseDNSRecordsSVCBRecordTTLNumber = 1
+	DNSRecordGetResponseSVCBTTLNumber1 DNSRecordGetResponseSVCBTTLNumber = 1
 )
 
-type DNSRecordGetResponseDNSRecordsTLSARecord struct {
+type DNSRecordGetResponseTLSA struct {
 	// Components of a TLSA record.
-	Data DNSRecordGetResponseDNSRecordsTLSARecordData `json:"data,required"`
+	Data DNSRecordGetResponseTLSAData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordGetResponseDNSRecordsTLSARecordType `json:"type,required"`
+	Type DNSRecordGetResponseTLSAType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -14298,7 +14680,7 @@ type DNSRecordGetResponseDNSRecordsTLSARecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordGetResponseDNSRecordsTLSARecordMeta `json:"meta"`
+	Meta DNSRecordGetResponseTLSAMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -14308,17 +14690,17 @@ type DNSRecordGetResponseDNSRecordsTLSARecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordGetResponseDNSRecordsTLSARecordTTL `json:"ttl"`
+	TTL DNSRecordGetResponseTLSATTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                       `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordGetResponseDNSRecordsTLSARecordJSON `json:"-"`
+	ZoneName string                       `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordGetResponseTLSAJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsTLSARecordJSON contains the JSON metadata for the
-// struct [DNSRecordGetResponseDNSRecordsTLSARecord]
-type dnsRecordGetResponseDNSRecordsTLSARecordJSON struct {
+// dnsRecordGetResponseTLSAJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseTLSA]
+type dnsRecordGetResponseTLSAJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -14338,14 +14720,14 @@ type dnsRecordGetResponseDNSRecordsTLSARecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsTLSARecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseTLSA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordGetResponseDNSRecordsTLSARecord) implementsDNSRecordGetResponse() {}
+func (r DNSRecordGetResponseTLSA) implementsDNSRecordGetResponse() {}
 
 // Components of a TLSA record.
-type DNSRecordGetResponseDNSRecordsTLSARecordData struct {
+type DNSRecordGetResponseTLSAData struct {
 	// certificate.
 	Certificate string `json:"certificate"`
 	// Matching Type.
@@ -14353,13 +14735,13 @@ type DNSRecordGetResponseDNSRecordsTLSARecordData struct {
 	// Selector.
 	Selector float64 `json:"selector"`
 	// Usage.
-	Usage float64                                          `json:"usage"`
-	JSON  dnsRecordGetResponseDNSRecordsTLSARecordDataJSON `json:"-"`
+	Usage float64                          `json:"usage"`
+	JSON  dnsRecordGetResponseTLSADataJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsTLSARecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordGetResponseDNSRecordsTLSARecordData]
-type dnsRecordGetResponseDNSRecordsTLSARecordDataJSON struct {
+// dnsRecordGetResponseTLSADataJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseTLSAData]
+type dnsRecordGetResponseTLSADataJSON struct {
 	Certificate  apijson.Field
 	MatchingType apijson.Field
 	Selector     apijson.Field
@@ -14368,37 +14750,37 @@ type dnsRecordGetResponseDNSRecordsTLSARecordDataJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsTLSARecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseTLSAData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordGetResponseDNSRecordsTLSARecordType string
+type DNSRecordGetResponseTLSAType string
 
 const (
-	DNSRecordGetResponseDNSRecordsTLSARecordTypeTLSA DNSRecordGetResponseDNSRecordsTLSARecordType = "TLSA"
+	DNSRecordGetResponseTLSATypeTLSA DNSRecordGetResponseTLSAType = "TLSA"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordGetResponseDNSRecordsTLSARecordMeta struct {
+type DNSRecordGetResponseTLSAMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                           `json:"source"`
-	JSON   dnsRecordGetResponseDNSRecordsTLSARecordMetaJSON `json:"-"`
+	Source string                           `json:"source"`
+	JSON   dnsRecordGetResponseTLSAMetaJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsTLSARecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordGetResponseDNSRecordsTLSARecordMeta]
-type dnsRecordGetResponseDNSRecordsTLSARecordMetaJSON struct {
+// dnsRecordGetResponseTLSAMetaJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseTLSAMeta]
+type dnsRecordGetResponseTLSAMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsTLSARecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseTLSAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -14406,15 +14788,14 @@ func (r *DNSRecordGetResponseDNSRecordsTLSARecordMeta) UnmarshalJSON(data []byte
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordGetResponseDNSRecordsTLSARecordTTLNumber].
-type DNSRecordGetResponseDNSRecordsTLSARecordTTL interface {
-	ImplementsDNSRecordGetResponseDNSRecordsTLSARecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordGetResponseTLSATTLNumber].
+type DNSRecordGetResponseTLSATTL interface {
+	ImplementsDNSRecordGetResponseTlsattl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordGetResponseDNSRecordsTLSARecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordGetResponseTLSATTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -14423,19 +14804,19 @@ func init() {
 	)
 }
 
-type DNSRecordGetResponseDNSRecordsTLSARecordTTLNumber float64
+type DNSRecordGetResponseTLSATTLNumber float64
 
 const (
-	DNSRecordGetResponseDNSRecordsTLSARecordTTLNumber1 DNSRecordGetResponseDNSRecordsTLSARecordTTLNumber = 1
+	DNSRecordGetResponseTLSATTLNumber1 DNSRecordGetResponseTLSATTLNumber = 1
 )
 
-type DNSRecordGetResponseDNSRecordsTXTRecord struct {
+type DNSRecordGetResponseTXT struct {
 	// Text content for the record.
 	Content string `json:"content,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Record type.
-	Type DNSRecordGetResponseDNSRecordsTXTRecordType `json:"type,required"`
+	Type DNSRecordGetResponseTXTType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -14447,7 +14828,7 @@ type DNSRecordGetResponseDNSRecordsTXTRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordGetResponseDNSRecordsTXTRecordMeta `json:"meta"`
+	Meta DNSRecordGetResponseTXTMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -14457,17 +14838,17 @@ type DNSRecordGetResponseDNSRecordsTXTRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordGetResponseDNSRecordsTXTRecordTTL `json:"ttl"`
+	TTL DNSRecordGetResponseTXTTTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                      `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordGetResponseDNSRecordsTXTRecordJSON `json:"-"`
+	ZoneName string                      `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordGetResponseTXTJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsTXTRecordJSON contains the JSON metadata for the
-// struct [DNSRecordGetResponseDNSRecordsTXTRecord]
-type dnsRecordGetResponseDNSRecordsTXTRecordJSON struct {
+// dnsRecordGetResponseTXTJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseTXT]
+type dnsRecordGetResponseTXTJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Type        apijson.Field
@@ -14486,39 +14867,39 @@ type dnsRecordGetResponseDNSRecordsTXTRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsTXTRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseTXT) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordGetResponseDNSRecordsTXTRecord) implementsDNSRecordGetResponse() {}
+func (r DNSRecordGetResponseTXT) implementsDNSRecordGetResponse() {}
 
 // Record type.
-type DNSRecordGetResponseDNSRecordsTXTRecordType string
+type DNSRecordGetResponseTXTType string
 
 const (
-	DNSRecordGetResponseDNSRecordsTXTRecordTypeTXT DNSRecordGetResponseDNSRecordsTXTRecordType = "TXT"
+	DNSRecordGetResponseTXTTypeTXT DNSRecordGetResponseTXTType = "TXT"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordGetResponseDNSRecordsTXTRecordMeta struct {
+type DNSRecordGetResponseTXTMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                          `json:"source"`
-	JSON   dnsRecordGetResponseDNSRecordsTXTRecordMetaJSON `json:"-"`
+	Source string                          `json:"source"`
+	JSON   dnsRecordGetResponseTXTMetaJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsTXTRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordGetResponseDNSRecordsTXTRecordMeta]
-type dnsRecordGetResponseDNSRecordsTXTRecordMetaJSON struct {
+// dnsRecordGetResponseTXTMetaJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseTXTMeta]
+type dnsRecordGetResponseTXTMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsTXTRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseTXTMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -14526,15 +14907,14 @@ func (r *DNSRecordGetResponseDNSRecordsTXTRecordMeta) UnmarshalJSON(data []byte)
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordGetResponseDNSRecordsTXTRecordTTLNumber].
-type DNSRecordGetResponseDNSRecordsTXTRecordTTL interface {
-	ImplementsDNSRecordGetResponseDNSRecordsTXTRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordGetResponseTXTTTLNumber].
+type DNSRecordGetResponseTXTTTL interface {
+	ImplementsDNSRecordGetResponseTxtttl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordGetResponseDNSRecordsTXTRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordGetResponseTXTTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -14543,22 +14923,22 @@ func init() {
 	)
 }
 
-type DNSRecordGetResponseDNSRecordsTXTRecordTTLNumber float64
+type DNSRecordGetResponseTXTTTLNumber float64
 
 const (
-	DNSRecordGetResponseDNSRecordsTXTRecordTTLNumber1 DNSRecordGetResponseDNSRecordsTXTRecordTTLNumber = 1
+	DNSRecordGetResponseTXTTTLNumber1 DNSRecordGetResponseTXTTTLNumber = 1
 )
 
-type DNSRecordGetResponseDNSRecordsURIRecord struct {
+type DNSRecordGetResponseURI struct {
 	// Components of a URI record.
-	Data DNSRecordGetResponseDNSRecordsURIRecordData `json:"data,required"`
+	Data DNSRecordGetResponseURIData `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name string `json:"name,required"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
 	// lower priorities are preferred.
 	Priority float64 `json:"priority,required"`
 	// Record type.
-	Type DNSRecordGetResponseDNSRecordsURIRecordType `json:"type,required"`
+	Type DNSRecordGetResponseURIType `json:"type,required"`
 	// Identifier
 	ID string `json:"id"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
@@ -14572,7 +14952,7 @@ type DNSRecordGetResponseDNSRecordsURIRecord struct {
 	// Cloudflare).
 	Locked bool `json:"locked"`
 	// Extra Cloudflare-specific information about the record.
-	Meta DNSRecordGetResponseDNSRecordsURIRecordMeta `json:"meta"`
+	Meta DNSRecordGetResponseURIMeta `json:"meta"`
 	// When the record was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
 	// Whether the record can be proxied by Cloudflare or not.
@@ -14582,17 +14962,17 @@ type DNSRecordGetResponseDNSRecordsURIRecord struct {
 	// Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
 	// Value must be between 60 and 86400, with the minimum reduced to 30 for
 	// Enterprise zones.
-	TTL DNSRecordGetResponseDNSRecordsURIRecordTTL `json:"ttl"`
+	TTL DNSRecordGetResponseURITTL `json:"ttl"`
 	// Identifier
 	ZoneID string `json:"zone_id"`
 	// The domain of the record.
-	ZoneName string                                      `json:"zone_name" format:"hostname"`
-	JSON     dnsRecordGetResponseDNSRecordsURIRecordJSON `json:"-"`
+	ZoneName string                      `json:"zone_name" format:"hostname"`
+	JSON     dnsRecordGetResponseURIJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsURIRecordJSON contains the JSON metadata for the
-// struct [DNSRecordGetResponseDNSRecordsURIRecord]
-type dnsRecordGetResponseDNSRecordsURIRecordJSON struct {
+// dnsRecordGetResponseURIJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseURI]
+type dnsRecordGetResponseURIJSON struct {
 	Data        apijson.Field
 	Name        apijson.Field
 	Priority    apijson.Field
@@ -14613,61 +14993,61 @@ type dnsRecordGetResponseDNSRecordsURIRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsURIRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseURI) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DNSRecordGetResponseDNSRecordsURIRecord) implementsDNSRecordGetResponse() {}
+func (r DNSRecordGetResponseURI) implementsDNSRecordGetResponse() {}
 
 // Components of a URI record.
-type DNSRecordGetResponseDNSRecordsURIRecordData struct {
+type DNSRecordGetResponseURIData struct {
 	// The record content.
 	Content string `json:"content"`
 	// The record weight.
-	Weight float64                                         `json:"weight"`
-	JSON   dnsRecordGetResponseDNSRecordsURIRecordDataJSON `json:"-"`
+	Weight float64                         `json:"weight"`
+	JSON   dnsRecordGetResponseURIDataJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsURIRecordDataJSON contains the JSON metadata for
-// the struct [DNSRecordGetResponseDNSRecordsURIRecordData]
-type dnsRecordGetResponseDNSRecordsURIRecordDataJSON struct {
+// dnsRecordGetResponseURIDataJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseURIData]
+type dnsRecordGetResponseURIDataJSON struct {
 	Content     apijson.Field
 	Weight      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsURIRecordData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseURIData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Record type.
-type DNSRecordGetResponseDNSRecordsURIRecordType string
+type DNSRecordGetResponseURIType string
 
 const (
-	DNSRecordGetResponseDNSRecordsURIRecordTypeURI DNSRecordGetResponseDNSRecordsURIRecordType = "URI"
+	DNSRecordGetResponseURITypeURI DNSRecordGetResponseURIType = "URI"
 )
 
 // Extra Cloudflare-specific information about the record.
-type DNSRecordGetResponseDNSRecordsURIRecordMeta struct {
+type DNSRecordGetResponseURIMeta struct {
 	// Will exist if Cloudflare automatically added this DNS record during initial
 	// setup.
 	AutoAdded bool `json:"auto_added"`
 	// Where the record originated from.
-	Source string                                          `json:"source"`
-	JSON   dnsRecordGetResponseDNSRecordsURIRecordMetaJSON `json:"-"`
+	Source string                          `json:"source"`
+	JSON   dnsRecordGetResponseURIMetaJSON `json:"-"`
 }
 
-// dnsRecordGetResponseDNSRecordsURIRecordMetaJSON contains the JSON metadata for
-// the struct [DNSRecordGetResponseDNSRecordsURIRecordMeta]
-type dnsRecordGetResponseDNSRecordsURIRecordMetaJSON struct {
+// dnsRecordGetResponseURIMetaJSON contains the JSON metadata for the struct
+// [DNSRecordGetResponseURIMeta]
+type dnsRecordGetResponseURIMetaJSON struct {
 	AutoAdded   apijson.Field
 	Source      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSRecordGetResponseDNSRecordsURIRecordMeta) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSRecordGetResponseURIMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -14675,15 +15055,14 @@ func (r *DNSRecordGetResponseDNSRecordsURIRecordMeta) UnmarshalJSON(data []byte)
 // Value must be between 60 and 86400, with the minimum reduced to 30 for
 // Enterprise zones.
 //
-// Union satisfied by [shared.UnionFloat] or
-// [DNSRecordGetResponseDNSRecordsURIRecordTTLNumber].
-type DNSRecordGetResponseDNSRecordsURIRecordTTL interface {
-	ImplementsDNSRecordGetResponseDNSRecordsURIRecordTTL()
+// Union satisfied by [shared.UnionFloat] or [DNSRecordGetResponseURITTLNumber].
+type DNSRecordGetResponseURITTL interface {
+	ImplementsDNSRecordGetResponseUrittl()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*DNSRecordGetResponseDNSRecordsURIRecordTTL)(nil)).Elem(),
+		reflect.TypeOf((*DNSRecordGetResponseURITTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -14692,10 +15071,10 @@ func init() {
 	)
 }
 
-type DNSRecordGetResponseDNSRecordsURIRecordTTLNumber float64
+type DNSRecordGetResponseURITTLNumber float64
 
 const (
-	DNSRecordGetResponseDNSRecordsURIRecordTTLNumber1 DNSRecordGetResponseDNSRecordsURIRecordTTLNumber = 1
+	DNSRecordGetResponseURITTLNumber1 DNSRecordGetResponseURITTLNumber = 1
 )
 
 type DNSRecordImportResponse struct {
