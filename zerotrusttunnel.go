@@ -16,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/tidwall/gjson"
 )
 
 // ZeroTrustTunnelService contains methods and other services that help with
@@ -196,7 +197,18 @@ type ZeroTrustTunnelListResponse interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZeroTrustTunnelListResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZeroTrustTunnelListResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustTunnelListResponseTunnelCfdTunnel{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustTunnelListResponseTunnelWARPConnectorTunnel{}),
+		},
+	)
 }
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
@@ -516,7 +528,18 @@ type ZeroTrustTunnelEditResponse interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZeroTrustTunnelEditResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZeroTrustTunnelEditResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustTunnelEditResponseTunnelCfdTunnel{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustTunnelEditResponseTunnelWARPConnectorTunnel{}),
+		},
+	)
 }
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.

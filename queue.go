@@ -200,6 +200,10 @@ func init() {
 		reflect.TypeOf((*QueueDeleteResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(QueueDeleteResponseArray{}),
+		},
+		apijson.UnionVariant{
 			TypeFilter: gjson.String,
 			Type:       reflect.TypeOf(shared.UnionString("")),
 		},

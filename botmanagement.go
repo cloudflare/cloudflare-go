@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/tidwall/gjson"
 )
 
 // BotManagementService contains methods and other services that help with
@@ -76,7 +77,26 @@ type BotManagementUpdateResponse interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*BotManagementUpdateResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*BotManagementUpdateResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(BotManagementUpdateResponseBotManagementBotFightModeConfig{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(BotManagementUpdateResponseBotManagementSbfmDefinitelyConfig{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(BotManagementUpdateResponseBotManagementSbfmLikelyConfig{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(BotManagementUpdateResponseBotManagementBmSubscriptionConfig{}),
+		},
+	)
 }
 
 type BotManagementUpdateResponseBotManagementBotFightModeConfig struct {
@@ -298,7 +318,26 @@ type BotManagementGetResponse interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*BotManagementGetResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*BotManagementGetResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(BotManagementGetResponseBotManagementBotFightModeConfig{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(BotManagementGetResponseBotManagementSbfmDefinitelyConfig{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(BotManagementGetResponseBotManagementSbfmLikelyConfig{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(BotManagementGetResponseBotManagementBmSubscriptionConfig{}),
+		},
+	)
 }
 
 type BotManagementGetResponseBotManagementBotFightModeConfig struct {

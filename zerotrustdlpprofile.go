@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/tidwall/gjson"
 )
 
 // ZeroTrustDLPProfileService contains methods and other services that help with
@@ -71,7 +72,22 @@ type ZeroTrustDLPProfileListResponse interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZeroTrustDLPProfileListResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZeroTrustDLPProfileListResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDLPProfileListResponseDLPPredefinedProfile{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDLPProfileListResponseDLPCustomProfile{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDLPProfileListResponseDLPIntegrationProfile{}),
+		},
+	)
 }
 
 type ZeroTrustDLPProfileListResponseDLPPredefinedProfile struct {
@@ -484,7 +500,22 @@ type ZeroTrustDLPProfileGetResponse interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZeroTrustDLPProfileGetResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZeroTrustDLPProfileGetResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDLPProfileGetResponseDLPPredefinedProfile{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDLPProfileGetResponseDLPCustomProfile{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDLPProfileGetResponseDLPIntegrationProfile{}),
+		},
+	)
 }
 
 type ZeroTrustDLPProfileGetResponseDLPPredefinedProfile struct {

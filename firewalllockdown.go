@@ -16,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/tidwall/gjson"
 )
 
 // FirewallLockdownService contains methods and other services that help with
@@ -169,7 +170,18 @@ type FirewallLockdownNewResponseConfigurations interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*FirewallLockdownNewResponseConfigurations)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*FirewallLockdownNewResponseConfigurations)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(FirewallLockdownNewResponseConfigurationsLegacyJhsSchemasIPConfiguration{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(FirewallLockdownNewResponseConfigurationsLegacyJhsSchemasCidrConfiguration{}),
+		},
+	)
 }
 
 type FirewallLockdownNewResponseConfigurationsLegacyJhsSchemasIPConfiguration struct {
@@ -305,7 +317,18 @@ type FirewallLockdownUpdateResponseConfigurations interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*FirewallLockdownUpdateResponseConfigurations)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*FirewallLockdownUpdateResponseConfigurations)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasIPConfiguration{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasCidrConfiguration{}),
+		},
+	)
 }
 
 type FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasIPConfiguration struct {
@@ -441,7 +464,18 @@ type FirewallLockdownListResponseConfigurations interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*FirewallLockdownListResponseConfigurations)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*FirewallLockdownListResponseConfigurations)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(FirewallLockdownListResponseConfigurationsLegacyJhsSchemasIPConfiguration{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(FirewallLockdownListResponseConfigurationsLegacyJhsSchemasCidrConfiguration{}),
+		},
+	)
 }
 
 type FirewallLockdownListResponseConfigurationsLegacyJhsSchemasIPConfiguration struct {
@@ -599,7 +633,18 @@ type FirewallLockdownGetResponseConfigurations interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*FirewallLockdownGetResponseConfigurations)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*FirewallLockdownGetResponseConfigurations)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(FirewallLockdownGetResponseConfigurationsLegacyJhsSchemasIPConfiguration{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(FirewallLockdownGetResponseConfigurationsLegacyJhsSchemasCidrConfiguration{}),
+		},
+	)
 }
 
 type FirewallLockdownGetResponseConfigurationsLegacyJhsSchemasIPConfiguration struct {

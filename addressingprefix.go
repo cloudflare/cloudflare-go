@@ -235,6 +235,10 @@ func init() {
 		reflect.TypeOf((*AddressingPrefixDeleteResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AddressingPrefixDeleteResponseArray{}),
+		},
+		apijson.UnionVariant{
 			TypeFilter: gjson.String,
 			Type:       reflect.TypeOf(shared.UnionString("")),
 		},

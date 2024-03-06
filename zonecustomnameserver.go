@@ -75,6 +75,10 @@ func init() {
 		reflect.TypeOf((*ZoneCustomNameserverUpdateResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZoneCustomNameserverUpdateResponseArray{}),
+		},
+		apijson.UnionVariant{
 			TypeFilter: gjson.String,
 			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
@@ -95,6 +99,10 @@ func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*ZoneCustomNameserverGetResponse)(nil)).Elem(),
 		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZoneCustomNameserverGetResponseArray{}),
+		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
 			Type:       reflect.TypeOf(shared.UnionString("")),

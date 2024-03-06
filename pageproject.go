@@ -119,6 +119,10 @@ func init() {
 		reflect.TypeOf((*PageProjectNewResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(PageProjectNewResponseArray{}),
+		},
+		apijson.UnionVariant{
 			TypeFilter: gjson.String,
 			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
@@ -292,6 +296,10 @@ func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*PageProjectEditResponse)(nil)).Elem(),
 		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(PageProjectEditResponseArray{}),
+		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
 			Type:       reflect.TypeOf(shared.UnionString("")),

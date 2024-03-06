@@ -239,6 +239,10 @@ func init() {
 		reflect.TypeOf((*CloudforceOneRequestPriorityDeleteResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(CloudforceOneRequestPriorityDeleteResponseArray{}),
+		},
+		apijson.UnionVariant{
 			TypeFilter: gjson.String,
 			Type:       reflect.TypeOf(shared.UnionString("")),
 		},

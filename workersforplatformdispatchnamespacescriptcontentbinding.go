@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/tidwall/gjson"
 )
 
 // WorkersForPlatformDispatchNamespaceScriptContentBindingService contains methods
@@ -60,7 +61,42 @@ type WorkersForPlatformDispatchNamespaceScriptContentBindingGetResponse interfac
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*WorkersForPlatformDispatchNamespaceScriptContentBindingGetResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*WorkersForPlatformDispatchNamespaceScriptContentBindingGetResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersKVNamespaceBinding{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersServiceBinding{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersDoBinding{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersR2Binding{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersQueueBinding{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersD1Binding{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersDispatchNamespaceBinding{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCertBinding{}),
+		},
+	)
 }
 
 type WorkersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersKVNamespaceBinding struct {

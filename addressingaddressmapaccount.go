@@ -71,6 +71,10 @@ func init() {
 		reflect.TypeOf((*AddressingAddressMapAccountUpdateResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AddressingAddressMapAccountUpdateResponseArray{}),
+		},
+		apijson.UnionVariant{
 			TypeFilter: gjson.String,
 			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
@@ -92,6 +96,10 @@ func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*AddressingAddressMapAccountDeleteResponse)(nil)).Elem(),
 		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AddressingAddressMapAccountDeleteResponseArray{}),
+		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
 			Type:       reflect.TypeOf(shared.UnionString("")),

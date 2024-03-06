@@ -16,6 +16,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/tidwall/gjson"
 )
 
 // UserFirewallAccessRuleService contains methods and other services that help with
@@ -170,7 +171,30 @@ type UserFirewallAccessRuleNewResponseConfiguration interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*UserFirewallAccessRuleNewResponseConfiguration)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*UserFirewallAccessRuleNewResponseConfiguration)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(UserFirewallAccessRuleNewResponseConfigurationLegacyJhsIPConfiguration{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(UserFirewallAccessRuleNewResponseConfigurationLegacyJhsIPV6Configuration{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(UserFirewallAccessRuleNewResponseConfigurationLegacyJhsCidrConfiguration{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(UserFirewallAccessRuleNewResponseConfigurationLegacyJhsASNConfiguration{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(UserFirewallAccessRuleNewResponseConfigurationLegacyJhsCountryConfiguration{}),
+		},
+	)
 }
 
 type UserFirewallAccessRuleNewResponseConfigurationLegacyJhsIPConfiguration struct {
@@ -441,7 +465,30 @@ type UserFirewallAccessRuleListResponseConfiguration interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*UserFirewallAccessRuleListResponseConfiguration)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*UserFirewallAccessRuleListResponseConfiguration)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(UserFirewallAccessRuleListResponseConfigurationLegacyJhsIPConfiguration{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(UserFirewallAccessRuleListResponseConfigurationLegacyJhsIPV6Configuration{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(UserFirewallAccessRuleListResponseConfigurationLegacyJhsCidrConfiguration{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(UserFirewallAccessRuleListResponseConfigurationLegacyJhsASNConfiguration{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(UserFirewallAccessRuleListResponseConfigurationLegacyJhsCountryConfiguration{}),
+		},
+	)
 }
 
 type UserFirewallAccessRuleListResponseConfigurationLegacyJhsIPConfiguration struct {
@@ -734,7 +781,30 @@ type UserFirewallAccessRuleEditResponseConfiguration interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*UserFirewallAccessRuleEditResponseConfiguration)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*UserFirewallAccessRuleEditResponseConfiguration)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(UserFirewallAccessRuleEditResponseConfigurationLegacyJhsIPConfiguration{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(UserFirewallAccessRuleEditResponseConfigurationLegacyJhsIPV6Configuration{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(UserFirewallAccessRuleEditResponseConfigurationLegacyJhsCidrConfiguration{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(UserFirewallAccessRuleEditResponseConfigurationLegacyJhsASNConfiguration{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(UserFirewallAccessRuleEditResponseConfigurationLegacyJhsCountryConfiguration{}),
+		},
+	)
 }
 
 type UserFirewallAccessRuleEditResponseConfigurationLegacyJhsIPConfiguration struct {

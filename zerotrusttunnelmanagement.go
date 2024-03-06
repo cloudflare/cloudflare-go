@@ -59,6 +59,10 @@ func init() {
 		reflect.TypeOf((*ZeroTrustTunnelManagementNewResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustTunnelManagementNewResponseArray{}),
+		},
+		apijson.UnionVariant{
 			TypeFilter: gjson.String,
 			Type:       reflect.TypeOf(shared.UnionString("")),
 		},

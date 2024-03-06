@@ -71,6 +71,10 @@ func init() {
 		reflect.TypeOf((*ZeroTrustTunnelConfigurationUpdateResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustTunnelConfigurationUpdateResponseArray{}),
+		},
+		apijson.UnionVariant{
 			TypeFilter: gjson.String,
 			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
@@ -92,6 +96,10 @@ func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*ZeroTrustTunnelConfigurationGetResponse)(nil)).Elem(),
 		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustTunnelConfigurationGetResponseArray{}),
+		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
 			Type:       reflect.TypeOf(shared.UnionString("")),

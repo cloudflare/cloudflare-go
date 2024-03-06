@@ -100,6 +100,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(EmailRoutingRoutingDNSGetResponseTTLNumber(0)),
+		},
 	)
 }
 

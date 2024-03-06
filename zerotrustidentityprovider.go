@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/tidwall/gjson"
 )
 
 // ZeroTrustIdentityProviderService contains methods and other services that help
@@ -161,7 +162,66 @@ type ZeroTrustIdentityProviderNewResponse interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZeroTrustIdentityProviderNewResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZeroTrustIdentityProviderNewResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderNewResponseAccessAzureAd{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderNewResponseAccessCentrify{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderNewResponseAccessFacebook{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderNewResponseAccessGitHub{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderNewResponseAccessGoogle{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderNewResponseAccessGoogleApps{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderNewResponseAccessLinkedin{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderNewResponseAccessOidc{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderNewResponseAccessOkta{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderNewResponseAccessOnelogin{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderNewResponseAccessPingone{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderNewResponseAccessSaml{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderNewResponseAccessYandex{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderNewResponseAccessOnetimepin{}),
+		},
+	)
 }
 
 type ZeroTrustIdentityProviderNewResponseAccessAzureAd struct {
@@ -2200,7 +2260,66 @@ type ZeroTrustIdentityProviderUpdateResponse interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZeroTrustIdentityProviderUpdateResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZeroTrustIdentityProviderUpdateResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderUpdateResponseAccessAzureAd{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderUpdateResponseAccessCentrify{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderUpdateResponseAccessFacebook{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderUpdateResponseAccessGitHub{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderUpdateResponseAccessGoogle{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderUpdateResponseAccessGoogleApps{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderUpdateResponseAccessLinkedin{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderUpdateResponseAccessOidc{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderUpdateResponseAccessOkta{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderUpdateResponseAccessOnelogin{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderUpdateResponseAccessPingone{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderUpdateResponseAccessSaml{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderUpdateResponseAccessYandex{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderUpdateResponseAccessOnetimepin{}),
+		},
+	)
 }
 
 type ZeroTrustIdentityProviderUpdateResponseAccessAzureAd struct {
@@ -4246,7 +4365,62 @@ type ZeroTrustIdentityProviderListResponse interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZeroTrustIdentityProviderListResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZeroTrustIdentityProviderListResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderListResponseAccessAzureAd{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderListResponseAccessCentrify{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderListResponseAccessFacebook{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderListResponseAccessGitHub{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderListResponseAccessGoogle{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderListResponseAccessGoogleApps{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderListResponseAccessLinkedin{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderListResponseAccessOidc{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderListResponseAccessOkta{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderListResponseAccessOnelogin{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderListResponseAccessPingone{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderListResponseAccessSaml{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderListResponseAccessYandex{}),
+		},
+	)
 }
 
 type ZeroTrustIdentityProviderListResponseAccessAzureAd struct {
@@ -6202,7 +6376,66 @@ type ZeroTrustIdentityProviderGetResponse interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZeroTrustIdentityProviderGetResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZeroTrustIdentityProviderGetResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderGetResponseAccessAzureAd{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderGetResponseAccessCentrify{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderGetResponseAccessFacebook{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderGetResponseAccessGitHub{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderGetResponseAccessGoogle{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderGetResponseAccessGoogleApps{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderGetResponseAccessLinkedin{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderGetResponseAccessOidc{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderGetResponseAccessOkta{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderGetResponseAccessOnelogin{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderGetResponseAccessPingone{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderGetResponseAccessSaml{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderGetResponseAccessYandex{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustIdentityProviderGetResponseAccessOnetimepin{}),
+		},
+	)
 }
 
 type ZeroTrustIdentityProviderGetResponseAccessAzureAd struct {

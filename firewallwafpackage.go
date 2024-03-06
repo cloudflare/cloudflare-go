@@ -88,7 +88,18 @@ type FirewallWAFPackageListResponse interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*FirewallWAFPackageListResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*FirewallWAFPackageListResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(FirewallWAFPackageListResponseLegacyJhsAPIResponseCollection{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(FirewallWAFPackageListResponseObject{}),
+		},
+	)
 }
 
 type FirewallWAFPackageListResponseLegacyJhsAPIResponseCollection struct {
@@ -186,6 +197,10 @@ func init() {
 		reflect.TypeOf((*FirewallWAFPackageListResponseLegacyJhsAPIResponseCollectionResult)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(FirewallWAFPackageListResponseLegacyJhsAPIResponseCollectionResultArray{}),
+		},
+		apijson.UnionVariant{
 			TypeFilter: gjson.String,
 			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
@@ -267,7 +282,18 @@ type FirewallWAFPackageListResponseObjectResult interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*FirewallWAFPackageListResponseObjectResult)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*FirewallWAFPackageListResponseObjectResult)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(FirewallWAFPackageListResponseObjectResultLegacyJhsPackageDefinition{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(FirewallWAFPackageListResponseObjectResultLegacyJhsAnomalyPackage{}),
+		},
+	)
 }
 
 type FirewallWAFPackageListResponseObjectResultLegacyJhsPackageDefinition struct {
@@ -438,7 +464,18 @@ type FirewallWAFPackageGetResponse interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*FirewallWAFPackageGetResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*FirewallWAFPackageGetResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(FirewallWAFPackageGetResponseLegacyJhsAPIResponseSingle{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(FirewallWAFPackageGetResponseObject{}),
+		},
+	)
 }
 
 type FirewallWAFPackageGetResponseLegacyJhsAPIResponseSingle struct {

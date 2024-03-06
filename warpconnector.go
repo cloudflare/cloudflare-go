@@ -135,7 +135,18 @@ type WARPConnectorNewResponse interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*WARPConnectorNewResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*WARPConnectorNewResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WARPConnectorNewResponseTunnelCfdTunnel{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WARPConnectorNewResponseTunnelWARPConnectorTunnel{}),
+		},
+	)
 }
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
@@ -388,7 +399,18 @@ type WARPConnectorListResponse interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*WARPConnectorListResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*WARPConnectorListResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WARPConnectorListResponseTunnelCfdTunnel{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WARPConnectorListResponseTunnelWARPConnectorTunnel{}),
+		},
+	)
 }
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
@@ -641,7 +663,18 @@ type WARPConnectorDeleteResponse interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*WARPConnectorDeleteResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*WARPConnectorDeleteResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WARPConnectorDeleteResponseTunnelCfdTunnel{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WARPConnectorDeleteResponseTunnelWARPConnectorTunnel{}),
+		},
+	)
 }
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
@@ -895,7 +928,18 @@ type WARPConnectorEditResponse interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*WARPConnectorEditResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*WARPConnectorEditResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WARPConnectorEditResponseTunnelCfdTunnel{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WARPConnectorEditResponseTunnelWARPConnectorTunnel{}),
+		},
+	)
 }
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
@@ -1148,7 +1192,18 @@ type WARPConnectorGetResponse interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*WARPConnectorGetResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*WARPConnectorGetResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WARPConnectorGetResponseTunnelCfdTunnel{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WARPConnectorGetResponseTunnelWARPConnectorTunnel{}),
+		},
+	)
 }
 
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
@@ -1402,6 +1457,10 @@ func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*WARPConnectorTokenResponse)(nil)).Elem(),
 		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WARPConnectorTokenResponseArray{}),
+		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
 			Type:       reflect.TypeOf(shared.UnionString("")),

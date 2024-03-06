@@ -58,6 +58,10 @@ func init() {
 		reflect.TypeOf((*PageProjectDeploymentHistoryLogGetResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(PageProjectDeploymentHistoryLogGetResponseArray{}),
+		},
+		apijson.UnionVariant{
 			TypeFilter: gjson.String,
 			Type:       reflect.TypeOf(shared.UnionString("")),
 		},

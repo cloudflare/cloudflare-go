@@ -111,7 +111,22 @@ type FirewallWAFPackageRuleListResponse interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*FirewallWAFPackageRuleListResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*FirewallWAFPackageRuleListResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(FirewallWAFPackageRuleListResponseWAFManagedRulesAnomalyRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRule{}),
+		},
+	)
 }
 
 // When triggered, anomaly detection WAF rules contribute to an overall threat
@@ -429,7 +444,22 @@ type FirewallWAFPackageRuleEditResponse interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*FirewallWAFPackageRuleEditResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*FirewallWAFPackageRuleEditResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(FirewallWAFPackageRuleEditResponseWAFManagedRulesAnomalyRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(FirewallWAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(FirewallWAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRule{}),
+		},
+	)
 }
 
 // When triggered, anomaly detection WAF rules contribute to an overall threat
@@ -743,6 +773,10 @@ func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*FirewallWAFPackageRuleGetResponse)(nil)).Elem(),
 		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(FirewallWAFPackageRuleGetResponseArray{}),
+		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
 			Type:       reflect.TypeOf(shared.UnionString("")),

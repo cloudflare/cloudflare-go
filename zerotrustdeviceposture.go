@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/tidwall/gjson"
 )
 
 // ZeroTrustDevicePostureService contains methods and other services that help with
@@ -168,7 +169,74 @@ type ZeroTrustDevicePostureNewResponseInput interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZeroTrustDevicePostureNewResponseInput)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZeroTrustDevicePostureNewResponseInput)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureNewResponseInputTeamsDevicesFileInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureNewResponseInputTeamsDevicesUniqueClientIDInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureNewResponseInputTeamsDevicesDomainJoinedInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureNewResponseInputTeamsDevicesOSVersionInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureNewResponseInputTeamsDevicesFirewallInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureNewResponseInputTeamsDevicesSentineloneInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureNewResponseInputTeamsDevicesCarbonblackInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureNewResponseInputTeamsDevicesDiskEncryptionInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureNewResponseInputTeamsDevicesApplicationInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureNewResponseInputTeamsDevicesClientCertificateInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureNewResponseInputTeamsDevicesWorkspaceOneInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureNewResponseInputTeamsDevicesIntuneInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureNewResponseInputTeamsDevicesKolideInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureNewResponseInputTeamsDevicesTaniumInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureNewResponseInputTeamsDevicesSentineloneS2sInputRequest{}),
+		},
+	)
 }
 
 type ZeroTrustDevicePostureNewResponseInputTeamsDevicesFileInputRequest struct {
@@ -1042,7 +1110,74 @@ type ZeroTrustDevicePostureUpdateResponseInput interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZeroTrustDevicePostureUpdateResponseInput)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZeroTrustDevicePostureUpdateResponseInput)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesFileInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesUniqueClientIDInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesDomainJoinedInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesOSVersionInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesFirewallInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesSentineloneInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesCarbonblackInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesDiskEncryptionInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesApplicationInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesClientCertificateInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesWorkspaceOneInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesIntuneInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesKolideInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesSentineloneS2sInputRequest{}),
+		},
+	)
 }
 
 type ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesFileInputRequest struct {
@@ -1916,7 +2051,74 @@ type ZeroTrustDevicePostureListResponseInput interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZeroTrustDevicePostureListResponseInput)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZeroTrustDevicePostureListResponseInput)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureListResponseInputTeamsDevicesFileInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureListResponseInputTeamsDevicesUniqueClientIDInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureListResponseInputTeamsDevicesDomainJoinedInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureListResponseInputTeamsDevicesOSVersionInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureListResponseInputTeamsDevicesFirewallInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureListResponseInputTeamsDevicesSentineloneInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureListResponseInputTeamsDevicesCarbonblackInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureListResponseInputTeamsDevicesDiskEncryptionInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureListResponseInputTeamsDevicesApplicationInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureListResponseInputTeamsDevicesClientCertificateInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureListResponseInputTeamsDevicesWorkspaceOneInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureListResponseInputTeamsDevicesIntuneInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureListResponseInputTeamsDevicesKolideInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureListResponseInputTeamsDevicesTaniumInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureListResponseInputTeamsDevicesSentineloneS2sInputRequest{}),
+		},
+	)
 }
 
 type ZeroTrustDevicePostureListResponseInputTeamsDevicesFileInputRequest struct {
@@ -2812,7 +3014,74 @@ type ZeroTrustDevicePostureGetResponseInput interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZeroTrustDevicePostureGetResponseInput)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZeroTrustDevicePostureGetResponseInput)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureGetResponseInputTeamsDevicesFileInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureGetResponseInputTeamsDevicesUniqueClientIDInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureGetResponseInputTeamsDevicesDomainJoinedInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureGetResponseInputTeamsDevicesOSVersionInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureGetResponseInputTeamsDevicesFirewallInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureGetResponseInputTeamsDevicesSentineloneInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureGetResponseInputTeamsDevicesCarbonblackInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureGetResponseInputTeamsDevicesDiskEncryptionInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureGetResponseInputTeamsDevicesApplicationInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureGetResponseInputTeamsDevicesClientCertificateInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureGetResponseInputTeamsDevicesWorkspaceOneInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureGetResponseInputTeamsDevicesIntuneInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureGetResponseInputTeamsDevicesKolideInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureGetResponseInputTeamsDevicesTaniumInputRequest{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustDevicePostureGetResponseInputTeamsDevicesSentineloneS2sInputRequest{}),
+		},
+	)
 }
 
 type ZeroTrustDevicePostureGetResponseInputTeamsDevicesFileInputRequest struct {

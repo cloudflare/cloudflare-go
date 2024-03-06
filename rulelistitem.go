@@ -201,6 +201,14 @@ func init() {
 			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
 		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleListItemGetResponseListsItemRedirect{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(RuleListItemGetResponseListsItemHostname{}),
+		},
+		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionInt(0)),
 		},

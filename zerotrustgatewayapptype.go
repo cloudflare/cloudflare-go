@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/tidwall/gjson"
 )
 
 // ZeroTrustGatewayAppTypeService contains methods and other services that help
@@ -54,7 +55,18 @@ type ZeroTrustGatewayAppTypeListResponse interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZeroTrustGatewayAppTypeListResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZeroTrustGatewayAppTypeListResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustGatewayAppTypeListResponseZeroTrustGatewayApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustGatewayAppTypeListResponseZeroTrustGatewayApplicationType{}),
+		},
+	)
 }
 
 type ZeroTrustGatewayAppTypeListResponseZeroTrustGatewayApplication struct {

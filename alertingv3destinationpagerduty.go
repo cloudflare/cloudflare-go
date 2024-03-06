@@ -119,6 +119,10 @@ func init() {
 		reflect.TypeOf((*AlertingV3DestinationPagerdutyDeleteResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AlertingV3DestinationPagerdutyDeleteResponseArray{}),
+		},
+		apijson.UnionVariant{
 			TypeFilter: gjson.String,
 			Type:       reflect.TypeOf(shared.UnionString("")),
 		},

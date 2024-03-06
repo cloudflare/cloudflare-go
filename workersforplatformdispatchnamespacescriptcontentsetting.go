@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/tidwall/gjson"
 )
 
 // WorkersForPlatformDispatchNamespaceScriptContentSettingService contains methods
@@ -123,7 +124,42 @@ type WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBinding 
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBinding)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBinding)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindingsWorkersKVNamespaceBinding{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindingsWorkersServiceBinding{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindingsWorkersDoBinding{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindingsWorkersR2Binding{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindingsWorkersQueueBinding{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindingsWorkersD1Binding{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindingsWorkersDispatchNamespaceBinding{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMTLSCertBinding{}),
+		},
+	)
 }
 
 type WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindingsWorkersKVNamespaceBinding struct {
@@ -522,7 +558,18 @@ type WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseMigratio
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseMigrations)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseMigrations)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseMigrationsWorkersSingleStepMigrations{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseMigrationsWorkersSteppedMigrations{}),
+		},
+	)
 }
 
 // A single set of migrations to apply.
@@ -862,7 +909,42 @@ type WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBinding i
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBinding)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBinding)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsWorkersKVNamespaceBinding{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsWorkersServiceBinding{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsWorkersDoBinding{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsWorkersR2Binding{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsWorkersQueueBinding{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsWorkersD1Binding{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsWorkersDispatchNamespaceBinding{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMTLSCertBinding{}),
+		},
+	)
 }
 
 type WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsWorkersKVNamespaceBinding struct {
@@ -1261,7 +1343,18 @@ type WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseMigration
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseMigrations)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseMigrations)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseMigrationsWorkersSingleStepMigrations{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseMigrationsWorkersSteppedMigrations{}),
+		},
+	)
 }
 
 // A single set of migrations to apply.

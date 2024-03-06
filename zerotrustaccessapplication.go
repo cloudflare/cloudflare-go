@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/tidwall/gjson"
 )
 
 // ZeroTrustAccessApplicationService contains methods and other services that help
@@ -184,7 +185,42 @@ type ZeroTrustAccessApplicationNewResponse interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZeroTrustAccessApplicationNewResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZeroTrustAccessApplicationNewResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationNewResponseSelfHostedApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationNewResponseSaaSApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationNewResponseBrowserSSHApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationNewResponseBrowserVncApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationNewResponseAppLauncherApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationNewResponseDeviceEnrollmentPermissionsApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationNewResponseBrowserIsolationPermissionsApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationNewResponseBookmarkApplication{}),
+		},
+	)
 }
 
 type ZeroTrustAccessApplicationNewResponseSelfHostedApplication struct {
@@ -430,7 +466,18 @@ type ZeroTrustAccessApplicationNewResponseSaaSApplicationSaasApp interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZeroTrustAccessApplicationNewResponseSaaSApplicationSaasApp)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZeroTrustAccessApplicationNewResponseSaaSApplicationSaasApp)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationNewResponseSaaSApplicationSaasAppAccessSamlSaasApp{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationNewResponseSaaSApplicationSaasAppAccessOidcSaasApp{}),
+		},
+	)
 }
 
 type ZeroTrustAccessApplicationNewResponseSaaSApplicationSaasAppAccessSamlSaasApp struct {
@@ -1277,7 +1324,42 @@ type ZeroTrustAccessApplicationUpdateResponse interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZeroTrustAccessApplicationUpdateResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZeroTrustAccessApplicationUpdateResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationUpdateResponseSelfHostedApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationUpdateResponseSaaSApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationUpdateResponseBrowserSSHApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationUpdateResponseBrowserVncApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationUpdateResponseAppLauncherApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationUpdateResponseBrowserIsolationPermissionsApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationUpdateResponseBookmarkApplication{}),
+		},
+	)
 }
 
 type ZeroTrustAccessApplicationUpdateResponseSelfHostedApplication struct {
@@ -1524,7 +1606,18 @@ type ZeroTrustAccessApplicationUpdateResponseSaaSApplicationSaasApp interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZeroTrustAccessApplicationUpdateResponseSaaSApplicationSaasApp)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZeroTrustAccessApplicationUpdateResponseSaaSApplicationSaasApp)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationUpdateResponseSaaSApplicationSaasAppAccessSamlSaasApp{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationUpdateResponseSaaSApplicationSaasAppAccessOidcSaasApp{}),
+		},
+	)
 }
 
 type ZeroTrustAccessApplicationUpdateResponseSaaSApplicationSaasAppAccessSamlSaasApp struct {
@@ -2371,7 +2464,42 @@ type ZeroTrustAccessApplicationListResponse interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZeroTrustAccessApplicationListResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZeroTrustAccessApplicationListResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationListResponseSelfHostedApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationListResponseSaaSApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationListResponseBrowserSSHApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationListResponseBrowserVncApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationListResponseAppLauncherApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationListResponseDeviceEnrollmentPermissionsApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationListResponseBrowserIsolationPermissionsApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationListResponseBookmarkApplication{}),
+		},
+	)
 }
 
 type ZeroTrustAccessApplicationListResponseSelfHostedApplication struct {
@@ -2617,7 +2745,18 @@ type ZeroTrustAccessApplicationListResponseSaaSApplicationSaasApp interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZeroTrustAccessApplicationListResponseSaaSApplicationSaasApp)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZeroTrustAccessApplicationListResponseSaaSApplicationSaasApp)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationListResponseSaaSApplicationSaasAppAccessSamlSaasApp{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationListResponseSaaSApplicationSaasAppAccessOidcSaasApp{}),
+		},
+	)
 }
 
 type ZeroTrustAccessApplicationListResponseSaaSApplicationSaasAppAccessSamlSaasApp struct {
@@ -3485,7 +3624,42 @@ type ZeroTrustAccessApplicationGetResponse interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZeroTrustAccessApplicationGetResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZeroTrustAccessApplicationGetResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationGetResponseSelfHostedApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationGetResponseSaaSApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationGetResponseBrowserSSHApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationGetResponseBrowserVncApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationGetResponseAppLauncherApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationGetResponseDeviceEnrollmentPermissionsApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationGetResponseBrowserIsolationPermissionsApplication{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationGetResponseBookmarkApplication{}),
+		},
+	)
 }
 
 type ZeroTrustAccessApplicationGetResponseSelfHostedApplication struct {
@@ -3731,7 +3905,18 @@ type ZeroTrustAccessApplicationGetResponseSaaSApplicationSaasApp interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZeroTrustAccessApplicationGetResponseSaaSApplicationSaasApp)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZeroTrustAccessApplicationGetResponseSaaSApplicationSaasApp)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationGetResponseSaaSApplicationSaasAppAccessSamlSaasApp{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationGetResponseSaaSApplicationSaasAppAccessOidcSaasApp{}),
+		},
+	)
 }
 
 type ZeroTrustAccessApplicationGetResponseSaaSApplicationSaasAppAccessSamlSaasApp struct {

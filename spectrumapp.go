@@ -230,7 +230,18 @@ type SpectrumAppNewResponseEdgeIPs interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*SpectrumAppNewResponseEdgeIPs)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SpectrumAppNewResponseEdgeIPs)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SpectrumAppNewResponseEdgeIPsSpectrumEdgeIPEyeballIPsVariable{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SpectrumAppNewResponseEdgeIPsSpectrumEdgeIPCustomerOwnedIPsVariable{}),
+		},
+	)
 }
 
 type SpectrumAppNewResponseEdgeIPsSpectrumEdgeIPEyeballIPsVariable struct {
@@ -542,7 +553,18 @@ type SpectrumAppUpdateResponseEdgeIPs interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*SpectrumAppUpdateResponseEdgeIPs)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*SpectrumAppUpdateResponseEdgeIPs)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SpectrumAppUpdateResponseEdgeIPsSpectrumEdgeIPEyeballIPsVariable{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(SpectrumAppUpdateResponseEdgeIPsSpectrumEdgeIPCustomerOwnedIPsVariable{}),
+		},
+	)
 }
 
 type SpectrumAppUpdateResponseEdgeIPsSpectrumEdgeIPEyeballIPsVariable struct {

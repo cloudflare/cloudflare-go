@@ -99,6 +99,10 @@ func init() {
 		reflect.TypeOf((*ZeroTrustNetworkVirtualNetworkNewResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustNetworkVirtualNetworkNewResponseArray{}),
+		},
+		apijson.UnionVariant{
 			TypeFilter: gjson.String,
 			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
@@ -159,6 +163,10 @@ func init() {
 		reflect.TypeOf((*ZeroTrustNetworkVirtualNetworkDeleteResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustNetworkVirtualNetworkDeleteResponseArray{}),
+		},
+		apijson.UnionVariant{
 			TypeFilter: gjson.String,
 			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
@@ -180,6 +188,10 @@ func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*ZeroTrustNetworkVirtualNetworkEditResponse)(nil)).Elem(),
 		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustNetworkVirtualNetworkEditResponseArray{}),
+		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
 			Type:       reflect.TypeOf(shared.UnionString("")),

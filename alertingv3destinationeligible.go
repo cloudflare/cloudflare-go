@@ -58,6 +58,10 @@ func init() {
 		reflect.TypeOf((*AlertingV3DestinationEligibleGetResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(AlertingV3DestinationEligibleGetResponseArray{}),
+		},
+		apijson.UnionVariant{
 			TypeFilter: gjson.String,
 			Type:       reflect.TypeOf(shared.UnionString("")),
 		},

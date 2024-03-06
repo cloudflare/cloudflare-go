@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/tidwall/gjson"
 )
 
 // WorkerScriptBindingService contains methods and other services that help with
@@ -52,7 +53,18 @@ type WorkerScriptBindingGetResponse interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*WorkerScriptBindingGetResponse)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*WorkerScriptBindingGetResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkerScriptBindingGetResponseWorkersKVNamespaceBinding{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(WorkerScriptBindingGetResponseWorkersWasmModuleBinding{}),
+		},
+	)
 }
 
 type WorkerScriptBindingGetResponseWorkersKVNamespaceBinding struct {

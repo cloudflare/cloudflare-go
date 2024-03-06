@@ -172,6 +172,10 @@ func init() {
 		reflect.TypeOf((*FirewallWAFPackageGroupEditResponse)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(FirewallWAFPackageGroupEditResponseArray{}),
+		},
+		apijson.UnionVariant{
 			TypeFilter: gjson.String,
 			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
@@ -192,6 +196,10 @@ func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*FirewallWAFPackageGroupGetResponse)(nil)).Elem(),
 		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(FirewallWAFPackageGroupGetResponseArray{}),
+		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.String,
 			Type:       reflect.TypeOf(shared.UnionString("")),

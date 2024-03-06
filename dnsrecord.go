@@ -433,6 +433,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordNewResponseATTLNumber(0)),
+		},
 	)
 }
 
@@ -563,6 +567,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordNewResponseAAAATTLNumber(0)),
 		},
 	)
 }
@@ -722,6 +730,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordNewResponseCAATTLNumber(0)),
 		},
 	)
 }
@@ -885,6 +897,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordNewResponseCertTTLNumber(0)),
+		},
 	)
 }
 
@@ -1015,6 +1031,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordNewResponseCNAMETTLNumber(0)),
 		},
 	)
 }
@@ -1178,6 +1198,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordNewResponseDNSKEYTTLNumber(0)),
+		},
 	)
 }
 
@@ -1340,6 +1364,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordNewResponseDSTTLNumber(0)),
+		},
 	)
 }
 
@@ -1498,6 +1526,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordNewResponseHTTPSTTLNumber(0)),
 		},
 	)
 }
@@ -1701,6 +1733,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordNewResponseLOCTTLNumber(0)),
+		},
 	)
 }
 
@@ -1831,6 +1867,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordNewResponseMXTTLNumber(0)),
 		},
 	)
 }
@@ -2000,6 +2040,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordNewResponseNAPTRTTLNumber(0)),
+		},
 	)
 }
 
@@ -2127,6 +2171,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordNewResponseNSTTLNumber(0)),
+		},
 	)
 }
 
@@ -2253,6 +2301,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordNewResponsePTRTTLNumber(0)),
 		},
 	)
 }
@@ -2415,6 +2467,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordNewResponseSmimeaTTLNumber(0)),
 		},
 	)
 }
@@ -2597,6 +2653,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordNewResponseSRVTTLNumber(0)),
+		},
 	)
 }
 
@@ -2756,6 +2816,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordNewResponseSSHFPTTLNumber(0)),
+		},
 	)
 }
 
@@ -2914,6 +2978,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordNewResponseSVCBTTLNumber(0)),
 		},
 	)
 }
@@ -3077,6 +3145,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordNewResponseTLSATTLNumber(0)),
+		},
 	)
 }
 
@@ -3203,6 +3275,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordNewResponseTXTTTLNumber(0)),
 		},
 	)
 }
@@ -3363,6 +3439,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordNewResponseURITTLNumber(0)),
 		},
 	)
 }
@@ -3616,6 +3696,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordUpdateResponseATTLNumber(0)),
+		},
 	)
 }
 
@@ -3747,6 +3831,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordUpdateResponseAAAATTLNumber(0)),
 		},
 	)
 }
@@ -3906,6 +3994,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordUpdateResponseCAATTLNumber(0)),
 		},
 	)
 }
@@ -4070,6 +4162,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordUpdateResponseCertTTLNumber(0)),
+		},
 	)
 }
 
@@ -4201,6 +4297,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordUpdateResponseCNAMETTLNumber(0)),
 		},
 	)
 }
@@ -4365,6 +4465,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordUpdateResponseDNSKEYTTLNumber(0)),
+		},
 	)
 }
 
@@ -4527,6 +4631,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordUpdateResponseDSTTLNumber(0)),
+		},
 	)
 }
 
@@ -4686,6 +4794,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordUpdateResponseHTTPSTTLNumber(0)),
 		},
 	)
 }
@@ -4889,6 +5001,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordUpdateResponseLOCTTLNumber(0)),
+		},
 	)
 }
 
@@ -5019,6 +5135,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordUpdateResponseMXTTLNumber(0)),
 		},
 	)
 }
@@ -5189,6 +5309,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordUpdateResponseNAPTRTTLNumber(0)),
+		},
 	)
 }
 
@@ -5316,6 +5440,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordUpdateResponseNSTTLNumber(0)),
+		},
 	)
 }
 
@@ -5442,6 +5570,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordUpdateResponsePTRTTLNumber(0)),
 		},
 	)
 }
@@ -5605,6 +5737,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordUpdateResponseSmimeaTTLNumber(0)),
 		},
 	)
 }
@@ -5787,6 +5923,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordUpdateResponseSRVTTLNumber(0)),
+		},
 	)
 }
 
@@ -5947,6 +6087,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordUpdateResponseSSHFPTTLNumber(0)),
+		},
 	)
 }
 
@@ -6106,6 +6250,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordUpdateResponseSVCBTTLNumber(0)),
 		},
 	)
 }
@@ -6270,6 +6418,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordUpdateResponseTLSATTLNumber(0)),
+		},
 	)
 }
 
@@ -6396,6 +6548,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordUpdateResponseTXTTTLNumber(0)),
 		},
 	)
 }
@@ -6556,6 +6712,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordUpdateResponseURITTLNumber(0)),
 		},
 	)
 }
@@ -6809,6 +6969,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordListResponseATTLNumber(0)),
+		},
 	)
 }
 
@@ -6939,6 +7103,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordListResponseAAAATTLNumber(0)),
 		},
 	)
 }
@@ -7098,6 +7266,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordListResponseCAATTLNumber(0)),
 		},
 	)
 }
@@ -7261,6 +7433,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordListResponseCertTTLNumber(0)),
+		},
 	)
 }
 
@@ -7391,6 +7567,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordListResponseCNAMETTLNumber(0)),
 		},
 	)
 }
@@ -7555,6 +7735,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordListResponseDNSKEYTTLNumber(0)),
+		},
 	)
 }
 
@@ -7717,6 +7901,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordListResponseDSTTLNumber(0)),
+		},
 	)
 }
 
@@ -7875,6 +8063,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordListResponseHTTPSTTLNumber(0)),
 		},
 	)
 }
@@ -8078,6 +8270,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordListResponseLOCTTLNumber(0)),
+		},
 	)
 }
 
@@ -8208,6 +8404,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordListResponseMXTTLNumber(0)),
 		},
 	)
 }
@@ -8377,6 +8577,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordListResponseNAPTRTTLNumber(0)),
+		},
 	)
 }
 
@@ -8504,6 +8708,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordListResponseNSTTLNumber(0)),
+		},
 	)
 }
 
@@ -8630,6 +8838,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordListResponsePTRTTLNumber(0)),
 		},
 	)
 }
@@ -8793,6 +9005,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordListResponseSmimeaTTLNumber(0)),
 		},
 	)
 }
@@ -8975,6 +9191,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordListResponseSRVTTLNumber(0)),
+		},
 	)
 }
 
@@ -9134,6 +9354,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordListResponseSSHFPTTLNumber(0)),
+		},
 	)
 }
 
@@ -9292,6 +9516,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordListResponseSVCBTTLNumber(0)),
 		},
 	)
 }
@@ -9455,6 +9683,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordListResponseTLSATTLNumber(0)),
+		},
 	)
 }
 
@@ -9581,6 +9813,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordListResponseTXTTTLNumber(0)),
 		},
 	)
 }
@@ -9741,6 +9977,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordListResponseURITTLNumber(0)),
 		},
 	)
 }
@@ -10016,6 +10256,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordEditResponseATTLNumber(0)),
+		},
 	)
 }
 
@@ -10146,6 +10390,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordEditResponseAAAATTLNumber(0)),
 		},
 	)
 }
@@ -10305,6 +10553,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordEditResponseCAATTLNumber(0)),
 		},
 	)
 }
@@ -10468,6 +10720,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordEditResponseCertTTLNumber(0)),
+		},
 	)
 }
 
@@ -10598,6 +10854,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordEditResponseCNAMETTLNumber(0)),
 		},
 	)
 }
@@ -10762,6 +11022,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordEditResponseDNSKEYTTLNumber(0)),
+		},
 	)
 }
 
@@ -10924,6 +11188,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordEditResponseDSTTLNumber(0)),
+		},
 	)
 }
 
@@ -11082,6 +11350,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordEditResponseHTTPSTTLNumber(0)),
 		},
 	)
 }
@@ -11285,6 +11557,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordEditResponseLOCTTLNumber(0)),
+		},
 	)
 }
 
@@ -11415,6 +11691,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordEditResponseMXTTLNumber(0)),
 		},
 	)
 }
@@ -11584,6 +11864,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordEditResponseNAPTRTTLNumber(0)),
+		},
 	)
 }
 
@@ -11711,6 +11995,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordEditResponseNSTTLNumber(0)),
+		},
 	)
 }
 
@@ -11837,6 +12125,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordEditResponsePTRTTLNumber(0)),
 		},
 	)
 }
@@ -12000,6 +12292,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordEditResponseSmimeaTTLNumber(0)),
 		},
 	)
 }
@@ -12182,6 +12478,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordEditResponseSRVTTLNumber(0)),
+		},
 	)
 }
 
@@ -12341,6 +12641,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordEditResponseSSHFPTTLNumber(0)),
+		},
 	)
 }
 
@@ -12499,6 +12803,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordEditResponseSVCBTTLNumber(0)),
 		},
 	)
 }
@@ -12662,6 +12970,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordEditResponseTLSATTLNumber(0)),
+		},
 	)
 }
 
@@ -12788,6 +13100,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordEditResponseTXTTTLNumber(0)),
 		},
 	)
 }
@@ -12948,6 +13264,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordEditResponseURITTLNumber(0)),
 		},
 	)
 }
@@ -13201,6 +13521,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordGetResponseATTLNumber(0)),
+		},
 	)
 }
 
@@ -13331,6 +13655,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordGetResponseAAAATTLNumber(0)),
 		},
 	)
 }
@@ -13490,6 +13818,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordGetResponseCAATTLNumber(0)),
 		},
 	)
 }
@@ -13653,6 +13985,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordGetResponseCertTTLNumber(0)),
+		},
 	)
 }
 
@@ -13783,6 +14119,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordGetResponseCNAMETTLNumber(0)),
 		},
 	)
 }
@@ -13946,6 +14286,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordGetResponseDNSKEYTTLNumber(0)),
+		},
 	)
 }
 
@@ -14108,6 +14452,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordGetResponseDSTTLNumber(0)),
+		},
 	)
 }
 
@@ -14266,6 +14614,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordGetResponseHTTPSTTLNumber(0)),
 		},
 	)
 }
@@ -14469,6 +14821,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordGetResponseLOCTTLNumber(0)),
+		},
 	)
 }
 
@@ -14599,6 +14955,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordGetResponseMXTTLNumber(0)),
 		},
 	)
 }
@@ -14768,6 +15128,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordGetResponseNAPTRTTLNumber(0)),
+		},
 	)
 }
 
@@ -14895,6 +15259,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordGetResponseNSTTLNumber(0)),
+		},
 	)
 }
 
@@ -15021,6 +15389,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordGetResponsePTRTTLNumber(0)),
 		},
 	)
 }
@@ -15183,6 +15555,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordGetResponseSmimeaTTLNumber(0)),
 		},
 	)
 }
@@ -15365,6 +15741,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordGetResponseSRVTTLNumber(0)),
+		},
 	)
 }
 
@@ -15524,6 +15904,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordGetResponseSSHFPTTLNumber(0)),
+		},
 	)
 }
 
@@ -15682,6 +16066,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordGetResponseSVCBTTLNumber(0)),
 		},
 	)
 }
@@ -15845,6 +16233,10 @@ func init() {
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
 		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordGetResponseTLSATTLNumber(0)),
+		},
 	)
 }
 
@@ -15971,6 +16363,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordGetResponseTXTTTLNumber(0)),
 		},
 	)
 }
@@ -16131,6 +16527,10 @@ func init() {
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
 			Type:       reflect.TypeOf(shared.UnionFloat(0)),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.Number,
+			Type:       reflect.TypeOf(DNSRecordGetResponseURITTLNumber(0)),
 		},
 	)
 }

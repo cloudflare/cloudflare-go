@@ -13,6 +13,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/tidwall/gjson"
 )
 
 // ZeroTrustAccessApplicationPolicyService contains methods and other services that
@@ -280,7 +281,86 @@ type ZeroTrustAccessApplicationPolicyNewResponseExclude interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZeroTrustAccessApplicationPolicyNewResponseExclude)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZeroTrustAccessApplicationPolicyNewResponseExclude)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessEmailRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessEmailListRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessDomainRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessEveryoneRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessIPRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessIPListRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessCertificateRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessAccessGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessAzureGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessGitHubOrganizationRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessGsuiteGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessOktaGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessSamlGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessServiceTokenRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessAnyValidServiceTokenRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessExternalEvaluationRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessCountryRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessAuthenticationMethodRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessDevicePostureRule{}),
+		},
+	)
 }
 
 // Matches a specific email.
@@ -1194,7 +1274,86 @@ type ZeroTrustAccessApplicationPolicyNewResponseInclude interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZeroTrustAccessApplicationPolicyNewResponseInclude)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZeroTrustAccessApplicationPolicyNewResponseInclude)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessEmailRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessEmailListRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessDomainRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessEveryoneRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessIPRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessIPListRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessCertificateRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessAccessGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessAzureGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessGitHubOrganizationRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessGsuiteGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessOktaGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessSamlGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessServiceTokenRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessAnyValidServiceTokenRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessExternalEvaluationRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessCountryRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessAuthenticationMethodRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessDevicePostureRule{}),
+		},
+	)
 }
 
 // Matches a specific email.
@@ -2108,7 +2267,86 @@ type ZeroTrustAccessApplicationPolicyNewResponseRequire interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZeroTrustAccessApplicationPolicyNewResponseRequire)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZeroTrustAccessApplicationPolicyNewResponseRequire)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseRequireAccessEmailRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseRequireAccessEmailListRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseRequireAccessDomainRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseRequireAccessEveryoneRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseRequireAccessIPRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseRequireAccessIPListRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseRequireAccessCertificateRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseRequireAccessAccessGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseRequireAccessAzureGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseRequireAccessGitHubOrganizationRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseRequireAccessGsuiteGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseRequireAccessOktaGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseRequireAccessSamlGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseRequireAccessServiceTokenRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseRequireAccessAnyValidServiceTokenRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseRequireAccessExternalEvaluationRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseRequireAccessCountryRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseRequireAccessAuthenticationMethodRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyNewResponseRequireAccessDevicePostureRule{}),
+		},
+	)
 }
 
 // Matches a specific email.
@@ -3133,7 +3371,86 @@ type ZeroTrustAccessApplicationPolicyUpdateResponseExclude interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZeroTrustAccessApplicationPolicyUpdateResponseExclude)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZeroTrustAccessApplicationPolicyUpdateResponseExclude)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessEmailRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessEmailListRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessDomainRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessEveryoneRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessIPRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessIPListRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessCertificateRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessAccessGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessAzureGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessGitHubOrganizationRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessGsuiteGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessOktaGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessSamlGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessServiceTokenRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessAnyValidServiceTokenRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessExternalEvaluationRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessCountryRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessAuthenticationMethodRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessDevicePostureRule{}),
+		},
+	)
 }
 
 // Matches a specific email.
@@ -4048,7 +4365,86 @@ type ZeroTrustAccessApplicationPolicyUpdateResponseInclude interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZeroTrustAccessApplicationPolicyUpdateResponseInclude)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZeroTrustAccessApplicationPolicyUpdateResponseInclude)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessEmailRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessEmailListRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessDomainRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessEveryoneRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessIPRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessIPListRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessCertificateRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessAccessGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessAzureGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessGitHubOrganizationRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessGsuiteGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessOktaGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessSamlGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessServiceTokenRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessAnyValidServiceTokenRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessExternalEvaluationRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessCountryRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessAuthenticationMethodRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessDevicePostureRule{}),
+		},
+	)
 }
 
 // Matches a specific email.
@@ -4963,7 +5359,86 @@ type ZeroTrustAccessApplicationPolicyUpdateResponseRequire interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZeroTrustAccessApplicationPolicyUpdateResponseRequire)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZeroTrustAccessApplicationPolicyUpdateResponseRequire)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessEmailRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessEmailListRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessDomainRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessEveryoneRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessIPRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessIPListRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessCertificateRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessAccessGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessAzureGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessGitHubOrganizationRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessGsuiteGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessOktaGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessSamlGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessServiceTokenRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessAnyValidServiceTokenRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessExternalEvaluationRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessCountryRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessAuthenticationMethodRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessDevicePostureRule{}),
+		},
+	)
 }
 
 // Matches a specific email.
@@ -5987,7 +6462,86 @@ type ZeroTrustAccessApplicationPolicyListResponseExclude interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZeroTrustAccessApplicationPolicyListResponseExclude)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZeroTrustAccessApplicationPolicyListResponseExclude)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseExcludeAccessEmailRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseExcludeAccessEmailListRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseExcludeAccessDomainRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseExcludeAccessEveryoneRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseExcludeAccessIPRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseExcludeAccessIPListRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseExcludeAccessCertificateRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseExcludeAccessAccessGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseExcludeAccessAzureGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseExcludeAccessGitHubOrganizationRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseExcludeAccessGsuiteGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseExcludeAccessOktaGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseExcludeAccessSamlGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseExcludeAccessServiceTokenRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseExcludeAccessAnyValidServiceTokenRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseExcludeAccessExternalEvaluationRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseExcludeAccessCountryRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseExcludeAccessAuthenticationMethodRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseExcludeAccessDevicePostureRule{}),
+		},
+	)
 }
 
 // Matches a specific email.
@@ -6901,7 +7455,86 @@ type ZeroTrustAccessApplicationPolicyListResponseInclude interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZeroTrustAccessApplicationPolicyListResponseInclude)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZeroTrustAccessApplicationPolicyListResponseInclude)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseIncludeAccessEmailRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseIncludeAccessEmailListRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseIncludeAccessDomainRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseIncludeAccessEveryoneRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseIncludeAccessIPRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseIncludeAccessIPListRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseIncludeAccessCertificateRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseIncludeAccessAccessGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseIncludeAccessAzureGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseIncludeAccessGitHubOrganizationRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseIncludeAccessGsuiteGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseIncludeAccessOktaGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseIncludeAccessSamlGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseIncludeAccessServiceTokenRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseIncludeAccessAnyValidServiceTokenRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseIncludeAccessExternalEvaluationRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseIncludeAccessCountryRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseIncludeAccessAuthenticationMethodRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseIncludeAccessDevicePostureRule{}),
+		},
+	)
 }
 
 // Matches a specific email.
@@ -7815,7 +8448,86 @@ type ZeroTrustAccessApplicationPolicyListResponseRequire interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZeroTrustAccessApplicationPolicyListResponseRequire)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZeroTrustAccessApplicationPolicyListResponseRequire)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseRequireAccessEmailRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseRequireAccessEmailListRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseRequireAccessDomainRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseRequireAccessEveryoneRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseRequireAccessIPRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseRequireAccessIPListRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseRequireAccessCertificateRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseRequireAccessAccessGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseRequireAccessAzureGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseRequireAccessGitHubOrganizationRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseRequireAccessGsuiteGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseRequireAccessOktaGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseRequireAccessSamlGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseRequireAccessServiceTokenRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseRequireAccessAnyValidServiceTokenRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseRequireAccessExternalEvaluationRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseRequireAccessCountryRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseRequireAccessAuthenticationMethodRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyListResponseRequireAccessDevicePostureRule{}),
+		},
+	)
 }
 
 // Matches a specific email.
@@ -8861,7 +9573,86 @@ type ZeroTrustAccessApplicationPolicyGetResponseExclude interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZeroTrustAccessApplicationPolicyGetResponseExclude)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZeroTrustAccessApplicationPolicyGetResponseExclude)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessEmailRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessEmailListRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessDomainRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessEveryoneRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessIPRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessIPListRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessCertificateRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessAccessGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessAzureGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessGitHubOrganizationRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessGsuiteGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessOktaGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessSamlGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessServiceTokenRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessAnyValidServiceTokenRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessExternalEvaluationRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessCountryRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessAuthenticationMethodRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessDevicePostureRule{}),
+		},
+	)
 }
 
 // Matches a specific email.
@@ -9775,7 +10566,86 @@ type ZeroTrustAccessApplicationPolicyGetResponseInclude interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZeroTrustAccessApplicationPolicyGetResponseInclude)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZeroTrustAccessApplicationPolicyGetResponseInclude)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessEmailRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessEmailListRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessDomainRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessEveryoneRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessIPRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessIPListRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessCertificateRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessAccessGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessAzureGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessGitHubOrganizationRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessGsuiteGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessOktaGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessSamlGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessServiceTokenRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessAnyValidServiceTokenRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessExternalEvaluationRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessCountryRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessAuthenticationMethodRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessDevicePostureRule{}),
+		},
+	)
 }
 
 // Matches a specific email.
@@ -10689,7 +11559,86 @@ type ZeroTrustAccessApplicationPolicyGetResponseRequire interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZeroTrustAccessApplicationPolicyGetResponseRequire)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*ZeroTrustAccessApplicationPolicyGetResponseRequire)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseRequireAccessEmailRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseRequireAccessEmailListRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseRequireAccessDomainRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseRequireAccessEveryoneRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseRequireAccessIPRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseRequireAccessIPListRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseRequireAccessCertificateRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseRequireAccessAccessGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseRequireAccessAzureGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseRequireAccessGitHubOrganizationRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseRequireAccessGsuiteGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseRequireAccessOktaGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseRequireAccessSamlGroupRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseRequireAccessServiceTokenRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseRequireAccessAnyValidServiceTokenRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseRequireAccessExternalEvaluationRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseRequireAccessCountryRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseRequireAccessAuthenticationMethodRule{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ZeroTrustAccessApplicationPolicyGetResponseRequireAccessDevicePostureRule{}),
+		},
+	)
 }
 
 // Matches a specific email.

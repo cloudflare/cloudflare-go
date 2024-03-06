@@ -15,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
 	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/tidwall/gjson"
 )
 
 // FirewallRuleService contains methods and other services that help with
@@ -190,7 +191,18 @@ type FirewallRuleNewResponseFilter interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*FirewallRuleNewResponseFilter)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*FirewallRuleNewResponseFilter)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(FirewallRuleNewResponseFilterLegacyJhsFilter{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(FirewallRuleNewResponseFilterLegacyJhsDeletedFilter{}),
+		},
+	)
 }
 
 type FirewallRuleNewResponseFilterLegacyJhsFilter struct {
@@ -336,7 +348,18 @@ type FirewallRuleUpdateResponseFilter interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*FirewallRuleUpdateResponseFilter)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*FirewallRuleUpdateResponseFilter)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(FirewallRuleUpdateResponseFilterLegacyJhsFilter{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(FirewallRuleUpdateResponseFilterLegacyJhsDeletedFilter{}),
+		},
+	)
 }
 
 type FirewallRuleUpdateResponseFilterLegacyJhsFilter struct {
@@ -483,7 +506,18 @@ type FirewallRuleListResponseFilter interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*FirewallRuleListResponseFilter)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*FirewallRuleListResponseFilter)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(FirewallRuleListResponseFilterLegacyJhsFilter{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(FirewallRuleListResponseFilterLegacyJhsDeletedFilter{}),
+		},
+	)
 }
 
 type FirewallRuleListResponseFilterLegacyJhsFilter struct {
@@ -629,7 +663,18 @@ type FirewallRuleDeleteResponseFilter interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*FirewallRuleDeleteResponseFilter)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*FirewallRuleDeleteResponseFilter)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(FirewallRuleDeleteResponseFilterLegacyJhsFilter{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(FirewallRuleDeleteResponseFilterLegacyJhsDeletedFilter{}),
+		},
+	)
 }
 
 type FirewallRuleDeleteResponseFilterLegacyJhsFilter struct {
@@ -776,7 +821,18 @@ type FirewallRuleEditResponseFilter interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*FirewallRuleEditResponseFilter)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*FirewallRuleEditResponseFilter)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(FirewallRuleEditResponseFilterLegacyJhsFilter{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(FirewallRuleEditResponseFilterLegacyJhsDeletedFilter{}),
+		},
+	)
 }
 
 type FirewallRuleEditResponseFilterLegacyJhsFilter struct {
@@ -922,7 +978,18 @@ type FirewallRuleGetResponseFilter interface {
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*FirewallRuleGetResponseFilter)(nil)).Elem(), "")
+	apijson.RegisterUnion(
+		reflect.TypeOf((*FirewallRuleGetResponseFilter)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(FirewallRuleGetResponseFilterLegacyJhsFilter{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(FirewallRuleGetResponseFilterLegacyJhsDeletedFilter{}),
+		},
+	)
 }
 
 type FirewallRuleGetResponseFilterLegacyJhsFilter struct {
