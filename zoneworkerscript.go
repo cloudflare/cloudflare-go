@@ -112,6 +112,10 @@ func (r *ZoneWorkerScriptUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneWorkerScriptUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneWorkerScriptUpdateResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -131,6 +135,10 @@ func (r *ZoneWorkerScriptUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneWorkerScriptUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneWorkerScriptUpdateResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -148,6 +156,10 @@ type zoneWorkerScriptUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneWorkerScriptUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneWorkerScriptUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

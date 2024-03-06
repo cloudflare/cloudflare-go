@@ -247,6 +247,10 @@ func (r *ZoneSettingEditResponseZones0rtt) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEditResponseZones0rttJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingEditResponseZones0rtt) implementsZoneSettingEditResponse() {}
 
 // ID of the zone setting.
@@ -302,6 +306,10 @@ type zoneSettingEditResponseZonesAdvancedDDOSJSON struct {
 
 func (r *ZoneSettingEditResponseZonesAdvancedDDOS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEditResponseZonesAdvancedDDOSJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingEditResponseZonesAdvancedDDOS) implementsZoneSettingEditResponse() {}
@@ -363,6 +371,10 @@ func (r *ZoneSettingEditResponseZonesAlwaysOnline) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEditResponseZonesAlwaysOnlineJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingEditResponseZonesAlwaysOnline) implementsZoneSettingEditResponse() {}
 
 // ID of the zone setting.
@@ -420,6 +432,10 @@ func (r *ZoneSettingEditResponseZonesAlwaysUseHTTPS) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEditResponseZonesAlwaysUseHTTPSJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingEditResponseZonesAlwaysUseHTTPS) implementsZoneSettingEditResponse() {}
 
 // ID of the zone setting.
@@ -473,6 +489,10 @@ type zoneSettingEditResponseZonesAutomaticHTTPSRewritesJSON struct {
 
 func (r *ZoneSettingEditResponseZonesAutomaticHTTPSRewrites) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEditResponseZonesAutomaticHTTPSRewritesJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingEditResponseZonesAutomaticHTTPSRewrites) implementsZoneSettingEditResponse() {}
@@ -531,6 +551,10 @@ func (r *ZoneSettingEditResponseZonesBrotli) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEditResponseZonesBrotliJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingEditResponseZonesBrotli) implementsZoneSettingEditResponse() {}
 
 // ID of the zone setting.
@@ -587,6 +611,10 @@ type zoneSettingEditResponseZonesBrowserCacheTTLJSON struct {
 
 func (r *ZoneSettingEditResponseZonesBrowserCacheTTL) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEditResponseZonesBrowserCacheTTLJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingEditResponseZonesBrowserCacheTTL) implementsZoneSettingEditResponse() {}
@@ -674,6 +702,10 @@ func (r *ZoneSettingEditResponseZonesBrowserCheck) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEditResponseZonesBrowserCheckJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingEditResponseZonesBrowserCheck) implementsZoneSettingEditResponse() {}
 
 // ID of the zone setting.
@@ -731,6 +763,10 @@ type zoneSettingEditResponseZonesCacheLevelJSON struct {
 
 func (r *ZoneSettingEditResponseZonesCacheLevel) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEditResponseZonesCacheLevelJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingEditResponseZonesCacheLevel) implementsZoneSettingEditResponse() {}
@@ -791,6 +827,10 @@ type zoneSettingEditResponseZonesChallengeTTLJSON struct {
 
 func (r *ZoneSettingEditResponseZonesChallengeTTL) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEditResponseZonesChallengeTTLJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingEditResponseZonesChallengeTTL) implementsZoneSettingEditResponse() {}
@@ -861,6 +901,10 @@ func (r *ZoneSettingEditResponseZonesCiphers) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEditResponseZonesCiphersJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingEditResponseZonesCiphers) implementsZoneSettingEditResponse() {}
 
 // ID of the zone setting.
@@ -906,6 +950,10 @@ type zoneSettingEditResponseZonesCNAMEFlatteningJSON struct {
 
 func (r *ZoneSettingEditResponseZonesCNAMEFlattening) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEditResponseZonesCNAMEFlatteningJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingEditResponseZonesCNAMEFlattening) implementsZoneSettingEditResponse() {}
@@ -973,6 +1021,10 @@ func (r *ZoneSettingEditResponseZonesDevelopmentMode) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEditResponseZonesDevelopmentModeJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingEditResponseZonesDevelopmentMode) implementsZoneSettingEditResponse() {}
 
 // ID of the zone setting.
@@ -1031,6 +1083,10 @@ func (r *ZoneSettingEditResponseZonesEarlyHints) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEditResponseZonesEarlyHintsJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingEditResponseZonesEarlyHints) implementsZoneSettingEditResponse() {}
 
 // ID of the zone setting.
@@ -1085,6 +1141,10 @@ type zoneSettingEditResponseZonesEdgeCacheTTLJSON struct {
 
 func (r *ZoneSettingEditResponseZonesEdgeCacheTTL) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEditResponseZonesEdgeCacheTTLJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingEditResponseZonesEdgeCacheTTL) implementsZoneSettingEditResponse() {}
@@ -1162,6 +1222,10 @@ func (r *ZoneSettingEditResponseZonesEmailObfuscation) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEditResponseZonesEmailObfuscationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingEditResponseZonesEmailObfuscation) implementsZoneSettingEditResponse() {}
 
 // ID of the zone setting.
@@ -1217,6 +1281,10 @@ type zoneSettingEditResponseZonesH2PrioritizationJSON struct {
 
 func (r *ZoneSettingEditResponseZonesH2Prioritization) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEditResponseZonesH2PrioritizationJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingEditResponseZonesH2Prioritization) implementsZoneSettingEditResponse() {}
@@ -1281,6 +1349,10 @@ func (r *ZoneSettingEditResponseZonesHotlinkProtection) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEditResponseZonesHotlinkProtectionJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingEditResponseZonesHotlinkProtection) implementsZoneSettingEditResponse() {}
 
 // ID of the zone setting.
@@ -1336,6 +1408,10 @@ func (r *ZoneSettingEditResponseZonesHTTP2) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEditResponseZonesHTTP2JSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingEditResponseZonesHTTP2) implementsZoneSettingEditResponse() {}
 
 // ID of the zone setting.
@@ -1389,6 +1465,10 @@ type zoneSettingEditResponseZonesHTTP3JSON struct {
 
 func (r *ZoneSettingEditResponseZonesHTTP3) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEditResponseZonesHTTP3JSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingEditResponseZonesHTTP3) implementsZoneSettingEditResponse() {}
@@ -1449,6 +1529,10 @@ func (r *ZoneSettingEditResponseZonesImageResizing) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEditResponseZonesImageResizingJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingEditResponseZonesImageResizing) implementsZoneSettingEditResponse() {}
 
 // ID of the zone setting.
@@ -1507,6 +1591,10 @@ func (r *ZoneSettingEditResponseZonesIPGeolocation) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEditResponseZonesIPGeolocationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingEditResponseZonesIPGeolocation) implementsZoneSettingEditResponse() {}
 
 // ID of the zone setting.
@@ -1563,6 +1651,10 @@ func (r *ZoneSettingEditResponseZonesIPV6) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEditResponseZonesIPV6JSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingEditResponseZonesIPV6) implementsZoneSettingEditResponse() {}
 
 // ID of the zone setting.
@@ -1616,6 +1708,10 @@ type zoneSettingEditResponseZonesMaxUploadJSON struct {
 
 func (r *ZoneSettingEditResponseZonesMaxUpload) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEditResponseZonesMaxUploadJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingEditResponseZonesMaxUpload) implementsZoneSettingEditResponse() {}
@@ -1674,6 +1770,10 @@ type zoneSettingEditResponseZonesMinTLSVersionJSON struct {
 
 func (r *ZoneSettingEditResponseZonesMinTLSVersion) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEditResponseZonesMinTLSVersionJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingEditResponseZonesMinTLSVersion) implementsZoneSettingEditResponse() {}
@@ -1735,6 +1835,10 @@ func (r *ZoneSettingEditResponseZonesMinify) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEditResponseZonesMinifyJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingEditResponseZonesMinify) implementsZoneSettingEditResponse() {}
 
 // Zone setting identifier.
@@ -1767,6 +1871,10 @@ type zoneSettingEditResponseZonesMinifyValueJSON struct {
 
 func (r *ZoneSettingEditResponseZonesMinifyValue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEditResponseZonesMinifyValueJSON) RawJSON() string {
+	return r.raw
 }
 
 // Automatically minify all CSS files for your website.
@@ -1834,6 +1942,10 @@ func (r *ZoneSettingEditResponseZonesMirage) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEditResponseZonesMirageJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingEditResponseZonesMirage) implementsZoneSettingEditResponse() {}
 
 // ID of the zone setting.
@@ -1892,6 +2004,10 @@ func (r *ZoneSettingEditResponseZonesMobileRedirect) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEditResponseZonesMobileRedirectJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingEditResponseZonesMobileRedirect) implementsZoneSettingEditResponse() {}
 
 // Identifier of the zone setting.
@@ -1926,6 +2042,10 @@ type zoneSettingEditResponseZonesMobileRedirectValueJSON struct {
 
 func (r *ZoneSettingEditResponseZonesMobileRedirectValue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEditResponseZonesMobileRedirectValueJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether or not mobile redirect is enabled.
@@ -1974,6 +2094,10 @@ func (r *ZoneSettingEditResponseZonesNEL) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEditResponseZonesNELJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingEditResponseZonesNEL) implementsZoneSettingEditResponse() {}
 
 // Zone setting identifier.
@@ -1999,6 +2123,10 @@ type zoneSettingEditResponseZonesNELValueJSON struct {
 
 func (r *ZoneSettingEditResponseZonesNELValue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEditResponseZonesNELValueJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -2037,6 +2165,10 @@ type zoneSettingEditResponseZonesOpportunisticEncryptionJSON struct {
 
 func (r *ZoneSettingEditResponseZonesOpportunisticEncryption) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEditResponseZonesOpportunisticEncryptionJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingEditResponseZonesOpportunisticEncryption) implementsZoneSettingEditResponse() {}
@@ -2095,6 +2227,10 @@ func (r *ZoneSettingEditResponseZonesOpportunisticOnion) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEditResponseZonesOpportunisticOnionJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingEditResponseZonesOpportunisticOnion) implementsZoneSettingEditResponse() {}
 
 // ID of the zone setting.
@@ -2149,6 +2285,10 @@ type zoneSettingEditResponseZonesOrangeToOrangeJSON struct {
 
 func (r *ZoneSettingEditResponseZonesOrangeToOrange) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEditResponseZonesOrangeToOrangeJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingEditResponseZonesOrangeToOrange) implementsZoneSettingEditResponse() {}
@@ -2206,6 +2346,10 @@ type zoneSettingEditResponseZonesOriginErrorPagePassThruJSON struct {
 
 func (r *ZoneSettingEditResponseZonesOriginErrorPagePassThru) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEditResponseZonesOriginErrorPagePassThruJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingEditResponseZonesOriginErrorPagePassThru) implementsZoneSettingEditResponse() {}
@@ -2268,6 +2412,10 @@ func (r *ZoneSettingEditResponseZonesPolish) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEditResponseZonesPolishJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingEditResponseZonesPolish) implementsZoneSettingEditResponse() {}
 
 // ID of the zone setting.
@@ -2325,6 +2473,10 @@ func (r *ZoneSettingEditResponseZonesPrefetchPreload) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEditResponseZonesPrefetchPreloadJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingEditResponseZonesPrefetchPreload) implementsZoneSettingEditResponse() {}
 
 // ID of the zone setting.
@@ -2380,6 +2532,10 @@ func (r *ZoneSettingEditResponseZonesProxyReadTimeout) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEditResponseZonesProxyReadTimeoutJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingEditResponseZonesProxyReadTimeout) implementsZoneSettingEditResponse() {}
 
 // ID of the zone setting.
@@ -2425,6 +2581,10 @@ type zoneSettingEditResponseZonesPseudoIPV4JSON struct {
 
 func (r *ZoneSettingEditResponseZonesPseudoIPV4) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEditResponseZonesPseudoIPV4JSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingEditResponseZonesPseudoIPV4) implementsZoneSettingEditResponse() {}
@@ -2484,6 +2644,10 @@ type zoneSettingEditResponseZonesResponseBufferingJSON struct {
 
 func (r *ZoneSettingEditResponseZonesResponseBuffering) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEditResponseZonesResponseBufferingJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingEditResponseZonesResponseBuffering) implementsZoneSettingEditResponse() {}
@@ -2550,6 +2714,10 @@ func (r *ZoneSettingEditResponseZonesRocketLoader) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEditResponseZonesRocketLoaderJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingEditResponseZonesRocketLoader) implementsZoneSettingEditResponse() {}
 
 // ID of the zone setting.
@@ -2608,6 +2776,10 @@ func (r *ZoneSettingEditResponseZonesSchemasAutomaticPlatformOptimization) Unmar
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEditResponseZonesSchemasAutomaticPlatformOptimizationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingEditResponseZonesSchemasAutomaticPlatformOptimization) implementsZoneSettingEditResponse() {
 }
 
@@ -2658,6 +2830,10 @@ func (r *ZoneSettingEditResponseZonesSchemasAutomaticPlatformOptimizationValue) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEditResponseZonesSchemasAutomaticPlatformOptimizationValueJSON) RawJSON() string {
+	return r.raw
+}
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingEditResponseZonesSchemasAutomaticPlatformOptimizationEditable bool
@@ -2696,6 +2872,10 @@ func (r *ZoneSettingEditResponseZonesSecurityHeader) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEditResponseZonesSecurityHeaderJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingEditResponseZonesSecurityHeader) implementsZoneSettingEditResponse() {}
 
 // ID of the zone's security header.
@@ -2722,6 +2902,10 @@ type zoneSettingEditResponseZonesSecurityHeaderValueJSON struct {
 
 func (r *ZoneSettingEditResponseZonesSecurityHeaderValue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEditResponseZonesSecurityHeaderValueJSON) RawJSON() string {
+	return r.raw
 }
 
 // Strict Transport Security.
@@ -2751,6 +2935,10 @@ type zoneSettingEditResponseZonesSecurityHeaderValueStrictTransportSecurityJSON 
 
 func (r *ZoneSettingEditResponseZonesSecurityHeaderValueStrictTransportSecurity) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEditResponseZonesSecurityHeaderValueStrictTransportSecurityJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -2792,6 +2980,10 @@ type zoneSettingEditResponseZonesSecurityLevelJSON struct {
 
 func (r *ZoneSettingEditResponseZonesSecurityLevel) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEditResponseZonesSecurityLevelJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingEditResponseZonesSecurityLevel) implementsZoneSettingEditResponse() {}
@@ -2863,6 +3055,10 @@ func (r *ZoneSettingEditResponseZonesServerSideExclude) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEditResponseZonesServerSideExcludeJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingEditResponseZonesServerSideExclude) implementsZoneSettingEditResponse() {}
 
 // ID of the zone setting.
@@ -2916,6 +3112,10 @@ type zoneSettingEditResponseZonesSha1SupportJSON struct {
 
 func (r *ZoneSettingEditResponseZonesSha1Support) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEditResponseZonesSha1SupportJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingEditResponseZonesSha1Support) implementsZoneSettingEditResponse() {}
@@ -2973,6 +3173,10 @@ type zoneSettingEditResponseZonesSortQueryStringForCacheJSON struct {
 
 func (r *ZoneSettingEditResponseZonesSortQueryStringForCache) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEditResponseZonesSortQueryStringForCacheJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingEditResponseZonesSortQueryStringForCache) implementsZoneSettingEditResponse() {}
@@ -3045,6 +3249,10 @@ func (r *ZoneSettingEditResponseZonesSSL) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEditResponseZonesSSLJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingEditResponseZonesSSL) implementsZoneSettingEditResponse() {}
 
 // ID of the zone setting.
@@ -3097,6 +3305,10 @@ func (r *ZoneSettingEditResponseZonesSSLRecommender) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEditResponseZonesSSLRecommenderJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingEditResponseZonesSSLRecommender) implementsZoneSettingEditResponse() {}
 
 // Enrollment value for SSL/TLS Recommender.
@@ -3133,6 +3345,10 @@ type zoneSettingEditResponseZonesTls1_2OnlyJSON struct {
 
 func (r *ZoneSettingEditResponseZonesTLS1_2Only) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEditResponseZonesTls1_2OnlyJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingEditResponseZonesTLS1_2Only) implementsZoneSettingEditResponse() {}
@@ -3188,6 +3404,10 @@ type zoneSettingEditResponseZonesTls1_3JSON struct {
 
 func (r *ZoneSettingEditResponseZonesTLS1_3) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEditResponseZonesTls1_3JSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingEditResponseZonesTLS1_3) implementsZoneSettingEditResponse() {}
@@ -3247,6 +3467,10 @@ func (r *ZoneSettingEditResponseZonesTLSClientAuth) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEditResponseZonesTLSClientAuthJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingEditResponseZonesTLSClientAuth) implementsZoneSettingEditResponse() {}
 
 // ID of the zone setting.
@@ -3301,6 +3525,10 @@ type zoneSettingEditResponseZonesTrueClientIPHeaderJSON struct {
 
 func (r *ZoneSettingEditResponseZonesTrueClientIPHeader) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEditResponseZonesTrueClientIPHeaderJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingEditResponseZonesTrueClientIPHeader) implementsZoneSettingEditResponse() {}
@@ -3367,6 +3595,10 @@ func (r *ZoneSettingEditResponseZonesWAF) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEditResponseZonesWAFJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingEditResponseZonesWAF) implementsZoneSettingEditResponse() {}
 
 // ID of the zone setting.
@@ -3422,6 +3654,10 @@ type zoneSettingEditResponseZonesWebpJSON struct {
 
 func (r *ZoneSettingEditResponseZonesWebp) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEditResponseZonesWebpJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingEditResponseZonesWebp) implementsZoneSettingEditResponse() {}
@@ -3483,6 +3719,10 @@ type zoneSettingEditResponseZonesWebsocketsJSON struct {
 
 func (r *ZoneSettingEditResponseZonesWebsockets) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEditResponseZonesWebsocketsJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingEditResponseZonesWebsockets) implementsZoneSettingEditResponse() {}
@@ -3596,6 +3836,10 @@ func (r *ZoneSettingGetResponseZones0rtt) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingGetResponseZones0rttJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingGetResponseZones0rtt) implementsZoneSettingGetResponse() {}
 
 // ID of the zone setting.
@@ -3651,6 +3895,10 @@ type zoneSettingGetResponseZonesAdvancedDDOSJSON struct {
 
 func (r *ZoneSettingGetResponseZonesAdvancedDDOS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingGetResponseZonesAdvancedDDOSJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingGetResponseZonesAdvancedDDOS) implementsZoneSettingGetResponse() {}
@@ -3712,6 +3960,10 @@ func (r *ZoneSettingGetResponseZonesAlwaysOnline) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingGetResponseZonesAlwaysOnlineJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingGetResponseZonesAlwaysOnline) implementsZoneSettingGetResponse() {}
 
 // ID of the zone setting.
@@ -3769,6 +4021,10 @@ func (r *ZoneSettingGetResponseZonesAlwaysUseHTTPS) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingGetResponseZonesAlwaysUseHTTPSJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingGetResponseZonesAlwaysUseHTTPS) implementsZoneSettingGetResponse() {}
 
 // ID of the zone setting.
@@ -3822,6 +4078,10 @@ type zoneSettingGetResponseZonesAutomaticHTTPSRewritesJSON struct {
 
 func (r *ZoneSettingGetResponseZonesAutomaticHTTPSRewrites) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingGetResponseZonesAutomaticHTTPSRewritesJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingGetResponseZonesAutomaticHTTPSRewrites) implementsZoneSettingGetResponse() {}
@@ -3880,6 +4140,10 @@ func (r *ZoneSettingGetResponseZonesBrotli) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingGetResponseZonesBrotliJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingGetResponseZonesBrotli) implementsZoneSettingGetResponse() {}
 
 // ID of the zone setting.
@@ -3936,6 +4200,10 @@ type zoneSettingGetResponseZonesBrowserCacheTTLJSON struct {
 
 func (r *ZoneSettingGetResponseZonesBrowserCacheTTL) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingGetResponseZonesBrowserCacheTTLJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingGetResponseZonesBrowserCacheTTL) implementsZoneSettingGetResponse() {}
@@ -4023,6 +4291,10 @@ func (r *ZoneSettingGetResponseZonesBrowserCheck) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingGetResponseZonesBrowserCheckJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingGetResponseZonesBrowserCheck) implementsZoneSettingGetResponse() {}
 
 // ID of the zone setting.
@@ -4080,6 +4352,10 @@ type zoneSettingGetResponseZonesCacheLevelJSON struct {
 
 func (r *ZoneSettingGetResponseZonesCacheLevel) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingGetResponseZonesCacheLevelJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingGetResponseZonesCacheLevel) implementsZoneSettingGetResponse() {}
@@ -4140,6 +4416,10 @@ type zoneSettingGetResponseZonesChallengeTTLJSON struct {
 
 func (r *ZoneSettingGetResponseZonesChallengeTTL) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingGetResponseZonesChallengeTTLJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingGetResponseZonesChallengeTTL) implementsZoneSettingGetResponse() {}
@@ -4210,6 +4490,10 @@ func (r *ZoneSettingGetResponseZonesCiphers) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingGetResponseZonesCiphersJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingGetResponseZonesCiphers) implementsZoneSettingGetResponse() {}
 
 // ID of the zone setting.
@@ -4255,6 +4539,10 @@ type zoneSettingGetResponseZonesCNAMEFlatteningJSON struct {
 
 func (r *ZoneSettingGetResponseZonesCNAMEFlattening) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingGetResponseZonesCNAMEFlatteningJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingGetResponseZonesCNAMEFlattening) implementsZoneSettingGetResponse() {}
@@ -4322,6 +4610,10 @@ func (r *ZoneSettingGetResponseZonesDevelopmentMode) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingGetResponseZonesDevelopmentModeJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingGetResponseZonesDevelopmentMode) implementsZoneSettingGetResponse() {}
 
 // ID of the zone setting.
@@ -4380,6 +4672,10 @@ func (r *ZoneSettingGetResponseZonesEarlyHints) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingGetResponseZonesEarlyHintsJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingGetResponseZonesEarlyHints) implementsZoneSettingGetResponse() {}
 
 // ID of the zone setting.
@@ -4434,6 +4730,10 @@ type zoneSettingGetResponseZonesEdgeCacheTTLJSON struct {
 
 func (r *ZoneSettingGetResponseZonesEdgeCacheTTL) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingGetResponseZonesEdgeCacheTTLJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingGetResponseZonesEdgeCacheTTL) implementsZoneSettingGetResponse() {}
@@ -4511,6 +4811,10 @@ func (r *ZoneSettingGetResponseZonesEmailObfuscation) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingGetResponseZonesEmailObfuscationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingGetResponseZonesEmailObfuscation) implementsZoneSettingGetResponse() {}
 
 // ID of the zone setting.
@@ -4566,6 +4870,10 @@ type zoneSettingGetResponseZonesH2PrioritizationJSON struct {
 
 func (r *ZoneSettingGetResponseZonesH2Prioritization) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingGetResponseZonesH2PrioritizationJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingGetResponseZonesH2Prioritization) implementsZoneSettingGetResponse() {}
@@ -4630,6 +4938,10 @@ func (r *ZoneSettingGetResponseZonesHotlinkProtection) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingGetResponseZonesHotlinkProtectionJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingGetResponseZonesHotlinkProtection) implementsZoneSettingGetResponse() {}
 
 // ID of the zone setting.
@@ -4685,6 +4997,10 @@ func (r *ZoneSettingGetResponseZonesHTTP2) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingGetResponseZonesHTTP2JSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingGetResponseZonesHTTP2) implementsZoneSettingGetResponse() {}
 
 // ID of the zone setting.
@@ -4738,6 +5054,10 @@ type zoneSettingGetResponseZonesHTTP3JSON struct {
 
 func (r *ZoneSettingGetResponseZonesHTTP3) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingGetResponseZonesHTTP3JSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingGetResponseZonesHTTP3) implementsZoneSettingGetResponse() {}
@@ -4798,6 +5118,10 @@ func (r *ZoneSettingGetResponseZonesImageResizing) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingGetResponseZonesImageResizingJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingGetResponseZonesImageResizing) implementsZoneSettingGetResponse() {}
 
 // ID of the zone setting.
@@ -4856,6 +5180,10 @@ func (r *ZoneSettingGetResponseZonesIPGeolocation) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingGetResponseZonesIPGeolocationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingGetResponseZonesIPGeolocation) implementsZoneSettingGetResponse() {}
 
 // ID of the zone setting.
@@ -4912,6 +5240,10 @@ func (r *ZoneSettingGetResponseZonesIPV6) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingGetResponseZonesIPV6JSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingGetResponseZonesIPV6) implementsZoneSettingGetResponse() {}
 
 // ID of the zone setting.
@@ -4965,6 +5297,10 @@ type zoneSettingGetResponseZonesMaxUploadJSON struct {
 
 func (r *ZoneSettingGetResponseZonesMaxUpload) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingGetResponseZonesMaxUploadJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingGetResponseZonesMaxUpload) implementsZoneSettingGetResponse() {}
@@ -5023,6 +5359,10 @@ type zoneSettingGetResponseZonesMinTLSVersionJSON struct {
 
 func (r *ZoneSettingGetResponseZonesMinTLSVersion) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingGetResponseZonesMinTLSVersionJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingGetResponseZonesMinTLSVersion) implementsZoneSettingGetResponse() {}
@@ -5084,6 +5424,10 @@ func (r *ZoneSettingGetResponseZonesMinify) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingGetResponseZonesMinifyJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingGetResponseZonesMinify) implementsZoneSettingGetResponse() {}
 
 // Zone setting identifier.
@@ -5116,6 +5460,10 @@ type zoneSettingGetResponseZonesMinifyValueJSON struct {
 
 func (r *ZoneSettingGetResponseZonesMinifyValue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingGetResponseZonesMinifyValueJSON) RawJSON() string {
+	return r.raw
 }
 
 // Automatically minify all CSS files for your website.
@@ -5183,6 +5531,10 @@ func (r *ZoneSettingGetResponseZonesMirage) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingGetResponseZonesMirageJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingGetResponseZonesMirage) implementsZoneSettingGetResponse() {}
 
 // ID of the zone setting.
@@ -5241,6 +5593,10 @@ func (r *ZoneSettingGetResponseZonesMobileRedirect) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingGetResponseZonesMobileRedirectJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingGetResponseZonesMobileRedirect) implementsZoneSettingGetResponse() {}
 
 // Identifier of the zone setting.
@@ -5275,6 +5631,10 @@ type zoneSettingGetResponseZonesMobileRedirectValueJSON struct {
 
 func (r *ZoneSettingGetResponseZonesMobileRedirectValue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingGetResponseZonesMobileRedirectValueJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether or not mobile redirect is enabled.
@@ -5323,6 +5683,10 @@ func (r *ZoneSettingGetResponseZonesNEL) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingGetResponseZonesNELJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingGetResponseZonesNEL) implementsZoneSettingGetResponse() {}
 
 // Zone setting identifier.
@@ -5348,6 +5712,10 @@ type zoneSettingGetResponseZonesNELValueJSON struct {
 
 func (r *ZoneSettingGetResponseZonesNELValue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingGetResponseZonesNELValueJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -5386,6 +5754,10 @@ type zoneSettingGetResponseZonesOpportunisticEncryptionJSON struct {
 
 func (r *ZoneSettingGetResponseZonesOpportunisticEncryption) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingGetResponseZonesOpportunisticEncryptionJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingGetResponseZonesOpportunisticEncryption) implementsZoneSettingGetResponse() {}
@@ -5444,6 +5816,10 @@ func (r *ZoneSettingGetResponseZonesOpportunisticOnion) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingGetResponseZonesOpportunisticOnionJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingGetResponseZonesOpportunisticOnion) implementsZoneSettingGetResponse() {}
 
 // ID of the zone setting.
@@ -5498,6 +5874,10 @@ type zoneSettingGetResponseZonesOrangeToOrangeJSON struct {
 
 func (r *ZoneSettingGetResponseZonesOrangeToOrange) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingGetResponseZonesOrangeToOrangeJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingGetResponseZonesOrangeToOrange) implementsZoneSettingGetResponse() {}
@@ -5555,6 +5935,10 @@ type zoneSettingGetResponseZonesOriginErrorPagePassThruJSON struct {
 
 func (r *ZoneSettingGetResponseZonesOriginErrorPagePassThru) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingGetResponseZonesOriginErrorPagePassThruJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingGetResponseZonesOriginErrorPagePassThru) implementsZoneSettingGetResponse() {}
@@ -5617,6 +6001,10 @@ func (r *ZoneSettingGetResponseZonesPolish) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingGetResponseZonesPolishJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingGetResponseZonesPolish) implementsZoneSettingGetResponse() {}
 
 // ID of the zone setting.
@@ -5674,6 +6062,10 @@ func (r *ZoneSettingGetResponseZonesPrefetchPreload) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingGetResponseZonesPrefetchPreloadJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingGetResponseZonesPrefetchPreload) implementsZoneSettingGetResponse() {}
 
 // ID of the zone setting.
@@ -5729,6 +6121,10 @@ func (r *ZoneSettingGetResponseZonesProxyReadTimeout) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingGetResponseZonesProxyReadTimeoutJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingGetResponseZonesProxyReadTimeout) implementsZoneSettingGetResponse() {}
 
 // ID of the zone setting.
@@ -5774,6 +6170,10 @@ type zoneSettingGetResponseZonesPseudoIPV4JSON struct {
 
 func (r *ZoneSettingGetResponseZonesPseudoIPV4) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingGetResponseZonesPseudoIPV4JSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingGetResponseZonesPseudoIPV4) implementsZoneSettingGetResponse() {}
@@ -5833,6 +6233,10 @@ type zoneSettingGetResponseZonesResponseBufferingJSON struct {
 
 func (r *ZoneSettingGetResponseZonesResponseBuffering) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingGetResponseZonesResponseBufferingJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingGetResponseZonesResponseBuffering) implementsZoneSettingGetResponse() {}
@@ -5899,6 +6303,10 @@ func (r *ZoneSettingGetResponseZonesRocketLoader) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingGetResponseZonesRocketLoaderJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingGetResponseZonesRocketLoader) implementsZoneSettingGetResponse() {}
 
 // ID of the zone setting.
@@ -5957,6 +6365,10 @@ func (r *ZoneSettingGetResponseZonesSchemasAutomaticPlatformOptimization) Unmars
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingGetResponseZonesSchemasAutomaticPlatformOptimizationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingGetResponseZonesSchemasAutomaticPlatformOptimization) implementsZoneSettingGetResponse() {
 }
 
@@ -6007,6 +6419,10 @@ func (r *ZoneSettingGetResponseZonesSchemasAutomaticPlatformOptimizationValue) U
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingGetResponseZonesSchemasAutomaticPlatformOptimizationValueJSON) RawJSON() string {
+	return r.raw
+}
+
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
 type ZoneSettingGetResponseZonesSchemasAutomaticPlatformOptimizationEditable bool
@@ -6045,6 +6461,10 @@ func (r *ZoneSettingGetResponseZonesSecurityHeader) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingGetResponseZonesSecurityHeaderJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingGetResponseZonesSecurityHeader) implementsZoneSettingGetResponse() {}
 
 // ID of the zone's security header.
@@ -6071,6 +6491,10 @@ type zoneSettingGetResponseZonesSecurityHeaderValueJSON struct {
 
 func (r *ZoneSettingGetResponseZonesSecurityHeaderValue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingGetResponseZonesSecurityHeaderValueJSON) RawJSON() string {
+	return r.raw
 }
 
 // Strict Transport Security.
@@ -6100,6 +6524,10 @@ type zoneSettingGetResponseZonesSecurityHeaderValueStrictTransportSecurityJSON s
 
 func (r *ZoneSettingGetResponseZonesSecurityHeaderValueStrictTransportSecurity) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingGetResponseZonesSecurityHeaderValueStrictTransportSecurityJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether or not this setting can be modified for this zone (based on your
@@ -6141,6 +6569,10 @@ type zoneSettingGetResponseZonesSecurityLevelJSON struct {
 
 func (r *ZoneSettingGetResponseZonesSecurityLevel) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingGetResponseZonesSecurityLevelJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingGetResponseZonesSecurityLevel) implementsZoneSettingGetResponse() {}
@@ -6212,6 +6644,10 @@ func (r *ZoneSettingGetResponseZonesServerSideExclude) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingGetResponseZonesServerSideExcludeJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingGetResponseZonesServerSideExclude) implementsZoneSettingGetResponse() {}
 
 // ID of the zone setting.
@@ -6265,6 +6701,10 @@ type zoneSettingGetResponseZonesSha1SupportJSON struct {
 
 func (r *ZoneSettingGetResponseZonesSha1Support) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingGetResponseZonesSha1SupportJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingGetResponseZonesSha1Support) implementsZoneSettingGetResponse() {}
@@ -6322,6 +6762,10 @@ type zoneSettingGetResponseZonesSortQueryStringForCacheJSON struct {
 
 func (r *ZoneSettingGetResponseZonesSortQueryStringForCache) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingGetResponseZonesSortQueryStringForCacheJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingGetResponseZonesSortQueryStringForCache) implementsZoneSettingGetResponse() {}
@@ -6394,6 +6838,10 @@ func (r *ZoneSettingGetResponseZonesSSL) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingGetResponseZonesSSLJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingGetResponseZonesSSL) implementsZoneSettingGetResponse() {}
 
 // ID of the zone setting.
@@ -6446,6 +6894,10 @@ func (r *ZoneSettingGetResponseZonesSSLRecommender) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingGetResponseZonesSSLRecommenderJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingGetResponseZonesSSLRecommender) implementsZoneSettingGetResponse() {}
 
 // Enrollment value for SSL/TLS Recommender.
@@ -6482,6 +6934,10 @@ type zoneSettingGetResponseZonesTls1_2OnlyJSON struct {
 
 func (r *ZoneSettingGetResponseZonesTLS1_2Only) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingGetResponseZonesTls1_2OnlyJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingGetResponseZonesTLS1_2Only) implementsZoneSettingGetResponse() {}
@@ -6537,6 +6993,10 @@ type zoneSettingGetResponseZonesTls1_3JSON struct {
 
 func (r *ZoneSettingGetResponseZonesTLS1_3) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingGetResponseZonesTls1_3JSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingGetResponseZonesTLS1_3) implementsZoneSettingGetResponse() {}
@@ -6596,6 +7056,10 @@ func (r *ZoneSettingGetResponseZonesTLSClientAuth) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingGetResponseZonesTLSClientAuthJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingGetResponseZonesTLSClientAuth) implementsZoneSettingGetResponse() {}
 
 // ID of the zone setting.
@@ -6650,6 +7114,10 @@ type zoneSettingGetResponseZonesTrueClientIPHeaderJSON struct {
 
 func (r *ZoneSettingGetResponseZonesTrueClientIPHeader) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingGetResponseZonesTrueClientIPHeaderJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingGetResponseZonesTrueClientIPHeader) implementsZoneSettingGetResponse() {}
@@ -6716,6 +7184,10 @@ func (r *ZoneSettingGetResponseZonesWAF) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingGetResponseZonesWAFJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZoneSettingGetResponseZonesWAF) implementsZoneSettingGetResponse() {}
 
 // ID of the zone setting.
@@ -6771,6 +7243,10 @@ type zoneSettingGetResponseZonesWebpJSON struct {
 
 func (r *ZoneSettingGetResponseZonesWebp) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingGetResponseZonesWebpJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingGetResponseZonesWebp) implementsZoneSettingGetResponse() {}
@@ -6832,6 +7308,10 @@ type zoneSettingGetResponseZonesWebsocketsJSON struct {
 
 func (r *ZoneSettingGetResponseZonesWebsockets) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingGetResponseZonesWebsocketsJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZoneSettingGetResponseZonesWebsockets) implementsZoneSettingGetResponse() {}
@@ -9265,6 +9745,10 @@ func (r *ZoneSettingEditResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingEditResponseEnvelopeErrors struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -9284,6 +9768,10 @@ func (r *ZoneSettingEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingEditResponseEnvelopeMessages struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -9301,6 +9789,10 @@ type zoneSettingEditResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneSettingGetParams struct {
@@ -9332,6 +9824,10 @@ func (r *ZoneSettingGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingGetResponseEnvelopeErrors struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -9351,6 +9847,10 @@ func (r *ZoneSettingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingGetResponseEnvelopeMessages struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -9368,4 +9868,8 @@ type zoneSettingGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }

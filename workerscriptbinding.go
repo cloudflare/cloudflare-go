@@ -80,6 +80,10 @@ func (r *WorkerScriptBindingGetResponseWorkersKVNamespaceBinding) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerScriptBindingGetResponseWorkersKVNamespaceBindingJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r WorkerScriptBindingGetResponseWorkersKVNamespaceBinding) implementsWorkerScriptBindingGetResponse() {
 }
 
@@ -109,6 +113,10 @@ type workerScriptBindingGetResponseWorkersWasmModuleBindingJSON struct {
 
 func (r *WorkerScriptBindingGetResponseWorkersWasmModuleBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerScriptBindingGetResponseWorkersWasmModuleBindingJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r WorkerScriptBindingGetResponseWorkersWasmModuleBinding) implementsWorkerScriptBindingGetResponse() {
@@ -150,6 +158,10 @@ func (r *WorkerScriptBindingGetResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerScriptBindingGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerScriptBindingGetResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -169,6 +181,10 @@ func (r *WorkerScriptBindingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerScriptBindingGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerScriptBindingGetResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -186,6 +202,10 @@ type workerScriptBindingGetResponseEnvelopeMessagesJSON struct {
 
 func (r *WorkerScriptBindingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerScriptBindingGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

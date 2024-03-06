@@ -89,6 +89,10 @@ func (r *ZoneSettingH2PrioritizationEditResponse) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingH2PrioritizationEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // ID of the zone setting.
 type ZoneSettingH2PrioritizationEditResponseID string
 
@@ -143,6 +147,10 @@ type zoneSettingH2PrioritizationGetResponseJSON struct {
 
 func (r *ZoneSettingH2PrioritizationGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingH2PrioritizationGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // ID of the zone setting.
@@ -249,6 +257,10 @@ func (r *ZoneSettingH2PrioritizationEditResponseEnvelope) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingH2PrioritizationEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingH2PrioritizationEditResponseEnvelopeErrors struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -266,6 +278,10 @@ type zoneSettingH2PrioritizationEditResponseEnvelopeErrorsJSON struct {
 
 func (r *ZoneSettingH2PrioritizationEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingH2PrioritizationEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneSettingH2PrioritizationEditResponseEnvelopeMessages struct {
@@ -286,6 +302,10 @@ type zoneSettingH2PrioritizationEditResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingH2PrioritizationEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingH2PrioritizationEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneSettingH2PrioritizationGetParams struct {
@@ -320,6 +340,10 @@ func (r *ZoneSettingH2PrioritizationGetResponseEnvelope) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingH2PrioritizationGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingH2PrioritizationGetResponseEnvelopeErrors struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -339,6 +363,10 @@ func (r *ZoneSettingH2PrioritizationGetResponseEnvelopeErrors) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingH2PrioritizationGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingH2PrioritizationGetResponseEnvelopeMessages struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -356,4 +384,8 @@ type zoneSettingH2PrioritizationGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingH2PrioritizationGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingH2PrioritizationGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }

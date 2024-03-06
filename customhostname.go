@@ -140,6 +140,10 @@ func (r *CustomHostnameNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customHostnameNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // SSL properties for the custom hostname.
 type CustomHostnameNewResponseSSL struct {
 	// Custom hostname SSL identifier tag.
@@ -217,6 +221,10 @@ func (r *CustomHostnameNewResponseSSL) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customHostnameNewResponseSSLJSON) RawJSON() string {
+	return r.raw
+}
+
 // A ubiquitous bundle has the highest probability of being verified everywhere,
 // even by clients using outdated or unusual trust stores. An optimal bundle uses
 // the shortest chain and newest intermediates. And the force bundle verifies the
@@ -277,6 +285,10 @@ type customHostnameNewResponseSSLSettingsJSON struct {
 
 func (r *CustomHostnameNewResponseSSLSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customHostnameNewResponseSSLSettingsJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether or not Early Hints is enabled.
@@ -366,6 +378,10 @@ func (r *CustomHostnameNewResponseSSLValidationError) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customHostnameNewResponseSSLValidationErrorJSON) RawJSON() string {
+	return r.raw
+}
+
 // Certificate's required validation record.
 type CustomHostnameNewResponseSSLValidationRecord struct {
 	// The set of email addresses that the certificate authority (CA) will use to
@@ -401,6 +417,10 @@ func (r *CustomHostnameNewResponseSSLValidationRecord) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customHostnameNewResponseSSLValidationRecordJSON) RawJSON() string {
+	return r.raw
+}
+
 type CustomHostnameListResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
@@ -423,6 +443,10 @@ type customHostnameListResponseJSON struct {
 
 func (r *CustomHostnameListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customHostnameListResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // SSL properties for the custom hostname.
@@ -502,6 +526,10 @@ func (r *CustomHostnameListResponseSSL) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customHostnameListResponseSSLJSON) RawJSON() string {
+	return r.raw
+}
+
 // A ubiquitous bundle has the highest probability of being verified everywhere,
 // even by clients using outdated or unusual trust stores. An optimal bundle uses
 // the shortest chain and newest intermediates. And the force bundle verifies the
@@ -562,6 +590,10 @@ type customHostnameListResponseSSLSettingsJSON struct {
 
 func (r *CustomHostnameListResponseSSLSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customHostnameListResponseSSLSettingsJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether or not Early Hints is enabled.
@@ -651,6 +683,10 @@ func (r *CustomHostnameListResponseSSLValidationError) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customHostnameListResponseSSLValidationErrorJSON) RawJSON() string {
+	return r.raw
+}
+
 // Certificate's required validation record.
 type CustomHostnameListResponseSSLValidationRecord struct {
 	// The set of email addresses that the certificate authority (CA) will use to
@@ -686,6 +722,10 @@ func (r *CustomHostnameListResponseSSLValidationRecord) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customHostnameListResponseSSLValidationRecordJSON) RawJSON() string {
+	return r.raw
+}
+
 type CustomHostnameDeleteResponse struct {
 	// Identifier
 	ID   string                           `json:"id"`
@@ -702,6 +742,10 @@ type customHostnameDeleteResponseJSON struct {
 
 func (r *CustomHostnameDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customHostnameDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type CustomHostnameEditResponse struct {
@@ -726,6 +770,10 @@ type customHostnameEditResponseJSON struct {
 
 func (r *CustomHostnameEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customHostnameEditResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // SSL properties for the custom hostname.
@@ -805,6 +853,10 @@ func (r *CustomHostnameEditResponseSSL) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customHostnameEditResponseSSLJSON) RawJSON() string {
+	return r.raw
+}
+
 // A ubiquitous bundle has the highest probability of being verified everywhere,
 // even by clients using outdated or unusual trust stores. An optimal bundle uses
 // the shortest chain and newest intermediates. And the force bundle verifies the
@@ -865,6 +917,10 @@ type customHostnameEditResponseSSLSettingsJSON struct {
 
 func (r *CustomHostnameEditResponseSSLSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customHostnameEditResponseSSLSettingsJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether or not Early Hints is enabled.
@@ -954,6 +1010,10 @@ func (r *CustomHostnameEditResponseSSLValidationError) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customHostnameEditResponseSSLValidationErrorJSON) RawJSON() string {
+	return r.raw
+}
+
 // Certificate's required validation record.
 type CustomHostnameEditResponseSSLValidationRecord struct {
 	// The set of email addresses that the certificate authority (CA) will use to
@@ -989,6 +1049,10 @@ func (r *CustomHostnameEditResponseSSLValidationRecord) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customHostnameEditResponseSSLValidationRecordJSON) RawJSON() string {
+	return r.raw
+}
+
 type CustomHostnameGetResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
@@ -1011,6 +1075,10 @@ type customHostnameGetResponseJSON struct {
 
 func (r *CustomHostnameGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customHostnameGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // SSL properties for the custom hostname.
@@ -1090,6 +1158,10 @@ func (r *CustomHostnameGetResponseSSL) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customHostnameGetResponseSSLJSON) RawJSON() string {
+	return r.raw
+}
+
 // A ubiquitous bundle has the highest probability of being verified everywhere,
 // even by clients using outdated or unusual trust stores. An optimal bundle uses
 // the shortest chain and newest intermediates. And the force bundle verifies the
@@ -1150,6 +1222,10 @@ type customHostnameGetResponseSSLSettingsJSON struct {
 
 func (r *CustomHostnameGetResponseSSLSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customHostnameGetResponseSSLSettingsJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether or not Early Hints is enabled.
@@ -1239,6 +1315,10 @@ func (r *CustomHostnameGetResponseSSLValidationError) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customHostnameGetResponseSSLValidationErrorJSON) RawJSON() string {
+	return r.raw
+}
+
 // Certificate's required validation record.
 type CustomHostnameGetResponseSSLValidationRecord struct {
 	// The set of email addresses that the certificate authority (CA) will use to
@@ -1272,6 +1352,10 @@ type customHostnameGetResponseSSLValidationRecordJSON struct {
 
 func (r *CustomHostnameGetResponseSSLValidationRecord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customHostnameGetResponseSSLValidationRecordJSON) RawJSON() string {
+	return r.raw
 }
 
 type CustomHostnameNewParams struct {
@@ -1442,6 +1526,10 @@ func (r *CustomHostnameNewResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customHostnameNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CustomHostnameNewResponseEnvelopeErrors struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -1461,6 +1549,10 @@ func (r *CustomHostnameNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customHostnameNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type CustomHostnameNewResponseEnvelopeMessages struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -1478,6 +1570,10 @@ type customHostnameNewResponseEnvelopeMessagesJSON struct {
 
 func (r *CustomHostnameNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customHostnameNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1722,6 +1818,10 @@ func (r *CustomHostnameEditResponseEnvelope) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customHostnameEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CustomHostnameEditResponseEnvelopeErrors struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -1741,6 +1841,10 @@ func (r *CustomHostnameEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customHostnameEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type CustomHostnameEditResponseEnvelopeMessages struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -1758,6 +1862,10 @@ type customHostnameEditResponseEnvelopeMessagesJSON struct {
 
 func (r *CustomHostnameEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customHostnameEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1796,6 +1904,10 @@ func (r *CustomHostnameGetResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customHostnameGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CustomHostnameGetResponseEnvelopeErrors struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -1815,6 +1927,10 @@ func (r *CustomHostnameGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customHostnameGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type CustomHostnameGetResponseEnvelopeMessages struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -1832,6 +1948,10 @@ type customHostnameGetResponseEnvelopeMessagesJSON struct {
 
 func (r *CustomHostnameGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customHostnameGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

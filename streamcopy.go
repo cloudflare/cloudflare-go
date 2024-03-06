@@ -147,6 +147,10 @@ func (r *StreamCopyNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamCopyNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamCopyNewResponseInput struct {
 	// The video height in pixels. A value of `-1` means the height is unknown. The
 	// value becomes available after the upload and before the video is ready.
@@ -170,6 +174,10 @@ func (r *StreamCopyNewResponseInput) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamCopyNewResponseInputJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamCopyNewResponsePlayback struct {
 	// DASH Media Presentation Description for the video.
 	Dash string `json:"dash"`
@@ -189,6 +197,10 @@ type streamCopyNewResponsePlaybackJSON struct {
 
 func (r *StreamCopyNewResponsePlayback) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamCopyNewResponsePlaybackJSON) RawJSON() string {
+	return r.raw
 }
 
 // Specifies a detailed status for a video. If the `state` is `inprogress` or
@@ -224,6 +236,10 @@ type streamCopyNewResponseStatusJSON struct {
 
 func (r *StreamCopyNewResponseStatus) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamCopyNewResponseStatusJSON) RawJSON() string {
+	return r.raw
 }
 
 // Specifies the processing status for all quality levels for a video.
@@ -294,6 +310,10 @@ type streamCopyNewResponseWatermarkJSON struct {
 
 func (r *StreamCopyNewResponseWatermark) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamCopyNewResponseWatermarkJSON) RawJSON() string {
+	return r.raw
 }
 
 type StreamCopyNewParams struct {
@@ -370,6 +390,10 @@ func (r *StreamCopyNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamCopyNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamCopyNewResponseEnvelopeErrors struct {
 	Code    int64                                   `json:"code,required"`
 	Message string                                  `json:"message,required"`
@@ -389,6 +413,10 @@ func (r *StreamCopyNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamCopyNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamCopyNewResponseEnvelopeMessages struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -406,6 +434,10 @@ type streamCopyNewResponseEnvelopeMessagesJSON struct {
 
 func (r *StreamCopyNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamCopyNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

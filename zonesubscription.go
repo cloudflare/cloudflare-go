@@ -138,6 +138,10 @@ func (r *ZoneSubscriptionListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSubscriptionListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSubscriptionListResponseApp struct {
 	// app install id.
 	InstallID string                              `json:"install_id"`
@@ -154,6 +158,10 @@ type zoneSubscriptionListResponseAppJSON struct {
 
 func (r *ZoneSubscriptionListResponseApp) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSubscriptionListResponseAppJSON) RawJSON() string {
+	return r.raw
 }
 
 // A component value for a subscription.
@@ -182,6 +190,10 @@ type zoneSubscriptionListResponseComponentValueJSON struct {
 
 func (r *ZoneSubscriptionListResponseComponentValue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSubscriptionListResponseComponentValueJSON) RawJSON() string {
+	return r.raw
 }
 
 // How often the subscription is renewed automatically.
@@ -231,6 +243,10 @@ func (r *ZoneSubscriptionListResponseRatePlan) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSubscriptionListResponseRatePlanJSON) RawJSON() string {
+	return r.raw
+}
+
 // The state that the subscription is in.
 type ZoneSubscriptionListResponseState string
 
@@ -264,6 +280,10 @@ type zoneSubscriptionListResponseZoneJSON struct {
 
 func (r *ZoneSubscriptionListResponseZone) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSubscriptionListResponseZoneJSON) RawJSON() string {
+	return r.raw
 }
 
 // Union satisfied by [ZoneSubscriptionGetResponseUnknown] or [shared.UnionString].
@@ -387,6 +407,10 @@ func (r *ZoneSubscriptionNewResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSubscriptionNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSubscriptionNewResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -406,6 +430,10 @@ func (r *ZoneSubscriptionNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSubscriptionNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSubscriptionNewResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -423,6 +451,10 @@ type zoneSubscriptionNewResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSubscriptionNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSubscriptionNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -458,6 +490,10 @@ func (r *ZoneSubscriptionListResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSubscriptionListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSubscriptionListResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -477,6 +513,10 @@ func (r *ZoneSubscriptionListResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSubscriptionListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSubscriptionListResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -494,6 +534,10 @@ type zoneSubscriptionListResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSubscriptionListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSubscriptionListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -530,6 +574,10 @@ func (r *ZoneSubscriptionListResponseEnvelopeResultInfo) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSubscriptionListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSubscriptionGetResponseEnvelope struct {
 	Errors   []ZoneSubscriptionGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZoneSubscriptionGetResponseEnvelopeMessages `json:"messages,required"`
@@ -554,6 +602,10 @@ func (r *ZoneSubscriptionGetResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSubscriptionGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSubscriptionGetResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -573,6 +625,10 @@ func (r *ZoneSubscriptionGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSubscriptionGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSubscriptionGetResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -590,6 +646,10 @@ type zoneSubscriptionGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSubscriptionGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSubscriptionGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

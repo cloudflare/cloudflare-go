@@ -98,6 +98,10 @@ func (r *PageProjectDeploymentHistoryLogGetResponseEnvelope) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectDeploymentHistoryLogGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageProjectDeploymentHistoryLogGetResponseEnvelopeErrors struct {
 	Code    int64                                                        `json:"code,required"`
 	Message string                                                       `json:"message,required"`
@@ -118,6 +122,10 @@ func (r *PageProjectDeploymentHistoryLogGetResponseEnvelopeErrors) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectDeploymentHistoryLogGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageProjectDeploymentHistoryLogGetResponseEnvelopeMessages struct {
 	Code    int64                                                          `json:"code,required"`
 	Message string                                                         `json:"message,required"`
@@ -136,6 +144,10 @@ type pageProjectDeploymentHistoryLogGetResponseEnvelopeMessagesJSON struct {
 
 func (r *PageProjectDeploymentHistoryLogGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectDeploymentHistoryLogGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

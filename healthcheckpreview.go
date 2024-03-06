@@ -146,6 +146,10 @@ func (r *HealthcheckPreviewNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r healthcheckPreviewNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // WNAM: Western North America, ENAM: Eastern North America, WEU: Western Europe,
 // EEU: Eastern Europe, NSAM: Northern South America, SSAM: Southern South America,
 // OC: Oceania, ME: Middle East, NAF: North Africa, SAF: South Africa, IN: India,
@@ -214,6 +218,10 @@ func (r *HealthcheckPreviewNewResponseHTTPConfig) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r healthcheckPreviewNewResponseHTTPConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 // The HTTP method to use for the health check.
 type HealthcheckPreviewNewResponseHTTPConfigMethod string
 
@@ -254,6 +262,10 @@ func (r *HealthcheckPreviewNewResponseTcpConfig) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r healthcheckPreviewNewResponseTcpConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 // The TCP connection method to use for the health check.
 type HealthcheckPreviewNewResponseTcpConfigMethod string
 
@@ -277,6 +289,10 @@ type healthcheckPreviewDeleteResponseJSON struct {
 
 func (r *HealthcheckPreviewDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r healthcheckPreviewDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type HealthcheckPreviewGetResponse struct {
@@ -354,6 +370,10 @@ func (r *HealthcheckPreviewGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r healthcheckPreviewGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // WNAM: Western North America, ENAM: Eastern North America, WEU: Western Europe,
 // EEU: Eastern Europe, NSAM: Northern South America, SSAM: Southern South America,
 // OC: Oceania, ME: Middle East, NAF: North Africa, SAF: South Africa, IN: India,
@@ -422,6 +442,10 @@ func (r *HealthcheckPreviewGetResponseHTTPConfig) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r healthcheckPreviewGetResponseHTTPConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 // The HTTP method to use for the health check.
 type HealthcheckPreviewGetResponseHTTPConfigMethod string
 
@@ -460,6 +484,10 @@ type healthcheckPreviewGetResponseTcpConfigJSON struct {
 
 func (r *HealthcheckPreviewGetResponseTcpConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r healthcheckPreviewGetResponseTcpConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The TCP connection method to use for the health check.
@@ -613,6 +641,10 @@ func (r *HealthcheckPreviewNewResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r healthcheckPreviewNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type HealthcheckPreviewNewResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -632,6 +664,10 @@ func (r *HealthcheckPreviewNewResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r healthcheckPreviewNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type HealthcheckPreviewNewResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -649,6 +685,10 @@ type healthcheckPreviewNewResponseEnvelopeMessagesJSON struct {
 
 func (r *HealthcheckPreviewNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r healthcheckPreviewNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -682,6 +722,10 @@ func (r *HealthcheckPreviewDeleteResponseEnvelope) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r healthcheckPreviewDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type HealthcheckPreviewDeleteResponseEnvelopeErrors struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -701,6 +745,10 @@ func (r *HealthcheckPreviewDeleteResponseEnvelopeErrors) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r healthcheckPreviewDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type HealthcheckPreviewDeleteResponseEnvelopeMessages struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -718,6 +766,10 @@ type healthcheckPreviewDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *HealthcheckPreviewDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r healthcheckPreviewDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -751,6 +803,10 @@ func (r *HealthcheckPreviewGetResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r healthcheckPreviewGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type HealthcheckPreviewGetResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -770,6 +826,10 @@ func (r *HealthcheckPreviewGetResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r healthcheckPreviewGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type HealthcheckPreviewGetResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -787,6 +847,10 @@ type healthcheckPreviewGetResponseEnvelopeMessagesJSON struct {
 
 func (r *HealthcheckPreviewGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r healthcheckPreviewGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

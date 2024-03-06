@@ -93,6 +93,10 @@ func (r *ZeroTrustDEXFleetStatusDeviceListResponse) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXFleetStatusDeviceListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXFleetStatusDeviceListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Page number of paginated results

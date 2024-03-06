@@ -84,6 +84,10 @@ func (r *UserBillingHistoryGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userBillingHistoryGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserBillingHistoryGetResponseZone struct {
 	Name interface{}                           `json:"name"`
 	JSON userBillingHistoryGetResponseZoneJSON `json:"-"`
@@ -99,6 +103,10 @@ type userBillingHistoryGetResponseZoneJSON struct {
 
 func (r *UserBillingHistoryGetResponseZone) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userBillingHistoryGetResponseZoneJSON) RawJSON() string {
+	return r.raw
 }
 
 type UserBillingHistoryGetParams struct {
@@ -154,6 +162,10 @@ func (r *UserBillingHistoryGetResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userBillingHistoryGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserBillingHistoryGetResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -173,6 +185,10 @@ func (r *UserBillingHistoryGetResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userBillingHistoryGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserBillingHistoryGetResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -190,6 +206,10 @@ type userBillingHistoryGetResponseEnvelopeMessagesJSON struct {
 
 func (r *UserBillingHistoryGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userBillingHistoryGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -224,4 +244,8 @@ type userBillingHistoryGetResponseEnvelopeResultInfoJSON struct {
 
 func (r *UserBillingHistoryGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userBillingHistoryGetResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

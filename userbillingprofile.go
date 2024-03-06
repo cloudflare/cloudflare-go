@@ -86,6 +86,10 @@ func (r *UserBillingProfileGetResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userBillingProfileGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserBillingProfileGetResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -105,6 +109,10 @@ func (r *UserBillingProfileGetResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userBillingProfileGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserBillingProfileGetResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -122,6 +130,10 @@ type userBillingProfileGetResponseEnvelopeMessagesJSON struct {
 
 func (r *UserBillingProfileGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userBillingProfileGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

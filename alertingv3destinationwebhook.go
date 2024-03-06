@@ -118,6 +118,10 @@ func (r *AlertingV3DestinationWebhookNewResponse) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3DestinationWebhookNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3DestinationWebhookUpdateResponse struct {
 	// UUID
 	ID   string                                         `json:"id"`
@@ -134,6 +138,10 @@ type alertingV3DestinationWebhookUpdateResponseJSON struct {
 
 func (r *AlertingV3DestinationWebhookUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r alertingV3DestinationWebhookUpdateResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type AlertingV3DestinationWebhookListResponse struct {
@@ -178,6 +186,10 @@ type alertingV3DestinationWebhookListResponseJSON struct {
 
 func (r *AlertingV3DestinationWebhookListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r alertingV3DestinationWebhookListResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Type of webhook endpoint.
@@ -255,6 +267,10 @@ func (r *AlertingV3DestinationWebhookGetResponse) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3DestinationWebhookGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Type of webhook endpoint.
 type AlertingV3DestinationWebhookGetResponseType string
 
@@ -306,6 +322,10 @@ func (r *AlertingV3DestinationWebhookNewResponseEnvelope) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3DestinationWebhookNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3DestinationWebhookNewResponseEnvelopeErrors struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -323,6 +343,10 @@ type alertingV3DestinationWebhookNewResponseEnvelopeErrorsJSON struct {
 
 func (r *AlertingV3DestinationWebhookNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r alertingV3DestinationWebhookNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type AlertingV3DestinationWebhookNewResponseEnvelopeMessages struct {
@@ -343,6 +367,10 @@ type alertingV3DestinationWebhookNewResponseEnvelopeMessagesJSON struct {
 
 func (r *AlertingV3DestinationWebhookNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r alertingV3DestinationWebhookNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -394,6 +422,10 @@ func (r *AlertingV3DestinationWebhookUpdateResponseEnvelope) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3DestinationWebhookUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3DestinationWebhookUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                        `json:"code,required"`
 	Message string                                                       `json:"message,required"`
@@ -414,6 +446,10 @@ func (r *AlertingV3DestinationWebhookUpdateResponseEnvelopeErrors) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3DestinationWebhookUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3DestinationWebhookUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                          `json:"code,required"`
 	Message string                                                         `json:"message,required"`
@@ -432,6 +468,10 @@ type alertingV3DestinationWebhookUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *AlertingV3DestinationWebhookUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r alertingV3DestinationWebhookUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -472,6 +512,10 @@ func (r *AlertingV3DestinationWebhookListResponseEnvelope) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3DestinationWebhookListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3DestinationWebhookListResponseEnvelopeErrors struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -489,6 +533,10 @@ type alertingV3DestinationWebhookListResponseEnvelopeErrorsJSON struct {
 
 func (r *AlertingV3DestinationWebhookListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r alertingV3DestinationWebhookListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type AlertingV3DestinationWebhookListResponseEnvelopeMessages struct {
@@ -509,6 +557,10 @@ type alertingV3DestinationWebhookListResponseEnvelopeMessagesJSON struct {
 
 func (r *AlertingV3DestinationWebhookListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r alertingV3DestinationWebhookListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -546,6 +598,10 @@ func (r *AlertingV3DestinationWebhookListResponseEnvelopeResultInfo) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3DestinationWebhookListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3DestinationWebhookDeleteParams struct {
 	// The account id
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -577,6 +633,10 @@ func (r *AlertingV3DestinationWebhookDeleteResponseEnvelope) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3DestinationWebhookDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3DestinationWebhookDeleteResponseEnvelopeErrors struct {
 	Code    int64                                                        `json:"code,required"`
 	Message string                                                       `json:"message,required"`
@@ -597,6 +657,10 @@ func (r *AlertingV3DestinationWebhookDeleteResponseEnvelopeErrors) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3DestinationWebhookDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3DestinationWebhookDeleteResponseEnvelopeMessages struct {
 	Code    int64                                                          `json:"code,required"`
 	Message string                                                         `json:"message,required"`
@@ -615,6 +679,10 @@ type alertingV3DestinationWebhookDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *AlertingV3DestinationWebhookDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r alertingV3DestinationWebhookDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -652,6 +720,10 @@ func (r *AlertingV3DestinationWebhookDeleteResponseEnvelopeResultInfo) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3DestinationWebhookDeleteResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3DestinationWebhookGetParams struct {
 	// The account id
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -681,6 +753,10 @@ func (r *AlertingV3DestinationWebhookGetResponseEnvelope) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3DestinationWebhookGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3DestinationWebhookGetResponseEnvelopeErrors struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -698,6 +774,10 @@ type alertingV3DestinationWebhookGetResponseEnvelopeErrorsJSON struct {
 
 func (r *AlertingV3DestinationWebhookGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r alertingV3DestinationWebhookGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type AlertingV3DestinationWebhookGetResponseEnvelopeMessages struct {
@@ -718,6 +798,10 @@ type alertingV3DestinationWebhookGetResponseEnvelopeMessagesJSON struct {
 
 func (r *AlertingV3DestinationWebhookGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r alertingV3DestinationWebhookGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

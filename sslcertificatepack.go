@@ -114,6 +114,10 @@ func (r *SSLCertificatePackDeleteResponse) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r sslCertificatePackDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type SSLCertificatePackEditResponse struct {
 	// Identifier
 	ID string `json:"id"`
@@ -155,6 +159,10 @@ type sslCertificatePackEditResponseJSON struct {
 
 func (r *SSLCertificatePackEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sslCertificatePackEditResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Certificate Authority selected for the order. For information on any certificate
@@ -286,6 +294,10 @@ func (r *SSLCertificatePackListResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r sslCertificatePackListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type SSLCertificatePackListResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -305,6 +317,10 @@ func (r *SSLCertificatePackListResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r sslCertificatePackListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type SSLCertificatePackListResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -322,6 +338,10 @@ type sslCertificatePackListResponseEnvelopeMessagesJSON struct {
 
 func (r *SSLCertificatePackListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sslCertificatePackListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -358,6 +378,10 @@ func (r *SSLCertificatePackListResponseEnvelopeResultInfo) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r sslCertificatePackListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type SSLCertificatePackDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -387,6 +411,10 @@ func (r *SSLCertificatePackDeleteResponseEnvelope) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r sslCertificatePackDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type SSLCertificatePackDeleteResponseEnvelopeErrors struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -406,6 +434,10 @@ func (r *SSLCertificatePackDeleteResponseEnvelopeErrors) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r sslCertificatePackDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type SSLCertificatePackDeleteResponseEnvelopeMessages struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -423,6 +455,10 @@ type sslCertificatePackDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *SSLCertificatePackDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sslCertificatePackDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -461,6 +497,10 @@ func (r *SSLCertificatePackEditResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r sslCertificatePackEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type SSLCertificatePackEditResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -480,6 +520,10 @@ func (r *SSLCertificatePackEditResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r sslCertificatePackEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type SSLCertificatePackEditResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -497,6 +541,10 @@ type sslCertificatePackEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SSLCertificatePackEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sslCertificatePackEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -535,6 +583,10 @@ func (r *SSLCertificatePackGetResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r sslCertificatePackGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type SSLCertificatePackGetResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -554,6 +606,10 @@ func (r *SSLCertificatePackGetResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r sslCertificatePackGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type SSLCertificatePackGetResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -571,6 +627,10 @@ type sslCertificatePackGetResponseEnvelopeMessagesJSON struct {
 
 func (r *SSLCertificatePackGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sslCertificatePackGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

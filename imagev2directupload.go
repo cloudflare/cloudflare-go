@@ -73,6 +73,10 @@ func (r *ImageV2DirectUploadNewResponse) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r imageV2DirectUploadNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ImageV2DirectUploadNewParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -114,6 +118,10 @@ func (r *ImageV2DirectUploadNewResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r imageV2DirectUploadNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ImageV2DirectUploadNewResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -133,6 +141,10 @@ func (r *ImageV2DirectUploadNewResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r imageV2DirectUploadNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ImageV2DirectUploadNewResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -150,6 +162,10 @@ type imageV2DirectUploadNewResponseEnvelopeMessagesJSON struct {
 
 func (r *ImageV2DirectUploadNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r imageV2DirectUploadNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

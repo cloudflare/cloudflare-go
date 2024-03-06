@@ -139,6 +139,10 @@ func (r *FirewallWAFPackageGroupListResponse) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallWAFPackageGroupListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The state of the rules contained in the rule group. When `on`, the rules in the
 // group are configurable/usable.
 type FirewallWAFPackageGroupListResponseMode string
@@ -306,6 +310,10 @@ func (r *FirewallWAFPackageGroupEditResponseEnvelope) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallWAFPackageGroupEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallWAFPackageGroupEditResponseEnvelopeErrors struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -325,6 +333,10 @@ func (r *FirewallWAFPackageGroupEditResponseEnvelopeErrors) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallWAFPackageGroupEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallWAFPackageGroupEditResponseEnvelopeMessages struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -342,6 +354,10 @@ type firewallWAFPackageGroupEditResponseEnvelopeMessagesJSON struct {
 
 func (r *FirewallWAFPackageGroupEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallWAFPackageGroupEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -380,6 +396,10 @@ func (r *FirewallWAFPackageGroupGetResponseEnvelope) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallWAFPackageGroupGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallWAFPackageGroupGetResponseEnvelopeErrors struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -399,6 +419,10 @@ func (r *FirewallWAFPackageGroupGetResponseEnvelopeErrors) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallWAFPackageGroupGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallWAFPackageGroupGetResponseEnvelopeMessages struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -416,6 +440,10 @@ type firewallWAFPackageGroupGetResponseEnvelopeMessagesJSON struct {
 
 func (r *FirewallWAFPackageGroupGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallWAFPackageGroupGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

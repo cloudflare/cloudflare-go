@@ -116,6 +116,10 @@ func (r *SpeedTestNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r speedTestNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The Lighthouse report.
 type SpeedTestNewResponseDesktopReport struct {
 	// Cumulative Layout Shift.
@@ -167,6 +171,10 @@ func (r *SpeedTestNewResponseDesktopReport) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r speedTestNewResponseDesktopReportJSON) RawJSON() string {
+	return r.raw
+}
+
 // The type of device.
 type SpeedTestNewResponseDesktopReportDeviceType string
 
@@ -197,6 +205,10 @@ type speedTestNewResponseDesktopReportErrorJSON struct {
 
 func (r *SpeedTestNewResponseDesktopReportError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r speedTestNewResponseDesktopReportErrorJSON) RawJSON() string {
+	return r.raw
 }
 
 // The error code of the Lighthouse result.
@@ -270,6 +282,10 @@ func (r *SpeedTestNewResponseMobileReport) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r speedTestNewResponseMobileReportJSON) RawJSON() string {
+	return r.raw
+}
+
 // The type of device.
 type SpeedTestNewResponseMobileReportDeviceType string
 
@@ -300,6 +316,10 @@ type speedTestNewResponseMobileReportErrorJSON struct {
 
 func (r *SpeedTestNewResponseMobileReportError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r speedTestNewResponseMobileReportErrorJSON) RawJSON() string {
+	return r.raw
 }
 
 // The error code of the Lighthouse result.
@@ -341,6 +361,10 @@ type speedTestNewResponseRegionJSON struct {
 
 func (r *SpeedTestNewResponseRegion) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r speedTestNewResponseRegionJSON) RawJSON() string {
+	return r.raw
 }
 
 // A test region.
@@ -402,6 +426,10 @@ func (r *SpeedTestListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r speedTestListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type SpeedTestListResponseError struct {
 	Code    int64                          `json:"code,required"`
 	Message string                         `json:"message,required"`
@@ -421,6 +449,10 @@ func (r *SpeedTestListResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r speedTestListResponseErrorJSON) RawJSON() string {
+	return r.raw
+}
+
 type SpeedTestListResponseMessage struct {
 	Code    int64                            `json:"code,required"`
 	Message string                           `json:"message,required"`
@@ -438,6 +470,10 @@ type speedTestListResponseMessageJSON struct {
 
 func (r *SpeedTestListResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r speedTestListResponseMessageJSON) RawJSON() string {
+	return r.raw
 }
 
 type SpeedTestListResponseResultInfo struct {
@@ -463,6 +499,10 @@ func (r *SpeedTestListResponseResultInfo) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r speedTestListResponseResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type SpeedTestDeleteResponse struct {
 	// Number of items affected.
 	Count float64                     `json:"count"`
@@ -479,6 +519,10 @@ type speedTestDeleteResponseJSON struct {
 
 func (r *SpeedTestDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r speedTestDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type SpeedTestGetResponse struct {
@@ -514,6 +558,10 @@ type speedTestGetResponseJSON struct {
 
 func (r *SpeedTestGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r speedTestGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // The Lighthouse report.
@@ -567,6 +615,10 @@ func (r *SpeedTestGetResponseDesktopReport) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r speedTestGetResponseDesktopReportJSON) RawJSON() string {
+	return r.raw
+}
+
 // The type of device.
 type SpeedTestGetResponseDesktopReportDeviceType string
 
@@ -597,6 +649,10 @@ type speedTestGetResponseDesktopReportErrorJSON struct {
 
 func (r *SpeedTestGetResponseDesktopReportError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r speedTestGetResponseDesktopReportErrorJSON) RawJSON() string {
+	return r.raw
 }
 
 // The error code of the Lighthouse result.
@@ -670,6 +726,10 @@ func (r *SpeedTestGetResponseMobileReport) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r speedTestGetResponseMobileReportJSON) RawJSON() string {
+	return r.raw
+}
+
 // The type of device.
 type SpeedTestGetResponseMobileReportDeviceType string
 
@@ -700,6 +760,10 @@ type speedTestGetResponseMobileReportErrorJSON struct {
 
 func (r *SpeedTestGetResponseMobileReportError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r speedTestGetResponseMobileReportErrorJSON) RawJSON() string {
+	return r.raw
 }
 
 // The error code of the Lighthouse result.
@@ -741,6 +805,10 @@ type speedTestGetResponseRegionJSON struct {
 
 func (r *SpeedTestGetResponseRegion) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r speedTestGetResponseRegionJSON) RawJSON() string {
+	return r.raw
 }
 
 // A test region.
@@ -831,6 +899,10 @@ type speedTestNewResponseEnvelopeJSON struct {
 
 func (r *SpeedTestNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r speedTestNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
 
 type SpeedTestListParams struct {
@@ -936,6 +1008,10 @@ func (r *SpeedTestDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r speedTestDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type SpeedTestGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -956,4 +1032,8 @@ type speedTestGetResponseEnvelopeJSON struct {
 
 func (r *SpeedTestGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r speedTestGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

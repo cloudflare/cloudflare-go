@@ -101,6 +101,10 @@ func (r *UserAuditLogListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userAuditLogListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserAuditLogListResponseAction struct {
 	// A boolean that indicates if the action attempted was successful.
 	Result bool `json:"result"`
@@ -120,6 +124,10 @@ type userAuditLogListResponseActionJSON struct {
 
 func (r *UserAuditLogListResponseAction) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userAuditLogListResponseActionJSON) RawJSON() string {
+	return r.raw
 }
 
 type UserAuditLogListResponseActor struct {
@@ -150,6 +158,10 @@ func (r *UserAuditLogListResponseActor) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userAuditLogListResponseActorJSON) RawJSON() string {
+	return r.raw
+}
+
 // The type of actor, whether a User, Cloudflare Admin, or an Automated System.
 type UserAuditLogListResponseActorType string
 
@@ -177,6 +189,10 @@ func (r *UserAuditLogListResponseOwner) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userAuditLogListResponseOwnerJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserAuditLogListResponseResource struct {
 	// An identifier for the resource that was affected by the action.
 	ID string `json:"id"`
@@ -196,6 +212,10 @@ type userAuditLogListResponseResourceJSON struct {
 
 func (r *UserAuditLogListResponseResource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userAuditLogListResponseResourceJSON) RawJSON() string {
+	return r.raw
 }
 
 type UserAuditLogListParams struct {

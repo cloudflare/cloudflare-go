@@ -66,6 +66,10 @@ func (r *IntelDomainHistoryGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r intelDomainHistoryGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type IntelDomainHistoryGetResponseCategorization struct {
 	Categories interface{}                                     `json:"categories"`
 	End        time.Time                                       `json:"end" format:"date"`
@@ -85,6 +89,10 @@ type intelDomainHistoryGetResponseCategorizationJSON struct {
 
 func (r *IntelDomainHistoryGetResponseCategorization) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r intelDomainHistoryGetResponseCategorizationJSON) RawJSON() string {
+	return r.raw
 }
 
 type IntelDomainHistoryGetParams struct {
@@ -128,6 +136,10 @@ func (r *IntelDomainHistoryGetResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r intelDomainHistoryGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type IntelDomainHistoryGetResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -147,6 +159,10 @@ func (r *IntelDomainHistoryGetResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r intelDomainHistoryGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type IntelDomainHistoryGetResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -164,6 +180,10 @@ type intelDomainHistoryGetResponseEnvelopeMessagesJSON struct {
 
 func (r *IntelDomainHistoryGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r intelDomainHistoryGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -198,4 +218,8 @@ type intelDomainHistoryGetResponseEnvelopeResultInfoJSON struct {
 
 func (r *IntelDomainHistoryGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r intelDomainHistoryGetResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

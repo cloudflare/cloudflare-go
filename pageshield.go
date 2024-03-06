@@ -90,6 +90,10 @@ func (r *PageShieldUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageShieldUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageShieldListResponse struct {
 	// When true, indicates that Page Shield is enabled.
 	Enabled bool `json:"enabled"`
@@ -116,6 +120,10 @@ type pageShieldListResponseJSON struct {
 
 func (r *PageShieldListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageShieldListResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type PageShieldUpdateParams struct {
@@ -158,6 +166,10 @@ func (r *PageShieldUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageShieldUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageShieldUpdateResponseEnvelopeErrors struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -177,6 +189,10 @@ func (r *PageShieldUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageShieldUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageShieldUpdateResponseEnvelopeMessages struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -194,6 +210,10 @@ type pageShieldUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *PageShieldUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageShieldUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -232,6 +252,10 @@ func (r *PageShieldListResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageShieldListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageShieldListResponseEnvelopeErrors struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -251,6 +275,10 @@ func (r *PageShieldListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageShieldListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageShieldListResponseEnvelopeMessages struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -268,6 +296,10 @@ type pageShieldListResponseEnvelopeMessagesJSON struct {
 
 func (r *PageShieldListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageShieldListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

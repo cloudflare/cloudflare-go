@@ -79,6 +79,10 @@ func (r *RadarVerifiedBotTopBotsResponse) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarVerifiedBotTopBotsResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarVerifiedBotTopBotsResponseMeta struct {
 	DateRange      []RadarVerifiedBotTopBotsResponseMetaDateRange    `json:"dateRange,required"`
 	ConfidenceInfo RadarVerifiedBotTopBotsResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -96,6 +100,10 @@ type radarVerifiedBotTopBotsResponseMetaJSON struct {
 
 func (r *RadarVerifiedBotTopBotsResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarVerifiedBotTopBotsResponseMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarVerifiedBotTopBotsResponseMetaDateRange struct {
@@ -119,6 +127,10 @@ func (r *RadarVerifiedBotTopBotsResponseMetaDateRange) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarVerifiedBotTopBotsResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarVerifiedBotTopBotsResponseMetaConfidenceInfo struct {
 	Annotations []RadarVerifiedBotTopBotsResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                         `json:"level"`
@@ -136,6 +148,10 @@ type radarVerifiedBotTopBotsResponseMetaConfidenceInfoJSON struct {
 
 func (r *RadarVerifiedBotTopBotsResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarVerifiedBotTopBotsResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarVerifiedBotTopBotsResponseMetaConfidenceInfoAnnotation struct {
@@ -168,6 +184,10 @@ func (r *RadarVerifiedBotTopBotsResponseMetaConfidenceInfoAnnotation) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarVerifiedBotTopBotsResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarVerifiedBotTopBotsResponseTop0 struct {
 	BotCategory string                                  `json:"botCategory,required"`
 	BotName     string                                  `json:"botName,required"`
@@ -191,6 +211,10 @@ func (r *RadarVerifiedBotTopBotsResponseTop0) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarVerifiedBotTopBotsResponseTop0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarVerifiedBotTopCategoriesResponse struct {
 	Meta RadarVerifiedBotTopCategoriesResponseMeta   `json:"meta,required"`
 	Top0 []RadarVerifiedBotTopCategoriesResponseTop0 `json:"top_0,required"`
@@ -210,6 +234,10 @@ func (r *RadarVerifiedBotTopCategoriesResponse) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarVerifiedBotTopCategoriesResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarVerifiedBotTopCategoriesResponseMeta struct {
 	DateRange      []RadarVerifiedBotTopCategoriesResponseMetaDateRange    `json:"dateRange,required"`
 	ConfidenceInfo RadarVerifiedBotTopCategoriesResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -227,6 +255,10 @@ type radarVerifiedBotTopCategoriesResponseMetaJSON struct {
 
 func (r *RadarVerifiedBotTopCategoriesResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarVerifiedBotTopCategoriesResponseMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarVerifiedBotTopCategoriesResponseMetaDateRange struct {
@@ -250,6 +282,10 @@ func (r *RadarVerifiedBotTopCategoriesResponseMetaDateRange) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarVerifiedBotTopCategoriesResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarVerifiedBotTopCategoriesResponseMetaConfidenceInfo struct {
 	Annotations []RadarVerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                               `json:"level"`
@@ -268,6 +304,10 @@ type radarVerifiedBotTopCategoriesResponseMetaConfidenceInfoJSON struct {
 
 func (r *RadarVerifiedBotTopCategoriesResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarVerifiedBotTopCategoriesResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarVerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotation struct {
@@ -300,6 +340,10 @@ func (r *RadarVerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotation) Unma
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarVerifiedBotTopCategoriesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarVerifiedBotTopCategoriesResponseTop0 struct {
 	BotCategory string                                        `json:"botCategory,required"`
 	Value       string                                        `json:"value,required"`
@@ -317,6 +361,10 @@ type radarVerifiedBotTopCategoriesResponseTop0JSON struct {
 
 func (r *RadarVerifiedBotTopCategoriesResponseTop0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarVerifiedBotTopCategoriesResponseTop0JSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarVerifiedBotTopBotsParams struct {
@@ -404,6 +452,10 @@ func (r *RadarVerifiedBotTopBotsResponseEnvelope) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarVerifiedBotTopBotsResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarVerifiedBotTopCategoriesParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
@@ -487,4 +539,8 @@ type radarVerifiedBotTopCategoriesResponseEnvelopeJSON struct {
 
 func (r *RadarVerifiedBotTopCategoriesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarVerifiedBotTopCategoriesResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

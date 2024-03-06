@@ -55,3 +55,7 @@ type logReceivedFieldGetResponseJSON struct {
 func (r *LogReceivedFieldGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+func (r logReceivedFieldGetResponseJSON) RawJSON() string {
+	return r.raw
+}

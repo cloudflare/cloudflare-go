@@ -118,6 +118,10 @@ func (r *FirewallWAFPackageListResponseLegacyJhsAPIResponseCollection) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallWAFPackageListResponseLegacyJhsAPIResponseCollectionJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r FirewallWAFPackageListResponseLegacyJhsAPIResponseCollection) implementsFirewallWAFPackageListResponse() {
 }
 
@@ -141,6 +145,10 @@ func (r *FirewallWAFPackageListResponseLegacyJhsAPIResponseCollectionError) Unma
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallWAFPackageListResponseLegacyJhsAPIResponseCollectionErrorJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallWAFPackageListResponseLegacyJhsAPIResponseCollectionMessage struct {
 	Code    int64                                                                   `json:"code,required"`
 	Message string                                                                  `json:"message,required"`
@@ -159,6 +167,10 @@ type firewallWAFPackageListResponseLegacyJhsAPIResponseCollectionMessageJSON str
 
 func (r *FirewallWAFPackageListResponseLegacyJhsAPIResponseCollectionMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallWAFPackageListResponseLegacyJhsAPIResponseCollectionMessageJSON) RawJSON() string {
+	return r.raw
 }
 
 // Union satisfied by
@@ -220,6 +232,10 @@ func (r *FirewallWAFPackageListResponseLegacyJhsAPIResponseCollectionResultInfo)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallWAFPackageListResponseLegacyJhsAPIResponseCollectionResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallWAFPackageListResponseObject struct {
 	Result []FirewallWAFPackageListResponseObjectResult `json:"result"`
 	JSON   firewallWAFPackageListResponseObjectJSON     `json:"-"`
@@ -235,6 +251,10 @@ type firewallWAFPackageListResponseObjectJSON struct {
 
 func (r *FirewallWAFPackageListResponseObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallWAFPackageListResponseObjectJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r FirewallWAFPackageListResponseObject) implementsFirewallWAFPackageListResponse() {}
@@ -291,6 +311,10 @@ type firewallWAFPackageListResponseObjectResultLegacyJhsPackageDefinitionJSON st
 
 func (r *FirewallWAFPackageListResponseObjectResultLegacyJhsPackageDefinition) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallWAFPackageListResponseObjectResultLegacyJhsPackageDefinitionJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r FirewallWAFPackageListResponseObjectResultLegacyJhsPackageDefinition) implementsFirewallWAFPackageListResponseObjectResult() {
@@ -361,6 +385,10 @@ type firewallWAFPackageListResponseObjectResultLegacyJhsAnomalyPackageJSON struc
 
 func (r *FirewallWAFPackageListResponseObjectResultLegacyJhsAnomalyPackage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallWAFPackageListResponseObjectResultLegacyJhsAnomalyPackageJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r FirewallWAFPackageListResponseObjectResultLegacyJhsAnomalyPackage) implementsFirewallWAFPackageListResponseObjectResult() {
@@ -438,6 +466,10 @@ func (r *FirewallWAFPackageGetResponseLegacyJhsAPIResponseSingle) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallWAFPackageGetResponseLegacyJhsAPIResponseSingleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r FirewallWAFPackageGetResponseLegacyJhsAPIResponseSingle) implementsFirewallWAFPackageGetResponse() {
 }
 
@@ -461,6 +493,10 @@ func (r *FirewallWAFPackageGetResponseLegacyJhsAPIResponseSingleError) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallWAFPackageGetResponseLegacyJhsAPIResponseSingleErrorJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallWAFPackageGetResponseLegacyJhsAPIResponseSingleMessage struct {
 	Code    int64                                                              `json:"code,required"`
 	Message string                                                             `json:"message,required"`
@@ -479,6 +515,10 @@ type firewallWAFPackageGetResponseLegacyJhsAPIResponseSingleMessageJSON struct {
 
 func (r *FirewallWAFPackageGetResponseLegacyJhsAPIResponseSingleMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallWAFPackageGetResponseLegacyJhsAPIResponseSingleMessageJSON) RawJSON() string {
+	return r.raw
 }
 
 // Union satisfied by
@@ -521,6 +561,10 @@ type firewallWAFPackageGetResponseObjectJSON struct {
 
 func (r *FirewallWAFPackageGetResponseObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallWAFPackageGetResponseObjectJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r FirewallWAFPackageGetResponseObject) implementsFirewallWAFPackageGetResponse() {}

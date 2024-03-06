@@ -62,6 +62,10 @@ func (r *RadarSearchGlobalResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarSearchGlobalResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarSearchGlobalResponseSearch struct {
 	Code string                              `json:"code,required"`
 	Name string                              `json:"name,required"`
@@ -81,6 +85,10 @@ type radarSearchGlobalResponseSearchJSON struct {
 
 func (r *RadarSearchGlobalResponseSearch) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarSearchGlobalResponseSearchJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarSearchGlobalParams struct {
@@ -150,4 +158,8 @@ type radarSearchGlobalResponseEnvelopeJSON struct {
 
 func (r *RadarSearchGlobalResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarSearchGlobalResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

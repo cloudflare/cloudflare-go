@@ -78,6 +78,10 @@ func (r *RadarConnectionTamperingSummaryResponse) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarConnectionTamperingSummaryResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarConnectionTamperingSummaryResponseMeta struct {
 	DateRange      []RadarConnectionTamperingSummaryResponseMetaDateRange    `json:"dateRange,required"`
 	ConfidenceInfo RadarConnectionTamperingSummaryResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -95,6 +99,10 @@ type radarConnectionTamperingSummaryResponseMetaJSON struct {
 
 func (r *RadarConnectionTamperingSummaryResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarConnectionTamperingSummaryResponseMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarConnectionTamperingSummaryResponseMetaDateRange struct {
@@ -118,6 +126,10 @@ func (r *RadarConnectionTamperingSummaryResponseMetaDateRange) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarConnectionTamperingSummaryResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarConnectionTamperingSummaryResponseMetaConfidenceInfo struct {
 	Annotations []RadarConnectionTamperingSummaryResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                                 `json:"level"`
@@ -136,6 +148,10 @@ type radarConnectionTamperingSummaryResponseMetaConfidenceInfoJSON struct {
 
 func (r *RadarConnectionTamperingSummaryResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarConnectionTamperingSummaryResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarConnectionTamperingSummaryResponseMetaConfidenceInfoAnnotation struct {
@@ -166,6 +182,10 @@ type radarConnectionTamperingSummaryResponseMetaConfidenceInfoAnnotationJSON str
 
 func (r *RadarConnectionTamperingSummaryResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarConnectionTamperingSummaryResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarConnectionTamperingSummaryResponseSummary0 struct {
@@ -203,6 +223,10 @@ func (r *RadarConnectionTamperingSummaryResponseSummary0) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarConnectionTamperingSummaryResponseSummary0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarConnectionTamperingTimeseriesGroupsResponse struct {
 	Meta   RadarConnectionTamperingTimeseriesGroupsResponseMeta   `json:"meta,required"`
 	Serie0 RadarConnectionTamperingTimeseriesGroupsResponseSerie0 `json:"serie_0,required"`
@@ -220,6 +244,10 @@ type radarConnectionTamperingTimeseriesGroupsResponseJSON struct {
 
 func (r *RadarConnectionTamperingTimeseriesGroupsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarConnectionTamperingTimeseriesGroupsResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarConnectionTamperingTimeseriesGroupsResponseMeta struct {
@@ -245,6 +273,10 @@ func (r *RadarConnectionTamperingTimeseriesGroupsResponseMeta) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarConnectionTamperingTimeseriesGroupsResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarConnectionTamperingTimeseriesGroupsResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
@@ -267,6 +299,10 @@ func (r *RadarConnectionTamperingTimeseriesGroupsResponseMetaDateRange) Unmarsha
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarConnectionTamperingTimeseriesGroupsResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarConnectionTamperingTimeseriesGroupsResponseMetaConfidenceInfo struct {
 	Annotations []RadarConnectionTamperingTimeseriesGroupsResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                                          `json:"level"`
@@ -285,6 +321,10 @@ type radarConnectionTamperingTimeseriesGroupsResponseMetaConfidenceInfoJSON stru
 
 func (r *RadarConnectionTamperingTimeseriesGroupsResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarConnectionTamperingTimeseriesGroupsResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarConnectionTamperingTimeseriesGroupsResponseMetaConfidenceInfoAnnotation struct {
@@ -315,6 +355,10 @@ type radarConnectionTamperingTimeseriesGroupsResponseMetaConfidenceInfoAnnotatio
 
 func (r *RadarConnectionTamperingTimeseriesGroupsResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarConnectionTamperingTimeseriesGroupsResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarConnectionTamperingTimeseriesGroupsResponseSerie0 struct {
@@ -352,6 +396,10 @@ type radarConnectionTamperingTimeseriesGroupsResponseSerie0JSON struct {
 
 func (r *RadarConnectionTamperingTimeseriesGroupsResponseSerie0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarConnectionTamperingTimeseriesGroupsResponseSerie0JSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarConnectionTamperingSummaryParams struct {
@@ -435,6 +483,10 @@ type radarConnectionTamperingSummaryResponseEnvelopeJSON struct {
 
 func (r *RadarConnectionTamperingSummaryResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarConnectionTamperingSummaryResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarConnectionTamperingTimeseriesGroupsParams struct {
@@ -535,4 +587,8 @@ type radarConnectionTamperingTimeseriesGroupsResponseEnvelopeJSON struct {
 
 func (r *RadarConnectionTamperingTimeseriesGroupsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarConnectionTamperingTimeseriesGroupsResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

@@ -67,6 +67,10 @@ func (r *MagicNetworkMonitoringConfigFullGetResponse) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicNetworkMonitoringConfigFullGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicNetworkMonitoringConfigFullGetResponseEnvelope struct {
 	Errors   []MagicNetworkMonitoringConfigFullGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []MagicNetworkMonitoringConfigFullGetResponseEnvelopeMessages `json:"messages,required"`
@@ -91,6 +95,10 @@ func (r *MagicNetworkMonitoringConfigFullGetResponseEnvelope) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicNetworkMonitoringConfigFullGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicNetworkMonitoringConfigFullGetResponseEnvelopeErrors struct {
 	Code    int64                                                         `json:"code,required"`
 	Message string                                                        `json:"message,required"`
@@ -111,6 +119,10 @@ func (r *MagicNetworkMonitoringConfigFullGetResponseEnvelopeErrors) UnmarshalJSO
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicNetworkMonitoringConfigFullGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicNetworkMonitoringConfigFullGetResponseEnvelopeMessages struct {
 	Code    int64                                                           `json:"code,required"`
 	Message string                                                          `json:"message,required"`
@@ -129,6 +141,10 @@ type magicNetworkMonitoringConfigFullGetResponseEnvelopeMessagesJSON struct {
 
 func (r *MagicNetworkMonitoringConfigFullGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicNetworkMonitoringConfigFullGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

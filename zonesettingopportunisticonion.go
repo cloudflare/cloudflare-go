@@ -90,6 +90,10 @@ func (r *ZoneSettingOpportunisticOnionEditResponse) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingOpportunisticOnionEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // ID of the zone setting.
 type ZoneSettingOpportunisticOnionEditResponseID string
 
@@ -142,6 +146,10 @@ type zoneSettingOpportunisticOnionGetResponseJSON struct {
 
 func (r *ZoneSettingOpportunisticOnionGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingOpportunisticOnionGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // ID of the zone setting.
@@ -215,6 +223,10 @@ func (r *ZoneSettingOpportunisticOnionEditResponseEnvelope) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingOpportunisticOnionEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingOpportunisticOnionEditResponseEnvelopeErrors struct {
 	Code    int64                                                       `json:"code,required"`
 	Message string                                                      `json:"message,required"`
@@ -235,6 +247,10 @@ func (r *ZoneSettingOpportunisticOnionEditResponseEnvelopeErrors) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingOpportunisticOnionEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingOpportunisticOnionEditResponseEnvelopeMessages struct {
 	Code    int64                                                         `json:"code,required"`
 	Message string                                                        `json:"message,required"`
@@ -253,6 +269,10 @@ type zoneSettingOpportunisticOnionEditResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingOpportunisticOnionEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingOpportunisticOnionEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneSettingOpportunisticOnionGetParams struct {
@@ -286,6 +306,10 @@ func (r *ZoneSettingOpportunisticOnionGetResponseEnvelope) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingOpportunisticOnionGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingOpportunisticOnionGetResponseEnvelopeErrors struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -303,6 +327,10 @@ type zoneSettingOpportunisticOnionGetResponseEnvelopeErrorsJSON struct {
 
 func (r *ZoneSettingOpportunisticOnionGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingOpportunisticOnionGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneSettingOpportunisticOnionGetResponseEnvelopeMessages struct {
@@ -323,4 +351,8 @@ type zoneSettingOpportunisticOnionGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingOpportunisticOnionGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingOpportunisticOnionGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }

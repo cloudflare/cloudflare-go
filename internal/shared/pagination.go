@@ -29,6 +29,10 @@ func (r *V4PagePaginationResult[T]) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r v4PagePaginationResultJSON) RawJSON() string {
+	return r.raw
+}
+
 type V4PagePaginationResultInfo struct {
 	Page    int64                          `json:"page"`
 	PerPage int64                          `json:"per_page"`
@@ -46,6 +50,10 @@ type v4PagePaginationResultInfoJSON struct {
 
 func (r *V4PagePaginationResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r v4PagePaginationResultInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type V4PagePagination[T any] struct {
@@ -67,6 +75,10 @@ type v4PagePaginationJSON struct {
 
 func (r *V4PagePagination[T]) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r v4PagePaginationJSON) RawJSON() string {
+	return r.raw
 }
 
 // NextPage returns the next page as defined by this pagination style. When there
@@ -161,6 +173,10 @@ func (r *V4PagePaginationArrayResultInfo) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r v4PagePaginationArrayResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type V4PagePaginationArray[T any] struct {
 	Result     []T                             `json:"result"`
 	ResultInfo V4PagePaginationArrayResultInfo `json:"result_info"`
@@ -180,6 +196,10 @@ type v4PagePaginationArrayJSON struct {
 
 func (r *V4PagePaginationArray[T]) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r v4PagePaginationArrayJSON) RawJSON() string {
+	return r.raw
 }
 
 // NextPage returns the next page as defined by this pagination style. When there

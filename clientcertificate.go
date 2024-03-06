@@ -183,6 +183,10 @@ func (r *ClientCertificateNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r clientCertificateNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Certificate Authority used to issue the Client Certificate
 type ClientCertificateNewResponseCertificateAuthority struct {
 	ID   string                                               `json:"id"`
@@ -201,6 +205,10 @@ type clientCertificateNewResponseCertificateAuthorityJSON struct {
 
 func (r *ClientCertificateNewResponseCertificateAuthority) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r clientCertificateNewResponseCertificateAuthorityJSON) RawJSON() string {
+	return r.raw
 }
 
 // Client Certificates may be active or revoked, and the pending_reactivation or
@@ -284,6 +292,10 @@ func (r *ClientCertificateListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r clientCertificateListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Certificate Authority used to issue the Client Certificate
 type ClientCertificateListResponseCertificateAuthority struct {
 	ID   string                                                `json:"id"`
@@ -302,6 +314,10 @@ type clientCertificateListResponseCertificateAuthorityJSON struct {
 
 func (r *ClientCertificateListResponseCertificateAuthority) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r clientCertificateListResponseCertificateAuthorityJSON) RawJSON() string {
+	return r.raw
 }
 
 // Client Certificates may be active or revoked, and the pending_reactivation or
@@ -385,6 +401,10 @@ func (r *ClientCertificateDeleteResponse) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r clientCertificateDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Certificate Authority used to issue the Client Certificate
 type ClientCertificateDeleteResponseCertificateAuthority struct {
 	ID   string                                                  `json:"id"`
@@ -403,6 +423,10 @@ type clientCertificateDeleteResponseCertificateAuthorityJSON struct {
 
 func (r *ClientCertificateDeleteResponseCertificateAuthority) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r clientCertificateDeleteResponseCertificateAuthorityJSON) RawJSON() string {
+	return r.raw
 }
 
 // Client Certificates may be active or revoked, and the pending_reactivation or
@@ -486,6 +510,10 @@ func (r *ClientCertificateEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r clientCertificateEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Certificate Authority used to issue the Client Certificate
 type ClientCertificateEditResponseCertificateAuthority struct {
 	ID   string                                                `json:"id"`
@@ -504,6 +532,10 @@ type clientCertificateEditResponseCertificateAuthorityJSON struct {
 
 func (r *ClientCertificateEditResponseCertificateAuthority) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r clientCertificateEditResponseCertificateAuthorityJSON) RawJSON() string {
+	return r.raw
 }
 
 // Client Certificates may be active or revoked, and the pending_reactivation or
@@ -587,6 +619,10 @@ func (r *ClientCertificateGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r clientCertificateGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Certificate Authority used to issue the Client Certificate
 type ClientCertificateGetResponseCertificateAuthority struct {
 	ID   string                                               `json:"id"`
@@ -605,6 +641,10 @@ type clientCertificateGetResponseCertificateAuthorityJSON struct {
 
 func (r *ClientCertificateGetResponseCertificateAuthority) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r clientCertificateGetResponseCertificateAuthorityJSON) RawJSON() string {
+	return r.raw
 }
 
 // Client Certificates may be active or revoked, and the pending_reactivation or
@@ -655,6 +695,10 @@ func (r *ClientCertificateNewResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r clientCertificateNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ClientCertificateNewResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -674,6 +718,10 @@ func (r *ClientCertificateNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r clientCertificateNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ClientCertificateNewResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -691,6 +739,10 @@ type clientCertificateNewResponseEnvelopeMessagesJSON struct {
 
 func (r *ClientCertificateNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r clientCertificateNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -764,6 +816,10 @@ func (r *ClientCertificateDeleteResponseEnvelope) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r clientCertificateDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ClientCertificateDeleteResponseEnvelopeErrors struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -783,6 +839,10 @@ func (r *ClientCertificateDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r clientCertificateDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ClientCertificateDeleteResponseEnvelopeMessages struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -800,6 +860,10 @@ type clientCertificateDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *ClientCertificateDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r clientCertificateDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -838,6 +902,10 @@ func (r *ClientCertificateEditResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r clientCertificateEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ClientCertificateEditResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -857,6 +925,10 @@ func (r *ClientCertificateEditResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r clientCertificateEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ClientCertificateEditResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -874,6 +946,10 @@ type clientCertificateEditResponseEnvelopeMessagesJSON struct {
 
 func (r *ClientCertificateEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r clientCertificateEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -912,6 +988,10 @@ func (r *ClientCertificateGetResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r clientCertificateGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ClientCertificateGetResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -931,6 +1011,10 @@ func (r *ClientCertificateGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r clientCertificateGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ClientCertificateGetResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -948,6 +1032,10 @@ type clientCertificateGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ClientCertificateGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r clientCertificateGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

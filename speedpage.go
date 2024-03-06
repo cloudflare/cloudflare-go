@@ -70,6 +70,10 @@ func (r *SpeedPageListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r speedPageListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // A test region with a label.
 type SpeedPageListResponseRegion struct {
 	Label string `json:"label"`
@@ -89,6 +93,10 @@ type speedPageListResponseRegionJSON struct {
 
 func (r *SpeedPageListResponseRegion) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r speedPageListResponseRegionJSON) RawJSON() string {
+	return r.raw
 }
 
 // A test region.
@@ -161,6 +169,10 @@ func (r *SpeedPageListResponseTest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r speedPageListResponseTestJSON) RawJSON() string {
+	return r.raw
+}
+
 // The Lighthouse report.
 type SpeedPageListResponseTestsDesktopReport struct {
 	// Cumulative Layout Shift.
@@ -212,6 +224,10 @@ func (r *SpeedPageListResponseTestsDesktopReport) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r speedPageListResponseTestsDesktopReportJSON) RawJSON() string {
+	return r.raw
+}
+
 // The type of device.
 type SpeedPageListResponseTestsDesktopReportDeviceType string
 
@@ -242,6 +258,10 @@ type speedPageListResponseTestsDesktopReportErrorJSON struct {
 
 func (r *SpeedPageListResponseTestsDesktopReportError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r speedPageListResponseTestsDesktopReportErrorJSON) RawJSON() string {
+	return r.raw
 }
 
 // The error code of the Lighthouse result.
@@ -315,6 +335,10 @@ func (r *SpeedPageListResponseTestsMobileReport) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r speedPageListResponseTestsMobileReportJSON) RawJSON() string {
+	return r.raw
+}
+
 // The type of device.
 type SpeedPageListResponseTestsMobileReportDeviceType string
 
@@ -345,6 +369,10 @@ type speedPageListResponseTestsMobileReportErrorJSON struct {
 
 func (r *SpeedPageListResponseTestsMobileReportError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r speedPageListResponseTestsMobileReportErrorJSON) RawJSON() string {
+	return r.raw
 }
 
 // The error code of the Lighthouse result.
@@ -386,6 +414,10 @@ type speedPageListResponseTestsRegionJSON struct {
 
 func (r *SpeedPageListResponseTestsRegion) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r speedPageListResponseTestsRegionJSON) RawJSON() string {
+	return r.raw
 }
 
 // A test region.
@@ -443,4 +475,8 @@ type speedPageListResponseEnvelopeJSON struct {
 
 func (r *SpeedPageListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r speedPageListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

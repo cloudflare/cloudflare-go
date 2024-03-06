@@ -93,6 +93,10 @@ func (r *ZoneSettingWebpEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingWebpEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // ID of the zone setting.
 type ZoneSettingWebpEditResponseID string
 
@@ -146,6 +150,10 @@ type zoneSettingWebpGetResponseJSON struct {
 
 func (r *ZoneSettingWebpGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingWebpGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // ID of the zone setting.
@@ -218,6 +226,10 @@ func (r *ZoneSettingWebpEditResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingWebpEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingWebpEditResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -237,6 +249,10 @@ func (r *ZoneSettingWebpEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingWebpEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingWebpEditResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -254,6 +270,10 @@ type zoneSettingWebpEditResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingWebpEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingWebpEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneSettingWebpGetParams struct {
@@ -288,6 +308,10 @@ func (r *ZoneSettingWebpGetResponseEnvelope) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingWebpGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingWebpGetResponseEnvelopeErrors struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -307,6 +331,10 @@ func (r *ZoneSettingWebpGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingWebpGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingWebpGetResponseEnvelopeMessages struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -324,4 +352,8 @@ type zoneSettingWebpGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingWebpGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingWebpGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }

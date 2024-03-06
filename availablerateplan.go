@@ -76,6 +76,10 @@ func (r *AvailableRatePlanGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r availableRatePlanGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type AvailableRatePlanGetResponseComponent struct {
 	// The default amount allocated.
 	Default float64 `json:"default"`
@@ -98,6 +102,10 @@ type availableRatePlanGetResponseComponentJSON struct {
 
 func (r *AvailableRatePlanGetResponseComponent) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r availableRatePlanGetResponseComponentJSON) RawJSON() string {
+	return r.raw
 }
 
 // The unique component.
@@ -146,6 +154,10 @@ func (r *AvailableRatePlanGetResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r availableRatePlanGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AvailableRatePlanGetResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -165,6 +177,10 @@ func (r *AvailableRatePlanGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r availableRatePlanGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AvailableRatePlanGetResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -182,6 +198,10 @@ type availableRatePlanGetResponseEnvelopeMessagesJSON struct {
 
 func (r *AvailableRatePlanGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r availableRatePlanGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -216,4 +236,8 @@ type availableRatePlanGetResponseEnvelopeResultInfoJSON struct {
 
 func (r *AvailableRatePlanGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r availableRatePlanGetResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

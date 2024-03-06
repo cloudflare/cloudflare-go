@@ -147,6 +147,10 @@ func (r *UserEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserEditResponseEnvelopeErrors struct {
 	Code    int64                              `json:"code,required"`
 	Message string                             `json:"message,required"`
@@ -166,6 +170,10 @@ func (r *UserEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserEditResponseEnvelopeMessages struct {
 	Code    int64                                `json:"code,required"`
 	Message string                               `json:"message,required"`
@@ -183,6 +191,10 @@ type userEditResponseEnvelopeMessagesJSON struct {
 
 func (r *UserEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -216,6 +228,10 @@ func (r *UserGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserGetResponseEnvelopeErrors struct {
 	Code    int64                             `json:"code,required"`
 	Message string                            `json:"message,required"`
@@ -235,6 +251,10 @@ func (r *UserGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserGetResponseEnvelopeMessages struct {
 	Code    int64                               `json:"code,required"`
 	Message string                              `json:"message,required"`
@@ -252,6 +272,10 @@ type userGetResponseEnvelopeMessagesJSON struct {
 
 func (r *UserGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

@@ -64,6 +64,10 @@ func (r *ZeroTrustDLPPatternValidateResponse) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPPatternValidateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDLPPatternValidateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -99,6 +103,10 @@ func (r *ZeroTrustDLPPatternValidateResponseEnvelope) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPPatternValidateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDLPPatternValidateResponseEnvelopeErrors struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -118,6 +126,10 @@ func (r *ZeroTrustDLPPatternValidateResponseEnvelopeErrors) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPPatternValidateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDLPPatternValidateResponseEnvelopeMessages struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -135,6 +147,10 @@ type zeroTrustDLPPatternValidateResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustDLPPatternValidateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDLPPatternValidateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

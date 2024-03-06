@@ -131,6 +131,10 @@ func (r *HyperdriveConfigNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r hyperdriveConfigNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type HyperdriveConfigUpdateResponse struct {
 	// Identifier
 	ID   string                             `json:"id"`
@@ -149,6 +153,10 @@ func (r *HyperdriveConfigUpdateResponse) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r hyperdriveConfigUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type HyperdriveConfigListResponse struct {
 	// Identifier
 	ID   string                           `json:"id"`
@@ -165,6 +173,10 @@ type hyperdriveConfigListResponseJSON struct {
 
 func (r *HyperdriveConfigListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r hyperdriveConfigListResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Union satisfied by [HyperdriveConfigDeleteResponseUnknown] or
@@ -202,6 +214,10 @@ func (r *HyperdriveConfigEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r hyperdriveConfigEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type HyperdriveConfigGetResponse struct {
 	// Identifier
 	ID   string                          `json:"id"`
@@ -218,6 +234,10 @@ type hyperdriveConfigGetResponseJSON struct {
 
 func (r *HyperdriveConfigGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r hyperdriveConfigGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type HyperdriveConfigNewParams struct {
@@ -264,6 +284,10 @@ func (r *HyperdriveConfigNewResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r hyperdriveConfigNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type HyperdriveConfigNewResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -283,6 +307,10 @@ func (r *HyperdriveConfigNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r hyperdriveConfigNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type HyperdriveConfigNewResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -300,6 +328,10 @@ type hyperdriveConfigNewResponseEnvelopeMessagesJSON struct {
 
 func (r *HyperdriveConfigNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r hyperdriveConfigNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -353,6 +385,10 @@ func (r *HyperdriveConfigUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r hyperdriveConfigUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type HyperdriveConfigUpdateResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -372,6 +408,10 @@ func (r *HyperdriveConfigUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r hyperdriveConfigUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type HyperdriveConfigUpdateResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -389,6 +429,10 @@ type hyperdriveConfigUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *HyperdriveConfigUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r hyperdriveConfigUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -427,6 +471,10 @@ func (r *HyperdriveConfigListResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r hyperdriveConfigListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type HyperdriveConfigListResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -446,6 +494,10 @@ func (r *HyperdriveConfigListResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r hyperdriveConfigListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type HyperdriveConfigListResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -463,6 +515,10 @@ type hyperdriveConfigListResponseEnvelopeMessagesJSON struct {
 
 func (r *HyperdriveConfigListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r hyperdriveConfigListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -501,6 +557,10 @@ func (r *HyperdriveConfigDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r hyperdriveConfigDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type HyperdriveConfigDeleteResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -520,6 +580,10 @@ func (r *HyperdriveConfigDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r hyperdriveConfigDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type HyperdriveConfigDeleteResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -537,6 +601,10 @@ type hyperdriveConfigDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *HyperdriveConfigDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r hyperdriveConfigDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -590,6 +658,10 @@ func (r *HyperdriveConfigEditResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r hyperdriveConfigEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type HyperdriveConfigEditResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -609,6 +681,10 @@ func (r *HyperdriveConfigEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r hyperdriveConfigEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type HyperdriveConfigEditResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -626,6 +702,10 @@ type hyperdriveConfigEditResponseEnvelopeMessagesJSON struct {
 
 func (r *HyperdriveConfigEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r hyperdriveConfigEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -664,6 +744,10 @@ func (r *HyperdriveConfigGetResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r hyperdriveConfigGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type HyperdriveConfigGetResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -683,6 +767,10 @@ func (r *HyperdriveConfigGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r hyperdriveConfigGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type HyperdriveConfigGetResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -700,6 +788,10 @@ type hyperdriveConfigGetResponseEnvelopeMessagesJSON struct {
 
 func (r *HyperdriveConfigGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r hyperdriveConfigGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

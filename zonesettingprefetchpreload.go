@@ -90,6 +90,10 @@ func (r *ZoneSettingPrefetchPreloadEditResponse) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingPrefetchPreloadEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // ID of the zone setting.
 type ZoneSettingPrefetchPreloadEditResponseID string
 
@@ -142,6 +146,10 @@ type zoneSettingPrefetchPreloadGetResponseJSON struct {
 
 func (r *ZoneSettingPrefetchPreloadGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingPrefetchPreloadGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // ID of the zone setting.
@@ -213,6 +221,10 @@ func (r *ZoneSettingPrefetchPreloadEditResponseEnvelope) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingPrefetchPreloadEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingPrefetchPreloadEditResponseEnvelopeErrors struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -232,6 +244,10 @@ func (r *ZoneSettingPrefetchPreloadEditResponseEnvelopeErrors) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingPrefetchPreloadEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingPrefetchPreloadEditResponseEnvelopeMessages struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -249,6 +265,10 @@ type zoneSettingPrefetchPreloadEditResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingPrefetchPreloadEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingPrefetchPreloadEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneSettingPrefetchPreloadGetParams struct {
@@ -282,6 +302,10 @@ func (r *ZoneSettingPrefetchPreloadGetResponseEnvelope) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingPrefetchPreloadGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingPrefetchPreloadGetResponseEnvelopeErrors struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -301,6 +325,10 @@ func (r *ZoneSettingPrefetchPreloadGetResponseEnvelopeErrors) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingPrefetchPreloadGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingPrefetchPreloadGetResponseEnvelopeMessages struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -318,4 +346,8 @@ type zoneSettingPrefetchPreloadGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingPrefetchPreloadGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingPrefetchPreloadGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }

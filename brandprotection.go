@@ -84,6 +84,10 @@ func (r *BrandProtectionSubmitResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r brandProtectionSubmitResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type BrandProtectionSubmitResponseExcludedURL struct {
 	// URL that was excluded.
 	URL  string                                       `json:"url"`
@@ -100,6 +104,10 @@ type brandProtectionSubmitResponseExcludedURLJSON struct {
 
 func (r *BrandProtectionSubmitResponseExcludedURL) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r brandProtectionSubmitResponseExcludedURLJSON) RawJSON() string {
+	return r.raw
 }
 
 type BrandProtectionSubmitResponseSkippedURL struct {
@@ -123,6 +131,10 @@ func (r *BrandProtectionSubmitResponseSkippedURL) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r brandProtectionSubmitResponseSkippedURLJSON) RawJSON() string {
+	return r.raw
+}
+
 type BrandProtectionSubmitResponseSubmittedURL struct {
 	// URL that was submitted.
 	URL string `json:"url"`
@@ -142,6 +154,10 @@ type brandProtectionSubmitResponseSubmittedURLJSON struct {
 
 func (r *BrandProtectionSubmitResponseSubmittedURL) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r brandProtectionSubmitResponseSubmittedURLJSON) RawJSON() string {
+	return r.raw
 }
 
 type BrandProtectionURLInfoResponse struct {
@@ -181,6 +197,10 @@ func (r *BrandProtectionURLInfoResponse) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r brandProtectionURLInfoResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type BrandProtectionURLInfoResponseCategorization struct {
 	// Name of the category applied.
 	Category string `json:"category"`
@@ -202,6 +222,10 @@ func (r *BrandProtectionURLInfoResponseCategorization) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r brandProtectionURLInfoResponseCategorizationJSON) RawJSON() string {
+	return r.raw
+}
+
 type BrandProtectionURLInfoResponseModelResult struct {
 	// Name of the model.
 	ModelName string `json:"model_name"`
@@ -221,6 +245,10 @@ type brandProtectionURLInfoResponseModelResultJSON struct {
 
 func (r *BrandProtectionURLInfoResponseModelResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r brandProtectionURLInfoResponseModelResultJSON) RawJSON() string {
+	return r.raw
 }
 
 type BrandProtectionURLInfoResponseRuleMatch struct {
@@ -250,6 +278,10 @@ func (r *BrandProtectionURLInfoResponseRuleMatch) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r brandProtectionURLInfoResponseRuleMatchJSON) RawJSON() string {
+	return r.raw
+}
+
 // Status of the most recent scan found.
 type BrandProtectionURLInfoResponseScanStatus struct {
 	// Timestamp of when the submission was processed.
@@ -276,6 +308,10 @@ type brandProtectionURLInfoResponseScanStatusJSON struct {
 
 func (r *BrandProtectionURLInfoResponseScanStatus) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r brandProtectionURLInfoResponseScanStatusJSON) RawJSON() string {
+	return r.raw
 }
 
 type BrandProtectionSubmitParams struct {
@@ -313,6 +349,10 @@ func (r *BrandProtectionSubmitResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r brandProtectionSubmitResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type BrandProtectionSubmitResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -332,6 +372,10 @@ func (r *BrandProtectionSubmitResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r brandProtectionSubmitResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type BrandProtectionSubmitResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -349,6 +393,10 @@ type brandProtectionSubmitResponseEnvelopeMessagesJSON struct {
 
 func (r *BrandProtectionSubmitResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r brandProtectionSubmitResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -412,6 +460,10 @@ func (r *BrandProtectionURLInfoResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r brandProtectionURLInfoResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type BrandProtectionURLInfoResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -431,6 +483,10 @@ func (r *BrandProtectionURLInfoResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r brandProtectionURLInfoResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type BrandProtectionURLInfoResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -448,6 +504,10 @@ type brandProtectionURLInfoResponseEnvelopeMessagesJSON struct {
 
 func (r *BrandProtectionURLInfoResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r brandProtectionURLInfoResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

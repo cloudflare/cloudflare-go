@@ -97,6 +97,10 @@ func (r *StorageAnalyticsListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r storageAnalyticsListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type StorageAnalyticsListResponseData struct {
 	// List of metrics returned by the query.
 	Metrics []interface{}                        `json:"metrics,required"`
@@ -113,6 +117,10 @@ type storageAnalyticsListResponseDataJSON struct {
 
 func (r *StorageAnalyticsListResponseData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r storageAnalyticsListResponseDataJSON) RawJSON() string {
+	return r.raw
 }
 
 // For specifying result metrics.
@@ -167,6 +175,10 @@ func (r *StorageAnalyticsListResponseQuery) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r storageAnalyticsListResponseQueryJSON) RawJSON() string {
+	return r.raw
+}
+
 // Metrics on Workers KV requests.
 type StorageAnalyticsStoredResponse struct {
 	Data []StorageAnalyticsStoredResponseData `json:"data,required,nullable"`
@@ -204,6 +216,10 @@ func (r *StorageAnalyticsStoredResponse) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r storageAnalyticsStoredResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type StorageAnalyticsStoredResponseData struct {
 	// List of metrics returned by the query.
 	Metrics []interface{}                          `json:"metrics,required"`
@@ -220,6 +236,10 @@ type storageAnalyticsStoredResponseDataJSON struct {
 
 func (r *StorageAnalyticsStoredResponseData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r storageAnalyticsStoredResponseDataJSON) RawJSON() string {
+	return r.raw
 }
 
 // For specifying result metrics.
@@ -272,6 +292,10 @@ type storageAnalyticsStoredResponseQueryJSON struct {
 
 func (r *StorageAnalyticsStoredResponseQuery) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r storageAnalyticsStoredResponseQueryJSON) RawJSON() string {
+	return r.raw
 }
 
 type StorageAnalyticsListParams struct {
@@ -375,6 +399,10 @@ func (r *StorageAnalyticsListResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r storageAnalyticsListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type StorageAnalyticsListResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -394,6 +422,10 @@ func (r *StorageAnalyticsListResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r storageAnalyticsListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type StorageAnalyticsListResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -411,6 +443,10 @@ type storageAnalyticsListResponseEnvelopeMessagesJSON struct {
 
 func (r *StorageAnalyticsListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r storageAnalyticsListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -518,6 +554,10 @@ func (r *StorageAnalyticsStoredResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r storageAnalyticsStoredResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type StorageAnalyticsStoredResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -537,6 +577,10 @@ func (r *StorageAnalyticsStoredResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r storageAnalyticsStoredResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type StorageAnalyticsStoredResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -554,6 +598,10 @@ type storageAnalyticsStoredResponseEnvelopeMessagesJSON struct {
 
 func (r *StorageAnalyticsStoredResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r storageAnalyticsStoredResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

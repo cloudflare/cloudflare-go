@@ -94,6 +94,10 @@ func (r *DNSFirewallAnalyticsReportBytimeGetResponse) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsFirewallAnalyticsReportBytimeGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSFirewallAnalyticsReportBytimeGetResponseData struct {
 	// Array of dimension values, representing the combination of dimension values
 	// corresponding to this row.
@@ -115,6 +119,10 @@ type dnsFirewallAnalyticsReportBytimeGetResponseDataJSON struct {
 
 func (r *DNSFirewallAnalyticsReportBytimeGetResponseData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsFirewallAnalyticsReportBytimeGetResponseDataJSON) RawJSON() string {
+	return r.raw
 }
 
 type DNSFirewallAnalyticsReportBytimeGetResponseQuery struct {
@@ -155,6 +163,10 @@ type dnsFirewallAnalyticsReportBytimeGetResponseQueryJSON struct {
 
 func (r *DNSFirewallAnalyticsReportBytimeGetResponseQuery) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsFirewallAnalyticsReportBytimeGetResponseQueryJSON) RawJSON() string {
+	return r.raw
 }
 
 // Unit of time to group data by.
@@ -242,6 +254,10 @@ func (r *DNSFirewallAnalyticsReportBytimeGetResponseEnvelope) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsFirewallAnalyticsReportBytimeGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSFirewallAnalyticsReportBytimeGetResponseEnvelopeErrors struct {
 	Code    int64                                                         `json:"code,required"`
 	Message string                                                        `json:"message,required"`
@@ -262,6 +278,10 @@ func (r *DNSFirewallAnalyticsReportBytimeGetResponseEnvelopeErrors) UnmarshalJSO
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsFirewallAnalyticsReportBytimeGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSFirewallAnalyticsReportBytimeGetResponseEnvelopeMessages struct {
 	Code    int64                                                           `json:"code,required"`
 	Message string                                                          `json:"message,required"`
@@ -280,6 +300,10 @@ type dnsFirewallAnalyticsReportBytimeGetResponseEnvelopeMessagesJSON struct {
 
 func (r *DNSFirewallAnalyticsReportBytimeGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsFirewallAnalyticsReportBytimeGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

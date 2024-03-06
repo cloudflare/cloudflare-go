@@ -376,6 +376,10 @@ func (r *DNSRecordNewResponseA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordNewResponseAJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordNewResponseA) implementsDNSRecordNewResponse() {}
 
 // Record type.
@@ -406,6 +410,10 @@ type dnsRecordNewResponseAMetaJSON struct {
 
 func (r *DNSRecordNewResponseAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordNewResponseAMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -499,6 +507,10 @@ func (r *DNSRecordNewResponseAAAA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordNewResponseAAAAJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordNewResponseAAAA) implementsDNSRecordNewResponse() {}
 
 // Record type.
@@ -529,6 +541,10 @@ type dnsRecordNewResponseAAAAMetaJSON struct {
 
 func (r *DNSRecordNewResponseAAAAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordNewResponseAAAAMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -621,6 +637,10 @@ func (r *DNSRecordNewResponseCAA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordNewResponseCAAJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordNewResponseCAA) implementsDNSRecordNewResponse() {}
 
 // Components of a CAA record.
@@ -646,6 +666,10 @@ type dnsRecordNewResponseCAADataJSON struct {
 
 func (r *DNSRecordNewResponseCAAData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordNewResponseCAADataJSON) RawJSON() string {
+	return r.raw
 }
 
 // Record type.
@@ -676,6 +700,10 @@ type dnsRecordNewResponseCAAMetaJSON struct {
 
 func (r *DNSRecordNewResponseCAAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordNewResponseCAAMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -768,6 +796,10 @@ func (r *DNSRecordNewResponseCert) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordNewResponseCertJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordNewResponseCert) implementsDNSRecordNewResponse() {}
 
 // Components of a CERT record.
@@ -798,6 +830,10 @@ func (r *DNSRecordNewResponseCertData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordNewResponseCertDataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DNSRecordNewResponseCertType string
 
@@ -826,6 +862,10 @@ type dnsRecordNewResponseCertMetaJSON struct {
 
 func (r *DNSRecordNewResponseCertMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordNewResponseCertMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -919,6 +959,10 @@ func (r *DNSRecordNewResponseCNAME) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordNewResponseCNAMEJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordNewResponseCNAME) implementsDNSRecordNewResponse() {}
 
 // Record type.
@@ -949,6 +993,10 @@ type dnsRecordNewResponseCNAMEMetaJSON struct {
 
 func (r *DNSRecordNewResponseCNAMEMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordNewResponseCNAMEMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -1041,6 +1089,10 @@ func (r *DNSRecordNewResponseDNSKEY) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordNewResponseDNSKEYJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordNewResponseDNSKEY) implementsDNSRecordNewResponse() {}
 
 // Components of a DNSKEY record.
@@ -1071,6 +1123,10 @@ func (r *DNSRecordNewResponseDNSKEYData) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordNewResponseDNSKEYDataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DNSRecordNewResponseDNSKEYType string
 
@@ -1099,6 +1155,10 @@ type dnsRecordNewResponseDNSKEYMetaJSON struct {
 
 func (r *DNSRecordNewResponseDNSKEYMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordNewResponseDNSKEYMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -1191,6 +1251,10 @@ func (r *DNSRecordNewResponseDS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordNewResponseDSJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordNewResponseDS) implementsDNSRecordNewResponse() {}
 
 // Components of a DS record.
@@ -1221,6 +1285,10 @@ func (r *DNSRecordNewResponseDSData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordNewResponseDSDataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DNSRecordNewResponseDSType string
 
@@ -1249,6 +1317,10 @@ type dnsRecordNewResponseDSMetaJSON struct {
 
 func (r *DNSRecordNewResponseDSMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordNewResponseDSMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -1341,6 +1413,10 @@ func (r *DNSRecordNewResponseHTTPS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordNewResponseHTTPSJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordNewResponseHTTPS) implementsDNSRecordNewResponse() {}
 
 // Components of a HTTPS record.
@@ -1366,6 +1442,10 @@ type dnsRecordNewResponseHTTPSDataJSON struct {
 
 func (r *DNSRecordNewResponseHTTPSData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordNewResponseHTTPSDataJSON) RawJSON() string {
+	return r.raw
 }
 
 // Record type.
@@ -1396,6 +1476,10 @@ type dnsRecordNewResponseHTTPSMetaJSON struct {
 
 func (r *DNSRecordNewResponseHTTPSMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordNewResponseHTTPSMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -1488,6 +1572,10 @@ func (r *DNSRecordNewResponseLOC) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordNewResponseLOCJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordNewResponseLOC) implementsDNSRecordNewResponse() {}
 
 // Components of a LOC record.
@@ -1542,6 +1630,10 @@ func (r *DNSRecordNewResponseLOCData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordNewResponseLOCDataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Latitude direction.
 type DNSRecordNewResponseLOCDataLatDirection string
 
@@ -1586,6 +1678,10 @@ type dnsRecordNewResponseLOCMetaJSON struct {
 
 func (r *DNSRecordNewResponseLOCMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordNewResponseLOCMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -1679,6 +1775,10 @@ func (r *DNSRecordNewResponseMX) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordNewResponseMXJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordNewResponseMX) implementsDNSRecordNewResponse() {}
 
 // Record type.
@@ -1709,6 +1809,10 @@ type dnsRecordNewResponseMXMetaJSON struct {
 
 func (r *DNSRecordNewResponseMXMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordNewResponseMXMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -1801,6 +1905,10 @@ func (r *DNSRecordNewResponseNAPTR) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordNewResponseNAPTRJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordNewResponseNAPTR) implementsDNSRecordNewResponse() {}
 
 // Components of a NAPTR record.
@@ -1837,6 +1945,10 @@ func (r *DNSRecordNewResponseNAPTRData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordNewResponseNAPTRDataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DNSRecordNewResponseNAPTRType string
 
@@ -1865,6 +1977,10 @@ type dnsRecordNewResponseNAPTRMetaJSON struct {
 
 func (r *DNSRecordNewResponseNAPTRMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordNewResponseNAPTRMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -1954,6 +2070,10 @@ func (r *DNSRecordNewResponseNS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordNewResponseNSJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordNewResponseNS) implementsDNSRecordNewResponse() {}
 
 // Record type.
@@ -1984,6 +2104,10 @@ type dnsRecordNewResponseNSMetaJSON struct {
 
 func (r *DNSRecordNewResponseNSMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordNewResponseNSMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -2073,6 +2197,10 @@ func (r *DNSRecordNewResponsePTR) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordNewResponsePTRJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordNewResponsePTR) implementsDNSRecordNewResponse() {}
 
 // Record type.
@@ -2103,6 +2231,10 @@ type dnsRecordNewResponsePTRMetaJSON struct {
 
 func (r *DNSRecordNewResponsePTRMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordNewResponsePTRMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -2195,6 +2327,10 @@ func (r *DNSRecordNewResponseSmimea) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordNewResponseSmimeaJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordNewResponseSmimea) implementsDNSRecordNewResponse() {}
 
 // Components of a SMIMEA record.
@@ -2225,6 +2361,10 @@ func (r *DNSRecordNewResponseSmimeaData) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordNewResponseSmimeaDataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DNSRecordNewResponseSmimeaType string
 
@@ -2253,6 +2393,10 @@ type dnsRecordNewResponseSmimeaMetaJSON struct {
 
 func (r *DNSRecordNewResponseSmimeaMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordNewResponseSmimeaMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -2348,6 +2492,10 @@ func (r *DNSRecordNewResponseSRV) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordNewResponseSRVJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordNewResponseSRV) implementsDNSRecordNewResponse() {}
 
 // Components of a SRV record.
@@ -2394,6 +2542,10 @@ func (r *DNSRecordNewResponseSRVData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordNewResponseSRVDataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DNSRecordNewResponseSRVType string
 
@@ -2422,6 +2574,10 @@ type dnsRecordNewResponseSRVMetaJSON struct {
 
 func (r *DNSRecordNewResponseSRVMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordNewResponseSRVMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -2514,6 +2670,10 @@ func (r *DNSRecordNewResponseSSHFP) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordNewResponseSSHFPJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordNewResponseSSHFP) implementsDNSRecordNewResponse() {}
 
 // Components of a SSHFP record.
@@ -2539,6 +2699,10 @@ type dnsRecordNewResponseSSHFPDataJSON struct {
 
 func (r *DNSRecordNewResponseSSHFPData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordNewResponseSSHFPDataJSON) RawJSON() string {
+	return r.raw
 }
 
 // Record type.
@@ -2569,6 +2733,10 @@ type dnsRecordNewResponseSSHFPMetaJSON struct {
 
 func (r *DNSRecordNewResponseSSHFPMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordNewResponseSSHFPMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -2661,6 +2829,10 @@ func (r *DNSRecordNewResponseSVCB) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordNewResponseSVCBJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordNewResponseSVCB) implementsDNSRecordNewResponse() {}
 
 // Components of a SVCB record.
@@ -2686,6 +2858,10 @@ type dnsRecordNewResponseSVCBDataJSON struct {
 
 func (r *DNSRecordNewResponseSVCBData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordNewResponseSVCBDataJSON) RawJSON() string {
+	return r.raw
 }
 
 // Record type.
@@ -2716,6 +2892,10 @@ type dnsRecordNewResponseSVCBMetaJSON struct {
 
 func (r *DNSRecordNewResponseSVCBMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordNewResponseSVCBMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -2808,6 +2988,10 @@ func (r *DNSRecordNewResponseTLSA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordNewResponseTLSAJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordNewResponseTLSA) implementsDNSRecordNewResponse() {}
 
 // Components of a TLSA record.
@@ -2838,6 +3022,10 @@ func (r *DNSRecordNewResponseTLSAData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordNewResponseTLSADataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DNSRecordNewResponseTLSAType string
 
@@ -2866,6 +3054,10 @@ type dnsRecordNewResponseTLSAMetaJSON struct {
 
 func (r *DNSRecordNewResponseTLSAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordNewResponseTLSAMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -2955,6 +3147,10 @@ func (r *DNSRecordNewResponseTXT) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordNewResponseTXTJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordNewResponseTXT) implementsDNSRecordNewResponse() {}
 
 // Record type.
@@ -2985,6 +3181,10 @@ type dnsRecordNewResponseTXTMetaJSON struct {
 
 func (r *DNSRecordNewResponseTXTMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordNewResponseTXTMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -3081,6 +3281,10 @@ func (r *DNSRecordNewResponseURI) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordNewResponseURIJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordNewResponseURI) implementsDNSRecordNewResponse() {}
 
 // Components of a URI record.
@@ -3103,6 +3307,10 @@ type dnsRecordNewResponseURIDataJSON struct {
 
 func (r *DNSRecordNewResponseURIData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordNewResponseURIDataJSON) RawJSON() string {
+	return r.raw
 }
 
 // Record type.
@@ -3133,6 +3341,10 @@ type dnsRecordNewResponseURIMetaJSON struct {
 
 func (r *DNSRecordNewResponseURIMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordNewResponseURIMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -3347,6 +3559,10 @@ func (r *DNSRecordUpdateResponseA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordUpdateResponseAJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordUpdateResponseA) implementsDNSRecordUpdateResponse() {}
 
 // Record type.
@@ -3377,6 +3593,10 @@ type dnsRecordUpdateResponseAMetaJSON struct {
 
 func (r *DNSRecordUpdateResponseAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordUpdateResponseAMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -3470,6 +3690,10 @@ func (r *DNSRecordUpdateResponseAAAA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordUpdateResponseAAAAJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordUpdateResponseAAAA) implementsDNSRecordUpdateResponse() {}
 
 // Record type.
@@ -3500,6 +3724,10 @@ type dnsRecordUpdateResponseAAAAMetaJSON struct {
 
 func (r *DNSRecordUpdateResponseAAAAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordUpdateResponseAAAAMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -3593,6 +3821,10 @@ func (r *DNSRecordUpdateResponseCAA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordUpdateResponseCAAJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordUpdateResponseCAA) implementsDNSRecordUpdateResponse() {}
 
 // Components of a CAA record.
@@ -3618,6 +3850,10 @@ type dnsRecordUpdateResponseCAADataJSON struct {
 
 func (r *DNSRecordUpdateResponseCAAData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordUpdateResponseCAADataJSON) RawJSON() string {
+	return r.raw
 }
 
 // Record type.
@@ -3648,6 +3884,10 @@ type dnsRecordUpdateResponseCAAMetaJSON struct {
 
 func (r *DNSRecordUpdateResponseCAAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordUpdateResponseCAAMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -3740,6 +3980,10 @@ func (r *DNSRecordUpdateResponseCert) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordUpdateResponseCertJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordUpdateResponseCert) implementsDNSRecordUpdateResponse() {}
 
 // Components of a CERT record.
@@ -3770,6 +4014,10 @@ func (r *DNSRecordUpdateResponseCertData) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordUpdateResponseCertDataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DNSRecordUpdateResponseCertType string
 
@@ -3798,6 +4046,10 @@ type dnsRecordUpdateResponseCertMetaJSON struct {
 
 func (r *DNSRecordUpdateResponseCertMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordUpdateResponseCertMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -3892,6 +4144,10 @@ func (r *DNSRecordUpdateResponseCNAME) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordUpdateResponseCNAMEJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordUpdateResponseCNAME) implementsDNSRecordUpdateResponse() {}
 
 // Record type.
@@ -3922,6 +4178,10 @@ type dnsRecordUpdateResponseCNAMEMetaJSON struct {
 
 func (r *DNSRecordUpdateResponseCNAMEMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordUpdateResponseCNAMEMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -4015,6 +4275,10 @@ func (r *DNSRecordUpdateResponseDNSKEY) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordUpdateResponseDNSKEYJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordUpdateResponseDNSKEY) implementsDNSRecordUpdateResponse() {}
 
 // Components of a DNSKEY record.
@@ -4045,6 +4309,10 @@ func (r *DNSRecordUpdateResponseDNSKEYData) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordUpdateResponseDNSKEYDataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DNSRecordUpdateResponseDNSKEYType string
 
@@ -4073,6 +4341,10 @@ type dnsRecordUpdateResponseDNSKEYMetaJSON struct {
 
 func (r *DNSRecordUpdateResponseDNSKEYMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordUpdateResponseDNSKEYMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -4166,6 +4438,10 @@ func (r *DNSRecordUpdateResponseDS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordUpdateResponseDSJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordUpdateResponseDS) implementsDNSRecordUpdateResponse() {}
 
 // Components of a DS record.
@@ -4196,6 +4472,10 @@ func (r *DNSRecordUpdateResponseDSData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordUpdateResponseDSDataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DNSRecordUpdateResponseDSType string
 
@@ -4224,6 +4504,10 @@ type dnsRecordUpdateResponseDSMetaJSON struct {
 
 func (r *DNSRecordUpdateResponseDSMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordUpdateResponseDSMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -4316,6 +4600,10 @@ func (r *DNSRecordUpdateResponseHTTPS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordUpdateResponseHTTPSJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordUpdateResponseHTTPS) implementsDNSRecordUpdateResponse() {}
 
 // Components of a HTTPS record.
@@ -4341,6 +4629,10 @@ type dnsRecordUpdateResponseHTTPSDataJSON struct {
 
 func (r *DNSRecordUpdateResponseHTTPSData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordUpdateResponseHTTPSDataJSON) RawJSON() string {
+	return r.raw
 }
 
 // Record type.
@@ -4371,6 +4663,10 @@ type dnsRecordUpdateResponseHTTPSMetaJSON struct {
 
 func (r *DNSRecordUpdateResponseHTTPSMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordUpdateResponseHTTPSMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -4464,6 +4760,10 @@ func (r *DNSRecordUpdateResponseLOC) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordUpdateResponseLOCJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordUpdateResponseLOC) implementsDNSRecordUpdateResponse() {}
 
 // Components of a LOC record.
@@ -4518,6 +4818,10 @@ func (r *DNSRecordUpdateResponseLOCData) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordUpdateResponseLOCDataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Latitude direction.
 type DNSRecordUpdateResponseLOCDataLatDirection string
 
@@ -4562,6 +4866,10 @@ type dnsRecordUpdateResponseLOCMetaJSON struct {
 
 func (r *DNSRecordUpdateResponseLOCMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordUpdateResponseLOCMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -4655,6 +4963,10 @@ func (r *DNSRecordUpdateResponseMX) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordUpdateResponseMXJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordUpdateResponseMX) implementsDNSRecordUpdateResponse() {}
 
 // Record type.
@@ -4685,6 +4997,10 @@ type dnsRecordUpdateResponseMXMetaJSON struct {
 
 func (r *DNSRecordUpdateResponseMXMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordUpdateResponseMXMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -4777,6 +5093,10 @@ func (r *DNSRecordUpdateResponseNAPTR) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordUpdateResponseNAPTRJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordUpdateResponseNAPTR) implementsDNSRecordUpdateResponse() {}
 
 // Components of a NAPTR record.
@@ -4813,6 +5133,10 @@ func (r *DNSRecordUpdateResponseNAPTRData) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordUpdateResponseNAPTRDataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DNSRecordUpdateResponseNAPTRType string
 
@@ -4841,6 +5165,10 @@ type dnsRecordUpdateResponseNAPTRMetaJSON struct {
 
 func (r *DNSRecordUpdateResponseNAPTRMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordUpdateResponseNAPTRMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -4931,6 +5259,10 @@ func (r *DNSRecordUpdateResponseNS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordUpdateResponseNSJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordUpdateResponseNS) implementsDNSRecordUpdateResponse() {}
 
 // Record type.
@@ -4961,6 +5293,10 @@ type dnsRecordUpdateResponseNSMetaJSON struct {
 
 func (r *DNSRecordUpdateResponseNSMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordUpdateResponseNSMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -5050,6 +5386,10 @@ func (r *DNSRecordUpdateResponsePTR) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordUpdateResponsePTRJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordUpdateResponsePTR) implementsDNSRecordUpdateResponse() {}
 
 // Record type.
@@ -5080,6 +5420,10 @@ type dnsRecordUpdateResponsePTRMetaJSON struct {
 
 func (r *DNSRecordUpdateResponsePTRMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordUpdateResponsePTRMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -5172,6 +5516,10 @@ func (r *DNSRecordUpdateResponseSmimea) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordUpdateResponseSmimeaJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordUpdateResponseSmimea) implementsDNSRecordUpdateResponse() {}
 
 // Components of a SMIMEA record.
@@ -5202,6 +5550,10 @@ func (r *DNSRecordUpdateResponseSmimeaData) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordUpdateResponseSmimeaDataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DNSRecordUpdateResponseSmimeaType string
 
@@ -5230,6 +5582,10 @@ type dnsRecordUpdateResponseSmimeaMetaJSON struct {
 
 func (r *DNSRecordUpdateResponseSmimeaMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordUpdateResponseSmimeaMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -5326,6 +5682,10 @@ func (r *DNSRecordUpdateResponseSRV) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordUpdateResponseSRVJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordUpdateResponseSRV) implementsDNSRecordUpdateResponse() {}
 
 // Components of a SRV record.
@@ -5372,6 +5732,10 @@ func (r *DNSRecordUpdateResponseSRVData) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordUpdateResponseSRVDataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DNSRecordUpdateResponseSRVType string
 
@@ -5400,6 +5764,10 @@ type dnsRecordUpdateResponseSRVMetaJSON struct {
 
 func (r *DNSRecordUpdateResponseSRVMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordUpdateResponseSRVMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -5492,6 +5860,10 @@ func (r *DNSRecordUpdateResponseSSHFP) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordUpdateResponseSSHFPJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordUpdateResponseSSHFP) implementsDNSRecordUpdateResponse() {}
 
 // Components of a SSHFP record.
@@ -5517,6 +5889,10 @@ type dnsRecordUpdateResponseSSHFPDataJSON struct {
 
 func (r *DNSRecordUpdateResponseSSHFPData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordUpdateResponseSSHFPDataJSON) RawJSON() string {
+	return r.raw
 }
 
 // Record type.
@@ -5547,6 +5923,10 @@ type dnsRecordUpdateResponseSSHFPMetaJSON struct {
 
 func (r *DNSRecordUpdateResponseSSHFPMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordUpdateResponseSSHFPMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -5640,6 +6020,10 @@ func (r *DNSRecordUpdateResponseSVCB) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordUpdateResponseSVCBJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordUpdateResponseSVCB) implementsDNSRecordUpdateResponse() {}
 
 // Components of a SVCB record.
@@ -5665,6 +6049,10 @@ type dnsRecordUpdateResponseSVCBDataJSON struct {
 
 func (r *DNSRecordUpdateResponseSVCBData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordUpdateResponseSVCBDataJSON) RawJSON() string {
+	return r.raw
 }
 
 // Record type.
@@ -5695,6 +6083,10 @@ type dnsRecordUpdateResponseSVCBMetaJSON struct {
 
 func (r *DNSRecordUpdateResponseSVCBMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordUpdateResponseSVCBMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -5788,6 +6180,10 @@ func (r *DNSRecordUpdateResponseTLSA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordUpdateResponseTLSAJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordUpdateResponseTLSA) implementsDNSRecordUpdateResponse() {}
 
 // Components of a TLSA record.
@@ -5818,6 +6214,10 @@ func (r *DNSRecordUpdateResponseTLSAData) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordUpdateResponseTLSADataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DNSRecordUpdateResponseTLSAType string
 
@@ -5846,6 +6246,10 @@ type dnsRecordUpdateResponseTLSAMetaJSON struct {
 
 func (r *DNSRecordUpdateResponseTLSAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordUpdateResponseTLSAMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -5936,6 +6340,10 @@ func (r *DNSRecordUpdateResponseTXT) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordUpdateResponseTXTJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordUpdateResponseTXT) implementsDNSRecordUpdateResponse() {}
 
 // Record type.
@@ -5966,6 +6374,10 @@ type dnsRecordUpdateResponseTXTMetaJSON struct {
 
 func (r *DNSRecordUpdateResponseTXTMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordUpdateResponseTXTMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -6062,6 +6474,10 @@ func (r *DNSRecordUpdateResponseURI) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordUpdateResponseURIJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordUpdateResponseURI) implementsDNSRecordUpdateResponse() {}
 
 // Components of a URI record.
@@ -6084,6 +6500,10 @@ type dnsRecordUpdateResponseURIDataJSON struct {
 
 func (r *DNSRecordUpdateResponseURIData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordUpdateResponseURIDataJSON) RawJSON() string {
+	return r.raw
 }
 
 // Record type.
@@ -6114,6 +6534,10 @@ type dnsRecordUpdateResponseURIMetaJSON struct {
 
 func (r *DNSRecordUpdateResponseURIMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordUpdateResponseURIMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -6328,6 +6752,10 @@ func (r *DNSRecordListResponseA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordListResponseAJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordListResponseA) implementsDNSRecordListResponse() {}
 
 // Record type.
@@ -6358,6 +6786,10 @@ type dnsRecordListResponseAMetaJSON struct {
 
 func (r *DNSRecordListResponseAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordListResponseAMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -6451,6 +6883,10 @@ func (r *DNSRecordListResponseAAAA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordListResponseAAAAJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordListResponseAAAA) implementsDNSRecordListResponse() {}
 
 // Record type.
@@ -6481,6 +6917,10 @@ type dnsRecordListResponseAAAAMetaJSON struct {
 
 func (r *DNSRecordListResponseAAAAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordListResponseAAAAMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -6573,6 +7013,10 @@ func (r *DNSRecordListResponseCAA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordListResponseCAAJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordListResponseCAA) implementsDNSRecordListResponse() {}
 
 // Components of a CAA record.
@@ -6598,6 +7042,10 @@ type dnsRecordListResponseCAADataJSON struct {
 
 func (r *DNSRecordListResponseCAAData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordListResponseCAADataJSON) RawJSON() string {
+	return r.raw
 }
 
 // Record type.
@@ -6628,6 +7076,10 @@ type dnsRecordListResponseCAAMetaJSON struct {
 
 func (r *DNSRecordListResponseCAAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordListResponseCAAMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -6720,6 +7172,10 @@ func (r *DNSRecordListResponseCert) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordListResponseCertJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordListResponseCert) implementsDNSRecordListResponse() {}
 
 // Components of a CERT record.
@@ -6750,6 +7206,10 @@ func (r *DNSRecordListResponseCertData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordListResponseCertDataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DNSRecordListResponseCertType string
 
@@ -6778,6 +7238,10 @@ type dnsRecordListResponseCertMetaJSON struct {
 
 func (r *DNSRecordListResponseCertMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordListResponseCertMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -6871,6 +7335,10 @@ func (r *DNSRecordListResponseCNAME) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordListResponseCNAMEJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordListResponseCNAME) implementsDNSRecordListResponse() {}
 
 // Record type.
@@ -6901,6 +7369,10 @@ type dnsRecordListResponseCNAMEMetaJSON struct {
 
 func (r *DNSRecordListResponseCNAMEMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordListResponseCNAMEMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -6993,6 +7465,10 @@ func (r *DNSRecordListResponseDNSKEY) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordListResponseDNSKEYJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordListResponseDNSKEY) implementsDNSRecordListResponse() {}
 
 // Components of a DNSKEY record.
@@ -7023,6 +7499,10 @@ func (r *DNSRecordListResponseDNSKEYData) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordListResponseDNSKEYDataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DNSRecordListResponseDNSKEYType string
 
@@ -7051,6 +7531,10 @@ type dnsRecordListResponseDNSKEYMetaJSON struct {
 
 func (r *DNSRecordListResponseDNSKEYMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordListResponseDNSKEYMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -7144,6 +7628,10 @@ func (r *DNSRecordListResponseDS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordListResponseDSJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordListResponseDS) implementsDNSRecordListResponse() {}
 
 // Components of a DS record.
@@ -7174,6 +7662,10 @@ func (r *DNSRecordListResponseDSData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordListResponseDSDataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DNSRecordListResponseDSType string
 
@@ -7202,6 +7694,10 @@ type dnsRecordListResponseDSMetaJSON struct {
 
 func (r *DNSRecordListResponseDSMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordListResponseDSMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -7294,6 +7790,10 @@ func (r *DNSRecordListResponseHTTPS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordListResponseHTTPSJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordListResponseHTTPS) implementsDNSRecordListResponse() {}
 
 // Components of a HTTPS record.
@@ -7319,6 +7819,10 @@ type dnsRecordListResponseHTTPSDataJSON struct {
 
 func (r *DNSRecordListResponseHTTPSData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordListResponseHTTPSDataJSON) RawJSON() string {
+	return r.raw
 }
 
 // Record type.
@@ -7349,6 +7853,10 @@ type dnsRecordListResponseHTTPSMetaJSON struct {
 
 func (r *DNSRecordListResponseHTTPSMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordListResponseHTTPSMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -7441,6 +7949,10 @@ func (r *DNSRecordListResponseLOC) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordListResponseLOCJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordListResponseLOC) implementsDNSRecordListResponse() {}
 
 // Components of a LOC record.
@@ -7495,6 +8007,10 @@ func (r *DNSRecordListResponseLOCData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordListResponseLOCDataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Latitude direction.
 type DNSRecordListResponseLOCDataLatDirection string
 
@@ -7539,6 +8055,10 @@ type dnsRecordListResponseLOCMetaJSON struct {
 
 func (r *DNSRecordListResponseLOCMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordListResponseLOCMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -7632,6 +8152,10 @@ func (r *DNSRecordListResponseMX) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordListResponseMXJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordListResponseMX) implementsDNSRecordListResponse() {}
 
 // Record type.
@@ -7662,6 +8186,10 @@ type dnsRecordListResponseMXMetaJSON struct {
 
 func (r *DNSRecordListResponseMXMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordListResponseMXMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -7754,6 +8282,10 @@ func (r *DNSRecordListResponseNAPTR) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordListResponseNAPTRJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordListResponseNAPTR) implementsDNSRecordListResponse() {}
 
 // Components of a NAPTR record.
@@ -7790,6 +8322,10 @@ func (r *DNSRecordListResponseNAPTRData) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordListResponseNAPTRDataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DNSRecordListResponseNAPTRType string
 
@@ -7818,6 +8354,10 @@ type dnsRecordListResponseNAPTRMetaJSON struct {
 
 func (r *DNSRecordListResponseNAPTRMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordListResponseNAPTRMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -7907,6 +8447,10 @@ func (r *DNSRecordListResponseNS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordListResponseNSJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordListResponseNS) implementsDNSRecordListResponse() {}
 
 // Record type.
@@ -7937,6 +8481,10 @@ type dnsRecordListResponseNSMetaJSON struct {
 
 func (r *DNSRecordListResponseNSMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordListResponseNSMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -8026,6 +8574,10 @@ func (r *DNSRecordListResponsePTR) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordListResponsePTRJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordListResponsePTR) implementsDNSRecordListResponse() {}
 
 // Record type.
@@ -8056,6 +8608,10 @@ type dnsRecordListResponsePTRMetaJSON struct {
 
 func (r *DNSRecordListResponsePTRMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordListResponsePTRMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -8148,6 +8704,10 @@ func (r *DNSRecordListResponseSmimea) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordListResponseSmimeaJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordListResponseSmimea) implementsDNSRecordListResponse() {}
 
 // Components of a SMIMEA record.
@@ -8178,6 +8738,10 @@ func (r *DNSRecordListResponseSmimeaData) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordListResponseSmimeaDataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DNSRecordListResponseSmimeaType string
 
@@ -8206,6 +8770,10 @@ type dnsRecordListResponseSmimeaMetaJSON struct {
 
 func (r *DNSRecordListResponseSmimeaMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordListResponseSmimeaMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -8302,6 +8870,10 @@ func (r *DNSRecordListResponseSRV) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordListResponseSRVJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordListResponseSRV) implementsDNSRecordListResponse() {}
 
 // Components of a SRV record.
@@ -8348,6 +8920,10 @@ func (r *DNSRecordListResponseSRVData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordListResponseSRVDataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DNSRecordListResponseSRVType string
 
@@ -8376,6 +8952,10 @@ type dnsRecordListResponseSRVMetaJSON struct {
 
 func (r *DNSRecordListResponseSRVMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordListResponseSRVMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -8468,6 +9048,10 @@ func (r *DNSRecordListResponseSSHFP) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordListResponseSSHFPJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordListResponseSSHFP) implementsDNSRecordListResponse() {}
 
 // Components of a SSHFP record.
@@ -8493,6 +9077,10 @@ type dnsRecordListResponseSSHFPDataJSON struct {
 
 func (r *DNSRecordListResponseSSHFPData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordListResponseSSHFPDataJSON) RawJSON() string {
+	return r.raw
 }
 
 // Record type.
@@ -8523,6 +9111,10 @@ type dnsRecordListResponseSSHFPMetaJSON struct {
 
 func (r *DNSRecordListResponseSSHFPMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordListResponseSSHFPMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -8615,6 +9207,10 @@ func (r *DNSRecordListResponseSVCB) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordListResponseSVCBJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordListResponseSVCB) implementsDNSRecordListResponse() {}
 
 // Components of a SVCB record.
@@ -8640,6 +9236,10 @@ type dnsRecordListResponseSVCBDataJSON struct {
 
 func (r *DNSRecordListResponseSVCBData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordListResponseSVCBDataJSON) RawJSON() string {
+	return r.raw
 }
 
 // Record type.
@@ -8670,6 +9270,10 @@ type dnsRecordListResponseSVCBMetaJSON struct {
 
 func (r *DNSRecordListResponseSVCBMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordListResponseSVCBMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -8762,6 +9366,10 @@ func (r *DNSRecordListResponseTLSA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordListResponseTLSAJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordListResponseTLSA) implementsDNSRecordListResponse() {}
 
 // Components of a TLSA record.
@@ -8792,6 +9400,10 @@ func (r *DNSRecordListResponseTLSAData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordListResponseTLSADataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DNSRecordListResponseTLSAType string
 
@@ -8820,6 +9432,10 @@ type dnsRecordListResponseTLSAMetaJSON struct {
 
 func (r *DNSRecordListResponseTLSAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordListResponseTLSAMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -8909,6 +9525,10 @@ func (r *DNSRecordListResponseTXT) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordListResponseTXTJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordListResponseTXT) implementsDNSRecordListResponse() {}
 
 // Record type.
@@ -8939,6 +9559,10 @@ type dnsRecordListResponseTXTMetaJSON struct {
 
 func (r *DNSRecordListResponseTXTMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordListResponseTXTMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -9035,6 +9659,10 @@ func (r *DNSRecordListResponseURI) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordListResponseURIJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordListResponseURI) implementsDNSRecordListResponse() {}
 
 // Components of a URI record.
@@ -9057,6 +9685,10 @@ type dnsRecordListResponseURIDataJSON struct {
 
 func (r *DNSRecordListResponseURIData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordListResponseURIDataJSON) RawJSON() string {
+	return r.raw
 }
 
 // Record type.
@@ -9087,6 +9719,10 @@ type dnsRecordListResponseURIMetaJSON struct {
 
 func (r *DNSRecordListResponseURIMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordListResponseURIMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -9131,6 +9767,10 @@ type dnsRecordDeleteResponseJSON struct {
 
 func (r *DNSRecordDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Union satisfied by [DNSRecordEditResponseA], [DNSRecordEditResponseAAAA],
@@ -9319,6 +9959,10 @@ func (r *DNSRecordEditResponseA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordEditResponseAJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordEditResponseA) implementsDNSRecordEditResponse() {}
 
 // Record type.
@@ -9349,6 +9993,10 @@ type dnsRecordEditResponseAMetaJSON struct {
 
 func (r *DNSRecordEditResponseAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordEditResponseAMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -9442,6 +10090,10 @@ func (r *DNSRecordEditResponseAAAA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordEditResponseAAAAJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordEditResponseAAAA) implementsDNSRecordEditResponse() {}
 
 // Record type.
@@ -9472,6 +10124,10 @@ type dnsRecordEditResponseAAAAMetaJSON struct {
 
 func (r *DNSRecordEditResponseAAAAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordEditResponseAAAAMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -9564,6 +10220,10 @@ func (r *DNSRecordEditResponseCAA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordEditResponseCAAJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordEditResponseCAA) implementsDNSRecordEditResponse() {}
 
 // Components of a CAA record.
@@ -9589,6 +10249,10 @@ type dnsRecordEditResponseCAADataJSON struct {
 
 func (r *DNSRecordEditResponseCAAData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordEditResponseCAADataJSON) RawJSON() string {
+	return r.raw
 }
 
 // Record type.
@@ -9619,6 +10283,10 @@ type dnsRecordEditResponseCAAMetaJSON struct {
 
 func (r *DNSRecordEditResponseCAAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordEditResponseCAAMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -9711,6 +10379,10 @@ func (r *DNSRecordEditResponseCert) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordEditResponseCertJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordEditResponseCert) implementsDNSRecordEditResponse() {}
 
 // Components of a CERT record.
@@ -9741,6 +10413,10 @@ func (r *DNSRecordEditResponseCertData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordEditResponseCertDataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DNSRecordEditResponseCertType string
 
@@ -9769,6 +10445,10 @@ type dnsRecordEditResponseCertMetaJSON struct {
 
 func (r *DNSRecordEditResponseCertMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordEditResponseCertMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -9862,6 +10542,10 @@ func (r *DNSRecordEditResponseCNAME) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordEditResponseCNAMEJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordEditResponseCNAME) implementsDNSRecordEditResponse() {}
 
 // Record type.
@@ -9892,6 +10576,10 @@ type dnsRecordEditResponseCNAMEMetaJSON struct {
 
 func (r *DNSRecordEditResponseCNAMEMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordEditResponseCNAMEMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -9984,6 +10672,10 @@ func (r *DNSRecordEditResponseDNSKEY) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordEditResponseDNSKEYJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordEditResponseDNSKEY) implementsDNSRecordEditResponse() {}
 
 // Components of a DNSKEY record.
@@ -10014,6 +10706,10 @@ func (r *DNSRecordEditResponseDNSKEYData) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordEditResponseDNSKEYDataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DNSRecordEditResponseDNSKEYType string
 
@@ -10042,6 +10738,10 @@ type dnsRecordEditResponseDNSKEYMetaJSON struct {
 
 func (r *DNSRecordEditResponseDNSKEYMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordEditResponseDNSKEYMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -10135,6 +10835,10 @@ func (r *DNSRecordEditResponseDS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordEditResponseDSJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordEditResponseDS) implementsDNSRecordEditResponse() {}
 
 // Components of a DS record.
@@ -10165,6 +10869,10 @@ func (r *DNSRecordEditResponseDSData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordEditResponseDSDataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DNSRecordEditResponseDSType string
 
@@ -10193,6 +10901,10 @@ type dnsRecordEditResponseDSMetaJSON struct {
 
 func (r *DNSRecordEditResponseDSMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordEditResponseDSMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -10285,6 +10997,10 @@ func (r *DNSRecordEditResponseHTTPS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordEditResponseHTTPSJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordEditResponseHTTPS) implementsDNSRecordEditResponse() {}
 
 // Components of a HTTPS record.
@@ -10310,6 +11026,10 @@ type dnsRecordEditResponseHTTPSDataJSON struct {
 
 func (r *DNSRecordEditResponseHTTPSData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordEditResponseHTTPSDataJSON) RawJSON() string {
+	return r.raw
 }
 
 // Record type.
@@ -10340,6 +11060,10 @@ type dnsRecordEditResponseHTTPSMetaJSON struct {
 
 func (r *DNSRecordEditResponseHTTPSMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordEditResponseHTTPSMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -10432,6 +11156,10 @@ func (r *DNSRecordEditResponseLOC) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordEditResponseLOCJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordEditResponseLOC) implementsDNSRecordEditResponse() {}
 
 // Components of a LOC record.
@@ -10486,6 +11214,10 @@ func (r *DNSRecordEditResponseLOCData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordEditResponseLOCDataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Latitude direction.
 type DNSRecordEditResponseLOCDataLatDirection string
 
@@ -10530,6 +11262,10 @@ type dnsRecordEditResponseLOCMetaJSON struct {
 
 func (r *DNSRecordEditResponseLOCMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordEditResponseLOCMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -10623,6 +11359,10 @@ func (r *DNSRecordEditResponseMX) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordEditResponseMXJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordEditResponseMX) implementsDNSRecordEditResponse() {}
 
 // Record type.
@@ -10653,6 +11393,10 @@ type dnsRecordEditResponseMXMetaJSON struct {
 
 func (r *DNSRecordEditResponseMXMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordEditResponseMXMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -10745,6 +11489,10 @@ func (r *DNSRecordEditResponseNAPTR) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordEditResponseNAPTRJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordEditResponseNAPTR) implementsDNSRecordEditResponse() {}
 
 // Components of a NAPTR record.
@@ -10781,6 +11529,10 @@ func (r *DNSRecordEditResponseNAPTRData) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordEditResponseNAPTRDataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DNSRecordEditResponseNAPTRType string
 
@@ -10809,6 +11561,10 @@ type dnsRecordEditResponseNAPTRMetaJSON struct {
 
 func (r *DNSRecordEditResponseNAPTRMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordEditResponseNAPTRMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -10898,6 +11654,10 @@ func (r *DNSRecordEditResponseNS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordEditResponseNSJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordEditResponseNS) implementsDNSRecordEditResponse() {}
 
 // Record type.
@@ -10928,6 +11688,10 @@ type dnsRecordEditResponseNSMetaJSON struct {
 
 func (r *DNSRecordEditResponseNSMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordEditResponseNSMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -11017,6 +11781,10 @@ func (r *DNSRecordEditResponsePTR) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordEditResponsePTRJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordEditResponsePTR) implementsDNSRecordEditResponse() {}
 
 // Record type.
@@ -11047,6 +11815,10 @@ type dnsRecordEditResponsePTRMetaJSON struct {
 
 func (r *DNSRecordEditResponsePTRMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordEditResponsePTRMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -11139,6 +11911,10 @@ func (r *DNSRecordEditResponseSmimea) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordEditResponseSmimeaJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordEditResponseSmimea) implementsDNSRecordEditResponse() {}
 
 // Components of a SMIMEA record.
@@ -11169,6 +11945,10 @@ func (r *DNSRecordEditResponseSmimeaData) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordEditResponseSmimeaDataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DNSRecordEditResponseSmimeaType string
 
@@ -11197,6 +11977,10 @@ type dnsRecordEditResponseSmimeaMetaJSON struct {
 
 func (r *DNSRecordEditResponseSmimeaMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordEditResponseSmimeaMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -11293,6 +12077,10 @@ func (r *DNSRecordEditResponseSRV) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordEditResponseSRVJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordEditResponseSRV) implementsDNSRecordEditResponse() {}
 
 // Components of a SRV record.
@@ -11339,6 +12127,10 @@ func (r *DNSRecordEditResponseSRVData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordEditResponseSRVDataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DNSRecordEditResponseSRVType string
 
@@ -11367,6 +12159,10 @@ type dnsRecordEditResponseSRVMetaJSON struct {
 
 func (r *DNSRecordEditResponseSRVMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordEditResponseSRVMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -11459,6 +12255,10 @@ func (r *DNSRecordEditResponseSSHFP) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordEditResponseSSHFPJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordEditResponseSSHFP) implementsDNSRecordEditResponse() {}
 
 // Components of a SSHFP record.
@@ -11484,6 +12284,10 @@ type dnsRecordEditResponseSSHFPDataJSON struct {
 
 func (r *DNSRecordEditResponseSSHFPData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordEditResponseSSHFPDataJSON) RawJSON() string {
+	return r.raw
 }
 
 // Record type.
@@ -11514,6 +12318,10 @@ type dnsRecordEditResponseSSHFPMetaJSON struct {
 
 func (r *DNSRecordEditResponseSSHFPMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordEditResponseSSHFPMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -11606,6 +12414,10 @@ func (r *DNSRecordEditResponseSVCB) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordEditResponseSVCBJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordEditResponseSVCB) implementsDNSRecordEditResponse() {}
 
 // Components of a SVCB record.
@@ -11631,6 +12443,10 @@ type dnsRecordEditResponseSVCBDataJSON struct {
 
 func (r *DNSRecordEditResponseSVCBData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordEditResponseSVCBDataJSON) RawJSON() string {
+	return r.raw
 }
 
 // Record type.
@@ -11661,6 +12477,10 @@ type dnsRecordEditResponseSVCBMetaJSON struct {
 
 func (r *DNSRecordEditResponseSVCBMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordEditResponseSVCBMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -11753,6 +12573,10 @@ func (r *DNSRecordEditResponseTLSA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordEditResponseTLSAJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordEditResponseTLSA) implementsDNSRecordEditResponse() {}
 
 // Components of a TLSA record.
@@ -11783,6 +12607,10 @@ func (r *DNSRecordEditResponseTLSAData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordEditResponseTLSADataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DNSRecordEditResponseTLSAType string
 
@@ -11811,6 +12639,10 @@ type dnsRecordEditResponseTLSAMetaJSON struct {
 
 func (r *DNSRecordEditResponseTLSAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordEditResponseTLSAMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -11900,6 +12732,10 @@ func (r *DNSRecordEditResponseTXT) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordEditResponseTXTJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordEditResponseTXT) implementsDNSRecordEditResponse() {}
 
 // Record type.
@@ -11930,6 +12766,10 @@ type dnsRecordEditResponseTXTMetaJSON struct {
 
 func (r *DNSRecordEditResponseTXTMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordEditResponseTXTMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -12026,6 +12866,10 @@ func (r *DNSRecordEditResponseURI) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordEditResponseURIJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordEditResponseURI) implementsDNSRecordEditResponse() {}
 
 // Components of a URI record.
@@ -12048,6 +12892,10 @@ type dnsRecordEditResponseURIDataJSON struct {
 
 func (r *DNSRecordEditResponseURIData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordEditResponseURIDataJSON) RawJSON() string {
+	return r.raw
 }
 
 // Record type.
@@ -12078,6 +12926,10 @@ type dnsRecordEditResponseURIMetaJSON struct {
 
 func (r *DNSRecordEditResponseURIMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordEditResponseURIMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -12292,6 +13144,10 @@ func (r *DNSRecordGetResponseA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordGetResponseAJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordGetResponseA) implementsDNSRecordGetResponse() {}
 
 // Record type.
@@ -12322,6 +13178,10 @@ type dnsRecordGetResponseAMetaJSON struct {
 
 func (r *DNSRecordGetResponseAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordGetResponseAMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -12415,6 +13275,10 @@ func (r *DNSRecordGetResponseAAAA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordGetResponseAAAAJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordGetResponseAAAA) implementsDNSRecordGetResponse() {}
 
 // Record type.
@@ -12445,6 +13309,10 @@ type dnsRecordGetResponseAAAAMetaJSON struct {
 
 func (r *DNSRecordGetResponseAAAAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordGetResponseAAAAMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -12537,6 +13405,10 @@ func (r *DNSRecordGetResponseCAA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordGetResponseCAAJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordGetResponseCAA) implementsDNSRecordGetResponse() {}
 
 // Components of a CAA record.
@@ -12562,6 +13434,10 @@ type dnsRecordGetResponseCAADataJSON struct {
 
 func (r *DNSRecordGetResponseCAAData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordGetResponseCAADataJSON) RawJSON() string {
+	return r.raw
 }
 
 // Record type.
@@ -12592,6 +13468,10 @@ type dnsRecordGetResponseCAAMetaJSON struct {
 
 func (r *DNSRecordGetResponseCAAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordGetResponseCAAMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -12684,6 +13564,10 @@ func (r *DNSRecordGetResponseCert) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordGetResponseCertJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordGetResponseCert) implementsDNSRecordGetResponse() {}
 
 // Components of a CERT record.
@@ -12714,6 +13598,10 @@ func (r *DNSRecordGetResponseCertData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordGetResponseCertDataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DNSRecordGetResponseCertType string
 
@@ -12742,6 +13630,10 @@ type dnsRecordGetResponseCertMetaJSON struct {
 
 func (r *DNSRecordGetResponseCertMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordGetResponseCertMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -12835,6 +13727,10 @@ func (r *DNSRecordGetResponseCNAME) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordGetResponseCNAMEJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordGetResponseCNAME) implementsDNSRecordGetResponse() {}
 
 // Record type.
@@ -12865,6 +13761,10 @@ type dnsRecordGetResponseCNAMEMetaJSON struct {
 
 func (r *DNSRecordGetResponseCNAMEMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordGetResponseCNAMEMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -12957,6 +13857,10 @@ func (r *DNSRecordGetResponseDNSKEY) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordGetResponseDNSKEYJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordGetResponseDNSKEY) implementsDNSRecordGetResponse() {}
 
 // Components of a DNSKEY record.
@@ -12987,6 +13891,10 @@ func (r *DNSRecordGetResponseDNSKEYData) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordGetResponseDNSKEYDataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DNSRecordGetResponseDNSKEYType string
 
@@ -13015,6 +13923,10 @@ type dnsRecordGetResponseDNSKEYMetaJSON struct {
 
 func (r *DNSRecordGetResponseDNSKEYMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordGetResponseDNSKEYMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -13107,6 +14019,10 @@ func (r *DNSRecordGetResponseDS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordGetResponseDSJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordGetResponseDS) implementsDNSRecordGetResponse() {}
 
 // Components of a DS record.
@@ -13137,6 +14053,10 @@ func (r *DNSRecordGetResponseDSData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordGetResponseDSDataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DNSRecordGetResponseDSType string
 
@@ -13165,6 +14085,10 @@ type dnsRecordGetResponseDSMetaJSON struct {
 
 func (r *DNSRecordGetResponseDSMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordGetResponseDSMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -13257,6 +14181,10 @@ func (r *DNSRecordGetResponseHTTPS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordGetResponseHTTPSJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordGetResponseHTTPS) implementsDNSRecordGetResponse() {}
 
 // Components of a HTTPS record.
@@ -13282,6 +14210,10 @@ type dnsRecordGetResponseHTTPSDataJSON struct {
 
 func (r *DNSRecordGetResponseHTTPSData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordGetResponseHTTPSDataJSON) RawJSON() string {
+	return r.raw
 }
 
 // Record type.
@@ -13312,6 +14244,10 @@ type dnsRecordGetResponseHTTPSMetaJSON struct {
 
 func (r *DNSRecordGetResponseHTTPSMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordGetResponseHTTPSMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -13404,6 +14340,10 @@ func (r *DNSRecordGetResponseLOC) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordGetResponseLOCJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordGetResponseLOC) implementsDNSRecordGetResponse() {}
 
 // Components of a LOC record.
@@ -13458,6 +14398,10 @@ func (r *DNSRecordGetResponseLOCData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordGetResponseLOCDataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Latitude direction.
 type DNSRecordGetResponseLOCDataLatDirection string
 
@@ -13502,6 +14446,10 @@ type dnsRecordGetResponseLOCMetaJSON struct {
 
 func (r *DNSRecordGetResponseLOCMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordGetResponseLOCMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -13595,6 +14543,10 @@ func (r *DNSRecordGetResponseMX) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordGetResponseMXJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordGetResponseMX) implementsDNSRecordGetResponse() {}
 
 // Record type.
@@ -13625,6 +14577,10 @@ type dnsRecordGetResponseMXMetaJSON struct {
 
 func (r *DNSRecordGetResponseMXMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordGetResponseMXMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -13717,6 +14673,10 @@ func (r *DNSRecordGetResponseNAPTR) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordGetResponseNAPTRJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordGetResponseNAPTR) implementsDNSRecordGetResponse() {}
 
 // Components of a NAPTR record.
@@ -13753,6 +14713,10 @@ func (r *DNSRecordGetResponseNAPTRData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordGetResponseNAPTRDataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DNSRecordGetResponseNAPTRType string
 
@@ -13781,6 +14745,10 @@ type dnsRecordGetResponseNAPTRMetaJSON struct {
 
 func (r *DNSRecordGetResponseNAPTRMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordGetResponseNAPTRMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -13870,6 +14838,10 @@ func (r *DNSRecordGetResponseNS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordGetResponseNSJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordGetResponseNS) implementsDNSRecordGetResponse() {}
 
 // Record type.
@@ -13900,6 +14872,10 @@ type dnsRecordGetResponseNSMetaJSON struct {
 
 func (r *DNSRecordGetResponseNSMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordGetResponseNSMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -13989,6 +14965,10 @@ func (r *DNSRecordGetResponsePTR) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordGetResponsePTRJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordGetResponsePTR) implementsDNSRecordGetResponse() {}
 
 // Record type.
@@ -14019,6 +14999,10 @@ type dnsRecordGetResponsePTRMetaJSON struct {
 
 func (r *DNSRecordGetResponsePTRMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordGetResponsePTRMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -14111,6 +15095,10 @@ func (r *DNSRecordGetResponseSmimea) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordGetResponseSmimeaJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordGetResponseSmimea) implementsDNSRecordGetResponse() {}
 
 // Components of a SMIMEA record.
@@ -14141,6 +15129,10 @@ func (r *DNSRecordGetResponseSmimeaData) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordGetResponseSmimeaDataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DNSRecordGetResponseSmimeaType string
 
@@ -14169,6 +15161,10 @@ type dnsRecordGetResponseSmimeaMetaJSON struct {
 
 func (r *DNSRecordGetResponseSmimeaMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordGetResponseSmimeaMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -14264,6 +15260,10 @@ func (r *DNSRecordGetResponseSRV) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordGetResponseSRVJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordGetResponseSRV) implementsDNSRecordGetResponse() {}
 
 // Components of a SRV record.
@@ -14310,6 +15310,10 @@ func (r *DNSRecordGetResponseSRVData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordGetResponseSRVDataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DNSRecordGetResponseSRVType string
 
@@ -14338,6 +15342,10 @@ type dnsRecordGetResponseSRVMetaJSON struct {
 
 func (r *DNSRecordGetResponseSRVMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordGetResponseSRVMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -14430,6 +15438,10 @@ func (r *DNSRecordGetResponseSSHFP) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordGetResponseSSHFPJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordGetResponseSSHFP) implementsDNSRecordGetResponse() {}
 
 // Components of a SSHFP record.
@@ -14455,6 +15467,10 @@ type dnsRecordGetResponseSSHFPDataJSON struct {
 
 func (r *DNSRecordGetResponseSSHFPData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordGetResponseSSHFPDataJSON) RawJSON() string {
+	return r.raw
 }
 
 // Record type.
@@ -14485,6 +15501,10 @@ type dnsRecordGetResponseSSHFPMetaJSON struct {
 
 func (r *DNSRecordGetResponseSSHFPMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordGetResponseSSHFPMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -14577,6 +15597,10 @@ func (r *DNSRecordGetResponseSVCB) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordGetResponseSVCBJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordGetResponseSVCB) implementsDNSRecordGetResponse() {}
 
 // Components of a SVCB record.
@@ -14602,6 +15626,10 @@ type dnsRecordGetResponseSVCBDataJSON struct {
 
 func (r *DNSRecordGetResponseSVCBData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordGetResponseSVCBDataJSON) RawJSON() string {
+	return r.raw
 }
 
 // Record type.
@@ -14632,6 +15660,10 @@ type dnsRecordGetResponseSVCBMetaJSON struct {
 
 func (r *DNSRecordGetResponseSVCBMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordGetResponseSVCBMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -14724,6 +15756,10 @@ func (r *DNSRecordGetResponseTLSA) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordGetResponseTLSAJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordGetResponseTLSA) implementsDNSRecordGetResponse() {}
 
 // Components of a TLSA record.
@@ -14754,6 +15790,10 @@ func (r *DNSRecordGetResponseTLSAData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordGetResponseTLSADataJSON) RawJSON() string {
+	return r.raw
+}
+
 // Record type.
 type DNSRecordGetResponseTLSAType string
 
@@ -14782,6 +15822,10 @@ type dnsRecordGetResponseTLSAMetaJSON struct {
 
 func (r *DNSRecordGetResponseTLSAMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordGetResponseTLSAMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -14871,6 +15915,10 @@ func (r *DNSRecordGetResponseTXT) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordGetResponseTXTJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordGetResponseTXT) implementsDNSRecordGetResponse() {}
 
 // Record type.
@@ -14901,6 +15949,10 @@ type dnsRecordGetResponseTXTMetaJSON struct {
 
 func (r *DNSRecordGetResponseTXTMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordGetResponseTXTMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -14997,6 +16049,10 @@ func (r *DNSRecordGetResponseURI) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordGetResponseURIJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r DNSRecordGetResponseURI) implementsDNSRecordGetResponse() {}
 
 // Components of a URI record.
@@ -15019,6 +16075,10 @@ type dnsRecordGetResponseURIDataJSON struct {
 
 func (r *DNSRecordGetResponseURIData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordGetResponseURIDataJSON) RawJSON() string {
+	return r.raw
 }
 
 // Record type.
@@ -15049,6 +16109,10 @@ type dnsRecordGetResponseURIMetaJSON struct {
 
 func (r *DNSRecordGetResponseURIMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordGetResponseURIMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 // Time To Live (TTL) of the DNS record in seconds. Setting to 1 means 'automatic'.
@@ -15098,6 +16162,10 @@ func (r *DNSRecordImportResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordImportResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSRecordScanResponse struct {
 	// Number of DNS records added.
 	RecsAdded float64 `json:"recs_added"`
@@ -15117,6 +16185,10 @@ type dnsRecordScanResponseJSON struct {
 
 func (r *DNSRecordScanResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordScanResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type DNSRecordNewParams struct {
@@ -15314,6 +16386,10 @@ func (r *DNSRecordNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSRecordNewResponseEnvelopeErrors struct {
 	Code    int64                                  `json:"code,required"`
 	Message string                                 `json:"message,required"`
@@ -15333,6 +16409,10 @@ func (r *DNSRecordNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSRecordNewResponseEnvelopeMessages struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -15350,6 +16430,10 @@ type dnsRecordNewResponseEnvelopeMessagesJSON struct {
 
 func (r *DNSRecordNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -15554,6 +16638,10 @@ func (r *DNSRecordUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSRecordUpdateResponseEnvelopeErrors struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -15573,6 +16661,10 @@ func (r *DNSRecordUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSRecordUpdateResponseEnvelopeMessages struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -15590,6 +16682,10 @@ type dnsRecordUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *DNSRecordUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -15793,6 +16889,10 @@ func (r *DNSRecordDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSRecordEditParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -15988,6 +17088,10 @@ func (r *DNSRecordEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSRecordEditResponseEnvelopeErrors struct {
 	Code    int64                                   `json:"code,required"`
 	Message string                                  `json:"message,required"`
@@ -16007,6 +17111,10 @@ func (r *DNSRecordEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSRecordEditResponseEnvelopeMessages struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -16024,6 +17132,10 @@ type dnsRecordEditResponseEnvelopeMessagesJSON struct {
 
 func (r *DNSRecordEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -16067,6 +17179,10 @@ func (r *DNSRecordGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSRecordGetResponseEnvelopeErrors struct {
 	Code    int64                                  `json:"code,required"`
 	Message string                                 `json:"message,required"`
@@ -16086,6 +17202,10 @@ func (r *DNSRecordGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSRecordGetResponseEnvelopeMessages struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -16103,6 +17223,10 @@ type dnsRecordGetResponseEnvelopeMessagesJSON struct {
 
 func (r *DNSRecordGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -16157,6 +17281,10 @@ func (r *DNSRecordImportResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordImportResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSRecordImportResponseEnvelopeErrors struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -16176,6 +17304,10 @@ func (r *DNSRecordImportResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordImportResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSRecordImportResponseEnvelopeMessages struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -16193,6 +17325,10 @@ type dnsRecordImportResponseEnvelopeMessagesJSON struct {
 
 func (r *DNSRecordImportResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordImportResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -16226,6 +17362,10 @@ func (r *DNSRecordImportResponseEnvelopeTiming) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordImportResponseEnvelopeTimingJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSRecordScanParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -16257,6 +17397,10 @@ func (r *DNSRecordScanResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordScanResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSRecordScanResponseEnvelopeErrors struct {
 	Code    int64                                   `json:"code,required"`
 	Message string                                  `json:"message,required"`
@@ -16276,6 +17420,10 @@ func (r *DNSRecordScanResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsRecordScanResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSRecordScanResponseEnvelopeMessages struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -16293,6 +17441,10 @@ type dnsRecordScanResponseEnvelopeMessagesJSON struct {
 
 func (r *DNSRecordScanResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordScanResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -16324,4 +17476,8 @@ type dnsRecordScanResponseEnvelopeTimingJSON struct {
 
 func (r *DNSRecordScanResponseEnvelopeTiming) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsRecordScanResponseEnvelopeTimingJSON) RawJSON() string {
+	return r.raw
 }

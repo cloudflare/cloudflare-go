@@ -97,6 +97,10 @@ func (r *SpeedDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r speedDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The test schedule.
 type SpeedScheduleGetResponse struct {
 	// The frequency of the test.
@@ -120,6 +124,10 @@ type speedScheduleGetResponseJSON struct {
 
 func (r *SpeedScheduleGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r speedScheduleGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // The frequency of the test.
@@ -196,6 +204,10 @@ func (r *SpeedTrendsListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r speedTrendsListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type SpeedDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -253,6 +265,10 @@ type speedDeleteResponseEnvelopeJSON struct {
 
 func (r *SpeedDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r speedDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
 
 type SpeedScheduleGetParams struct {
@@ -313,6 +329,10 @@ type speedScheduleGetResponseEnvelopeJSON struct {
 
 func (r *SpeedScheduleGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r speedScheduleGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
 
 type SpeedTrendsListParams struct {
@@ -386,4 +406,8 @@ type speedTrendsListResponseEnvelopeJSON struct {
 
 func (r *SpeedTrendsListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r speedTrendsListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

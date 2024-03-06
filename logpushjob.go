@@ -211,6 +211,10 @@ func (r *LogpushJobNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logpushJobNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The frequency at which Cloudflare sends batches of logs to your destination.
 // Setting frequency to high sends your logs in larger quantities of smaller files.
 // Setting frequency to low sends logs in smaller quantities of larger files.
@@ -282,6 +286,10 @@ type logpushJobNewResponseOutputOptionsJSON struct {
 
 func (r *LogpushJobNewResponseOutputOptions) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r logpushJobNewResponseOutputOptionsJSON) RawJSON() string {
+	return r.raw
 }
 
 // Specifies the output type, such as `ndjson` or `csv`. This sets default values
@@ -371,6 +379,10 @@ func (r *LogpushJobUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logpushJobUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The frequency at which Cloudflare sends batches of logs to your destination.
 // Setting frequency to high sends your logs in larger quantities of smaller files.
 // Setting frequency to low sends logs in smaller quantities of larger files.
@@ -442,6 +454,10 @@ type logpushJobUpdateResponseOutputOptionsJSON struct {
 
 func (r *LogpushJobUpdateResponseOutputOptions) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r logpushJobUpdateResponseOutputOptionsJSON) RawJSON() string {
+	return r.raw
 }
 
 // Specifies the output type, such as `ndjson` or `csv`. This sets default values
@@ -531,6 +547,10 @@ func (r *LogpushJobListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logpushJobListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The frequency at which Cloudflare sends batches of logs to your destination.
 // Setting frequency to high sends your logs in larger quantities of smaller files.
 // Setting frequency to low sends logs in smaller quantities of larger files.
@@ -602,6 +622,10 @@ type logpushJobListResponseOutputOptionsJSON struct {
 
 func (r *LogpushJobListResponseOutputOptions) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r logpushJobListResponseOutputOptionsJSON) RawJSON() string {
+	return r.raw
 }
 
 // Specifies the output type, such as `ndjson` or `csv`. This sets default values
@@ -712,6 +736,10 @@ func (r *LogpushJobGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logpushJobGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The frequency at which Cloudflare sends batches of logs to your destination.
 // Setting frequency to high sends your logs in larger quantities of smaller files.
 // Setting frequency to low sends logs in smaller quantities of larger files.
@@ -783,6 +811,10 @@ type logpushJobGetResponseOutputOptionsJSON struct {
 
 func (r *LogpushJobGetResponseOutputOptions) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r logpushJobGetResponseOutputOptionsJSON) RawJSON() string {
+	return r.raw
 }
 
 // Specifies the output type, such as `ndjson` or `csv`. This sets default values
@@ -940,6 +972,10 @@ func (r *LogpushJobNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logpushJobNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogpushJobNewResponseEnvelopeErrors struct {
 	Code    int64                                   `json:"code,required"`
 	Message string                                  `json:"message,required"`
@@ -959,6 +995,10 @@ func (r *LogpushJobNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logpushJobNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogpushJobNewResponseEnvelopeMessages struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -976,6 +1016,10 @@ type logpushJobNewResponseEnvelopeMessagesJSON struct {
 
 func (r *LogpushJobNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r logpushJobNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1114,6 +1158,10 @@ func (r *LogpushJobUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logpushJobUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogpushJobUpdateResponseEnvelopeErrors struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -1133,6 +1181,10 @@ func (r *LogpushJobUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logpushJobUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogpushJobUpdateResponseEnvelopeMessages struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -1150,6 +1202,10 @@ type logpushJobUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *LogpushJobUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r logpushJobUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1190,6 +1246,10 @@ func (r *LogpushJobListResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logpushJobListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogpushJobListResponseEnvelopeErrors struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -1209,6 +1269,10 @@ func (r *LogpushJobListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logpushJobListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogpushJobListResponseEnvelopeMessages struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -1226,6 +1290,10 @@ type logpushJobListResponseEnvelopeMessagesJSON struct {
 
 func (r *LogpushJobListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r logpushJobListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1266,6 +1334,10 @@ func (r *LogpushJobDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logpushJobDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogpushJobDeleteResponseEnvelopeErrors struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -1285,6 +1357,10 @@ func (r *LogpushJobDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logpushJobDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogpushJobDeleteResponseEnvelopeMessages struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -1302,6 +1378,10 @@ type logpushJobDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *LogpushJobDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r logpushJobDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1342,6 +1422,10 @@ func (r *LogpushJobGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logpushJobGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogpushJobGetResponseEnvelopeErrors struct {
 	Code    int64                                   `json:"code,required"`
 	Message string                                  `json:"message,required"`
@@ -1361,6 +1445,10 @@ func (r *LogpushJobGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logpushJobGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogpushJobGetResponseEnvelopeMessages struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -1378,6 +1466,10 @@ type logpushJobGetResponseEnvelopeMessagesJSON struct {
 
 func (r *LogpushJobGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r logpushJobGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

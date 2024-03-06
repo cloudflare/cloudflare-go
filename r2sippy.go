@@ -93,6 +93,10 @@ func (r *R2SippyUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r r2SippyUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Details about the configured destination bucket
 type R2SippyUpdateResponseDestination struct {
 	// ID of the Cloudflare API token used when writing objects to this bucket
@@ -117,6 +121,10 @@ type r2SippyUpdateResponseDestinationJSON struct {
 
 func (r *R2SippyUpdateResponseDestination) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r r2SippyUpdateResponseDestinationJSON) RawJSON() string {
+	return r.raw
 }
 
 type R2SippyUpdateResponseDestinationProvider string
@@ -149,6 +157,10 @@ func (r *R2SippyUpdateResponseSource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r r2SippyUpdateResponseSourceJSON) RawJSON() string {
+	return r.raw
+}
+
 type R2SippyUpdateResponseSourceProvider string
 
 const (
@@ -171,6 +183,10 @@ type r2SippyDeleteResponseJSON struct {
 
 func (r *R2SippyDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r r2SippyDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type R2SippyDeleteResponseEnabled bool
@@ -203,6 +219,10 @@ func (r *R2SippyGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r r2SippyGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Details about the configured destination bucket
 type R2SippyGetResponseDestination struct {
 	// ID of the Cloudflare API token used when writing objects to this bucket
@@ -227,6 +247,10 @@ type r2SippyGetResponseDestinationJSON struct {
 
 func (r *R2SippyGetResponseDestination) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r r2SippyGetResponseDestinationJSON) RawJSON() string {
+	return r.raw
 }
 
 type R2SippyGetResponseDestinationProvider string
@@ -257,6 +281,10 @@ type r2SippyGetResponseSourceJSON struct {
 
 func (r *R2SippyGetResponseSource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r r2SippyGetResponseSourceJSON) RawJSON() string {
+	return r.raw
 }
 
 type R2SippyGetResponseSourceProvider string
@@ -355,6 +383,10 @@ func (r *R2SippyUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r r2SippyUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type R2SippyUpdateResponseEnvelopeErrors struct {
 	Code    int64                                   `json:"code,required"`
 	Message string                                  `json:"message,required"`
@@ -372,6 +404,10 @@ type r2SippyUpdateResponseEnvelopeErrorsJSON struct {
 
 func (r *R2SippyUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r r2SippyUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -410,6 +446,10 @@ func (r *R2SippyDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r r2SippyDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type R2SippyDeleteResponseEnvelopeErrors struct {
 	Code    int64                                   `json:"code,required"`
 	Message string                                  `json:"message,required"`
@@ -427,6 +467,10 @@ type r2SippyDeleteResponseEnvelopeErrorsJSON struct {
 
 func (r *R2SippyDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r r2SippyDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -465,6 +509,10 @@ func (r *R2SippyGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r r2SippyGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type R2SippyGetResponseEnvelopeErrors struct {
 	Code    int64                                `json:"code,required"`
 	Message string                               `json:"message,required"`
@@ -482,6 +530,10 @@ type r2SippyGetResponseEnvelopeErrorsJSON struct {
 
 func (r *R2SippyGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r r2SippyGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

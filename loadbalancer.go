@@ -272,6 +272,10 @@ func (r *LoadBalancer) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerJSON) RawJSON() string {
+	return r.raw
+}
+
 // Controls features that modify the routing of requests to pools and origins in
 // response to dynamic conditions, such as during the interval between active
 // health monitoring requests. For example, zero-downtime failover occurs
@@ -299,6 +303,10 @@ type loadBalancerAdaptiveRoutingJSON struct {
 
 func (r *LoadBalancerAdaptiveRouting) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerAdaptiveRoutingJSON) RawJSON() string {
+	return r.raw
 }
 
 // Controls location-based steering for non-proxied requests. See `steering_policy`
@@ -333,6 +341,10 @@ type loadBalancerLocationStrategyJSON struct {
 
 func (r *LoadBalancerLocationStrategy) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerLocationStrategyJSON) RawJSON() string {
+	return r.raw
 }
 
 // Determines the authoritative location when ECS is not preferred, does not exist
@@ -395,6 +407,10 @@ func (r *LoadBalancerRandomSteering) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerRandomSteeringJSON) RawJSON() string {
+	return r.raw
+}
+
 // A rule object containing conditions and overrides for this load balancer to
 // evaluate.
 type LoadBalancerRule struct {
@@ -444,6 +460,10 @@ func (r *LoadBalancerRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 // A collection of fields used to directly respond to the eyeball instead of
 // routing to a pool. If a fixed_response is supplied the rule will be marked as
 // terminates.
@@ -472,6 +492,10 @@ type loadBalancerRulesFixedResponseJSON struct {
 
 func (r *LoadBalancerRulesFixedResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerRulesFixedResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // A collection of overrides to apply to the load balancer when this rule's
@@ -605,6 +629,10 @@ func (r *LoadBalancerRulesOverrides) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerRulesOverridesJSON) RawJSON() string {
+	return r.raw
+}
+
 // Controls features that modify the routing of requests to pools and origins in
 // response to dynamic conditions, such as during the interval between active
 // health monitoring requests. For example, zero-downtime failover occurs
@@ -632,6 +660,10 @@ type loadBalancerRulesOverridesAdaptiveRoutingJSON struct {
 
 func (r *LoadBalancerRulesOverridesAdaptiveRouting) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerRulesOverridesAdaptiveRoutingJSON) RawJSON() string {
+	return r.raw
 }
 
 // Controls location-based steering for non-proxied requests. See `steering_policy`
@@ -666,6 +698,10 @@ type loadBalancerRulesOverridesLocationStrategyJSON struct {
 
 func (r *LoadBalancerRulesOverridesLocationStrategy) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerRulesOverridesLocationStrategyJSON) RawJSON() string {
+	return r.raw
 }
 
 // Determines the authoritative location when ECS is not preferred, does not exist
@@ -726,6 +762,10 @@ type loadBalancerRulesOverridesRandomSteeringJSON struct {
 
 func (r *LoadBalancerRulesOverridesRandomSteering) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerRulesOverridesRandomSteeringJSON) RawJSON() string {
+	return r.raw
 }
 
 // Specifies the type of session affinity the load balancer should use unless
@@ -825,6 +865,10 @@ type loadBalancerRulesOverridesSessionAffinityAttributesJSON struct {
 
 func (r *LoadBalancerRulesOverridesSessionAffinityAttributes) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerRulesOverridesSessionAffinityAttributesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configures the SameSite attribute on session affinity cookie. Value "Auto" will
@@ -1004,6 +1048,10 @@ func (r *LoadBalancerSessionAffinityAttributes) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerSessionAffinityAttributesJSON) RawJSON() string {
+	return r.raw
+}
+
 // Configures the SameSite attribute on session affinity cookie. Value "Auto" will
 // be translated to "Lax" or "None" depending if Always Use HTTPS is enabled. Note:
 // when using value "None", the secure attribute can not be set to "Never".
@@ -1097,6 +1145,10 @@ type loadBalancerDeleteResponseJSON struct {
 
 func (r *LoadBalancerDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type LoadBalancerNewParams struct {
@@ -1919,6 +1971,10 @@ func (r *LoadBalancerNewResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoadBalancerNewResponseEnvelopeErrors struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -1938,6 +1994,10 @@ func (r *LoadBalancerNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoadBalancerNewResponseEnvelopeMessages struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -1955,6 +2015,10 @@ type loadBalancerNewResponseEnvelopeMessagesJSON struct {
 
 func (r *LoadBalancerNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -2786,6 +2850,10 @@ func (r *LoadBalancerUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoadBalancerUpdateResponseEnvelopeErrors struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -2805,6 +2873,10 @@ func (r *LoadBalancerUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoadBalancerUpdateResponseEnvelopeMessages struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -2822,6 +2894,10 @@ type loadBalancerUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *LoadBalancerUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -2861,6 +2937,10 @@ func (r *LoadBalancerListResponseEnvelope) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoadBalancerListResponseEnvelopeErrors struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -2880,6 +2960,10 @@ func (r *LoadBalancerListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoadBalancerListResponseEnvelopeMessages struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -2897,6 +2981,10 @@ type loadBalancerListResponseEnvelopeMessagesJSON struct {
 
 func (r *LoadBalancerListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -2933,6 +3021,10 @@ func (r *LoadBalancerListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoadBalancerDeleteParams struct {
 	ZoneID param.Field[string] `path:"zone_id,required"`
 }
@@ -2961,6 +3053,10 @@ func (r *LoadBalancerDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoadBalancerDeleteResponseEnvelopeErrors struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -2980,6 +3076,10 @@ func (r *LoadBalancerDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoadBalancerDeleteResponseEnvelopeMessages struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -2997,6 +3097,10 @@ type loadBalancerDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *LoadBalancerDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -3828,6 +3932,10 @@ func (r *LoadBalancerEditResponseEnvelope) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoadBalancerEditResponseEnvelopeErrors struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -3847,6 +3955,10 @@ func (r *LoadBalancerEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoadBalancerEditResponseEnvelopeMessages struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -3864,6 +3976,10 @@ type loadBalancerEditResponseEnvelopeMessagesJSON struct {
 
 func (r *LoadBalancerEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -3901,6 +4017,10 @@ func (r *LoadBalancerGetResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoadBalancerGetResponseEnvelopeErrors struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -3920,6 +4040,10 @@ func (r *LoadBalancerGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoadBalancerGetResponseEnvelopeMessages struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -3937,6 +4061,10 @@ type loadBalancerGetResponseEnvelopeMessagesJSON struct {
 
 func (r *LoadBalancerGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

@@ -169,6 +169,10 @@ func (r *RadarEmailSecuritySummaryARCResponse) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummaryARCResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummaryARCResponseMeta struct {
 	DateRange      []RadarEmailSecuritySummaryARCResponseMetaDateRange    `json:"dateRange,required"`
 	LastUpdated    string                                                 `json:"lastUpdated,required"`
@@ -192,6 +196,10 @@ func (r *RadarEmailSecuritySummaryARCResponseMeta) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummaryARCResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummaryARCResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
@@ -213,6 +221,10 @@ func (r *RadarEmailSecuritySummaryARCResponseMetaDateRange) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummaryARCResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummaryARCResponseMetaConfidenceInfo struct {
 	Annotations []RadarEmailSecuritySummaryARCResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                              `json:"level"`
@@ -230,6 +242,10 @@ type radarEmailSecuritySummaryARCResponseMetaConfidenceInfoJSON struct {
 
 func (r *RadarEmailSecuritySummaryARCResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailSecuritySummaryARCResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailSecuritySummaryARCResponseMetaConfidenceInfoAnnotation struct {
@@ -262,6 +278,10 @@ func (r *RadarEmailSecuritySummaryARCResponseMetaConfidenceInfoAnnotation) Unmar
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummaryARCResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummaryARCResponseSummary0 struct {
 	Fail string                                           `json:"FAIL,required"`
 	None string                                           `json:"NONE,required"`
@@ -283,6 +303,10 @@ func (r *RadarEmailSecuritySummaryARCResponseSummary0) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummaryARCResponseSummary0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummaryDKIMResponse struct {
 	Meta     RadarEmailSecuritySummaryDKIMResponseMeta     `json:"meta,required"`
 	Summary0 RadarEmailSecuritySummaryDKIMResponseSummary0 `json:"summary_0,required"`
@@ -300,6 +324,10 @@ type radarEmailSecuritySummaryDKIMResponseJSON struct {
 
 func (r *RadarEmailSecuritySummaryDKIMResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailSecuritySummaryDKIMResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailSecuritySummaryDKIMResponseMeta struct {
@@ -325,6 +353,10 @@ func (r *RadarEmailSecuritySummaryDKIMResponseMeta) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummaryDKIMResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummaryDKIMResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
@@ -346,6 +378,10 @@ func (r *RadarEmailSecuritySummaryDKIMResponseMetaDateRange) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummaryDKIMResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummaryDKIMResponseMetaConfidenceInfo struct {
 	Annotations []RadarEmailSecuritySummaryDKIMResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                               `json:"level"`
@@ -364,6 +400,10 @@ type radarEmailSecuritySummaryDKIMResponseMetaConfidenceInfoJSON struct {
 
 func (r *RadarEmailSecuritySummaryDKIMResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailSecuritySummaryDKIMResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailSecuritySummaryDKIMResponseMetaConfidenceInfoAnnotation struct {
@@ -396,6 +436,10 @@ func (r *RadarEmailSecuritySummaryDKIMResponseMetaConfidenceInfoAnnotation) Unma
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummaryDKIMResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummaryDKIMResponseSummary0 struct {
 	Fail string                                            `json:"FAIL,required"`
 	None string                                            `json:"NONE,required"`
@@ -417,6 +461,10 @@ func (r *RadarEmailSecuritySummaryDKIMResponseSummary0) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummaryDKIMResponseSummary0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummaryDMARCResponse struct {
 	Meta     RadarEmailSecuritySummaryDMARCResponseMeta     `json:"meta,required"`
 	Summary0 RadarEmailSecuritySummaryDMARCResponseSummary0 `json:"summary_0,required"`
@@ -434,6 +482,10 @@ type radarEmailSecuritySummaryDMARCResponseJSON struct {
 
 func (r *RadarEmailSecuritySummaryDMARCResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailSecuritySummaryDMARCResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailSecuritySummaryDMARCResponseMeta struct {
@@ -459,6 +511,10 @@ func (r *RadarEmailSecuritySummaryDMARCResponseMeta) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummaryDMARCResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummaryDMARCResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
@@ -480,6 +536,10 @@ func (r *RadarEmailSecuritySummaryDMARCResponseMetaDateRange) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummaryDMARCResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummaryDMARCResponseMetaConfidenceInfo struct {
 	Annotations []RadarEmailSecuritySummaryDMARCResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                                `json:"level"`
@@ -498,6 +558,10 @@ type radarEmailSecuritySummaryDMARCResponseMetaConfidenceInfoJSON struct {
 
 func (r *RadarEmailSecuritySummaryDMARCResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailSecuritySummaryDMARCResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailSecuritySummaryDMARCResponseMetaConfidenceInfoAnnotation struct {
@@ -530,6 +594,10 @@ func (r *RadarEmailSecuritySummaryDMARCResponseMetaConfidenceInfoAnnotation) Unm
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummaryDMARCResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummaryDMARCResponseSummary0 struct {
 	Fail string                                             `json:"FAIL,required"`
 	None string                                             `json:"NONE,required"`
@@ -551,6 +619,10 @@ func (r *RadarEmailSecuritySummaryDMARCResponseSummary0) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummaryDMARCResponseSummary0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummaryMaliciousResponse struct {
 	Meta     RadarEmailSecuritySummaryMaliciousResponseMeta     `json:"meta,required"`
 	Summary0 RadarEmailSecuritySummaryMaliciousResponseSummary0 `json:"summary_0,required"`
@@ -568,6 +640,10 @@ type radarEmailSecuritySummaryMaliciousResponseJSON struct {
 
 func (r *RadarEmailSecuritySummaryMaliciousResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailSecuritySummaryMaliciousResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailSecuritySummaryMaliciousResponseMeta struct {
@@ -593,6 +669,10 @@ func (r *RadarEmailSecuritySummaryMaliciousResponseMeta) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummaryMaliciousResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummaryMaliciousResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
@@ -615,6 +695,10 @@ func (r *RadarEmailSecuritySummaryMaliciousResponseMetaDateRange) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummaryMaliciousResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummaryMaliciousResponseMetaConfidenceInfo struct {
 	Annotations []RadarEmailSecuritySummaryMaliciousResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                                    `json:"level"`
@@ -633,6 +717,10 @@ type radarEmailSecuritySummaryMaliciousResponseMetaConfidenceInfoJSON struct {
 
 func (r *RadarEmailSecuritySummaryMaliciousResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailSecuritySummaryMaliciousResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailSecuritySummaryMaliciousResponseMetaConfidenceInfoAnnotation struct {
@@ -665,6 +753,10 @@ func (r *RadarEmailSecuritySummaryMaliciousResponseMetaConfidenceInfoAnnotation)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummaryMaliciousResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummaryMaliciousResponseSummary0 struct {
 	Malicious    string                                                 `json:"MALICIOUS,required"`
 	NotMalicious string                                                 `json:"NOT_MALICIOUS,required"`
@@ -684,6 +776,10 @@ func (r *RadarEmailSecuritySummaryMaliciousResponseSummary0) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummaryMaliciousResponseSummary0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummarySpamResponse struct {
 	Meta     RadarEmailSecuritySummarySpamResponseMeta     `json:"meta,required"`
 	Summary0 RadarEmailSecuritySummarySpamResponseSummary0 `json:"summary_0,required"`
@@ -701,6 +797,10 @@ type radarEmailSecuritySummarySpamResponseJSON struct {
 
 func (r *RadarEmailSecuritySummarySpamResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailSecuritySummarySpamResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailSecuritySummarySpamResponseMeta struct {
@@ -726,6 +826,10 @@ func (r *RadarEmailSecuritySummarySpamResponseMeta) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummarySpamResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummarySpamResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
@@ -747,6 +851,10 @@ func (r *RadarEmailSecuritySummarySpamResponseMetaDateRange) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummarySpamResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummarySpamResponseMetaConfidenceInfo struct {
 	Annotations []RadarEmailSecuritySummarySpamResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                               `json:"level"`
@@ -765,6 +873,10 @@ type radarEmailSecuritySummarySpamResponseMetaConfidenceInfoJSON struct {
 
 func (r *RadarEmailSecuritySummarySpamResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailSecuritySummarySpamResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailSecuritySummarySpamResponseMetaConfidenceInfoAnnotation struct {
@@ -797,6 +909,10 @@ func (r *RadarEmailSecuritySummarySpamResponseMetaConfidenceInfoAnnotation) Unma
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummarySpamResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummarySpamResponseSummary0 struct {
 	NotSpam string                                            `json:"NOT_SPAM,required"`
 	Spam    string                                            `json:"SPAM,required"`
@@ -816,6 +932,10 @@ func (r *RadarEmailSecuritySummarySpamResponseSummary0) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummarySpamResponseSummary0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummarySPFResponse struct {
 	Meta     RadarEmailSecuritySummarySPFResponseMeta     `json:"meta,required"`
 	Summary0 RadarEmailSecuritySummarySPFResponseSummary0 `json:"summary_0,required"`
@@ -833,6 +953,10 @@ type radarEmailSecuritySummarySPFResponseJSON struct {
 
 func (r *RadarEmailSecuritySummarySPFResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailSecuritySummarySPFResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailSecuritySummarySPFResponseMeta struct {
@@ -858,6 +982,10 @@ func (r *RadarEmailSecuritySummarySPFResponseMeta) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummarySPFResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummarySPFResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
@@ -879,6 +1007,10 @@ func (r *RadarEmailSecuritySummarySPFResponseMetaDateRange) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummarySPFResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummarySPFResponseMetaConfidenceInfo struct {
 	Annotations []RadarEmailSecuritySummarySPFResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                              `json:"level"`
@@ -896,6 +1028,10 @@ type radarEmailSecuritySummarySPFResponseMetaConfidenceInfoJSON struct {
 
 func (r *RadarEmailSecuritySummarySPFResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailSecuritySummarySPFResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailSecuritySummarySPFResponseMetaConfidenceInfoAnnotation struct {
@@ -928,6 +1064,10 @@ func (r *RadarEmailSecuritySummarySPFResponseMetaConfidenceInfoAnnotation) Unmar
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummarySPFResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummarySPFResponseSummary0 struct {
 	Fail string                                           `json:"FAIL,required"`
 	None string                                           `json:"NONE,required"`
@@ -949,6 +1089,10 @@ func (r *RadarEmailSecuritySummarySPFResponseSummary0) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummarySPFResponseSummary0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummarySpoofResponse struct {
 	Meta     RadarEmailSecuritySummarySpoofResponseMeta     `json:"meta,required"`
 	Summary0 RadarEmailSecuritySummarySpoofResponseSummary0 `json:"summary_0,required"`
@@ -966,6 +1110,10 @@ type radarEmailSecuritySummarySpoofResponseJSON struct {
 
 func (r *RadarEmailSecuritySummarySpoofResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailSecuritySummarySpoofResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailSecuritySummarySpoofResponseMeta struct {
@@ -991,6 +1139,10 @@ func (r *RadarEmailSecuritySummarySpoofResponseMeta) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummarySpoofResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummarySpoofResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
@@ -1012,6 +1164,10 @@ func (r *RadarEmailSecuritySummarySpoofResponseMetaDateRange) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummarySpoofResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummarySpoofResponseMetaConfidenceInfo struct {
 	Annotations []RadarEmailSecuritySummarySpoofResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                                `json:"level"`
@@ -1030,6 +1186,10 @@ type radarEmailSecuritySummarySpoofResponseMetaConfidenceInfoJSON struct {
 
 func (r *RadarEmailSecuritySummarySpoofResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailSecuritySummarySpoofResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailSecuritySummarySpoofResponseMetaConfidenceInfoAnnotation struct {
@@ -1062,6 +1222,10 @@ func (r *RadarEmailSecuritySummarySpoofResponseMetaConfidenceInfoAnnotation) Unm
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummarySpoofResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummarySpoofResponseSummary0 struct {
 	NotSpoof string                                             `json:"NOT_SPOOF,required"`
 	Spoof    string                                             `json:"SPOOF,required"`
@@ -1081,6 +1245,10 @@ func (r *RadarEmailSecuritySummarySpoofResponseSummary0) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummarySpoofResponseSummary0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummaryThreatCategoryResponse struct {
 	Meta     RadarEmailSecuritySummaryThreatCategoryResponseMeta     `json:"meta,required"`
 	Summary0 RadarEmailSecuritySummaryThreatCategoryResponseSummary0 `json:"summary_0,required"`
@@ -1098,6 +1266,10 @@ type radarEmailSecuritySummaryThreatCategoryResponseJSON struct {
 
 func (r *RadarEmailSecuritySummaryThreatCategoryResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailSecuritySummaryThreatCategoryResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailSecuritySummaryThreatCategoryResponseMeta struct {
@@ -1123,6 +1295,10 @@ func (r *RadarEmailSecuritySummaryThreatCategoryResponseMeta) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummaryThreatCategoryResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummaryThreatCategoryResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
@@ -1145,6 +1321,10 @@ func (r *RadarEmailSecuritySummaryThreatCategoryResponseMetaDateRange) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummaryThreatCategoryResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummaryThreatCategoryResponseMetaConfidenceInfo struct {
 	Annotations []RadarEmailSecuritySummaryThreatCategoryResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                                         `json:"level"`
@@ -1163,6 +1343,10 @@ type radarEmailSecuritySummaryThreatCategoryResponseMetaConfidenceInfoJSON struc
 
 func (r *RadarEmailSecuritySummaryThreatCategoryResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailSecuritySummaryThreatCategoryResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailSecuritySummaryThreatCategoryResponseMetaConfidenceInfoAnnotation struct {
@@ -1195,6 +1379,10 @@ func (r *RadarEmailSecuritySummaryThreatCategoryResponseMetaConfidenceInfoAnnota
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummaryThreatCategoryResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummaryThreatCategoryResponseSummary0 struct {
 	BrandImpersonation  string                                                      `json:"BrandImpersonation,required"`
 	CredentialHarvester string                                                      `json:"CredentialHarvester,required"`
@@ -1219,6 +1407,10 @@ func (r *RadarEmailSecuritySummaryThreatCategoryResponseSummary0) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummaryThreatCategoryResponseSummary0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummaryTLSVersionResponse struct {
 	Meta     RadarEmailSecuritySummaryTLSVersionResponseMeta     `json:"meta,required"`
 	Summary0 RadarEmailSecuritySummaryTLSVersionResponseSummary0 `json:"summary_0,required"`
@@ -1236,6 +1428,10 @@ type radarEmailSecuritySummaryTLSVersionResponseJSON struct {
 
 func (r *RadarEmailSecuritySummaryTLSVersionResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailSecuritySummaryTLSVersionResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailSecuritySummaryTLSVersionResponseMeta struct {
@@ -1261,6 +1457,10 @@ func (r *RadarEmailSecuritySummaryTLSVersionResponseMeta) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummaryTLSVersionResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummaryTLSVersionResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
@@ -1283,6 +1483,10 @@ func (r *RadarEmailSecuritySummaryTLSVersionResponseMetaDateRange) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummaryTLSVersionResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummaryTLSVersionResponseMetaConfidenceInfo struct {
 	Annotations []RadarEmailSecuritySummaryTLSVersionResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                                     `json:"level"`
@@ -1301,6 +1505,10 @@ type radarEmailSecuritySummaryTLSVersionResponseMetaConfidenceInfoJSON struct {
 
 func (r *RadarEmailSecuritySummaryTLSVersionResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailSecuritySummaryTLSVersionResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailSecuritySummaryTLSVersionResponseMetaConfidenceInfoAnnotation struct {
@@ -1333,6 +1541,10 @@ func (r *RadarEmailSecuritySummaryTLSVersionResponseMetaConfidenceInfoAnnotation
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummaryTLSVersionResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummaryTLSVersionResponseSummary0 struct {
 	TLS1_0 string                                                  `json:"TLS 1.0,required"`
 	TLS1_1 string                                                  `json:"TLS 1.1,required"`
@@ -1354,6 +1566,10 @@ type radarEmailSecuritySummaryTLSVersionResponseSummary0JSON struct {
 
 func (r *RadarEmailSecuritySummaryTLSVersionResponseSummary0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailSecuritySummaryTLSVersionResponseSummary0JSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailSecuritySummaryARCParams struct {
@@ -1468,6 +1684,10 @@ func (r *RadarEmailSecuritySummaryARCResponseEnvelope) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummaryARCResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummaryDKIMParams struct {
 	// Filter for arc (Authenticated Received Chain).
 	ARC param.Field[[]RadarEmailSecuritySummaryDKIMParamsARC] `query:"arc"`
@@ -1580,6 +1800,10 @@ func (r *RadarEmailSecuritySummaryDKIMResponseEnvelope) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummaryDKIMResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummaryDMARCParams struct {
 	// Filter for arc (Authenticated Received Chain).
 	ARC param.Field[[]RadarEmailSecuritySummaryDMARCParamsARC] `query:"arc"`
@@ -1690,6 +1914,10 @@ type radarEmailSecuritySummaryDMARCResponseEnvelopeJSON struct {
 
 func (r *RadarEmailSecuritySummaryDMARCResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailSecuritySummaryDMARCResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailSecuritySummaryMaliciousParams struct {
@@ -1814,6 +2042,10 @@ func (r *RadarEmailSecuritySummaryMaliciousResponseEnvelope) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummaryMaliciousResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummarySpamParams struct {
 	// Filter for arc (Authenticated Received Chain).
 	ARC param.Field[[]RadarEmailSecuritySummarySpamParamsARC] `query:"arc"`
@@ -1936,6 +2168,10 @@ func (r *RadarEmailSecuritySummarySpamResponseEnvelope) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummarySpamResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummarySPFParams struct {
 	// Filter for arc (Authenticated Received Chain).
 	ARC param.Field[[]RadarEmailSecuritySummarySPFParamsARC] `query:"arc"`
@@ -2046,6 +2282,10 @@ type radarEmailSecuritySummarySPFResponseEnvelopeJSON struct {
 
 func (r *RadarEmailSecuritySummarySPFResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailSecuritySummarySPFResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailSecuritySummarySpoofParams struct {
@@ -2168,6 +2408,10 @@ type radarEmailSecuritySummarySpoofResponseEnvelopeJSON struct {
 
 func (r *RadarEmailSecuritySummarySpoofResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailSecuritySummarySpoofResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailSecuritySummaryThreatCategoryParams struct {
@@ -2293,6 +2537,10 @@ func (r *RadarEmailSecuritySummaryThreatCategoryResponseEnvelope) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecuritySummaryThreatCategoryResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecuritySummaryTLSVersionParams struct {
 	// Filter for arc (Authenticated Received Chain).
 	ARC param.Field[[]RadarEmailSecuritySummaryTLSVersionParamsARC] `query:"arc"`
@@ -2402,4 +2650,8 @@ type radarEmailSecuritySummaryTLSVersionResponseEnvelopeJSON struct {
 
 func (r *RadarEmailSecuritySummaryTLSVersionResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailSecuritySummaryTLSVersionResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

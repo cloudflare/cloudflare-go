@@ -104,6 +104,10 @@ func (r *ZeroTrustDEXTracerouteTestGetResponse) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTracerouteTestGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTracerouteTestGetResponseKind string
 
 const (
@@ -136,6 +140,10 @@ func (r *ZeroTrustDEXTracerouteTestGetResponseTracerouteStats) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTracerouteTestGetResponseTracerouteStatsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTracerouteTestGetResponseTracerouteStatsAvailabilityPct struct {
 	Slots []ZeroTrustDEXTracerouteTestGetResponseTracerouteStatsAvailabilityPctSlot `json:"slots,required"`
 	// average observed in the time period
@@ -163,6 +171,10 @@ func (r *ZeroTrustDEXTracerouteTestGetResponseTracerouteStatsAvailabilityPct) Un
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTracerouteTestGetResponseTracerouteStatsAvailabilityPctJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTracerouteTestGetResponseTracerouteStatsAvailabilityPctSlot struct {
 	Timestamp string                                                                      `json:"timestamp,required"`
 	Value     float64                                                                     `json:"value,required"`
@@ -181,6 +193,10 @@ type zeroTrustDEXTracerouteTestGetResponseTracerouteStatsAvailabilityPctSlotJSON
 
 func (r *ZeroTrustDEXTracerouteTestGetResponseTracerouteStatsAvailabilityPctSlot) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXTracerouteTestGetResponseTracerouteStatsAvailabilityPctSlotJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDEXTracerouteTestGetResponseTracerouteStatsHopsCount struct {
@@ -210,6 +226,10 @@ func (r *ZeroTrustDEXTracerouteTestGetResponseTracerouteStatsHopsCount) Unmarsha
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTracerouteTestGetResponseTracerouteStatsHopsCountJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTracerouteTestGetResponseTracerouteStatsHopsCountSlot struct {
 	Timestamp string                                                                `json:"timestamp,required"`
 	Value     int64                                                                 `json:"value,required"`
@@ -228,6 +248,10 @@ type zeroTrustDEXTracerouteTestGetResponseTracerouteStatsHopsCountSlotJSON struc
 
 func (r *ZeroTrustDEXTracerouteTestGetResponseTracerouteStatsHopsCountSlot) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXTracerouteTestGetResponseTracerouteStatsHopsCountSlotJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDEXTracerouteTestGetResponseTracerouteStatsPacketLossPct struct {
@@ -257,6 +281,10 @@ func (r *ZeroTrustDEXTracerouteTestGetResponseTracerouteStatsPacketLossPct) Unma
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTracerouteTestGetResponseTracerouteStatsPacketLossPctJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTracerouteTestGetResponseTracerouteStatsPacketLossPctSlot struct {
 	Timestamp string                                                                    `json:"timestamp,required"`
 	Value     float64                                                                   `json:"value,required"`
@@ -275,6 +303,10 @@ type zeroTrustDEXTracerouteTestGetResponseTracerouteStatsPacketLossPctSlotJSON s
 
 func (r *ZeroTrustDEXTracerouteTestGetResponseTracerouteStatsPacketLossPctSlot) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXTracerouteTestGetResponseTracerouteStatsPacketLossPctSlotJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDEXTracerouteTestGetResponseTracerouteStatsRoundTripTimeMs struct {
@@ -304,6 +336,10 @@ func (r *ZeroTrustDEXTracerouteTestGetResponseTracerouteStatsRoundTripTimeMs) Un
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTracerouteTestGetResponseTracerouteStatsRoundTripTimeMsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTracerouteTestGetResponseTracerouteStatsRoundTripTimeMsSlot struct {
 	Timestamp string                                                                      `json:"timestamp,required"`
 	Value     int64                                                                       `json:"value,required"`
@@ -322,6 +358,10 @@ type zeroTrustDEXTracerouteTestGetResponseTracerouteStatsRoundTripTimeMsSlotJSON
 
 func (r *ZeroTrustDEXTracerouteTestGetResponseTracerouteStatsRoundTripTimeMsSlot) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXTracerouteTestGetResponseTracerouteStatsRoundTripTimeMsSlotJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDEXTracerouteTestGetResponseTracerouteStatsByColo struct {
@@ -353,6 +393,10 @@ func (r *ZeroTrustDEXTracerouteTestGetResponseTracerouteStatsByColo) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTracerouteTestGetResponseTracerouteStatsByColoJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTracerouteTestGetResponseTracerouteStatsByColoAvailabilityPct struct {
 	Slots []ZeroTrustDEXTracerouteTestGetResponseTracerouteStatsByColoAvailabilityPctSlot `json:"slots,required"`
 	// average observed in the time period
@@ -380,6 +424,10 @@ func (r *ZeroTrustDEXTracerouteTestGetResponseTracerouteStatsByColoAvailabilityP
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTracerouteTestGetResponseTracerouteStatsByColoAvailabilityPctJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTracerouteTestGetResponseTracerouteStatsByColoAvailabilityPctSlot struct {
 	Timestamp string                                                                            `json:"timestamp,required"`
 	Value     float64                                                                           `json:"value,required"`
@@ -398,6 +446,10 @@ type zeroTrustDEXTracerouteTestGetResponseTracerouteStatsByColoAvailabilityPctSl
 
 func (r *ZeroTrustDEXTracerouteTestGetResponseTracerouteStatsByColoAvailabilityPctSlot) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXTracerouteTestGetResponseTracerouteStatsByColoAvailabilityPctSlotJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDEXTracerouteTestGetResponseTracerouteStatsByColoHopsCount struct {
@@ -427,6 +479,10 @@ func (r *ZeroTrustDEXTracerouteTestGetResponseTracerouteStatsByColoHopsCount) Un
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTracerouteTestGetResponseTracerouteStatsByColoHopsCountJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTracerouteTestGetResponseTracerouteStatsByColoHopsCountSlot struct {
 	Timestamp string                                                                      `json:"timestamp,required"`
 	Value     int64                                                                       `json:"value,required"`
@@ -445,6 +501,10 @@ type zeroTrustDEXTracerouteTestGetResponseTracerouteStatsByColoHopsCountSlotJSON
 
 func (r *ZeroTrustDEXTracerouteTestGetResponseTracerouteStatsByColoHopsCountSlot) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXTracerouteTestGetResponseTracerouteStatsByColoHopsCountSlotJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDEXTracerouteTestGetResponseTracerouteStatsByColoPacketLossPct struct {
@@ -474,6 +534,10 @@ func (r *ZeroTrustDEXTracerouteTestGetResponseTracerouteStatsByColoPacketLossPct
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTracerouteTestGetResponseTracerouteStatsByColoPacketLossPctJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTracerouteTestGetResponseTracerouteStatsByColoPacketLossPctSlot struct {
 	Timestamp string                                                                          `json:"timestamp,required"`
 	Value     float64                                                                         `json:"value,required"`
@@ -492,6 +556,10 @@ type zeroTrustDEXTracerouteTestGetResponseTracerouteStatsByColoPacketLossPctSlot
 
 func (r *ZeroTrustDEXTracerouteTestGetResponseTracerouteStatsByColoPacketLossPctSlot) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXTracerouteTestGetResponseTracerouteStatsByColoPacketLossPctSlotJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDEXTracerouteTestGetResponseTracerouteStatsByColoRoundTripTimeMs struct {
@@ -521,6 +589,10 @@ func (r *ZeroTrustDEXTracerouteTestGetResponseTracerouteStatsByColoRoundTripTime
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTracerouteTestGetResponseTracerouteStatsByColoRoundTripTimeMsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTracerouteTestGetResponseTracerouteStatsByColoRoundTripTimeMsSlot struct {
 	Timestamp string                                                                            `json:"timestamp,required"`
 	Value     int64                                                                             `json:"value,required"`
@@ -539,6 +611,10 @@ type zeroTrustDEXTracerouteTestGetResponseTracerouteStatsByColoRoundTripTimeMsSl
 
 func (r *ZeroTrustDEXTracerouteTestGetResponseTracerouteStatsByColoRoundTripTimeMsSlot) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXTracerouteTestGetResponseTracerouteStatsByColoRoundTripTimeMsSlotJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDEXTracerouteTestNetworkPathResponse struct {
@@ -573,6 +649,10 @@ func (r *ZeroTrustDEXTracerouteTestNetworkPathResponse) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTracerouteTestNetworkPathResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTracerouteTestNetworkPathResponseKind string
 
 const (
@@ -600,6 +680,10 @@ type zeroTrustDEXTracerouteTestNetworkPathResponseNetworkPathJSON struct {
 
 func (r *ZeroTrustDEXTracerouteTestNetworkPathResponseNetworkPath) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXTracerouteTestNetworkPathResponseNetworkPathJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDEXTracerouteTestNetworkPathResponseNetworkPathSlot struct {
@@ -635,6 +719,10 @@ func (r *ZeroTrustDEXTracerouteTestNetworkPathResponseNetworkPathSlot) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTracerouteTestNetworkPathResponseNetworkPathSlotJSON) RawJSON() string {
+	return r.raw
+}
+
 // Specifies the sampling applied, if any, to the slots response. When sampled,
 // results shown represent the first test run to the start of each sampling
 // interval.
@@ -656,6 +744,10 @@ type zeroTrustDEXTracerouteTestNetworkPathResponseNetworkPathSamplingJSON struct
 
 func (r *ZeroTrustDEXTracerouteTestNetworkPathResponseNetworkPathSampling) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXTracerouteTestNetworkPathResponseNetworkPathSamplingJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDEXTracerouteTestNetworkPathResponseNetworkPathSamplingUnit string
@@ -685,6 +777,10 @@ func (r *ZeroTrustDEXTracerouteTestPercentilesResponse) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTracerouteTestPercentilesResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTracerouteTestPercentilesResponseHopsCount struct {
 	// p50 observed in the time period
 	P50 float64 `json:"p50,nullable"`
@@ -710,6 +806,10 @@ type zeroTrustDEXTracerouteTestPercentilesResponseHopsCountJSON struct {
 
 func (r *ZeroTrustDEXTracerouteTestPercentilesResponseHopsCount) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXTracerouteTestPercentilesResponseHopsCountJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDEXTracerouteTestPercentilesResponsePacketLossPct struct {
@@ -740,6 +840,10 @@ func (r *ZeroTrustDEXTracerouteTestPercentilesResponsePacketLossPct) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTracerouteTestPercentilesResponsePacketLossPctJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTracerouteTestPercentilesResponseRoundTripTimeMs struct {
 	// p50 observed in the time period
 	P50 float64 `json:"p50,nullable"`
@@ -766,6 +870,10 @@ type zeroTrustDEXTracerouteTestPercentilesResponseRoundTripTimeMsJSON struct {
 
 func (r *ZeroTrustDEXTracerouteTestPercentilesResponseRoundTripTimeMs) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXTracerouteTestPercentilesResponseRoundTripTimeMsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDEXTracerouteTestGetParams struct {
@@ -825,6 +933,10 @@ func (r *ZeroTrustDEXTracerouteTestGetResponseEnvelope) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTracerouteTestGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTracerouteTestGetResponseEnvelopeErrors struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -844,6 +956,10 @@ func (r *ZeroTrustDEXTracerouteTestGetResponseEnvelopeErrors) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTracerouteTestGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTracerouteTestGetResponseEnvelopeMessages struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -861,6 +977,10 @@ type zeroTrustDEXTracerouteTestGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustDEXTracerouteTestGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXTracerouteTestGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -923,6 +1043,10 @@ func (r *ZeroTrustDEXTracerouteTestNetworkPathResponseEnvelope) UnmarshalJSON(da
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTracerouteTestNetworkPathResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTracerouteTestNetworkPathResponseEnvelopeErrors struct {
 	Code    int64                                                           `json:"code,required"`
 	Message string                                                          `json:"message,required"`
@@ -943,6 +1067,10 @@ func (r *ZeroTrustDEXTracerouteTestNetworkPathResponseEnvelopeErrors) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTracerouteTestNetworkPathResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTracerouteTestNetworkPathResponseEnvelopeMessages struct {
 	Code    int64                                                             `json:"code,required"`
 	Message string                                                            `json:"message,required"`
@@ -961,6 +1089,10 @@ type zeroTrustDEXTracerouteTestNetworkPathResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustDEXTracerouteTestNetworkPathResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXTracerouteTestNetworkPathResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1017,6 +1149,10 @@ func (r *ZeroTrustDEXTracerouteTestPercentilesResponseEnvelope) UnmarshalJSON(da
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTracerouteTestPercentilesResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTracerouteTestPercentilesResponseEnvelopeErrors struct {
 	Code    int64                                                           `json:"code,required"`
 	Message string                                                          `json:"message,required"`
@@ -1037,6 +1173,10 @@ func (r *ZeroTrustDEXTracerouteTestPercentilesResponseEnvelopeErrors) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTracerouteTestPercentilesResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTracerouteTestPercentilesResponseEnvelopeMessages struct {
 	Code    int64                                                             `json:"code,required"`
 	Message string                                                            `json:"message,required"`
@@ -1055,6 +1195,10 @@ type zeroTrustDEXTracerouteTestPercentilesResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustDEXTracerouteTestPercentilesResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXTracerouteTestPercentilesResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

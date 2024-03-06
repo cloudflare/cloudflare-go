@@ -116,6 +116,10 @@ func (r *ImageV1VariantNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r imageV1VariantNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ImageV1VariantNewResponseVariant struct {
 	ID interface{} `json:"id,required"`
 	// Allows you to define image resizing sizes for different use cases.
@@ -138,6 +142,10 @@ type imageV1VariantNewResponseVariantJSON struct {
 
 func (r *ImageV1VariantNewResponseVariant) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r imageV1VariantNewResponseVariantJSON) RawJSON() string {
+	return r.raw
 }
 
 // Allows you to define image resizing sizes for different use cases.
@@ -167,6 +175,10 @@ type imageV1VariantNewResponseVariantOptionsJSON struct {
 
 func (r *ImageV1VariantNewResponseVariantOptions) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r imageV1VariantNewResponseVariantOptionsJSON) RawJSON() string {
+	return r.raw
 }
 
 // The fit property describes how the width and height dimensions should be
@@ -207,6 +219,10 @@ func (r *ImageV1VariantListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r imageV1VariantListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ImageV1VariantListResponseVariants struct {
 	Hero ImageV1VariantListResponseVariantsHero `json:"hero"`
 	JSON imageV1VariantListResponseVariantsJSON `json:"-"`
@@ -222,6 +238,10 @@ type imageV1VariantListResponseVariantsJSON struct {
 
 func (r *ImageV1VariantListResponseVariants) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r imageV1VariantListResponseVariantsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ImageV1VariantListResponseVariantsHero struct {
@@ -246,6 +266,10 @@ type imageV1VariantListResponseVariantsHeroJSON struct {
 
 func (r *ImageV1VariantListResponseVariantsHero) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r imageV1VariantListResponseVariantsHeroJSON) RawJSON() string {
+	return r.raw
 }
 
 // Allows you to define image resizing sizes for different use cases.
@@ -275,6 +299,10 @@ type imageV1VariantListResponseVariantsHeroOptionsJSON struct {
 
 func (r *ImageV1VariantListResponseVariantsHeroOptions) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r imageV1VariantListResponseVariantsHeroOptionsJSON) RawJSON() string {
+	return r.raw
 }
 
 // The fit property describes how the width and height dimensions should be
@@ -332,6 +360,10 @@ func (r *ImageV1VariantEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r imageV1VariantEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ImageV1VariantEditResponseVariant struct {
 	ID interface{} `json:"id,required"`
 	// Allows you to define image resizing sizes for different use cases.
@@ -354,6 +386,10 @@ type imageV1VariantEditResponseVariantJSON struct {
 
 func (r *ImageV1VariantEditResponseVariant) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r imageV1VariantEditResponseVariantJSON) RawJSON() string {
+	return r.raw
 }
 
 // Allows you to define image resizing sizes for different use cases.
@@ -383,6 +419,10 @@ type imageV1VariantEditResponseVariantOptionsJSON struct {
 
 func (r *ImageV1VariantEditResponseVariantOptions) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r imageV1VariantEditResponseVariantOptionsJSON) RawJSON() string {
+	return r.raw
 }
 
 // The fit property describes how the width and height dimensions should be
@@ -423,6 +463,10 @@ func (r *ImageV1VariantGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r imageV1VariantGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ImageV1VariantGetResponseVariant struct {
 	ID interface{} `json:"id,required"`
 	// Allows you to define image resizing sizes for different use cases.
@@ -445,6 +489,10 @@ type imageV1VariantGetResponseVariantJSON struct {
 
 func (r *ImageV1VariantGetResponseVariant) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r imageV1VariantGetResponseVariantJSON) RawJSON() string {
+	return r.raw
 }
 
 // Allows you to define image resizing sizes for different use cases.
@@ -474,6 +522,10 @@ type imageV1VariantGetResponseVariantOptionsJSON struct {
 
 func (r *ImageV1VariantGetResponseVariantOptions) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r imageV1VariantGetResponseVariantOptionsJSON) RawJSON() string {
+	return r.raw
 }
 
 // The fit property describes how the width and height dimensions should be
@@ -574,6 +626,10 @@ func (r *ImageV1VariantNewResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r imageV1VariantNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ImageV1VariantNewResponseEnvelopeErrors struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -593,6 +649,10 @@ func (r *ImageV1VariantNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r imageV1VariantNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ImageV1VariantNewResponseEnvelopeMessages struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -610,6 +670,10 @@ type imageV1VariantNewResponseEnvelopeMessagesJSON struct {
 
 func (r *ImageV1VariantNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r imageV1VariantNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -648,6 +712,10 @@ func (r *ImageV1VariantListResponseEnvelope) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r imageV1VariantListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ImageV1VariantListResponseEnvelopeErrors struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -667,6 +735,10 @@ func (r *ImageV1VariantListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r imageV1VariantListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ImageV1VariantListResponseEnvelopeMessages struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -684,6 +756,10 @@ type imageV1VariantListResponseEnvelopeMessagesJSON struct {
 
 func (r *ImageV1VariantListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r imageV1VariantListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -722,6 +798,10 @@ func (r *ImageV1VariantDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r imageV1VariantDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ImageV1VariantDeleteResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -741,6 +821,10 @@ func (r *ImageV1VariantDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r imageV1VariantDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ImageV1VariantDeleteResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -758,6 +842,10 @@ type imageV1VariantDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *ImageV1VariantDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r imageV1VariantDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -843,6 +931,10 @@ func (r *ImageV1VariantEditResponseEnvelope) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r imageV1VariantEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ImageV1VariantEditResponseEnvelopeErrors struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -862,6 +954,10 @@ func (r *ImageV1VariantEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r imageV1VariantEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ImageV1VariantEditResponseEnvelopeMessages struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -879,6 +975,10 @@ type imageV1VariantEditResponseEnvelopeMessagesJSON struct {
 
 func (r *ImageV1VariantEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r imageV1VariantEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -917,6 +1017,10 @@ func (r *ImageV1VariantGetResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r imageV1VariantGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ImageV1VariantGetResponseEnvelopeErrors struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -936,6 +1040,10 @@ func (r *ImageV1VariantGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r imageV1VariantGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ImageV1VariantGetResponseEnvelopeMessages struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -953,6 +1061,10 @@ type imageV1VariantGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ImageV1VariantGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r imageV1VariantGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

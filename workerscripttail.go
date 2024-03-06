@@ -94,6 +94,10 @@ func (r *WorkerScriptTailNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerScriptTailNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Union satisfied by [WorkerScriptTailDeleteResponseUnknown],
 // [WorkerScriptTailDeleteResponseArray] or [shared.UnionString].
 type WorkerScriptTailDeleteResponse interface {
@@ -136,6 +140,10 @@ func (r *WorkerScriptTailGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerScriptTailGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerScriptTailNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -165,6 +173,10 @@ func (r *WorkerScriptTailNewResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerScriptTailNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerScriptTailNewResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -184,6 +196,10 @@ func (r *WorkerScriptTailNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerScriptTailNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerScriptTailNewResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -201,6 +217,10 @@ type workerScriptTailNewResponseEnvelopeMessagesJSON struct {
 
 func (r *WorkerScriptTailNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerScriptTailNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -239,6 +259,10 @@ func (r *WorkerScriptTailDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerScriptTailDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerScriptTailDeleteResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -258,6 +282,10 @@ func (r *WorkerScriptTailDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerScriptTailDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerScriptTailDeleteResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -275,6 +303,10 @@ type workerScriptTailDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *WorkerScriptTailDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerScriptTailDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -313,6 +345,10 @@ func (r *WorkerScriptTailGetResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerScriptTailGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerScriptTailGetResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -332,6 +368,10 @@ func (r *WorkerScriptTailGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerScriptTailGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerScriptTailGetResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -349,6 +389,10 @@ type workerScriptTailGetResponseEnvelopeMessagesJSON struct {
 
 func (r *WorkerScriptTailGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerScriptTailGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

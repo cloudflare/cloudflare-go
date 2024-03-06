@@ -125,6 +125,10 @@ func (r *OriginTLSClientAuthHostnameCertificateNewResponse) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r originTLSClientAuthHostnameCertificateNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Status of the certificate or the association.
 type OriginTLSClientAuthHostnameCertificateNewResponseStatus string
 
@@ -173,6 +177,10 @@ func (r *OriginTLSClientAuthHostnameCertificateListResponse) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r originTLSClientAuthHostnameCertificateListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type OriginTLSClientAuthHostnameCertificateDeleteResponse struct {
 	// Identifier
 	ID string `json:"id"`
@@ -210,6 +218,10 @@ type originTLSClientAuthHostnameCertificateDeleteResponseJSON struct {
 
 func (r *OriginTLSClientAuthHostnameCertificateDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r originTLSClientAuthHostnameCertificateDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Status of the certificate or the association.
@@ -264,6 +276,10 @@ func (r *OriginTLSClientAuthHostnameCertificateGetResponse) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r originTLSClientAuthHostnameCertificateGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Status of the certificate or the association.
 type OriginTLSClientAuthHostnameCertificateGetResponseStatus string
 
@@ -315,6 +331,10 @@ func (r *OriginTLSClientAuthHostnameCertificateNewResponseEnvelope) UnmarshalJSO
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r originTLSClientAuthHostnameCertificateNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type OriginTLSClientAuthHostnameCertificateNewResponseEnvelopeErrors struct {
 	Code    int64                                                               `json:"code,required"`
 	Message string                                                              `json:"message,required"`
@@ -335,6 +355,10 @@ func (r *OriginTLSClientAuthHostnameCertificateNewResponseEnvelopeErrors) Unmars
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r originTLSClientAuthHostnameCertificateNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type OriginTLSClientAuthHostnameCertificateNewResponseEnvelopeMessages struct {
 	Code    int64                                                                 `json:"code,required"`
 	Message string                                                                `json:"message,required"`
@@ -353,6 +377,10 @@ type originTLSClientAuthHostnameCertificateNewResponseEnvelopeMessagesJSON struc
 
 func (r *OriginTLSClientAuthHostnameCertificateNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r originTLSClientAuthHostnameCertificateNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -394,6 +422,10 @@ func (r *OriginTLSClientAuthHostnameCertificateListResponseEnvelope) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r originTLSClientAuthHostnameCertificateListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type OriginTLSClientAuthHostnameCertificateListResponseEnvelopeErrors struct {
 	Code    int64                                                                `json:"code,required"`
 	Message string                                                               `json:"message,required"`
@@ -414,6 +446,10 @@ func (r *OriginTLSClientAuthHostnameCertificateListResponseEnvelopeErrors) Unmar
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r originTLSClientAuthHostnameCertificateListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type OriginTLSClientAuthHostnameCertificateListResponseEnvelopeMessages struct {
 	Code    int64                                                                  `json:"code,required"`
 	Message string                                                                 `json:"message,required"`
@@ -432,6 +468,10 @@ type originTLSClientAuthHostnameCertificateListResponseEnvelopeMessagesJSON stru
 
 func (r *OriginTLSClientAuthHostnameCertificateListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r originTLSClientAuthHostnameCertificateListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -469,6 +509,10 @@ func (r *OriginTLSClientAuthHostnameCertificateListResponseEnvelopeResultInfo) U
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r originTLSClientAuthHostnameCertificateListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type OriginTLSClientAuthHostnameCertificateDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -499,6 +543,10 @@ func (r *OriginTLSClientAuthHostnameCertificateDeleteResponseEnvelope) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r originTLSClientAuthHostnameCertificateDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type OriginTLSClientAuthHostnameCertificateDeleteResponseEnvelopeErrors struct {
 	Code    int64                                                                  `json:"code,required"`
 	Message string                                                                 `json:"message,required"`
@@ -519,6 +567,10 @@ func (r *OriginTLSClientAuthHostnameCertificateDeleteResponseEnvelopeErrors) Unm
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r originTLSClientAuthHostnameCertificateDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type OriginTLSClientAuthHostnameCertificateDeleteResponseEnvelopeMessages struct {
 	Code    int64                                                                    `json:"code,required"`
 	Message string                                                                   `json:"message,required"`
@@ -537,6 +589,10 @@ type originTLSClientAuthHostnameCertificateDeleteResponseEnvelopeMessagesJSON st
 
 func (r *OriginTLSClientAuthHostnameCertificateDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r originTLSClientAuthHostnameCertificateDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -576,6 +632,10 @@ func (r *OriginTLSClientAuthHostnameCertificateGetResponseEnvelope) UnmarshalJSO
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r originTLSClientAuthHostnameCertificateGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type OriginTLSClientAuthHostnameCertificateGetResponseEnvelopeErrors struct {
 	Code    int64                                                               `json:"code,required"`
 	Message string                                                              `json:"message,required"`
@@ -596,6 +656,10 @@ func (r *OriginTLSClientAuthHostnameCertificateGetResponseEnvelopeErrors) Unmars
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r originTLSClientAuthHostnameCertificateGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type OriginTLSClientAuthHostnameCertificateGetResponseEnvelopeMessages struct {
 	Code    int64                                                                 `json:"code,required"`
 	Message string                                                                `json:"message,required"`
@@ -614,6 +678,10 @@ type originTLSClientAuthHostnameCertificateGetResponseEnvelopeMessagesJSON struc
 
 func (r *OriginTLSClientAuthHostnameCertificateGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r originTLSClientAuthHostnameCertificateGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

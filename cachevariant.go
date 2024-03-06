@@ -109,6 +109,10 @@ func (r *CacheVariantDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cacheVariantDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // ID of the zone setting.
 type CacheVariantDeleteResponseID string
 
@@ -143,6 +147,10 @@ type cacheVariantEditResponseJSON struct {
 
 func (r *CacheVariantEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cacheVariantEditResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // ID of the zone setting.
@@ -212,6 +220,10 @@ func (r *CacheVariantEditResponseValue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cacheVariantEditResponseValueJSON) RawJSON() string {
+	return r.raw
+}
+
 // Variant support enables caching variants of images with certain file extensions
 // in addition to the original. This only applies when the origin server sends the
 // 'Vary: Accept' response header. If the origin server sends 'Vary: Accept' but
@@ -239,6 +251,10 @@ type cacheVariantGetResponseJSON struct {
 
 func (r *CacheVariantGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cacheVariantGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // ID of the zone setting.
@@ -308,6 +324,10 @@ func (r *CacheVariantGetResponseValue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cacheVariantGetResponseValueJSON) RawJSON() string {
+	return r.raw
+}
+
 type CacheVariantDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -342,6 +362,10 @@ func (r *CacheVariantDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cacheVariantDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CacheVariantDeleteResponseEnvelopeErrors struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -361,6 +385,10 @@ func (r *CacheVariantDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cacheVariantDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type CacheVariantDeleteResponseEnvelopeMessages struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -378,6 +406,10 @@ type cacheVariantDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *CacheVariantDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cacheVariantDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -468,6 +500,10 @@ func (r *CacheVariantEditResponseEnvelope) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cacheVariantEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CacheVariantEditResponseEnvelopeErrors struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -487,6 +523,10 @@ func (r *CacheVariantEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cacheVariantEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type CacheVariantEditResponseEnvelopeMessages struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -504,6 +544,10 @@ type cacheVariantEditResponseEnvelopeMessagesJSON struct {
 
 func (r *CacheVariantEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cacheVariantEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -547,6 +591,10 @@ func (r *CacheVariantGetResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cacheVariantGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CacheVariantGetResponseEnvelopeErrors struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -566,6 +614,10 @@ func (r *CacheVariantGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cacheVariantGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type CacheVariantGetResponseEnvelopeMessages struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -583,6 +635,10 @@ type cacheVariantGetResponseEnvelopeMessagesJSON struct {
 
 func (r *CacheVariantGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cacheVariantGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

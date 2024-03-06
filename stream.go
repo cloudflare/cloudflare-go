@@ -210,6 +210,10 @@ func (r *StreamListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamListResponseInput struct {
 	// The video height in pixels. A value of `-1` means the height is unknown. The
 	// value becomes available after the upload and before the video is ready.
@@ -233,6 +237,10 @@ func (r *StreamListResponseInput) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamListResponseInputJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamListResponsePlayback struct {
 	// DASH Media Presentation Description for the video.
 	Dash string `json:"dash"`
@@ -252,6 +260,10 @@ type streamListResponsePlaybackJSON struct {
 
 func (r *StreamListResponsePlayback) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamListResponsePlaybackJSON) RawJSON() string {
+	return r.raw
 }
 
 // Specifies a detailed status for a video. If the `state` is `inprogress` or
@@ -287,6 +299,10 @@ type streamListResponseStatusJSON struct {
 
 func (r *StreamListResponseStatus) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamListResponseStatusJSON) RawJSON() string {
+	return r.raw
 }
 
 // Specifies the processing status for all quality levels for a video.
@@ -357,6 +373,10 @@ type streamListResponseWatermarkJSON struct {
 
 func (r *StreamListResponseWatermark) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamListResponseWatermarkJSON) RawJSON() string {
+	return r.raw
 }
 
 type StreamGetResponse struct {
@@ -462,6 +482,10 @@ func (r *StreamGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamGetResponseInput struct {
 	// The video height in pixels. A value of `-1` means the height is unknown. The
 	// value becomes available after the upload and before the video is ready.
@@ -485,6 +509,10 @@ func (r *StreamGetResponseInput) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamGetResponseInputJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamGetResponsePlayback struct {
 	// DASH Media Presentation Description for the video.
 	Dash string `json:"dash"`
@@ -504,6 +532,10 @@ type streamGetResponsePlaybackJSON struct {
 
 func (r *StreamGetResponsePlayback) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamGetResponsePlaybackJSON) RawJSON() string {
+	return r.raw
 }
 
 // Specifies a detailed status for a video. If the `state` is `inprogress` or
@@ -539,6 +571,10 @@ type streamGetResponseStatusJSON struct {
 
 func (r *StreamGetResponseStatus) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamGetResponseStatusJSON) RawJSON() string {
+	return r.raw
 }
 
 // Specifies the processing status for all quality levels for a video.
@@ -609,6 +645,10 @@ type streamGetResponseWatermarkJSON struct {
 
 func (r *StreamGetResponseWatermark) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamGetResponseWatermarkJSON) RawJSON() string {
+	return r.raw
 }
 
 type StreamNewParams struct {
@@ -709,6 +749,10 @@ func (r *StreamListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamListResponseEnvelopeErrors struct {
 	Code    int64                                `json:"code,required"`
 	Message string                               `json:"message,required"`
@@ -728,6 +772,10 @@ func (r *StreamListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamListResponseEnvelopeMessages struct {
 	Code    int64                                  `json:"code,required"`
 	Message string                                 `json:"message,required"`
@@ -745,6 +793,10 @@ type streamListResponseEnvelopeMessagesJSON struct {
 
 func (r *StreamListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -788,6 +840,10 @@ func (r *StreamGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamGetResponseEnvelopeErrors struct {
 	Code    int64                               `json:"code,required"`
 	Message string                              `json:"message,required"`
@@ -807,6 +863,10 @@ func (r *StreamGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamGetResponseEnvelopeMessages struct {
 	Code    int64                                 `json:"code,required"`
 	Message string                                `json:"message,required"`
@@ -824,6 +884,10 @@ type streamGetResponseEnvelopeMessagesJSON struct {
 
 func (r *StreamGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

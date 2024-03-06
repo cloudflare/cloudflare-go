@@ -106,6 +106,10 @@ func (r *RadarEntityASNListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEntityASNListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEntityASNListResponseASN struct {
 	ASN         int64  `json:"asn,required"`
 	Country     string `json:"country,required"`
@@ -138,6 +142,10 @@ func (r *RadarEntityASNListResponseASN) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEntityASNListResponseASNJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEntityASNGetResponse struct {
 	ASN  RadarEntityASNGetResponseASN  `json:"asn,required"`
 	JSON radarEntityASNGetResponseJSON `json:"-"`
@@ -153,6 +161,10 @@ type radarEntityASNGetResponseJSON struct {
 
 func (r *RadarEntityASNGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEntityASNGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEntityASNGetResponseASN struct {
@@ -196,6 +208,10 @@ func (r *RadarEntityASNGetResponseASN) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEntityASNGetResponseASNJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEntityASNGetResponseASNEstimatedUsers struct {
 	Locations []RadarEntityASNGetResponseASNEstimatedUsersLocation `json:"locations,required"`
 	// Total estimated users
@@ -214,6 +230,10 @@ type radarEntityASNGetResponseASNEstimatedUsersJSON struct {
 
 func (r *RadarEntityASNGetResponseASNEstimatedUsers) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEntityASNGetResponseASNEstimatedUsersJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEntityASNGetResponseASNEstimatedUsersLocation struct {
@@ -236,6 +256,10 @@ type radarEntityASNGetResponseASNEstimatedUsersLocationJSON struct {
 
 func (r *RadarEntityASNGetResponseASNEstimatedUsersLocation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEntityASNGetResponseASNEstimatedUsersLocationJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEntityASNGetResponseASNRelated struct {
@@ -262,6 +286,10 @@ func (r *RadarEntityASNGetResponseASNRelated) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEntityASNGetResponseASNRelatedJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEntityAsnipResponse struct {
 	ASN  RadarEntityAsnipResponseASN  `json:"asn,required"`
 	JSON radarEntityAsnipResponseJSON `json:"-"`
@@ -277,6 +305,10 @@ type radarEntityAsnipResponseJSON struct {
 
 func (r *RadarEntityAsnipResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEntityAsnipResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEntityAsnipResponseASN struct {
@@ -318,6 +350,10 @@ func (r *RadarEntityAsnipResponseASN) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEntityAsnipResponseASNJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEntityAsnipResponseASNEstimatedUsers struct {
 	Locations []RadarEntityAsnipResponseASNEstimatedUsersLocation `json:"locations,required"`
 	// Total estimated users
@@ -336,6 +372,10 @@ type radarEntityAsnipResponseASNEstimatedUsersJSON struct {
 
 func (r *RadarEntityAsnipResponseASNEstimatedUsers) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEntityAsnipResponseASNEstimatedUsersJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEntityAsnipResponseASNEstimatedUsersLocation struct {
@@ -358,6 +398,10 @@ type radarEntityAsnipResponseASNEstimatedUsersLocationJSON struct {
 
 func (r *RadarEntityAsnipResponseASNEstimatedUsersLocation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEntityAsnipResponseASNEstimatedUsersLocationJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEntityAsnipResponseASNRelated struct {
@@ -384,6 +428,10 @@ func (r *RadarEntityAsnipResponseASNRelated) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEntityAsnipResponseASNRelatedJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEntityASNRelResponse struct {
 	Meta RadarEntityASNRelResponseMeta  `json:"meta,required"`
 	Rels []RadarEntityASNRelResponseRel `json:"rels,required"`
@@ -401,6 +449,10 @@ type radarEntityASNRelResponseJSON struct {
 
 func (r *RadarEntityASNRelResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEntityASNRelResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEntityASNRelResponseMeta struct {
@@ -422,6 +474,10 @@ type radarEntityASNRelResponseMetaJSON struct {
 
 func (r *RadarEntityASNRelResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEntityASNRelResponseMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEntityASNRelResponseRel struct {
@@ -451,6 +507,10 @@ type radarEntityASNRelResponseRelJSON struct {
 
 func (r *RadarEntityASNRelResponseRel) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEntityASNRelResponseRelJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEntityASNListParams struct {
@@ -512,6 +572,10 @@ func (r *RadarEntityASNListResponseEnvelope) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEntityASNListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEntityASNGetParams struct {
 	// Format results are returned in.
 	Format param.Field[RadarEntityASNGetParamsFormat] `query:"format"`
@@ -551,6 +615,10 @@ type radarEntityASNGetResponseEnvelopeJSON struct {
 
 func (r *RadarEntityASNGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEntityASNGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEntityASNIPParams struct {
@@ -595,6 +663,10 @@ func (r *RadarEntityAsnipResponseEnvelope) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEntityAsnipResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEntityASNRelParams struct {
 	// Get the AS relationship of ASN2 with respect to the given ASN
 	Asn2 param.Field[int64] `query:"asn2"`
@@ -636,4 +708,8 @@ type radarEntityASNRelResponseEnvelopeJSON struct {
 
 func (r *RadarEntityASNRelResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEntityASNRelResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

@@ -79,6 +79,10 @@ func (r *EmailRoutingRoutingDNSGetResponse) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r emailRoutingRoutingDNSGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Time to live, in seconds, of the DNS record. Must be between 60 and 86400, or 1
 // for 'automatic'.
 //
@@ -155,6 +159,10 @@ func (r *EmailRoutingRoutingDNSGetResponseEnvelope) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r emailRoutingRoutingDNSGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type EmailRoutingRoutingDNSGetResponseEnvelopeErrors struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -174,6 +182,10 @@ func (r *EmailRoutingRoutingDNSGetResponseEnvelopeErrors) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r emailRoutingRoutingDNSGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type EmailRoutingRoutingDNSGetResponseEnvelopeMessages struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -191,6 +203,10 @@ type emailRoutingRoutingDNSGetResponseEnvelopeMessagesJSON struct {
 
 func (r *EmailRoutingRoutingDNSGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailRoutingRoutingDNSGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -225,4 +241,8 @@ type emailRoutingRoutingDNSGetResponseEnvelopeResultInfoJSON struct {
 
 func (r *EmailRoutingRoutingDNSGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailRoutingRoutingDNSGetResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

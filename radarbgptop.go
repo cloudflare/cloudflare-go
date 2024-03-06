@@ -68,6 +68,10 @@ func (r *RadarBGPTopPrefixesResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarBGPTopPrefixesResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarBGPTopPrefixesResponseMeta struct {
 	DateRange []RadarBGPTopPrefixesResponseMetaDateRange `json:"dateRange,required"`
 	JSON      radarBGPTopPrefixesResponseMetaJSON        `json:"-"`
@@ -83,6 +87,10 @@ type radarBGPTopPrefixesResponseMetaJSON struct {
 
 func (r *RadarBGPTopPrefixesResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarBGPTopPrefixesResponseMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarBGPTopPrefixesResponseMetaDateRange struct {
@@ -106,6 +114,10 @@ func (r *RadarBGPTopPrefixesResponseMetaDateRange) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarBGPTopPrefixesResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarBGPTopPrefixesResponseTop0 struct {
 	Prefix string                              `json:"prefix,required"`
 	Value  string                              `json:"value,required"`
@@ -123,6 +135,10 @@ type radarBGPTopPrefixesResponseTop0JSON struct {
 
 func (r *RadarBGPTopPrefixesResponseTop0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarBGPTopPrefixesResponseTop0JSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarBGPTopPrefixesParams struct {
@@ -209,4 +225,8 @@ type radarBGPTopPrefixesResponseEnvelopeJSON struct {
 
 func (r *RadarBGPTopPrefixesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarBGPTopPrefixesResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

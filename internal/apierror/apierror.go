@@ -31,6 +31,10 @@ func (r *Error) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r errorJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r *Error) Error() string {
 	body, _ := io.ReadAll(r.Response.Body)
 	return fmt.Sprintf("%s \"%s\": %d %s %s", r.Request.Method, r.Request.URL, r.Response.StatusCode, http.StatusText(r.Response.StatusCode), string(body))

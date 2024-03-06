@@ -91,6 +91,10 @@ func (r *CacheRegionalTieredCacheEditResponse) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cacheRegionalTieredCacheEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // ID of the zone setting.
 type CacheRegionalTieredCacheEditResponseID string
 
@@ -120,6 +124,10 @@ type cacheRegionalTieredCacheEditResponseValueJSON struct {
 
 func (r *CacheRegionalTieredCacheEditResponseValue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cacheRegionalTieredCacheEditResponseValueJSON) RawJSON() string {
+	return r.raw
 }
 
 // ID of the zone setting.
@@ -158,6 +166,10 @@ func (r *CacheRegionalTieredCacheGetResponse) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cacheRegionalTieredCacheGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // ID of the zone setting.
 type CacheRegionalTieredCacheGetResponseID string
 
@@ -187,6 +199,10 @@ type cacheRegionalTieredCacheGetResponseValueJSON struct {
 
 func (r *CacheRegionalTieredCacheGetResponseValue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cacheRegionalTieredCacheGetResponseValueJSON) RawJSON() string {
+	return r.raw
 }
 
 // ID of the zone setting.
@@ -242,6 +258,10 @@ func (r *CacheRegionalTieredCacheEditResponseEnvelope) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cacheRegionalTieredCacheEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CacheRegionalTieredCacheEditResponseEnvelopeErrors struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -261,6 +281,10 @@ func (r *CacheRegionalTieredCacheEditResponseEnvelopeErrors) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cacheRegionalTieredCacheEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type CacheRegionalTieredCacheEditResponseEnvelopeMessages struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -278,6 +302,10 @@ type cacheRegionalTieredCacheEditResponseEnvelopeMessagesJSON struct {
 
 func (r *CacheRegionalTieredCacheEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cacheRegionalTieredCacheEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -319,6 +347,10 @@ func (r *CacheRegionalTieredCacheGetResponseEnvelope) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cacheRegionalTieredCacheGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CacheRegionalTieredCacheGetResponseEnvelopeErrors struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -338,6 +370,10 @@ func (r *CacheRegionalTieredCacheGetResponseEnvelopeErrors) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cacheRegionalTieredCacheGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type CacheRegionalTieredCacheGetResponseEnvelopeMessages struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -355,6 +391,10 @@ type cacheRegionalTieredCacheGetResponseEnvelopeMessagesJSON struct {
 
 func (r *CacheRegionalTieredCacheGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cacheRegionalTieredCacheGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

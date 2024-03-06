@@ -71,6 +71,10 @@ func (r *RadarAttackLayer3TimeseriesResponse) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer3TimeseriesResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer3TimeseriesResponseSerie0 struct {
 	Timestamps []string                                      `json:"timestamps,required"`
 	Values     []string                                      `json:"values,required"`
@@ -88,6 +92,10 @@ type radarAttackLayer3TimeseriesResponseSerie0JSON struct {
 
 func (r *RadarAttackLayer3TimeseriesResponseSerie0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAttackLayer3TimeseriesResponseSerie0JSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarAttackLayer3TimeseriesParams struct {
@@ -241,4 +249,8 @@ type radarAttackLayer3TimeseriesResponseEnvelopeJSON struct {
 
 func (r *RadarAttackLayer3TimeseriesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAttackLayer3TimeseriesResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

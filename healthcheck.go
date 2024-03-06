@@ -187,6 +187,10 @@ func (r *HealthcheckNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r healthcheckNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // WNAM: Western North America, ENAM: Eastern North America, WEU: Western Europe,
 // EEU: Eastern Europe, NSAM: Northern South America, SSAM: Southern South America,
 // OC: Oceania, ME: Middle East, NAF: North Africa, SAF: South Africa, IN: India,
@@ -255,6 +259,10 @@ func (r *HealthcheckNewResponseHTTPConfig) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r healthcheckNewResponseHTTPConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 // The HTTP method to use for the health check.
 type HealthcheckNewResponseHTTPConfigMethod string
 
@@ -293,6 +301,10 @@ type healthcheckNewResponseTcpConfigJSON struct {
 
 func (r *HealthcheckNewResponseTcpConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r healthcheckNewResponseTcpConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The TCP connection method to use for the health check.
@@ -377,6 +389,10 @@ func (r *HealthcheckUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r healthcheckUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // WNAM: Western North America, ENAM: Eastern North America, WEU: Western Europe,
 // EEU: Eastern Europe, NSAM: Northern South America, SSAM: Southern South America,
 // OC: Oceania, ME: Middle East, NAF: North Africa, SAF: South Africa, IN: India,
@@ -445,6 +461,10 @@ func (r *HealthcheckUpdateResponseHTTPConfig) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r healthcheckUpdateResponseHTTPConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 // The HTTP method to use for the health check.
 type HealthcheckUpdateResponseHTTPConfigMethod string
 
@@ -483,6 +503,10 @@ type healthcheckUpdateResponseTcpConfigJSON struct {
 
 func (r *HealthcheckUpdateResponseTcpConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r healthcheckUpdateResponseTcpConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The TCP connection method to use for the health check.
@@ -567,6 +591,10 @@ func (r *HealthcheckListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r healthcheckListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // WNAM: Western North America, ENAM: Eastern North America, WEU: Western Europe,
 // EEU: Eastern Europe, NSAM: Northern South America, SSAM: Southern South America,
 // OC: Oceania, ME: Middle East, NAF: North Africa, SAF: South Africa, IN: India,
@@ -635,6 +663,10 @@ func (r *HealthcheckListResponseHTTPConfig) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r healthcheckListResponseHTTPConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 // The HTTP method to use for the health check.
 type HealthcheckListResponseHTTPConfigMethod string
 
@@ -675,6 +707,10 @@ func (r *HealthcheckListResponseTcpConfig) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r healthcheckListResponseTcpConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 // The TCP connection method to use for the health check.
 type HealthcheckListResponseTcpConfigMethod string
 
@@ -698,6 +734,10 @@ type healthcheckDeleteResponseJSON struct {
 
 func (r *HealthcheckDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r healthcheckDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type HealthcheckEditResponse struct {
@@ -775,6 +815,10 @@ func (r *HealthcheckEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r healthcheckEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // WNAM: Western North America, ENAM: Eastern North America, WEU: Western Europe,
 // EEU: Eastern Europe, NSAM: Northern South America, SSAM: Southern South America,
 // OC: Oceania, ME: Middle East, NAF: North Africa, SAF: South Africa, IN: India,
@@ -843,6 +887,10 @@ func (r *HealthcheckEditResponseHTTPConfig) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r healthcheckEditResponseHTTPConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 // The HTTP method to use for the health check.
 type HealthcheckEditResponseHTTPConfigMethod string
 
@@ -881,6 +929,10 @@ type healthcheckEditResponseTcpConfigJSON struct {
 
 func (r *HealthcheckEditResponseTcpConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r healthcheckEditResponseTcpConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The TCP connection method to use for the health check.
@@ -965,6 +1017,10 @@ func (r *HealthcheckGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r healthcheckGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // WNAM: Western North America, ENAM: Eastern North America, WEU: Western Europe,
 // EEU: Eastern Europe, NSAM: Northern South America, SSAM: Southern South America,
 // OC: Oceania, ME: Middle East, NAF: North Africa, SAF: South Africa, IN: India,
@@ -1033,6 +1089,10 @@ func (r *HealthcheckGetResponseHTTPConfig) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r healthcheckGetResponseHTTPConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 // The HTTP method to use for the health check.
 type HealthcheckGetResponseHTTPConfigMethod string
 
@@ -1071,6 +1131,10 @@ type healthcheckGetResponseTcpConfigJSON struct {
 
 func (r *HealthcheckGetResponseTcpConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r healthcheckGetResponseTcpConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The TCP connection method to use for the health check.
@@ -1224,6 +1288,10 @@ func (r *HealthcheckNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r healthcheckNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type HealthcheckNewResponseEnvelopeErrors struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -1243,6 +1311,10 @@ func (r *HealthcheckNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r healthcheckNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type HealthcheckNewResponseEnvelopeMessages struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -1260,6 +1332,10 @@ type healthcheckNewResponseEnvelopeMessagesJSON struct {
 
 func (r *HealthcheckNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r healthcheckNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1413,6 +1489,10 @@ func (r *HealthcheckUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r healthcheckUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type HealthcheckUpdateResponseEnvelopeErrors struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -1432,6 +1512,10 @@ func (r *HealthcheckUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r healthcheckUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type HealthcheckUpdateResponseEnvelopeMessages struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -1449,6 +1533,10 @@ type healthcheckUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *HealthcheckUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r healthcheckUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1484,6 +1572,10 @@ func (r *HealthcheckListResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r healthcheckListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type HealthcheckListResponseEnvelopeErrors struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -1503,6 +1595,10 @@ func (r *HealthcheckListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r healthcheckListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type HealthcheckListResponseEnvelopeMessages struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -1520,6 +1616,10 @@ type healthcheckListResponseEnvelopeMessagesJSON struct {
 
 func (r *HealthcheckListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r healthcheckListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1556,6 +1656,10 @@ func (r *HealthcheckListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r healthcheckListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type HealthcheckDeleteResponseEnvelope struct {
 	Errors   []HealthcheckDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []HealthcheckDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -1580,6 +1684,10 @@ func (r *HealthcheckDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r healthcheckDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type HealthcheckDeleteResponseEnvelopeErrors struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -1599,6 +1707,10 @@ func (r *HealthcheckDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r healthcheckDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type HealthcheckDeleteResponseEnvelopeMessages struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -1616,6 +1728,10 @@ type healthcheckDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *HealthcheckDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r healthcheckDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1769,6 +1885,10 @@ func (r *HealthcheckEditResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r healthcheckEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type HealthcheckEditResponseEnvelopeErrors struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -1788,6 +1908,10 @@ func (r *HealthcheckEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r healthcheckEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type HealthcheckEditResponseEnvelopeMessages struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -1805,6 +1929,10 @@ type healthcheckEditResponseEnvelopeMessagesJSON struct {
 
 func (r *HealthcheckEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r healthcheckEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1838,6 +1966,10 @@ func (r *HealthcheckGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r healthcheckGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type HealthcheckGetResponseEnvelopeErrors struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -1857,6 +1989,10 @@ func (r *HealthcheckGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r healthcheckGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type HealthcheckGetResponseEnvelopeMessages struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -1874,6 +2010,10 @@ type healthcheckGetResponseEnvelopeMessagesJSON struct {
 
 func (r *HealthcheckGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r healthcheckGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

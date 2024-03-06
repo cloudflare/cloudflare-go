@@ -135,6 +135,10 @@ func (r *StreamAudioTrackCopyResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamAudioTrackCopyResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Specifies the processing status of the video.
 type StreamAudioTrackCopyResponseStatus string
 
@@ -172,6 +176,10 @@ func (r *StreamAudioTrackEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamAudioTrackEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Specifies the processing status of the video.
 type StreamAudioTrackEditResponseStatus string
 
@@ -207,6 +215,10 @@ type streamAudioTrackGetResponseJSON struct {
 
 func (r *StreamAudioTrackGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamAudioTrackGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Specifies the processing status of the video.
@@ -247,6 +259,10 @@ func (r *StreamAudioTrackDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamAudioTrackDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamAudioTrackDeleteResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -266,6 +282,10 @@ func (r *StreamAudioTrackDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamAudioTrackDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamAudioTrackDeleteResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -283,6 +303,10 @@ type streamAudioTrackDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *StreamAudioTrackDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamAudioTrackDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -332,6 +356,10 @@ func (r *StreamAudioTrackCopyResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamAudioTrackCopyResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamAudioTrackCopyResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -351,6 +379,10 @@ func (r *StreamAudioTrackCopyResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamAudioTrackCopyResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamAudioTrackCopyResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -368,6 +400,10 @@ type streamAudioTrackCopyResponseEnvelopeMessagesJSON struct {
 
 func (r *StreamAudioTrackCopyResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamAudioTrackCopyResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -415,6 +451,10 @@ func (r *StreamAudioTrackEditResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamAudioTrackEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamAudioTrackEditResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -434,6 +474,10 @@ func (r *StreamAudioTrackEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamAudioTrackEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamAudioTrackEditResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -451,6 +495,10 @@ type streamAudioTrackEditResponseEnvelopeMessagesJSON struct {
 
 func (r *StreamAudioTrackEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamAudioTrackEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -489,6 +537,10 @@ func (r *StreamAudioTrackGetResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamAudioTrackGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamAudioTrackGetResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -508,6 +560,10 @@ func (r *StreamAudioTrackGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamAudioTrackGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamAudioTrackGetResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -525,6 +581,10 @@ type streamAudioTrackGetResponseEnvelopeMessagesJSON struct {
 
 func (r *StreamAudioTrackGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamAudioTrackGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

@@ -87,6 +87,10 @@ func (r *ZoneSettingPseudoIPV4EditResponse) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingPseudoIPV4EditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Value of the Pseudo IPv4 setting.
 type ZoneSettingPseudoIPV4EditResponseID string
 
@@ -139,6 +143,10 @@ type zoneSettingPseudoIPV4GetResponseJSON struct {
 
 func (r *ZoneSettingPseudoIPV4GetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingPseudoIPV4GetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Value of the Pseudo IPv4 setting.
@@ -211,6 +219,10 @@ func (r *ZoneSettingPseudoIPV4EditResponseEnvelope) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingPseudoIPV4EditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingPseudoIPV4EditResponseEnvelopeErrors struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -230,6 +242,10 @@ func (r *ZoneSettingPseudoIPV4EditResponseEnvelopeErrors) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingPseudoIPV4EditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingPseudoIPV4EditResponseEnvelopeMessages struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -247,6 +263,10 @@ type zoneSettingPseudoIPV4EditResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingPseudoIPV4EditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingPseudoIPV4EditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneSettingPseudoIPV4GetParams struct {
@@ -279,6 +299,10 @@ func (r *ZoneSettingPseudoIPV4GetResponseEnvelope) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingPseudoIPV4GetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingPseudoIPV4GetResponseEnvelopeErrors struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -298,6 +322,10 @@ func (r *ZoneSettingPseudoIPV4GetResponseEnvelopeErrors) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingPseudoIPV4GetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingPseudoIPV4GetResponseEnvelopeMessages struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -315,4 +343,8 @@ type zoneSettingPseudoIPV4GetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingPseudoIPV4GetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingPseudoIPV4GetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }

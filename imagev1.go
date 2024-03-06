@@ -160,6 +160,10 @@ func (r *ImageV1NewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r imageV1NewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // URI to thumbnail variant for an image.
 //
 // Union satisfied by [shared.UnionString], [shared.UnionString] or
@@ -211,6 +215,10 @@ func (r *ImageV1ListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r imageV1ListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ImageV1ListResponseError struct {
 	Code    int64                        `json:"code,required"`
 	Message string                       `json:"message,required"`
@@ -228,6 +236,10 @@ type imageV1ListResponseErrorJSON struct {
 
 func (r *ImageV1ListResponseError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r imageV1ListResponseErrorJSON) RawJSON() string {
+	return r.raw
 }
 
 type ImageV1ListResponseMessage struct {
@@ -249,6 +261,10 @@ func (r *ImageV1ListResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r imageV1ListResponseMessageJSON) RawJSON() string {
+	return r.raw
+}
+
 type ImageV1ListResponseResult struct {
 	Images []ImageV1ListResponseResultImage `json:"images"`
 	JSON   imageV1ListResponseResultJSON    `json:"-"`
@@ -264,6 +280,10 @@ type imageV1ListResponseResultJSON struct {
 
 func (r *ImageV1ListResponseResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r imageV1ListResponseResultJSON) RawJSON() string {
+	return r.raw
 }
 
 type ImageV1ListResponseResultImage struct {
@@ -299,6 +319,10 @@ type imageV1ListResponseResultImageJSON struct {
 
 func (r *ImageV1ListResponseResultImage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r imageV1ListResponseResultImageJSON) RawJSON() string {
+	return r.raw
 }
 
 // URI to thumbnail variant for an image.
@@ -386,6 +410,10 @@ func (r *ImageV1EditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r imageV1EditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // URI to thumbnail variant for an image.
 //
 // Union satisfied by [shared.UnionString], [shared.UnionString] or
@@ -446,6 +474,10 @@ type imageV1GetResponseJSON struct {
 
 func (r *ImageV1GetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r imageV1GetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // URI to thumbnail variant for an image.
@@ -511,6 +543,10 @@ func (r *ImageV1NewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r imageV1NewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ImageV1NewResponseEnvelopeErrors struct {
 	Code    int64                                `json:"code,required"`
 	Message string                               `json:"message,required"`
@@ -530,6 +566,10 @@ func (r *ImageV1NewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r imageV1NewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ImageV1NewResponseEnvelopeMessages struct {
 	Code    int64                                  `json:"code,required"`
 	Message string                                 `json:"message,required"`
@@ -547,6 +587,10 @@ type imageV1NewResponseEnvelopeMessagesJSON struct {
 
 func (r *ImageV1NewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r imageV1NewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -602,6 +646,10 @@ func (r *ImageV1DeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r imageV1DeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ImageV1DeleteResponseEnvelopeErrors struct {
 	Code    int64                                   `json:"code,required"`
 	Message string                                  `json:"message,required"`
@@ -621,6 +669,10 @@ func (r *ImageV1DeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r imageV1DeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ImageV1DeleteResponseEnvelopeMessages struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -638,6 +690,10 @@ type imageV1DeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *ImageV1DeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r imageV1DeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -687,6 +743,10 @@ func (r *ImageV1EditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r imageV1EditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ImageV1EditResponseEnvelopeErrors struct {
 	Code    int64                                 `json:"code,required"`
 	Message string                                `json:"message,required"`
@@ -706,6 +766,10 @@ func (r *ImageV1EditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r imageV1EditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ImageV1EditResponseEnvelopeMessages struct {
 	Code    int64                                   `json:"code,required"`
 	Message string                                  `json:"message,required"`
@@ -723,6 +787,10 @@ type imageV1EditResponseEnvelopeMessagesJSON struct {
 
 func (r *ImageV1EditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r imageV1EditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -761,6 +829,10 @@ func (r *ImageV1GetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r imageV1GetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ImageV1GetResponseEnvelopeErrors struct {
 	Code    int64                                `json:"code,required"`
 	Message string                               `json:"message,required"`
@@ -780,6 +852,10 @@ func (r *ImageV1GetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r imageV1GetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ImageV1GetResponseEnvelopeMessages struct {
 	Code    int64                                  `json:"code,required"`
 	Message string                                 `json:"message,required"`
@@ -797,6 +873,10 @@ type imageV1GetResponseEnvelopeMessagesJSON struct {
 
 func (r *ImageV1GetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r imageV1GetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

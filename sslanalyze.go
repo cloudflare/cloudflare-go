@@ -115,6 +115,10 @@ func (r *SSLAnalyzeNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r sslAnalyzeNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type SSLAnalyzeNewResponseEnvelopeErrors struct {
 	Code    int64                                   `json:"code,required"`
 	Message string                                  `json:"message,required"`
@@ -134,6 +138,10 @@ func (r *SSLAnalyzeNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r sslAnalyzeNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type SSLAnalyzeNewResponseEnvelopeMessages struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -151,6 +159,10 @@ type sslAnalyzeNewResponseEnvelopeMessagesJSON struct {
 
 func (r *SSLAnalyzeNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sslAnalyzeNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

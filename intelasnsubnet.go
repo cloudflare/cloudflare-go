@@ -69,6 +69,10 @@ func (r *IntelASNSubnetGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r intelASNSubnetGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type IntelASNSubnetGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`

@@ -134,6 +134,10 @@ func (r *CacheCacheReserveClearResponse) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cacheCacheReserveClearResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // ID of the zone setting.
 type CacheCacheReserveClearResponseID string
 
@@ -179,6 +183,10 @@ func (r *CacheCacheReserveEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cacheCacheReserveEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // ID of the zone setting.
 type CacheCacheReserveEditResponseID string
 
@@ -222,6 +230,10 @@ type cacheCacheReserveGetResponseJSON struct {
 
 func (r *CacheCacheReserveGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cacheCacheReserveGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // ID of the zone setting.
@@ -273,6 +285,10 @@ func (r *CacheCacheReserveStatusResponse) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cacheCacheReserveStatusResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // ID of the zone setting.
 type CacheCacheReserveStatusResponseID string
 
@@ -321,6 +337,10 @@ func (r *CacheCacheReserveClearResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cacheCacheReserveClearResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CacheCacheReserveClearResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -340,6 +360,10 @@ func (r *CacheCacheReserveClearResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cacheCacheReserveClearResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type CacheCacheReserveClearResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -357,6 +381,10 @@ type cacheCacheReserveClearResponseEnvelopeMessagesJSON struct {
 
 func (r *CacheCacheReserveClearResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cacheCacheReserveClearResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -415,6 +443,10 @@ func (r *CacheCacheReserveEditResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cacheCacheReserveEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CacheCacheReserveEditResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -434,6 +466,10 @@ func (r *CacheCacheReserveEditResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cacheCacheReserveEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type CacheCacheReserveEditResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -451,6 +487,10 @@ type cacheCacheReserveEditResponseEnvelopeMessagesJSON struct {
 
 func (r *CacheCacheReserveEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cacheCacheReserveEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -495,6 +535,10 @@ func (r *CacheCacheReserveGetResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cacheCacheReserveGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CacheCacheReserveGetResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -514,6 +558,10 @@ func (r *CacheCacheReserveGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cacheCacheReserveGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type CacheCacheReserveGetResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -531,6 +579,10 @@ type cacheCacheReserveGetResponseEnvelopeMessagesJSON struct {
 
 func (r *CacheCacheReserveGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cacheCacheReserveGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -573,6 +625,10 @@ func (r *CacheCacheReserveStatusResponseEnvelope) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cacheCacheReserveStatusResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CacheCacheReserveStatusResponseEnvelopeErrors struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -592,6 +648,10 @@ func (r *CacheCacheReserveStatusResponseEnvelopeErrors) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cacheCacheReserveStatusResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type CacheCacheReserveStatusResponseEnvelopeMessages struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -609,6 +669,10 @@ type cacheCacheReserveStatusResponseEnvelopeMessagesJSON struct {
 
 func (r *CacheCacheReserveStatusResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cacheCacheReserveStatusResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

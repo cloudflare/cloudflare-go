@@ -65,6 +65,10 @@ func (r *MTLSCertificateAssociationGetResponse) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r mtlsCertificateAssociationGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type MTLSCertificateAssociationGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -96,6 +100,10 @@ func (r *MTLSCertificateAssociationGetResponseEnvelope) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r mtlsCertificateAssociationGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type MTLSCertificateAssociationGetResponseEnvelopeErrors struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -115,6 +123,10 @@ func (r *MTLSCertificateAssociationGetResponseEnvelopeErrors) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r mtlsCertificateAssociationGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type MTLSCertificateAssociationGetResponseEnvelopeMessages struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -132,6 +144,10 @@ type mtlsCertificateAssociationGetResponseEnvelopeMessagesJSON struct {
 
 func (r *MTLSCertificateAssociationGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r mtlsCertificateAssociationGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -167,4 +183,8 @@ type mtlsCertificateAssociationGetResponseEnvelopeResultInfoJSON struct {
 
 func (r *MTLSCertificateAssociationGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r mtlsCertificateAssociationGetResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

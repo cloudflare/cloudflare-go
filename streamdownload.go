@@ -151,6 +151,10 @@ func (r *StreamDownloadNewResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamDownloadNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamDownloadNewResponseEnvelopeErrors struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -170,6 +174,10 @@ func (r *StreamDownloadNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamDownloadNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamDownloadNewResponseEnvelopeMessages struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -187,6 +195,10 @@ type streamDownloadNewResponseEnvelopeMessagesJSON struct {
 
 func (r *StreamDownloadNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamDownloadNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -225,6 +237,10 @@ func (r *StreamDownloadDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamDownloadDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamDownloadDeleteResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -244,6 +260,10 @@ func (r *StreamDownloadDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamDownloadDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamDownloadDeleteResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -261,6 +281,10 @@ type streamDownloadDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *StreamDownloadDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamDownloadDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -299,6 +323,10 @@ func (r *StreamDownloadGetResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamDownloadGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamDownloadGetResponseEnvelopeErrors struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -318,6 +346,10 @@ func (r *StreamDownloadGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamDownloadGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamDownloadGetResponseEnvelopeMessages struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -335,6 +367,10 @@ type streamDownloadGetResponseEnvelopeMessagesJSON struct {
 
 func (r *StreamDownloadGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamDownloadGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

@@ -223,6 +223,10 @@ func (r *UserLoadBalancerMonitorNewResponse) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userLoadBalancerMonitorNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The protocol to use for the health check. Currently supported protocols are
 // 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
 type UserLoadBalancerMonitorNewResponseType string
@@ -320,6 +324,10 @@ type userLoadBalancerMonitorUpdateResponseJSON struct {
 
 func (r *UserLoadBalancerMonitorUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userLoadBalancerMonitorUpdateResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // The protocol to use for the health check. Currently supported protocols are
@@ -421,6 +429,10 @@ func (r *UserLoadBalancerMonitorListResponse) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userLoadBalancerMonitorListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The protocol to use for the health check. Currently supported protocols are
 // 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
 type UserLoadBalancerMonitorListResponseType string
@@ -449,6 +461,10 @@ type userLoadBalancerMonitorDeleteResponseJSON struct {
 
 func (r *UserLoadBalancerMonitorDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userLoadBalancerMonitorDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type UserLoadBalancerMonitorEditResponse struct {
@@ -535,6 +551,10 @@ type userLoadBalancerMonitorEditResponseJSON struct {
 
 func (r *UserLoadBalancerMonitorEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userLoadBalancerMonitorEditResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // The protocol to use for the health check. Currently supported protocols are
@@ -636,6 +656,10 @@ func (r *UserLoadBalancerMonitorGetResponse) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userLoadBalancerMonitorGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The protocol to use for the health check. Currently supported protocols are
 // 'HTTP','HTTPS', 'TCP', 'ICMP-PING', 'UDP-ICMP', and 'SMTP'.
 type UserLoadBalancerMonitorGetResponseType string
@@ -669,6 +693,10 @@ func (r *UserLoadBalancerMonitorPreviewResponse) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userLoadBalancerMonitorPreviewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserLoadBalancerMonitorReferencesResponse struct {
 	ReferenceType UserLoadBalancerMonitorReferencesResponseReferenceType `json:"reference_type"`
 	ResourceID    string                                                 `json:"resource_id"`
@@ -690,6 +718,10 @@ type userLoadBalancerMonitorReferencesResponseJSON struct {
 
 func (r *UserLoadBalancerMonitorReferencesResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userLoadBalancerMonitorReferencesResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type UserLoadBalancerMonitorReferencesResponseReferenceType string
@@ -793,6 +825,10 @@ func (r *UserLoadBalancerMonitorNewResponseEnvelope) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userLoadBalancerMonitorNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserLoadBalancerMonitorNewResponseEnvelopeErrors struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -812,6 +848,10 @@ func (r *UserLoadBalancerMonitorNewResponseEnvelopeErrors) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userLoadBalancerMonitorNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserLoadBalancerMonitorNewResponseEnvelopeMessages struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -829,6 +869,10 @@ type userLoadBalancerMonitorNewResponseEnvelopeMessagesJSON struct {
 
 func (r *UserLoadBalancerMonitorNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userLoadBalancerMonitorNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -931,6 +975,10 @@ func (r *UserLoadBalancerMonitorUpdateResponseEnvelope) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userLoadBalancerMonitorUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserLoadBalancerMonitorUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -950,6 +998,10 @@ func (r *UserLoadBalancerMonitorUpdateResponseEnvelopeErrors) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userLoadBalancerMonitorUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserLoadBalancerMonitorUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -967,6 +1019,10 @@ type userLoadBalancerMonitorUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *UserLoadBalancerMonitorUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userLoadBalancerMonitorUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1002,6 +1058,10 @@ func (r *UserLoadBalancerMonitorListResponseEnvelope) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userLoadBalancerMonitorListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserLoadBalancerMonitorListResponseEnvelopeErrors struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -1021,6 +1081,10 @@ func (r *UserLoadBalancerMonitorListResponseEnvelopeErrors) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userLoadBalancerMonitorListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserLoadBalancerMonitorListResponseEnvelopeMessages struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -1038,6 +1102,10 @@ type userLoadBalancerMonitorListResponseEnvelopeMessagesJSON struct {
 
 func (r *UserLoadBalancerMonitorListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userLoadBalancerMonitorListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1074,6 +1142,10 @@ func (r *UserLoadBalancerMonitorListResponseEnvelopeResultInfo) UnmarshalJSON(da
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userLoadBalancerMonitorListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserLoadBalancerMonitorDeleteResponseEnvelope struct {
 	Errors   []UserLoadBalancerMonitorDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []UserLoadBalancerMonitorDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -1098,6 +1170,10 @@ func (r *UserLoadBalancerMonitorDeleteResponseEnvelope) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userLoadBalancerMonitorDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserLoadBalancerMonitorDeleteResponseEnvelopeErrors struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -1117,6 +1193,10 @@ func (r *UserLoadBalancerMonitorDeleteResponseEnvelopeErrors) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userLoadBalancerMonitorDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserLoadBalancerMonitorDeleteResponseEnvelopeMessages struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -1134,6 +1214,10 @@ type userLoadBalancerMonitorDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *UserLoadBalancerMonitorDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userLoadBalancerMonitorDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1236,6 +1320,10 @@ func (r *UserLoadBalancerMonitorEditResponseEnvelope) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userLoadBalancerMonitorEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserLoadBalancerMonitorEditResponseEnvelopeErrors struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -1255,6 +1343,10 @@ func (r *UserLoadBalancerMonitorEditResponseEnvelopeErrors) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userLoadBalancerMonitorEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserLoadBalancerMonitorEditResponseEnvelopeMessages struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -1272,6 +1364,10 @@ type userLoadBalancerMonitorEditResponseEnvelopeMessagesJSON struct {
 
 func (r *UserLoadBalancerMonitorEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userLoadBalancerMonitorEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1305,6 +1401,10 @@ func (r *UserLoadBalancerMonitorGetResponseEnvelope) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userLoadBalancerMonitorGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserLoadBalancerMonitorGetResponseEnvelopeErrors struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -1324,6 +1424,10 @@ func (r *UserLoadBalancerMonitorGetResponseEnvelopeErrors) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userLoadBalancerMonitorGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserLoadBalancerMonitorGetResponseEnvelopeMessages struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -1341,6 +1445,10 @@ type userLoadBalancerMonitorGetResponseEnvelopeMessagesJSON struct {
 
 func (r *UserLoadBalancerMonitorGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userLoadBalancerMonitorGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1443,6 +1551,10 @@ func (r *UserLoadBalancerMonitorPreviewResponseEnvelope) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userLoadBalancerMonitorPreviewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserLoadBalancerMonitorPreviewResponseEnvelopeErrors struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -1462,6 +1574,10 @@ func (r *UserLoadBalancerMonitorPreviewResponseEnvelopeErrors) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userLoadBalancerMonitorPreviewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserLoadBalancerMonitorPreviewResponseEnvelopeMessages struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -1479,6 +1595,10 @@ type userLoadBalancerMonitorPreviewResponseEnvelopeMessagesJSON struct {
 
 func (r *UserLoadBalancerMonitorPreviewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userLoadBalancerMonitorPreviewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1515,6 +1635,10 @@ func (r *UserLoadBalancerMonitorReferencesResponseEnvelope) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userLoadBalancerMonitorReferencesResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserLoadBalancerMonitorReferencesResponseEnvelopeErrors struct {
 	Code    int64                                                       `json:"code,required"`
 	Message string                                                      `json:"message,required"`
@@ -1535,6 +1659,10 @@ func (r *UserLoadBalancerMonitorReferencesResponseEnvelopeErrors) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userLoadBalancerMonitorReferencesResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserLoadBalancerMonitorReferencesResponseEnvelopeMessages struct {
 	Code    int64                                                         `json:"code,required"`
 	Message string                                                        `json:"message,required"`
@@ -1553,6 +1681,10 @@ type userLoadBalancerMonitorReferencesResponseEnvelopeMessagesJSON struct {
 
 func (r *UserLoadBalancerMonitorReferencesResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userLoadBalancerMonitorReferencesResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1588,4 +1720,8 @@ type userLoadBalancerMonitorReferencesResponseEnvelopeResultInfoJSON struct {
 
 func (r *UserLoadBalancerMonitorReferencesResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userLoadBalancerMonitorReferencesResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

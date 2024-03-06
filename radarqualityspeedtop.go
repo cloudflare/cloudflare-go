@@ -80,6 +80,10 @@ func (r *RadarQualitySpeedTopAsesResponse) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarQualitySpeedTopAsesResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarQualitySpeedTopAsesResponseMeta struct {
 	DateRange      []RadarQualitySpeedTopAsesResponseMetaDateRange    `json:"dateRange,required"`
 	LastUpdated    string                                             `json:"lastUpdated,required"`
@@ -99,6 +103,10 @@ type radarQualitySpeedTopAsesResponseMetaJSON struct {
 
 func (r *RadarQualitySpeedTopAsesResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarQualitySpeedTopAsesResponseMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarQualitySpeedTopAsesResponseMetaDateRange struct {
@@ -122,6 +130,10 @@ func (r *RadarQualitySpeedTopAsesResponseMetaDateRange) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarQualitySpeedTopAsesResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarQualitySpeedTopAsesResponseMetaConfidenceInfo struct {
 	Annotations []RadarQualitySpeedTopAsesResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                          `json:"level"`
@@ -139,6 +151,10 @@ type radarQualitySpeedTopAsesResponseMetaConfidenceInfoJSON struct {
 
 func (r *RadarQualitySpeedTopAsesResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarQualitySpeedTopAsesResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarQualitySpeedTopAsesResponseMetaConfidenceInfoAnnotation struct {
@@ -169,6 +185,10 @@ type radarQualitySpeedTopAsesResponseMetaConfidenceInfoAnnotationJSON struct {
 
 func (r *RadarQualitySpeedTopAsesResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarQualitySpeedTopAsesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarQualitySpeedTopAsesResponseTop0 struct {
@@ -206,6 +226,10 @@ func (r *RadarQualitySpeedTopAsesResponseTop0) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarQualitySpeedTopAsesResponseTop0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarQualitySpeedTopLocationsResponse struct {
 	Meta RadarQualitySpeedTopLocationsResponseMeta   `json:"meta,required"`
 	Top0 []RadarQualitySpeedTopLocationsResponseTop0 `json:"top_0,required"`
@@ -223,6 +247,10 @@ type radarQualitySpeedTopLocationsResponseJSON struct {
 
 func (r *RadarQualitySpeedTopLocationsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarQualitySpeedTopLocationsResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarQualitySpeedTopLocationsResponseMeta struct {
@@ -246,6 +274,10 @@ func (r *RadarQualitySpeedTopLocationsResponseMeta) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarQualitySpeedTopLocationsResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarQualitySpeedTopLocationsResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
@@ -267,6 +299,10 @@ func (r *RadarQualitySpeedTopLocationsResponseMetaDateRange) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarQualitySpeedTopLocationsResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarQualitySpeedTopLocationsResponseMetaConfidenceInfo struct {
 	Annotations []RadarQualitySpeedTopLocationsResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                               `json:"level"`
@@ -285,6 +321,10 @@ type radarQualitySpeedTopLocationsResponseMetaConfidenceInfoJSON struct {
 
 func (r *RadarQualitySpeedTopLocationsResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarQualitySpeedTopLocationsResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarQualitySpeedTopLocationsResponseMetaConfidenceInfoAnnotation struct {
@@ -315,6 +355,10 @@ type radarQualitySpeedTopLocationsResponseMetaConfidenceInfoAnnotationJSON struc
 
 func (r *RadarQualitySpeedTopLocationsResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarQualitySpeedTopLocationsResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarQualitySpeedTopLocationsResponseTop0 struct {
@@ -350,6 +394,10 @@ type radarQualitySpeedTopLocationsResponseTop0JSON struct {
 
 func (r *RadarQualitySpeedTopLocationsResponseTop0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarQualitySpeedTopLocationsResponseTop0JSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarQualitySpeedTopAsesParams struct {
@@ -427,6 +475,10 @@ func (r *RadarQualitySpeedTopAsesResponseEnvelope) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarQualitySpeedTopAsesResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarQualitySpeedTopLocationsParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
@@ -500,4 +552,8 @@ type radarQualitySpeedTopLocationsResponseEnvelopeJSON struct {
 
 func (r *RadarQualitySpeedTopLocationsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarQualitySpeedTopLocationsResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

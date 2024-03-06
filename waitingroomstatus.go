@@ -85,6 +85,10 @@ func (r *WaitingRoomStatusGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomStatusGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomStatusGetResponseStatus string
 
 const (
@@ -108,4 +112,8 @@ type waitingRoomStatusGetResponseEnvelopeJSON struct {
 
 func (r *WaitingRoomStatusGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomStatusGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

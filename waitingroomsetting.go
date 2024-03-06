@@ -90,6 +90,10 @@ func (r *WaitingRoomSettingUpdateResponse) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomSettingUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomSettingEditResponse struct {
 	// Whether to allow verified search engine crawlers to bypass all waiting rooms on
 	// this zone. Verified search engine crawlers will not be tracked or counted by the
@@ -110,6 +114,10 @@ func (r *WaitingRoomSettingEditResponse) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomSettingEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomSettingGetResponse struct {
 	// Whether to allow verified search engine crawlers to bypass all waiting rooms on
 	// this zone. Verified search engine crawlers will not be tracked or counted by the
@@ -128,6 +136,10 @@ type waitingRoomSettingGetResponseJSON struct {
 
 func (r *WaitingRoomSettingGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomSettingGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type WaitingRoomSettingUpdateParams struct {
@@ -158,6 +170,10 @@ func (r *WaitingRoomSettingUpdateResponseEnvelope) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomSettingUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomSettingEditParams struct {
 	// Whether to allow verified search engine crawlers to bypass all waiting rooms on
 	// this zone. Verified search engine crawlers will not be tracked or counted by the
@@ -186,6 +202,10 @@ func (r *WaitingRoomSettingEditResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomSettingEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomSettingGetResponseEnvelope struct {
 	Result WaitingRoomSettingGetResponse             `json:"result,required"`
 	JSON   waitingRoomSettingGetResponseEnvelopeJSON `json:"-"`
@@ -201,4 +221,8 @@ type waitingRoomSettingGetResponseEnvelopeJSON struct {
 
 func (r *WaitingRoomSettingGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomSettingGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

@@ -106,6 +106,10 @@ func (r *ZeroTrustDEXColoListResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXColoListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXColoListResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -125,6 +129,10 @@ func (r *ZeroTrustDEXColoListResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXColoListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXColoListResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -142,6 +150,10 @@ type zeroTrustDEXColoListResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustDEXColoListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXColoListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -176,4 +188,8 @@ type zeroTrustDEXColoListResponseEnvelopeResultInfoJSON struct {
 
 func (r *ZeroTrustDEXColoListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXColoListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

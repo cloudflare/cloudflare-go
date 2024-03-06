@@ -132,6 +132,10 @@ func (r *OriginCACertificate) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r originCACertificateJSON) RawJSON() string {
+	return r.raw
+}
+
 // Signature type desired on certificate ("origin-rsa" (rsa), "origin-ecc" (ecdsa),
 // or "keyless-certificate" (for Keyless SSL servers).
 type OriginCACertificateRequestType string
@@ -187,6 +191,10 @@ type certificateDeleteResponseJSON struct {
 
 func (r *CertificateDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificateDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Union satisfied by [CertificateGetResponseUnknown] or [shared.UnionString].
@@ -269,6 +277,10 @@ func (r *CertificateNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r certificateNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CertificateNewResponseEnvelopeErrors struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -288,6 +300,10 @@ func (r *CertificateNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r certificateNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type CertificateNewResponseEnvelopeMessages struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -305,6 +321,10 @@ type certificateNewResponseEnvelopeMessagesJSON struct {
 
 func (r *CertificateNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificateNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -343,6 +363,10 @@ func (r *CertificateListResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r certificateListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CertificateListResponseEnvelopeErrors struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -362,6 +386,10 @@ func (r *CertificateListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r certificateListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type CertificateListResponseEnvelopeMessages struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -379,6 +407,10 @@ type certificateListResponseEnvelopeMessagesJSON struct {
 
 func (r *CertificateListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificateListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -415,6 +447,10 @@ func (r *CertificateListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r certificateListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type CertificateDeleteResponseEnvelope struct {
 	Errors   []CertificateDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []CertificateDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -439,6 +475,10 @@ func (r *CertificateDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r certificateDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CertificateDeleteResponseEnvelopeErrors struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -458,6 +498,10 @@ func (r *CertificateDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r certificateDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type CertificateDeleteResponseEnvelopeMessages struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -475,6 +519,10 @@ type certificateDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *CertificateDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificateDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -508,6 +556,10 @@ func (r *CertificateGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r certificateGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CertificateGetResponseEnvelopeErrors struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -527,6 +579,10 @@ func (r *CertificateGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r certificateGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type CertificateGetResponseEnvelopeMessages struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -544,6 +600,10 @@ type certificateGetResponseEnvelopeMessagesJSON struct {
 
 func (r *CertificateGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificateGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

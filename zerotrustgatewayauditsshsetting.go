@@ -83,6 +83,10 @@ func (r *ZeroTrustGatewayAuditSSHSettingUpdateResponse) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayAuditSSHSettingUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayAuditSSHSettingGetResponse struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// SSH encryption public key
@@ -106,6 +110,10 @@ type zeroTrustGatewayAuditSSHSettingGetResponseJSON struct {
 
 func (r *ZeroTrustGatewayAuditSSHSettingGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayAuditSSHSettingGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustGatewayAuditSSHSettingUpdateParams struct {
@@ -144,6 +152,10 @@ func (r *ZeroTrustGatewayAuditSSHSettingUpdateResponseEnvelope) UnmarshalJSON(da
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayAuditSSHSettingUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayAuditSSHSettingUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                           `json:"code,required"`
 	Message string                                                          `json:"message,required"`
@@ -164,6 +176,10 @@ func (r *ZeroTrustGatewayAuditSSHSettingUpdateResponseEnvelopeErrors) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayAuditSSHSettingUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayAuditSSHSettingUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                             `json:"code,required"`
 	Message string                                                            `json:"message,required"`
@@ -182,6 +198,10 @@ type zeroTrustGatewayAuditSSHSettingUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustGatewayAuditSSHSettingUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayAuditSSHSettingUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -219,6 +239,10 @@ func (r *ZeroTrustGatewayAuditSSHSettingGetResponseEnvelope) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayAuditSSHSettingGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayAuditSSHSettingGetResponseEnvelopeErrors struct {
 	Code    int64                                                        `json:"code,required"`
 	Message string                                                       `json:"message,required"`
@@ -239,6 +263,10 @@ func (r *ZeroTrustGatewayAuditSSHSettingGetResponseEnvelopeErrors) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayAuditSSHSettingGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayAuditSSHSettingGetResponseEnvelopeMessages struct {
 	Code    int64                                                          `json:"code,required"`
 	Message string                                                         `json:"message,required"`
@@ -257,6 +285,10 @@ type zeroTrustGatewayAuditSSHSettingGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustGatewayAuditSSHSettingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayAuditSSHSettingGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

@@ -93,6 +93,10 @@ func (r *ZoneSettingIPGeolocationEditResponse) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingIPGeolocationEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // ID of the zone setting.
 type ZoneSettingIPGeolocationEditResponseID string
 
@@ -146,6 +150,10 @@ type zoneSettingIPGeolocationGetResponseJSON struct {
 
 func (r *ZoneSettingIPGeolocationGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingIPGeolocationGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // ID of the zone setting.
@@ -218,6 +226,10 @@ func (r *ZoneSettingIPGeolocationEditResponseEnvelope) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingIPGeolocationEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingIPGeolocationEditResponseEnvelopeErrors struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -237,6 +249,10 @@ func (r *ZoneSettingIPGeolocationEditResponseEnvelopeErrors) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingIPGeolocationEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingIPGeolocationEditResponseEnvelopeMessages struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -254,6 +270,10 @@ type zoneSettingIPGeolocationEditResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingIPGeolocationEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingIPGeolocationEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneSettingIPGeolocationGetParams struct {
@@ -288,6 +308,10 @@ func (r *ZoneSettingIPGeolocationGetResponseEnvelope) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingIPGeolocationGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingIPGeolocationGetResponseEnvelopeErrors struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -307,6 +331,10 @@ func (r *ZoneSettingIPGeolocationGetResponseEnvelopeErrors) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingIPGeolocationGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingIPGeolocationGetResponseEnvelopeMessages struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -324,4 +352,8 @@ type zoneSettingIPGeolocationGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingIPGeolocationGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingIPGeolocationGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }

@@ -112,6 +112,10 @@ func (r *StreamClipNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamClipNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamClipNewResponsePlayback struct {
 	// DASH Media Presentation Description for the video.
 	Dash string `json:"dash"`
@@ -131,6 +135,10 @@ type streamClipNewResponsePlaybackJSON struct {
 
 func (r *StreamClipNewResponsePlayback) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamClipNewResponsePlaybackJSON) RawJSON() string {
+	return r.raw
 }
 
 // Specifies the processing status for all quality levels for a video.
@@ -161,6 +169,10 @@ type streamClipNewResponseWatermarkJSON struct {
 
 func (r *StreamClipNewResponseWatermark) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamClipNewResponseWatermarkJSON) RawJSON() string {
+	return r.raw
 }
 
 type StreamClipNewParams struct {
@@ -231,6 +243,10 @@ func (r *StreamClipNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamClipNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamClipNewResponseEnvelopeErrors struct {
 	Code    int64                                   `json:"code,required"`
 	Message string                                  `json:"message,required"`
@@ -250,6 +266,10 @@ func (r *StreamClipNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamClipNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamClipNewResponseEnvelopeMessages struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -267,6 +287,10 @@ type streamClipNewResponseEnvelopeMessagesJSON struct {
 
 func (r *StreamClipNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamClipNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

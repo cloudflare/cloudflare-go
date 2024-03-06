@@ -79,6 +79,10 @@ func (r *IntelWhoisGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r intelWhoisGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type IntelWhoisGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -117,6 +121,10 @@ func (r *IntelWhoisGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r intelWhoisGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type IntelWhoisGetResponseEnvelopeErrors struct {
 	Code    int64                                   `json:"code,required"`
 	Message string                                  `json:"message,required"`
@@ -136,6 +144,10 @@ func (r *IntelWhoisGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r intelWhoisGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type IntelWhoisGetResponseEnvelopeMessages struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -153,6 +165,10 @@ type intelWhoisGetResponseEnvelopeMessagesJSON struct {
 
 func (r *IntelWhoisGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r intelWhoisGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

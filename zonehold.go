@@ -95,6 +95,10 @@ func (r *ZoneHoldNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneHoldNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneHoldDeleteResponse struct {
 	Hold              bool                       `json:"hold"`
 	HoldAfter         string                     `json:"hold_after"`
@@ -116,6 +120,10 @@ func (r *ZoneHoldDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneHoldDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneHoldGetResponse struct {
 	Hold              bool                    `json:"hold"`
 	HoldAfter         string                  `json:"hold_after"`
@@ -135,6 +143,10 @@ type zoneHoldGetResponseJSON struct {
 
 func (r *ZoneHoldGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneHoldGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneHoldNewParams struct {
@@ -179,6 +191,10 @@ func (r *ZoneHoldNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneHoldNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneHoldNewResponseEnvelopeErrors struct {
 	Code    int64                                 `json:"code,required"`
 	Message string                                `json:"message,required"`
@@ -198,6 +214,10 @@ func (r *ZoneHoldNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneHoldNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneHoldNewResponseEnvelopeMessages struct {
 	Code    int64                                   `json:"code,required"`
 	Message string                                  `json:"message,required"`
@@ -215,6 +235,10 @@ type zoneHoldNewResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneHoldNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneHoldNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -258,6 +282,10 @@ func (r *ZoneHoldDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneHoldDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneHoldGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -287,6 +315,10 @@ func (r *ZoneHoldGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneHoldGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneHoldGetResponseEnvelopeErrors struct {
 	Code    int64                                 `json:"code,required"`
 	Message string                                `json:"message,required"`
@@ -306,6 +338,10 @@ func (r *ZoneHoldGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneHoldGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneHoldGetResponseEnvelopeMessages struct {
 	Code    int64                                   `json:"code,required"`
 	Message string                                  `json:"message,required"`
@@ -323,6 +359,10 @@ type zoneHoldGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneHoldGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneHoldGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

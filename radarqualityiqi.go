@@ -80,6 +80,10 @@ func (r *RadarQualityIQISummaryResponse) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarQualityIQISummaryResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarQualityIQISummaryResponseMeta struct {
 	DateRange      []RadarQualityIQISummaryResponseMetaDateRange    `json:"dateRange,required"`
 	LastUpdated    string                                           `json:"lastUpdated,required"`
@@ -103,6 +107,10 @@ func (r *RadarQualityIQISummaryResponseMeta) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarQualityIQISummaryResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarQualityIQISummaryResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
@@ -124,6 +132,10 @@ func (r *RadarQualityIQISummaryResponseMetaDateRange) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarQualityIQISummaryResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarQualityIQISummaryResponseMetaConfidenceInfo struct {
 	Annotations []RadarQualityIQISummaryResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                        `json:"level"`
@@ -141,6 +153,10 @@ type radarQualityIQISummaryResponseMetaConfidenceInfoJSON struct {
 
 func (r *RadarQualityIQISummaryResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarQualityIQISummaryResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarQualityIQISummaryResponseMetaConfidenceInfoAnnotation struct {
@@ -173,6 +189,10 @@ func (r *RadarQualityIQISummaryResponseMetaConfidenceInfoAnnotation) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarQualityIQISummaryResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarQualityIQISummaryResponseSummary0 struct {
 	P25  string                                     `json:"p25,required"`
 	P50  string                                     `json:"p50,required"`
@@ -194,6 +214,10 @@ func (r *RadarQualityIQISummaryResponseSummary0) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarQualityIQISummaryResponseSummary0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarQualityIQITimeseriesGroupsResponse struct {
 	Meta   interface{}                                   `json:"meta,required"`
 	Serie0 RadarQualityIQITimeseriesGroupsResponseSerie0 `json:"serie_0,required"`
@@ -211,6 +235,10 @@ type radarQualityIQITimeseriesGroupsResponseJSON struct {
 
 func (r *RadarQualityIQITimeseriesGroupsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarQualityIQITimeseriesGroupsResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarQualityIQITimeseriesGroupsResponseSerie0 struct {
@@ -234,6 +262,10 @@ type radarQualityIQITimeseriesGroupsResponseSerie0JSON struct {
 
 func (r *RadarQualityIQITimeseriesGroupsResponseSerie0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarQualityIQITimeseriesGroupsResponseSerie0JSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarQualityIQISummaryParams struct {
@@ -328,6 +360,10 @@ type radarQualityIQISummaryResponseEnvelopeJSON struct {
 
 func (r *RadarQualityIQISummaryResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarQualityIQISummaryResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarQualityIQITimeseriesGroupsParams struct {
@@ -440,4 +476,8 @@ type radarQualityIQITimeseriesGroupsResponseEnvelopeJSON struct {
 
 func (r *RadarQualityIQITimeseriesGroupsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarQualityIQITimeseriesGroupsResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

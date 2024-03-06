@@ -140,6 +140,10 @@ func (r *ZeroTrustDevicePostureNewResponse) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The value to be checked against.
 //
 // Union satisfied by
@@ -198,6 +202,10 @@ func (r *ZeroTrustDevicePostureNewResponseInputTeamsDevicesFileInputRequest) Unm
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureNewResponseInputTeamsDevicesFileInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustDevicePostureNewResponseInputTeamsDevicesFileInputRequest) implementsZeroTrustDevicePostureNewResponseInput() {
 }
 
@@ -232,6 +240,10 @@ func (r *ZeroTrustDevicePostureNewResponseInputTeamsDevicesUniqueClientIDInputRe
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureNewResponseInputTeamsDevicesUniqueClientIDInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustDevicePostureNewResponseInputTeamsDevicesUniqueClientIDInputRequest) implementsZeroTrustDevicePostureNewResponseInput() {
 }
 
@@ -264,6 +276,10 @@ type zeroTrustDevicePostureNewResponseInputTeamsDevicesDomainJoinedInputRequestJ
 
 func (r *ZeroTrustDevicePostureNewResponseInputTeamsDevicesDomainJoinedInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureNewResponseInputTeamsDevicesDomainJoinedInputRequestJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustDevicePostureNewResponseInputTeamsDevicesDomainJoinedInputRequest) implementsZeroTrustDevicePostureNewResponseInput() {
@@ -311,6 +327,10 @@ func (r *ZeroTrustDevicePostureNewResponseInputTeamsDevicesOSVersionInputRequest
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureNewResponseInputTeamsDevicesOSVersionInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustDevicePostureNewResponseInputTeamsDevicesOSVersionInputRequest) implementsZeroTrustDevicePostureNewResponseInput() {
 }
 
@@ -354,6 +374,10 @@ func (r *ZeroTrustDevicePostureNewResponseInputTeamsDevicesFirewallInputRequest)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureNewResponseInputTeamsDevicesFirewallInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustDevicePostureNewResponseInputTeamsDevicesFirewallInputRequest) implementsZeroTrustDevicePostureNewResponseInput() {
 }
 
@@ -391,6 +415,10 @@ type zeroTrustDevicePostureNewResponseInputTeamsDevicesSentineloneInputRequestJS
 
 func (r *ZeroTrustDevicePostureNewResponseInputTeamsDevicesSentineloneInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureNewResponseInputTeamsDevicesSentineloneInputRequestJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustDevicePostureNewResponseInputTeamsDevicesSentineloneInputRequest) implementsZeroTrustDevicePostureNewResponseInput() {
@@ -433,6 +461,10 @@ func (r *ZeroTrustDevicePostureNewResponseInputTeamsDevicesCarbonblackInputReque
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureNewResponseInputTeamsDevicesCarbonblackInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustDevicePostureNewResponseInputTeamsDevicesCarbonblackInputRequest) implementsZeroTrustDevicePostureNewResponseInput() {
 }
 
@@ -467,6 +499,10 @@ func (r *ZeroTrustDevicePostureNewResponseInputTeamsDevicesDiskEncryptionInputRe
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureNewResponseInputTeamsDevicesDiskEncryptionInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustDevicePostureNewResponseInputTeamsDevicesDiskEncryptionInputRequest) implementsZeroTrustDevicePostureNewResponseInput() {
 }
 
@@ -496,6 +532,10 @@ type zeroTrustDevicePostureNewResponseInputTeamsDevicesApplicationInputRequestJS
 
 func (r *ZeroTrustDevicePostureNewResponseInputTeamsDevicesApplicationInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureNewResponseInputTeamsDevicesApplicationInputRequestJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustDevicePostureNewResponseInputTeamsDevicesApplicationInputRequest) implementsZeroTrustDevicePostureNewResponseInput() {
@@ -532,6 +572,10 @@ func (r *ZeroTrustDevicePostureNewResponseInputTeamsDevicesClientCertificateInpu
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureNewResponseInputTeamsDevicesClientCertificateInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustDevicePostureNewResponseInputTeamsDevicesClientCertificateInputRequest) implementsZeroTrustDevicePostureNewResponseInput() {
 }
 
@@ -555,6 +599,10 @@ type zeroTrustDevicePostureNewResponseInputTeamsDevicesWorkspaceOneInputRequestJ
 
 func (r *ZeroTrustDevicePostureNewResponseInputTeamsDevicesWorkspaceOneInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureNewResponseInputTeamsDevicesWorkspaceOneInputRequestJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustDevicePostureNewResponseInputTeamsDevicesWorkspaceOneInputRequest) implementsZeroTrustDevicePostureNewResponseInput() {
@@ -610,6 +658,10 @@ type zeroTrustDevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequestJS
 
 func (r *ZeroTrustDevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequestJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustDevicePostureNewResponseInputTeamsDevicesCrowdstrikeInputRequest) implementsZeroTrustDevicePostureNewResponseInput() {
@@ -668,6 +720,10 @@ func (r *ZeroTrustDevicePostureNewResponseInputTeamsDevicesIntuneInputRequest) U
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureNewResponseInputTeamsDevicesIntuneInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustDevicePostureNewResponseInputTeamsDevicesIntuneInputRequest) implementsZeroTrustDevicePostureNewResponseInput() {
 }
 
@@ -706,6 +762,10 @@ type zeroTrustDevicePostureNewResponseInputTeamsDevicesKolideInputRequestJSON st
 
 func (r *ZeroTrustDevicePostureNewResponseInputTeamsDevicesKolideInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureNewResponseInputTeamsDevicesKolideInputRequestJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustDevicePostureNewResponseInputTeamsDevicesKolideInputRequest) implementsZeroTrustDevicePostureNewResponseInput() {
@@ -754,6 +814,10 @@ type zeroTrustDevicePostureNewResponseInputTeamsDevicesTaniumInputRequestJSON st
 
 func (r *ZeroTrustDevicePostureNewResponseInputTeamsDevicesTaniumInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureNewResponseInputTeamsDevicesTaniumInputRequestJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustDevicePostureNewResponseInputTeamsDevicesTaniumInputRequest) implementsZeroTrustDevicePostureNewResponseInput() {
@@ -825,6 +889,10 @@ func (r *ZeroTrustDevicePostureNewResponseInputTeamsDevicesSentineloneS2sInputRe
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureNewResponseInputTeamsDevicesSentineloneS2sInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustDevicePostureNewResponseInputTeamsDevicesSentineloneS2sInputRequest) implementsZeroTrustDevicePostureNewResponseInput() {
 }
 
@@ -864,6 +932,10 @@ type zeroTrustDevicePostureNewResponseMatchJSON struct {
 
 func (r *ZeroTrustDevicePostureNewResponseMatch) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureNewResponseMatchJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDevicePostureNewResponseMatchPlatform string
@@ -942,6 +1014,10 @@ func (r *ZeroTrustDevicePostureUpdateResponse) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The value to be checked against.
 //
 // Union satisfied by
@@ -1000,6 +1076,10 @@ func (r *ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesFileInputRequest) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureUpdateResponseInputTeamsDevicesFileInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesFileInputRequest) implementsZeroTrustDevicePostureUpdateResponseInput() {
 }
 
@@ -1034,6 +1114,10 @@ func (r *ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesUniqueClientIDInpu
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureUpdateResponseInputTeamsDevicesUniqueClientIDInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesUniqueClientIDInputRequest) implementsZeroTrustDevicePostureUpdateResponseInput() {
 }
 
@@ -1066,6 +1150,10 @@ type zeroTrustDevicePostureUpdateResponseInputTeamsDevicesDomainJoinedInputReque
 
 func (r *ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesDomainJoinedInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureUpdateResponseInputTeamsDevicesDomainJoinedInputRequestJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesDomainJoinedInputRequest) implementsZeroTrustDevicePostureUpdateResponseInput() {
@@ -1113,6 +1201,10 @@ func (r *ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesOSVersionInputRequ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureUpdateResponseInputTeamsDevicesOSVersionInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesOSVersionInputRequest) implementsZeroTrustDevicePostureUpdateResponseInput() {
 }
 
@@ -1156,6 +1248,10 @@ func (r *ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesFirewallInputReque
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureUpdateResponseInputTeamsDevicesFirewallInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesFirewallInputRequest) implementsZeroTrustDevicePostureUpdateResponseInput() {
 }
 
@@ -1193,6 +1289,10 @@ type zeroTrustDevicePostureUpdateResponseInputTeamsDevicesSentineloneInputReques
 
 func (r *ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesSentineloneInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureUpdateResponseInputTeamsDevicesSentineloneInputRequestJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesSentineloneInputRequest) implementsZeroTrustDevicePostureUpdateResponseInput() {
@@ -1235,6 +1335,10 @@ func (r *ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesCarbonblackInputRe
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureUpdateResponseInputTeamsDevicesCarbonblackInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesCarbonblackInputRequest) implementsZeroTrustDevicePostureUpdateResponseInput() {
 }
 
@@ -1269,6 +1373,10 @@ func (r *ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesDiskEncryptionInpu
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureUpdateResponseInputTeamsDevicesDiskEncryptionInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesDiskEncryptionInputRequest) implementsZeroTrustDevicePostureUpdateResponseInput() {
 }
 
@@ -1298,6 +1406,10 @@ type zeroTrustDevicePostureUpdateResponseInputTeamsDevicesApplicationInputReques
 
 func (r *ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesApplicationInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureUpdateResponseInputTeamsDevicesApplicationInputRequestJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesApplicationInputRequest) implementsZeroTrustDevicePostureUpdateResponseInput() {
@@ -1334,6 +1446,10 @@ func (r *ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesClientCertificateI
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureUpdateResponseInputTeamsDevicesClientCertificateInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesClientCertificateInputRequest) implementsZeroTrustDevicePostureUpdateResponseInput() {
 }
 
@@ -1357,6 +1473,10 @@ type zeroTrustDevicePostureUpdateResponseInputTeamsDevicesWorkspaceOneInputReque
 
 func (r *ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesWorkspaceOneInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureUpdateResponseInputTeamsDevicesWorkspaceOneInputRequestJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesWorkspaceOneInputRequest) implementsZeroTrustDevicePostureUpdateResponseInput() {
@@ -1412,6 +1532,10 @@ type zeroTrustDevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputReques
 
 func (r *ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequestJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesCrowdstrikeInputRequest) implementsZeroTrustDevicePostureUpdateResponseInput() {
@@ -1470,6 +1594,10 @@ func (r *ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesIntuneInputRequest
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureUpdateResponseInputTeamsDevicesIntuneInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesIntuneInputRequest) implementsZeroTrustDevicePostureUpdateResponseInput() {
 }
 
@@ -1508,6 +1636,10 @@ type zeroTrustDevicePostureUpdateResponseInputTeamsDevicesKolideInputRequestJSON
 
 func (r *ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesKolideInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureUpdateResponseInputTeamsDevicesKolideInputRequestJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesKolideInputRequest) implementsZeroTrustDevicePostureUpdateResponseInput() {
@@ -1556,6 +1688,10 @@ type zeroTrustDevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestJSON
 
 func (r *ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequestJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesTaniumInputRequest) implementsZeroTrustDevicePostureUpdateResponseInput() {
@@ -1627,6 +1763,10 @@ func (r *ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesSentineloneS2sInpu
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureUpdateResponseInputTeamsDevicesSentineloneS2sInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustDevicePostureUpdateResponseInputTeamsDevicesSentineloneS2sInputRequest) implementsZeroTrustDevicePostureUpdateResponseInput() {
 }
 
@@ -1666,6 +1806,10 @@ type zeroTrustDevicePostureUpdateResponseMatchJSON struct {
 
 func (r *ZeroTrustDevicePostureUpdateResponseMatch) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureUpdateResponseMatchJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDevicePostureUpdateResponseMatchPlatform string
@@ -1744,6 +1888,10 @@ func (r *ZeroTrustDevicePostureListResponse) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The value to be checked against.
 //
 // Union satisfied by
@@ -1802,6 +1950,10 @@ func (r *ZeroTrustDevicePostureListResponseInputTeamsDevicesFileInputRequest) Un
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureListResponseInputTeamsDevicesFileInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustDevicePostureListResponseInputTeamsDevicesFileInputRequest) implementsZeroTrustDevicePostureListResponseInput() {
 }
 
@@ -1836,6 +1988,10 @@ func (r *ZeroTrustDevicePostureListResponseInputTeamsDevicesUniqueClientIDInputR
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureListResponseInputTeamsDevicesUniqueClientIDInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustDevicePostureListResponseInputTeamsDevicesUniqueClientIDInputRequest) implementsZeroTrustDevicePostureListResponseInput() {
 }
 
@@ -1868,6 +2024,10 @@ type zeroTrustDevicePostureListResponseInputTeamsDevicesDomainJoinedInputRequest
 
 func (r *ZeroTrustDevicePostureListResponseInputTeamsDevicesDomainJoinedInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureListResponseInputTeamsDevicesDomainJoinedInputRequestJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustDevicePostureListResponseInputTeamsDevicesDomainJoinedInputRequest) implementsZeroTrustDevicePostureListResponseInput() {
@@ -1915,6 +2075,10 @@ func (r *ZeroTrustDevicePostureListResponseInputTeamsDevicesOSVersionInputReques
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureListResponseInputTeamsDevicesOSVersionInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustDevicePostureListResponseInputTeamsDevicesOSVersionInputRequest) implementsZeroTrustDevicePostureListResponseInput() {
 }
 
@@ -1958,6 +2122,10 @@ func (r *ZeroTrustDevicePostureListResponseInputTeamsDevicesFirewallInputRequest
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureListResponseInputTeamsDevicesFirewallInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustDevicePostureListResponseInputTeamsDevicesFirewallInputRequest) implementsZeroTrustDevicePostureListResponseInput() {
 }
 
@@ -1995,6 +2163,10 @@ type zeroTrustDevicePostureListResponseInputTeamsDevicesSentineloneInputRequestJ
 
 func (r *ZeroTrustDevicePostureListResponseInputTeamsDevicesSentineloneInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureListResponseInputTeamsDevicesSentineloneInputRequestJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustDevicePostureListResponseInputTeamsDevicesSentineloneInputRequest) implementsZeroTrustDevicePostureListResponseInput() {
@@ -2037,6 +2209,10 @@ func (r *ZeroTrustDevicePostureListResponseInputTeamsDevicesCarbonblackInputRequ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureListResponseInputTeamsDevicesCarbonblackInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustDevicePostureListResponseInputTeamsDevicesCarbonblackInputRequest) implementsZeroTrustDevicePostureListResponseInput() {
 }
 
@@ -2071,6 +2247,10 @@ func (r *ZeroTrustDevicePostureListResponseInputTeamsDevicesDiskEncryptionInputR
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureListResponseInputTeamsDevicesDiskEncryptionInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustDevicePostureListResponseInputTeamsDevicesDiskEncryptionInputRequest) implementsZeroTrustDevicePostureListResponseInput() {
 }
 
@@ -2100,6 +2280,10 @@ type zeroTrustDevicePostureListResponseInputTeamsDevicesApplicationInputRequestJ
 
 func (r *ZeroTrustDevicePostureListResponseInputTeamsDevicesApplicationInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureListResponseInputTeamsDevicesApplicationInputRequestJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustDevicePostureListResponseInputTeamsDevicesApplicationInputRequest) implementsZeroTrustDevicePostureListResponseInput() {
@@ -2136,6 +2320,10 @@ func (r *ZeroTrustDevicePostureListResponseInputTeamsDevicesClientCertificateInp
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureListResponseInputTeamsDevicesClientCertificateInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustDevicePostureListResponseInputTeamsDevicesClientCertificateInputRequest) implementsZeroTrustDevicePostureListResponseInput() {
 }
 
@@ -2159,6 +2347,10 @@ type zeroTrustDevicePostureListResponseInputTeamsDevicesWorkspaceOneInputRequest
 
 func (r *ZeroTrustDevicePostureListResponseInputTeamsDevicesWorkspaceOneInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureListResponseInputTeamsDevicesWorkspaceOneInputRequestJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustDevicePostureListResponseInputTeamsDevicesWorkspaceOneInputRequest) implementsZeroTrustDevicePostureListResponseInput() {
@@ -2214,6 +2406,10 @@ type zeroTrustDevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequestJ
 
 func (r *ZeroTrustDevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequestJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustDevicePostureListResponseInputTeamsDevicesCrowdstrikeInputRequest) implementsZeroTrustDevicePostureListResponseInput() {
@@ -2272,6 +2468,10 @@ func (r *ZeroTrustDevicePostureListResponseInputTeamsDevicesIntuneInputRequest) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureListResponseInputTeamsDevicesIntuneInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustDevicePostureListResponseInputTeamsDevicesIntuneInputRequest) implementsZeroTrustDevicePostureListResponseInput() {
 }
 
@@ -2310,6 +2510,10 @@ type zeroTrustDevicePostureListResponseInputTeamsDevicesKolideInputRequestJSON s
 
 func (r *ZeroTrustDevicePostureListResponseInputTeamsDevicesKolideInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureListResponseInputTeamsDevicesKolideInputRequestJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustDevicePostureListResponseInputTeamsDevicesKolideInputRequest) implementsZeroTrustDevicePostureListResponseInput() {
@@ -2358,6 +2562,10 @@ type zeroTrustDevicePostureListResponseInputTeamsDevicesTaniumInputRequestJSON s
 
 func (r *ZeroTrustDevicePostureListResponseInputTeamsDevicesTaniumInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureListResponseInputTeamsDevicesTaniumInputRequestJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustDevicePostureListResponseInputTeamsDevicesTaniumInputRequest) implementsZeroTrustDevicePostureListResponseInput() {
@@ -2429,6 +2637,10 @@ func (r *ZeroTrustDevicePostureListResponseInputTeamsDevicesSentineloneS2sInputR
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureListResponseInputTeamsDevicesSentineloneS2sInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustDevicePostureListResponseInputTeamsDevicesSentineloneS2sInputRequest) implementsZeroTrustDevicePostureListResponseInput() {
 }
 
@@ -2468,6 +2680,10 @@ type zeroTrustDevicePostureListResponseMatchJSON struct {
 
 func (r *ZeroTrustDevicePostureListResponseMatch) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureListResponseMatchJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDevicePostureListResponseMatchPlatform string
@@ -2523,6 +2739,10 @@ func (r *ZeroTrustDevicePostureDeleteResponse) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDevicePostureGetResponse struct {
 	// API UUID.
 	ID string `json:"id"`
@@ -2562,6 +2782,10 @@ type zeroTrustDevicePostureGetResponseJSON struct {
 
 func (r *ZeroTrustDevicePostureGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // The value to be checked against.
@@ -2622,6 +2846,10 @@ func (r *ZeroTrustDevicePostureGetResponseInputTeamsDevicesFileInputRequest) Unm
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureGetResponseInputTeamsDevicesFileInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustDevicePostureGetResponseInputTeamsDevicesFileInputRequest) implementsZeroTrustDevicePostureGetResponseInput() {
 }
 
@@ -2656,6 +2884,10 @@ func (r *ZeroTrustDevicePostureGetResponseInputTeamsDevicesUniqueClientIDInputRe
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureGetResponseInputTeamsDevicesUniqueClientIDInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustDevicePostureGetResponseInputTeamsDevicesUniqueClientIDInputRequest) implementsZeroTrustDevicePostureGetResponseInput() {
 }
 
@@ -2688,6 +2920,10 @@ type zeroTrustDevicePostureGetResponseInputTeamsDevicesDomainJoinedInputRequestJ
 
 func (r *ZeroTrustDevicePostureGetResponseInputTeamsDevicesDomainJoinedInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureGetResponseInputTeamsDevicesDomainJoinedInputRequestJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustDevicePostureGetResponseInputTeamsDevicesDomainJoinedInputRequest) implementsZeroTrustDevicePostureGetResponseInput() {
@@ -2735,6 +2971,10 @@ func (r *ZeroTrustDevicePostureGetResponseInputTeamsDevicesOSVersionInputRequest
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureGetResponseInputTeamsDevicesOSVersionInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustDevicePostureGetResponseInputTeamsDevicesOSVersionInputRequest) implementsZeroTrustDevicePostureGetResponseInput() {
 }
 
@@ -2778,6 +3018,10 @@ func (r *ZeroTrustDevicePostureGetResponseInputTeamsDevicesFirewallInputRequest)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureGetResponseInputTeamsDevicesFirewallInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustDevicePostureGetResponseInputTeamsDevicesFirewallInputRequest) implementsZeroTrustDevicePostureGetResponseInput() {
 }
 
@@ -2815,6 +3059,10 @@ type zeroTrustDevicePostureGetResponseInputTeamsDevicesSentineloneInputRequestJS
 
 func (r *ZeroTrustDevicePostureGetResponseInputTeamsDevicesSentineloneInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureGetResponseInputTeamsDevicesSentineloneInputRequestJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustDevicePostureGetResponseInputTeamsDevicesSentineloneInputRequest) implementsZeroTrustDevicePostureGetResponseInput() {
@@ -2857,6 +3105,10 @@ func (r *ZeroTrustDevicePostureGetResponseInputTeamsDevicesCarbonblackInputReque
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureGetResponseInputTeamsDevicesCarbonblackInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustDevicePostureGetResponseInputTeamsDevicesCarbonblackInputRequest) implementsZeroTrustDevicePostureGetResponseInput() {
 }
 
@@ -2891,6 +3143,10 @@ func (r *ZeroTrustDevicePostureGetResponseInputTeamsDevicesDiskEncryptionInputRe
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureGetResponseInputTeamsDevicesDiskEncryptionInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustDevicePostureGetResponseInputTeamsDevicesDiskEncryptionInputRequest) implementsZeroTrustDevicePostureGetResponseInput() {
 }
 
@@ -2920,6 +3176,10 @@ type zeroTrustDevicePostureGetResponseInputTeamsDevicesApplicationInputRequestJS
 
 func (r *ZeroTrustDevicePostureGetResponseInputTeamsDevicesApplicationInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureGetResponseInputTeamsDevicesApplicationInputRequestJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustDevicePostureGetResponseInputTeamsDevicesApplicationInputRequest) implementsZeroTrustDevicePostureGetResponseInput() {
@@ -2956,6 +3216,10 @@ func (r *ZeroTrustDevicePostureGetResponseInputTeamsDevicesClientCertificateInpu
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureGetResponseInputTeamsDevicesClientCertificateInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustDevicePostureGetResponseInputTeamsDevicesClientCertificateInputRequest) implementsZeroTrustDevicePostureGetResponseInput() {
 }
 
@@ -2979,6 +3243,10 @@ type zeroTrustDevicePostureGetResponseInputTeamsDevicesWorkspaceOneInputRequestJ
 
 func (r *ZeroTrustDevicePostureGetResponseInputTeamsDevicesWorkspaceOneInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureGetResponseInputTeamsDevicesWorkspaceOneInputRequestJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustDevicePostureGetResponseInputTeamsDevicesWorkspaceOneInputRequest) implementsZeroTrustDevicePostureGetResponseInput() {
@@ -3034,6 +3302,10 @@ type zeroTrustDevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestJS
 
 func (r *ZeroTrustDevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequestJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustDevicePostureGetResponseInputTeamsDevicesCrowdstrikeInputRequest) implementsZeroTrustDevicePostureGetResponseInput() {
@@ -3092,6 +3364,10 @@ func (r *ZeroTrustDevicePostureGetResponseInputTeamsDevicesIntuneInputRequest) U
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureGetResponseInputTeamsDevicesIntuneInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustDevicePostureGetResponseInputTeamsDevicesIntuneInputRequest) implementsZeroTrustDevicePostureGetResponseInput() {
 }
 
@@ -3130,6 +3406,10 @@ type zeroTrustDevicePostureGetResponseInputTeamsDevicesKolideInputRequestJSON st
 
 func (r *ZeroTrustDevicePostureGetResponseInputTeamsDevicesKolideInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureGetResponseInputTeamsDevicesKolideInputRequestJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustDevicePostureGetResponseInputTeamsDevicesKolideInputRequest) implementsZeroTrustDevicePostureGetResponseInput() {
@@ -3178,6 +3458,10 @@ type zeroTrustDevicePostureGetResponseInputTeamsDevicesTaniumInputRequestJSON st
 
 func (r *ZeroTrustDevicePostureGetResponseInputTeamsDevicesTaniumInputRequest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureGetResponseInputTeamsDevicesTaniumInputRequestJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustDevicePostureGetResponseInputTeamsDevicesTaniumInputRequest) implementsZeroTrustDevicePostureGetResponseInput() {
@@ -3249,6 +3533,10 @@ func (r *ZeroTrustDevicePostureGetResponseInputTeamsDevicesSentineloneS2sInputRe
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureGetResponseInputTeamsDevicesSentineloneS2sInputRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustDevicePostureGetResponseInputTeamsDevicesSentineloneS2sInputRequest) implementsZeroTrustDevicePostureGetResponseInput() {
 }
 
@@ -3288,6 +3576,10 @@ type zeroTrustDevicePostureGetResponseMatchJSON struct {
 
 func (r *ZeroTrustDevicePostureGetResponseMatch) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureGetResponseMatchJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDevicePostureGetResponseMatchPlatform string
@@ -3915,6 +4207,10 @@ func (r *ZeroTrustDevicePostureNewResponseEnvelope) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDevicePostureNewResponseEnvelopeErrors struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -3934,6 +4230,10 @@ func (r *ZeroTrustDevicePostureNewResponseEnvelopeErrors) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDevicePostureNewResponseEnvelopeMessages struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -3951,6 +4251,10 @@ type zeroTrustDevicePostureNewResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustDevicePostureNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful.
@@ -4551,6 +4855,10 @@ func (r *ZeroTrustDevicePostureUpdateResponseEnvelope) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDevicePostureUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -4570,6 +4878,10 @@ func (r *ZeroTrustDevicePostureUpdateResponseEnvelopeErrors) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDevicePostureUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -4587,6 +4899,10 @@ type zeroTrustDevicePostureUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustDevicePostureUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful.
@@ -4626,6 +4942,10 @@ func (r *ZeroTrustDevicePostureListResponseEnvelope) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDevicePostureListResponseEnvelopeErrors struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -4645,6 +4965,10 @@ func (r *ZeroTrustDevicePostureListResponseEnvelopeErrors) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDevicePostureListResponseEnvelopeMessages struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -4662,6 +4986,10 @@ type zeroTrustDevicePostureListResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustDevicePostureListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful.
@@ -4698,6 +5026,10 @@ func (r *ZeroTrustDevicePostureListResponseEnvelopeResultInfo) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDevicePostureDeleteParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
@@ -4726,6 +5058,10 @@ func (r *ZeroTrustDevicePostureDeleteResponseEnvelope) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDevicePostureDeleteResponseEnvelopeErrors struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -4745,6 +5081,10 @@ func (r *ZeroTrustDevicePostureDeleteResponseEnvelopeErrors) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDevicePostureDeleteResponseEnvelopeMessages struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -4762,6 +5102,10 @@ type zeroTrustDevicePostureDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustDevicePostureDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful.
@@ -4799,6 +5143,10 @@ func (r *ZeroTrustDevicePostureGetResponseEnvelope) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDevicePostureGetResponseEnvelopeErrors struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -4818,6 +5166,10 @@ func (r *ZeroTrustDevicePostureGetResponseEnvelopeErrors) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDevicePostureGetResponseEnvelopeMessages struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -4835,6 +5187,10 @@ type zeroTrustDevicePostureGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustDevicePostureGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful.

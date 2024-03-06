@@ -199,6 +199,10 @@ func (r *ZeroTrustIdentityProviderNewResponseAccessAzureAd) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderNewResponseAccessAzureAdJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustIdentityProviderNewResponseAccessAzureAd) implementsZeroTrustIdentityProviderNewResponse() {
 }
 
@@ -240,6 +244,10 @@ type zeroTrustIdentityProviderNewResponseAccessAzureAdConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderNewResponseAccessAzureAdConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderNewResponseAccessAzureAdConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -304,6 +312,10 @@ func (r *ZeroTrustIdentityProviderNewResponseAccessAzureAdScimConfig) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderNewResponseAccessAzureAdScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderNewResponseAccessCentrify struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -337,6 +349,10 @@ type zeroTrustIdentityProviderNewResponseAccessCentrifyJSON struct {
 
 func (r *ZeroTrustIdentityProviderNewResponseAccessCentrify) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderNewResponseAccessCentrifyJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustIdentityProviderNewResponseAccessCentrify) implementsZeroTrustIdentityProviderNewResponse() {
@@ -377,6 +393,10 @@ type zeroTrustIdentityProviderNewResponseAccessCentrifyConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderNewResponseAccessCentrifyConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderNewResponseAccessCentrifyConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -441,6 +461,10 @@ func (r *ZeroTrustIdentityProviderNewResponseAccessCentrifyScimConfig) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderNewResponseAccessCentrifyScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderNewResponseAccessFacebook struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -476,6 +500,10 @@ func (r *ZeroTrustIdentityProviderNewResponseAccessFacebook) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderNewResponseAccessFacebookJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustIdentityProviderNewResponseAccessFacebook) implementsZeroTrustIdentityProviderNewResponse() {
 }
 
@@ -502,6 +530,10 @@ type zeroTrustIdentityProviderNewResponseAccessFacebookConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderNewResponseAccessFacebookConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderNewResponseAccessFacebookConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -566,6 +598,10 @@ func (r *ZeroTrustIdentityProviderNewResponseAccessFacebookScimConfig) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderNewResponseAccessFacebookScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderNewResponseAccessGitHub struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -601,6 +637,10 @@ func (r *ZeroTrustIdentityProviderNewResponseAccessGitHub) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderNewResponseAccessGitHubJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustIdentityProviderNewResponseAccessGitHub) implementsZeroTrustIdentityProviderNewResponse() {
 }
 
@@ -626,6 +666,10 @@ type zeroTrustIdentityProviderNewResponseAccessGitHubConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderNewResponseAccessGitHubConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderNewResponseAccessGitHubConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -690,6 +734,10 @@ func (r *ZeroTrustIdentityProviderNewResponseAccessGitHubScimConfig) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderNewResponseAccessGitHubScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderNewResponseAccessGoogle struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -725,6 +773,10 @@ func (r *ZeroTrustIdentityProviderNewResponseAccessGoogle) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderNewResponseAccessGoogleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustIdentityProviderNewResponseAccessGoogle) implementsZeroTrustIdentityProviderNewResponse() {
 }
 
@@ -756,6 +808,10 @@ type zeroTrustIdentityProviderNewResponseAccessGoogleConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderNewResponseAccessGoogleConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderNewResponseAccessGoogleConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -820,6 +876,10 @@ func (r *ZeroTrustIdentityProviderNewResponseAccessGoogleScimConfig) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderNewResponseAccessGoogleScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderNewResponseAccessGoogleApps struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -853,6 +913,10 @@ type zeroTrustIdentityProviderNewResponseAccessGoogleAppsJSON struct {
 
 func (r *ZeroTrustIdentityProviderNewResponseAccessGoogleApps) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderNewResponseAccessGoogleAppsJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustIdentityProviderNewResponseAccessGoogleApps) implementsZeroTrustIdentityProviderNewResponse() {
@@ -890,6 +954,10 @@ type zeroTrustIdentityProviderNewResponseAccessGoogleAppsConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderNewResponseAccessGoogleAppsConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderNewResponseAccessGoogleAppsConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -954,6 +1022,10 @@ func (r *ZeroTrustIdentityProviderNewResponseAccessGoogleAppsScimConfig) Unmarsh
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderNewResponseAccessGoogleAppsScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderNewResponseAccessLinkedin struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -989,6 +1061,10 @@ func (r *ZeroTrustIdentityProviderNewResponseAccessLinkedin) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderNewResponseAccessLinkedinJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustIdentityProviderNewResponseAccessLinkedin) implementsZeroTrustIdentityProviderNewResponse() {
 }
 
@@ -1015,6 +1091,10 @@ type zeroTrustIdentityProviderNewResponseAccessLinkedinConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderNewResponseAccessLinkedinConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderNewResponseAccessLinkedinConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -1079,6 +1159,10 @@ func (r *ZeroTrustIdentityProviderNewResponseAccessLinkedinScimConfig) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderNewResponseAccessLinkedinScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderNewResponseAccessOidc struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -1112,6 +1196,10 @@ type zeroTrustIdentityProviderNewResponseAccessOidcJSON struct {
 
 func (r *ZeroTrustIdentityProviderNewResponseAccessOidc) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderNewResponseAccessOidcJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustIdentityProviderNewResponseAccessOidc) implementsZeroTrustIdentityProviderNewResponse() {
@@ -1157,6 +1245,10 @@ type zeroTrustIdentityProviderNewResponseAccessOidcConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderNewResponseAccessOidcConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderNewResponseAccessOidcConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -1221,6 +1313,10 @@ func (r *ZeroTrustIdentityProviderNewResponseAccessOidcScimConfig) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderNewResponseAccessOidcScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderNewResponseAccessOkta struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -1254,6 +1350,10 @@ type zeroTrustIdentityProviderNewResponseAccessOktaJSON struct {
 
 func (r *ZeroTrustIdentityProviderNewResponseAccessOkta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderNewResponseAccessOktaJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustIdentityProviderNewResponseAccessOkta) implementsZeroTrustIdentityProviderNewResponse() {
@@ -1293,6 +1393,10 @@ type zeroTrustIdentityProviderNewResponseAccessOktaConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderNewResponseAccessOktaConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderNewResponseAccessOktaConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -1357,6 +1461,10 @@ func (r *ZeroTrustIdentityProviderNewResponseAccessOktaScimConfig) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderNewResponseAccessOktaScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderNewResponseAccessOnelogin struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -1390,6 +1498,10 @@ type zeroTrustIdentityProviderNewResponseAccessOneloginJSON struct {
 
 func (r *ZeroTrustIdentityProviderNewResponseAccessOnelogin) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderNewResponseAccessOneloginJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustIdentityProviderNewResponseAccessOnelogin) implementsZeroTrustIdentityProviderNewResponse() {
@@ -1427,6 +1539,10 @@ type zeroTrustIdentityProviderNewResponseAccessOneloginConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderNewResponseAccessOneloginConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderNewResponseAccessOneloginConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -1491,6 +1607,10 @@ func (r *ZeroTrustIdentityProviderNewResponseAccessOneloginScimConfig) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderNewResponseAccessOneloginScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderNewResponseAccessPingone struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -1524,6 +1644,10 @@ type zeroTrustIdentityProviderNewResponseAccessPingoneJSON struct {
 
 func (r *ZeroTrustIdentityProviderNewResponseAccessPingone) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderNewResponseAccessPingoneJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustIdentityProviderNewResponseAccessPingone) implementsZeroTrustIdentityProviderNewResponse() {
@@ -1561,6 +1685,10 @@ type zeroTrustIdentityProviderNewResponseAccessPingoneConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderNewResponseAccessPingoneConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderNewResponseAccessPingoneConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -1625,6 +1753,10 @@ func (r *ZeroTrustIdentityProviderNewResponseAccessPingoneScimConfig) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderNewResponseAccessPingoneScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderNewResponseAccessSaml struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -1658,6 +1790,10 @@ type zeroTrustIdentityProviderNewResponseAccessSamlJSON struct {
 
 func (r *ZeroTrustIdentityProviderNewResponseAccessSaml) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderNewResponseAccessSamlJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustIdentityProviderNewResponseAccessSaml) implementsZeroTrustIdentityProviderNewResponse() {
@@ -1705,6 +1841,10 @@ func (r *ZeroTrustIdentityProviderNewResponseAccessSamlConfig) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderNewResponseAccessSamlConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderNewResponseAccessSamlConfigHeaderAttribute struct {
 	// attribute name from the IDP
 	AttributeName string `json:"attribute_name"`
@@ -1725,6 +1865,10 @@ type zeroTrustIdentityProviderNewResponseAccessSamlConfigHeaderAttributeJSON str
 
 func (r *ZeroTrustIdentityProviderNewResponseAccessSamlConfigHeaderAttribute) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderNewResponseAccessSamlConfigHeaderAttributeJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -1789,6 +1933,10 @@ func (r *ZeroTrustIdentityProviderNewResponseAccessSamlScimConfig) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderNewResponseAccessSamlScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderNewResponseAccessYandex struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -1824,6 +1972,10 @@ func (r *ZeroTrustIdentityProviderNewResponseAccessYandex) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderNewResponseAccessYandexJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustIdentityProviderNewResponseAccessYandex) implementsZeroTrustIdentityProviderNewResponse() {
 }
 
@@ -1849,6 +2001,10 @@ type zeroTrustIdentityProviderNewResponseAccessYandexConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderNewResponseAccessYandexConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderNewResponseAccessYandexConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -1913,6 +2069,10 @@ func (r *ZeroTrustIdentityProviderNewResponseAccessYandexScimConfig) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderNewResponseAccessYandexScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderNewResponseAccessOnetimepin struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -1946,6 +2106,10 @@ type zeroTrustIdentityProviderNewResponseAccessOnetimepinJSON struct {
 
 func (r *ZeroTrustIdentityProviderNewResponseAccessOnetimepin) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderNewResponseAccessOnetimepinJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustIdentityProviderNewResponseAccessOnetimepin) implementsZeroTrustIdentityProviderNewResponse() {
@@ -2013,6 +2177,10 @@ func (r *ZeroTrustIdentityProviderNewResponseAccessOnetimepinScimConfig) Unmarsh
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderNewResponseAccessOnetimepinScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 // Union satisfied by [ZeroTrustIdentityProviderUpdateResponseAccessAzureAd],
 // [ZeroTrustIdentityProviderUpdateResponseAccessCentrify],
 // [ZeroTrustIdentityProviderUpdateResponseAccessFacebook],
@@ -2070,6 +2238,10 @@ func (r *ZeroTrustIdentityProviderUpdateResponseAccessAzureAd) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderUpdateResponseAccessAzureAdJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustIdentityProviderUpdateResponseAccessAzureAd) implementsZeroTrustIdentityProviderUpdateResponse() {
 }
 
@@ -2111,6 +2283,10 @@ type zeroTrustIdentityProviderUpdateResponseAccessAzureAdConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderUpdateResponseAccessAzureAdConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderUpdateResponseAccessAzureAdConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -2175,6 +2351,10 @@ func (r *ZeroTrustIdentityProviderUpdateResponseAccessAzureAdScimConfig) Unmarsh
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderUpdateResponseAccessAzureAdScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderUpdateResponseAccessCentrify struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -2208,6 +2388,10 @@ type zeroTrustIdentityProviderUpdateResponseAccessCentrifyJSON struct {
 
 func (r *ZeroTrustIdentityProviderUpdateResponseAccessCentrify) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderUpdateResponseAccessCentrifyJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustIdentityProviderUpdateResponseAccessCentrify) implementsZeroTrustIdentityProviderUpdateResponse() {
@@ -2248,6 +2432,10 @@ type zeroTrustIdentityProviderUpdateResponseAccessCentrifyConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderUpdateResponseAccessCentrifyConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderUpdateResponseAccessCentrifyConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -2312,6 +2500,10 @@ func (r *ZeroTrustIdentityProviderUpdateResponseAccessCentrifyScimConfig) Unmars
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderUpdateResponseAccessCentrifyScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderUpdateResponseAccessFacebook struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -2347,6 +2539,10 @@ func (r *ZeroTrustIdentityProviderUpdateResponseAccessFacebook) UnmarshalJSON(da
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderUpdateResponseAccessFacebookJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustIdentityProviderUpdateResponseAccessFacebook) implementsZeroTrustIdentityProviderUpdateResponse() {
 }
 
@@ -2373,6 +2569,10 @@ type zeroTrustIdentityProviderUpdateResponseAccessFacebookConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderUpdateResponseAccessFacebookConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderUpdateResponseAccessFacebookConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -2437,6 +2637,10 @@ func (r *ZeroTrustIdentityProviderUpdateResponseAccessFacebookScimConfig) Unmars
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderUpdateResponseAccessFacebookScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderUpdateResponseAccessGitHub struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -2472,6 +2676,10 @@ func (r *ZeroTrustIdentityProviderUpdateResponseAccessGitHub) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderUpdateResponseAccessGitHubJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustIdentityProviderUpdateResponseAccessGitHub) implementsZeroTrustIdentityProviderUpdateResponse() {
 }
 
@@ -2498,6 +2706,10 @@ type zeroTrustIdentityProviderUpdateResponseAccessGitHubConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderUpdateResponseAccessGitHubConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderUpdateResponseAccessGitHubConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -2562,6 +2774,10 @@ func (r *ZeroTrustIdentityProviderUpdateResponseAccessGitHubScimConfig) Unmarsha
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderUpdateResponseAccessGitHubScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderUpdateResponseAccessGoogle struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -2597,6 +2813,10 @@ func (r *ZeroTrustIdentityProviderUpdateResponseAccessGoogle) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderUpdateResponseAccessGoogleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustIdentityProviderUpdateResponseAccessGoogle) implementsZeroTrustIdentityProviderUpdateResponse() {
 }
 
@@ -2629,6 +2849,10 @@ type zeroTrustIdentityProviderUpdateResponseAccessGoogleConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderUpdateResponseAccessGoogleConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderUpdateResponseAccessGoogleConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -2693,6 +2917,10 @@ func (r *ZeroTrustIdentityProviderUpdateResponseAccessGoogleScimConfig) Unmarsha
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderUpdateResponseAccessGoogleScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderUpdateResponseAccessGoogleApps struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -2727,6 +2955,10 @@ type zeroTrustIdentityProviderUpdateResponseAccessGoogleAppsJSON struct {
 
 func (r *ZeroTrustIdentityProviderUpdateResponseAccessGoogleApps) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderUpdateResponseAccessGoogleAppsJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustIdentityProviderUpdateResponseAccessGoogleApps) implementsZeroTrustIdentityProviderUpdateResponse() {
@@ -2764,6 +2996,10 @@ type zeroTrustIdentityProviderUpdateResponseAccessGoogleAppsConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderUpdateResponseAccessGoogleAppsConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderUpdateResponseAccessGoogleAppsConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -2828,6 +3064,10 @@ func (r *ZeroTrustIdentityProviderUpdateResponseAccessGoogleAppsScimConfig) Unma
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderUpdateResponseAccessGoogleAppsScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderUpdateResponseAccessLinkedin struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -2863,6 +3103,10 @@ func (r *ZeroTrustIdentityProviderUpdateResponseAccessLinkedin) UnmarshalJSON(da
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderUpdateResponseAccessLinkedinJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustIdentityProviderUpdateResponseAccessLinkedin) implementsZeroTrustIdentityProviderUpdateResponse() {
 }
 
@@ -2889,6 +3133,10 @@ type zeroTrustIdentityProviderUpdateResponseAccessLinkedinConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderUpdateResponseAccessLinkedinConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderUpdateResponseAccessLinkedinConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -2953,6 +3201,10 @@ func (r *ZeroTrustIdentityProviderUpdateResponseAccessLinkedinScimConfig) Unmars
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderUpdateResponseAccessLinkedinScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderUpdateResponseAccessOidc struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -2986,6 +3238,10 @@ type zeroTrustIdentityProviderUpdateResponseAccessOidcJSON struct {
 
 func (r *ZeroTrustIdentityProviderUpdateResponseAccessOidc) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderUpdateResponseAccessOidcJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustIdentityProviderUpdateResponseAccessOidc) implementsZeroTrustIdentityProviderUpdateResponse() {
@@ -3032,6 +3288,10 @@ type zeroTrustIdentityProviderUpdateResponseAccessOidcConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderUpdateResponseAccessOidcConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderUpdateResponseAccessOidcConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -3096,6 +3356,10 @@ func (r *ZeroTrustIdentityProviderUpdateResponseAccessOidcScimConfig) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderUpdateResponseAccessOidcScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderUpdateResponseAccessOkta struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -3129,6 +3393,10 @@ type zeroTrustIdentityProviderUpdateResponseAccessOktaJSON struct {
 
 func (r *ZeroTrustIdentityProviderUpdateResponseAccessOkta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderUpdateResponseAccessOktaJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustIdentityProviderUpdateResponseAccessOkta) implementsZeroTrustIdentityProviderUpdateResponse() {
@@ -3169,6 +3437,10 @@ type zeroTrustIdentityProviderUpdateResponseAccessOktaConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderUpdateResponseAccessOktaConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderUpdateResponseAccessOktaConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -3233,6 +3505,10 @@ func (r *ZeroTrustIdentityProviderUpdateResponseAccessOktaScimConfig) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderUpdateResponseAccessOktaScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderUpdateResponseAccessOnelogin struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -3266,6 +3542,10 @@ type zeroTrustIdentityProviderUpdateResponseAccessOneloginJSON struct {
 
 func (r *ZeroTrustIdentityProviderUpdateResponseAccessOnelogin) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderUpdateResponseAccessOneloginJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustIdentityProviderUpdateResponseAccessOnelogin) implementsZeroTrustIdentityProviderUpdateResponse() {
@@ -3303,6 +3583,10 @@ type zeroTrustIdentityProviderUpdateResponseAccessOneloginConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderUpdateResponseAccessOneloginConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderUpdateResponseAccessOneloginConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -3367,6 +3651,10 @@ func (r *ZeroTrustIdentityProviderUpdateResponseAccessOneloginScimConfig) Unmars
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderUpdateResponseAccessOneloginScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderUpdateResponseAccessPingone struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -3400,6 +3688,10 @@ type zeroTrustIdentityProviderUpdateResponseAccessPingoneJSON struct {
 
 func (r *ZeroTrustIdentityProviderUpdateResponseAccessPingone) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderUpdateResponseAccessPingoneJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustIdentityProviderUpdateResponseAccessPingone) implementsZeroTrustIdentityProviderUpdateResponse() {
@@ -3437,6 +3729,10 @@ type zeroTrustIdentityProviderUpdateResponseAccessPingoneConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderUpdateResponseAccessPingoneConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderUpdateResponseAccessPingoneConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -3501,6 +3797,10 @@ func (r *ZeroTrustIdentityProviderUpdateResponseAccessPingoneScimConfig) Unmarsh
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderUpdateResponseAccessPingoneScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderUpdateResponseAccessSaml struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -3534,6 +3834,10 @@ type zeroTrustIdentityProviderUpdateResponseAccessSamlJSON struct {
 
 func (r *ZeroTrustIdentityProviderUpdateResponseAccessSaml) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderUpdateResponseAccessSamlJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustIdentityProviderUpdateResponseAccessSaml) implementsZeroTrustIdentityProviderUpdateResponse() {
@@ -3582,6 +3886,10 @@ func (r *ZeroTrustIdentityProviderUpdateResponseAccessSamlConfig) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderUpdateResponseAccessSamlConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderUpdateResponseAccessSamlConfigHeaderAttribute struct {
 	// attribute name from the IDP
 	AttributeName string `json:"attribute_name"`
@@ -3602,6 +3910,10 @@ type zeroTrustIdentityProviderUpdateResponseAccessSamlConfigHeaderAttributeJSON 
 
 func (r *ZeroTrustIdentityProviderUpdateResponseAccessSamlConfigHeaderAttribute) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderUpdateResponseAccessSamlConfigHeaderAttributeJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -3666,6 +3978,10 @@ func (r *ZeroTrustIdentityProviderUpdateResponseAccessSamlScimConfig) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderUpdateResponseAccessSamlScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderUpdateResponseAccessYandex struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -3701,6 +4017,10 @@ func (r *ZeroTrustIdentityProviderUpdateResponseAccessYandex) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderUpdateResponseAccessYandexJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustIdentityProviderUpdateResponseAccessYandex) implementsZeroTrustIdentityProviderUpdateResponse() {
 }
 
@@ -3727,6 +4047,10 @@ type zeroTrustIdentityProviderUpdateResponseAccessYandexConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderUpdateResponseAccessYandexConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderUpdateResponseAccessYandexConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -3791,6 +4115,10 @@ func (r *ZeroTrustIdentityProviderUpdateResponseAccessYandexScimConfig) Unmarsha
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderUpdateResponseAccessYandexScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderUpdateResponseAccessOnetimepin struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -3825,6 +4153,10 @@ type zeroTrustIdentityProviderUpdateResponseAccessOnetimepinJSON struct {
 
 func (r *ZeroTrustIdentityProviderUpdateResponseAccessOnetimepin) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderUpdateResponseAccessOnetimepinJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustIdentityProviderUpdateResponseAccessOnetimepin) implementsZeroTrustIdentityProviderUpdateResponse() {
@@ -3892,6 +4224,10 @@ func (r *ZeroTrustIdentityProviderUpdateResponseAccessOnetimepinScimConfig) Unma
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderUpdateResponseAccessOnetimepinScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 // Union satisfied by [ZeroTrustIdentityProviderListResponseAccessAzureAd],
 // [ZeroTrustIdentityProviderListResponseAccessCentrify],
 // [ZeroTrustIdentityProviderListResponseAccessFacebook],
@@ -3948,6 +4284,10 @@ func (r *ZeroTrustIdentityProviderListResponseAccessAzureAd) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderListResponseAccessAzureAdJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustIdentityProviderListResponseAccessAzureAd) implementsZeroTrustIdentityProviderListResponse() {
 }
 
@@ -3989,6 +4329,10 @@ type zeroTrustIdentityProviderListResponseAccessAzureAdConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderListResponseAccessAzureAdConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderListResponseAccessAzureAdConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -4053,6 +4397,10 @@ func (r *ZeroTrustIdentityProviderListResponseAccessAzureAdScimConfig) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderListResponseAccessAzureAdScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderListResponseAccessCentrify struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -4086,6 +4434,10 @@ type zeroTrustIdentityProviderListResponseAccessCentrifyJSON struct {
 
 func (r *ZeroTrustIdentityProviderListResponseAccessCentrify) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderListResponseAccessCentrifyJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustIdentityProviderListResponseAccessCentrify) implementsZeroTrustIdentityProviderListResponse() {
@@ -4126,6 +4478,10 @@ type zeroTrustIdentityProviderListResponseAccessCentrifyConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderListResponseAccessCentrifyConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderListResponseAccessCentrifyConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -4190,6 +4546,10 @@ func (r *ZeroTrustIdentityProviderListResponseAccessCentrifyScimConfig) Unmarsha
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderListResponseAccessCentrifyScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderListResponseAccessFacebook struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -4225,6 +4585,10 @@ func (r *ZeroTrustIdentityProviderListResponseAccessFacebook) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderListResponseAccessFacebookJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustIdentityProviderListResponseAccessFacebook) implementsZeroTrustIdentityProviderListResponse() {
 }
 
@@ -4251,6 +4615,10 @@ type zeroTrustIdentityProviderListResponseAccessFacebookConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderListResponseAccessFacebookConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderListResponseAccessFacebookConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -4315,6 +4683,10 @@ func (r *ZeroTrustIdentityProviderListResponseAccessFacebookScimConfig) Unmarsha
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderListResponseAccessFacebookScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderListResponseAccessGitHub struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -4350,6 +4722,10 @@ func (r *ZeroTrustIdentityProviderListResponseAccessGitHub) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderListResponseAccessGitHubJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustIdentityProviderListResponseAccessGitHub) implementsZeroTrustIdentityProviderListResponse() {
 }
 
@@ -4376,6 +4752,10 @@ type zeroTrustIdentityProviderListResponseAccessGitHubConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderListResponseAccessGitHubConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderListResponseAccessGitHubConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -4440,6 +4820,10 @@ func (r *ZeroTrustIdentityProviderListResponseAccessGitHubScimConfig) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderListResponseAccessGitHubScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderListResponseAccessGoogle struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -4475,6 +4859,10 @@ func (r *ZeroTrustIdentityProviderListResponseAccessGoogle) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderListResponseAccessGoogleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustIdentityProviderListResponseAccessGoogle) implementsZeroTrustIdentityProviderListResponse() {
 }
 
@@ -4507,6 +4895,10 @@ type zeroTrustIdentityProviderListResponseAccessGoogleConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderListResponseAccessGoogleConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderListResponseAccessGoogleConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -4571,6 +4963,10 @@ func (r *ZeroTrustIdentityProviderListResponseAccessGoogleScimConfig) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderListResponseAccessGoogleScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderListResponseAccessGoogleApps struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -4604,6 +5000,10 @@ type zeroTrustIdentityProviderListResponseAccessGoogleAppsJSON struct {
 
 func (r *ZeroTrustIdentityProviderListResponseAccessGoogleApps) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderListResponseAccessGoogleAppsJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustIdentityProviderListResponseAccessGoogleApps) implementsZeroTrustIdentityProviderListResponse() {
@@ -4641,6 +5041,10 @@ type zeroTrustIdentityProviderListResponseAccessGoogleAppsConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderListResponseAccessGoogleAppsConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderListResponseAccessGoogleAppsConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -4705,6 +5109,10 @@ func (r *ZeroTrustIdentityProviderListResponseAccessGoogleAppsScimConfig) Unmars
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderListResponseAccessGoogleAppsScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderListResponseAccessLinkedin struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -4740,6 +5148,10 @@ func (r *ZeroTrustIdentityProviderListResponseAccessLinkedin) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderListResponseAccessLinkedinJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustIdentityProviderListResponseAccessLinkedin) implementsZeroTrustIdentityProviderListResponse() {
 }
 
@@ -4766,6 +5178,10 @@ type zeroTrustIdentityProviderListResponseAccessLinkedinConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderListResponseAccessLinkedinConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderListResponseAccessLinkedinConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -4830,6 +5246,10 @@ func (r *ZeroTrustIdentityProviderListResponseAccessLinkedinScimConfig) Unmarsha
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderListResponseAccessLinkedinScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderListResponseAccessOidc struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -4863,6 +5283,10 @@ type zeroTrustIdentityProviderListResponseAccessOidcJSON struct {
 
 func (r *ZeroTrustIdentityProviderListResponseAccessOidc) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderListResponseAccessOidcJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustIdentityProviderListResponseAccessOidc) implementsZeroTrustIdentityProviderListResponse() {
@@ -4908,6 +5332,10 @@ type zeroTrustIdentityProviderListResponseAccessOidcConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderListResponseAccessOidcConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderListResponseAccessOidcConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -4972,6 +5400,10 @@ func (r *ZeroTrustIdentityProviderListResponseAccessOidcScimConfig) UnmarshalJSO
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderListResponseAccessOidcScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderListResponseAccessOkta struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -5005,6 +5437,10 @@ type zeroTrustIdentityProviderListResponseAccessOktaJSON struct {
 
 func (r *ZeroTrustIdentityProviderListResponseAccessOkta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderListResponseAccessOktaJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustIdentityProviderListResponseAccessOkta) implementsZeroTrustIdentityProviderListResponse() {
@@ -5044,6 +5480,10 @@ type zeroTrustIdentityProviderListResponseAccessOktaConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderListResponseAccessOktaConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderListResponseAccessOktaConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -5108,6 +5548,10 @@ func (r *ZeroTrustIdentityProviderListResponseAccessOktaScimConfig) UnmarshalJSO
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderListResponseAccessOktaScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderListResponseAccessOnelogin struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -5141,6 +5585,10 @@ type zeroTrustIdentityProviderListResponseAccessOneloginJSON struct {
 
 func (r *ZeroTrustIdentityProviderListResponseAccessOnelogin) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderListResponseAccessOneloginJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustIdentityProviderListResponseAccessOnelogin) implementsZeroTrustIdentityProviderListResponse() {
@@ -5178,6 +5626,10 @@ type zeroTrustIdentityProviderListResponseAccessOneloginConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderListResponseAccessOneloginConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderListResponseAccessOneloginConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -5242,6 +5694,10 @@ func (r *ZeroTrustIdentityProviderListResponseAccessOneloginScimConfig) Unmarsha
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderListResponseAccessOneloginScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderListResponseAccessPingone struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -5275,6 +5731,10 @@ type zeroTrustIdentityProviderListResponseAccessPingoneJSON struct {
 
 func (r *ZeroTrustIdentityProviderListResponseAccessPingone) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderListResponseAccessPingoneJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustIdentityProviderListResponseAccessPingone) implementsZeroTrustIdentityProviderListResponse() {
@@ -5312,6 +5772,10 @@ type zeroTrustIdentityProviderListResponseAccessPingoneConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderListResponseAccessPingoneConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderListResponseAccessPingoneConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -5376,6 +5840,10 @@ func (r *ZeroTrustIdentityProviderListResponseAccessPingoneScimConfig) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderListResponseAccessPingoneScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderListResponseAccessSaml struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -5409,6 +5877,10 @@ type zeroTrustIdentityProviderListResponseAccessSamlJSON struct {
 
 func (r *ZeroTrustIdentityProviderListResponseAccessSaml) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderListResponseAccessSamlJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustIdentityProviderListResponseAccessSaml) implementsZeroTrustIdentityProviderListResponse() {
@@ -5456,6 +5928,10 @@ func (r *ZeroTrustIdentityProviderListResponseAccessSamlConfig) UnmarshalJSON(da
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderListResponseAccessSamlConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderListResponseAccessSamlConfigHeaderAttribute struct {
 	// attribute name from the IDP
 	AttributeName string `json:"attribute_name"`
@@ -5476,6 +5952,10 @@ type zeroTrustIdentityProviderListResponseAccessSamlConfigHeaderAttributeJSON st
 
 func (r *ZeroTrustIdentityProviderListResponseAccessSamlConfigHeaderAttribute) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderListResponseAccessSamlConfigHeaderAttributeJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -5540,6 +6020,10 @@ func (r *ZeroTrustIdentityProviderListResponseAccessSamlScimConfig) UnmarshalJSO
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderListResponseAccessSamlScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderListResponseAccessYandex struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -5575,6 +6059,10 @@ func (r *ZeroTrustIdentityProviderListResponseAccessYandex) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderListResponseAccessYandexJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustIdentityProviderListResponseAccessYandex) implementsZeroTrustIdentityProviderListResponse() {
 }
 
@@ -5601,6 +6089,10 @@ type zeroTrustIdentityProviderListResponseAccessYandexConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderListResponseAccessYandexConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderListResponseAccessYandexConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -5665,6 +6157,10 @@ func (r *ZeroTrustIdentityProviderListResponseAccessYandexScimConfig) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderListResponseAccessYandexScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderDeleteResponse struct {
 	// UUID
 	ID   string                                      `json:"id"`
@@ -5681,6 +6177,10 @@ type zeroTrustIdentityProviderDeleteResponseJSON struct {
 
 func (r *ZeroTrustIdentityProviderDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Union satisfied by [ZeroTrustIdentityProviderGetResponseAccessAzureAd],
@@ -5740,6 +6240,10 @@ func (r *ZeroTrustIdentityProviderGetResponseAccessAzureAd) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderGetResponseAccessAzureAdJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustIdentityProviderGetResponseAccessAzureAd) implementsZeroTrustIdentityProviderGetResponse() {
 }
 
@@ -5781,6 +6285,10 @@ type zeroTrustIdentityProviderGetResponseAccessAzureAdConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderGetResponseAccessAzureAdConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderGetResponseAccessAzureAdConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -5845,6 +6353,10 @@ func (r *ZeroTrustIdentityProviderGetResponseAccessAzureAdScimConfig) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderGetResponseAccessAzureAdScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderGetResponseAccessCentrify struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -5878,6 +6390,10 @@ type zeroTrustIdentityProviderGetResponseAccessCentrifyJSON struct {
 
 func (r *ZeroTrustIdentityProviderGetResponseAccessCentrify) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderGetResponseAccessCentrifyJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustIdentityProviderGetResponseAccessCentrify) implementsZeroTrustIdentityProviderGetResponse() {
@@ -5918,6 +6434,10 @@ type zeroTrustIdentityProviderGetResponseAccessCentrifyConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderGetResponseAccessCentrifyConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderGetResponseAccessCentrifyConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -5982,6 +6502,10 @@ func (r *ZeroTrustIdentityProviderGetResponseAccessCentrifyScimConfig) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderGetResponseAccessCentrifyScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderGetResponseAccessFacebook struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -6017,6 +6541,10 @@ func (r *ZeroTrustIdentityProviderGetResponseAccessFacebook) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderGetResponseAccessFacebookJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustIdentityProviderGetResponseAccessFacebook) implementsZeroTrustIdentityProviderGetResponse() {
 }
 
@@ -6043,6 +6571,10 @@ type zeroTrustIdentityProviderGetResponseAccessFacebookConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderGetResponseAccessFacebookConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderGetResponseAccessFacebookConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -6107,6 +6639,10 @@ func (r *ZeroTrustIdentityProviderGetResponseAccessFacebookScimConfig) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderGetResponseAccessFacebookScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderGetResponseAccessGitHub struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -6142,6 +6678,10 @@ func (r *ZeroTrustIdentityProviderGetResponseAccessGitHub) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderGetResponseAccessGitHubJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustIdentityProviderGetResponseAccessGitHub) implementsZeroTrustIdentityProviderGetResponse() {
 }
 
@@ -6167,6 +6707,10 @@ type zeroTrustIdentityProviderGetResponseAccessGitHubConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderGetResponseAccessGitHubConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderGetResponseAccessGitHubConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -6231,6 +6775,10 @@ func (r *ZeroTrustIdentityProviderGetResponseAccessGitHubScimConfig) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderGetResponseAccessGitHubScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderGetResponseAccessGoogle struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -6266,6 +6814,10 @@ func (r *ZeroTrustIdentityProviderGetResponseAccessGoogle) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderGetResponseAccessGoogleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustIdentityProviderGetResponseAccessGoogle) implementsZeroTrustIdentityProviderGetResponse() {
 }
 
@@ -6297,6 +6849,10 @@ type zeroTrustIdentityProviderGetResponseAccessGoogleConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderGetResponseAccessGoogleConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderGetResponseAccessGoogleConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -6361,6 +6917,10 @@ func (r *ZeroTrustIdentityProviderGetResponseAccessGoogleScimConfig) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderGetResponseAccessGoogleScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderGetResponseAccessGoogleApps struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -6394,6 +6954,10 @@ type zeroTrustIdentityProviderGetResponseAccessGoogleAppsJSON struct {
 
 func (r *ZeroTrustIdentityProviderGetResponseAccessGoogleApps) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderGetResponseAccessGoogleAppsJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustIdentityProviderGetResponseAccessGoogleApps) implementsZeroTrustIdentityProviderGetResponse() {
@@ -6431,6 +6995,10 @@ type zeroTrustIdentityProviderGetResponseAccessGoogleAppsConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderGetResponseAccessGoogleAppsConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderGetResponseAccessGoogleAppsConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -6495,6 +7063,10 @@ func (r *ZeroTrustIdentityProviderGetResponseAccessGoogleAppsScimConfig) Unmarsh
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderGetResponseAccessGoogleAppsScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderGetResponseAccessLinkedin struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -6530,6 +7102,10 @@ func (r *ZeroTrustIdentityProviderGetResponseAccessLinkedin) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderGetResponseAccessLinkedinJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustIdentityProviderGetResponseAccessLinkedin) implementsZeroTrustIdentityProviderGetResponse() {
 }
 
@@ -6556,6 +7132,10 @@ type zeroTrustIdentityProviderGetResponseAccessLinkedinConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderGetResponseAccessLinkedinConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderGetResponseAccessLinkedinConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -6620,6 +7200,10 @@ func (r *ZeroTrustIdentityProviderGetResponseAccessLinkedinScimConfig) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderGetResponseAccessLinkedinScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderGetResponseAccessOidc struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -6653,6 +7237,10 @@ type zeroTrustIdentityProviderGetResponseAccessOidcJSON struct {
 
 func (r *ZeroTrustIdentityProviderGetResponseAccessOidc) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderGetResponseAccessOidcJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustIdentityProviderGetResponseAccessOidc) implementsZeroTrustIdentityProviderGetResponse() {
@@ -6698,6 +7286,10 @@ type zeroTrustIdentityProviderGetResponseAccessOidcConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderGetResponseAccessOidcConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderGetResponseAccessOidcConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -6762,6 +7354,10 @@ func (r *ZeroTrustIdentityProviderGetResponseAccessOidcScimConfig) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderGetResponseAccessOidcScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderGetResponseAccessOkta struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -6795,6 +7391,10 @@ type zeroTrustIdentityProviderGetResponseAccessOktaJSON struct {
 
 func (r *ZeroTrustIdentityProviderGetResponseAccessOkta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderGetResponseAccessOktaJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustIdentityProviderGetResponseAccessOkta) implementsZeroTrustIdentityProviderGetResponse() {
@@ -6834,6 +7434,10 @@ type zeroTrustIdentityProviderGetResponseAccessOktaConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderGetResponseAccessOktaConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderGetResponseAccessOktaConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -6898,6 +7502,10 @@ func (r *ZeroTrustIdentityProviderGetResponseAccessOktaScimConfig) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderGetResponseAccessOktaScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderGetResponseAccessOnelogin struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -6931,6 +7539,10 @@ type zeroTrustIdentityProviderGetResponseAccessOneloginJSON struct {
 
 func (r *ZeroTrustIdentityProviderGetResponseAccessOnelogin) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderGetResponseAccessOneloginJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustIdentityProviderGetResponseAccessOnelogin) implementsZeroTrustIdentityProviderGetResponse() {
@@ -6968,6 +7580,10 @@ type zeroTrustIdentityProviderGetResponseAccessOneloginConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderGetResponseAccessOneloginConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderGetResponseAccessOneloginConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -7032,6 +7648,10 @@ func (r *ZeroTrustIdentityProviderGetResponseAccessOneloginScimConfig) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderGetResponseAccessOneloginScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderGetResponseAccessPingone struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -7065,6 +7685,10 @@ type zeroTrustIdentityProviderGetResponseAccessPingoneJSON struct {
 
 func (r *ZeroTrustIdentityProviderGetResponseAccessPingone) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderGetResponseAccessPingoneJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustIdentityProviderGetResponseAccessPingone) implementsZeroTrustIdentityProviderGetResponse() {
@@ -7102,6 +7726,10 @@ type zeroTrustIdentityProviderGetResponseAccessPingoneConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderGetResponseAccessPingoneConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderGetResponseAccessPingoneConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -7166,6 +7794,10 @@ func (r *ZeroTrustIdentityProviderGetResponseAccessPingoneScimConfig) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderGetResponseAccessPingoneScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderGetResponseAccessSaml struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -7199,6 +7831,10 @@ type zeroTrustIdentityProviderGetResponseAccessSamlJSON struct {
 
 func (r *ZeroTrustIdentityProviderGetResponseAccessSaml) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderGetResponseAccessSamlJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustIdentityProviderGetResponseAccessSaml) implementsZeroTrustIdentityProviderGetResponse() {
@@ -7246,6 +7882,10 @@ func (r *ZeroTrustIdentityProviderGetResponseAccessSamlConfig) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderGetResponseAccessSamlConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderGetResponseAccessSamlConfigHeaderAttribute struct {
 	// attribute name from the IDP
 	AttributeName string `json:"attribute_name"`
@@ -7266,6 +7906,10 @@ type zeroTrustIdentityProviderGetResponseAccessSamlConfigHeaderAttributeJSON str
 
 func (r *ZeroTrustIdentityProviderGetResponseAccessSamlConfigHeaderAttribute) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderGetResponseAccessSamlConfigHeaderAttributeJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -7330,6 +7974,10 @@ func (r *ZeroTrustIdentityProviderGetResponseAccessSamlScimConfig) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderGetResponseAccessSamlScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderGetResponseAccessYandex struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -7365,6 +8013,10 @@ func (r *ZeroTrustIdentityProviderGetResponseAccessYandex) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderGetResponseAccessYandexJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustIdentityProviderGetResponseAccessYandex) implementsZeroTrustIdentityProviderGetResponse() {
 }
 
@@ -7390,6 +8042,10 @@ type zeroTrustIdentityProviderGetResponseAccessYandexConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderGetResponseAccessYandexConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderGetResponseAccessYandexConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of identity provider. To determine the value for a specific provider,
@@ -7454,6 +8110,10 @@ func (r *ZeroTrustIdentityProviderGetResponseAccessYandexScimConfig) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderGetResponseAccessYandexScimConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderGetResponseAccessOnetimepin struct {
 	// The configuration parameters for the identity provider. To view the required
 	// parameters for a specific provider, refer to our
@@ -7487,6 +8147,10 @@ type zeroTrustIdentityProviderGetResponseAccessOnetimepinJSON struct {
 
 func (r *ZeroTrustIdentityProviderGetResponseAccessOnetimepin) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderGetResponseAccessOnetimepinJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustIdentityProviderGetResponseAccessOnetimepin) implementsZeroTrustIdentityProviderGetResponse() {
@@ -7552,6 +8216,10 @@ type zeroTrustIdentityProviderGetResponseAccessOnetimepinScimConfigJSON struct {
 
 func (r *ZeroTrustIdentityProviderGetResponseAccessOnetimepinScimConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderGetResponseAccessOnetimepinScimConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustIdentityProviderNewParams struct {
@@ -7714,6 +8382,10 @@ func (r *ZeroTrustIdentityProviderNewResponseEnvelope) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderNewResponseEnvelopeErrors struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -7733,6 +8405,10 @@ func (r *ZeroTrustIdentityProviderNewResponseEnvelopeErrors) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderNewResponseEnvelopeMessages struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -7750,6 +8426,10 @@ type zeroTrustIdentityProviderNewResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustIdentityProviderNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -7919,6 +8599,10 @@ func (r *ZeroTrustIdentityProviderUpdateResponseEnvelope) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -7936,6 +8620,10 @@ type zeroTrustIdentityProviderUpdateResponseEnvelopeErrorsJSON struct {
 
 func (r *ZeroTrustIdentityProviderUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustIdentityProviderUpdateResponseEnvelopeMessages struct {
@@ -7956,6 +8644,10 @@ type zeroTrustIdentityProviderUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustIdentityProviderUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -7998,6 +8690,10 @@ func (r *ZeroTrustIdentityProviderListResponseEnvelope) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderListResponseEnvelopeErrors struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -8017,6 +8713,10 @@ func (r *ZeroTrustIdentityProviderListResponseEnvelopeErrors) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderListResponseEnvelopeMessages struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -8034,6 +8734,10 @@ type zeroTrustIdentityProviderListResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustIdentityProviderListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -8071,6 +8775,10 @@ func (r *ZeroTrustIdentityProviderListResponseEnvelopeResultInfo) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderDeleteParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
@@ -8102,6 +8810,10 @@ func (r *ZeroTrustIdentityProviderDeleteResponseEnvelope) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderDeleteResponseEnvelopeErrors struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -8119,6 +8831,10 @@ type zeroTrustIdentityProviderDeleteResponseEnvelopeErrorsJSON struct {
 
 func (r *ZeroTrustIdentityProviderDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustIdentityProviderDeleteResponseEnvelopeMessages struct {
@@ -8139,6 +8855,10 @@ type zeroTrustIdentityProviderDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustIdentityProviderDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -8179,6 +8899,10 @@ func (r *ZeroTrustIdentityProviderGetResponseEnvelope) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderGetResponseEnvelopeErrors struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -8198,6 +8922,10 @@ func (r *ZeroTrustIdentityProviderGetResponseEnvelopeErrors) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustIdentityProviderGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustIdentityProviderGetResponseEnvelopeMessages struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -8215,6 +8943,10 @@ type zeroTrustIdentityProviderGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustIdentityProviderGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustIdentityProviderGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

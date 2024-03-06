@@ -96,6 +96,10 @@ func (r *LogpushOwnershipNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logpushOwnershipNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogpushOwnershipValidateResponse struct {
 	Valid bool                                 `json:"valid"`
 	JSON  logpushOwnershipValidateResponseJSON `json:"-"`
@@ -111,6 +115,10 @@ type logpushOwnershipValidateResponseJSON struct {
 
 func (r *LogpushOwnershipValidateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r logpushOwnershipValidateResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type LogpushOwnershipNewParams struct {
@@ -152,6 +160,10 @@ func (r *LogpushOwnershipNewResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logpushOwnershipNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogpushOwnershipNewResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -171,6 +183,10 @@ func (r *LogpushOwnershipNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logpushOwnershipNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogpushOwnershipNewResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -188,6 +204,10 @@ type logpushOwnershipNewResponseEnvelopeMessagesJSON struct {
 
 func (r *LogpushOwnershipNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r logpushOwnershipNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -238,6 +258,10 @@ func (r *LogpushOwnershipValidateResponseEnvelope) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logpushOwnershipValidateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogpushOwnershipValidateResponseEnvelopeErrors struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -257,6 +281,10 @@ func (r *LogpushOwnershipValidateResponseEnvelopeErrors) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logpushOwnershipValidateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogpushOwnershipValidateResponseEnvelopeMessages struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -274,6 +302,10 @@ type logpushOwnershipValidateResponseEnvelopeMessagesJSON struct {
 
 func (r *LogpushOwnershipValidateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r logpushOwnershipValidateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

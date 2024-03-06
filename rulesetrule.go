@@ -141,6 +141,10 @@ func (r *RulesetRuleNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The kind of the ruleset.
 type RulesetRuleNewResponseKind string
 
@@ -263,6 +267,10 @@ func (r *RulesetRuleNewResponseRulesRulesetsBlockRule) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleNewResponseRulesRulesetsBlockRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r RulesetRuleNewResponseRulesRulesetsBlockRule) implementsRulesetRuleNewResponseRule() {}
 
 // The action to perform when the rule matches.
@@ -292,6 +300,10 @@ func (r *RulesetRuleNewResponseRulesRulesetsBlockRuleActionParameters) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleNewResponseRulesRulesetsBlockRuleActionParametersJSON) RawJSON() string {
+	return r.raw
+}
+
 // The response to show when the block is applied.
 type RulesetRuleNewResponseRulesRulesetsBlockRuleActionParametersResponse struct {
 	// The content to return.
@@ -318,6 +330,10 @@ func (r *RulesetRuleNewResponseRulesRulesetsBlockRuleActionParametersResponse) U
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleNewResponseRulesRulesetsBlockRuleActionParametersResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // An object configuring the rule's logging behavior.
 type RulesetRuleNewResponseRulesRulesetsBlockRuleLogging struct {
 	// Whether to generate a log when the rule matches.
@@ -335,6 +351,10 @@ type rulesetRuleNewResponseRulesRulesetsBlockRuleLoggingJSON struct {
 
 func (r *RulesetRuleNewResponseRulesRulesetsBlockRuleLogging) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetRuleNewResponseRulesRulesetsBlockRuleLoggingJSON) RawJSON() string {
+	return r.raw
 }
 
 type RulesetRuleNewResponseRulesRulesetsExecuteRule struct {
@@ -385,6 +405,10 @@ func (r *RulesetRuleNewResponseRulesRulesetsExecuteRule) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleNewResponseRulesRulesetsExecuteRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r RulesetRuleNewResponseRulesRulesetsExecuteRule) implementsRulesetRuleNewResponseRule() {}
 
 // The action to perform when the rule matches.
@@ -420,6 +444,10 @@ func (r *RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParameters) Unmarsh
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersJSON) RawJSON() string {
+	return r.raw
+}
+
 // The configuration to use for matched data logging.
 type RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersMatchedData struct {
 	// The public key to encrypt matched data logs with.
@@ -438,6 +466,10 @@ type rulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersMatchedDataJS
 
 func (r *RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersMatchedData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersMatchedDataJSON) RawJSON() string {
+	return r.raw
 }
 
 // A set of overrides to apply to the target ruleset.
@@ -476,6 +508,10 @@ func (r *RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverrides
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesJSON) RawJSON() string {
+	return r.raw
+}
+
 // A category-level override
 type RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory struct {
 	// The name of the category to override.
@@ -503,6 +539,10 @@ type rulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCate
 
 func (r *RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoryJSON) RawJSON() string {
+	return r.raw
 }
 
 // The sensitivity level to use for rules in the category.
@@ -547,6 +587,10 @@ func (r *RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverrides
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 // The sensitivity level to use for the rule.
 type RulesetRuleNewResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel string
 
@@ -585,6 +629,10 @@ type rulesetRuleNewResponseRulesRulesetsExecuteRuleLoggingJSON struct {
 
 func (r *RulesetRuleNewResponseRulesRulesetsExecuteRuleLogging) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetRuleNewResponseRulesRulesetsExecuteRuleLoggingJSON) RawJSON() string {
+	return r.raw
 }
 
 type RulesetRuleNewResponseRulesRulesetsLogRule struct {
@@ -635,6 +683,10 @@ func (r *RulesetRuleNewResponseRulesRulesetsLogRule) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleNewResponseRulesRulesetsLogRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r RulesetRuleNewResponseRulesRulesetsLogRule) implementsRulesetRuleNewResponseRule() {}
 
 // The action to perform when the rule matches.
@@ -661,6 +713,10 @@ type rulesetRuleNewResponseRulesRulesetsLogRuleLoggingJSON struct {
 
 func (r *RulesetRuleNewResponseRulesRulesetsLogRuleLogging) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetRuleNewResponseRulesRulesetsLogRuleLoggingJSON) RawJSON() string {
+	return r.raw
 }
 
 type RulesetRuleNewResponseRulesRulesetsSkipRule struct {
@@ -711,6 +767,10 @@ func (r *RulesetRuleNewResponseRulesRulesetsSkipRule) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleNewResponseRulesRulesetsSkipRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r RulesetRuleNewResponseRulesRulesetsSkipRule) implementsRulesetRuleNewResponseRule() {}
 
 // The action to perform when the rule matches.
@@ -754,6 +814,10 @@ type rulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersJSON struct {
 
 func (r *RulesetRuleNewResponseRulesRulesetsSkipRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetRuleNewResponseRulesRulesetsSkipRuleActionParametersJSON) RawJSON() string {
+	return r.raw
 }
 
 // A phase to skip the execution of.
@@ -825,6 +889,10 @@ func (r *RulesetRuleNewResponseRulesRulesetsSkipRuleLogging) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleNewResponseRulesRulesetsSkipRuleLoggingJSON) RawJSON() string {
+	return r.raw
+}
+
 // A result.
 type RulesetRuleDeleteResponse struct {
 	// The unique ID of the ruleset.
@@ -863,6 +931,10 @@ type rulesetRuleDeleteResponseJSON struct {
 
 func (r *RulesetRuleDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetRuleDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // The kind of the ruleset.
@@ -987,6 +1059,10 @@ func (r *RulesetRuleDeleteResponseRulesRulesetsBlockRule) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleDeleteResponseRulesRulesetsBlockRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r RulesetRuleDeleteResponseRulesRulesetsBlockRule) implementsRulesetRuleDeleteResponseRule() {}
 
 // The action to perform when the rule matches.
@@ -1016,6 +1092,10 @@ func (r *RulesetRuleDeleteResponseRulesRulesetsBlockRuleActionParameters) Unmars
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleDeleteResponseRulesRulesetsBlockRuleActionParametersJSON) RawJSON() string {
+	return r.raw
+}
+
 // The response to show when the block is applied.
 type RulesetRuleDeleteResponseRulesRulesetsBlockRuleActionParametersResponse struct {
 	// The content to return.
@@ -1042,6 +1122,10 @@ func (r *RulesetRuleDeleteResponseRulesRulesetsBlockRuleActionParametersResponse
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleDeleteResponseRulesRulesetsBlockRuleActionParametersResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // An object configuring the rule's logging behavior.
 type RulesetRuleDeleteResponseRulesRulesetsBlockRuleLogging struct {
 	// Whether to generate a log when the rule matches.
@@ -1059,6 +1143,10 @@ type rulesetRuleDeleteResponseRulesRulesetsBlockRuleLoggingJSON struct {
 
 func (r *RulesetRuleDeleteResponseRulesRulesetsBlockRuleLogging) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetRuleDeleteResponseRulesRulesetsBlockRuleLoggingJSON) RawJSON() string {
+	return r.raw
 }
 
 type RulesetRuleDeleteResponseRulesRulesetsExecuteRule struct {
@@ -1109,6 +1197,10 @@ func (r *RulesetRuleDeleteResponseRulesRulesetsExecuteRule) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleDeleteResponseRulesRulesetsExecuteRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r RulesetRuleDeleteResponseRulesRulesetsExecuteRule) implementsRulesetRuleDeleteResponseRule() {
 }
 
@@ -1145,6 +1237,10 @@ func (r *RulesetRuleDeleteResponseRulesRulesetsExecuteRuleActionParameters) Unma
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleDeleteResponseRulesRulesetsExecuteRuleActionParametersJSON) RawJSON() string {
+	return r.raw
+}
+
 // The configuration to use for matched data logging.
 type RulesetRuleDeleteResponseRulesRulesetsExecuteRuleActionParametersMatchedData struct {
 	// The public key to encrypt matched data logs with.
@@ -1163,6 +1259,10 @@ type rulesetRuleDeleteResponseRulesRulesetsExecuteRuleActionParametersMatchedDat
 
 func (r *RulesetRuleDeleteResponseRulesRulesetsExecuteRuleActionParametersMatchedData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetRuleDeleteResponseRulesRulesetsExecuteRuleActionParametersMatchedDataJSON) RawJSON() string {
+	return r.raw
 }
 
 // A set of overrides to apply to the target ruleset.
@@ -1201,6 +1301,10 @@ func (r *RulesetRuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverri
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesJSON) RawJSON() string {
+	return r.raw
+}
+
 // A category-level override
 type RulesetRuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory struct {
 	// The name of the category to override.
@@ -1228,6 +1332,10 @@ type rulesetRuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesC
 
 func (r *RulesetRuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetRuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoryJSON) RawJSON() string {
+	return r.raw
 }
 
 // The sensitivity level to use for rules in the category.
@@ -1272,6 +1380,10 @@ func (r *RulesetRuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverri
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 // The sensitivity level to use for the rule.
 type RulesetRuleDeleteResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel string
 
@@ -1311,6 +1423,10 @@ type rulesetRuleDeleteResponseRulesRulesetsExecuteRuleLoggingJSON struct {
 
 func (r *RulesetRuleDeleteResponseRulesRulesetsExecuteRuleLogging) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetRuleDeleteResponseRulesRulesetsExecuteRuleLoggingJSON) RawJSON() string {
+	return r.raw
 }
 
 type RulesetRuleDeleteResponseRulesRulesetsLogRule struct {
@@ -1361,6 +1477,10 @@ func (r *RulesetRuleDeleteResponseRulesRulesetsLogRule) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleDeleteResponseRulesRulesetsLogRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r RulesetRuleDeleteResponseRulesRulesetsLogRule) implementsRulesetRuleDeleteResponseRule() {}
 
 // The action to perform when the rule matches.
@@ -1387,6 +1507,10 @@ type rulesetRuleDeleteResponseRulesRulesetsLogRuleLoggingJSON struct {
 
 func (r *RulesetRuleDeleteResponseRulesRulesetsLogRuleLogging) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetRuleDeleteResponseRulesRulesetsLogRuleLoggingJSON) RawJSON() string {
+	return r.raw
 }
 
 type RulesetRuleDeleteResponseRulesRulesetsSkipRule struct {
@@ -1437,6 +1561,10 @@ func (r *RulesetRuleDeleteResponseRulesRulesetsSkipRule) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleDeleteResponseRulesRulesetsSkipRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r RulesetRuleDeleteResponseRulesRulesetsSkipRule) implementsRulesetRuleDeleteResponseRule() {}
 
 // The action to perform when the rule matches.
@@ -1480,6 +1608,10 @@ type rulesetRuleDeleteResponseRulesRulesetsSkipRuleActionParametersJSON struct {
 
 func (r *RulesetRuleDeleteResponseRulesRulesetsSkipRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetRuleDeleteResponseRulesRulesetsSkipRuleActionParametersJSON) RawJSON() string {
+	return r.raw
 }
 
 // A phase to skip the execution of.
@@ -1551,6 +1683,10 @@ func (r *RulesetRuleDeleteResponseRulesRulesetsSkipRuleLogging) UnmarshalJSON(da
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleDeleteResponseRulesRulesetsSkipRuleLoggingJSON) RawJSON() string {
+	return r.raw
+}
+
 // A result.
 type RulesetRuleEditResponse struct {
 	// The unique ID of the ruleset.
@@ -1589,6 +1725,10 @@ type rulesetRuleEditResponseJSON struct {
 
 func (r *RulesetRuleEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetRuleEditResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // The kind of the ruleset.
@@ -1713,6 +1853,10 @@ func (r *RulesetRuleEditResponseRulesRulesetsBlockRule) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleEditResponseRulesRulesetsBlockRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r RulesetRuleEditResponseRulesRulesetsBlockRule) implementsRulesetRuleEditResponseRule() {}
 
 // The action to perform when the rule matches.
@@ -1742,6 +1886,10 @@ func (r *RulesetRuleEditResponseRulesRulesetsBlockRuleActionParameters) Unmarsha
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleEditResponseRulesRulesetsBlockRuleActionParametersJSON) RawJSON() string {
+	return r.raw
+}
+
 // The response to show when the block is applied.
 type RulesetRuleEditResponseRulesRulesetsBlockRuleActionParametersResponse struct {
 	// The content to return.
@@ -1768,6 +1916,10 @@ func (r *RulesetRuleEditResponseRulesRulesetsBlockRuleActionParametersResponse) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleEditResponseRulesRulesetsBlockRuleActionParametersResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // An object configuring the rule's logging behavior.
 type RulesetRuleEditResponseRulesRulesetsBlockRuleLogging struct {
 	// Whether to generate a log when the rule matches.
@@ -1785,6 +1937,10 @@ type rulesetRuleEditResponseRulesRulesetsBlockRuleLoggingJSON struct {
 
 func (r *RulesetRuleEditResponseRulesRulesetsBlockRuleLogging) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetRuleEditResponseRulesRulesetsBlockRuleLoggingJSON) RawJSON() string {
+	return r.raw
 }
 
 type RulesetRuleEditResponseRulesRulesetsExecuteRule struct {
@@ -1835,6 +1991,10 @@ func (r *RulesetRuleEditResponseRulesRulesetsExecuteRule) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleEditResponseRulesRulesetsExecuteRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r RulesetRuleEditResponseRulesRulesetsExecuteRule) implementsRulesetRuleEditResponseRule() {}
 
 // The action to perform when the rule matches.
@@ -1870,6 +2030,10 @@ func (r *RulesetRuleEditResponseRulesRulesetsExecuteRuleActionParameters) Unmars
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleEditResponseRulesRulesetsExecuteRuleActionParametersJSON) RawJSON() string {
+	return r.raw
+}
+
 // The configuration to use for matched data logging.
 type RulesetRuleEditResponseRulesRulesetsExecuteRuleActionParametersMatchedData struct {
 	// The public key to encrypt matched data logs with.
@@ -1888,6 +2052,10 @@ type rulesetRuleEditResponseRulesRulesetsExecuteRuleActionParametersMatchedDataJ
 
 func (r *RulesetRuleEditResponseRulesRulesetsExecuteRuleActionParametersMatchedData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetRuleEditResponseRulesRulesetsExecuteRuleActionParametersMatchedDataJSON) RawJSON() string {
+	return r.raw
 }
 
 // A set of overrides to apply to the target ruleset.
@@ -1926,6 +2094,10 @@ func (r *RulesetRuleEditResponseRulesRulesetsExecuteRuleActionParametersOverride
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesJSON) RawJSON() string {
+	return r.raw
+}
+
 // A category-level override
 type RulesetRuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory struct {
 	// The name of the category to override.
@@ -1953,6 +2125,10 @@ type rulesetRuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesCat
 
 func (r *RulesetRuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetRuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoryJSON) RawJSON() string {
+	return r.raw
 }
 
 // The sensitivity level to use for rules in the category.
@@ -1997,6 +2173,10 @@ func (r *RulesetRuleEditResponseRulesRulesetsExecuteRuleActionParametersOverride
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 // The sensitivity level to use for the rule.
 type RulesetRuleEditResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel string
 
@@ -2035,6 +2215,10 @@ type rulesetRuleEditResponseRulesRulesetsExecuteRuleLoggingJSON struct {
 
 func (r *RulesetRuleEditResponseRulesRulesetsExecuteRuleLogging) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetRuleEditResponseRulesRulesetsExecuteRuleLoggingJSON) RawJSON() string {
+	return r.raw
 }
 
 type RulesetRuleEditResponseRulesRulesetsLogRule struct {
@@ -2085,6 +2269,10 @@ func (r *RulesetRuleEditResponseRulesRulesetsLogRule) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleEditResponseRulesRulesetsLogRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r RulesetRuleEditResponseRulesRulesetsLogRule) implementsRulesetRuleEditResponseRule() {}
 
 // The action to perform when the rule matches.
@@ -2111,6 +2299,10 @@ type rulesetRuleEditResponseRulesRulesetsLogRuleLoggingJSON struct {
 
 func (r *RulesetRuleEditResponseRulesRulesetsLogRuleLogging) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetRuleEditResponseRulesRulesetsLogRuleLoggingJSON) RawJSON() string {
+	return r.raw
 }
 
 type RulesetRuleEditResponseRulesRulesetsSkipRule struct {
@@ -2161,6 +2353,10 @@ func (r *RulesetRuleEditResponseRulesRulesetsSkipRule) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleEditResponseRulesRulesetsSkipRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r RulesetRuleEditResponseRulesRulesetsSkipRule) implementsRulesetRuleEditResponseRule() {}
 
 // The action to perform when the rule matches.
@@ -2204,6 +2400,10 @@ type rulesetRuleEditResponseRulesRulesetsSkipRuleActionParametersJSON struct {
 
 func (r *RulesetRuleEditResponseRulesRulesetsSkipRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetRuleEditResponseRulesRulesetsSkipRuleActionParametersJSON) RawJSON() string {
+	return r.raw
 }
 
 // A phase to skip the execution of.
@@ -2273,6 +2473,10 @@ type rulesetRuleEditResponseRulesRulesetsSkipRuleLoggingJSON struct {
 
 func (r *RulesetRuleEditResponseRulesRulesetsSkipRuleLogging) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetRuleEditResponseRulesRulesetsSkipRuleLoggingJSON) RawJSON() string {
+	return r.raw
 }
 
 type RulesetRuleNewParams struct {
@@ -2363,6 +2567,10 @@ func (r *RulesetRuleNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 // A message.
 type RulesetRuleNewResponseEnvelopeErrors struct {
 	// A text description of this message.
@@ -2388,6 +2596,10 @@ func (r *RulesetRuleNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 // The source of this message.
 type RulesetRuleNewResponseEnvelopeErrorsSource struct {
 	// A JSON pointer to the field that is the source of the message.
@@ -2405,6 +2617,10 @@ type rulesetRuleNewResponseEnvelopeErrorsSourceJSON struct {
 
 func (r *RulesetRuleNewResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetRuleNewResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
 }
 
 // A message.
@@ -2432,6 +2648,10 @@ func (r *RulesetRuleNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
 // The source of this message.
 type RulesetRuleNewResponseEnvelopeMessagesSource struct {
 	// A JSON pointer to the field that is the source of the message.
@@ -2449,6 +2669,10 @@ type rulesetRuleNewResponseEnvelopeMessagesSourceJSON struct {
 
 func (r *RulesetRuleNewResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetRuleNewResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful.
@@ -2493,6 +2717,10 @@ func (r *RulesetRuleDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 // A message.
 type RulesetRuleDeleteResponseEnvelopeErrors struct {
 	// A text description of this message.
@@ -2518,6 +2746,10 @@ func (r *RulesetRuleDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 // The source of this message.
 type RulesetRuleDeleteResponseEnvelopeErrorsSource struct {
 	// A JSON pointer to the field that is the source of the message.
@@ -2535,6 +2767,10 @@ type rulesetRuleDeleteResponseEnvelopeErrorsSourceJSON struct {
 
 func (r *RulesetRuleDeleteResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetRuleDeleteResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
 }
 
 // A message.
@@ -2562,6 +2798,10 @@ func (r *RulesetRuleDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
 // The source of this message.
 type RulesetRuleDeleteResponseEnvelopeMessagesSource struct {
 	// A JSON pointer to the field that is the source of the message.
@@ -2579,6 +2819,10 @@ type rulesetRuleDeleteResponseEnvelopeMessagesSourceJSON struct {
 
 func (r *RulesetRuleDeleteResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetRuleDeleteResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful.
@@ -2676,6 +2920,10 @@ func (r *RulesetRuleEditResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 // A message.
 type RulesetRuleEditResponseEnvelopeErrors struct {
 	// A text description of this message.
@@ -2701,6 +2949,10 @@ func (r *RulesetRuleEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 // The source of this message.
 type RulesetRuleEditResponseEnvelopeErrorsSource struct {
 	// A JSON pointer to the field that is the source of the message.
@@ -2718,6 +2970,10 @@ type rulesetRuleEditResponseEnvelopeErrorsSourceJSON struct {
 
 func (r *RulesetRuleEditResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetRuleEditResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
 }
 
 // A message.
@@ -2745,6 +3001,10 @@ func (r *RulesetRuleEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetRuleEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
 // The source of this message.
 type RulesetRuleEditResponseEnvelopeMessagesSource struct {
 	// A JSON pointer to the field that is the source of the message.
@@ -2762,6 +3022,10 @@ type rulesetRuleEditResponseEnvelopeMessagesSourceJSON struct {
 
 func (r *RulesetRuleEditResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetRuleEditResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful.

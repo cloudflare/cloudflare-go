@@ -164,6 +164,10 @@ func (r *ZeroTrustAccessApplicationCAListResponse) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationCAListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessApplicationCADeleteResponse struct {
 	// The ID of the CA.
 	ID   string                                         `json:"id"`
@@ -180,6 +184,10 @@ type zeroTrustAccessApplicationCADeleteResponseJSON struct {
 
 func (r *ZeroTrustAccessApplicationCADeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationCADeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Union satisfied by [ZeroTrustAccessApplicationCAGetResponseUnknown] or
@@ -230,6 +238,10 @@ func (r *ZeroTrustAccessApplicationCANewResponseEnvelope) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationCANewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessApplicationCANewResponseEnvelopeErrors struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -247,6 +259,10 @@ type zeroTrustAccessApplicationCANewResponseEnvelopeErrorsJSON struct {
 
 func (r *ZeroTrustAccessApplicationCANewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationCANewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustAccessApplicationCANewResponseEnvelopeMessages struct {
@@ -267,6 +283,10 @@ type zeroTrustAccessApplicationCANewResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustAccessApplicationCANewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationCANewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -309,6 +329,10 @@ func (r *ZeroTrustAccessApplicationCAListResponseEnvelope) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationCAListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessApplicationCAListResponseEnvelopeErrors struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -326,6 +350,10 @@ type zeroTrustAccessApplicationCAListResponseEnvelopeErrorsJSON struct {
 
 func (r *ZeroTrustAccessApplicationCAListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationCAListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustAccessApplicationCAListResponseEnvelopeMessages struct {
@@ -346,6 +374,10 @@ type zeroTrustAccessApplicationCAListResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustAccessApplicationCAListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationCAListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -383,6 +415,10 @@ func (r *ZeroTrustAccessApplicationCAListResponseEnvelopeResultInfo) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationCAListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessApplicationCADeleteParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
@@ -414,6 +450,10 @@ func (r *ZeroTrustAccessApplicationCADeleteResponseEnvelope) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationCADeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessApplicationCADeleteResponseEnvelopeErrors struct {
 	Code    int64                                                        `json:"code,required"`
 	Message string                                                       `json:"message,required"`
@@ -434,6 +474,10 @@ func (r *ZeroTrustAccessApplicationCADeleteResponseEnvelopeErrors) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationCADeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessApplicationCADeleteResponseEnvelopeMessages struct {
 	Code    int64                                                          `json:"code,required"`
 	Message string                                                         `json:"message,required"`
@@ -452,6 +496,10 @@ type zeroTrustAccessApplicationCADeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustAccessApplicationCADeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationCADeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -492,6 +540,10 @@ func (r *ZeroTrustAccessApplicationCAGetResponseEnvelope) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationCAGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessApplicationCAGetResponseEnvelopeErrors struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -509,6 +561,10 @@ type zeroTrustAccessApplicationCAGetResponseEnvelopeErrorsJSON struct {
 
 func (r *ZeroTrustAccessApplicationCAGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationCAGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustAccessApplicationCAGetResponseEnvelopeMessages struct {
@@ -529,6 +585,10 @@ type zeroTrustAccessApplicationCAGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustAccessApplicationCAGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationCAGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

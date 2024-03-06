@@ -163,6 +163,10 @@ func (r *ZeroTrustGatewayRuleNewResponse) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The action to preform when the associated traffic, identity, and device posture
 // expressions are either absent or evaluate to `true`.
 type ZeroTrustGatewayRuleNewResponseAction string
@@ -280,6 +284,10 @@ func (r *ZeroTrustGatewayRuleNewResponseRuleSettings) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleNewResponseRuleSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Settings for the Audit SSH action.
 type ZeroTrustGatewayRuleNewResponseRuleSettingsAuditSSH struct {
 	// Enable to turn on SSH command logging.
@@ -297,6 +305,10 @@ type zeroTrustGatewayRuleNewResponseRuleSettingsAuditSSHJSON struct {
 
 func (r *ZeroTrustGatewayRuleNewResponseRuleSettingsAuditSSH) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayRuleNewResponseRuleSettingsAuditSSHJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configure how browser isolation behaves.
@@ -331,6 +343,10 @@ func (r *ZeroTrustGatewayRuleNewResponseRuleSettingsBisoAdminControls) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleNewResponseRuleSettingsBisoAdminControlsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Configure how session check behaves.
 type ZeroTrustGatewayRuleNewResponseRuleSettingsCheckSession struct {
 	// Configure how fresh the session needs to be to be considered valid.
@@ -354,6 +370,10 @@ func (r *ZeroTrustGatewayRuleNewResponseRuleSettingsCheckSession) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleNewResponseRuleSettingsCheckSessionJSON) RawJSON() string {
+	return r.raw
+}
+
 // Add your own custom resolvers to route queries that match the resolver policy.
 // Cannot be used when resolve_dns_through_cloudflare is set. DNS queries will
 // route to the address closest to their origin.
@@ -375,6 +395,10 @@ type zeroTrustGatewayRuleNewResponseRuleSettingsDNSResolversJSON struct {
 
 func (r *ZeroTrustGatewayRuleNewResponseRuleSettingsDNSResolvers) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayRuleNewResponseRuleSettingsDNSResolversJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustGatewayRuleNewResponseRuleSettingsDNSResolversIPV4 struct {
@@ -407,6 +431,10 @@ func (r *ZeroTrustGatewayRuleNewResponseRuleSettingsDNSResolversIPV4) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleNewResponseRuleSettingsDNSResolversIPV4JSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayRuleNewResponseRuleSettingsDNSResolversIPV6 struct {
 	// IP address of upstream resolver.
 	IP string `json:"ip,required"`
@@ -435,6 +463,10 @@ type zeroTrustGatewayRuleNewResponseRuleSettingsDNSResolversIPV6JSON struct {
 
 func (r *ZeroTrustGatewayRuleNewResponseRuleSettingsDNSResolversIPV6) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayRuleNewResponseRuleSettingsDNSResolversIPV6JSON) RawJSON() string {
+	return r.raw
 }
 
 // Configure how Gateway Proxy traffic egresses. You can enable this setting for
@@ -466,6 +498,10 @@ func (r *ZeroTrustGatewayRuleNewResponseRuleSettingsEgress) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleNewResponseRuleSettingsEgressJSON) RawJSON() string {
+	return r.raw
+}
+
 // Send matching traffic to the supplied destination IP address and port.
 type ZeroTrustGatewayRuleNewResponseRuleSettingsL4override struct {
 	// IPv4 or IPv6 address.
@@ -486,6 +522,10 @@ type zeroTrustGatewayRuleNewResponseRuleSettingsL4overrideJSON struct {
 
 func (r *ZeroTrustGatewayRuleNewResponseRuleSettingsL4override) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayRuleNewResponseRuleSettingsL4overrideJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configure a notification to display on the user's device when this rule is
@@ -516,6 +556,10 @@ func (r *ZeroTrustGatewayRuleNewResponseRuleSettingsNotificationSettings) Unmars
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleNewResponseRuleSettingsNotificationSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Configure DLP payload logging.
 type ZeroTrustGatewayRuleNewResponseRuleSettingsPayloadLog struct {
 	// Set to true to enable DLP payload logging for this rule.
@@ -533,6 +577,10 @@ type zeroTrustGatewayRuleNewResponseRuleSettingsPayloadLogJSON struct {
 
 func (r *ZeroTrustGatewayRuleNewResponseRuleSettingsPayloadLog) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayRuleNewResponseRuleSettingsPayloadLogJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configure behavior when an upstream cert is invalid or an SSL error occurs.
@@ -554,6 +602,10 @@ type zeroTrustGatewayRuleNewResponseRuleSettingsUntrustedCertJSON struct {
 
 func (r *ZeroTrustGatewayRuleNewResponseRuleSettingsUntrustedCert) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayRuleNewResponseRuleSettingsUntrustedCertJSON) RawJSON() string {
+	return r.raw
 }
 
 // The action performed when an untrusted certificate is seen. The default action
@@ -627,6 +679,10 @@ func (r *ZeroTrustGatewayRuleNewResponseSchedule) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleNewResponseScheduleJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayRuleUpdateResponse struct {
 	// The API resource UUID.
 	ID string `json:"id"`
@@ -688,6 +744,10 @@ type zeroTrustGatewayRuleUpdateResponseJSON struct {
 
 func (r *ZeroTrustGatewayRuleUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayRuleUpdateResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // The action to preform when the associated traffic, identity, and device posture
@@ -807,6 +867,10 @@ func (r *ZeroTrustGatewayRuleUpdateResponseRuleSettings) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleUpdateResponseRuleSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Settings for the Audit SSH action.
 type ZeroTrustGatewayRuleUpdateResponseRuleSettingsAuditSSH struct {
 	// Enable to turn on SSH command logging.
@@ -824,6 +888,10 @@ type zeroTrustGatewayRuleUpdateResponseRuleSettingsAuditSSHJSON struct {
 
 func (r *ZeroTrustGatewayRuleUpdateResponseRuleSettingsAuditSSH) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayRuleUpdateResponseRuleSettingsAuditSSHJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configure how browser isolation behaves.
@@ -858,6 +926,10 @@ func (r *ZeroTrustGatewayRuleUpdateResponseRuleSettingsBisoAdminControls) Unmars
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleUpdateResponseRuleSettingsBisoAdminControlsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Configure how session check behaves.
 type ZeroTrustGatewayRuleUpdateResponseRuleSettingsCheckSession struct {
 	// Configure how fresh the session needs to be to be considered valid.
@@ -881,6 +953,10 @@ func (r *ZeroTrustGatewayRuleUpdateResponseRuleSettingsCheckSession) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleUpdateResponseRuleSettingsCheckSessionJSON) RawJSON() string {
+	return r.raw
+}
+
 // Add your own custom resolvers to route queries that match the resolver policy.
 // Cannot be used when resolve_dns_through_cloudflare is set. DNS queries will
 // route to the address closest to their origin.
@@ -902,6 +978,10 @@ type zeroTrustGatewayRuleUpdateResponseRuleSettingsDNSResolversJSON struct {
 
 func (r *ZeroTrustGatewayRuleUpdateResponseRuleSettingsDNSResolvers) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayRuleUpdateResponseRuleSettingsDNSResolversJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustGatewayRuleUpdateResponseRuleSettingsDNSResolversIPV4 struct {
@@ -934,6 +1014,10 @@ func (r *ZeroTrustGatewayRuleUpdateResponseRuleSettingsDNSResolversIPV4) Unmarsh
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleUpdateResponseRuleSettingsDNSResolversIPV4JSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayRuleUpdateResponseRuleSettingsDNSResolversIPV6 struct {
 	// IP address of upstream resolver.
 	IP string `json:"ip,required"`
@@ -962,6 +1046,10 @@ type zeroTrustGatewayRuleUpdateResponseRuleSettingsDNSResolversIPV6JSON struct {
 
 func (r *ZeroTrustGatewayRuleUpdateResponseRuleSettingsDNSResolversIPV6) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayRuleUpdateResponseRuleSettingsDNSResolversIPV6JSON) RawJSON() string {
+	return r.raw
 }
 
 // Configure how Gateway Proxy traffic egresses. You can enable this setting for
@@ -993,6 +1081,10 @@ func (r *ZeroTrustGatewayRuleUpdateResponseRuleSettingsEgress) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleUpdateResponseRuleSettingsEgressJSON) RawJSON() string {
+	return r.raw
+}
+
 // Send matching traffic to the supplied destination IP address and port.
 type ZeroTrustGatewayRuleUpdateResponseRuleSettingsL4override struct {
 	// IPv4 or IPv6 address.
@@ -1014,6 +1106,10 @@ type zeroTrustGatewayRuleUpdateResponseRuleSettingsL4overrideJSON struct {
 
 func (r *ZeroTrustGatewayRuleUpdateResponseRuleSettingsL4override) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayRuleUpdateResponseRuleSettingsL4overrideJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configure a notification to display on the user's device when this rule is
@@ -1044,6 +1140,10 @@ func (r *ZeroTrustGatewayRuleUpdateResponseRuleSettingsNotificationSettings) Unm
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleUpdateResponseRuleSettingsNotificationSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Configure DLP payload logging.
 type ZeroTrustGatewayRuleUpdateResponseRuleSettingsPayloadLog struct {
 	// Set to true to enable DLP payload logging for this rule.
@@ -1062,6 +1162,10 @@ type zeroTrustGatewayRuleUpdateResponseRuleSettingsPayloadLogJSON struct {
 
 func (r *ZeroTrustGatewayRuleUpdateResponseRuleSettingsPayloadLog) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayRuleUpdateResponseRuleSettingsPayloadLogJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configure behavior when an upstream cert is invalid or an SSL error occurs.
@@ -1083,6 +1187,10 @@ type zeroTrustGatewayRuleUpdateResponseRuleSettingsUntrustedCertJSON struct {
 
 func (r *ZeroTrustGatewayRuleUpdateResponseRuleSettingsUntrustedCert) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayRuleUpdateResponseRuleSettingsUntrustedCertJSON) RawJSON() string {
+	return r.raw
 }
 
 // The action performed when an untrusted certificate is seen. The default action
@@ -1156,6 +1264,10 @@ func (r *ZeroTrustGatewayRuleUpdateResponseSchedule) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleUpdateResponseScheduleJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayRuleListResponse struct {
 	// The API resource UUID.
 	ID string `json:"id"`
@@ -1217,6 +1329,10 @@ type zeroTrustGatewayRuleListResponseJSON struct {
 
 func (r *ZeroTrustGatewayRuleListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayRuleListResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // The action to preform when the associated traffic, identity, and device posture
@@ -1336,6 +1452,10 @@ func (r *ZeroTrustGatewayRuleListResponseRuleSettings) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleListResponseRuleSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Settings for the Audit SSH action.
 type ZeroTrustGatewayRuleListResponseRuleSettingsAuditSSH struct {
 	// Enable to turn on SSH command logging.
@@ -1353,6 +1473,10 @@ type zeroTrustGatewayRuleListResponseRuleSettingsAuditSSHJSON struct {
 
 func (r *ZeroTrustGatewayRuleListResponseRuleSettingsAuditSSH) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayRuleListResponseRuleSettingsAuditSSHJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configure how browser isolation behaves.
@@ -1387,6 +1511,10 @@ func (r *ZeroTrustGatewayRuleListResponseRuleSettingsBisoAdminControls) Unmarsha
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleListResponseRuleSettingsBisoAdminControlsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Configure how session check behaves.
 type ZeroTrustGatewayRuleListResponseRuleSettingsCheckSession struct {
 	// Configure how fresh the session needs to be to be considered valid.
@@ -1410,6 +1538,10 @@ func (r *ZeroTrustGatewayRuleListResponseRuleSettingsCheckSession) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleListResponseRuleSettingsCheckSessionJSON) RawJSON() string {
+	return r.raw
+}
+
 // Add your own custom resolvers to route queries that match the resolver policy.
 // Cannot be used when resolve_dns_through_cloudflare is set. DNS queries will
 // route to the address closest to their origin.
@@ -1431,6 +1563,10 @@ type zeroTrustGatewayRuleListResponseRuleSettingsDNSResolversJSON struct {
 
 func (r *ZeroTrustGatewayRuleListResponseRuleSettingsDNSResolvers) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayRuleListResponseRuleSettingsDNSResolversJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustGatewayRuleListResponseRuleSettingsDNSResolversIPV4 struct {
@@ -1463,6 +1599,10 @@ func (r *ZeroTrustGatewayRuleListResponseRuleSettingsDNSResolversIPV4) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleListResponseRuleSettingsDNSResolversIPV4JSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayRuleListResponseRuleSettingsDNSResolversIPV6 struct {
 	// IP address of upstream resolver.
 	IP string `json:"ip,required"`
@@ -1491,6 +1631,10 @@ type zeroTrustGatewayRuleListResponseRuleSettingsDNSResolversIPV6JSON struct {
 
 func (r *ZeroTrustGatewayRuleListResponseRuleSettingsDNSResolversIPV6) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayRuleListResponseRuleSettingsDNSResolversIPV6JSON) RawJSON() string {
+	return r.raw
 }
 
 // Configure how Gateway Proxy traffic egresses. You can enable this setting for
@@ -1522,6 +1666,10 @@ func (r *ZeroTrustGatewayRuleListResponseRuleSettingsEgress) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleListResponseRuleSettingsEgressJSON) RawJSON() string {
+	return r.raw
+}
+
 // Send matching traffic to the supplied destination IP address and port.
 type ZeroTrustGatewayRuleListResponseRuleSettingsL4override struct {
 	// IPv4 or IPv6 address.
@@ -1542,6 +1690,10 @@ type zeroTrustGatewayRuleListResponseRuleSettingsL4overrideJSON struct {
 
 func (r *ZeroTrustGatewayRuleListResponseRuleSettingsL4override) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayRuleListResponseRuleSettingsL4overrideJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configure a notification to display on the user's device when this rule is
@@ -1572,6 +1724,10 @@ func (r *ZeroTrustGatewayRuleListResponseRuleSettingsNotificationSettings) Unmar
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleListResponseRuleSettingsNotificationSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Configure DLP payload logging.
 type ZeroTrustGatewayRuleListResponseRuleSettingsPayloadLog struct {
 	// Set to true to enable DLP payload logging for this rule.
@@ -1589,6 +1745,10 @@ type zeroTrustGatewayRuleListResponseRuleSettingsPayloadLogJSON struct {
 
 func (r *ZeroTrustGatewayRuleListResponseRuleSettingsPayloadLog) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayRuleListResponseRuleSettingsPayloadLogJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configure behavior when an upstream cert is invalid or an SSL error occurs.
@@ -1610,6 +1770,10 @@ type zeroTrustGatewayRuleListResponseRuleSettingsUntrustedCertJSON struct {
 
 func (r *ZeroTrustGatewayRuleListResponseRuleSettingsUntrustedCert) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayRuleListResponseRuleSettingsUntrustedCertJSON) RawJSON() string {
+	return r.raw
 }
 
 // The action performed when an untrusted certificate is seen. The default action
@@ -1681,6 +1845,10 @@ type zeroTrustGatewayRuleListResponseScheduleJSON struct {
 
 func (r *ZeroTrustGatewayRuleListResponseSchedule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayRuleListResponseScheduleJSON) RawJSON() string {
+	return r.raw
 }
 
 // Union satisfied by [ZeroTrustGatewayRuleDeleteResponseUnknown] or
@@ -1761,6 +1929,10 @@ type zeroTrustGatewayRuleGetResponseJSON struct {
 
 func (r *ZeroTrustGatewayRuleGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayRuleGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // The action to preform when the associated traffic, identity, and device posture
@@ -1880,6 +2052,10 @@ func (r *ZeroTrustGatewayRuleGetResponseRuleSettings) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleGetResponseRuleSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Settings for the Audit SSH action.
 type ZeroTrustGatewayRuleGetResponseRuleSettingsAuditSSH struct {
 	// Enable to turn on SSH command logging.
@@ -1897,6 +2073,10 @@ type zeroTrustGatewayRuleGetResponseRuleSettingsAuditSSHJSON struct {
 
 func (r *ZeroTrustGatewayRuleGetResponseRuleSettingsAuditSSH) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayRuleGetResponseRuleSettingsAuditSSHJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configure how browser isolation behaves.
@@ -1931,6 +2111,10 @@ func (r *ZeroTrustGatewayRuleGetResponseRuleSettingsBisoAdminControls) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleGetResponseRuleSettingsBisoAdminControlsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Configure how session check behaves.
 type ZeroTrustGatewayRuleGetResponseRuleSettingsCheckSession struct {
 	// Configure how fresh the session needs to be to be considered valid.
@@ -1954,6 +2138,10 @@ func (r *ZeroTrustGatewayRuleGetResponseRuleSettingsCheckSession) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleGetResponseRuleSettingsCheckSessionJSON) RawJSON() string {
+	return r.raw
+}
+
 // Add your own custom resolvers to route queries that match the resolver policy.
 // Cannot be used when resolve_dns_through_cloudflare is set. DNS queries will
 // route to the address closest to their origin.
@@ -1975,6 +2163,10 @@ type zeroTrustGatewayRuleGetResponseRuleSettingsDNSResolversJSON struct {
 
 func (r *ZeroTrustGatewayRuleGetResponseRuleSettingsDNSResolvers) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayRuleGetResponseRuleSettingsDNSResolversJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustGatewayRuleGetResponseRuleSettingsDNSResolversIPV4 struct {
@@ -2007,6 +2199,10 @@ func (r *ZeroTrustGatewayRuleGetResponseRuleSettingsDNSResolversIPV4) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleGetResponseRuleSettingsDNSResolversIPV4JSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayRuleGetResponseRuleSettingsDNSResolversIPV6 struct {
 	// IP address of upstream resolver.
 	IP string `json:"ip,required"`
@@ -2035,6 +2231,10 @@ type zeroTrustGatewayRuleGetResponseRuleSettingsDNSResolversIPV6JSON struct {
 
 func (r *ZeroTrustGatewayRuleGetResponseRuleSettingsDNSResolversIPV6) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayRuleGetResponseRuleSettingsDNSResolversIPV6JSON) RawJSON() string {
+	return r.raw
 }
 
 // Configure how Gateway Proxy traffic egresses. You can enable this setting for
@@ -2066,6 +2266,10 @@ func (r *ZeroTrustGatewayRuleGetResponseRuleSettingsEgress) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleGetResponseRuleSettingsEgressJSON) RawJSON() string {
+	return r.raw
+}
+
 // Send matching traffic to the supplied destination IP address and port.
 type ZeroTrustGatewayRuleGetResponseRuleSettingsL4override struct {
 	// IPv4 or IPv6 address.
@@ -2086,6 +2290,10 @@ type zeroTrustGatewayRuleGetResponseRuleSettingsL4overrideJSON struct {
 
 func (r *ZeroTrustGatewayRuleGetResponseRuleSettingsL4override) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayRuleGetResponseRuleSettingsL4overrideJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configure a notification to display on the user's device when this rule is
@@ -2116,6 +2324,10 @@ func (r *ZeroTrustGatewayRuleGetResponseRuleSettingsNotificationSettings) Unmars
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleGetResponseRuleSettingsNotificationSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Configure DLP payload logging.
 type ZeroTrustGatewayRuleGetResponseRuleSettingsPayloadLog struct {
 	// Set to true to enable DLP payload logging for this rule.
@@ -2133,6 +2345,10 @@ type zeroTrustGatewayRuleGetResponseRuleSettingsPayloadLogJSON struct {
 
 func (r *ZeroTrustGatewayRuleGetResponseRuleSettingsPayloadLog) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayRuleGetResponseRuleSettingsPayloadLogJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configure behavior when an upstream cert is invalid or an SSL error occurs.
@@ -2154,6 +2370,10 @@ type zeroTrustGatewayRuleGetResponseRuleSettingsUntrustedCertJSON struct {
 
 func (r *ZeroTrustGatewayRuleGetResponseRuleSettingsUntrustedCert) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayRuleGetResponseRuleSettingsUntrustedCertJSON) RawJSON() string {
+	return r.raw
 }
 
 // The action performed when an untrusted certificate is seen. The default action
@@ -2225,6 +2445,10 @@ type zeroTrustGatewayRuleGetResponseScheduleJSON struct {
 
 func (r *ZeroTrustGatewayRuleGetResponseSchedule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayRuleGetResponseScheduleJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustGatewayRuleNewParams struct {
@@ -2583,6 +2807,10 @@ func (r *ZeroTrustGatewayRuleNewResponseEnvelope) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayRuleNewResponseEnvelopeErrors struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -2602,6 +2830,10 @@ func (r *ZeroTrustGatewayRuleNewResponseEnvelopeErrors) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayRuleNewResponseEnvelopeMessages struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -2619,6 +2851,10 @@ type zeroTrustGatewayRuleNewResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustGatewayRuleNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayRuleNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -2984,6 +3220,10 @@ func (r *ZeroTrustGatewayRuleUpdateResponseEnvelope) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayRuleUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -3003,6 +3243,10 @@ func (r *ZeroTrustGatewayRuleUpdateResponseEnvelopeErrors) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayRuleUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -3020,6 +3264,10 @@ type zeroTrustGatewayRuleUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustGatewayRuleUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayRuleUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -3059,6 +3307,10 @@ func (r *ZeroTrustGatewayRuleListResponseEnvelope) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayRuleListResponseEnvelopeErrors struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -3078,6 +3330,10 @@ func (r *ZeroTrustGatewayRuleListResponseEnvelopeErrors) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayRuleListResponseEnvelopeMessages struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -3095,6 +3351,10 @@ type zeroTrustGatewayRuleListResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustGatewayRuleListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayRuleListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -3131,6 +3391,10 @@ func (r *ZeroTrustGatewayRuleListResponseEnvelopeResultInfo) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayRuleDeleteParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
@@ -3159,6 +3423,10 @@ func (r *ZeroTrustGatewayRuleDeleteResponseEnvelope) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayRuleDeleteResponseEnvelopeErrors struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -3178,6 +3446,10 @@ func (r *ZeroTrustGatewayRuleDeleteResponseEnvelopeErrors) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayRuleDeleteResponseEnvelopeMessages struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -3195,6 +3467,10 @@ type zeroTrustGatewayRuleDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustGatewayRuleDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayRuleDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -3232,6 +3508,10 @@ func (r *ZeroTrustGatewayRuleGetResponseEnvelope) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayRuleGetResponseEnvelopeErrors struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -3251,6 +3531,10 @@ func (r *ZeroTrustGatewayRuleGetResponseEnvelopeErrors) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayRuleGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayRuleGetResponseEnvelopeMessages struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -3268,6 +3552,10 @@ type zeroTrustGatewayRuleGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustGatewayRuleGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayRuleGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

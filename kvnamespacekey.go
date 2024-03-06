@@ -74,6 +74,10 @@ func (r *KVNamespaceKeyListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r kvNamespaceKeyListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type KVNamespaceKeyListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -125,6 +129,10 @@ func (r *KVNamespaceKeyListResponseEnvelope) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r kvNamespaceKeyListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type KVNamespaceKeyListResponseEnvelopeErrors struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -144,6 +152,10 @@ func (r *KVNamespaceKeyListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r kvNamespaceKeyListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type KVNamespaceKeyListResponseEnvelopeMessages struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -161,6 +173,10 @@ type kvNamespaceKeyListResponseEnvelopeMessagesJSON struct {
 
 func (r *KVNamespaceKeyListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r kvNamespaceKeyListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -192,4 +208,8 @@ type kvNamespaceKeyListResponseEnvelopeResultInfoJSON struct {
 
 func (r *KVNamespaceKeyListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r kvNamespaceKeyListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

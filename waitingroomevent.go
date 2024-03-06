@@ -196,6 +196,10 @@ func (r *WaitingRoomEventNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomEventNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomEventUpdateResponse struct {
 	ID        interface{} `json:"id"`
 	CreatedOn time.Time   `json:"created_on" format:"date-time"`
@@ -273,6 +277,10 @@ type waitingRoomEventUpdateResponseJSON struct {
 
 func (r *WaitingRoomEventUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomEventUpdateResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type WaitingRoomEventListResponse struct {
@@ -354,6 +362,10 @@ func (r *WaitingRoomEventListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomEventListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomEventDeleteResponse struct {
 	ID   interface{}                        `json:"id"`
 	JSON waitingRoomEventDeleteResponseJSON `json:"-"`
@@ -369,6 +381,10 @@ type waitingRoomEventDeleteResponseJSON struct {
 
 func (r *WaitingRoomEventDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomEventDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type WaitingRoomEventEditResponse struct {
@@ -450,6 +466,10 @@ func (r *WaitingRoomEventEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomEventEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomEventGetResponse struct {
 	ID        interface{} `json:"id"`
 	CreatedOn time.Time   `json:"created_on" format:"date-time"`
@@ -529,6 +549,10 @@ func (r *WaitingRoomEventGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomEventGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomEventNewParams struct {
 	// An ISO 8601 timestamp that marks the end of the event.
 	EventEndTime param.Field[string] `json:"event_end_time,required"`
@@ -596,6 +620,10 @@ type waitingRoomEventNewResponseEnvelopeJSON struct {
 
 func (r *WaitingRoomEventNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomEventNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
 
 type WaitingRoomEventUpdateParams struct {
@@ -667,6 +695,10 @@ func (r *WaitingRoomEventUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomEventUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomEventListResponseEnvelope struct {
 	Errors   []WaitingRoomEventListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []WaitingRoomEventListResponseEnvelopeMessages `json:"messages,required"`
@@ -693,6 +725,10 @@ func (r *WaitingRoomEventListResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomEventListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomEventListResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -712,6 +748,10 @@ func (r *WaitingRoomEventListResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomEventListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomEventListResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -729,6 +769,10 @@ type waitingRoomEventListResponseEnvelopeMessagesJSON struct {
 
 func (r *WaitingRoomEventListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomEventListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -765,6 +809,10 @@ func (r *WaitingRoomEventListResponseEnvelopeResultInfo) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomEventListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomEventDeleteResponseEnvelope struct {
 	Result WaitingRoomEventDeleteResponse             `json:"result,required"`
 	JSON   waitingRoomEventDeleteResponseEnvelopeJSON `json:"-"`
@@ -780,6 +828,10 @@ type waitingRoomEventDeleteResponseEnvelopeJSON struct {
 
 func (r *WaitingRoomEventDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomEventDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
 
 type WaitingRoomEventEditParams struct {
@@ -851,6 +903,10 @@ func (r *WaitingRoomEventEditResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomEventEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomEventGetResponseEnvelope struct {
 	Result WaitingRoomEventGetResponse             `json:"result,required"`
 	JSON   waitingRoomEventGetResponseEnvelopeJSON `json:"-"`
@@ -866,4 +922,8 @@ type waitingRoomEventGetResponseEnvelopeJSON struct {
 
 func (r *WaitingRoomEventGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomEventGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

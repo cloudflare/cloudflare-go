@@ -88,6 +88,10 @@ func (r *LogpushEdgeNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logpushEdgeNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogpushEdgeGetResponse struct {
 	// Unique WebSocket address that will receive messages from Cloudflare’s edge.
 	DestinationConf string `json:"destination_conf" format:"uri"`
@@ -117,6 +121,10 @@ type logpushEdgeGetResponseJSON struct {
 
 func (r *LogpushEdgeGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r logpushEdgeGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type LogpushEdgeNewParams struct {
@@ -159,6 +167,10 @@ func (r *LogpushEdgeNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logpushEdgeNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogpushEdgeNewResponseEnvelopeErrors struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -178,6 +190,10 @@ func (r *LogpushEdgeNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logpushEdgeNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogpushEdgeNewResponseEnvelopeMessages struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -195,6 +211,10 @@ type logpushEdgeNewResponseEnvelopeMessagesJSON struct {
 
 func (r *LogpushEdgeNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r logpushEdgeNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -233,6 +253,10 @@ func (r *LogpushEdgeGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logpushEdgeGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogpushEdgeGetResponseEnvelopeErrors struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -252,6 +276,10 @@ func (r *LogpushEdgeGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logpushEdgeGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogpushEdgeGetResponseEnvelopeMessages struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -269,6 +297,10 @@ type logpushEdgeGetResponseEnvelopeMessagesJSON struct {
 
 func (r *LogpushEdgeGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r logpushEdgeGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

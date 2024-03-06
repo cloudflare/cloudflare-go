@@ -96,6 +96,10 @@ func (r *ZeroTrustAccessUserListResponse) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessUserListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessUserListResponseEnvelope struct {
 	Errors   []ZeroTrustAccessUserListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustAccessUserListResponseEnvelopeMessages `json:"messages,required"`
@@ -122,6 +126,10 @@ func (r *ZeroTrustAccessUserListResponseEnvelope) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessUserListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessUserListResponseEnvelopeErrors struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -141,6 +149,10 @@ func (r *ZeroTrustAccessUserListResponseEnvelopeErrors) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessUserListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessUserListResponseEnvelopeMessages struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -158,6 +170,10 @@ type zeroTrustAccessUserListResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustAccessUserListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessUserListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -192,4 +208,8 @@ type zeroTrustAccessUserListResponseEnvelopeResultInfoJSON struct {
 
 func (r *ZeroTrustAccessUserListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessUserListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

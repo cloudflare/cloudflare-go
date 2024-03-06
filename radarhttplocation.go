@@ -80,6 +80,10 @@ func (r *RadarHTTPLocationGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarHTTPLocationGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarHTTPLocationGetResponseMeta struct {
 	DateRange      []RadarHTTPLocationGetResponseMetaDateRange    `json:"dateRange,required"`
 	LastUpdated    string                                         `json:"lastUpdated,required"`
@@ -99,6 +103,10 @@ type radarHTTPLocationGetResponseMetaJSON struct {
 
 func (r *RadarHTTPLocationGetResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarHTTPLocationGetResponseMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarHTTPLocationGetResponseMetaDateRange struct {
@@ -122,6 +130,10 @@ func (r *RadarHTTPLocationGetResponseMetaDateRange) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarHTTPLocationGetResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarHTTPLocationGetResponseMetaConfidenceInfo struct {
 	Annotations []RadarHTTPLocationGetResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                      `json:"level"`
@@ -139,6 +151,10 @@ type radarHTTPLocationGetResponseMetaConfidenceInfoJSON struct {
 
 func (r *RadarHTTPLocationGetResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarHTTPLocationGetResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarHTTPLocationGetResponseMetaConfidenceInfoAnnotation struct {
@@ -171,6 +187,10 @@ func (r *RadarHTTPLocationGetResponseMetaConfidenceInfoAnnotation) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarHTTPLocationGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarHTTPLocationGetResponseTop0 struct {
 	ClientCountryAlpha2 string                               `json:"clientCountryAlpha2,required"`
 	ClientCountryName   string                               `json:"clientCountryName,required"`
@@ -190,6 +210,10 @@ type radarHTTPLocationGetResponseTop0JSON struct {
 
 func (r *RadarHTTPLocationGetResponseTop0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarHTTPLocationGetResponseTop0JSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarHTTPLocationGetParams struct {
@@ -349,4 +373,8 @@ type radarHTTPLocationGetResponseEnvelopeJSON struct {
 
 func (r *RadarHTTPLocationGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarHTTPLocationGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

@@ -306,6 +306,10 @@ func (r *ZeroTrustTunnelConfigurationUpdateResponseEnvelope) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustTunnelConfigurationUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustTunnelConfigurationUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                        `json:"code,required"`
 	Message string                                                       `json:"message,required"`
@@ -326,6 +330,10 @@ func (r *ZeroTrustTunnelConfigurationUpdateResponseEnvelopeErrors) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustTunnelConfigurationUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustTunnelConfigurationUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                          `json:"code,required"`
 	Message string                                                         `json:"message,required"`
@@ -344,6 +352,10 @@ type zeroTrustTunnelConfigurationUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustTunnelConfigurationUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustTunnelConfigurationUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -382,6 +394,10 @@ func (r *ZeroTrustTunnelConfigurationGetResponseEnvelope) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustTunnelConfigurationGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustTunnelConfigurationGetResponseEnvelopeErrors struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -399,6 +415,10 @@ type zeroTrustTunnelConfigurationGetResponseEnvelopeErrorsJSON struct {
 
 func (r *ZeroTrustTunnelConfigurationGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustTunnelConfigurationGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustTunnelConfigurationGetResponseEnvelopeMessages struct {
@@ -419,6 +439,10 @@ type zeroTrustTunnelConfigurationGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustTunnelConfigurationGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustTunnelConfigurationGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

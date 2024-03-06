@@ -195,6 +195,10 @@ func (r *PageProjectDomainNewResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectDomainNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageProjectDomainNewResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -214,6 +218,10 @@ func (r *PageProjectDomainNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectDomainNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageProjectDomainNewResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -231,6 +239,10 @@ type pageProjectDomainNewResponseEnvelopeMessagesJSON struct {
 
 func (r *PageProjectDomainNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectDomainNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -271,6 +283,10 @@ func (r *PageProjectDomainListResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectDomainListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageProjectDomainListResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -290,6 +306,10 @@ func (r *PageProjectDomainListResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectDomainListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageProjectDomainListResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -307,6 +327,10 @@ type pageProjectDomainListResponseEnvelopeMessagesJSON struct {
 
 func (r *PageProjectDomainListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectDomainListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -337,6 +361,10 @@ type pageProjectDomainListResponseEnvelopeResultInfoJSON struct {
 
 func (r *PageProjectDomainListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectDomainListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type PageProjectDomainDeleteParams struct {
@@ -373,6 +401,10 @@ func (r *PageProjectDomainEditResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectDomainEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageProjectDomainEditResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -392,6 +424,10 @@ func (r *PageProjectDomainEditResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectDomainEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageProjectDomainEditResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -409,6 +445,10 @@ type pageProjectDomainEditResponseEnvelopeMessagesJSON struct {
 
 func (r *PageProjectDomainEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectDomainEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -447,6 +487,10 @@ func (r *PageProjectDomainGetResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectDomainGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageProjectDomainGetResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -466,6 +510,10 @@ func (r *PageProjectDomainGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectDomainGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageProjectDomainGetResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -483,6 +531,10 @@ type pageProjectDomainGetResponseEnvelopeMessagesJSON struct {
 
 func (r *PageProjectDomainGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectDomainGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

@@ -130,6 +130,10 @@ func (r *ZeroTrustAccessBookmarkNewResponse) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessBookmarkNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessBookmarkUpdateResponse struct {
 	// The unique identifier for the Bookmark application.
 	ID interface{} `json:"id"`
@@ -162,6 +166,10 @@ type zeroTrustAccessBookmarkUpdateResponseJSON struct {
 
 func (r *ZeroTrustAccessBookmarkUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessBookmarkUpdateResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustAccessBookmarkListResponse struct {
@@ -198,6 +206,10 @@ func (r *ZeroTrustAccessBookmarkListResponse) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessBookmarkListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessBookmarkDeleteResponse struct {
 	// UUID
 	ID   string                                    `json:"id"`
@@ -214,6 +226,10 @@ type zeroTrustAccessBookmarkDeleteResponseJSON struct {
 
 func (r *ZeroTrustAccessBookmarkDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessBookmarkDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustAccessBookmarkGetResponse struct {
@@ -250,6 +266,10 @@ func (r *ZeroTrustAccessBookmarkGetResponse) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessBookmarkGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessBookmarkNewResponseEnvelope struct {
 	Errors   []ZeroTrustAccessBookmarkNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustAccessBookmarkNewResponseEnvelopeMessages `json:"messages,required"`
@@ -274,6 +294,10 @@ func (r *ZeroTrustAccessBookmarkNewResponseEnvelope) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessBookmarkNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessBookmarkNewResponseEnvelopeErrors struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -293,6 +317,10 @@ func (r *ZeroTrustAccessBookmarkNewResponseEnvelopeErrors) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessBookmarkNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessBookmarkNewResponseEnvelopeMessages struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -310,6 +338,10 @@ type zeroTrustAccessBookmarkNewResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustAccessBookmarkNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessBookmarkNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -343,6 +375,10 @@ func (r *ZeroTrustAccessBookmarkUpdateResponseEnvelope) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessBookmarkUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessBookmarkUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -362,6 +398,10 @@ func (r *ZeroTrustAccessBookmarkUpdateResponseEnvelopeErrors) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessBookmarkUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessBookmarkUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -379,6 +419,10 @@ type zeroTrustAccessBookmarkUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustAccessBookmarkUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessBookmarkUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -414,6 +458,10 @@ func (r *ZeroTrustAccessBookmarkListResponseEnvelope) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessBookmarkListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessBookmarkListResponseEnvelopeErrors struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -433,6 +481,10 @@ func (r *ZeroTrustAccessBookmarkListResponseEnvelopeErrors) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessBookmarkListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessBookmarkListResponseEnvelopeMessages struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -450,6 +502,10 @@ type zeroTrustAccessBookmarkListResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustAccessBookmarkListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessBookmarkListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -486,6 +542,10 @@ func (r *ZeroTrustAccessBookmarkListResponseEnvelopeResultInfo) UnmarshalJSON(da
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessBookmarkListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessBookmarkDeleteResponseEnvelope struct {
 	Errors   []ZeroTrustAccessBookmarkDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustAccessBookmarkDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -510,6 +570,10 @@ func (r *ZeroTrustAccessBookmarkDeleteResponseEnvelope) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessBookmarkDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessBookmarkDeleteResponseEnvelopeErrors struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -529,6 +593,10 @@ func (r *ZeroTrustAccessBookmarkDeleteResponseEnvelopeErrors) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessBookmarkDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessBookmarkDeleteResponseEnvelopeMessages struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -546,6 +614,10 @@ type zeroTrustAccessBookmarkDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustAccessBookmarkDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessBookmarkDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -579,6 +651,10 @@ func (r *ZeroTrustAccessBookmarkGetResponseEnvelope) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessBookmarkGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessBookmarkGetResponseEnvelopeErrors struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -598,6 +674,10 @@ func (r *ZeroTrustAccessBookmarkGetResponseEnvelopeErrors) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessBookmarkGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessBookmarkGetResponseEnvelopeMessages struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -615,6 +695,10 @@ type zeroTrustAccessBookmarkGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustAccessBookmarkGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessBookmarkGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

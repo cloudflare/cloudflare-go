@@ -162,6 +162,10 @@ func (r *StreamLiveInputNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamLiveInputNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Records the input to a Cloudflare Stream video. Behavior depends on the mode. In
 // most cases, the video will initially be viewable as a live video and transition
 // to on-demand after a condition is satisfied.
@@ -200,6 +204,10 @@ func (r *StreamLiveInputNewResponseRecording) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamLiveInputNewResponseRecordingJSON) RawJSON() string {
+	return r.raw
+}
+
 // Specifies the recording behavior for the live input. Set this value to `off` to
 // prevent a recording. Set the value to `automatic` to begin a recording and
 // transition to on-demand after Stream Live stops receiving input.
@@ -232,6 +240,10 @@ func (r *StreamLiveInputNewResponseRtmps) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamLiveInputNewResponseRtmpsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Details for playback from an live input using RTMPS.
 type StreamLiveInputNewResponseRtmpsPlayback struct {
 	// The secret key to use for playback via RTMPS.
@@ -252,6 +264,10 @@ type streamLiveInputNewResponseRtmpsPlaybackJSON struct {
 
 func (r *StreamLiveInputNewResponseRtmpsPlayback) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamLiveInputNewResponseRtmpsPlaybackJSON) RawJSON() string {
+	return r.raw
 }
 
 // Details for streaming to a live input using SRT.
@@ -279,6 +295,10 @@ func (r *StreamLiveInputNewResponseSrt) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamLiveInputNewResponseSrtJSON) RawJSON() string {
+	return r.raw
+}
+
 // Details for playback from an live input using SRT.
 type StreamLiveInputNewResponseSrtPlayback struct {
 	// The secret key to use for playback via SRT.
@@ -302,6 +322,10 @@ type streamLiveInputNewResponseSrtPlaybackJSON struct {
 
 func (r *StreamLiveInputNewResponseSrtPlayback) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamLiveInputNewResponseSrtPlaybackJSON) RawJSON() string {
+	return r.raw
 }
 
 // The connection status of a live input.
@@ -337,6 +361,10 @@ func (r *StreamLiveInputNewResponseWebRtc) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamLiveInputNewResponseWebRtcJSON) RawJSON() string {
+	return r.raw
+}
+
 // Details for playback from a live input using WebRTC.
 type StreamLiveInputNewResponseWebRtcPlayback struct {
 	// The URL used to play live video over WebRTC.
@@ -354,6 +382,10 @@ type streamLiveInputNewResponseWebRtcPlaybackJSON struct {
 
 func (r *StreamLiveInputNewResponseWebRtcPlayback) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamLiveInputNewResponseWebRtcPlaybackJSON) RawJSON() string {
+	return r.raw
 }
 
 // Details about a live input.
@@ -418,6 +450,10 @@ func (r *StreamLiveInputUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamLiveInputUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Records the input to a Cloudflare Stream video. Behavior depends on the mode. In
 // most cases, the video will initially be viewable as a live video and transition
 // to on-demand after a condition is satisfied.
@@ -456,6 +492,10 @@ func (r *StreamLiveInputUpdateResponseRecording) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamLiveInputUpdateResponseRecordingJSON) RawJSON() string {
+	return r.raw
+}
+
 // Specifies the recording behavior for the live input. Set this value to `off` to
 // prevent a recording. Set the value to `automatic` to begin a recording and
 // transition to on-demand after Stream Live stops receiving input.
@@ -488,6 +528,10 @@ func (r *StreamLiveInputUpdateResponseRtmps) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamLiveInputUpdateResponseRtmpsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Details for playback from an live input using RTMPS.
 type StreamLiveInputUpdateResponseRtmpsPlayback struct {
 	// The secret key to use for playback via RTMPS.
@@ -508,6 +552,10 @@ type streamLiveInputUpdateResponseRtmpsPlaybackJSON struct {
 
 func (r *StreamLiveInputUpdateResponseRtmpsPlayback) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamLiveInputUpdateResponseRtmpsPlaybackJSON) RawJSON() string {
+	return r.raw
 }
 
 // Details for streaming to a live input using SRT.
@@ -535,6 +583,10 @@ func (r *StreamLiveInputUpdateResponseSrt) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamLiveInputUpdateResponseSrtJSON) RawJSON() string {
+	return r.raw
+}
+
 // Details for playback from an live input using SRT.
 type StreamLiveInputUpdateResponseSrtPlayback struct {
 	// The secret key to use for playback via SRT.
@@ -558,6 +610,10 @@ type streamLiveInputUpdateResponseSrtPlaybackJSON struct {
 
 func (r *StreamLiveInputUpdateResponseSrtPlayback) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamLiveInputUpdateResponseSrtPlaybackJSON) RawJSON() string {
+	return r.raw
 }
 
 // The connection status of a live input.
@@ -593,6 +649,10 @@ func (r *StreamLiveInputUpdateResponseWebRtc) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamLiveInputUpdateResponseWebRtcJSON) RawJSON() string {
+	return r.raw
+}
+
 // Details for playback from a live input using WebRTC.
 type StreamLiveInputUpdateResponseWebRtcPlayback struct {
 	// The URL used to play live video over WebRTC.
@@ -610,6 +670,10 @@ type streamLiveInputUpdateResponseWebRtcPlaybackJSON struct {
 
 func (r *StreamLiveInputUpdateResponseWebRtcPlayback) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamLiveInputUpdateResponseWebRtcPlaybackJSON) RawJSON() string {
+	return r.raw
 }
 
 type StreamLiveInputListResponse struct {
@@ -633,6 +697,10 @@ type streamLiveInputListResponseJSON struct {
 
 func (r *StreamLiveInputListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamLiveInputListResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type StreamLiveInputListResponseLiveInput struct {
@@ -668,6 +736,10 @@ type streamLiveInputListResponseLiveInputJSON struct {
 
 func (r *StreamLiveInputListResponseLiveInput) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamLiveInputListResponseLiveInputJSON) RawJSON() string {
+	return r.raw
 }
 
 // Details about a live input.
@@ -732,6 +804,10 @@ func (r *StreamLiveInputGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamLiveInputGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Records the input to a Cloudflare Stream video. Behavior depends on the mode. In
 // most cases, the video will initially be viewable as a live video and transition
 // to on-demand after a condition is satisfied.
@@ -770,6 +846,10 @@ func (r *StreamLiveInputGetResponseRecording) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamLiveInputGetResponseRecordingJSON) RawJSON() string {
+	return r.raw
+}
+
 // Specifies the recording behavior for the live input. Set this value to `off` to
 // prevent a recording. Set the value to `automatic` to begin a recording and
 // transition to on-demand after Stream Live stops receiving input.
@@ -802,6 +882,10 @@ func (r *StreamLiveInputGetResponseRtmps) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamLiveInputGetResponseRtmpsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Details for playback from an live input using RTMPS.
 type StreamLiveInputGetResponseRtmpsPlayback struct {
 	// The secret key to use for playback via RTMPS.
@@ -822,6 +906,10 @@ type streamLiveInputGetResponseRtmpsPlaybackJSON struct {
 
 func (r *StreamLiveInputGetResponseRtmpsPlayback) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamLiveInputGetResponseRtmpsPlaybackJSON) RawJSON() string {
+	return r.raw
 }
 
 // Details for streaming to a live input using SRT.
@@ -849,6 +937,10 @@ func (r *StreamLiveInputGetResponseSrt) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamLiveInputGetResponseSrtJSON) RawJSON() string {
+	return r.raw
+}
+
 // Details for playback from an live input using SRT.
 type StreamLiveInputGetResponseSrtPlayback struct {
 	// The secret key to use for playback via SRT.
@@ -872,6 +964,10 @@ type streamLiveInputGetResponseSrtPlaybackJSON struct {
 
 func (r *StreamLiveInputGetResponseSrtPlayback) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamLiveInputGetResponseSrtPlaybackJSON) RawJSON() string {
+	return r.raw
 }
 
 // The connection status of a live input.
@@ -907,6 +1003,10 @@ func (r *StreamLiveInputGetResponseWebRtc) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamLiveInputGetResponseWebRtcJSON) RawJSON() string {
+	return r.raw
+}
+
 // Details for playback from a live input using WebRTC.
 type StreamLiveInputGetResponseWebRtcPlayback struct {
 	// The URL used to play live video over WebRTC.
@@ -924,6 +1024,10 @@ type streamLiveInputGetResponseWebRtcPlaybackJSON struct {
 
 func (r *StreamLiveInputGetResponseWebRtcPlayback) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamLiveInputGetResponseWebRtcPlaybackJSON) RawJSON() string {
+	return r.raw
 }
 
 type StreamLiveInputNewParams struct {
@@ -1011,6 +1115,10 @@ func (r *StreamLiveInputNewResponseEnvelope) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamLiveInputNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamLiveInputNewResponseEnvelopeErrors struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -1030,6 +1138,10 @@ func (r *StreamLiveInputNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamLiveInputNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamLiveInputNewResponseEnvelopeMessages struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -1047,6 +1159,10 @@ type streamLiveInputNewResponseEnvelopeMessagesJSON struct {
 
 func (r *StreamLiveInputNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamLiveInputNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1141,6 +1257,10 @@ func (r *StreamLiveInputUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamLiveInputUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamLiveInputUpdateResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -1160,6 +1280,10 @@ func (r *StreamLiveInputUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamLiveInputUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamLiveInputUpdateResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -1177,6 +1301,10 @@ type streamLiveInputUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *StreamLiveInputUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamLiveInputUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1227,6 +1355,10 @@ func (r *StreamLiveInputListResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamLiveInputListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamLiveInputListResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -1246,6 +1378,10 @@ func (r *StreamLiveInputListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamLiveInputListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamLiveInputListResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -1263,6 +1399,10 @@ type streamLiveInputListResponseEnvelopeMessagesJSON struct {
 
 func (r *StreamLiveInputListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamLiveInputListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1307,6 +1447,10 @@ func (r *StreamLiveInputGetResponseEnvelope) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamLiveInputGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamLiveInputGetResponseEnvelopeErrors struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -1326,6 +1470,10 @@ func (r *StreamLiveInputGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamLiveInputGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamLiveInputGetResponseEnvelopeMessages struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -1343,6 +1491,10 @@ type streamLiveInputGetResponseEnvelopeMessagesJSON struct {
 
 func (r *StreamLiveInputGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamLiveInputGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

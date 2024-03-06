@@ -67,6 +67,10 @@ func (r *RadarBGPHijackEventsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarBGPHijackEventsResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarBGPHijackEventsResponseASNInfo struct {
 	ASN         int64                                   `json:"asn,required"`
 	CountryCode string                                  `json:"country_code,required"`
@@ -86,6 +90,10 @@ type radarBGPHijackEventsResponseASNInfoJSON struct {
 
 func (r *RadarBGPHijackEventsResponseASNInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarBGPHijackEventsResponseASNInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarBGPHijackEventsResponseEvent struct {
@@ -139,6 +147,10 @@ func (r *RadarBGPHijackEventsResponseEvent) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarBGPHijackEventsResponseEventJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarBGPHijackEventsResponseEventsTag struct {
 	Name  string                                    `json:"name,required"`
 	Score int64                                     `json:"score,required"`
@@ -156,6 +168,10 @@ type radarBGPHijackEventsResponseEventsTagJSON struct {
 
 func (r *RadarBGPHijackEventsResponseEventsTag) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarBGPHijackEventsResponseEventsTagJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarBGPHijackEventsParams struct {
@@ -271,6 +287,10 @@ func (r *RadarBGPHijackEventsResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarBGPHijackEventsResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarBGPHijackEventsResponseEnvelopeResultInfo struct {
 	Count      int64                                              `json:"count,required"`
 	Page       int64                                              `json:"page,required"`
@@ -292,4 +312,8 @@ type radarBGPHijackEventsResponseEnvelopeResultInfoJSON struct {
 
 func (r *RadarBGPHijackEventsResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarBGPHijackEventsResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

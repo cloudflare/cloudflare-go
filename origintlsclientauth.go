@@ -138,6 +138,10 @@ func (r *OriginTLSClientAuthListResponse) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r originTLSClientAuthListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Union satisfied by [OriginTLSClientAuthDeleteResponseUnknown] or
 // [shared.UnionString].
 type OriginTLSClientAuthDeleteResponse interface {
@@ -209,6 +213,10 @@ func (r *OriginTLSClientAuthNewResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r originTLSClientAuthNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type OriginTLSClientAuthNewResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -228,6 +236,10 @@ func (r *OriginTLSClientAuthNewResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r originTLSClientAuthNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type OriginTLSClientAuthNewResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -245,6 +257,10 @@ type originTLSClientAuthNewResponseEnvelopeMessagesJSON struct {
 
 func (r *OriginTLSClientAuthNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r originTLSClientAuthNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -285,6 +301,10 @@ func (r *OriginTLSClientAuthListResponseEnvelope) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r originTLSClientAuthListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type OriginTLSClientAuthListResponseEnvelopeErrors struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -304,6 +324,10 @@ func (r *OriginTLSClientAuthListResponseEnvelopeErrors) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r originTLSClientAuthListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type OriginTLSClientAuthListResponseEnvelopeMessages struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -321,6 +345,10 @@ type originTLSClientAuthListResponseEnvelopeMessagesJSON struct {
 
 func (r *OriginTLSClientAuthListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r originTLSClientAuthListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -357,6 +385,10 @@ func (r *OriginTLSClientAuthListResponseEnvelopeResultInfo) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r originTLSClientAuthListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type OriginTLSClientAuthDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -386,6 +418,10 @@ func (r *OriginTLSClientAuthDeleteResponseEnvelope) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r originTLSClientAuthDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type OriginTLSClientAuthDeleteResponseEnvelopeErrors struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -405,6 +441,10 @@ func (r *OriginTLSClientAuthDeleteResponseEnvelopeErrors) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r originTLSClientAuthDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type OriginTLSClientAuthDeleteResponseEnvelopeMessages struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -422,6 +462,10 @@ type originTLSClientAuthDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *OriginTLSClientAuthDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r originTLSClientAuthDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -460,6 +504,10 @@ func (r *OriginTLSClientAuthGetResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r originTLSClientAuthGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type OriginTLSClientAuthGetResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -479,6 +527,10 @@ func (r *OriginTLSClientAuthGetResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r originTLSClientAuthGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type OriginTLSClientAuthGetResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -496,6 +548,10 @@ type originTLSClientAuthGetResponseEnvelopeMessagesJSON struct {
 
 func (r *OriginTLSClientAuthGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r originTLSClientAuthGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

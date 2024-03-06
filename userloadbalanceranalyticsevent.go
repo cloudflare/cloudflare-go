@@ -69,6 +69,10 @@ func (r *UserLoadBalancerAnalyticsEventListResponse) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userLoadBalancerAnalyticsEventListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserLoadBalancerAnalyticsEventListParams struct {
 	// If true, filter events where the origin status is healthy. If false, filter
 	// events where the origin status is unhealthy.
@@ -122,6 +126,10 @@ func (r *UserLoadBalancerAnalyticsEventListResponseEnvelope) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userLoadBalancerAnalyticsEventListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserLoadBalancerAnalyticsEventListResponseEnvelopeErrors struct {
 	Code    int64                                                        `json:"code,required"`
 	Message string                                                       `json:"message,required"`
@@ -142,6 +150,10 @@ func (r *UserLoadBalancerAnalyticsEventListResponseEnvelopeErrors) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userLoadBalancerAnalyticsEventListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserLoadBalancerAnalyticsEventListResponseEnvelopeMessages struct {
 	Code    int64                                                          `json:"code,required"`
 	Message string                                                         `json:"message,required"`
@@ -160,6 +172,10 @@ type userLoadBalancerAnalyticsEventListResponseEnvelopeMessagesJSON struct {
 
 func (r *UserLoadBalancerAnalyticsEventListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userLoadBalancerAnalyticsEventListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -195,4 +211,8 @@ type userLoadBalancerAnalyticsEventListResponseEnvelopeResultInfoJSON struct {
 
 func (r *UserLoadBalancerAnalyticsEventListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userLoadBalancerAnalyticsEventListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

@@ -65,6 +65,10 @@ func (r *SpeedAvailabilityListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r speedAvailabilityListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type SpeedAvailabilityListResponseQuota struct {
 	// Cloudflare plan.
 	Plan string `json:"plan"`
@@ -95,6 +99,10 @@ func (r *SpeedAvailabilityListResponseQuota) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r speedAvailabilityListResponseQuotaJSON) RawJSON() string {
+	return r.raw
+}
+
 // A test region with a label.
 type SpeedAvailabilityListResponseRegion struct {
 	Label string `json:"label"`
@@ -114,6 +122,10 @@ type speedAvailabilityListResponseRegionJSON struct {
 
 func (r *SpeedAvailabilityListResponseRegion) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r speedAvailabilityListResponseRegionJSON) RawJSON() string {
+	return r.raw
 }
 
 // A test region.
@@ -163,4 +175,8 @@ type speedAvailabilityListResponseEnvelopeJSON struct {
 
 func (r *SpeedAvailabilityListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r speedAvailabilityListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

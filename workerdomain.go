@@ -114,6 +114,10 @@ func (r *WorkerDomainUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerDomainUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerDomainListResponse struct {
 	// Identifer of the Worker Domain.
 	ID interface{} `json:"id"`
@@ -147,6 +151,10 @@ func (r *WorkerDomainListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerDomainListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerDomainGetResponse struct {
 	// Identifer of the Worker Domain.
 	ID interface{} `json:"id"`
@@ -178,6 +186,10 @@ type workerDomainGetResponseJSON struct {
 
 func (r *WorkerDomainGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerDomainGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type WorkerDomainUpdateParams struct {
@@ -220,6 +232,10 @@ func (r *WorkerDomainUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerDomainUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerDomainUpdateResponseEnvelopeErrors struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -239,6 +255,10 @@ func (r *WorkerDomainUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerDomainUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerDomainUpdateResponseEnvelopeMessages struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -256,6 +276,10 @@ type workerDomainUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *WorkerDomainUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerDomainUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -311,6 +335,10 @@ func (r *WorkerDomainListResponseEnvelope) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerDomainListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerDomainListResponseEnvelopeErrors struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -330,6 +358,10 @@ func (r *WorkerDomainListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerDomainListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerDomainListResponseEnvelopeMessages struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -347,6 +379,10 @@ type workerDomainListResponseEnvelopeMessagesJSON struct {
 
 func (r *WorkerDomainListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerDomainListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -388,6 +424,10 @@ func (r *WorkerDomainGetResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerDomainGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerDomainGetResponseEnvelopeErrors struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -407,6 +447,10 @@ func (r *WorkerDomainGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerDomainGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerDomainGetResponseEnvelopeMessages struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -424,6 +468,10 @@ type workerDomainGetResponseEnvelopeMessagesJSON struct {
 
 func (r *WorkerDomainGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerDomainGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

@@ -79,6 +79,10 @@ func (r *RadarDNSTopAsesResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarDNSTopAsesResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarDNSTopAsesResponseMeta struct {
 	DateRange      []RadarDNSTopAsesResponseMetaDateRange    `json:"dateRange,required"`
 	ConfidenceInfo RadarDNSTopAsesResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -96,6 +100,10 @@ type radarDNSTopAsesResponseMetaJSON struct {
 
 func (r *RadarDNSTopAsesResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarDNSTopAsesResponseMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarDNSTopAsesResponseMetaDateRange struct {
@@ -119,6 +127,10 @@ func (r *RadarDNSTopAsesResponseMetaDateRange) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarDNSTopAsesResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarDNSTopAsesResponseMetaConfidenceInfo struct {
 	Annotations []RadarDNSTopAsesResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                 `json:"level"`
@@ -136,6 +148,10 @@ type radarDNSTopAsesResponseMetaConfidenceInfoJSON struct {
 
 func (r *RadarDNSTopAsesResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarDNSTopAsesResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarDNSTopAsesResponseMetaConfidenceInfoAnnotation struct {
@@ -167,6 +183,10 @@ func (r *RadarDNSTopAsesResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarDNSTopAsesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarDNSTopAsesResponseTop0 struct {
 	ClientASN    int64                           `json:"clientASN,required"`
 	ClientAsName string                          `json:"clientASName,required"`
@@ -188,6 +208,10 @@ func (r *RadarDNSTopAsesResponseTop0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarDNSTopAsesResponseTop0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarDNSTopLocationsResponse struct {
 	Meta RadarDNSTopLocationsResponseMeta   `json:"meta,required"`
 	Top0 []RadarDNSTopLocationsResponseTop0 `json:"top_0,required"`
@@ -207,6 +231,10 @@ func (r *RadarDNSTopLocationsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarDNSTopLocationsResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarDNSTopLocationsResponseMeta struct {
 	DateRange      []RadarDNSTopLocationsResponseMetaDateRange    `json:"dateRange,required"`
 	ConfidenceInfo RadarDNSTopLocationsResponseMetaConfidenceInfo `json:"confidenceInfo"`
@@ -224,6 +252,10 @@ type radarDNSTopLocationsResponseMetaJSON struct {
 
 func (r *RadarDNSTopLocationsResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarDNSTopLocationsResponseMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarDNSTopLocationsResponseMetaDateRange struct {
@@ -247,6 +279,10 @@ func (r *RadarDNSTopLocationsResponseMetaDateRange) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarDNSTopLocationsResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarDNSTopLocationsResponseMetaConfidenceInfo struct {
 	Annotations []RadarDNSTopLocationsResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                      `json:"level"`
@@ -264,6 +300,10 @@ type radarDNSTopLocationsResponseMetaConfidenceInfoJSON struct {
 
 func (r *RadarDNSTopLocationsResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarDNSTopLocationsResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarDNSTopLocationsResponseMetaConfidenceInfoAnnotation struct {
@@ -296,6 +336,10 @@ func (r *RadarDNSTopLocationsResponseMetaConfidenceInfoAnnotation) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarDNSTopLocationsResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarDNSTopLocationsResponseTop0 struct {
 	ClientCountryAlpha2 string                               `json:"clientCountryAlpha2,required"`
 	ClientCountryName   string                               `json:"clientCountryName,required"`
@@ -315,6 +359,10 @@ type radarDNSTopLocationsResponseTop0JSON struct {
 
 func (r *RadarDNSTopLocationsResponseTop0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarDNSTopLocationsResponseTop0JSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarDNSTopAsesParams struct {
@@ -403,6 +451,10 @@ func (r *RadarDNSTopAsesResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarDNSTopAsesResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarDNSTopLocationsParams struct {
 	// Array of domain names.
 	Domain param.Field[[]string] `query:"domain,required"`
@@ -488,4 +540,8 @@ type radarDNSTopLocationsResponseEnvelopeJSON struct {
 
 func (r *RadarDNSTopLocationsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarDNSTopLocationsResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

@@ -100,6 +100,10 @@ func (r *AlertingV3DestinationEligibleGetResponseEnvelope) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3DestinationEligibleGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3DestinationEligibleGetResponseEnvelopeErrors struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -117,6 +121,10 @@ type alertingV3DestinationEligibleGetResponseEnvelopeErrorsJSON struct {
 
 func (r *AlertingV3DestinationEligibleGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r alertingV3DestinationEligibleGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type AlertingV3DestinationEligibleGetResponseEnvelopeMessages struct {
@@ -137,6 +145,10 @@ type alertingV3DestinationEligibleGetResponseEnvelopeMessagesJSON struct {
 
 func (r *AlertingV3DestinationEligibleGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r alertingV3DestinationEligibleGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -172,4 +184,8 @@ type alertingV3DestinationEligibleGetResponseEnvelopeResultInfoJSON struct {
 
 func (r *AlertingV3DestinationEligibleGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r alertingV3DestinationEligibleGetResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

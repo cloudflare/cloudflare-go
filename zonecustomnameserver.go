@@ -145,6 +145,10 @@ func (r *ZoneCustomNameserverUpdateResponseEnvelope) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneCustomNameserverUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneCustomNameserverUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -164,6 +168,10 @@ func (r *ZoneCustomNameserverUpdateResponseEnvelopeErrors) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneCustomNameserverUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneCustomNameserverUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -181,6 +189,10 @@ type zoneCustomNameserverUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneCustomNameserverUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneCustomNameserverUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -215,6 +227,10 @@ type zoneCustomNameserverUpdateResponseEnvelopeResultInfoJSON struct {
 
 func (r *ZoneCustomNameserverUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneCustomNameserverUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneCustomNameserverGetParams struct {
@@ -254,6 +270,10 @@ func (r *ZoneCustomNameserverGetResponseEnvelope) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneCustomNameserverGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneCustomNameserverGetResponseEnvelopeErrors struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -273,6 +293,10 @@ func (r *ZoneCustomNameserverGetResponseEnvelopeErrors) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneCustomNameserverGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneCustomNameserverGetResponseEnvelopeMessages struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -290,6 +314,10 @@ type zoneCustomNameserverGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneCustomNameserverGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneCustomNameserverGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -324,4 +352,8 @@ type zoneCustomNameserverGetResponseEnvelopeResultInfoJSON struct {
 
 func (r *ZoneCustomNameserverGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneCustomNameserverGetResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

@@ -67,6 +67,10 @@ func (r *SpeedScheduleNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r speedScheduleNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The test schedule.
 type SpeedScheduleNewResponseSchedule struct {
 	// The frequency of the test.
@@ -90,6 +94,10 @@ type speedScheduleNewResponseScheduleJSON struct {
 
 func (r *SpeedScheduleNewResponseSchedule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r speedScheduleNewResponseScheduleJSON) RawJSON() string {
+	return r.raw
 }
 
 // The frequency of the test.
@@ -162,6 +170,10 @@ func (r *SpeedScheduleNewResponseTest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r speedScheduleNewResponseTestJSON) RawJSON() string {
+	return r.raw
+}
+
 // The Lighthouse report.
 type SpeedScheduleNewResponseTestDesktopReport struct {
 	// Cumulative Layout Shift.
@@ -213,6 +225,10 @@ func (r *SpeedScheduleNewResponseTestDesktopReport) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r speedScheduleNewResponseTestDesktopReportJSON) RawJSON() string {
+	return r.raw
+}
+
 // The type of device.
 type SpeedScheduleNewResponseTestDesktopReportDeviceType string
 
@@ -243,6 +259,10 @@ type speedScheduleNewResponseTestDesktopReportErrorJSON struct {
 
 func (r *SpeedScheduleNewResponseTestDesktopReportError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r speedScheduleNewResponseTestDesktopReportErrorJSON) RawJSON() string {
+	return r.raw
 }
 
 // The error code of the Lighthouse result.
@@ -316,6 +336,10 @@ func (r *SpeedScheduleNewResponseTestMobileReport) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r speedScheduleNewResponseTestMobileReportJSON) RawJSON() string {
+	return r.raw
+}
+
 // The type of device.
 type SpeedScheduleNewResponseTestMobileReportDeviceType string
 
@@ -346,6 +370,10 @@ type speedScheduleNewResponseTestMobileReportErrorJSON struct {
 
 func (r *SpeedScheduleNewResponseTestMobileReportError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r speedScheduleNewResponseTestMobileReportErrorJSON) RawJSON() string {
+	return r.raw
 }
 
 // The error code of the Lighthouse result.
@@ -387,6 +415,10 @@ type speedScheduleNewResponseTestRegionJSON struct {
 
 func (r *SpeedScheduleNewResponseTestRegion) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r speedScheduleNewResponseTestRegionJSON) RawJSON() string {
+	return r.raw
 }
 
 // A test region.
@@ -481,4 +513,8 @@ type speedScheduleNewResponseEnvelopeJSON struct {
 
 func (r *SpeedScheduleNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r speedScheduleNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

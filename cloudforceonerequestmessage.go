@@ -122,6 +122,10 @@ func (r *CloudforceOneRequestMessageNewResponse) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cloudforceOneRequestMessageNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type CloudforceOneRequestMessageUpdateResponse struct {
 	// Message ID
 	ID int64 `json:"id,required"`
@@ -153,6 +157,10 @@ type cloudforceOneRequestMessageUpdateResponseJSON struct {
 
 func (r *CloudforceOneRequestMessageUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cloudforceOneRequestMessageUpdateResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Union satisfied by [CloudforceOneRequestMessageDeleteResponseUnknown],
@@ -210,6 +218,10 @@ func (r *CloudforceOneRequestMessageGetResponse) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cloudforceOneRequestMessageGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type CloudforceOneRequestMessageNewParams struct {
 	// Content of message
 	Content param.Field[string] `json:"content"`
@@ -243,6 +255,10 @@ func (r *CloudforceOneRequestMessageNewResponseEnvelope) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cloudforceOneRequestMessageNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CloudforceOneRequestMessageNewResponseEnvelopeErrors struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -262,6 +278,10 @@ func (r *CloudforceOneRequestMessageNewResponseEnvelopeErrors) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cloudforceOneRequestMessageNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type CloudforceOneRequestMessageNewResponseEnvelopeMessages struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -279,6 +299,10 @@ type cloudforceOneRequestMessageNewResponseEnvelopeMessagesJSON struct {
 
 func (r *CloudforceOneRequestMessageNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cloudforceOneRequestMessageNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -340,6 +364,10 @@ func (r *CloudforceOneRequestMessageUpdateResponseEnvelope) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cloudforceOneRequestMessageUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CloudforceOneRequestMessageUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                       `json:"code,required"`
 	Message string                                                      `json:"message,required"`
@@ -360,6 +388,10 @@ func (r *CloudforceOneRequestMessageUpdateResponseEnvelopeErrors) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cloudforceOneRequestMessageUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type CloudforceOneRequestMessageUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                         `json:"code,required"`
 	Message string                                                        `json:"message,required"`
@@ -378,6 +410,10 @@ type cloudforceOneRequestMessageUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *CloudforceOneRequestMessageUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cloudforceOneRequestMessageUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -411,6 +447,10 @@ func (r *CloudforceOneRequestMessageDeleteResponseEnvelope) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cloudforceOneRequestMessageDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CloudforceOneRequestMessageDeleteResponseEnvelopeErrors struct {
 	Code    int64                                                       `json:"code,required"`
 	Message string                                                      `json:"message,required"`
@@ -431,6 +471,10 @@ func (r *CloudforceOneRequestMessageDeleteResponseEnvelopeErrors) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cloudforceOneRequestMessageDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type CloudforceOneRequestMessageDeleteResponseEnvelopeMessages struct {
 	Code    int64                                                         `json:"code,required"`
 	Message string                                                        `json:"message,required"`
@@ -449,6 +493,10 @@ type cloudforceOneRequestMessageDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *CloudforceOneRequestMessageDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cloudforceOneRequestMessageDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -509,6 +557,10 @@ func (r *CloudforceOneRequestMessageGetResponseEnvelope) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cloudforceOneRequestMessageGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CloudforceOneRequestMessageGetResponseEnvelopeErrors struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -528,6 +580,10 @@ func (r *CloudforceOneRequestMessageGetResponseEnvelopeErrors) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cloudforceOneRequestMessageGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type CloudforceOneRequestMessageGetResponseEnvelopeMessages struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -545,6 +601,10 @@ type cloudforceOneRequestMessageGetResponseEnvelopeMessagesJSON struct {
 
 func (r *CloudforceOneRequestMessageGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cloudforceOneRequestMessageGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

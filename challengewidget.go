@@ -178,6 +178,10 @@ func (r *ChallengeWidgetNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r challengeWidgetNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // If Turnstile is embedded on a Cloudflare site and the widget should grant
 // challenge clearance, this setting can determine the clearance level to be set
 type ChallengeWidgetNewResponseClearanceLevel string
@@ -257,6 +261,10 @@ func (r *ChallengeWidgetUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r challengeWidgetUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // If Turnstile is embedded on a Cloudflare site and the widget should grant
 // challenge clearance, this setting can determine the clearance level to be set
 type ChallengeWidgetUpdateResponseClearanceLevel string
@@ -331,6 +339,10 @@ type challengeWidgetListResponseJSON struct {
 
 func (r *ChallengeWidgetListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r challengeWidgetListResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // If Turnstile is embedded on a Cloudflare site and the widget should grant
@@ -412,6 +424,10 @@ func (r *ChallengeWidgetDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r challengeWidgetDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // If Turnstile is embedded on a Cloudflare site and the widget should grant
 // challenge clearance, this setting can determine the clearance level to be set
 type ChallengeWidgetDeleteResponseClearanceLevel string
@@ -491,6 +507,10 @@ func (r *ChallengeWidgetGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r challengeWidgetGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // If Turnstile is embedded on a Cloudflare site and the widget should grant
 // challenge clearance, this setting can determine the clearance level to be set
 type ChallengeWidgetGetResponseClearanceLevel string
@@ -568,6 +588,10 @@ type challengeWidgetRotateSecretResponseJSON struct {
 
 func (r *ChallengeWidgetRotateSecretResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r challengeWidgetRotateSecretResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // If Turnstile is embedded on a Cloudflare site and the widget should grant
@@ -711,6 +735,10 @@ func (r *ChallengeWidgetNewResponseEnvelope) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r challengeWidgetNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ChallengeWidgetNewResponseEnvelopeErrors struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -730,6 +758,10 @@ func (r *ChallengeWidgetNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r challengeWidgetNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ChallengeWidgetNewResponseEnvelopeMessages struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -747,6 +779,10 @@ type challengeWidgetNewResponseEnvelopeMessagesJSON struct {
 
 func (r *ChallengeWidgetNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r challengeWidgetNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ChallengeWidgetNewResponseEnvelopeResultInfo struct {
@@ -774,6 +810,10 @@ type challengeWidgetNewResponseEnvelopeResultInfoJSON struct {
 
 func (r *ChallengeWidgetNewResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r challengeWidgetNewResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type ChallengeWidgetUpdateParams struct {
@@ -843,6 +883,10 @@ func (r *ChallengeWidgetUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r challengeWidgetUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ChallengeWidgetUpdateResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -862,6 +906,10 @@ func (r *ChallengeWidgetUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r challengeWidgetUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ChallengeWidgetUpdateResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -879,6 +927,10 @@ type challengeWidgetUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *ChallengeWidgetUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r challengeWidgetUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ChallengeWidgetListParams struct {
@@ -945,6 +997,10 @@ func (r *ChallengeWidgetDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r challengeWidgetDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ChallengeWidgetDeleteResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -964,6 +1020,10 @@ func (r *ChallengeWidgetDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r challengeWidgetDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ChallengeWidgetDeleteResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -981,6 +1041,10 @@ type challengeWidgetDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *ChallengeWidgetDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r challengeWidgetDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ChallengeWidgetGetResponseEnvelope struct {
@@ -1008,6 +1072,10 @@ func (r *ChallengeWidgetGetResponseEnvelope) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r challengeWidgetGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ChallengeWidgetGetResponseEnvelopeErrors struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -1027,6 +1095,10 @@ func (r *ChallengeWidgetGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r challengeWidgetGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ChallengeWidgetGetResponseEnvelopeMessages struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -1044,6 +1116,10 @@ type challengeWidgetGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ChallengeWidgetGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r challengeWidgetGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ChallengeWidgetRotateSecretParams struct {
@@ -1082,6 +1158,10 @@ func (r *ChallengeWidgetRotateSecretResponseEnvelope) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r challengeWidgetRotateSecretResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ChallengeWidgetRotateSecretResponseEnvelopeErrors struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -1101,6 +1181,10 @@ func (r *ChallengeWidgetRotateSecretResponseEnvelopeErrors) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r challengeWidgetRotateSecretResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ChallengeWidgetRotateSecretResponseEnvelopeMessages struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -1118,4 +1202,8 @@ type challengeWidgetRotateSecretResponseEnvelopeMessagesJSON struct {
 
 func (r *ChallengeWidgetRotateSecretResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r challengeWidgetRotateSecretResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }

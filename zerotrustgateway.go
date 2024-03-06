@@ -99,6 +99,10 @@ func (r *ZeroTrustGatewayNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayListResponse struct {
 	// Cloudflare account ID.
 	ID string `json:"id"`
@@ -121,6 +125,10 @@ type zeroTrustGatewayListResponseJSON struct {
 
 func (r *ZeroTrustGatewayListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayListResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustGatewayNewParams struct {
@@ -151,6 +159,10 @@ func (r *ZeroTrustGatewayNewResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayNewResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -170,6 +182,10 @@ func (r *ZeroTrustGatewayNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayNewResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -187,6 +203,10 @@ type zeroTrustGatewayNewResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustGatewayNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -224,6 +244,10 @@ func (r *ZeroTrustGatewayListResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayListResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -243,6 +267,10 @@ func (r *ZeroTrustGatewayListResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayListResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -260,6 +288,10 @@ type zeroTrustGatewayListResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustGatewayListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

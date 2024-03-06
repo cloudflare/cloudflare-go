@@ -129,6 +129,10 @@ func (r *MagicTransitRouteNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitRouteNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitRouteNewResponseRoute struct {
 	// The next-hop IP Address for the static route.
 	Nexthop string `json:"nexthop,required"`
@@ -171,6 +175,10 @@ func (r *MagicTransitRouteNewResponseRoute) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitRouteNewResponseRouteJSON) RawJSON() string {
+	return r.raw
+}
+
 // Used only for ECMP routes.
 type MagicTransitRouteNewResponseRoutesScope struct {
 	// List of colo names for the ECMP scope.
@@ -193,6 +201,10 @@ func (r *MagicTransitRouteNewResponseRoutesScope) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitRouteNewResponseRoutesScopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitRouteUpdateResponse struct {
 	Modified      bool                                `json:"modified"`
 	ModifiedRoute interface{}                         `json:"modified_route"`
@@ -212,6 +224,10 @@ func (r *MagicTransitRouteUpdateResponse) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitRouteUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitRouteListResponse struct {
 	Routes []MagicTransitRouteListResponseRoute `json:"routes"`
 	JSON   magicTransitRouteListResponseJSON    `json:"-"`
@@ -227,6 +243,10 @@ type magicTransitRouteListResponseJSON struct {
 
 func (r *MagicTransitRouteListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitRouteListResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type MagicTransitRouteListResponseRoute struct {
@@ -271,6 +291,10 @@ func (r *MagicTransitRouteListResponseRoute) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitRouteListResponseRouteJSON) RawJSON() string {
+	return r.raw
+}
+
 // Used only for ECMP routes.
 type MagicTransitRouteListResponseRoutesScope struct {
 	// List of colo names for the ECMP scope.
@@ -293,6 +317,10 @@ func (r *MagicTransitRouteListResponseRoutesScope) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitRouteListResponseRoutesScopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitRouteDeleteResponse struct {
 	Deleted      bool                                `json:"deleted"`
 	DeletedRoute interface{}                         `json:"deleted_route"`
@@ -310,6 +338,10 @@ type magicTransitRouteDeleteResponseJSON struct {
 
 func (r *MagicTransitRouteDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitRouteDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type MagicTransitRouteEmptyResponse struct {
@@ -331,6 +363,10 @@ func (r *MagicTransitRouteEmptyResponse) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitRouteEmptyResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitRouteGetResponse struct {
 	Route interface{}                      `json:"route"`
 	JSON  magicTransitRouteGetResponseJSON `json:"-"`
@@ -346,6 +382,10 @@ type magicTransitRouteGetResponseJSON struct {
 
 func (r *MagicTransitRouteGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitRouteGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type MagicTransitRouteNewParams struct {
@@ -380,6 +420,10 @@ func (r *MagicTransitRouteNewResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitRouteNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitRouteNewResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -399,6 +443,10 @@ func (r *MagicTransitRouteNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitRouteNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitRouteNewResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -416,6 +464,10 @@ type magicTransitRouteNewResponseEnvelopeMessagesJSON struct {
 
 func (r *MagicTransitRouteNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitRouteNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -480,6 +532,10 @@ func (r *MagicTransitRouteUpdateResponseEnvelope) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitRouteUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitRouteUpdateResponseEnvelopeErrors struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -499,6 +555,10 @@ func (r *MagicTransitRouteUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitRouteUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitRouteUpdateResponseEnvelopeMessages struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -516,6 +576,10 @@ type magicTransitRouteUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *MagicTransitRouteUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitRouteUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -549,6 +613,10 @@ func (r *MagicTransitRouteListResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitRouteListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitRouteListResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -568,6 +636,10 @@ func (r *MagicTransitRouteListResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitRouteListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitRouteListResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -585,6 +657,10 @@ type magicTransitRouteListResponseEnvelopeMessagesJSON struct {
 
 func (r *MagicTransitRouteListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitRouteListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -618,6 +694,10 @@ func (r *MagicTransitRouteDeleteResponseEnvelope) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitRouteDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitRouteDeleteResponseEnvelopeErrors struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -637,6 +717,10 @@ func (r *MagicTransitRouteDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitRouteDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitRouteDeleteResponseEnvelopeMessages struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -654,6 +738,10 @@ type magicTransitRouteDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *MagicTransitRouteDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitRouteDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -702,6 +790,10 @@ func (r *MagicTransitRouteEmptyResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitRouteEmptyResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitRouteEmptyResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -721,6 +813,10 @@ func (r *MagicTransitRouteEmptyResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitRouteEmptyResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitRouteEmptyResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -738,6 +834,10 @@ type magicTransitRouteEmptyResponseEnvelopeMessagesJSON struct {
 
 func (r *MagicTransitRouteEmptyResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitRouteEmptyResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -771,6 +871,10 @@ func (r *MagicTransitRouteGetResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitRouteGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitRouteGetResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -790,6 +894,10 @@ func (r *MagicTransitRouteGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitRouteGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitRouteGetResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -807,6 +915,10 @@ type magicTransitRouteGetResponseEnvelopeMessagesJSON struct {
 
 func (r *MagicTransitRouteGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitRouteGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

@@ -130,6 +130,10 @@ func (r *RadarEmailRoutingSummaryARCResponse) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingSummaryARCResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingSummaryARCResponseMeta struct {
 	DateRange      []RadarEmailRoutingSummaryARCResponseMetaDateRange    `json:"dateRange,required"`
 	LastUpdated    string                                                `json:"lastUpdated,required"`
@@ -153,6 +157,10 @@ func (r *RadarEmailRoutingSummaryARCResponseMeta) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingSummaryARCResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingSummaryARCResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
@@ -174,6 +182,10 @@ func (r *RadarEmailRoutingSummaryARCResponseMetaDateRange) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingSummaryARCResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingSummaryARCResponseMetaConfidenceInfo struct {
 	Annotations []RadarEmailRoutingSummaryARCResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                             `json:"level"`
@@ -191,6 +203,10 @@ type radarEmailRoutingSummaryARCResponseMetaConfidenceInfoJSON struct {
 
 func (r *RadarEmailRoutingSummaryARCResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailRoutingSummaryARCResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailRoutingSummaryARCResponseMetaConfidenceInfoAnnotation struct {
@@ -223,6 +239,10 @@ func (r *RadarEmailRoutingSummaryARCResponseMetaConfidenceInfoAnnotation) Unmars
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingSummaryARCResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingSummaryARCResponseSummary0 struct {
 	Fail string                                          `json:"FAIL,required"`
 	None string                                          `json:"NONE,required"`
@@ -244,6 +264,10 @@ func (r *RadarEmailRoutingSummaryARCResponseSummary0) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingSummaryARCResponseSummary0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingSummaryDKIMResponse struct {
 	Meta     RadarEmailRoutingSummaryDKIMResponseMeta     `json:"meta,required"`
 	Summary0 RadarEmailRoutingSummaryDKIMResponseSummary0 `json:"summary_0,required"`
@@ -261,6 +285,10 @@ type radarEmailRoutingSummaryDKIMResponseJSON struct {
 
 func (r *RadarEmailRoutingSummaryDKIMResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailRoutingSummaryDKIMResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailRoutingSummaryDKIMResponseMeta struct {
@@ -286,6 +314,10 @@ func (r *RadarEmailRoutingSummaryDKIMResponseMeta) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingSummaryDKIMResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingSummaryDKIMResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
@@ -307,6 +339,10 @@ func (r *RadarEmailRoutingSummaryDKIMResponseMetaDateRange) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingSummaryDKIMResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingSummaryDKIMResponseMetaConfidenceInfo struct {
 	Annotations []RadarEmailRoutingSummaryDKIMResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                              `json:"level"`
@@ -324,6 +360,10 @@ type radarEmailRoutingSummaryDKIMResponseMetaConfidenceInfoJSON struct {
 
 func (r *RadarEmailRoutingSummaryDKIMResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailRoutingSummaryDKIMResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailRoutingSummaryDKIMResponseMetaConfidenceInfoAnnotation struct {
@@ -356,6 +396,10 @@ func (r *RadarEmailRoutingSummaryDKIMResponseMetaConfidenceInfoAnnotation) Unmar
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingSummaryDKIMResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingSummaryDKIMResponseSummary0 struct {
 	Fail string                                           `json:"FAIL,required"`
 	None string                                           `json:"NONE,required"`
@@ -377,6 +421,10 @@ func (r *RadarEmailRoutingSummaryDKIMResponseSummary0) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingSummaryDKIMResponseSummary0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingSummaryDMARCResponse struct {
 	Meta     RadarEmailRoutingSummaryDMARCResponseMeta     `json:"meta,required"`
 	Summary0 RadarEmailRoutingSummaryDMARCResponseSummary0 `json:"summary_0,required"`
@@ -394,6 +442,10 @@ type radarEmailRoutingSummaryDMARCResponseJSON struct {
 
 func (r *RadarEmailRoutingSummaryDMARCResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailRoutingSummaryDMARCResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailRoutingSummaryDMARCResponseMeta struct {
@@ -419,6 +471,10 @@ func (r *RadarEmailRoutingSummaryDMARCResponseMeta) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingSummaryDMARCResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingSummaryDMARCResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
@@ -440,6 +496,10 @@ func (r *RadarEmailRoutingSummaryDMARCResponseMetaDateRange) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingSummaryDMARCResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingSummaryDMARCResponseMetaConfidenceInfo struct {
 	Annotations []RadarEmailRoutingSummaryDMARCResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                               `json:"level"`
@@ -458,6 +518,10 @@ type radarEmailRoutingSummaryDMARCResponseMetaConfidenceInfoJSON struct {
 
 func (r *RadarEmailRoutingSummaryDMARCResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailRoutingSummaryDMARCResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailRoutingSummaryDMARCResponseMetaConfidenceInfoAnnotation struct {
@@ -490,6 +554,10 @@ func (r *RadarEmailRoutingSummaryDMARCResponseMetaConfidenceInfoAnnotation) Unma
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingSummaryDMARCResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingSummaryDMARCResponseSummary0 struct {
 	Fail string                                            `json:"FAIL,required"`
 	None string                                            `json:"NONE,required"`
@@ -511,6 +579,10 @@ func (r *RadarEmailRoutingSummaryDMARCResponseSummary0) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingSummaryDMARCResponseSummary0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingSummaryEncryptedResponse struct {
 	Meta     RadarEmailRoutingSummaryEncryptedResponseMeta     `json:"meta,required"`
 	Summary0 RadarEmailRoutingSummaryEncryptedResponseSummary0 `json:"summary_0,required"`
@@ -528,6 +600,10 @@ type radarEmailRoutingSummaryEncryptedResponseJSON struct {
 
 func (r *RadarEmailRoutingSummaryEncryptedResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailRoutingSummaryEncryptedResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailRoutingSummaryEncryptedResponseMeta struct {
@@ -553,6 +629,10 @@ func (r *RadarEmailRoutingSummaryEncryptedResponseMeta) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingSummaryEncryptedResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingSummaryEncryptedResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
@@ -574,6 +654,10 @@ func (r *RadarEmailRoutingSummaryEncryptedResponseMetaDateRange) UnmarshalJSON(d
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingSummaryEncryptedResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingSummaryEncryptedResponseMetaConfidenceInfo struct {
 	Annotations []RadarEmailRoutingSummaryEncryptedResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                                   `json:"level"`
@@ -592,6 +676,10 @@ type radarEmailRoutingSummaryEncryptedResponseMetaConfidenceInfoJSON struct {
 
 func (r *RadarEmailRoutingSummaryEncryptedResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailRoutingSummaryEncryptedResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailRoutingSummaryEncryptedResponseMetaConfidenceInfoAnnotation struct {
@@ -624,6 +712,10 @@ func (r *RadarEmailRoutingSummaryEncryptedResponseMetaConfidenceInfoAnnotation) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingSummaryEncryptedResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingSummaryEncryptedResponseSummary0 struct {
 	Encrypted    string                                                `json:"ENCRYPTED,required"`
 	NotEncrypted string                                                `json:"NOT_ENCRYPTED,required"`
@@ -643,6 +735,10 @@ func (r *RadarEmailRoutingSummaryEncryptedResponseSummary0) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingSummaryEncryptedResponseSummary0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingSummaryIPVersionResponse struct {
 	Meta     RadarEmailRoutingSummaryIPVersionResponseMeta     `json:"meta,required"`
 	Summary0 RadarEmailRoutingSummaryIPVersionResponseSummary0 `json:"summary_0,required"`
@@ -660,6 +756,10 @@ type radarEmailRoutingSummaryIPVersionResponseJSON struct {
 
 func (r *RadarEmailRoutingSummaryIPVersionResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailRoutingSummaryIPVersionResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailRoutingSummaryIPVersionResponseMeta struct {
@@ -685,6 +785,10 @@ func (r *RadarEmailRoutingSummaryIPVersionResponseMeta) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingSummaryIPVersionResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingSummaryIPVersionResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
@@ -706,6 +810,10 @@ func (r *RadarEmailRoutingSummaryIPVersionResponseMetaDateRange) UnmarshalJSON(d
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingSummaryIPVersionResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingSummaryIPVersionResponseMetaConfidenceInfo struct {
 	Annotations []RadarEmailRoutingSummaryIPVersionResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                                   `json:"level"`
@@ -724,6 +832,10 @@ type radarEmailRoutingSummaryIPVersionResponseMetaConfidenceInfoJSON struct {
 
 func (r *RadarEmailRoutingSummaryIPVersionResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailRoutingSummaryIPVersionResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailRoutingSummaryIPVersionResponseMetaConfidenceInfoAnnotation struct {
@@ -756,6 +868,10 @@ func (r *RadarEmailRoutingSummaryIPVersionResponseMetaConfidenceInfoAnnotation) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingSummaryIPVersionResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingSummaryIPVersionResponseSummary0 struct {
 	IPv4 string                                                `json:"IPv4,required"`
 	IPv6 string                                                `json:"IPv6,required"`
@@ -775,6 +891,10 @@ func (r *RadarEmailRoutingSummaryIPVersionResponseSummary0) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingSummaryIPVersionResponseSummary0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingSummarySPFResponse struct {
 	Meta     RadarEmailRoutingSummarySPFResponseMeta     `json:"meta,required"`
 	Summary0 RadarEmailRoutingSummarySPFResponseSummary0 `json:"summary_0,required"`
@@ -792,6 +912,10 @@ type radarEmailRoutingSummarySPFResponseJSON struct {
 
 func (r *RadarEmailRoutingSummarySPFResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailRoutingSummarySPFResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailRoutingSummarySPFResponseMeta struct {
@@ -817,6 +941,10 @@ func (r *RadarEmailRoutingSummarySPFResponseMeta) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingSummarySPFResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingSummarySPFResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
@@ -838,6 +966,10 @@ func (r *RadarEmailRoutingSummarySPFResponseMetaDateRange) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingSummarySPFResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingSummarySPFResponseMetaConfidenceInfo struct {
 	Annotations []RadarEmailRoutingSummarySPFResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                             `json:"level"`
@@ -855,6 +987,10 @@ type radarEmailRoutingSummarySPFResponseMetaConfidenceInfoJSON struct {
 
 func (r *RadarEmailRoutingSummarySPFResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailRoutingSummarySPFResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailRoutingSummarySPFResponseMetaConfidenceInfoAnnotation struct {
@@ -887,6 +1023,10 @@ func (r *RadarEmailRoutingSummarySPFResponseMetaConfidenceInfoAnnotation) Unmars
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingSummarySPFResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingSummarySPFResponseSummary0 struct {
 	Fail string                                          `json:"FAIL,required"`
 	None string                                          `json:"NONE,required"`
@@ -906,6 +1046,10 @@ type radarEmailRoutingSummarySPFResponseSummary0JSON struct {
 
 func (r *RadarEmailRoutingSummarySPFResponseSummary0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailRoutingSummarySPFResponseSummary0JSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailRoutingSummaryARCParams struct {
@@ -1027,6 +1171,10 @@ func (r *RadarEmailRoutingSummaryARCResponseEnvelope) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingSummaryARCResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingSummaryDKIMParams struct {
 	// Filter for arc (Authenticated Received Chain).
 	ARC param.Field[[]RadarEmailRoutingSummaryDKIMParamsARC] `query:"arc"`
@@ -1146,6 +1294,10 @@ func (r *RadarEmailRoutingSummaryDKIMResponseEnvelope) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingSummaryDKIMResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingSummaryDMARCParams struct {
 	// Filter for arc (Authenticated Received Chain).
 	ARC param.Field[[]RadarEmailRoutingSummaryDMARCParamsARC] `query:"arc"`
@@ -1263,6 +1415,10 @@ type radarEmailRoutingSummaryDMARCResponseEnvelopeJSON struct {
 
 func (r *RadarEmailRoutingSummaryDMARCResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailRoutingSummaryDMARCResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailRoutingSummaryEncryptedParams struct {
@@ -1385,6 +1541,10 @@ func (r *RadarEmailRoutingSummaryEncryptedResponseEnvelope) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingSummaryEncryptedResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingSummaryIPVersionParams struct {
 	// Filter for arc (Authenticated Received Chain).
 	ARC param.Field[[]RadarEmailRoutingSummaryIPVersionParamsARC] `query:"arc"`
@@ -1505,6 +1665,10 @@ func (r *RadarEmailRoutingSummaryIPVersionResponseEnvelope) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingSummaryIPVersionResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingSummarySPFParams struct {
 	// Filter for arc (Authenticated Received Chain).
 	ARC param.Field[[]RadarEmailRoutingSummarySPFParamsARC] `query:"arc"`
@@ -1622,4 +1786,8 @@ type radarEmailRoutingSummarySPFResponseEnvelopeJSON struct {
 
 func (r *RadarEmailRoutingSummarySPFResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailRoutingSummarySPFResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

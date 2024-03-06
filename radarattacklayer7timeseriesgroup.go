@@ -157,6 +157,10 @@ func (r *RadarAttackLayer7TimeseriesGroupGetResponse) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer7TimeseriesGroupGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer7TimeseriesGroupGetResponseMeta struct {
 	AggInterval    string                                                        `json:"aggInterval,required"`
 	DateRange      []RadarAttackLayer7TimeseriesGroupGetResponseMetaDateRange    `json:"dateRange,required"`
@@ -178,6 +182,10 @@ type radarAttackLayer7TimeseriesGroupGetResponseMetaJSON struct {
 
 func (r *RadarAttackLayer7TimeseriesGroupGetResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAttackLayer7TimeseriesGroupGetResponseMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarAttackLayer7TimeseriesGroupGetResponseMetaDateRange struct {
@@ -202,6 +210,10 @@ func (r *RadarAttackLayer7TimeseriesGroupGetResponseMetaDateRange) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer7TimeseriesGroupGetResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer7TimeseriesGroupGetResponseMetaConfidenceInfo struct {
 	Annotations []RadarAttackLayer7TimeseriesGroupGetResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                                     `json:"level"`
@@ -220,6 +232,10 @@ type radarAttackLayer7TimeseriesGroupGetResponseMetaConfidenceInfoJSON struct {
 
 func (r *RadarAttackLayer7TimeseriesGroupGetResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAttackLayer7TimeseriesGroupGetResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarAttackLayer7TimeseriesGroupGetResponseMetaConfidenceInfoAnnotation struct {
@@ -250,6 +266,10 @@ type radarAttackLayer7TimeseriesGroupGetResponseMetaConfidenceInfoAnnotationJSON
 
 func (r *RadarAttackLayer7TimeseriesGroupGetResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAttackLayer7TimeseriesGroupGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarAttackLayer7TimeseriesGroupGetResponseSerie0 struct {
@@ -283,6 +303,10 @@ func (r *RadarAttackLayer7TimeseriesGroupGetResponseSerie0) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer7TimeseriesGroupGetResponseSerie0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer7TimeseriesGroupHTTPMethodResponse struct {
 	Meta   interface{}                                              `json:"meta,required"`
 	Serie0 RadarAttackLayer7TimeseriesGroupHTTPMethodResponseSerie0 `json:"serie_0,required"`
@@ -300,6 +324,10 @@ type radarAttackLayer7TimeseriesGroupHTTPMethodResponseJSON struct {
 
 func (r *RadarAttackLayer7TimeseriesGroupHTTPMethodResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAttackLayer7TimeseriesGroupHTTPMethodResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarAttackLayer7TimeseriesGroupHTTPMethodResponseSerie0 struct {
@@ -322,6 +350,10 @@ func (r *RadarAttackLayer7TimeseriesGroupHTTPMethodResponseSerie0) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer7TimeseriesGroupHTTPMethodResponseSerie0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer7TimeseriesGroupHTTPVersionResponse struct {
 	Meta   interface{}                                               `json:"meta,required"`
 	Serie0 RadarAttackLayer7TimeseriesGroupHTTPVersionResponseSerie0 `json:"serie_0,required"`
@@ -339,6 +371,10 @@ type radarAttackLayer7TimeseriesGroupHTTPVersionResponseJSON struct {
 
 func (r *RadarAttackLayer7TimeseriesGroupHTTPVersionResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAttackLayer7TimeseriesGroupHTTPVersionResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarAttackLayer7TimeseriesGroupHTTPVersionResponseSerie0 struct {
@@ -361,6 +397,10 @@ func (r *RadarAttackLayer7TimeseriesGroupHTTPVersionResponseSerie0) UnmarshalJSO
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer7TimeseriesGroupHTTPVersionResponseSerie0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer7TimeseriesGroupIndustryResponse struct {
 	Meta   interface{}                                            `json:"meta,required"`
 	Serie0 RadarAttackLayer7TimeseriesGroupIndustryResponseSerie0 `json:"serie_0,required"`
@@ -378,6 +418,10 @@ type radarAttackLayer7TimeseriesGroupIndustryResponseJSON struct {
 
 func (r *RadarAttackLayer7TimeseriesGroupIndustryResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAttackLayer7TimeseriesGroupIndustryResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarAttackLayer7TimeseriesGroupIndustryResponseSerie0 struct {
@@ -398,6 +442,10 @@ func (r *RadarAttackLayer7TimeseriesGroupIndustryResponseSerie0) UnmarshalJSON(d
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer7TimeseriesGroupIndustryResponseSerie0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer7TimeseriesGroupIPVersionResponse struct {
 	Meta   interface{}                                             `json:"meta,required"`
 	Serie0 RadarAttackLayer7TimeseriesGroupIPVersionResponseSerie0 `json:"serie_0,required"`
@@ -415,6 +463,10 @@ type radarAttackLayer7TimeseriesGroupIPVersionResponseJSON struct {
 
 func (r *RadarAttackLayer7TimeseriesGroupIPVersionResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAttackLayer7TimeseriesGroupIPVersionResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarAttackLayer7TimeseriesGroupIPVersionResponseSerie0 struct {
@@ -439,6 +491,10 @@ func (r *RadarAttackLayer7TimeseriesGroupIPVersionResponseSerie0) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer7TimeseriesGroupIPVersionResponseSerie0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer7TimeseriesGroupManagedRulesResponse struct {
 	Meta   interface{}                                                `json:"meta,required"`
 	Serie0 RadarAttackLayer7TimeseriesGroupManagedRulesResponseSerie0 `json:"serie_0,required"`
@@ -456,6 +512,10 @@ type radarAttackLayer7TimeseriesGroupManagedRulesResponseJSON struct {
 
 func (r *RadarAttackLayer7TimeseriesGroupManagedRulesResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAttackLayer7TimeseriesGroupManagedRulesResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarAttackLayer7TimeseriesGroupManagedRulesResponseSerie0 struct {
@@ -478,6 +538,10 @@ func (r *RadarAttackLayer7TimeseriesGroupManagedRulesResponseSerie0) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer7TimeseriesGroupManagedRulesResponseSerie0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer7TimeseriesGroupMitigationProductResponse struct {
 	Meta   interface{}                                                     `json:"meta,required"`
 	Serie0 RadarAttackLayer7TimeseriesGroupMitigationProductResponseSerie0 `json:"serie_0,required"`
@@ -496,6 +560,10 @@ type radarAttackLayer7TimeseriesGroupMitigationProductResponseJSON struct {
 
 func (r *RadarAttackLayer7TimeseriesGroupMitigationProductResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAttackLayer7TimeseriesGroupMitigationProductResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarAttackLayer7TimeseriesGroupMitigationProductResponseSerie0 struct {
@@ -518,6 +586,10 @@ func (r *RadarAttackLayer7TimeseriesGroupMitigationProductResponseSerie0) Unmars
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer7TimeseriesGroupMitigationProductResponseSerie0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer7TimeseriesGroupVerticalResponse struct {
 	Meta   interface{}                                            `json:"meta,required"`
 	Serie0 RadarAttackLayer7TimeseriesGroupVerticalResponseSerie0 `json:"serie_0,required"`
@@ -537,6 +609,10 @@ func (r *RadarAttackLayer7TimeseriesGroupVerticalResponse) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer7TimeseriesGroupVerticalResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer7TimeseriesGroupVerticalResponseSerie0 struct {
 	Timestamps  []string                                                   `json:"timestamps,required"`
 	ExtraFields map[string][]string                                        `json:"-,extras"`
@@ -553,6 +629,10 @@ type radarAttackLayer7TimeseriesGroupVerticalResponseSerie0JSON struct {
 
 func (r *RadarAttackLayer7TimeseriesGroupVerticalResponseSerie0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAttackLayer7TimeseriesGroupVerticalResponseSerie0JSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarAttackLayer7TimeseriesGroupGetParams struct {
@@ -652,6 +732,10 @@ type radarAttackLayer7TimeseriesGroupGetResponseEnvelopeJSON struct {
 
 func (r *RadarAttackLayer7TimeseriesGroupGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAttackLayer7TimeseriesGroupGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarAttackLayer7TimeseriesGroupHTTPMethodParams struct {
@@ -797,6 +881,10 @@ type radarAttackLayer7TimeseriesGroupHTTPMethodResponseEnvelopeJSON struct {
 
 func (r *RadarAttackLayer7TimeseriesGroupHTTPMethodResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAttackLayer7TimeseriesGroupHTTPMethodResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarAttackLayer7TimeseriesGroupHTTPVersionParams struct {
@@ -985,6 +1073,10 @@ type radarAttackLayer7TimeseriesGroupHTTPVersionResponseEnvelopeJSON struct {
 
 func (r *RadarAttackLayer7TimeseriesGroupHTTPVersionResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAttackLayer7TimeseriesGroupHTTPVersionResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarAttackLayer7TimeseriesGroupIndustryParams struct {
@@ -1188,6 +1280,10 @@ func (r *RadarAttackLayer7TimeseriesGroupIndustryResponseEnvelope) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer7TimeseriesGroupIndustryResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer7TimeseriesGroupIPVersionParams struct {
 	// Aggregation interval results should be returned in (for example, in 15 minutes
 	// or 1 hour intervals). Refer to
@@ -1375,6 +1471,10 @@ type radarAttackLayer7TimeseriesGroupIPVersionResponseEnvelopeJSON struct {
 
 func (r *RadarAttackLayer7TimeseriesGroupIPVersionResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAttackLayer7TimeseriesGroupIPVersionResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarAttackLayer7TimeseriesGroupManagedRulesParams struct {
@@ -1575,6 +1675,10 @@ func (r *RadarAttackLayer7TimeseriesGroupManagedRulesResponseEnvelope) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer7TimeseriesGroupManagedRulesResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer7TimeseriesGroupMitigationProductParams struct {
 	// Aggregation interval results should be returned in (for example, in 15 minutes
 	// or 1 hour intervals). Refer to
@@ -1757,6 +1861,10 @@ type radarAttackLayer7TimeseriesGroupMitigationProductResponseEnvelopeJSON struc
 
 func (r *RadarAttackLayer7TimeseriesGroupMitigationProductResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAttackLayer7TimeseriesGroupMitigationProductResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarAttackLayer7TimeseriesGroupVerticalParams struct {
@@ -1958,4 +2066,8 @@ type radarAttackLayer7TimeseriesGroupVerticalResponseEnvelopeJSON struct {
 
 func (r *RadarAttackLayer7TimeseriesGroupVerticalResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAttackLayer7TimeseriesGroupVerticalResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

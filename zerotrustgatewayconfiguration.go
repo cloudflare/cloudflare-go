@@ -98,6 +98,10 @@ func (r *ZeroTrustGatewayConfigurationUpdateResponse) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayConfigurationUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // account settings.
 type ZeroTrustGatewayConfigurationUpdateResponseSettings struct {
 	// Activity log settings.
@@ -144,6 +148,10 @@ func (r *ZeroTrustGatewayConfigurationUpdateResponseSettings) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayConfigurationUpdateResponseSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Activity log settings.
 type ZeroTrustGatewayConfigurationUpdateResponseSettingsActivityLog struct {
 	// Enable activity logging.
@@ -162,6 +170,10 @@ type zeroTrustGatewayConfigurationUpdateResponseSettingsActivityLogJSON struct {
 
 func (r *ZeroTrustGatewayConfigurationUpdateResponseSettingsActivityLog) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayConfigurationUpdateResponseSettingsActivityLogJSON) RawJSON() string {
+	return r.raw
 }
 
 // Anti-virus settings.
@@ -194,6 +206,10 @@ func (r *ZeroTrustGatewayConfigurationUpdateResponseSettingsAntivirus) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayConfigurationUpdateResponseSettingsAntivirusJSON) RawJSON() string {
+	return r.raw
+}
+
 // Configure a message to display on the user's device when an antivirus search is
 // performed.
 type ZeroTrustGatewayConfigurationUpdateResponseSettingsAntivirusNotificationSettings struct {
@@ -220,6 +236,10 @@ type zeroTrustGatewayConfigurationUpdateResponseSettingsAntivirusNotificationSet
 
 func (r *ZeroTrustGatewayConfigurationUpdateResponseSettingsAntivirusNotificationSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayConfigurationUpdateResponseSettingsAntivirusNotificationSettingsJSON) RawJSON() string {
+	return r.raw
 }
 
 // Block page layout settings.
@@ -266,6 +286,10 @@ func (r *ZeroTrustGatewayConfigurationUpdateResponseSettingsBlockPage) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayConfigurationUpdateResponseSettingsBlockPageJSON) RawJSON() string {
+	return r.raw
+}
+
 // DLP body scanning settings.
 type ZeroTrustGatewayConfigurationUpdateResponseSettingsBodyScanning struct {
 	// Set the inspection mode to either `deep` or `shallow`.
@@ -284,6 +308,10 @@ type zeroTrustGatewayConfigurationUpdateResponseSettingsBodyScanningJSON struct 
 
 func (r *ZeroTrustGatewayConfigurationUpdateResponseSettingsBodyScanning) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayConfigurationUpdateResponseSettingsBodyScanningJSON) RawJSON() string {
+	return r.raw
 }
 
 // Browser isolation settings.
@@ -307,6 +335,10 @@ type zeroTrustGatewayConfigurationUpdateResponseSettingsBrowserIsolationJSON str
 
 func (r *ZeroTrustGatewayConfigurationUpdateResponseSettingsBrowserIsolation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayConfigurationUpdateResponseSettingsBrowserIsolationJSON) RawJSON() string {
+	return r.raw
 }
 
 // Custom certificate settings for BYO-PKI.
@@ -337,6 +369,10 @@ func (r *ZeroTrustGatewayConfigurationUpdateResponseSettingsCustomCertificate) U
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayConfigurationUpdateResponseSettingsCustomCertificateJSON) RawJSON() string {
+	return r.raw
+}
+
 // Extended e-mail matching settings.
 type ZeroTrustGatewayConfigurationUpdateResponseSettingsExtendedEmailMatching struct {
 	// Enable matching all variants of user emails (with + or . modifiers) used as
@@ -356,6 +392,10 @@ type zeroTrustGatewayConfigurationUpdateResponseSettingsExtendedEmailMatchingJSO
 
 func (r *ZeroTrustGatewayConfigurationUpdateResponseSettingsExtendedEmailMatching) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayConfigurationUpdateResponseSettingsExtendedEmailMatchingJSON) RawJSON() string {
+	return r.raw
 }
 
 // FIPS settings.
@@ -378,6 +418,10 @@ func (r *ZeroTrustGatewayConfigurationUpdateResponseSettingsFips) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayConfigurationUpdateResponseSettingsFipsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Protocol Detection settings.
 type ZeroTrustGatewayConfigurationUpdateResponseSettingsProtocolDetection struct {
 	// Enable detecting protocol on initial bytes of client traffic.
@@ -398,6 +442,10 @@ func (r *ZeroTrustGatewayConfigurationUpdateResponseSettingsProtocolDetection) U
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayConfigurationUpdateResponseSettingsProtocolDetectionJSON) RawJSON() string {
+	return r.raw
+}
+
 // TLS interception settings.
 type ZeroTrustGatewayConfigurationUpdateResponseSettingsTLSDecrypt struct {
 	// Enable inspecting encrypted HTTP traffic.
@@ -416,6 +464,10 @@ type zeroTrustGatewayConfigurationUpdateResponseSettingsTLSDecryptJSON struct {
 
 func (r *ZeroTrustGatewayConfigurationUpdateResponseSettingsTLSDecrypt) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayConfigurationUpdateResponseSettingsTLSDecryptJSON) RawJSON() string {
+	return r.raw
 }
 
 // account settings.
@@ -439,6 +491,10 @@ type zeroTrustGatewayConfigurationEditResponseJSON struct {
 
 func (r *ZeroTrustGatewayConfigurationEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayConfigurationEditResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // account settings.
@@ -487,6 +543,10 @@ func (r *ZeroTrustGatewayConfigurationEditResponseSettings) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayConfigurationEditResponseSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Activity log settings.
 type ZeroTrustGatewayConfigurationEditResponseSettingsActivityLog struct {
 	// Enable activity logging.
@@ -505,6 +565,10 @@ type zeroTrustGatewayConfigurationEditResponseSettingsActivityLogJSON struct {
 
 func (r *ZeroTrustGatewayConfigurationEditResponseSettingsActivityLog) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayConfigurationEditResponseSettingsActivityLogJSON) RawJSON() string {
+	return r.raw
 }
 
 // Anti-virus settings.
@@ -537,6 +601,10 @@ func (r *ZeroTrustGatewayConfigurationEditResponseSettingsAntivirus) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayConfigurationEditResponseSettingsAntivirusJSON) RawJSON() string {
+	return r.raw
+}
+
 // Configure a message to display on the user's device when an antivirus search is
 // performed.
 type ZeroTrustGatewayConfigurationEditResponseSettingsAntivirusNotificationSettings struct {
@@ -563,6 +631,10 @@ type zeroTrustGatewayConfigurationEditResponseSettingsAntivirusNotificationSetti
 
 func (r *ZeroTrustGatewayConfigurationEditResponseSettingsAntivirusNotificationSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayConfigurationEditResponseSettingsAntivirusNotificationSettingsJSON) RawJSON() string {
+	return r.raw
 }
 
 // Block page layout settings.
@@ -609,6 +681,10 @@ func (r *ZeroTrustGatewayConfigurationEditResponseSettingsBlockPage) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayConfigurationEditResponseSettingsBlockPageJSON) RawJSON() string {
+	return r.raw
+}
+
 // DLP body scanning settings.
 type ZeroTrustGatewayConfigurationEditResponseSettingsBodyScanning struct {
 	// Set the inspection mode to either `deep` or `shallow`.
@@ -627,6 +703,10 @@ type zeroTrustGatewayConfigurationEditResponseSettingsBodyScanningJSON struct {
 
 func (r *ZeroTrustGatewayConfigurationEditResponseSettingsBodyScanning) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayConfigurationEditResponseSettingsBodyScanningJSON) RawJSON() string {
+	return r.raw
 }
 
 // Browser isolation settings.
@@ -650,6 +730,10 @@ type zeroTrustGatewayConfigurationEditResponseSettingsBrowserIsolationJSON struc
 
 func (r *ZeroTrustGatewayConfigurationEditResponseSettingsBrowserIsolation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayConfigurationEditResponseSettingsBrowserIsolationJSON) RawJSON() string {
+	return r.raw
 }
 
 // Custom certificate settings for BYO-PKI.
@@ -680,6 +764,10 @@ func (r *ZeroTrustGatewayConfigurationEditResponseSettingsCustomCertificate) Unm
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayConfigurationEditResponseSettingsCustomCertificateJSON) RawJSON() string {
+	return r.raw
+}
+
 // Extended e-mail matching settings.
 type ZeroTrustGatewayConfigurationEditResponseSettingsExtendedEmailMatching struct {
 	// Enable matching all variants of user emails (with + or . modifiers) used as
@@ -701,6 +789,10 @@ func (r *ZeroTrustGatewayConfigurationEditResponseSettingsExtendedEmailMatching)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayConfigurationEditResponseSettingsExtendedEmailMatchingJSON) RawJSON() string {
+	return r.raw
+}
+
 // FIPS settings.
 type ZeroTrustGatewayConfigurationEditResponseSettingsFips struct {
 	// Enable only cipher suites and TLS versions compliant with FIPS 140-2.
@@ -718,6 +810,10 @@ type zeroTrustGatewayConfigurationEditResponseSettingsFipsJSON struct {
 
 func (r *ZeroTrustGatewayConfigurationEditResponseSettingsFips) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayConfigurationEditResponseSettingsFipsJSON) RawJSON() string {
+	return r.raw
 }
 
 // Protocol Detection settings.
@@ -740,6 +836,10 @@ func (r *ZeroTrustGatewayConfigurationEditResponseSettingsProtocolDetection) Unm
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayConfigurationEditResponseSettingsProtocolDetectionJSON) RawJSON() string {
+	return r.raw
+}
+
 // TLS interception settings.
 type ZeroTrustGatewayConfigurationEditResponseSettingsTLSDecrypt struct {
 	// Enable inspecting encrypted HTTP traffic.
@@ -758,6 +858,10 @@ type zeroTrustGatewayConfigurationEditResponseSettingsTLSDecryptJSON struct {
 
 func (r *ZeroTrustGatewayConfigurationEditResponseSettingsTLSDecrypt) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayConfigurationEditResponseSettingsTLSDecryptJSON) RawJSON() string {
+	return r.raw
 }
 
 // account settings.
@@ -781,6 +885,10 @@ type zeroTrustGatewayConfigurationGetResponseJSON struct {
 
 func (r *ZeroTrustGatewayConfigurationGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayConfigurationGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // account settings.
@@ -829,6 +937,10 @@ func (r *ZeroTrustGatewayConfigurationGetResponseSettings) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayConfigurationGetResponseSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Activity log settings.
 type ZeroTrustGatewayConfigurationGetResponseSettingsActivityLog struct {
 	// Enable activity logging.
@@ -847,6 +959,10 @@ type zeroTrustGatewayConfigurationGetResponseSettingsActivityLogJSON struct {
 
 func (r *ZeroTrustGatewayConfigurationGetResponseSettingsActivityLog) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayConfigurationGetResponseSettingsActivityLogJSON) RawJSON() string {
+	return r.raw
 }
 
 // Anti-virus settings.
@@ -879,6 +995,10 @@ func (r *ZeroTrustGatewayConfigurationGetResponseSettingsAntivirus) UnmarshalJSO
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayConfigurationGetResponseSettingsAntivirusJSON) RawJSON() string {
+	return r.raw
+}
+
 // Configure a message to display on the user's device when an antivirus search is
 // performed.
 type ZeroTrustGatewayConfigurationGetResponseSettingsAntivirusNotificationSettings struct {
@@ -905,6 +1025,10 @@ type zeroTrustGatewayConfigurationGetResponseSettingsAntivirusNotificationSettin
 
 func (r *ZeroTrustGatewayConfigurationGetResponseSettingsAntivirusNotificationSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayConfigurationGetResponseSettingsAntivirusNotificationSettingsJSON) RawJSON() string {
+	return r.raw
 }
 
 // Block page layout settings.
@@ -951,6 +1075,10 @@ func (r *ZeroTrustGatewayConfigurationGetResponseSettingsBlockPage) UnmarshalJSO
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayConfigurationGetResponseSettingsBlockPageJSON) RawJSON() string {
+	return r.raw
+}
+
 // DLP body scanning settings.
 type ZeroTrustGatewayConfigurationGetResponseSettingsBodyScanning struct {
 	// Set the inspection mode to either `deep` or `shallow`.
@@ -969,6 +1097,10 @@ type zeroTrustGatewayConfigurationGetResponseSettingsBodyScanningJSON struct {
 
 func (r *ZeroTrustGatewayConfigurationGetResponseSettingsBodyScanning) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayConfigurationGetResponseSettingsBodyScanningJSON) RawJSON() string {
+	return r.raw
 }
 
 // Browser isolation settings.
@@ -992,6 +1124,10 @@ type zeroTrustGatewayConfigurationGetResponseSettingsBrowserIsolationJSON struct
 
 func (r *ZeroTrustGatewayConfigurationGetResponseSettingsBrowserIsolation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayConfigurationGetResponseSettingsBrowserIsolationJSON) RawJSON() string {
+	return r.raw
 }
 
 // Custom certificate settings for BYO-PKI.
@@ -1022,6 +1158,10 @@ func (r *ZeroTrustGatewayConfigurationGetResponseSettingsCustomCertificate) Unma
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayConfigurationGetResponseSettingsCustomCertificateJSON) RawJSON() string {
+	return r.raw
+}
+
 // Extended e-mail matching settings.
 type ZeroTrustGatewayConfigurationGetResponseSettingsExtendedEmailMatching struct {
 	// Enable matching all variants of user emails (with + or . modifiers) used as
@@ -1043,6 +1183,10 @@ func (r *ZeroTrustGatewayConfigurationGetResponseSettingsExtendedEmailMatching) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayConfigurationGetResponseSettingsExtendedEmailMatchingJSON) RawJSON() string {
+	return r.raw
+}
+
 // FIPS settings.
 type ZeroTrustGatewayConfigurationGetResponseSettingsFips struct {
 	// Enable only cipher suites and TLS versions compliant with FIPS 140-2.
@@ -1060,6 +1204,10 @@ type zeroTrustGatewayConfigurationGetResponseSettingsFipsJSON struct {
 
 func (r *ZeroTrustGatewayConfigurationGetResponseSettingsFips) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayConfigurationGetResponseSettingsFipsJSON) RawJSON() string {
+	return r.raw
 }
 
 // Protocol Detection settings.
@@ -1082,6 +1230,10 @@ func (r *ZeroTrustGatewayConfigurationGetResponseSettingsProtocolDetection) Unma
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayConfigurationGetResponseSettingsProtocolDetectionJSON) RawJSON() string {
+	return r.raw
+}
+
 // TLS interception settings.
 type ZeroTrustGatewayConfigurationGetResponseSettingsTLSDecrypt struct {
 	// Enable inspecting encrypted HTTP traffic.
@@ -1100,6 +1252,10 @@ type zeroTrustGatewayConfigurationGetResponseSettingsTLSDecryptJSON struct {
 
 func (r *ZeroTrustGatewayConfigurationGetResponseSettingsTLSDecrypt) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayConfigurationGetResponseSettingsTLSDecryptJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustGatewayConfigurationUpdateParams struct {
@@ -1309,6 +1465,10 @@ func (r *ZeroTrustGatewayConfigurationUpdateResponseEnvelope) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayConfigurationUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayConfigurationUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                         `json:"code,required"`
 	Message string                                                        `json:"message,required"`
@@ -1329,6 +1489,10 @@ func (r *ZeroTrustGatewayConfigurationUpdateResponseEnvelopeErrors) UnmarshalJSO
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayConfigurationUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayConfigurationUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                           `json:"code,required"`
 	Message string                                                          `json:"message,required"`
@@ -1347,6 +1511,10 @@ type zeroTrustGatewayConfigurationUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustGatewayConfigurationUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayConfigurationUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1563,6 +1731,10 @@ func (r *ZeroTrustGatewayConfigurationEditResponseEnvelope) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayConfigurationEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayConfigurationEditResponseEnvelopeErrors struct {
 	Code    int64                                                       `json:"code,required"`
 	Message string                                                      `json:"message,required"`
@@ -1583,6 +1755,10 @@ func (r *ZeroTrustGatewayConfigurationEditResponseEnvelopeErrors) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayConfigurationEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayConfigurationEditResponseEnvelopeMessages struct {
 	Code    int64                                                         `json:"code,required"`
 	Message string                                                        `json:"message,required"`
@@ -1601,6 +1777,10 @@ type zeroTrustGatewayConfigurationEditResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustGatewayConfigurationEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayConfigurationEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1639,6 +1819,10 @@ func (r *ZeroTrustGatewayConfigurationGetResponseEnvelope) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayConfigurationGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayConfigurationGetResponseEnvelopeErrors struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -1656,6 +1840,10 @@ type zeroTrustGatewayConfigurationGetResponseEnvelopeErrorsJSON struct {
 
 func (r *ZeroTrustGatewayConfigurationGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayConfigurationGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustGatewayConfigurationGetResponseEnvelopeMessages struct {
@@ -1676,6 +1864,10 @@ type zeroTrustGatewayConfigurationGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustGatewayConfigurationGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayConfigurationGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

@@ -61,6 +61,10 @@ func (r *SSLCertificatePackQuotaGetResponse) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r sslCertificatePackQuotaGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type SSLCertificatePackQuotaGetResponseAdvanced struct {
 	// Quantity Allocated.
 	Allocated int64 `json:"allocated"`
@@ -80,6 +84,10 @@ type sslCertificatePackQuotaGetResponseAdvancedJSON struct {
 
 func (r *SSLCertificatePackQuotaGetResponseAdvanced) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sslCertificatePackQuotaGetResponseAdvancedJSON) RawJSON() string {
+	return r.raw
 }
 
 type SSLCertificatePackQuotaGetParams struct {
@@ -111,6 +119,10 @@ func (r *SSLCertificatePackQuotaGetResponseEnvelope) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r sslCertificatePackQuotaGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type SSLCertificatePackQuotaGetResponseEnvelopeErrors struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -130,6 +142,10 @@ func (r *SSLCertificatePackQuotaGetResponseEnvelopeErrors) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r sslCertificatePackQuotaGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type SSLCertificatePackQuotaGetResponseEnvelopeMessages struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -147,6 +163,10 @@ type sslCertificatePackQuotaGetResponseEnvelopeMessagesJSON struct {
 
 func (r *SSLCertificatePackQuotaGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sslCertificatePackQuotaGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

@@ -65,6 +65,10 @@ func (r *RadarTrafficAnomalyLocationGetResponse) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarTrafficAnomalyLocationGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarTrafficAnomalyLocationGetResponseTrafficAnomaly struct {
 	ClientCountryAlpha2 string                                                   `json:"clientCountryAlpha2,required"`
 	ClientCountryName   string                                                   `json:"clientCountryName,required"`
@@ -84,6 +88,10 @@ type radarTrafficAnomalyLocationGetResponseTrafficAnomalyJSON struct {
 
 func (r *RadarTrafficAnomalyLocationGetResponseTrafficAnomaly) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarTrafficAnomalyLocationGetResponseTrafficAnomalyJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarTrafficAnomalyLocationGetParams struct {
@@ -164,4 +172,8 @@ type radarTrafficAnomalyLocationGetResponseEnvelopeJSON struct {
 
 func (r *RadarTrafficAnomalyLocationGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarTrafficAnomalyLocationGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

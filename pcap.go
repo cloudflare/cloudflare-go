@@ -121,6 +121,10 @@ func (r *PCAPNewResponseMagicVisibilityPCAPsResponseSimple) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pcapNewResponseMagicVisibilityPCAPsResponseSimpleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r PCAPNewResponseMagicVisibilityPCAPsResponseSimple) implementsPCAPNewResponse() {}
 
 // The packet capture filter. When this field is empty, all packets are captured.
@@ -153,6 +157,10 @@ type pcapNewResponseMagicVisibilityPCAPsResponseSimpleFilterV1JSON struct {
 
 func (r *PCAPNewResponseMagicVisibilityPCAPsResponseSimpleFilterV1) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pcapNewResponseMagicVisibilityPCAPsResponseSimpleFilterV1JSON) RawJSON() string {
+	return r.raw
 }
 
 // The status of the packet capture request.
@@ -238,6 +246,10 @@ func (r *PCAPNewResponseMagicVisibilityPCAPsResponseFull) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pcapNewResponseMagicVisibilityPCAPsResponseFullJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r PCAPNewResponseMagicVisibilityPCAPsResponseFull) implementsPCAPNewResponse() {}
 
 // The packet capture filter. When this field is empty, all packets are captured.
@@ -270,6 +282,10 @@ type pcapNewResponseMagicVisibilityPCAPsResponseFullFilterV1JSON struct {
 
 func (r *PCAPNewResponseMagicVisibilityPCAPsResponseFullFilterV1) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pcapNewResponseMagicVisibilityPCAPsResponseFullFilterV1JSON) RawJSON() string {
+	return r.raw
 }
 
 // The status of the packet capture request.
@@ -349,6 +365,10 @@ func (r *PCAPListResponseMagicVisibilityPCAPsResponseSimple) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pcapListResponseMagicVisibilityPCAPsResponseSimpleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r PCAPListResponseMagicVisibilityPCAPsResponseSimple) implementsPCAPListResponse() {}
 
 // The packet capture filter. When this field is empty, all packets are captured.
@@ -381,6 +401,10 @@ type pcapListResponseMagicVisibilityPCAPsResponseSimpleFilterV1JSON struct {
 
 func (r *PCAPListResponseMagicVisibilityPCAPsResponseSimpleFilterV1) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pcapListResponseMagicVisibilityPCAPsResponseSimpleFilterV1JSON) RawJSON() string {
+	return r.raw
 }
 
 // The status of the packet capture request.
@@ -466,6 +490,10 @@ func (r *PCAPListResponseMagicVisibilityPCAPsResponseFull) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pcapListResponseMagicVisibilityPCAPsResponseFullJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r PCAPListResponseMagicVisibilityPCAPsResponseFull) implementsPCAPListResponse() {}
 
 // The packet capture filter. When this field is empty, all packets are captured.
@@ -498,6 +526,10 @@ type pcapListResponseMagicVisibilityPCAPsResponseFullFilterV1JSON struct {
 
 func (r *PCAPListResponseMagicVisibilityPCAPsResponseFullFilterV1) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pcapListResponseMagicVisibilityPCAPsResponseFullFilterV1JSON) RawJSON() string {
+	return r.raw
 }
 
 // The status of the packet capture request.
@@ -577,6 +609,10 @@ func (r *PCAPGetResponseMagicVisibilityPCAPsResponseSimple) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pcapGetResponseMagicVisibilityPCAPsResponseSimpleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r PCAPGetResponseMagicVisibilityPCAPsResponseSimple) implementsPCAPGetResponse() {}
 
 // The packet capture filter. When this field is empty, all packets are captured.
@@ -609,6 +645,10 @@ type pcapGetResponseMagicVisibilityPCAPsResponseSimpleFilterV1JSON struct {
 
 func (r *PCAPGetResponseMagicVisibilityPCAPsResponseSimpleFilterV1) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pcapGetResponseMagicVisibilityPCAPsResponseSimpleFilterV1JSON) RawJSON() string {
+	return r.raw
 }
 
 // The status of the packet capture request.
@@ -694,6 +734,10 @@ func (r *PCAPGetResponseMagicVisibilityPCAPsResponseFull) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pcapGetResponseMagicVisibilityPCAPsResponseFullJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r PCAPGetResponseMagicVisibilityPCAPsResponseFull) implementsPCAPGetResponse() {}
 
 // The packet capture filter. When this field is empty, all packets are captured.
@@ -726,6 +770,10 @@ type pcapGetResponseMagicVisibilityPCAPsResponseFullFilterV1JSON struct {
 
 func (r *PCAPGetResponseMagicVisibilityPCAPsResponseFullFilterV1) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pcapGetResponseMagicVisibilityPCAPsResponseFullFilterV1JSON) RawJSON() string {
+	return r.raw
 }
 
 // The status of the packet capture request.
@@ -843,6 +891,10 @@ func (r *PCAPNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pcapNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type PCAPNewResponseEnvelopeErrors struct {
 	Code    int64                             `json:"code,required"`
 	Message string                            `json:"message,required"`
@@ -862,6 +914,10 @@ func (r *PCAPNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pcapNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type PCAPNewResponseEnvelopeMessages struct {
 	Code    int64                               `json:"code,required"`
 	Message string                              `json:"message,required"`
@@ -879,6 +935,10 @@ type pcapNewResponseEnvelopeMessagesJSON struct {
 
 func (r *PCAPNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pcapNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -919,6 +979,10 @@ func (r *PCAPListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pcapListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type PCAPListResponseEnvelopeErrors struct {
 	Code    int64                              `json:"code,required"`
 	Message string                             `json:"message,required"`
@@ -938,6 +1002,10 @@ func (r *PCAPListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pcapListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type PCAPListResponseEnvelopeMessages struct {
 	Code    int64                                `json:"code,required"`
 	Message string                               `json:"message,required"`
@@ -955,6 +1023,10 @@ type pcapListResponseEnvelopeMessagesJSON struct {
 
 func (r *PCAPListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pcapListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -991,6 +1063,10 @@ func (r *PCAPListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pcapListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type PCAPGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -1020,6 +1096,10 @@ func (r *PCAPGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pcapGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type PCAPGetResponseEnvelopeErrors struct {
 	Code    int64                             `json:"code,required"`
 	Message string                            `json:"message,required"`
@@ -1039,6 +1119,10 @@ func (r *PCAPGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pcapGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type PCAPGetResponseEnvelopeMessages struct {
 	Code    int64                               `json:"code,required"`
 	Message string                              `json:"message,required"`
@@ -1056,6 +1140,10 @@ type pcapGetResponseEnvelopeMessagesJSON struct {
 
 func (r *PCAPGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pcapGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

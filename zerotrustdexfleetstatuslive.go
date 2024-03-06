@@ -63,6 +63,10 @@ func (r *ZeroTrustDEXFleetStatusLiveListResponse) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXFleetStatusLiveListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXFleetStatusLiveListResponseDeviceStats struct {
 	ByColo     []ZeroTrustDEXFleetStatusLiveListResponseDeviceStatsByColo     `json:"byColo,nullable"`
 	ByMode     []ZeroTrustDEXFleetStatusLiveListResponseDeviceStatsByMode     `json:"byMode,nullable"`
@@ -91,6 +95,10 @@ func (r *ZeroTrustDEXFleetStatusLiveListResponseDeviceStats) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXFleetStatusLiveListResponseDeviceStatsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXFleetStatusLiveListResponseDeviceStatsByColo struct {
 	// Number of unique devices
 	UniqueDevicesTotal float64                                                      `json:"uniqueDevicesTotal"`
@@ -110,6 +118,10 @@ type zeroTrustDEXFleetStatusLiveListResponseDeviceStatsByColoJSON struct {
 
 func (r *ZeroTrustDEXFleetStatusLiveListResponseDeviceStatsByColo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXFleetStatusLiveListResponseDeviceStatsByColoJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDEXFleetStatusLiveListResponseDeviceStatsByMode struct {
@@ -133,6 +145,10 @@ func (r *ZeroTrustDEXFleetStatusLiveListResponseDeviceStatsByMode) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXFleetStatusLiveListResponseDeviceStatsByModeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXFleetStatusLiveListResponseDeviceStatsByPlatform struct {
 	// Number of unique devices
 	UniqueDevicesTotal float64                                                          `json:"uniqueDevicesTotal"`
@@ -152,6 +168,10 @@ type zeroTrustDEXFleetStatusLiveListResponseDeviceStatsByPlatformJSON struct {
 
 func (r *ZeroTrustDEXFleetStatusLiveListResponseDeviceStatsByPlatform) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXFleetStatusLiveListResponseDeviceStatsByPlatformJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDEXFleetStatusLiveListResponseDeviceStatsByStatus struct {
@@ -175,6 +195,10 @@ func (r *ZeroTrustDEXFleetStatusLiveListResponseDeviceStatsByStatus) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXFleetStatusLiveListResponseDeviceStatsByStatusJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXFleetStatusLiveListResponseDeviceStatsByVersion struct {
 	// Number of unique devices
 	UniqueDevicesTotal float64                                                         `json:"uniqueDevicesTotal"`
@@ -194,6 +218,10 @@ type zeroTrustDEXFleetStatusLiveListResponseDeviceStatsByVersionJSON struct {
 
 func (r *ZeroTrustDEXFleetStatusLiveListResponseDeviceStatsByVersion) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXFleetStatusLiveListResponseDeviceStatsByVersionJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDEXFleetStatusLiveListParams struct {
@@ -235,6 +263,10 @@ func (r *ZeroTrustDEXFleetStatusLiveListResponseEnvelope) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXFleetStatusLiveListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXFleetStatusLiveListResponseEnvelopeErrors struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -252,6 +284,10 @@ type zeroTrustDEXFleetStatusLiveListResponseEnvelopeErrorsJSON struct {
 
 func (r *ZeroTrustDEXFleetStatusLiveListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXFleetStatusLiveListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDEXFleetStatusLiveListResponseEnvelopeMessages struct {
@@ -272,6 +308,10 @@ type zeroTrustDEXFleetStatusLiveListResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustDEXFleetStatusLiveListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXFleetStatusLiveListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

@@ -100,6 +100,10 @@ func (r *ZoneSettingAutomaticPlatformOptimizationEditResponse) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingAutomaticPlatformOptimizationEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingAutomaticPlatformOptimizationGetResponse struct {
 	// Indicates whether or not
 	// [cache by device type](https://developers.cloudflare.com/automatic-platform-optimization/reference/cache-device-type/)
@@ -136,6 +140,10 @@ type zoneSettingAutomaticPlatformOptimizationGetResponseJSON struct {
 
 func (r *ZoneSettingAutomaticPlatformOptimizationGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingAutomaticPlatformOptimizationGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneSettingAutomaticPlatformOptimizationEditParams struct {
@@ -197,6 +205,10 @@ func (r *ZoneSettingAutomaticPlatformOptimizationEditResponseEnvelope) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingAutomaticPlatformOptimizationEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingAutomaticPlatformOptimizationEditResponseEnvelopeErrors struct {
 	Code    int64                                                                  `json:"code,required"`
 	Message string                                                                 `json:"message,required"`
@@ -217,6 +229,10 @@ func (r *ZoneSettingAutomaticPlatformOptimizationEditResponseEnvelopeErrors) Unm
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingAutomaticPlatformOptimizationEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingAutomaticPlatformOptimizationEditResponseEnvelopeMessages struct {
 	Code    int64                                                                    `json:"code,required"`
 	Message string                                                                   `json:"message,required"`
@@ -235,6 +251,10 @@ type zoneSettingAutomaticPlatformOptimizationEditResponseEnvelopeMessagesJSON st
 
 func (r *ZoneSettingAutomaticPlatformOptimizationEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingAutomaticPlatformOptimizationEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneSettingAutomaticPlatformOptimizationGetParams struct {
@@ -267,6 +287,10 @@ func (r *ZoneSettingAutomaticPlatformOptimizationGetResponseEnvelope) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingAutomaticPlatformOptimizationGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingAutomaticPlatformOptimizationGetResponseEnvelopeErrors struct {
 	Code    int64                                                                 `json:"code,required"`
 	Message string                                                                `json:"message,required"`
@@ -287,6 +311,10 @@ func (r *ZoneSettingAutomaticPlatformOptimizationGetResponseEnvelopeErrors) Unma
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingAutomaticPlatformOptimizationGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingAutomaticPlatformOptimizationGetResponseEnvelopeMessages struct {
 	Code    int64                                                                   `json:"code,required"`
 	Message string                                                                  `json:"message,required"`
@@ -305,4 +333,8 @@ type zoneSettingAutomaticPlatformOptimizationGetResponseEnvelopeMessagesJSON str
 
 func (r *ZoneSettingAutomaticPlatformOptimizationGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingAutomaticPlatformOptimizationGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }

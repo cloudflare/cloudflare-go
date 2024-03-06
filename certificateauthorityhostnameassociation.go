@@ -82,6 +82,10 @@ func (r *CertificateAuthorityHostnameAssociationUpdateResponse) UnmarshalJSON(da
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r certificateAuthorityHostnameAssociationUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type CertificateAuthorityHostnameAssociationGetResponse struct {
 	Hostnames []string `json:"hostnames"`
 	// The UUID for a certificate that was uploaded to the mTLS Certificate Management
@@ -102,6 +106,10 @@ type certificateAuthorityHostnameAssociationGetResponseJSON struct {
 
 func (r *CertificateAuthorityHostnameAssociationGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificateAuthorityHostnameAssociationGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type CertificateAuthorityHostnameAssociationUpdateParams struct {
@@ -143,6 +151,10 @@ func (r *CertificateAuthorityHostnameAssociationUpdateResponseEnvelope) Unmarsha
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r certificateAuthorityHostnameAssociationUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CertificateAuthorityHostnameAssociationUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                                   `json:"code,required"`
 	Message string                                                                  `json:"message,required"`
@@ -163,6 +175,10 @@ func (r *CertificateAuthorityHostnameAssociationUpdateResponseEnvelopeErrors) Un
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r certificateAuthorityHostnameAssociationUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type CertificateAuthorityHostnameAssociationUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                                     `json:"code,required"`
 	Message string                                                                    `json:"message,required"`
@@ -181,6 +197,10 @@ type certificateAuthorityHostnameAssociationUpdateResponseEnvelopeMessagesJSON s
 
 func (r *CertificateAuthorityHostnameAssociationUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificateAuthorityHostnameAssociationUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -233,6 +253,10 @@ func (r *CertificateAuthorityHostnameAssociationGetResponseEnvelope) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r certificateAuthorityHostnameAssociationGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CertificateAuthorityHostnameAssociationGetResponseEnvelopeErrors struct {
 	Code    int64                                                                `json:"code,required"`
 	Message string                                                               `json:"message,required"`
@@ -253,6 +277,10 @@ func (r *CertificateAuthorityHostnameAssociationGetResponseEnvelopeErrors) Unmar
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r certificateAuthorityHostnameAssociationGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type CertificateAuthorityHostnameAssociationGetResponseEnvelopeMessages struct {
 	Code    int64                                                                  `json:"code,required"`
 	Message string                                                                 `json:"message,required"`
@@ -271,6 +299,10 @@ type certificateAuthorityHostnameAssociationGetResponseEnvelopeMessagesJSON stru
 
 func (r *CertificateAuthorityHostnameAssociationGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r certificateAuthorityHostnameAssociationGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

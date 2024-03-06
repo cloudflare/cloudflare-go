@@ -104,6 +104,10 @@ func (r *HostnameSettingTLSUpdateResponse) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r hostnameSettingTLSUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The tls setting value.
 //
 // Union satisfied by [shared.UnionFloat], [shared.UnionString] or
@@ -160,6 +164,10 @@ func (r *HostnameSettingTLSDeleteResponse) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r hostnameSettingTLSDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type HostnameSettingTLSGetResponse struct {
 	// This is the time the tls setting was originally created for this hostname.
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
@@ -188,6 +196,10 @@ type hostnameSettingTLSGetResponseJSON struct {
 
 func (r *HostnameSettingTLSGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r hostnameSettingTLSGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // The tls setting value.
@@ -273,6 +285,10 @@ func (r *HostnameSettingTLSUpdateResponseEnvelope) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r hostnameSettingTLSUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type HostnameSettingTLSUpdateResponseEnvelopeErrors struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -292,6 +308,10 @@ func (r *HostnameSettingTLSUpdateResponseEnvelopeErrors) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r hostnameSettingTLSUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type HostnameSettingTLSUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -309,6 +329,10 @@ type hostnameSettingTLSUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *HostnameSettingTLSUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r hostnameSettingTLSUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -356,6 +380,10 @@ func (r *HostnameSettingTLSDeleteResponseEnvelope) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r hostnameSettingTLSDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type HostnameSettingTLSDeleteResponseEnvelopeErrors struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -375,6 +403,10 @@ func (r *HostnameSettingTLSDeleteResponseEnvelopeErrors) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r hostnameSettingTLSDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type HostnameSettingTLSDeleteResponseEnvelopeMessages struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -392,6 +424,10 @@ type hostnameSettingTLSDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *HostnameSettingTLSDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r hostnameSettingTLSDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -441,6 +477,10 @@ func (r *HostnameSettingTLSGetResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r hostnameSettingTLSGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type HostnameSettingTLSGetResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -460,6 +500,10 @@ func (r *HostnameSettingTLSGetResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r hostnameSettingTLSGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type HostnameSettingTLSGetResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -477,6 +521,10 @@ type hostnameSettingTLSGetResponseEnvelopeMessagesJSON struct {
 
 func (r *HostnameSettingTLSGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r hostnameSettingTLSGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -514,4 +562,8 @@ type hostnameSettingTLSGetResponseEnvelopeResultInfoJSON struct {
 
 func (r *HostnameSettingTLSGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r hostnameSettingTLSGetResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

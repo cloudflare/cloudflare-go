@@ -123,6 +123,10 @@ func (r *ZeroTrustDLPDatasetNewResponse) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPDatasetNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDLPDatasetNewResponseDataset struct {
 	ID          string                                        `json:"id,required" format:"uuid"`
 	CreatedAt   time.Time                                     `json:"created_at,required" format:"date-time"`
@@ -156,6 +160,10 @@ func (r *ZeroTrustDLPDatasetNewResponseDataset) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPDatasetNewResponseDatasetJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDLPDatasetNewResponseDatasetStatus string
 
 const (
@@ -184,6 +192,10 @@ type zeroTrustDLPDatasetNewResponseDatasetUploadJSON struct {
 
 func (r *ZeroTrustDLPDatasetNewResponseDatasetUpload) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDLPDatasetNewResponseDatasetUploadJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDLPDatasetNewResponseDatasetUploadsStatus string
@@ -228,6 +240,10 @@ func (r *ZeroTrustDLPDatasetUpdateResponse) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPDatasetUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDLPDatasetUpdateResponseStatus string
 
 const (
@@ -256,6 +272,10 @@ type zeroTrustDLPDatasetUpdateResponseUploadJSON struct {
 
 func (r *ZeroTrustDLPDatasetUpdateResponseUpload) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDLPDatasetUpdateResponseUploadJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDLPDatasetUpdateResponseUploadsStatus string
@@ -300,6 +320,10 @@ func (r *ZeroTrustDLPDatasetListResponse) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPDatasetListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDLPDatasetListResponseStatus string
 
 const (
@@ -328,6 +352,10 @@ type zeroTrustDLPDatasetListResponseUploadJSON struct {
 
 func (r *ZeroTrustDLPDatasetListResponseUpload) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDLPDatasetListResponseUploadJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDLPDatasetListResponseUploadsStatus string
@@ -372,6 +400,10 @@ func (r *ZeroTrustDLPDatasetGetResponse) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPDatasetGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDLPDatasetGetResponseStatus string
 
 const (
@@ -400,6 +432,10 @@ type zeroTrustDLPDatasetGetResponseUploadJSON struct {
 
 func (r *ZeroTrustDLPDatasetGetResponseUpload) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDLPDatasetGetResponseUploadJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDLPDatasetGetResponseUploadsStatus string
@@ -451,6 +487,10 @@ func (r *ZeroTrustDLPDatasetNewResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPDatasetNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDLPDatasetNewResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -470,6 +510,10 @@ func (r *ZeroTrustDLPDatasetNewResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPDatasetNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDLPDatasetNewResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -487,6 +531,10 @@ type zeroTrustDLPDatasetNewResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustDLPDatasetNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDLPDatasetNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDLPDatasetNewResponseEnvelopeResultInfo struct {
@@ -514,6 +562,10 @@ type zeroTrustDLPDatasetNewResponseEnvelopeResultInfoJSON struct {
 
 func (r *ZeroTrustDLPDatasetNewResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDLPDatasetNewResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDLPDatasetUpdateParams struct {
@@ -551,6 +603,10 @@ func (r *ZeroTrustDLPDatasetUpdateResponseEnvelope) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPDatasetUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDLPDatasetUpdateResponseEnvelopeErrors struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -570,6 +626,10 @@ func (r *ZeroTrustDLPDatasetUpdateResponseEnvelopeErrors) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPDatasetUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDLPDatasetUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -587,6 +647,10 @@ type zeroTrustDLPDatasetUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustDLPDatasetUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDLPDatasetUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDLPDatasetUpdateResponseEnvelopeResultInfo struct {
@@ -614,6 +678,10 @@ type zeroTrustDLPDatasetUpdateResponseEnvelopeResultInfoJSON struct {
 
 func (r *ZeroTrustDLPDatasetUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDLPDatasetUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDLPDatasetListParams struct {
@@ -645,6 +713,10 @@ func (r *ZeroTrustDLPDatasetListResponseEnvelope) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPDatasetListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDLPDatasetListResponseEnvelopeErrors struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -664,6 +736,10 @@ func (r *ZeroTrustDLPDatasetListResponseEnvelopeErrors) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPDatasetListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDLPDatasetListResponseEnvelopeMessages struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -681,6 +757,10 @@ type zeroTrustDLPDatasetListResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustDLPDatasetListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDLPDatasetListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDLPDatasetListResponseEnvelopeResultInfo struct {
@@ -708,6 +788,10 @@ type zeroTrustDLPDatasetListResponseEnvelopeResultInfoJSON struct {
 
 func (r *ZeroTrustDLPDatasetListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDLPDatasetListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDLPDatasetDeleteParams struct {
@@ -743,6 +827,10 @@ func (r *ZeroTrustDLPDatasetGetResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPDatasetGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDLPDatasetGetResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -762,6 +850,10 @@ func (r *ZeroTrustDLPDatasetGetResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPDatasetGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDLPDatasetGetResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -779,6 +871,10 @@ type zeroTrustDLPDatasetGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustDLPDatasetGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDLPDatasetGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDLPDatasetGetResponseEnvelopeResultInfo struct {
@@ -806,4 +902,8 @@ type zeroTrustDLPDatasetGetResponseEnvelopeResultInfoJSON struct {
 
 func (r *ZeroTrustDLPDatasetGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDLPDatasetGetResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

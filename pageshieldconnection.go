@@ -89,6 +89,10 @@ func (r *PageShieldConnectionListResponse) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageShieldConnectionListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageShieldConnectionGetResponse struct {
 	ID                      interface{}                         `json:"id"`
 	AddedAt                 interface{}                         `json:"added_at"`
@@ -122,6 +126,10 @@ type pageShieldConnectionGetResponseJSON struct {
 
 func (r *PageShieldConnectionGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageShieldConnectionGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type PageShieldConnectionListParams struct {
@@ -234,6 +242,10 @@ func (r *PageShieldConnectionListResponseEnvelope) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageShieldConnectionListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageShieldConnectionListResponseEnvelopeErrors struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -253,6 +265,10 @@ func (r *PageShieldConnectionListResponseEnvelopeErrors) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageShieldConnectionListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageShieldConnectionListResponseEnvelopeMessages struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -270,6 +286,10 @@ type pageShieldConnectionListResponseEnvelopeMessagesJSON struct {
 
 func (r *PageShieldConnectionListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageShieldConnectionListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -304,6 +324,10 @@ type pageShieldConnectionListResponseEnvelopeResultInfoJSON struct {
 
 func (r *PageShieldConnectionListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageShieldConnectionListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type PageShieldConnectionGetParams struct {

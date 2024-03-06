@@ -110,6 +110,10 @@ func (r *UserOrganizationListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userOrganizationListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Whether the user is a member of the organization or has an inivitation pending.
 type UserOrganizationListResponseStatus string
 
@@ -134,6 +138,10 @@ type userOrganizationDeleteResponseJSON struct {
 
 func (r *UserOrganizationDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userOrganizationDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Union satisfied by [UserOrganizationGetResponseUnknown] or [shared.UnionString].
@@ -235,6 +243,10 @@ func (r *UserOrganizationGetResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userOrganizationGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserOrganizationGetResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -254,6 +266,10 @@ func (r *UserOrganizationGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userOrganizationGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserOrganizationGetResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -271,6 +287,10 @@ type userOrganizationGetResponseEnvelopeMessagesJSON struct {
 
 func (r *UserOrganizationGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userOrganizationGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

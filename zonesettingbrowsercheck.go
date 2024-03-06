@@ -99,6 +99,10 @@ func (r *ZoneSettingBrowserCheckEditResponse) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingBrowserCheckEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // ID of the zone setting.
 type ZoneSettingBrowserCheckEditResponseID string
 
@@ -154,6 +158,10 @@ type zoneSettingBrowserCheckGetResponseJSON struct {
 
 func (r *ZoneSettingBrowserCheckGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingBrowserCheckGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // ID of the zone setting.
@@ -228,6 +236,10 @@ func (r *ZoneSettingBrowserCheckEditResponseEnvelope) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingBrowserCheckEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingBrowserCheckEditResponseEnvelopeErrors struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -247,6 +259,10 @@ func (r *ZoneSettingBrowserCheckEditResponseEnvelopeErrors) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingBrowserCheckEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingBrowserCheckEditResponseEnvelopeMessages struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -264,6 +280,10 @@ type zoneSettingBrowserCheckEditResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingBrowserCheckEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingBrowserCheckEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneSettingBrowserCheckGetParams struct {
@@ -300,6 +320,10 @@ func (r *ZoneSettingBrowserCheckGetResponseEnvelope) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingBrowserCheckGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingBrowserCheckGetResponseEnvelopeErrors struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -319,6 +343,10 @@ func (r *ZoneSettingBrowserCheckGetResponseEnvelopeErrors) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingBrowserCheckGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingBrowserCheckGetResponseEnvelopeMessages struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -336,4 +364,8 @@ type zoneSettingBrowserCheckGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingBrowserCheckGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingBrowserCheckGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }

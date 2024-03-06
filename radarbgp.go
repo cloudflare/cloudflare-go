@@ -74,6 +74,10 @@ func (r *RadarBGPTimeseriesResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarBGPTimeseriesResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarBGPTimeseriesResponseMeta struct {
 	AggInterval    string                                       `json:"aggInterval,required"`
 	DateRange      []RadarBGPTimeseriesResponseMetaDateRange    `json:"dateRange,required"`
@@ -97,6 +101,10 @@ func (r *RadarBGPTimeseriesResponseMeta) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarBGPTimeseriesResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarBGPTimeseriesResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
@@ -118,6 +126,10 @@ func (r *RadarBGPTimeseriesResponseMetaDateRange) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarBGPTimeseriesResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarBGPTimeseriesResponseMetaConfidenceInfo struct {
 	Annotations []RadarBGPTimeseriesResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                    `json:"level"`
@@ -135,6 +147,10 @@ type radarBGPTimeseriesResponseMetaConfidenceInfoJSON struct {
 
 func (r *RadarBGPTimeseriesResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarBGPTimeseriesResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarBGPTimeseriesResponseMetaConfidenceInfoAnnotation struct {
@@ -166,6 +182,10 @@ func (r *RadarBGPTimeseriesResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(d
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarBGPTimeseriesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarBGPTimeseriesResponseSerie0 struct {
 	Timestamps []time.Time                          `json:"timestamps,required" format:"date-time"`
 	Values     []string                             `json:"values,required"`
@@ -183,6 +203,10 @@ type radarBGPTimeseriesResponseSerie0JSON struct {
 
 func (r *RadarBGPTimeseriesResponseSerie0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarBGPTimeseriesResponseSerie0JSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarBGPTimeseriesParams struct {
@@ -285,4 +309,8 @@ type radarBGPTimeseriesResponseEnvelopeJSON struct {
 
 func (r *RadarBGPTimeseriesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarBGPTimeseriesResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

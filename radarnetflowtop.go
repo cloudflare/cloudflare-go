@@ -78,6 +78,10 @@ func (r *RadarNetflowTopAsesResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarNetflowTopAsesResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarNetflowTopAsesResponseTop0 struct {
 	ClientASN    float64                             `json:"clientASN,required"`
 	ClientAsName string                              `json:"clientASName,required"`
@@ -99,6 +103,10 @@ func (r *RadarNetflowTopAsesResponseTop0) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarNetflowTopAsesResponseTop0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarNetflowTopLocationsResponse struct {
 	Top0 []RadarNetflowTopLocationsResponseTop0 `json:"top_0,required"`
 	JSON radarNetflowTopLocationsResponseJSON   `json:"-"`
@@ -114,6 +122,10 @@ type radarNetflowTopLocationsResponseJSON struct {
 
 func (r *RadarNetflowTopLocationsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarNetflowTopLocationsResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarNetflowTopLocationsResponseTop0 struct {
@@ -135,6 +147,10 @@ type radarNetflowTopLocationsResponseTop0JSON struct {
 
 func (r *RadarNetflowTopLocationsResponseTop0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarNetflowTopLocationsResponseTop0JSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarNetflowTopAsesParams struct {
@@ -222,6 +238,10 @@ func (r *RadarNetflowTopAsesResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarNetflowTopAsesResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarNetflowTopLocationsParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
@@ -305,4 +325,8 @@ type radarNetflowTopLocationsResponseEnvelopeJSON struct {
 
 func (r *RadarNetflowTopLocationsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarNetflowTopLocationsResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

@@ -135,6 +135,10 @@ func (r *AddressingAddressMapAccountUpdateResponseEnvelope) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingAddressMapAccountUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingAddressMapAccountUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                       `json:"code,required"`
 	Message string                                                      `json:"message,required"`
@@ -155,6 +159,10 @@ func (r *AddressingAddressMapAccountUpdateResponseEnvelopeErrors) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingAddressMapAccountUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingAddressMapAccountUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                         `json:"code,required"`
 	Message string                                                        `json:"message,required"`
@@ -173,6 +181,10 @@ type addressingAddressMapAccountUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *AddressingAddressMapAccountUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressingAddressMapAccountUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -210,6 +222,10 @@ func (r *AddressingAddressMapAccountUpdateResponseEnvelopeResultInfo) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingAddressMapAccountUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingAddressMapAccountDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -241,6 +257,10 @@ func (r *AddressingAddressMapAccountDeleteResponseEnvelope) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingAddressMapAccountDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingAddressMapAccountDeleteResponseEnvelopeErrors struct {
 	Code    int64                                                       `json:"code,required"`
 	Message string                                                      `json:"message,required"`
@@ -261,6 +281,10 @@ func (r *AddressingAddressMapAccountDeleteResponseEnvelopeErrors) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingAddressMapAccountDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingAddressMapAccountDeleteResponseEnvelopeMessages struct {
 	Code    int64                                                         `json:"code,required"`
 	Message string                                                        `json:"message,required"`
@@ -279,6 +303,10 @@ type addressingAddressMapAccountDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *AddressingAddressMapAccountDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressingAddressMapAccountDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -314,4 +342,8 @@ type addressingAddressMapAccountDeleteResponseEnvelopeResultInfoJSON struct {
 
 func (r *AddressingAddressMapAccountDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressingAddressMapAccountDeleteResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

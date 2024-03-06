@@ -130,6 +130,10 @@ func (r *ZeroTrustGatewayProxyEndpointNewResponse) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayProxyEndpointNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayProxyEndpointListResponse struct {
 	ID        interface{} `json:"id"`
 	CreatedAt time.Time   `json:"created_at" format:"date-time"`
@@ -158,6 +162,10 @@ type zeroTrustGatewayProxyEndpointListResponseJSON struct {
 
 func (r *ZeroTrustGatewayProxyEndpointListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayProxyEndpointListResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Union satisfied by [ZeroTrustGatewayProxyEndpointDeleteResponseUnknown] or
@@ -207,6 +215,10 @@ func (r *ZeroTrustGatewayProxyEndpointEditResponse) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayProxyEndpointEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayProxyEndpointGetResponse struct {
 	ID        interface{} `json:"id"`
 	CreatedAt time.Time   `json:"created_at" format:"date-time"`
@@ -235,6 +247,10 @@ type zeroTrustGatewayProxyEndpointGetResponseJSON struct {
 
 func (r *ZeroTrustGatewayProxyEndpointGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayProxyEndpointGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustGatewayProxyEndpointNewParams struct {
@@ -275,6 +291,10 @@ func (r *ZeroTrustGatewayProxyEndpointNewResponseEnvelope) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayProxyEndpointNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayProxyEndpointNewResponseEnvelopeErrors struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -292,6 +312,10 @@ type zeroTrustGatewayProxyEndpointNewResponseEnvelopeErrorsJSON struct {
 
 func (r *ZeroTrustGatewayProxyEndpointNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayProxyEndpointNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustGatewayProxyEndpointNewResponseEnvelopeMessages struct {
@@ -312,6 +336,10 @@ type zeroTrustGatewayProxyEndpointNewResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustGatewayProxyEndpointNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayProxyEndpointNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -351,6 +379,10 @@ func (r *ZeroTrustGatewayProxyEndpointListResponseEnvelope) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayProxyEndpointListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayProxyEndpointListResponseEnvelopeErrors struct {
 	Code    int64                                                       `json:"code,required"`
 	Message string                                                      `json:"message,required"`
@@ -371,6 +403,10 @@ func (r *ZeroTrustGatewayProxyEndpointListResponseEnvelopeErrors) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayProxyEndpointListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayProxyEndpointListResponseEnvelopeMessages struct {
 	Code    int64                                                         `json:"code,required"`
 	Message string                                                        `json:"message,required"`
@@ -389,6 +425,10 @@ type zeroTrustGatewayProxyEndpointListResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustGatewayProxyEndpointListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayProxyEndpointListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -426,6 +466,10 @@ func (r *ZeroTrustGatewayProxyEndpointListResponseEnvelopeResultInfo) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayProxyEndpointListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayProxyEndpointDeleteParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
@@ -454,6 +498,10 @@ func (r *ZeroTrustGatewayProxyEndpointDeleteResponseEnvelope) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayProxyEndpointDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayProxyEndpointDeleteResponseEnvelopeErrors struct {
 	Code    int64                                                         `json:"code,required"`
 	Message string                                                        `json:"message,required"`
@@ -474,6 +522,10 @@ func (r *ZeroTrustGatewayProxyEndpointDeleteResponseEnvelopeErrors) UnmarshalJSO
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayProxyEndpointDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayProxyEndpointDeleteResponseEnvelopeMessages struct {
 	Code    int64                                                           `json:"code,required"`
 	Message string                                                          `json:"message,required"`
@@ -492,6 +544,10 @@ type zeroTrustGatewayProxyEndpointDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustGatewayProxyEndpointDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayProxyEndpointDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -539,6 +595,10 @@ func (r *ZeroTrustGatewayProxyEndpointEditResponseEnvelope) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayProxyEndpointEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayProxyEndpointEditResponseEnvelopeErrors struct {
 	Code    int64                                                       `json:"code,required"`
 	Message string                                                      `json:"message,required"`
@@ -559,6 +619,10 @@ func (r *ZeroTrustGatewayProxyEndpointEditResponseEnvelopeErrors) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayProxyEndpointEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayProxyEndpointEditResponseEnvelopeMessages struct {
 	Code    int64                                                         `json:"code,required"`
 	Message string                                                        `json:"message,required"`
@@ -577,6 +641,10 @@ type zeroTrustGatewayProxyEndpointEditResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustGatewayProxyEndpointEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayProxyEndpointEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -614,6 +682,10 @@ func (r *ZeroTrustGatewayProxyEndpointGetResponseEnvelope) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayProxyEndpointGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayProxyEndpointGetResponseEnvelopeErrors struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -631,6 +703,10 @@ type zeroTrustGatewayProxyEndpointGetResponseEnvelopeErrorsJSON struct {
 
 func (r *ZeroTrustGatewayProxyEndpointGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayProxyEndpointGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustGatewayProxyEndpointGetResponseEnvelopeMessages struct {
@@ -651,6 +727,10 @@ type zeroTrustGatewayProxyEndpointGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustGatewayProxyEndpointGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayProxyEndpointGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

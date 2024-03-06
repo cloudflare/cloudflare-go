@@ -70,6 +70,10 @@ func (r *UserTokenPermissionGroupListResponseEnvelope) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userTokenPermissionGroupListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserTokenPermissionGroupListResponseEnvelopeErrors struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -89,6 +93,10 @@ func (r *UserTokenPermissionGroupListResponseEnvelopeErrors) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userTokenPermissionGroupListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserTokenPermissionGroupListResponseEnvelopeMessages struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -106,6 +114,10 @@ type userTokenPermissionGroupListResponseEnvelopeMessagesJSON struct {
 
 func (r *UserTokenPermissionGroupListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userTokenPermissionGroupListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -140,4 +152,8 @@ type userTokenPermissionGroupListResponseEnvelopeResultInfoJSON struct {
 
 func (r *UserTokenPermissionGroupListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userTokenPermissionGroupListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

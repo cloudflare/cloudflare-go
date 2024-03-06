@@ -78,6 +78,10 @@ func (r *RadarAttackLayer3TopLocationOriginResponse) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer3TopLocationOriginResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer3TopLocationOriginResponseMeta struct {
 	DateRange      []RadarAttackLayer3TopLocationOriginResponseMetaDateRange    `json:"dateRange,required"`
 	LastUpdated    string                                                       `json:"lastUpdated,required"`
@@ -97,6 +101,10 @@ type radarAttackLayer3TopLocationOriginResponseMetaJSON struct {
 
 func (r *RadarAttackLayer3TopLocationOriginResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAttackLayer3TopLocationOriginResponseMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarAttackLayer3TopLocationOriginResponseMetaDateRange struct {
@@ -121,6 +129,10 @@ func (r *RadarAttackLayer3TopLocationOriginResponseMetaDateRange) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer3TopLocationOriginResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer3TopLocationOriginResponseMetaConfidenceInfo struct {
 	Annotations []RadarAttackLayer3TopLocationOriginResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                                    `json:"level"`
@@ -139,6 +151,10 @@ type radarAttackLayer3TopLocationOriginResponseMetaConfidenceInfoJSON struct {
 
 func (r *RadarAttackLayer3TopLocationOriginResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAttackLayer3TopLocationOriginResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarAttackLayer3TopLocationOriginResponseMetaConfidenceInfoAnnotation struct {
@@ -171,6 +187,10 @@ func (r *RadarAttackLayer3TopLocationOriginResponseMetaConfidenceInfoAnnotation)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer3TopLocationOriginResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer3TopLocationOriginResponseTop0 struct {
 	OriginCountryAlpha2 string                                             `json:"originCountryAlpha2,required"`
 	OriginCountryName   string                                             `json:"originCountryName,required"`
@@ -194,6 +214,10 @@ func (r *RadarAttackLayer3TopLocationOriginResponseTop0) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer3TopLocationOriginResponseTop0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer3TopLocationTargetResponse struct {
 	Meta RadarAttackLayer3TopLocationTargetResponseMeta   `json:"meta,required"`
 	Top0 []RadarAttackLayer3TopLocationTargetResponseTop0 `json:"top_0,required"`
@@ -211,6 +235,10 @@ type radarAttackLayer3TopLocationTargetResponseJSON struct {
 
 func (r *RadarAttackLayer3TopLocationTargetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAttackLayer3TopLocationTargetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarAttackLayer3TopLocationTargetResponseMeta struct {
@@ -232,6 +260,10 @@ type radarAttackLayer3TopLocationTargetResponseMetaJSON struct {
 
 func (r *RadarAttackLayer3TopLocationTargetResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAttackLayer3TopLocationTargetResponseMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarAttackLayer3TopLocationTargetResponseMetaDateRange struct {
@@ -256,6 +288,10 @@ func (r *RadarAttackLayer3TopLocationTargetResponseMetaDateRange) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer3TopLocationTargetResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer3TopLocationTargetResponseMetaConfidenceInfo struct {
 	Annotations []RadarAttackLayer3TopLocationTargetResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                                    `json:"level"`
@@ -274,6 +310,10 @@ type radarAttackLayer3TopLocationTargetResponseMetaConfidenceInfoJSON struct {
 
 func (r *RadarAttackLayer3TopLocationTargetResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAttackLayer3TopLocationTargetResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarAttackLayer3TopLocationTargetResponseMetaConfidenceInfoAnnotation struct {
@@ -306,6 +346,10 @@ func (r *RadarAttackLayer3TopLocationTargetResponseMetaConfidenceInfoAnnotation)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer3TopLocationTargetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer3TopLocationTargetResponseTop0 struct {
 	Rank                float64                                            `json:"rank,required"`
 	TargetCountryAlpha2 string                                             `json:"targetCountryAlpha2,required"`
@@ -327,6 +371,10 @@ type radarAttackLayer3TopLocationTargetResponseTop0JSON struct {
 
 func (r *RadarAttackLayer3TopLocationTargetResponseTop0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAttackLayer3TopLocationTargetResponseTop0JSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarAttackLayer3TopLocationOriginParams struct {
@@ -430,6 +478,10 @@ func (r *RadarAttackLayer3TopLocationOriginResponseEnvelope) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer3TopLocationOriginResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer3TopLocationTargetParams struct {
 	// Array of comma separated list of continents (alpha-2 continent codes). Start
 	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
@@ -529,4 +581,8 @@ type radarAttackLayer3TopLocationTargetResponseEnvelopeJSON struct {
 
 func (r *RadarAttackLayer3TopLocationTargetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAttackLayer3TopLocationTargetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

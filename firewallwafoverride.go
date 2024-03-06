@@ -179,6 +179,10 @@ func (r *FirewallWAFOverrideNewResponse) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallWAFOverrideNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Specifies that, when a WAF rule matches, its configured action will be replaced
 // by the action configured in this object.
 type FirewallWAFOverrideNewResponseRewriteAction struct {
@@ -206,6 +210,10 @@ type firewallWAFOverrideNewResponseRewriteActionJSON struct {
 
 func (r *FirewallWAFOverrideNewResponseRewriteAction) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallWAFOverrideNewResponseRewriteActionJSON) RawJSON() string {
+	return r.raw
 }
 
 // The WAF rule action to apply.
@@ -293,6 +301,10 @@ func (r *FirewallWAFOverrideUpdateResponse) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallWAFOverrideUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Specifies that, when a WAF rule matches, its configured action will be replaced
 // by the action configured in this object.
 type FirewallWAFOverrideUpdateResponseRewriteAction struct {
@@ -320,6 +332,10 @@ type firewallWAFOverrideUpdateResponseRewriteActionJSON struct {
 
 func (r *FirewallWAFOverrideUpdateResponseRewriteAction) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallWAFOverrideUpdateResponseRewriteActionJSON) RawJSON() string {
+	return r.raw
 }
 
 // The WAF rule action to apply.
@@ -407,6 +423,10 @@ func (r *FirewallWAFOverrideListResponse) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallWAFOverrideListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Specifies that, when a WAF rule matches, its configured action will be replaced
 // by the action configured in this object.
 type FirewallWAFOverrideListResponseRewriteAction struct {
@@ -434,6 +454,10 @@ type firewallWAFOverrideListResponseRewriteActionJSON struct {
 
 func (r *FirewallWAFOverrideListResponseRewriteAction) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallWAFOverrideListResponseRewriteActionJSON) RawJSON() string {
+	return r.raw
 }
 
 // The WAF rule action to apply.
@@ -485,6 +509,10 @@ type firewallWAFOverrideDeleteResponseJSON struct {
 
 func (r *FirewallWAFOverrideDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallWAFOverrideDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type FirewallWAFOverrideGetResponse struct {
@@ -539,6 +567,10 @@ func (r *FirewallWAFOverrideGetResponse) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallWAFOverrideGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Specifies that, when a WAF rule matches, its configured action will be replaced
 // by the action configured in this object.
 type FirewallWAFOverrideGetResponseRewriteAction struct {
@@ -566,6 +598,10 @@ type firewallWAFOverrideGetResponseRewriteActionJSON struct {
 
 func (r *FirewallWAFOverrideGetResponseRewriteAction) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallWAFOverrideGetResponseRewriteActionJSON) RawJSON() string {
+	return r.raw
 }
 
 // The WAF rule action to apply.
@@ -633,6 +669,10 @@ func (r *FirewallWAFOverrideNewResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallWAFOverrideNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallWAFOverrideNewResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -652,6 +692,10 @@ func (r *FirewallWAFOverrideNewResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallWAFOverrideNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallWAFOverrideNewResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -669,6 +713,10 @@ type firewallWAFOverrideNewResponseEnvelopeMessagesJSON struct {
 
 func (r *FirewallWAFOverrideNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallWAFOverrideNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -710,6 +758,10 @@ func (r *FirewallWAFOverrideUpdateResponseEnvelope) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallWAFOverrideUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallWAFOverrideUpdateResponseEnvelopeErrors struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -729,6 +781,10 @@ func (r *FirewallWAFOverrideUpdateResponseEnvelopeErrors) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallWAFOverrideUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallWAFOverrideUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -746,6 +802,10 @@ type firewallWAFOverrideUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *FirewallWAFOverrideUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallWAFOverrideUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -788,6 +848,10 @@ func (r *FirewallWAFOverrideDeleteResponseEnvelope) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallWAFOverrideDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallWAFOverrideGetResponseEnvelope struct {
 	Errors   []FirewallWAFOverrideGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []FirewallWAFOverrideGetResponseEnvelopeMessages `json:"messages,required"`
@@ -812,6 +876,10 @@ func (r *FirewallWAFOverrideGetResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallWAFOverrideGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallWAFOverrideGetResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -831,6 +899,10 @@ func (r *FirewallWAFOverrideGetResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallWAFOverrideGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallWAFOverrideGetResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -848,6 +920,10 @@ type firewallWAFOverrideGetResponseEnvelopeMessagesJSON struct {
 
 func (r *FirewallWAFOverrideGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallWAFOverrideGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

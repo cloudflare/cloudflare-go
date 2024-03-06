@@ -60,6 +60,10 @@ func (r *ImageV1KeyListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r imageV1KeyListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ImageV1KeyListResponseKey struct {
 	// Key name.
 	Name string `json:"name"`
@@ -79,6 +83,10 @@ type imageV1KeyListResponseKeyJSON struct {
 
 func (r *ImageV1KeyListResponseKey) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r imageV1KeyListResponseKeyJSON) RawJSON() string {
+	return r.raw
 }
 
 type ImageV1KeyListParams struct {
@@ -110,6 +118,10 @@ func (r *ImageV1KeyListResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r imageV1KeyListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ImageV1KeyListResponseEnvelopeErrors struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -129,6 +141,10 @@ func (r *ImageV1KeyListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r imageV1KeyListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ImageV1KeyListResponseEnvelopeMessages struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -146,6 +162,10 @@ type imageV1KeyListResponseEnvelopeMessagesJSON struct {
 
 func (r *ImageV1KeyListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r imageV1KeyListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

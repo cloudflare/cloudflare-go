@@ -109,6 +109,10 @@ func (r *R2BucketNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r r2BucketNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Location of the bucket
 type R2BucketNewResponseLocation string
 
@@ -143,6 +147,10 @@ type r2BucketListResponseJSON struct {
 
 func (r *R2BucketListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r r2BucketListResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Location of the bucket
@@ -181,6 +189,10 @@ type r2BucketGetResponseJSON struct {
 
 func (r *R2BucketGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r r2BucketGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Location of the bucket
@@ -243,6 +255,10 @@ func (r *R2BucketNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r r2BucketNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type R2BucketNewResponseEnvelopeErrors struct {
 	Code    int64                                 `json:"code,required"`
 	Message string                                `json:"message,required"`
@@ -260,6 +276,10 @@ type r2BucketNewResponseEnvelopeErrorsJSON struct {
 
 func (r *R2BucketNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r r2BucketNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -337,6 +357,10 @@ func (r *R2BucketListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r r2BucketListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type R2BucketListResponseEnvelopeErrors struct {
 	Code    int64                                  `json:"code,required"`
 	Message string                                 `json:"message,required"`
@@ -354,6 +378,10 @@ type r2BucketListResponseEnvelopeErrorsJSON struct {
 
 func (r *R2BucketListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r r2BucketListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -382,6 +410,10 @@ type r2BucketListResponseEnvelopeResultInfoJSON struct {
 
 func (r *R2BucketListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r r2BucketListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type R2BucketDeleteParams struct {
@@ -413,6 +445,10 @@ func (r *R2BucketDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r r2BucketDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type R2BucketDeleteResponseEnvelopeErrors struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -430,6 +466,10 @@ type r2BucketDeleteResponseEnvelopeErrorsJSON struct {
 
 func (r *R2BucketDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r r2BucketDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -469,6 +509,10 @@ func (r *R2BucketGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r r2BucketGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type R2BucketGetResponseEnvelopeErrors struct {
 	Code    int64                                 `json:"code,required"`
 	Message string                                `json:"message,required"`
@@ -486,6 +530,10 @@ type r2BucketGetResponseEnvelopeErrorsJSON struct {
 
 func (r *R2BucketGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r r2BucketGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

@@ -78,6 +78,10 @@ func (r *RadarEntityLocationListResponse) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEntityLocationListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEntityLocationListResponseLocation struct {
 	Alpha2    string                                      `json:"alpha2,required"`
 	Latitude  string                                      `json:"latitude,required"`
@@ -101,6 +105,10 @@ func (r *RadarEntityLocationListResponseLocation) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEntityLocationListResponseLocationJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEntityLocationGetResponse struct {
 	Location RadarEntityLocationGetResponseLocation `json:"location,required"`
 	JSON     radarEntityLocationGetResponseJSON     `json:"-"`
@@ -116,6 +124,10 @@ type radarEntityLocationGetResponseJSON struct {
 
 func (r *RadarEntityLocationGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEntityLocationGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEntityLocationGetResponseLocation struct {
@@ -145,6 +157,10 @@ type radarEntityLocationGetResponseLocationJSON struct {
 
 func (r *RadarEntityLocationGetResponseLocation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEntityLocationGetResponseLocationJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEntityLocationListParams struct {
@@ -194,6 +210,10 @@ func (r *RadarEntityLocationListResponseEnvelope) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEntityLocationListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEntityLocationGetParams struct {
 	// Format results are returned in.
 	Format param.Field[RadarEntityLocationGetParamsFormat] `query:"format"`
@@ -233,4 +253,8 @@ type radarEntityLocationGetResponseEnvelopeJSON struct {
 
 func (r *RadarEntityLocationGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEntityLocationGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

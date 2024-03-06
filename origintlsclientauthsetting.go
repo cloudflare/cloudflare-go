@@ -78,6 +78,10 @@ func (r *OriginTLSClientAuthSettingUpdateResponse) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r originTLSClientAuthSettingUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type OriginTLSClientAuthSettingGetResponse struct {
 	// Indicates whether zone-level authenticated origin pulls is enabled.
 	Enabled bool                                      `json:"enabled"`
@@ -94,6 +98,10 @@ type originTLSClientAuthSettingGetResponseJSON struct {
 
 func (r *OriginTLSClientAuthSettingGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r originTLSClientAuthSettingGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type OriginTLSClientAuthSettingUpdateParams struct {
@@ -131,6 +139,10 @@ func (r *OriginTLSClientAuthSettingUpdateResponseEnvelope) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r originTLSClientAuthSettingUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type OriginTLSClientAuthSettingUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -148,6 +160,10 @@ type originTLSClientAuthSettingUpdateResponseEnvelopeErrorsJSON struct {
 
 func (r *OriginTLSClientAuthSettingUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r originTLSClientAuthSettingUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type OriginTLSClientAuthSettingUpdateResponseEnvelopeMessages struct {
@@ -168,6 +184,10 @@ type originTLSClientAuthSettingUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *OriginTLSClientAuthSettingUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r originTLSClientAuthSettingUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -206,6 +226,10 @@ func (r *OriginTLSClientAuthSettingGetResponseEnvelope) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r originTLSClientAuthSettingGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type OriginTLSClientAuthSettingGetResponseEnvelopeErrors struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -225,6 +249,10 @@ func (r *OriginTLSClientAuthSettingGetResponseEnvelopeErrors) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r originTLSClientAuthSettingGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type OriginTLSClientAuthSettingGetResponseEnvelopeMessages struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -242,6 +270,10 @@ type originTLSClientAuthSettingGetResponseEnvelopeMessagesJSON struct {
 
 func (r *OriginTLSClientAuthSettingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r originTLSClientAuthSettingGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

@@ -118,6 +118,10 @@ func (r *AlertingV3PolicyNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3PolicyNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3PolicyUpdateResponse struct {
 	// UUID
 	ID   string                             `json:"id"`
@@ -134,6 +138,10 @@ type alertingV3PolicyUpdateResponseJSON struct {
 
 func (r *AlertingV3PolicyUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r alertingV3PolicyUpdateResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type AlertingV3PolicyListResponse struct {
@@ -179,6 +187,10 @@ type alertingV3PolicyListResponseJSON struct {
 
 func (r *AlertingV3PolicyListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r alertingV3PolicyListResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Refers to which event will trigger a Notification dispatch. You can use the
@@ -381,6 +393,10 @@ func (r *AlertingV3PolicyListResponseFilters) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3PolicyListResponseFiltersJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3PolicyListResponseFiltersAlertTriggerPreferencesValue string
 
 const (
@@ -420,6 +436,10 @@ type alertingV3PolicyListResponseMechanismsJSON struct {
 
 func (r *AlertingV3PolicyListResponseMechanisms) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r alertingV3PolicyListResponseMechanismsJSON) RawJSON() string {
+	return r.raw
 }
 
 // UUID
@@ -508,6 +528,10 @@ type alertingV3PolicyGetResponseJSON struct {
 
 func (r *AlertingV3PolicyGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r alertingV3PolicyGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Refers to which event will trigger a Notification dispatch. You can use the
@@ -710,6 +734,10 @@ func (r *AlertingV3PolicyGetResponseFilters) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3PolicyGetResponseFiltersJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3PolicyGetResponseFiltersAlertTriggerPreferencesValue string
 
 const (
@@ -749,6 +777,10 @@ type alertingV3PolicyGetResponseMechanismsJSON struct {
 
 func (r *AlertingV3PolicyGetResponseMechanisms) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r alertingV3PolicyGetResponseMechanismsJSON) RawJSON() string {
+	return r.raw
 }
 
 // UUID
@@ -1014,6 +1046,10 @@ func (r *AlertingV3PolicyNewResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3PolicyNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3PolicyNewResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -1033,6 +1069,10 @@ func (r *AlertingV3PolicyNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3PolicyNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3PolicyNewResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -1050,6 +1090,10 @@ type alertingV3PolicyNewResponseEnvelopeMessagesJSON struct {
 
 func (r *AlertingV3PolicyNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r alertingV3PolicyNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1300,6 +1344,10 @@ func (r *AlertingV3PolicyUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3PolicyUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3PolicyUpdateResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -1319,6 +1367,10 @@ func (r *AlertingV3PolicyUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3PolicyUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3PolicyUpdateResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -1336,6 +1388,10 @@ type alertingV3PolicyUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *AlertingV3PolicyUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r alertingV3PolicyUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1376,6 +1432,10 @@ func (r *AlertingV3PolicyListResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3PolicyListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3PolicyListResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -1395,6 +1455,10 @@ func (r *AlertingV3PolicyListResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3PolicyListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3PolicyListResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -1412,6 +1476,10 @@ type alertingV3PolicyListResponseEnvelopeMessagesJSON struct {
 
 func (r *AlertingV3PolicyListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r alertingV3PolicyListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1448,6 +1516,10 @@ func (r *AlertingV3PolicyListResponseEnvelopeResultInfo) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3PolicyListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3PolicyDeleteParams struct {
 	// The account id
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -1479,6 +1551,10 @@ func (r *AlertingV3PolicyDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3PolicyDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3PolicyDeleteResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -1498,6 +1574,10 @@ func (r *AlertingV3PolicyDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3PolicyDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3PolicyDeleteResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -1515,6 +1595,10 @@ type alertingV3PolicyDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *AlertingV3PolicyDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r alertingV3PolicyDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1551,6 +1635,10 @@ func (r *AlertingV3PolicyDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3PolicyDeleteResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3PolicyGetParams struct {
 	// The account id
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -1580,6 +1668,10 @@ func (r *AlertingV3PolicyGetResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3PolicyGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3PolicyGetResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -1599,6 +1691,10 @@ func (r *AlertingV3PolicyGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3PolicyGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3PolicyGetResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -1616,6 +1712,10 @@ type alertingV3PolicyGetResponseEnvelopeMessagesJSON struct {
 
 func (r *AlertingV3PolicyGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r alertingV3PolicyGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

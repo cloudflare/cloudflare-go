@@ -194,6 +194,10 @@ func (r *VectorizeIndexNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r vectorizeIndexNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type VectorizeIndexNewResponseConfig struct {
 	// Specifies the number of dimensions for the index
 	Dimensions int64 `json:"dimensions,required"`
@@ -213,6 +217,10 @@ type vectorizeIndexNewResponseConfigJSON struct {
 
 func (r *VectorizeIndexNewResponseConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r vectorizeIndexNewResponseConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // Specifies the type of metric to use calculating distance.
@@ -252,6 +260,10 @@ func (r *VectorizeIndexUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r vectorizeIndexUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type VectorizeIndexUpdateResponseConfig struct {
 	// Specifies the number of dimensions for the index
 	Dimensions int64 `json:"dimensions,required"`
@@ -271,6 +283,10 @@ type vectorizeIndexUpdateResponseConfigJSON struct {
 
 func (r *VectorizeIndexUpdateResponseConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r vectorizeIndexUpdateResponseConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // Specifies the type of metric to use calculating distance.
@@ -310,6 +326,10 @@ func (r *VectorizeIndexListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r vectorizeIndexListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type VectorizeIndexListResponseConfig struct {
 	// Specifies the number of dimensions for the index
 	Dimensions int64 `json:"dimensions,required"`
@@ -329,6 +349,10 @@ type vectorizeIndexListResponseConfigJSON struct {
 
 func (r *VectorizeIndexListResponseConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r vectorizeIndexListResponseConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // Specifies the type of metric to use calculating distance.
@@ -379,6 +403,10 @@ func (r *VectorizeIndexDeleteByIDsResponse) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r vectorizeIndexDeleteByIDsResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type VectorizeIndexGetResponse struct {
 	Config VectorizeIndexGetResponseConfig `json:"config"`
 	// Specifies the timestamp the resource was created as an ISO8601 string.
@@ -407,6 +435,10 @@ func (r *VectorizeIndexGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r vectorizeIndexGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type VectorizeIndexGetResponseConfig struct {
 	// Specifies the number of dimensions for the index
 	Dimensions int64 `json:"dimensions,required"`
@@ -426,6 +458,10 @@ type vectorizeIndexGetResponseConfigJSON struct {
 
 func (r *VectorizeIndexGetResponseConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r vectorizeIndexGetResponseConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // Specifies the type of metric to use calculating distance.
@@ -460,6 +496,10 @@ func (r *VectorizeIndexInsertResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r vectorizeIndexInsertResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type VectorizeIndexQueryResponse struct {
 	// Specifies the count of vectors returned by the search
 	Count int64 `json:"count"`
@@ -479,6 +519,10 @@ type vectorizeIndexQueryResponseJSON struct {
 
 func (r *VectorizeIndexQueryResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r vectorizeIndexQueryResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type VectorizeIndexQueryResponseMatch struct {
@@ -506,6 +550,10 @@ func (r *VectorizeIndexQueryResponseMatch) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r vectorizeIndexQueryResponseMatchJSON) RawJSON() string {
+	return r.raw
+}
+
 type VectorizeIndexUpsertResponse struct {
 	// Specifies the count of the vectors successfully inserted.
 	Count int64 `json:"count"`
@@ -525,6 +573,10 @@ type vectorizeIndexUpsertResponseJSON struct {
 
 func (r *VectorizeIndexUpsertResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r vectorizeIndexUpsertResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type VectorizeIndexNewParams struct {
@@ -617,6 +669,10 @@ func (r *VectorizeIndexNewResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r vectorizeIndexNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type VectorizeIndexNewResponseEnvelopeErrors struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -636,6 +692,10 @@ func (r *VectorizeIndexNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r vectorizeIndexNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type VectorizeIndexNewResponseEnvelopeMessages struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -653,6 +713,10 @@ type vectorizeIndexNewResponseEnvelopeMessagesJSON struct {
 
 func (r *VectorizeIndexNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r vectorizeIndexNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -695,6 +759,10 @@ func (r *VectorizeIndexUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r vectorizeIndexUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type VectorizeIndexUpdateResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -714,6 +782,10 @@ func (r *VectorizeIndexUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r vectorizeIndexUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type VectorizeIndexUpdateResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -731,6 +803,10 @@ type vectorizeIndexUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *VectorizeIndexUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r vectorizeIndexUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -764,6 +840,10 @@ func (r *VectorizeIndexListResponseEnvelope) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r vectorizeIndexListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type VectorizeIndexListResponseEnvelopeErrors struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -783,6 +863,10 @@ func (r *VectorizeIndexListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r vectorizeIndexListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type VectorizeIndexListResponseEnvelopeMessages struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -800,6 +884,10 @@ type vectorizeIndexListResponseEnvelopeMessagesJSON struct {
 
 func (r *VectorizeIndexListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r vectorizeIndexListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -833,6 +921,10 @@ func (r *VectorizeIndexDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r vectorizeIndexDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type VectorizeIndexDeleteResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -852,6 +944,10 @@ func (r *VectorizeIndexDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r vectorizeIndexDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type VectorizeIndexDeleteResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -869,6 +965,10 @@ type vectorizeIndexDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *VectorizeIndexDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r vectorizeIndexDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -911,6 +1011,10 @@ func (r *VectorizeIndexDeleteByIDsResponseEnvelope) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r vectorizeIndexDeleteByIDsResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type VectorizeIndexDeleteByIDsResponseEnvelopeErrors struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -930,6 +1034,10 @@ func (r *VectorizeIndexDeleteByIDsResponseEnvelopeErrors) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r vectorizeIndexDeleteByIDsResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type VectorizeIndexDeleteByIDsResponseEnvelopeMessages struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -947,6 +1055,10 @@ type vectorizeIndexDeleteByIDsResponseEnvelopeMessagesJSON struct {
 
 func (r *VectorizeIndexDeleteByIDsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r vectorizeIndexDeleteByIDsResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -980,6 +1092,10 @@ func (r *VectorizeIndexGetResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r vectorizeIndexGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type VectorizeIndexGetResponseEnvelopeErrors struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -999,6 +1115,10 @@ func (r *VectorizeIndexGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r vectorizeIndexGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type VectorizeIndexGetResponseEnvelopeMessages struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -1016,6 +1136,10 @@ type vectorizeIndexGetResponseEnvelopeMessagesJSON struct {
 
 func (r *VectorizeIndexGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r vectorizeIndexGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1059,6 +1183,10 @@ func (r *VectorizeIndexGetByIDsResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r vectorizeIndexGetByIDsResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type VectorizeIndexGetByIDsResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -1078,6 +1206,10 @@ func (r *VectorizeIndexGetByIDsResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r vectorizeIndexGetByIDsResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type VectorizeIndexGetByIDsResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -1095,6 +1227,10 @@ type vectorizeIndexGetByIDsResponseEnvelopeMessagesJSON struct {
 
 func (r *VectorizeIndexGetByIDsResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r vectorizeIndexGetByIDsResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1128,6 +1264,10 @@ func (r *VectorizeIndexInsertResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r vectorizeIndexInsertResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type VectorizeIndexInsertResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -1147,6 +1287,10 @@ func (r *VectorizeIndexInsertResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r vectorizeIndexInsertResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type VectorizeIndexInsertResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -1164,6 +1308,10 @@ type vectorizeIndexInsertResponseEnvelopeMessagesJSON struct {
 
 func (r *VectorizeIndexInsertResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r vectorizeIndexInsertResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1212,6 +1360,10 @@ func (r *VectorizeIndexQueryResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r vectorizeIndexQueryResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type VectorizeIndexQueryResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -1231,6 +1383,10 @@ func (r *VectorizeIndexQueryResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r vectorizeIndexQueryResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type VectorizeIndexQueryResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -1248,6 +1404,10 @@ type vectorizeIndexQueryResponseEnvelopeMessagesJSON struct {
 
 func (r *VectorizeIndexQueryResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r vectorizeIndexQueryResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1281,6 +1441,10 @@ func (r *VectorizeIndexUpsertResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r vectorizeIndexUpsertResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type VectorizeIndexUpsertResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -1300,6 +1464,10 @@ func (r *VectorizeIndexUpsertResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r vectorizeIndexUpsertResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type VectorizeIndexUpsertResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -1317,6 +1485,10 @@ type vectorizeIndexUpsertResponseEnvelopeMessagesJSON struct {
 
 func (r *VectorizeIndexUpsertResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r vectorizeIndexUpsertResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

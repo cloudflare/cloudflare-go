@@ -96,6 +96,10 @@ func (r *IntelDomainGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r intelDomainGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Additional information related to the host name.
 type IntelDomainGetResponseAdditionalInformation struct {
 	// Suspected DGA malware family.
@@ -113,6 +117,10 @@ type intelDomainGetResponseAdditionalInformationJSON struct {
 
 func (r *IntelDomainGetResponseAdditionalInformation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r intelDomainGetResponseAdditionalInformationJSON) RawJSON() string {
+	return r.raw
 }
 
 // Application that the hostname belongs to.
@@ -133,6 +141,10 @@ type intelDomainGetResponseApplicationJSON struct {
 
 func (r *IntelDomainGetResponseApplication) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r intelDomainGetResponseApplicationJSON) RawJSON() string {
+	return r.raw
 }
 
 type IntelDomainGetResponseInheritedContentCategory struct {
@@ -156,6 +168,10 @@ func (r *IntelDomainGetResponseInheritedContentCategory) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r intelDomainGetResponseInheritedContentCategoryJSON) RawJSON() string {
+	return r.raw
+}
+
 type IntelDomainGetResponseInheritedRiskType struct {
 	ID              int64                                       `json:"id"`
 	Name            string                                      `json:"name"`
@@ -175,6 +191,10 @@ type intelDomainGetResponseInheritedRiskTypeJSON struct {
 
 func (r *IntelDomainGetResponseInheritedRiskType) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r intelDomainGetResponseInheritedRiskTypeJSON) RawJSON() string {
+	return r.raw
 }
 
 type IntelDomainGetResponseResolvesToRef struct {
@@ -197,6 +217,10 @@ type intelDomainGetResponseResolvesToRefJSON struct {
 
 func (r *IntelDomainGetResponseResolvesToRef) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r intelDomainGetResponseResolvesToRefJSON) RawJSON() string {
+	return r.raw
 }
 
 type IntelDomainGetParams struct {
@@ -237,6 +261,10 @@ func (r *IntelDomainGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r intelDomainGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type IntelDomainGetResponseEnvelopeErrors struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -256,6 +284,10 @@ func (r *IntelDomainGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r intelDomainGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type IntelDomainGetResponseEnvelopeMessages struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -273,6 +305,10 @@ type intelDomainGetResponseEnvelopeMessagesJSON struct {
 
 func (r *IntelDomainGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r intelDomainGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

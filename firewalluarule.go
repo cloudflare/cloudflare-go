@@ -176,6 +176,10 @@ func (r *FirewallUARuleListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallUARuleListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The configuration object for the current rule.
 type FirewallUARuleListResponseConfiguration struct {
 	// The configuration target for this rule. You must set the target to `ua` for User
@@ -198,6 +202,10 @@ type firewallUARuleListResponseConfigurationJSON struct {
 
 func (r *FirewallUARuleListResponseConfiguration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallUARuleListResponseConfigurationJSON) RawJSON() string {
+	return r.raw
 }
 
 // The action to apply to a matched request.
@@ -226,6 +234,10 @@ type firewallUARuleDeleteResponseJSON struct {
 
 func (r *FirewallUARuleDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallUARuleDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Union satisfied by [FirewallUARuleGetResponseUnknown] or [shared.UnionString].
@@ -276,6 +288,10 @@ func (r *FirewallUARuleNewResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallUARuleNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallUARuleNewResponseEnvelopeErrors struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -295,6 +311,10 @@ func (r *FirewallUARuleNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallUARuleNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallUARuleNewResponseEnvelopeMessages struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -312,6 +332,10 @@ type firewallUARuleNewResponseEnvelopeMessagesJSON struct {
 
 func (r *FirewallUARuleNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallUARuleNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -353,6 +377,10 @@ func (r *FirewallUARuleUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallUARuleUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallUARuleUpdateResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -372,6 +400,10 @@ func (r *FirewallUARuleUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallUARuleUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallUARuleUpdateResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -389,6 +421,10 @@ type firewallUARuleUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *FirewallUARuleUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallUARuleUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -445,6 +481,10 @@ func (r *FirewallUARuleDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallUARuleDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallUARuleDeleteResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -464,6 +504,10 @@ func (r *FirewallUARuleDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallUARuleDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallUARuleDeleteResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -481,6 +525,10 @@ type firewallUARuleDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *FirewallUARuleDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallUARuleDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -514,6 +562,10 @@ func (r *FirewallUARuleGetResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallUARuleGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallUARuleGetResponseEnvelopeErrors struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -533,6 +585,10 @@ func (r *FirewallUARuleGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallUARuleGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallUARuleGetResponseEnvelopeMessages struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -550,6 +606,10 @@ type firewallUARuleGetResponseEnvelopeMessagesJSON struct {
 
 func (r *FirewallUARuleGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallUARuleGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

@@ -87,6 +87,10 @@ func (r *SSLCertificatePackOrderNewResponse) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r sslCertificatePackOrderNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Certificate Authority selected for the order. For information on any certificate
 // authority specific details or restrictions
 // [see this page for more details.](https://developers.cloudflare.com/ssl/reference/certificate-authorities)
@@ -235,6 +239,10 @@ func (r *SSLCertificatePackOrderNewResponseEnvelope) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r sslCertificatePackOrderNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type SSLCertificatePackOrderNewResponseEnvelopeErrors struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -254,6 +262,10 @@ func (r *SSLCertificatePackOrderNewResponseEnvelopeErrors) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r sslCertificatePackOrderNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type SSLCertificatePackOrderNewResponseEnvelopeMessages struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -271,6 +283,10 @@ type sslCertificatePackOrderNewResponseEnvelopeMessagesJSON struct {
 
 func (r *SSLCertificatePackOrderNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sslCertificatePackOrderNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

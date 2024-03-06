@@ -98,6 +98,10 @@ func (r *ZoneSettingOriginMaxHTTPVersionEditResponse) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingOriginMaxHTTPVersionEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Value of the zone setting.
 type ZoneSettingOriginMaxHTTPVersionEditResponseID string
 
@@ -141,6 +145,10 @@ type zoneSettingOriginMaxHTTPVersionGetResponseJSON struct {
 
 func (r *ZoneSettingOriginMaxHTTPVersionGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingOriginMaxHTTPVersionGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Value of the zone setting.
@@ -207,6 +215,10 @@ func (r *ZoneSettingOriginMaxHTTPVersionEditResponseEnvelope) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingOriginMaxHTTPVersionEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingOriginMaxHTTPVersionEditResponseEnvelopeErrors struct {
 	Code    int64                                                         `json:"code,required"`
 	Message string                                                        `json:"message,required"`
@@ -227,6 +239,10 @@ func (r *ZoneSettingOriginMaxHTTPVersionEditResponseEnvelopeErrors) UnmarshalJSO
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingOriginMaxHTTPVersionEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingOriginMaxHTTPVersionEditResponseEnvelopeMessages struct {
 	Code    int64                                                           `json:"code,required"`
 	Message string                                                          `json:"message,required"`
@@ -245,6 +261,10 @@ type zoneSettingOriginMaxHTTPVersionEditResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingOriginMaxHTTPVersionEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingOriginMaxHTTPVersionEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -289,6 +309,10 @@ func (r *ZoneSettingOriginMaxHTTPVersionGetResponseEnvelope) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingOriginMaxHTTPVersionGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingOriginMaxHTTPVersionGetResponseEnvelopeErrors struct {
 	Code    int64                                                        `json:"code,required"`
 	Message string                                                       `json:"message,required"`
@@ -309,6 +333,10 @@ func (r *ZoneSettingOriginMaxHTTPVersionGetResponseEnvelopeErrors) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingOriginMaxHTTPVersionGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingOriginMaxHTTPVersionGetResponseEnvelopeMessages struct {
 	Code    int64                                                          `json:"code,required"`
 	Message string                                                         `json:"message,required"`
@@ -327,6 +355,10 @@ type zoneSettingOriginMaxHTTPVersionGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingOriginMaxHTTPVersionGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingOriginMaxHTTPVersionGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

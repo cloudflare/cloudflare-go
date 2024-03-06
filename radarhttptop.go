@@ -80,6 +80,10 @@ func (r *RadarHTTPTopBrowserFamiliesResponse) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarHTTPTopBrowserFamiliesResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarHTTPTopBrowserFamiliesResponseMeta struct {
 	DateRange      []RadarHTTPTopBrowserFamiliesResponseMetaDateRange    `json:"dateRange,required"`
 	LastUpdated    string                                                `json:"lastUpdated,required"`
@@ -99,6 +103,10 @@ type radarHTTPTopBrowserFamiliesResponseMetaJSON struct {
 
 func (r *RadarHTTPTopBrowserFamiliesResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarHTTPTopBrowserFamiliesResponseMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarHTTPTopBrowserFamiliesResponseMetaDateRange struct {
@@ -122,6 +130,10 @@ func (r *RadarHTTPTopBrowserFamiliesResponseMetaDateRange) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarHTTPTopBrowserFamiliesResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarHTTPTopBrowserFamiliesResponseMetaConfidenceInfo struct {
 	Annotations []RadarHTTPTopBrowserFamiliesResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                             `json:"level"`
@@ -139,6 +151,10 @@ type radarHTTPTopBrowserFamiliesResponseMetaConfidenceInfoJSON struct {
 
 func (r *RadarHTTPTopBrowserFamiliesResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarHTTPTopBrowserFamiliesResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarHTTPTopBrowserFamiliesResponseMetaConfidenceInfoAnnotation struct {
@@ -171,6 +187,10 @@ func (r *RadarHTTPTopBrowserFamiliesResponseMetaConfidenceInfoAnnotation) Unmars
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarHTTPTopBrowserFamiliesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarHTTPTopBrowserFamiliesResponseTop0 struct {
 	Name  string                                      `json:"name,required"`
 	Value string                                      `json:"value,required"`
@@ -190,6 +210,10 @@ func (r *RadarHTTPTopBrowserFamiliesResponseTop0) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarHTTPTopBrowserFamiliesResponseTop0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarHTTPTopBrowsersResponse struct {
 	Meta RadarHTTPTopBrowsersResponseMeta   `json:"meta,required"`
 	Top0 []RadarHTTPTopBrowsersResponseTop0 `json:"top_0,required"`
@@ -207,6 +231,10 @@ type radarHTTPTopBrowsersResponseJSON struct {
 
 func (r *RadarHTTPTopBrowsersResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarHTTPTopBrowsersResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarHTTPTopBrowsersResponseMeta struct {
@@ -230,6 +258,10 @@ func (r *RadarHTTPTopBrowsersResponseMeta) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarHTTPTopBrowsersResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarHTTPTopBrowsersResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
@@ -251,6 +283,10 @@ func (r *RadarHTTPTopBrowsersResponseMetaDateRange) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarHTTPTopBrowsersResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarHTTPTopBrowsersResponseMetaConfidenceInfo struct {
 	Annotations []RadarHTTPTopBrowsersResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                      `json:"level"`
@@ -268,6 +304,10 @@ type radarHTTPTopBrowsersResponseMetaConfidenceInfoJSON struct {
 
 func (r *RadarHTTPTopBrowsersResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarHTTPTopBrowsersResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarHTTPTopBrowsersResponseMetaConfidenceInfoAnnotation struct {
@@ -300,6 +340,10 @@ func (r *RadarHTTPTopBrowsersResponseMetaConfidenceInfoAnnotation) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarHTTPTopBrowsersResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarHTTPTopBrowsersResponseTop0 struct {
 	Name  string                               `json:"name,required"`
 	Value string                               `json:"value,required"`
@@ -317,6 +361,10 @@ type radarHTTPTopBrowsersResponseTop0JSON struct {
 
 func (r *RadarHTTPTopBrowsersResponseTop0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarHTTPTopBrowsersResponseTop0JSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarHTTPTopBrowserFamiliesParams struct {
@@ -478,6 +526,10 @@ func (r *RadarHTTPTopBrowserFamiliesResponseEnvelope) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarHTTPTopBrowserFamiliesResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarHTTPTopBrowsersParams struct {
 	// Array of comma separated list of ASNs, start with `-` to exclude from results.
 	// For example, `-174, 3356` excludes results from AS174, but includes results from
@@ -635,4 +687,8 @@ type radarHTTPTopBrowsersResponseEnvelopeJSON struct {
 
 func (r *RadarHTTPTopBrowsersResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarHTTPTopBrowsersResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

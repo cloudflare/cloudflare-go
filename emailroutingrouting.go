@@ -94,6 +94,10 @@ func (r *EmailRoutingRoutingGetResponse) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r emailRoutingRoutingGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // State of the zone settings for Email Routing.
 type EmailRoutingRoutingGetResponseEnabled bool
 
@@ -145,6 +149,10 @@ func (r *EmailRoutingRoutingGetResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r emailRoutingRoutingGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type EmailRoutingRoutingGetResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -164,6 +172,10 @@ func (r *EmailRoutingRoutingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r emailRoutingRoutingGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type EmailRoutingRoutingGetResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -181,6 +193,10 @@ type emailRoutingRoutingGetResponseEnvelopeMessagesJSON struct {
 
 func (r *EmailRoutingRoutingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailRoutingRoutingGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

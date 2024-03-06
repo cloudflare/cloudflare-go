@@ -132,6 +132,10 @@ func (r *MTLSCertificateNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r mtlsCertificateNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type MTLSCertificateListResponse struct {
 	// Identifier
 	ID string `json:"id"`
@@ -172,6 +176,10 @@ type mtlsCertificateListResponseJSON struct {
 
 func (r *MTLSCertificateListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r mtlsCertificateListResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type MTLSCertificateDeleteResponse struct {
@@ -216,6 +224,10 @@ func (r *MTLSCertificateDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r mtlsCertificateDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type MTLSCertificateGetResponse struct {
 	// Identifier
 	ID string `json:"id"`
@@ -256,6 +268,10 @@ type mtlsCertificateGetResponseJSON struct {
 
 func (r *MTLSCertificateGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r mtlsCertificateGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type MTLSCertificateNewParams struct {
@@ -299,6 +315,10 @@ func (r *MTLSCertificateNewResponseEnvelope) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r mtlsCertificateNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type MTLSCertificateNewResponseEnvelopeErrors struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -318,6 +338,10 @@ func (r *MTLSCertificateNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r mtlsCertificateNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type MTLSCertificateNewResponseEnvelopeMessages struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -335,6 +359,10 @@ type mtlsCertificateNewResponseEnvelopeMessagesJSON struct {
 
 func (r *MTLSCertificateNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r mtlsCertificateNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -375,6 +403,10 @@ func (r *MTLSCertificateListResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r mtlsCertificateListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type MTLSCertificateListResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -394,6 +426,10 @@ func (r *MTLSCertificateListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r mtlsCertificateListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type MTLSCertificateListResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -411,6 +447,10 @@ type mtlsCertificateListResponseEnvelopeMessagesJSON struct {
 
 func (r *MTLSCertificateListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r mtlsCertificateListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -449,6 +489,10 @@ func (r *MTLSCertificateListResponseEnvelopeResultInfo) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r mtlsCertificateListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type MTLSCertificateDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -478,6 +522,10 @@ func (r *MTLSCertificateDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r mtlsCertificateDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type MTLSCertificateDeleteResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -497,6 +545,10 @@ func (r *MTLSCertificateDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r mtlsCertificateDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type MTLSCertificateDeleteResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -514,6 +566,10 @@ type mtlsCertificateDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *MTLSCertificateDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r mtlsCertificateDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -552,6 +608,10 @@ func (r *MTLSCertificateGetResponseEnvelope) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r mtlsCertificateGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type MTLSCertificateGetResponseEnvelopeErrors struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -571,6 +631,10 @@ func (r *MTLSCertificateGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r mtlsCertificateGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type MTLSCertificateGetResponseEnvelopeMessages struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -588,6 +652,10 @@ type mtlsCertificateGetResponseEnvelopeMessagesJSON struct {
 
 func (r *MTLSCertificateGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r mtlsCertificateGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

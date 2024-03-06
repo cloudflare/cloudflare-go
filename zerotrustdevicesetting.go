@@ -84,6 +84,10 @@ func (r *ZeroTrustDeviceSettingUpdateResponse) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDeviceSettingUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDeviceSettingListResponse struct {
 	// Enable gateway proxy filtering on TCP.
 	GatewayProxyEnabled bool `json:"gateway_proxy_enabled"`
@@ -109,6 +113,10 @@ type zeroTrustDeviceSettingListResponseJSON struct {
 
 func (r *ZeroTrustDeviceSettingListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDeviceSettingListResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDeviceSettingUpdateParams struct {
@@ -151,6 +159,10 @@ func (r *ZeroTrustDeviceSettingUpdateResponseEnvelope) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDeviceSettingUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDeviceSettingUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -170,6 +182,10 @@ func (r *ZeroTrustDeviceSettingUpdateResponseEnvelopeErrors) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDeviceSettingUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDeviceSettingUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -187,6 +203,10 @@ type zeroTrustDeviceSettingUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustDeviceSettingUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDeviceSettingUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful.
@@ -224,6 +244,10 @@ func (r *ZeroTrustDeviceSettingListResponseEnvelope) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDeviceSettingListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDeviceSettingListResponseEnvelopeErrors struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -243,6 +267,10 @@ func (r *ZeroTrustDeviceSettingListResponseEnvelopeErrors) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDeviceSettingListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDeviceSettingListResponseEnvelopeMessages struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -260,6 +288,10 @@ type zeroTrustDeviceSettingListResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustDeviceSettingListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDeviceSettingListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful.

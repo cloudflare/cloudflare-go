@@ -131,6 +131,10 @@ func (r *Web3HostnameIPFSUniversalPathContentListEntryNewResponse) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r web3HostnameIPFSUniversalPathContentListEntryNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Type of content list entry to block.
 type Web3HostnameIPFSUniversalPathContentListEntryNewResponseType string
 
@@ -172,6 +176,10 @@ func (r *Web3HostnameIPFSUniversalPathContentListEntryUpdateResponse) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r web3HostnameIPFSUniversalPathContentListEntryUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Type of content list entry to block.
 type Web3HostnameIPFSUniversalPathContentListEntryUpdateResponseType string
 
@@ -197,6 +205,10 @@ type web3HostnameIPFSUniversalPathContentListEntryListResponseJSON struct {
 
 func (r *Web3HostnameIPFSUniversalPathContentListEntryListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r web3HostnameIPFSUniversalPathContentListEntryListResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Content list entry to be blocked.
@@ -232,6 +244,10 @@ func (r *Web3HostnameIPFSUniversalPathContentListEntryListResponseEntry) Unmarsh
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r web3HostnameIPFSUniversalPathContentListEntryListResponseEntryJSON) RawJSON() string {
+	return r.raw
+}
+
 // Type of content list entry to block.
 type Web3HostnameIPFSUniversalPathContentListEntryListResponseEntriesType string
 
@@ -257,6 +273,10 @@ type web3HostnameIPFSUniversalPathContentListEntryDeleteResponseJSON struct {
 
 func (r *Web3HostnameIPFSUniversalPathContentListEntryDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r web3HostnameIPFSUniversalPathContentListEntryDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Content list entry to be blocked.
@@ -290,6 +310,10 @@ type web3HostnameIPFSUniversalPathContentListEntryGetResponseJSON struct {
 
 func (r *Web3HostnameIPFSUniversalPathContentListEntryGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r web3HostnameIPFSUniversalPathContentListEntryGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Type of content list entry to block.
@@ -347,6 +371,10 @@ func (r *Web3HostnameIPFSUniversalPathContentListEntryNewResponseEnvelope) Unmar
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r web3HostnameIPFSUniversalPathContentListEntryNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type Web3HostnameIPFSUniversalPathContentListEntryNewResponseEnvelopeErrors struct {
 	Code    int64                                                                      `json:"code,required"`
 	Message string                                                                     `json:"message,required"`
@@ -367,6 +395,10 @@ func (r *Web3HostnameIPFSUniversalPathContentListEntryNewResponseEnvelopeErrors)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r web3HostnameIPFSUniversalPathContentListEntryNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type Web3HostnameIPFSUniversalPathContentListEntryNewResponseEnvelopeMessages struct {
 	Code    int64                                                                        `json:"code,required"`
 	Message string                                                                       `json:"message,required"`
@@ -385,6 +417,10 @@ type web3HostnameIPFSUniversalPathContentListEntryNewResponseEnvelopeMessagesJSO
 
 func (r *Web3HostnameIPFSUniversalPathContentListEntryNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r web3HostnameIPFSUniversalPathContentListEntryNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -441,6 +477,10 @@ func (r *Web3HostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelope) Un
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r web3HostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type Web3HostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                                         `json:"code,required"`
 	Message string                                                                        `json:"message,required"`
@@ -461,6 +501,10 @@ func (r *Web3HostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelopeErro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r web3HostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type Web3HostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                                           `json:"code,required"`
 	Message string                                                                          `json:"message,required"`
@@ -479,6 +523,10 @@ type web3HostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelopeMessages
 
 func (r *Web3HostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r web3HostnameIPFSUniversalPathContentListEntryUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -515,6 +563,10 @@ func (r *Web3HostnameIPFSUniversalPathContentListEntryListResponseEnvelope) Unma
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r web3HostnameIPFSUniversalPathContentListEntryListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type Web3HostnameIPFSUniversalPathContentListEntryListResponseEnvelopeErrors struct {
 	Code    int64                                                                       `json:"code,required"`
 	Message string                                                                      `json:"message,required"`
@@ -535,6 +587,10 @@ func (r *Web3HostnameIPFSUniversalPathContentListEntryListResponseEnvelopeErrors
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r web3HostnameIPFSUniversalPathContentListEntryListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type Web3HostnameIPFSUniversalPathContentListEntryListResponseEnvelopeMessages struct {
 	Code    int64                                                                         `json:"code,required"`
 	Message string                                                                        `json:"message,required"`
@@ -553,6 +609,10 @@ type web3HostnameIPFSUniversalPathContentListEntryListResponseEnvelopeMessagesJS
 
 func (r *Web3HostnameIPFSUniversalPathContentListEntryListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r web3HostnameIPFSUniversalPathContentListEntryListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -590,6 +650,10 @@ func (r *Web3HostnameIPFSUniversalPathContentListEntryListResponseEnvelopeResult
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r web3HostnameIPFSUniversalPathContentListEntryListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type Web3HostnameIPFSUniversalPathContentListEntryDeleteResponseEnvelope struct {
 	Errors   []Web3HostnameIPFSUniversalPathContentListEntryDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []Web3HostnameIPFSUniversalPathContentListEntryDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -615,6 +679,10 @@ func (r *Web3HostnameIPFSUniversalPathContentListEntryDeleteResponseEnvelope) Un
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r web3HostnameIPFSUniversalPathContentListEntryDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type Web3HostnameIPFSUniversalPathContentListEntryDeleteResponseEnvelopeErrors struct {
 	Code    int64                                                                         `json:"code,required"`
 	Message string                                                                        `json:"message,required"`
@@ -635,6 +703,10 @@ func (r *Web3HostnameIPFSUniversalPathContentListEntryDeleteResponseEnvelopeErro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r web3HostnameIPFSUniversalPathContentListEntryDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type Web3HostnameIPFSUniversalPathContentListEntryDeleteResponseEnvelopeMessages struct {
 	Code    int64                                                                           `json:"code,required"`
 	Message string                                                                          `json:"message,required"`
@@ -653,6 +725,10 @@ type web3HostnameIPFSUniversalPathContentListEntryDeleteResponseEnvelopeMessages
 
 func (r *Web3HostnameIPFSUniversalPathContentListEntryDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r web3HostnameIPFSUniversalPathContentListEntryDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -688,6 +764,10 @@ func (r *Web3HostnameIPFSUniversalPathContentListEntryGetResponseEnvelope) Unmar
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r web3HostnameIPFSUniversalPathContentListEntryGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type Web3HostnameIPFSUniversalPathContentListEntryGetResponseEnvelopeErrors struct {
 	Code    int64                                                                      `json:"code,required"`
 	Message string                                                                     `json:"message,required"`
@@ -708,6 +788,10 @@ func (r *Web3HostnameIPFSUniversalPathContentListEntryGetResponseEnvelopeErrors)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r web3HostnameIPFSUniversalPathContentListEntryGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type Web3HostnameIPFSUniversalPathContentListEntryGetResponseEnvelopeMessages struct {
 	Code    int64                                                                        `json:"code,required"`
 	Message string                                                                       `json:"message,required"`
@@ -726,6 +810,10 @@ type web3HostnameIPFSUniversalPathContentListEntryGetResponseEnvelopeMessagesJSO
 
 func (r *Web3HostnameIPFSUniversalPathContentListEntryGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r web3HostnameIPFSUniversalPathContentListEntryGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

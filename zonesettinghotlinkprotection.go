@@ -105,6 +105,10 @@ func (r *ZoneSettingHotlinkProtectionEditResponse) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingHotlinkProtectionEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // ID of the zone setting.
 type ZoneSettingHotlinkProtectionEditResponseID string
 
@@ -162,6 +166,10 @@ type zoneSettingHotlinkProtectionGetResponseJSON struct {
 
 func (r *ZoneSettingHotlinkProtectionGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingHotlinkProtectionGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // ID of the zone setting.
@@ -238,6 +246,10 @@ func (r *ZoneSettingHotlinkProtectionEditResponseEnvelope) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingHotlinkProtectionEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingHotlinkProtectionEditResponseEnvelopeErrors struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -255,6 +267,10 @@ type zoneSettingHotlinkProtectionEditResponseEnvelopeErrorsJSON struct {
 
 func (r *ZoneSettingHotlinkProtectionEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingHotlinkProtectionEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneSettingHotlinkProtectionEditResponseEnvelopeMessages struct {
@@ -275,6 +291,10 @@ type zoneSettingHotlinkProtectionEditResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingHotlinkProtectionEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingHotlinkProtectionEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneSettingHotlinkProtectionGetParams struct {
@@ -313,6 +333,10 @@ func (r *ZoneSettingHotlinkProtectionGetResponseEnvelope) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingHotlinkProtectionGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingHotlinkProtectionGetResponseEnvelopeErrors struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -330,6 +354,10 @@ type zoneSettingHotlinkProtectionGetResponseEnvelopeErrorsJSON struct {
 
 func (r *ZoneSettingHotlinkProtectionGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingHotlinkProtectionGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneSettingHotlinkProtectionGetResponseEnvelopeMessages struct {
@@ -350,4 +378,8 @@ type zoneSettingHotlinkProtectionGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingHotlinkProtectionGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingHotlinkProtectionGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }

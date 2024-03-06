@@ -87,6 +87,10 @@ func (r *ZoneSettingProxyReadTimeoutEditResponse) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingProxyReadTimeoutEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // ID of the zone setting.
 type ZoneSettingProxyReadTimeoutEditResponseID string
 
@@ -130,6 +134,10 @@ type zoneSettingProxyReadTimeoutGetResponseJSON struct {
 
 func (r *ZoneSettingProxyReadTimeoutGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingProxyReadTimeoutGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // ID of the zone setting.
@@ -212,6 +220,10 @@ func (r *ZoneSettingProxyReadTimeoutEditResponseEnvelope) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingProxyReadTimeoutEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingProxyReadTimeoutEditResponseEnvelopeErrors struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -229,6 +241,10 @@ type zoneSettingProxyReadTimeoutEditResponseEnvelopeErrorsJSON struct {
 
 func (r *ZoneSettingProxyReadTimeoutEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingProxyReadTimeoutEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneSettingProxyReadTimeoutEditResponseEnvelopeMessages struct {
@@ -249,6 +265,10 @@ type zoneSettingProxyReadTimeoutEditResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingProxyReadTimeoutEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingProxyReadTimeoutEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneSettingProxyReadTimeoutGetParams struct {
@@ -281,6 +301,10 @@ func (r *ZoneSettingProxyReadTimeoutGetResponseEnvelope) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingProxyReadTimeoutGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingProxyReadTimeoutGetResponseEnvelopeErrors struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -300,6 +324,10 @@ func (r *ZoneSettingProxyReadTimeoutGetResponseEnvelopeErrors) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingProxyReadTimeoutGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingProxyReadTimeoutGetResponseEnvelopeMessages struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -317,4 +345,8 @@ type zoneSettingProxyReadTimeoutGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingProxyReadTimeoutGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingProxyReadTimeoutGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }

@@ -74,6 +74,10 @@ func (r *StreamDirectUploadNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamDirectUploadNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamDirectUploadNewResponseWatermark struct {
 	// The date and a time a watermark profile was created.
 	Created time.Time `json:"created" format:"date-time"`
@@ -130,6 +134,10 @@ type streamDirectUploadNewResponseWatermarkJSON struct {
 
 func (r *StreamDirectUploadNewResponseWatermark) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamDirectUploadNewResponseWatermarkJSON) RawJSON() string {
+	return r.raw
 }
 
 type StreamDirectUploadNewParams struct {
@@ -205,6 +213,10 @@ func (r *StreamDirectUploadNewResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamDirectUploadNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamDirectUploadNewResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -224,6 +236,10 @@ func (r *StreamDirectUploadNewResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamDirectUploadNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamDirectUploadNewResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -241,6 +257,10 @@ type streamDirectUploadNewResponseEnvelopeMessagesJSON struct {
 
 func (r *StreamDirectUploadNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamDirectUploadNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

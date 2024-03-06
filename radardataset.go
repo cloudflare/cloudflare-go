@@ -87,6 +87,10 @@ func (r *RadarDatasetListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarDatasetListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarDatasetListResponseDataset struct {
 	ID          int64                               `json:"id,required"`
 	Description string                              `json:"description,required"`
@@ -114,6 +118,10 @@ func (r *RadarDatasetListResponseDataset) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarDatasetListResponseDatasetJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarDatasetDownloadResponse struct {
 	Dataset RadarDatasetDownloadResponseDataset `json:"dataset,required"`
 	JSON    radarDatasetDownloadResponseJSON    `json:"-"`
@@ -131,6 +139,10 @@ func (r *RadarDatasetDownloadResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarDatasetDownloadResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarDatasetDownloadResponseDataset struct {
 	URL  string                                  `json:"url,required"`
 	JSON radarDatasetDownloadResponseDatasetJSON `json:"-"`
@@ -146,6 +158,10 @@ type radarDatasetDownloadResponseDatasetJSON struct {
 
 func (r *RadarDatasetDownloadResponseDataset) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarDatasetDownloadResponseDatasetJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarDatasetListParams struct {
@@ -202,6 +218,10 @@ func (r *RadarDatasetListResponseEnvelope) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarDatasetListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarDatasetDownloadParams struct {
 	DatasetID param.Field[int64] `json:"datasetId,required"`
 	// Format results are returned in.
@@ -246,6 +266,10 @@ type radarDatasetDownloadResponseEnvelopeJSON struct {
 
 func (r *RadarDatasetDownloadResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarDatasetDownloadResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarDatasetGetParams struct {

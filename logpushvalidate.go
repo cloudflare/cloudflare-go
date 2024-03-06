@@ -92,6 +92,10 @@ func (r *LogpushValidateDestinationResponse) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logpushValidateDestinationResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogpushValidateOriginResponse struct {
 	Message string                            `json:"message"`
 	Valid   bool                              `json:"valid"`
@@ -109,6 +113,10 @@ type logpushValidateOriginResponseJSON struct {
 
 func (r *LogpushValidateOriginResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r logpushValidateOriginResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type LogpushValidateDestinationParams struct {
@@ -150,6 +158,10 @@ func (r *LogpushValidateDestinationResponseEnvelope) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logpushValidateDestinationResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogpushValidateDestinationResponseEnvelopeErrors struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -169,6 +181,10 @@ func (r *LogpushValidateDestinationResponseEnvelopeErrors) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logpushValidateDestinationResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogpushValidateDestinationResponseEnvelopeMessages struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -186,6 +202,10 @@ type logpushValidateDestinationResponseEnvelopeMessagesJSON struct {
 
 func (r *LogpushValidateDestinationResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r logpushValidateDestinationResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -236,6 +256,10 @@ func (r *LogpushValidateOriginResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logpushValidateOriginResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogpushValidateOriginResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -255,6 +279,10 @@ func (r *LogpushValidateOriginResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logpushValidateOriginResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogpushValidateOriginResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -272,6 +300,10 @@ type logpushValidateOriginResponseEnvelopeMessagesJSON struct {
 
 func (r *LogpushValidateOriginResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r logpushValidateOriginResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

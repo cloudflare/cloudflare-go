@@ -112,6 +112,10 @@ func (r *StreamLiveInputOutputNewResponse) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamLiveInputOutputNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamLiveInputOutputUpdateResponse struct {
 	// When enabled, live video streamed to the associated live input will be sent to
 	// the output URL. When disabled, live video will not be sent to the output URL,
@@ -143,6 +147,10 @@ func (r *StreamLiveInputOutputUpdateResponse) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamLiveInputOutputUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamLiveInputOutputListResponse struct {
 	// When enabled, live video streamed to the associated live input will be sent to
 	// the output URL. When disabled, live video will not be sent to the output URL,
@@ -172,6 +180,10 @@ type streamLiveInputOutputListResponseJSON struct {
 
 func (r *StreamLiveInputOutputListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamLiveInputOutputListResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type StreamLiveInputOutputNewParams struct {
@@ -217,6 +229,10 @@ func (r *StreamLiveInputOutputNewResponseEnvelope) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamLiveInputOutputNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamLiveInputOutputNewResponseEnvelopeErrors struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -236,6 +252,10 @@ func (r *StreamLiveInputOutputNewResponseEnvelopeErrors) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamLiveInputOutputNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamLiveInputOutputNewResponseEnvelopeMessages struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -253,6 +273,10 @@ type streamLiveInputOutputNewResponseEnvelopeMessagesJSON struct {
 
 func (r *StreamLiveInputOutputNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamLiveInputOutputNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -301,6 +325,10 @@ func (r *StreamLiveInputOutputUpdateResponseEnvelope) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamLiveInputOutputUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamLiveInputOutputUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -320,6 +348,10 @@ func (r *StreamLiveInputOutputUpdateResponseEnvelopeErrors) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamLiveInputOutputUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamLiveInputOutputUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -337,6 +369,10 @@ type streamLiveInputOutputUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *StreamLiveInputOutputUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamLiveInputOutputUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -375,6 +411,10 @@ func (r *StreamLiveInputOutputListResponseEnvelope) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamLiveInputOutputListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamLiveInputOutputListResponseEnvelopeErrors struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -394,6 +434,10 @@ func (r *StreamLiveInputOutputListResponseEnvelopeErrors) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamLiveInputOutputListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamLiveInputOutputListResponseEnvelopeMessages struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -411,6 +455,10 @@ type streamLiveInputOutputListResponseEnvelopeMessagesJSON struct {
 
 func (r *StreamLiveInputOutputListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamLiveInputOutputListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

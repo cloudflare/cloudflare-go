@@ -67,6 +67,10 @@ func (r *RequestTracerTraceNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r requestTracerTraceNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RequestTracerTraceNewParams struct {
 	// HTTP Method of tracing request
 	Method param.Field[string] `json:"method,required"`
@@ -161,6 +165,10 @@ func (r *RequestTracerTraceNewResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r requestTracerTraceNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RequestTracerTraceNewResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -180,6 +188,10 @@ func (r *RequestTracerTraceNewResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r requestTracerTraceNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type RequestTracerTraceNewResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -197,6 +209,10 @@ type requestTracerTraceNewResponseEnvelopeMessagesJSON struct {
 
 func (r *RequestTracerTraceNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r requestTracerTraceNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

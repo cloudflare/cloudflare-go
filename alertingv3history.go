@@ -105,6 +105,10 @@ func (r *AlertingV3HistoryListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3HistoryListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The type of mechanism to which the notification has been dispatched. This can be
 // email/pagerduty/webhook based on the mechanism configured.
 type AlertingV3HistoryListResponseMechanismType string

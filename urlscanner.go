@@ -70,6 +70,10 @@ func (r *URLScannerScanResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanResponseTask struct {
 	// Alpha-2 country code
 	Country string `json:"country,required"`
@@ -101,6 +105,10 @@ type urlScannerScanResponseTaskJSON struct {
 
 func (r *URLScannerScanResponseTask) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r urlScannerScanResponseTaskJSON) RawJSON() string {
+	return r.raw
 }
 
 type URLScannerScanParams struct {
@@ -166,6 +174,10 @@ func (r *URLScannerScanResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanResponseEnvelopeErrors struct {
 	Message string                                   `json:"message,required"`
 	JSON    urlScannerScanResponseEnvelopeErrorsJSON `json:"-"`
@@ -183,6 +195,10 @@ func (r *URLScannerScanResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanResponseEnvelopeMessages struct {
 	Message string                                     `json:"message,required"`
 	JSON    urlScannerScanResponseEnvelopeMessagesJSON `json:"-"`
@@ -198,4 +214,8 @@ type urlScannerScanResponseEnvelopeMessagesJSON struct {
 
 func (r *URLScannerScanResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r urlScannerScanResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }

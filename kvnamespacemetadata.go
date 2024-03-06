@@ -78,6 +78,10 @@ func (r *KVNamespaceMetadataGetResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r kvNamespaceMetadataGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type KVNamespaceMetadataGetResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -97,6 +101,10 @@ func (r *KVNamespaceMetadataGetResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r kvNamespaceMetadataGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type KVNamespaceMetadataGetResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -114,6 +122,10 @@ type kvNamespaceMetadataGetResponseEnvelopeMessagesJSON struct {
 
 func (r *KVNamespaceMetadataGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r kvNamespaceMetadataGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

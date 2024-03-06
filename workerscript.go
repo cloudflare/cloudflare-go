@@ -139,6 +139,10 @@ func (r *WorkerScriptUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerScriptUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // A reference to a script that will consume logs from the attached Worker.
 type WorkerScriptUpdateResponseTailConsumer struct {
 	// Name of Worker that is to be the consumer.
@@ -162,6 +166,10 @@ type workerScriptUpdateResponseTailConsumerJSON struct {
 
 func (r *WorkerScriptUpdateResponseTailConsumer) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerScriptUpdateResponseTailConsumerJSON) RawJSON() string {
+	return r.raw
 }
 
 type WorkerScriptListResponse struct {
@@ -206,6 +214,10 @@ func (r *WorkerScriptListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerScriptListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // A reference to a script that will consume logs from the attached Worker.
 type WorkerScriptListResponseTailConsumer struct {
 	// Name of Worker that is to be the consumer.
@@ -229,6 +241,10 @@ type workerScriptListResponseTailConsumerJSON struct {
 
 func (r *WorkerScriptListResponseTailConsumer) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerScriptListResponseTailConsumerJSON) RawJSON() string {
+	return r.raw
 }
 
 type WorkerScriptUpdateParams struct {
@@ -483,6 +499,10 @@ func (r *WorkerScriptUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerScriptUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerScriptUpdateResponseEnvelopeErrors struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -502,6 +522,10 @@ func (r *WorkerScriptUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerScriptUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerScriptUpdateResponseEnvelopeMessages struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -519,6 +543,10 @@ type workerScriptUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *WorkerScriptUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerScriptUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -557,6 +585,10 @@ func (r *WorkerScriptListResponseEnvelope) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerScriptListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerScriptListResponseEnvelopeErrors struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -576,6 +608,10 @@ func (r *WorkerScriptListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerScriptListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerScriptListResponseEnvelopeMessages struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -593,6 +629,10 @@ type workerScriptListResponseEnvelopeMessagesJSON struct {
 
 func (r *WorkerScriptListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerScriptListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

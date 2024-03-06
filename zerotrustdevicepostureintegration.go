@@ -130,6 +130,10 @@ func (r *ZeroTrustDevicePostureIntegrationNewResponse) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureIntegrationNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The configuration object containing third-party integration information.
 type ZeroTrustDevicePostureIntegrationNewResponseConfig struct {
 	// The Workspace One API URL provided in the Workspace One Admin Dashboard.
@@ -153,6 +157,10 @@ type zeroTrustDevicePostureIntegrationNewResponseConfigJSON struct {
 
 func (r *ZeroTrustDevicePostureIntegrationNewResponseConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureIntegrationNewResponseConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of device posture integration.
@@ -199,6 +207,10 @@ func (r *ZeroTrustDevicePostureIntegrationListResponse) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureIntegrationListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The configuration object containing third-party integration information.
 type ZeroTrustDevicePostureIntegrationListResponseConfig struct {
 	// The Workspace One API URL provided in the Workspace One Admin Dashboard.
@@ -222,6 +234,10 @@ type zeroTrustDevicePostureIntegrationListResponseConfigJSON struct {
 
 func (r *ZeroTrustDevicePostureIntegrationListResponseConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureIntegrationListResponseConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of device posture integration.
@@ -285,6 +301,10 @@ func (r *ZeroTrustDevicePostureIntegrationEditResponse) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureIntegrationEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The configuration object containing third-party integration information.
 type ZeroTrustDevicePostureIntegrationEditResponseConfig struct {
 	// The Workspace One API URL provided in the Workspace One Admin Dashboard.
@@ -308,6 +328,10 @@ type zeroTrustDevicePostureIntegrationEditResponseConfigJSON struct {
 
 func (r *ZeroTrustDevicePostureIntegrationEditResponseConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureIntegrationEditResponseConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of device posture integration.
@@ -354,6 +378,10 @@ func (r *ZeroTrustDevicePostureIntegrationGetResponse) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureIntegrationGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The configuration object containing third-party integration information.
 type ZeroTrustDevicePostureIntegrationGetResponseConfig struct {
 	// The Workspace One API URL provided in the Workspace One Admin Dashboard.
@@ -377,6 +405,10 @@ type zeroTrustDevicePostureIntegrationGetResponseConfigJSON struct {
 
 func (r *ZeroTrustDevicePostureIntegrationGetResponseConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureIntegrationGetResponseConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of device posture integration.
@@ -578,6 +610,10 @@ func (r *ZeroTrustDevicePostureIntegrationNewResponseEnvelope) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureIntegrationNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDevicePostureIntegrationNewResponseEnvelopeErrors struct {
 	Code    int64                                                          `json:"code,required"`
 	Message string                                                         `json:"message,required"`
@@ -598,6 +634,10 @@ func (r *ZeroTrustDevicePostureIntegrationNewResponseEnvelopeErrors) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureIntegrationNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDevicePostureIntegrationNewResponseEnvelopeMessages struct {
 	Code    int64                                                            `json:"code,required"`
 	Message string                                                           `json:"message,required"`
@@ -616,6 +656,10 @@ type zeroTrustDevicePostureIntegrationNewResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustDevicePostureIntegrationNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureIntegrationNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful.
@@ -655,6 +699,10 @@ func (r *ZeroTrustDevicePostureIntegrationListResponseEnvelope) UnmarshalJSON(da
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureIntegrationListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDevicePostureIntegrationListResponseEnvelopeErrors struct {
 	Code    int64                                                           `json:"code,required"`
 	Message string                                                          `json:"message,required"`
@@ -675,6 +723,10 @@ func (r *ZeroTrustDevicePostureIntegrationListResponseEnvelopeErrors) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureIntegrationListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDevicePostureIntegrationListResponseEnvelopeMessages struct {
 	Code    int64                                                             `json:"code,required"`
 	Message string                                                            `json:"message,required"`
@@ -693,6 +745,10 @@ type zeroTrustDevicePostureIntegrationListResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustDevicePostureIntegrationListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureIntegrationListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful.
@@ -730,6 +786,10 @@ func (r *ZeroTrustDevicePostureIntegrationListResponseEnvelopeResultInfo) Unmars
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureIntegrationListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDevicePostureIntegrationDeleteParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
@@ -759,6 +819,10 @@ func (r *ZeroTrustDevicePostureIntegrationDeleteResponseEnvelope) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureIntegrationDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDevicePostureIntegrationDeleteResponseEnvelopeErrors struct {
 	Code    int64                                                             `json:"code,required"`
 	Message string                                                            `json:"message,required"`
@@ -779,6 +843,10 @@ func (r *ZeroTrustDevicePostureIntegrationDeleteResponseEnvelopeErrors) Unmarsha
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureIntegrationDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDevicePostureIntegrationDeleteResponseEnvelopeMessages struct {
 	Code    int64                                                               `json:"code,required"`
 	Message string                                                              `json:"message,required"`
@@ -797,6 +865,10 @@ type zeroTrustDevicePostureIntegrationDeleteResponseEnvelopeMessagesJSON struct 
 
 func (r *ZeroTrustDevicePostureIntegrationDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureIntegrationDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful.
@@ -992,6 +1064,10 @@ func (r *ZeroTrustDevicePostureIntegrationEditResponseEnvelope) UnmarshalJSON(da
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureIntegrationEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDevicePostureIntegrationEditResponseEnvelopeErrors struct {
 	Code    int64                                                           `json:"code,required"`
 	Message string                                                          `json:"message,required"`
@@ -1012,6 +1088,10 @@ func (r *ZeroTrustDevicePostureIntegrationEditResponseEnvelopeErrors) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureIntegrationEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDevicePostureIntegrationEditResponseEnvelopeMessages struct {
 	Code    int64                                                             `json:"code,required"`
 	Message string                                                            `json:"message,required"`
@@ -1030,6 +1110,10 @@ type zeroTrustDevicePostureIntegrationEditResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustDevicePostureIntegrationEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureIntegrationEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful.
@@ -1067,6 +1151,10 @@ func (r *ZeroTrustDevicePostureIntegrationGetResponseEnvelope) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureIntegrationGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDevicePostureIntegrationGetResponseEnvelopeErrors struct {
 	Code    int64                                                          `json:"code,required"`
 	Message string                                                         `json:"message,required"`
@@ -1087,6 +1175,10 @@ func (r *ZeroTrustDevicePostureIntegrationGetResponseEnvelopeErrors) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePostureIntegrationGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDevicePostureIntegrationGetResponseEnvelopeMessages struct {
 	Code    int64                                                            `json:"code,required"`
 	Message string                                                           `json:"message,required"`
@@ -1105,6 +1197,10 @@ type zeroTrustDevicePostureIntegrationGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustDevicePostureIntegrationGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePostureIntegrationGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful.

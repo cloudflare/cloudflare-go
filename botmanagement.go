@@ -106,6 +106,10 @@ func (r *BotManagementUpdateResponseBotManagementBotFightModeConfig) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r botManagementUpdateResponseBotManagementBotFightModeConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r BotManagementUpdateResponseBotManagementBotFightModeConfig) implementsBotManagementUpdateResponse() {
 }
 
@@ -145,6 +149,10 @@ type botManagementUpdateResponseBotManagementSbfmDefinitelyConfigJSON struct {
 
 func (r *BotManagementUpdateResponseBotManagementSbfmDefinitelyConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r botManagementUpdateResponseBotManagementSbfmDefinitelyConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r BotManagementUpdateResponseBotManagementSbfmDefinitelyConfig) implementsBotManagementUpdateResponse() {
@@ -206,6 +214,10 @@ type botManagementUpdateResponseBotManagementSbfmLikelyConfigJSON struct {
 
 func (r *BotManagementUpdateResponseBotManagementSbfmLikelyConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r botManagementUpdateResponseBotManagementSbfmLikelyConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r BotManagementUpdateResponseBotManagementSbfmLikelyConfig) implementsBotManagementUpdateResponse() {
@@ -270,6 +282,10 @@ func (r *BotManagementUpdateResponseBotManagementBmSubscriptionConfig) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r botManagementUpdateResponseBotManagementBmSubscriptionConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r BotManagementUpdateResponseBotManagementBmSubscriptionConfig) implementsBotManagementUpdateResponse() {
 }
 
@@ -312,6 +328,10 @@ func (r *BotManagementGetResponseBotManagementBotFightModeConfig) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r botManagementGetResponseBotManagementBotFightModeConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r BotManagementGetResponseBotManagementBotFightModeConfig) implementsBotManagementGetResponse() {
 }
 
@@ -351,6 +371,10 @@ type botManagementGetResponseBotManagementSbfmDefinitelyConfigJSON struct {
 
 func (r *BotManagementGetResponseBotManagementSbfmDefinitelyConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r botManagementGetResponseBotManagementSbfmDefinitelyConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r BotManagementGetResponseBotManagementSbfmDefinitelyConfig) implementsBotManagementGetResponse() {
@@ -413,6 +437,10 @@ func (r *BotManagementGetResponseBotManagementSbfmLikelyConfig) UnmarshalJSON(da
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r botManagementGetResponseBotManagementSbfmLikelyConfigJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r BotManagementGetResponseBotManagementSbfmLikelyConfig) implementsBotManagementGetResponse() {}
 
 // Super Bot Fight Mode (SBFM) action to take on definitely automated requests.
@@ -472,6 +500,10 @@ type botManagementGetResponseBotManagementBmSubscriptionConfigJSON struct {
 
 func (r *BotManagementGetResponseBotManagementBmSubscriptionConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r botManagementGetResponseBotManagementBmSubscriptionConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r BotManagementGetResponseBotManagementBmSubscriptionConfig) implementsBotManagementGetResponse() {
@@ -560,6 +592,10 @@ func (r *BotManagementUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r botManagementUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type BotManagementUpdateResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -579,6 +615,10 @@ func (r *BotManagementUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r botManagementUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type BotManagementUpdateResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -596,6 +636,10 @@ type botManagementUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *BotManagementUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r botManagementUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -634,6 +678,10 @@ func (r *BotManagementGetResponseEnvelope) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r botManagementGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type BotManagementGetResponseEnvelopeErrors struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -653,6 +701,10 @@ func (r *BotManagementGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r botManagementGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type BotManagementGetResponseEnvelopeMessages struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -670,6 +722,10 @@ type botManagementGetResponseEnvelopeMessagesJSON struct {
 
 func (r *BotManagementGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r botManagementGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

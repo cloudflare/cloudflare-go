@@ -99,6 +99,10 @@ func (r *ZoneSettingAlwaysOnlineEditResponse) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingAlwaysOnlineEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // ID of the zone setting.
 type ZoneSettingAlwaysOnlineEditResponseID string
 
@@ -154,6 +158,10 @@ type zoneSettingAlwaysOnlineGetResponseJSON struct {
 
 func (r *ZoneSettingAlwaysOnlineGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingAlwaysOnlineGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // ID of the zone setting.
@@ -228,6 +236,10 @@ func (r *ZoneSettingAlwaysOnlineEditResponseEnvelope) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingAlwaysOnlineEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingAlwaysOnlineEditResponseEnvelopeErrors struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -247,6 +259,10 @@ func (r *ZoneSettingAlwaysOnlineEditResponseEnvelopeErrors) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingAlwaysOnlineEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingAlwaysOnlineEditResponseEnvelopeMessages struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -264,6 +280,10 @@ type zoneSettingAlwaysOnlineEditResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingAlwaysOnlineEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingAlwaysOnlineEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneSettingAlwaysOnlineGetParams struct {
@@ -300,6 +320,10 @@ func (r *ZoneSettingAlwaysOnlineGetResponseEnvelope) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingAlwaysOnlineGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingAlwaysOnlineGetResponseEnvelopeErrors struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -319,6 +343,10 @@ func (r *ZoneSettingAlwaysOnlineGetResponseEnvelopeErrors) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingAlwaysOnlineGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingAlwaysOnlineGetResponseEnvelopeMessages struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -336,4 +364,8 @@ type zoneSettingAlwaysOnlineGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingAlwaysOnlineGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingAlwaysOnlineGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }

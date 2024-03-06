@@ -65,6 +65,10 @@ func (r *ZeroTrustGatewayListItemListResponse) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayListItemListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayListItemListParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
@@ -95,6 +99,10 @@ func (r *ZeroTrustGatewayListItemListResponseEnvelope) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayListItemListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayListItemListResponseEnvelopeErrors struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -114,6 +122,10 @@ func (r *ZeroTrustGatewayListItemListResponseEnvelopeErrors) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayListItemListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayListItemListResponseEnvelopeMessages struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -131,6 +143,10 @@ type zeroTrustGatewayListItemListResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustGatewayListItemListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayListItemListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -165,4 +181,8 @@ type zeroTrustGatewayListItemListResponseEnvelopeResultInfoJSON struct {
 
 func (r *ZeroTrustGatewayListItemListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayListItemListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

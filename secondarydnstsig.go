@@ -122,6 +122,10 @@ func (r *SecondaryDnstsigNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r secondaryDnstsigNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type SecondaryDnstsigUpdateResponse struct {
 	ID interface{} `json:"id,required"`
 	// TSIG algorithm.
@@ -146,6 +150,10 @@ type secondaryDnstsigUpdateResponseJSON struct {
 
 func (r *SecondaryDnstsigUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r secondaryDnstsigUpdateResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type SecondaryDnstsigListResponse struct {
@@ -174,6 +182,10 @@ func (r *SecondaryDnstsigListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r secondaryDnstsigListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type SecondaryDnstsigDeleteResponse struct {
 	ID   interface{}                        `json:"id"`
 	JSON secondaryDnstsigDeleteResponseJSON `json:"-"`
@@ -189,6 +201,10 @@ type secondaryDnstsigDeleteResponseJSON struct {
 
 func (r *SecondaryDnstsigDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r secondaryDnstsigDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type SecondaryDnstsigGetResponse struct {
@@ -215,6 +231,10 @@ type secondaryDnstsigGetResponseJSON struct {
 
 func (r *SecondaryDnstsigGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r secondaryDnstsigGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type SecondaryDNSTSIGNewParams struct {
@@ -255,6 +275,10 @@ func (r *SecondaryDnstsigNewResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r secondaryDnstsigNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type SecondaryDnstsigNewResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -274,6 +298,10 @@ func (r *SecondaryDnstsigNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r secondaryDnstsigNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type SecondaryDnstsigNewResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -291,6 +319,10 @@ type secondaryDnstsigNewResponseEnvelopeMessagesJSON struct {
 
 func (r *SecondaryDnstsigNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r secondaryDnstsigNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -338,6 +370,10 @@ func (r *SecondaryDnstsigUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r secondaryDnstsigUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type SecondaryDnstsigUpdateResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -357,6 +393,10 @@ func (r *SecondaryDnstsigUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r secondaryDnstsigUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type SecondaryDnstsigUpdateResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -374,6 +414,10 @@ type secondaryDnstsigUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *SecondaryDnstsigUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r secondaryDnstsigUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -413,6 +457,10 @@ func (r *SecondaryDnstsigListResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r secondaryDnstsigListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type SecondaryDnstsigListResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -432,6 +480,10 @@ func (r *SecondaryDnstsigListResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r secondaryDnstsigListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type SecondaryDnstsigListResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -449,6 +501,10 @@ type secondaryDnstsigListResponseEnvelopeMessagesJSON struct {
 
 func (r *SecondaryDnstsigListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r secondaryDnstsigListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -485,6 +541,10 @@ func (r *SecondaryDnstsigListResponseEnvelopeResultInfo) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r secondaryDnstsigListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type SecondaryDNSTSIGDeleteParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
@@ -513,6 +573,10 @@ func (r *SecondaryDnstsigDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r secondaryDnstsigDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type SecondaryDnstsigDeleteResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -532,6 +596,10 @@ func (r *SecondaryDnstsigDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r secondaryDnstsigDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type SecondaryDnstsigDeleteResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -549,6 +617,10 @@ type secondaryDnstsigDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *SecondaryDnstsigDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r secondaryDnstsigDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -586,6 +658,10 @@ func (r *SecondaryDnstsigGetResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r secondaryDnstsigGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type SecondaryDnstsigGetResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -605,6 +681,10 @@ func (r *SecondaryDnstsigGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r secondaryDnstsigGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type SecondaryDnstsigGetResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -622,6 +702,10 @@ type secondaryDnstsigGetResponseEnvelopeMessagesJSON struct {
 
 func (r *SecondaryDnstsigGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r secondaryDnstsigGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

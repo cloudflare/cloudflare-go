@@ -64,6 +64,10 @@ func (r *DiagnosticTracerouteNewResponse) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r diagnosticTracerouteNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type DiagnosticTracerouteNewResponseColo struct {
 	Colo DiagnosticTracerouteNewResponseColosColo `json:"colo"`
 	// Errors resulting from collecting traceroute from colo to target.
@@ -92,6 +96,10 @@ func (r *DiagnosticTracerouteNewResponseColo) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r diagnosticTracerouteNewResponseColoJSON) RawJSON() string {
+	return r.raw
+}
+
 type DiagnosticTracerouteNewResponseColosColo struct {
 	// Source colo city.
 	City string `json:"city"`
@@ -111,6 +119,10 @@ type diagnosticTracerouteNewResponseColosColoJSON struct {
 
 func (r *DiagnosticTracerouteNewResponseColosColo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r diagnosticTracerouteNewResponseColosColoJSON) RawJSON() string {
+	return r.raw
 }
 
 // Errors resulting from collecting traceroute from colo to target.
@@ -149,6 +161,10 @@ type diagnosticTracerouteNewResponseColosHopJSON struct {
 
 func (r *DiagnosticTracerouteNewResponseColosHop) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r diagnosticTracerouteNewResponseColosHopJSON) RawJSON() string {
+	return r.raw
 }
 
 type DiagnosticTracerouteNewResponseColosHopsNode struct {
@@ -193,6 +209,10 @@ type diagnosticTracerouteNewResponseColosHopsNodeJSON struct {
 
 func (r *DiagnosticTracerouteNewResponseColosHopsNode) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r diagnosticTracerouteNewResponseColosHopsNodeJSON) RawJSON() string {
+	return r.raw
 }
 
 type DiagnosticTracerouteNewParams struct {
@@ -265,6 +285,10 @@ func (r *DiagnosticTracerouteNewResponseEnvelope) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r diagnosticTracerouteNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type DiagnosticTracerouteNewResponseEnvelopeErrors struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -284,6 +308,10 @@ func (r *DiagnosticTracerouteNewResponseEnvelopeErrors) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r diagnosticTracerouteNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type DiagnosticTracerouteNewResponseEnvelopeMessages struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -301,6 +329,10 @@ type diagnosticTracerouteNewResponseEnvelopeMessagesJSON struct {
 
 func (r *DiagnosticTracerouteNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r diagnosticTracerouteNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -335,4 +367,8 @@ type diagnosticTracerouteNewResponseEnvelopeResultInfoJSON struct {
 
 func (r *DiagnosticTracerouteNewResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r diagnosticTracerouteNewResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

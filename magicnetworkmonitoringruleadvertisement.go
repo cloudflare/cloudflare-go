@@ -64,6 +64,10 @@ func (r *MagicNetworkMonitoringRuleAdvertisementEditResponse) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicNetworkMonitoringRuleAdvertisementEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicNetworkMonitoringRuleAdvertisementEditResponseEnvelope struct {
 	Errors   []MagicNetworkMonitoringRuleAdvertisementEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []MagicNetworkMonitoringRuleAdvertisementEditResponseEnvelopeMessages `json:"messages,required"`
@@ -89,6 +93,10 @@ func (r *MagicNetworkMonitoringRuleAdvertisementEditResponseEnvelope) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicNetworkMonitoringRuleAdvertisementEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicNetworkMonitoringRuleAdvertisementEditResponseEnvelopeErrors struct {
 	Code    int64                                                                 `json:"code,required"`
 	Message string                                                                `json:"message,required"`
@@ -109,6 +117,10 @@ func (r *MagicNetworkMonitoringRuleAdvertisementEditResponseEnvelopeErrors) Unma
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicNetworkMonitoringRuleAdvertisementEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicNetworkMonitoringRuleAdvertisementEditResponseEnvelopeMessages struct {
 	Code    int64                                                                   `json:"code,required"`
 	Message string                                                                  `json:"message,required"`
@@ -127,6 +139,10 @@ type magicNetworkMonitoringRuleAdvertisementEditResponseEnvelopeMessagesJSON str
 
 func (r *MagicNetworkMonitoringRuleAdvertisementEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicNetworkMonitoringRuleAdvertisementEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

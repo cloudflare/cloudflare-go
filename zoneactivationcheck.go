@@ -63,6 +63,10 @@ func (r *ZoneActivationCheckTriggerResponse) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneActivationCheckTriggerResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneActivationCheckTriggerParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -92,6 +96,10 @@ func (r *ZoneActivationCheckTriggerResponseEnvelope) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneActivationCheckTriggerResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneActivationCheckTriggerResponseEnvelopeErrors struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -111,6 +119,10 @@ func (r *ZoneActivationCheckTriggerResponseEnvelopeErrors) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneActivationCheckTriggerResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneActivationCheckTriggerResponseEnvelopeMessages struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -128,6 +140,10 @@ type zoneActivationCheckTriggerResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneActivationCheckTriggerResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneActivationCheckTriggerResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

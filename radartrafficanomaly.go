@@ -67,6 +67,10 @@ func (r *RadarTrafficAnomalyGetResponse) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarTrafficAnomalyGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarTrafficAnomalyGetResponseTrafficAnomaly struct {
 	StartDate            string                                                        `json:"startDate,required"`
 	Status               string                                                        `json:"status,required"`
@@ -98,6 +102,10 @@ func (r *RadarTrafficAnomalyGetResponseTrafficAnomaly) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarTrafficAnomalyGetResponseTrafficAnomalyJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarTrafficAnomalyGetResponseTrafficAnomaliesASNDetails struct {
 	ASN       string                                                            `json:"asn,required"`
 	Name      string                                                            `json:"name,required"`
@@ -120,6 +128,10 @@ func (r *RadarTrafficAnomalyGetResponseTrafficAnomaliesASNDetails) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarTrafficAnomalyGetResponseTrafficAnomaliesASNDetailsJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarTrafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocations struct {
 	Code string                                                                `json:"code,required"`
 	Name string                                                                `json:"name,required"`
@@ -140,6 +152,10 @@ func (r *RadarTrafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocations) Unma
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarTrafficAnomalyGetResponseTrafficAnomaliesASNDetailsLocationsJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarTrafficAnomalyGetResponseTrafficAnomaliesLocationDetails struct {
 	Code string                                                            `json:"code,required"`
 	Name string                                                            `json:"name,required"`
@@ -158,6 +174,10 @@ type radarTrafficAnomalyGetResponseTrafficAnomaliesLocationDetailsJSON struct {
 
 func (r *RadarTrafficAnomalyGetResponseTrafficAnomaliesLocationDetails) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarTrafficAnomalyGetResponseTrafficAnomaliesLocationDetailsJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarTrafficAnomalyGetParams struct {
@@ -244,4 +264,8 @@ type radarTrafficAnomalyGetResponseEnvelopeJSON struct {
 
 func (r *RadarTrafficAnomalyGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarTrafficAnomalyGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

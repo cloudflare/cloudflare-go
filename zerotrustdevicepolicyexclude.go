@@ -97,6 +97,10 @@ func (r *ZeroTrustDevicePolicyExcludeUpdateResponse) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePolicyExcludeUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDevicePolicyExcludeListResponse struct {
 	// The address in CIDR format to exclude from the tunnel. If `address` is present,
 	// `host` must not be present.
@@ -123,6 +127,10 @@ func (r *ZeroTrustDevicePolicyExcludeListResponse) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePolicyExcludeListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDevicePolicyExcludeGetResponse struct {
 	// The address in CIDR format to exclude from the tunnel. If `address` is present,
 	// `host` must not be present.
@@ -147,6 +155,10 @@ type zeroTrustDevicePolicyExcludeGetResponseJSON struct {
 
 func (r *ZeroTrustDevicePolicyExcludeGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePolicyExcludeGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDevicePolicyExcludeUpdateParams struct {
@@ -199,6 +211,10 @@ func (r *ZeroTrustDevicePolicyExcludeUpdateResponseEnvelope) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePolicyExcludeUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDevicePolicyExcludeUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                        `json:"code,required"`
 	Message string                                                       `json:"message,required"`
@@ -219,6 +235,10 @@ func (r *ZeroTrustDevicePolicyExcludeUpdateResponseEnvelopeErrors) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePolicyExcludeUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDevicePolicyExcludeUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                          `json:"code,required"`
 	Message string                                                         `json:"message,required"`
@@ -237,6 +257,10 @@ type zeroTrustDevicePolicyExcludeUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustDevicePolicyExcludeUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePolicyExcludeUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful.
@@ -274,6 +298,10 @@ func (r *ZeroTrustDevicePolicyExcludeUpdateResponseEnvelopeResultInfo) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePolicyExcludeUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDevicePolicyExcludeListParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
@@ -304,6 +332,10 @@ func (r *ZeroTrustDevicePolicyExcludeListResponseEnvelope) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePolicyExcludeListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDevicePolicyExcludeListResponseEnvelopeErrors struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -321,6 +353,10 @@ type zeroTrustDevicePolicyExcludeListResponseEnvelopeErrorsJSON struct {
 
 func (r *ZeroTrustDevicePolicyExcludeListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePolicyExcludeListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDevicePolicyExcludeListResponseEnvelopeMessages struct {
@@ -341,6 +377,10 @@ type zeroTrustDevicePolicyExcludeListResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustDevicePolicyExcludeListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePolicyExcludeListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful.
@@ -378,6 +418,10 @@ func (r *ZeroTrustDevicePolicyExcludeListResponseEnvelopeResultInfo) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePolicyExcludeListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDevicePolicyExcludeGetParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
@@ -408,6 +452,10 @@ func (r *ZeroTrustDevicePolicyExcludeGetResponseEnvelope) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDevicePolicyExcludeGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDevicePolicyExcludeGetResponseEnvelopeErrors struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -425,6 +473,10 @@ type zeroTrustDevicePolicyExcludeGetResponseEnvelopeErrorsJSON struct {
 
 func (r *ZeroTrustDevicePolicyExcludeGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePolicyExcludeGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDevicePolicyExcludeGetResponseEnvelopeMessages struct {
@@ -445,6 +497,10 @@ type zeroTrustDevicePolicyExcludeGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustDevicePolicyExcludeGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePolicyExcludeGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful.
@@ -480,4 +536,8 @@ type zeroTrustDevicePolicyExcludeGetResponseEnvelopeResultInfoJSON struct {
 
 func (r *ZeroTrustDevicePolicyExcludeGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDevicePolicyExcludeGetResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

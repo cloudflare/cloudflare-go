@@ -86,6 +86,10 @@ func (r *ZeroTrustDLPProfilePredefinedUpdateResponse) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPProfilePredefinedUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Scan the context of predefined entries to only return matches surrounded by
 // keywords.
 type ZeroTrustDLPProfilePredefinedUpdateResponseContextAwareness struct {
@@ -111,6 +115,10 @@ func (r *ZeroTrustDLPProfilePredefinedUpdateResponseContextAwareness) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPProfilePredefinedUpdateResponseContextAwarenessJSON) RawJSON() string {
+	return r.raw
+}
+
 // Content types to exclude from context analysis and return all matches.
 type ZeroTrustDLPProfilePredefinedUpdateResponseContextAwarenessSkip struct {
 	// If the content type is a file, skip context analysis and return all matches.
@@ -129,6 +137,10 @@ type zeroTrustDLPProfilePredefinedUpdateResponseContextAwarenessSkipJSON struct 
 
 func (r *ZeroTrustDLPProfilePredefinedUpdateResponseContextAwarenessSkip) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDLPProfilePredefinedUpdateResponseContextAwarenessSkipJSON) RawJSON() string {
+	return r.raw
 }
 
 // A predefined entry that matches a profile
@@ -157,6 +169,10 @@ type zeroTrustDLPProfilePredefinedUpdateResponseEntryJSON struct {
 
 func (r *ZeroTrustDLPProfilePredefinedUpdateResponseEntry) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDLPProfilePredefinedUpdateResponseEntryJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of the profile.
@@ -200,6 +216,10 @@ func (r *ZeroTrustDLPProfilePredefinedGetResponse) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPProfilePredefinedGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Scan the context of predefined entries to only return matches surrounded by
 // keywords.
 type ZeroTrustDLPProfilePredefinedGetResponseContextAwareness struct {
@@ -225,6 +245,10 @@ func (r *ZeroTrustDLPProfilePredefinedGetResponseContextAwareness) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPProfilePredefinedGetResponseContextAwarenessJSON) RawJSON() string {
+	return r.raw
+}
+
 // Content types to exclude from context analysis and return all matches.
 type ZeroTrustDLPProfilePredefinedGetResponseContextAwarenessSkip struct {
 	// If the content type is a file, skip context analysis and return all matches.
@@ -243,6 +267,10 @@ type zeroTrustDLPProfilePredefinedGetResponseContextAwarenessSkipJSON struct {
 
 func (r *ZeroTrustDLPProfilePredefinedGetResponseContextAwarenessSkip) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDLPProfilePredefinedGetResponseContextAwarenessSkipJSON) RawJSON() string {
+	return r.raw
 }
 
 // A predefined entry that matches a profile
@@ -271,6 +299,10 @@ type zeroTrustDLPProfilePredefinedGetResponseEntryJSON struct {
 
 func (r *ZeroTrustDLPProfilePredefinedGetResponseEntry) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDLPProfilePredefinedGetResponseEntryJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of the profile.
@@ -358,6 +390,10 @@ func (r *ZeroTrustDLPProfilePredefinedGetResponseEnvelope) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPProfilePredefinedGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDLPProfilePredefinedGetResponseEnvelopeErrors struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -375,6 +411,10 @@ type zeroTrustDLPProfilePredefinedGetResponseEnvelopeErrorsJSON struct {
 
 func (r *ZeroTrustDLPProfilePredefinedGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDLPProfilePredefinedGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDLPProfilePredefinedGetResponseEnvelopeMessages struct {
@@ -395,6 +435,10 @@ type zeroTrustDLPProfilePredefinedGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustDLPProfilePredefinedGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDLPProfilePredefinedGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

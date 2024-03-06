@@ -81,6 +81,10 @@ func (r *IntelSinkholeListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r intelSinkholeListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type IntelSinkholeListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -110,6 +114,10 @@ func (r *IntelSinkholeListResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r intelSinkholeListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type IntelSinkholeListResponseEnvelopeErrors struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -129,6 +137,10 @@ func (r *IntelSinkholeListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r intelSinkholeListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type IntelSinkholeListResponseEnvelopeMessages struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -146,6 +158,10 @@ type intelSinkholeListResponseEnvelopeMessagesJSON struct {
 
 func (r *IntelSinkholeListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r intelSinkholeListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

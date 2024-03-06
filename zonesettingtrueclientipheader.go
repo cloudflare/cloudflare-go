@@ -90,6 +90,10 @@ func (r *ZoneSettingTrueClientIPHeaderEditResponse) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingTrueClientIPHeaderEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // ID of the zone setting.
 type ZoneSettingTrueClientIPHeaderEditResponseID string
 
@@ -142,6 +146,10 @@ type zoneSettingTrueClientIPHeaderGetResponseJSON struct {
 
 func (r *ZoneSettingTrueClientIPHeaderGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingTrueClientIPHeaderGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // ID of the zone setting.
@@ -213,6 +221,10 @@ func (r *ZoneSettingTrueClientIPHeaderEditResponseEnvelope) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingTrueClientIPHeaderEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingTrueClientIPHeaderEditResponseEnvelopeErrors struct {
 	Code    int64                                                       `json:"code,required"`
 	Message string                                                      `json:"message,required"`
@@ -233,6 +245,10 @@ func (r *ZoneSettingTrueClientIPHeaderEditResponseEnvelopeErrors) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingTrueClientIPHeaderEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingTrueClientIPHeaderEditResponseEnvelopeMessages struct {
 	Code    int64                                                         `json:"code,required"`
 	Message string                                                        `json:"message,required"`
@@ -251,6 +267,10 @@ type zoneSettingTrueClientIPHeaderEditResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingTrueClientIPHeaderEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingTrueClientIPHeaderEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneSettingTrueClientIPHeaderGetParams struct {
@@ -284,6 +304,10 @@ func (r *ZoneSettingTrueClientIPHeaderGetResponseEnvelope) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingTrueClientIPHeaderGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingTrueClientIPHeaderGetResponseEnvelopeErrors struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -301,6 +325,10 @@ type zoneSettingTrueClientIPHeaderGetResponseEnvelopeErrorsJSON struct {
 
 func (r *ZoneSettingTrueClientIPHeaderGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingTrueClientIPHeaderGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneSettingTrueClientIPHeaderGetResponseEnvelopeMessages struct {
@@ -321,4 +349,8 @@ type zoneSettingTrueClientIPHeaderGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingTrueClientIPHeaderGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingTrueClientIPHeaderGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }

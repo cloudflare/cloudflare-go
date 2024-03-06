@@ -92,6 +92,10 @@ func (r *MagicTransitCfInterconnectUpdateResponse) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitCfInterconnectUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitCfInterconnectListResponse struct {
 	Interconnects []MagicTransitCfInterconnectListResponseInterconnect `json:"interconnects"`
 	JSON          magicTransitCfInterconnectListResponseJSON           `json:"-"`
@@ -107,6 +111,10 @@ type magicTransitCfInterconnectListResponseJSON struct {
 
 func (r *MagicTransitCfInterconnectListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitCfInterconnectListResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type MagicTransitCfInterconnectListResponseInterconnect struct {
@@ -156,6 +164,10 @@ func (r *MagicTransitCfInterconnectListResponseInterconnect) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitCfInterconnectListResponseInterconnectJSON) RawJSON() string {
+	return r.raw
+}
+
 // The configuration specific to GRE interconnects.
 type MagicTransitCfInterconnectListResponseInterconnectsGRE struct {
 	// The IP address assigned to the Cloudflare side of the GRE tunnel created as part
@@ -174,6 +186,10 @@ type magicTransitCfInterconnectListResponseInterconnectsGREJSON struct {
 
 func (r *MagicTransitCfInterconnectListResponseInterconnectsGRE) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitCfInterconnectListResponseInterconnectsGREJSON) RawJSON() string {
+	return r.raw
 }
 
 type MagicTransitCfInterconnectListResponseInterconnectsHealthCheck struct {
@@ -204,6 +220,10 @@ type magicTransitCfInterconnectListResponseInterconnectsHealthCheckJSON struct {
 
 func (r *MagicTransitCfInterconnectListResponseInterconnectsHealthCheck) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitCfInterconnectListResponseInterconnectsHealthCheckJSON) RawJSON() string {
+	return r.raw
 }
 
 // How frequent the health check is run. The default value is `mid`.
@@ -238,6 +258,10 @@ type magicTransitCfInterconnectGetResponseJSON struct {
 
 func (r *MagicTransitCfInterconnectGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitCfInterconnectGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type MagicTransitCfInterconnectUpdateParams struct {
@@ -328,6 +352,10 @@ func (r *MagicTransitCfInterconnectUpdateResponseEnvelope) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitCfInterconnectUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitCfInterconnectUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -345,6 +373,10 @@ type magicTransitCfInterconnectUpdateResponseEnvelopeErrorsJSON struct {
 
 func (r *MagicTransitCfInterconnectUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitCfInterconnectUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type MagicTransitCfInterconnectUpdateResponseEnvelopeMessages struct {
@@ -365,6 +397,10 @@ type magicTransitCfInterconnectUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *MagicTransitCfInterconnectUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitCfInterconnectUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -398,6 +434,10 @@ func (r *MagicTransitCfInterconnectListResponseEnvelope) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitCfInterconnectListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitCfInterconnectListResponseEnvelopeErrors struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -417,6 +457,10 @@ func (r *MagicTransitCfInterconnectListResponseEnvelopeErrors) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitCfInterconnectListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitCfInterconnectListResponseEnvelopeMessages struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -434,6 +478,10 @@ type magicTransitCfInterconnectListResponseEnvelopeMessagesJSON struct {
 
 func (r *MagicTransitCfInterconnectListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitCfInterconnectListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -467,6 +515,10 @@ func (r *MagicTransitCfInterconnectGetResponseEnvelope) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitCfInterconnectGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitCfInterconnectGetResponseEnvelopeErrors struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -486,6 +538,10 @@ func (r *MagicTransitCfInterconnectGetResponseEnvelopeErrors) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitCfInterconnectGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitCfInterconnectGetResponseEnvelopeMessages struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -503,6 +559,10 @@ type magicTransitCfInterconnectGetResponseEnvelopeMessagesJSON struct {
 
 func (r *MagicTransitCfInterconnectGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitCfInterconnectGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

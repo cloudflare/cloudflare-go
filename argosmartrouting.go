@@ -136,6 +136,10 @@ func (r *ArgoSmartRoutingEditResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r argoSmartRoutingEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ArgoSmartRoutingEditResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -155,6 +159,10 @@ func (r *ArgoSmartRoutingEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r argoSmartRoutingEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ArgoSmartRoutingEditResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -172,6 +180,10 @@ type argoSmartRoutingEditResponseEnvelopeMessagesJSON struct {
 
 func (r *ArgoSmartRoutingEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r argoSmartRoutingEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -210,6 +222,10 @@ func (r *ArgoSmartRoutingGetResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r argoSmartRoutingGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ArgoSmartRoutingGetResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -229,6 +245,10 @@ func (r *ArgoSmartRoutingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r argoSmartRoutingGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ArgoSmartRoutingGetResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -246,6 +266,10 @@ type argoSmartRoutingGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ArgoSmartRoutingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r argoSmartRoutingGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

@@ -73,6 +73,10 @@ func (r *IntelDNSGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r intelDNSGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type IntelDNSGetResponseReverseRecord struct {
 	// First seen date of the DNS record during the time period.
 	FirstSeen time.Time `json:"first_seen" format:"date"`
@@ -95,6 +99,10 @@ type intelDNSGetResponseReverseRecordJSON struct {
 
 func (r *IntelDNSGetResponseReverseRecord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r intelDNSGetResponseReverseRecordJSON) RawJSON() string {
+	return r.raw
 }
 
 type IntelDNSGetParams struct {
@@ -156,6 +164,10 @@ func (r *IntelDNSGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r intelDNSGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type IntelDNSGetResponseEnvelopeErrors struct {
 	Code    int64                                 `json:"code,required"`
 	Message string                                `json:"message,required"`
@@ -175,6 +187,10 @@ func (r *IntelDNSGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r intelDNSGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type IntelDNSGetResponseEnvelopeMessages struct {
 	Code    int64                                   `json:"code,required"`
 	Message string                                  `json:"message,required"`
@@ -192,6 +208,10 @@ type intelDNSGetResponseEnvelopeMessagesJSON struct {
 
 func (r *IntelDNSGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r intelDNSGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

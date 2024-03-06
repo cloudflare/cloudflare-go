@@ -117,6 +117,10 @@ func (r *LoadBalancerSearchGetResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerSearchGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoadBalancerSearchGetResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -136,6 +140,10 @@ func (r *LoadBalancerSearchGetResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerSearchGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoadBalancerSearchGetResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -153,6 +161,10 @@ type loadBalancerSearchGetResponseEnvelopeMessagesJSON struct {
 
 func (r *LoadBalancerSearchGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerSearchGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -187,4 +199,8 @@ type loadBalancerSearchGetResponseEnvelopeResultInfoJSON struct {
 
 func (r *LoadBalancerSearchGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerSearchGetResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

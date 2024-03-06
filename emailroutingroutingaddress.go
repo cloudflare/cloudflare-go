@@ -133,6 +133,10 @@ func (r *EmailRoutingRoutingAddressNewResponse) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r emailRoutingRoutingAddressNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type EmailRoutingRoutingAddressListResponse struct {
 	// Destination address identifier.
 	ID string `json:"id"`
@@ -166,6 +170,10 @@ type emailRoutingRoutingAddressListResponseJSON struct {
 
 func (r *EmailRoutingRoutingAddressListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailRoutingRoutingAddressListResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type EmailRoutingRoutingAddressDeleteResponse struct {
@@ -203,6 +211,10 @@ func (r *EmailRoutingRoutingAddressDeleteResponse) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r emailRoutingRoutingAddressDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type EmailRoutingRoutingAddressGetResponse struct {
 	// Destination address identifier.
 	ID string `json:"id"`
@@ -238,6 +250,10 @@ func (r *EmailRoutingRoutingAddressGetResponse) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r emailRoutingRoutingAddressGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type EmailRoutingRoutingAddressNewParams struct {
 	// The contact email address of the user.
 	Email param.Field[string] `json:"email,required"`
@@ -271,6 +287,10 @@ func (r *EmailRoutingRoutingAddressNewResponseEnvelope) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r emailRoutingRoutingAddressNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type EmailRoutingRoutingAddressNewResponseEnvelopeErrors struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -290,6 +310,10 @@ func (r *EmailRoutingRoutingAddressNewResponseEnvelopeErrors) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r emailRoutingRoutingAddressNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type EmailRoutingRoutingAddressNewResponseEnvelopeMessages struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -307,6 +331,10 @@ type emailRoutingRoutingAddressNewResponseEnvelopeMessagesJSON struct {
 
 func (r *EmailRoutingRoutingAddressNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailRoutingRoutingAddressNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -376,6 +404,10 @@ func (r *EmailRoutingRoutingAddressDeleteResponseEnvelope) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r emailRoutingRoutingAddressDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type EmailRoutingRoutingAddressDeleteResponseEnvelopeErrors struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -393,6 +425,10 @@ type emailRoutingRoutingAddressDeleteResponseEnvelopeErrorsJSON struct {
 
 func (r *EmailRoutingRoutingAddressDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailRoutingRoutingAddressDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type EmailRoutingRoutingAddressDeleteResponseEnvelopeMessages struct {
@@ -413,6 +449,10 @@ type emailRoutingRoutingAddressDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *EmailRoutingRoutingAddressDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailRoutingRoutingAddressDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -446,6 +486,10 @@ func (r *EmailRoutingRoutingAddressGetResponseEnvelope) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r emailRoutingRoutingAddressGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type EmailRoutingRoutingAddressGetResponseEnvelopeErrors struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -465,6 +509,10 @@ func (r *EmailRoutingRoutingAddressGetResponseEnvelopeErrors) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r emailRoutingRoutingAddressGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type EmailRoutingRoutingAddressGetResponseEnvelopeMessages struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -482,6 +530,10 @@ type emailRoutingRoutingAddressGetResponseEnvelopeMessagesJSON struct {
 
 func (r *EmailRoutingRoutingAddressGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailRoutingRoutingAddressGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

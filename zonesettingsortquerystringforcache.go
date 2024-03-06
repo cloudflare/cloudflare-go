@@ -94,6 +94,10 @@ func (r *ZoneSettingSortQueryStringForCacheEditResponse) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingSortQueryStringForCacheEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // ID of the zone setting.
 type ZoneSettingSortQueryStringForCacheEditResponseID string
 
@@ -147,6 +151,10 @@ type zoneSettingSortQueryStringForCacheGetResponseJSON struct {
 
 func (r *ZoneSettingSortQueryStringForCacheGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingSortQueryStringForCacheGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // ID of the zone setting.
@@ -219,6 +227,10 @@ func (r *ZoneSettingSortQueryStringForCacheEditResponseEnvelope) UnmarshalJSON(d
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingSortQueryStringForCacheEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingSortQueryStringForCacheEditResponseEnvelopeErrors struct {
 	Code    int64                                                            `json:"code,required"`
 	Message string                                                           `json:"message,required"`
@@ -239,6 +251,10 @@ func (r *ZoneSettingSortQueryStringForCacheEditResponseEnvelopeErrors) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingSortQueryStringForCacheEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingSortQueryStringForCacheEditResponseEnvelopeMessages struct {
 	Code    int64                                                              `json:"code,required"`
 	Message string                                                             `json:"message,required"`
@@ -257,6 +273,10 @@ type zoneSettingSortQueryStringForCacheEditResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingSortQueryStringForCacheEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingSortQueryStringForCacheEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneSettingSortQueryStringForCacheGetParams struct {
@@ -291,6 +311,10 @@ func (r *ZoneSettingSortQueryStringForCacheGetResponseEnvelope) UnmarshalJSON(da
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingSortQueryStringForCacheGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingSortQueryStringForCacheGetResponseEnvelopeErrors struct {
 	Code    int64                                                           `json:"code,required"`
 	Message string                                                          `json:"message,required"`
@@ -311,6 +335,10 @@ func (r *ZoneSettingSortQueryStringForCacheGetResponseEnvelopeErrors) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingSortQueryStringForCacheGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingSortQueryStringForCacheGetResponseEnvelopeMessages struct {
 	Code    int64                                                             `json:"code,required"`
 	Message string                                                            `json:"message,required"`
@@ -329,4 +357,8 @@ type zoneSettingSortQueryStringForCacheGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingSortQueryStringForCacheGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingSortQueryStringForCacheGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }

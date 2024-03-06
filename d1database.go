@@ -134,6 +134,10 @@ func (r *D1DatabaseNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r d1DatabaseNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type D1DatabaseListResponse struct {
 	// Specifies the timestamp the resource was created as an ISO8601 string.
 	CreatedAt interface{}                `json:"created_at"`
@@ -156,6 +160,10 @@ type d1DatabaseListResponseJSON struct {
 
 func (r *D1DatabaseListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r d1DatabaseListResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Union satisfied by [D1DatabaseDeleteResponseUnknown] or [shared.UnionString].
@@ -203,6 +211,10 @@ func (r *D1DatabaseGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r d1DatabaseGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type D1DatabaseQueryResponse struct {
 	Meta    D1DatabaseQueryResponseMeta `json:"meta"`
 	Results []interface{}               `json:"results"`
@@ -222,6 +234,10 @@ type d1DatabaseQueryResponseJSON struct {
 
 func (r *D1DatabaseQueryResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r d1DatabaseQueryResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type D1DatabaseQueryResponseMeta struct {
@@ -251,6 +267,10 @@ type d1DatabaseQueryResponseMetaJSON struct {
 
 func (r *D1DatabaseQueryResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r d1DatabaseQueryResponseMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 type D1DatabaseNewParams struct {
@@ -287,6 +307,10 @@ func (r *D1DatabaseNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r d1DatabaseNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type D1DatabaseNewResponseEnvelopeErrors struct {
 	Code    int64                                   `json:"code,required"`
 	Message string                                  `json:"message,required"`
@@ -306,6 +330,10 @@ func (r *D1DatabaseNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r d1DatabaseNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type D1DatabaseNewResponseEnvelopeMessages struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -323,6 +351,10 @@ type d1DatabaseNewResponseEnvelopeMessagesJSON struct {
 
 func (r *D1DatabaseNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r d1DatabaseNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -375,6 +407,10 @@ func (r *D1DatabaseDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r d1DatabaseDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type D1DatabaseDeleteResponseEnvelopeErrors struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -394,6 +430,10 @@ func (r *D1DatabaseDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r d1DatabaseDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type D1DatabaseDeleteResponseEnvelopeMessages struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -411,6 +451,10 @@ type d1DatabaseDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *D1DatabaseDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r d1DatabaseDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -444,6 +488,10 @@ func (r *D1DatabaseGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r d1DatabaseGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type D1DatabaseGetResponseEnvelopeErrors struct {
 	Code    int64                                   `json:"code,required"`
 	Message string                                  `json:"message,required"`
@@ -463,6 +511,10 @@ func (r *D1DatabaseGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r d1DatabaseGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type D1DatabaseGetResponseEnvelopeMessages struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -480,6 +532,10 @@ type d1DatabaseGetResponseEnvelopeMessagesJSON struct {
 
 func (r *D1DatabaseGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r d1DatabaseGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -522,6 +578,10 @@ func (r *D1DatabaseQueryResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r d1DatabaseQueryResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type D1DatabaseQueryResponseEnvelopeErrors struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -541,6 +601,10 @@ func (r *D1DatabaseQueryResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r d1DatabaseQueryResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type D1DatabaseQueryResponseEnvelopeMessages struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -558,6 +622,10 @@ type d1DatabaseQueryResponseEnvelopeMessagesJSON struct {
 
 func (r *D1DatabaseQueryResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r d1DatabaseQueryResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

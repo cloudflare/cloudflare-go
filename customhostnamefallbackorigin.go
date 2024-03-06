@@ -159,6 +159,10 @@ func (r *CustomHostnameFallbackOriginUpdateResponseEnvelope) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customHostnameFallbackOriginUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CustomHostnameFallbackOriginUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                        `json:"code,required"`
 	Message string                                                       `json:"message,required"`
@@ -179,6 +183,10 @@ func (r *CustomHostnameFallbackOriginUpdateResponseEnvelopeErrors) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customHostnameFallbackOriginUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type CustomHostnameFallbackOriginUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                          `json:"code,required"`
 	Message string                                                         `json:"message,required"`
@@ -197,6 +205,10 @@ type customHostnameFallbackOriginUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *CustomHostnameFallbackOriginUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customHostnameFallbackOriginUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -235,6 +247,10 @@ func (r *CustomHostnameFallbackOriginDeleteResponseEnvelope) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customHostnameFallbackOriginDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CustomHostnameFallbackOriginDeleteResponseEnvelopeErrors struct {
 	Code    int64                                                        `json:"code,required"`
 	Message string                                                       `json:"message,required"`
@@ -255,6 +271,10 @@ func (r *CustomHostnameFallbackOriginDeleteResponseEnvelopeErrors) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customHostnameFallbackOriginDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type CustomHostnameFallbackOriginDeleteResponseEnvelopeMessages struct {
 	Code    int64                                                          `json:"code,required"`
 	Message string                                                         `json:"message,required"`
@@ -273,6 +293,10 @@ type customHostnameFallbackOriginDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *CustomHostnameFallbackOriginDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customHostnameFallbackOriginDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -311,6 +335,10 @@ func (r *CustomHostnameFallbackOriginGetResponseEnvelope) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customHostnameFallbackOriginGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CustomHostnameFallbackOriginGetResponseEnvelopeErrors struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -328,6 +356,10 @@ type customHostnameFallbackOriginGetResponseEnvelopeErrorsJSON struct {
 
 func (r *CustomHostnameFallbackOriginGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customHostnameFallbackOriginGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type CustomHostnameFallbackOriginGetResponseEnvelopeMessages struct {
@@ -348,6 +380,10 @@ type customHostnameFallbackOriginGetResponseEnvelopeMessagesJSON struct {
 
 func (r *CustomHostnameFallbackOriginGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customHostnameFallbackOriginGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

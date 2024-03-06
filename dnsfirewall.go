@@ -171,6 +171,10 @@ func (r *DNSFirewallNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsFirewallNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Cloudflare-assigned DNS IPv4 Address.
 //
 // Union satisfied by [shared.UnionString] or [shared.UnionString].
@@ -241,6 +245,10 @@ func (r *DNSFirewallNewResponseAttackMitigation) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsFirewallNewResponseAttackMitigationJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSFirewallListResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
@@ -296,6 +304,10 @@ type dnsFirewallListResponseJSON struct {
 
 func (r *DNSFirewallListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsFirewallListResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Cloudflare-assigned DNS IPv4 Address.
@@ -368,6 +380,10 @@ func (r *DNSFirewallListResponseAttackMitigation) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsFirewallListResponseAttackMitigationJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSFirewallDeleteResponse struct {
 	// Identifier
 	ID   string                        `json:"id"`
@@ -384,6 +400,10 @@ type dnsFirewallDeleteResponseJSON struct {
 
 func (r *DNSFirewallDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsFirewallDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type DNSFirewallEditResponse struct {
@@ -441,6 +461,10 @@ type dnsFirewallEditResponseJSON struct {
 
 func (r *DNSFirewallEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsFirewallEditResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Cloudflare-assigned DNS IPv4 Address.
@@ -513,6 +537,10 @@ func (r *DNSFirewallEditResponseAttackMitigation) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsFirewallEditResponseAttackMitigationJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSFirewallGetResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
@@ -568,6 +596,10 @@ type dnsFirewallGetResponseJSON struct {
 
 func (r *DNSFirewallGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsFirewallGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Cloudflare-assigned DNS IPv4 Address.
@@ -638,6 +670,10 @@ type dnsFirewallGetResponseAttackMitigationJSON struct {
 
 func (r *DNSFirewallGetResponseAttackMitigation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsFirewallGetResponseAttackMitigationJSON) RawJSON() string {
+	return r.raw
 }
 
 type DNSFirewallNewParams struct {
@@ -718,6 +754,10 @@ func (r *DNSFirewallNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsFirewallNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSFirewallNewResponseEnvelopeErrors struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -737,6 +777,10 @@ func (r *DNSFirewallNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsFirewallNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSFirewallNewResponseEnvelopeMessages struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -754,6 +798,10 @@ type dnsFirewallNewResponseEnvelopeMessagesJSON struct {
 
 func (r *DNSFirewallNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsFirewallNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -809,6 +857,10 @@ func (r *DNSFirewallDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsFirewallDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSFirewallDeleteResponseEnvelopeErrors struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -828,6 +880,10 @@ func (r *DNSFirewallDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsFirewallDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSFirewallDeleteResponseEnvelopeMessages struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -845,6 +901,10 @@ type dnsFirewallDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *DNSFirewallDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsFirewallDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -940,6 +1000,10 @@ func (r *DNSFirewallEditResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsFirewallEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSFirewallEditResponseEnvelopeErrors struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -959,6 +1023,10 @@ func (r *DNSFirewallEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsFirewallEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSFirewallEditResponseEnvelopeMessages struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -976,6 +1044,10 @@ type dnsFirewallEditResponseEnvelopeMessagesJSON struct {
 
 func (r *DNSFirewallEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsFirewallEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1014,6 +1086,10 @@ func (r *DNSFirewallGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsFirewallGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSFirewallGetResponseEnvelopeErrors struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -1033,6 +1109,10 @@ func (r *DNSFirewallGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsFirewallGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSFirewallGetResponseEnvelopeMessages struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -1050,6 +1130,10 @@ type dnsFirewallGetResponseEnvelopeMessagesJSON struct {
 
 func (r *DNSFirewallGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsFirewallGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

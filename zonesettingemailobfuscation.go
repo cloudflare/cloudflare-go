@@ -90,6 +90,10 @@ func (r *ZoneSettingEmailObfuscationEditResponse) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEmailObfuscationEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // ID of the zone setting.
 type ZoneSettingEmailObfuscationEditResponseID string
 
@@ -142,6 +146,10 @@ type zoneSettingEmailObfuscationGetResponseJSON struct {
 
 func (r *ZoneSettingEmailObfuscationGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEmailObfuscationGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // ID of the zone setting.
@@ -213,6 +221,10 @@ func (r *ZoneSettingEmailObfuscationEditResponseEnvelope) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEmailObfuscationEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingEmailObfuscationEditResponseEnvelopeErrors struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -230,6 +242,10 @@ type zoneSettingEmailObfuscationEditResponseEnvelopeErrorsJSON struct {
 
 func (r *ZoneSettingEmailObfuscationEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEmailObfuscationEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneSettingEmailObfuscationEditResponseEnvelopeMessages struct {
@@ -250,6 +266,10 @@ type zoneSettingEmailObfuscationEditResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingEmailObfuscationEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEmailObfuscationEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneSettingEmailObfuscationGetParams struct {
@@ -283,6 +303,10 @@ func (r *ZoneSettingEmailObfuscationGetResponseEnvelope) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEmailObfuscationGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingEmailObfuscationGetResponseEnvelopeErrors struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -302,6 +326,10 @@ func (r *ZoneSettingEmailObfuscationGetResponseEnvelopeErrors) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEmailObfuscationGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingEmailObfuscationGetResponseEnvelopeMessages struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -319,4 +347,8 @@ type zoneSettingEmailObfuscationGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingEmailObfuscationGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEmailObfuscationGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }

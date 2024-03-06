@@ -160,6 +160,10 @@ func (r *AddressingPrefixNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingPrefixNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingPrefixListResponse struct {
 	// Identifier
 	ID string `json:"id"`
@@ -214,6 +218,10 @@ type addressingPrefixListResponseJSON struct {
 
 func (r *AddressingPrefixListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressingPrefixListResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Union satisfied by [AddressingPrefixDeleteResponseUnknown],
@@ -293,6 +301,10 @@ func (r *AddressingPrefixEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingPrefixEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingPrefixGetResponse struct {
 	// Identifier
 	ID string `json:"id"`
@@ -349,6 +361,10 @@ func (r *AddressingPrefixGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingPrefixGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingPrefixNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -388,6 +404,10 @@ func (r *AddressingPrefixNewResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingPrefixNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingPrefixNewResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -407,6 +427,10 @@ func (r *AddressingPrefixNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingPrefixNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingPrefixNewResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -424,6 +448,10 @@ type addressingPrefixNewResponseEnvelopeMessagesJSON struct {
 
 func (r *AddressingPrefixNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressingPrefixNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -464,6 +492,10 @@ func (r *AddressingPrefixListResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingPrefixListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingPrefixListResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -483,6 +515,10 @@ func (r *AddressingPrefixListResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingPrefixListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingPrefixListResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -500,6 +536,10 @@ type addressingPrefixListResponseEnvelopeMessagesJSON struct {
 
 func (r *AddressingPrefixListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressingPrefixListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -536,6 +576,10 @@ func (r *AddressingPrefixListResponseEnvelopeResultInfo) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingPrefixListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingPrefixDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -567,6 +611,10 @@ func (r *AddressingPrefixDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingPrefixDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingPrefixDeleteResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -586,6 +634,10 @@ func (r *AddressingPrefixDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingPrefixDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingPrefixDeleteResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -603,6 +655,10 @@ type addressingPrefixDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *AddressingPrefixDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressingPrefixDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -637,6 +693,10 @@ type addressingPrefixDeleteResponseEnvelopeResultInfoJSON struct {
 
 func (r *AddressingPrefixDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressingPrefixDeleteResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type AddressingPrefixEditParams struct {
@@ -674,6 +734,10 @@ func (r *AddressingPrefixEditResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingPrefixEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingPrefixEditResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -693,6 +757,10 @@ func (r *AddressingPrefixEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingPrefixEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingPrefixEditResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -710,6 +778,10 @@ type addressingPrefixEditResponseEnvelopeMessagesJSON struct {
 
 func (r *AddressingPrefixEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressingPrefixEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -748,6 +820,10 @@ func (r *AddressingPrefixGetResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingPrefixGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingPrefixGetResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -767,6 +843,10 @@ func (r *AddressingPrefixGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingPrefixGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingPrefixGetResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -784,6 +864,10 @@ type addressingPrefixGetResponseEnvelopeMessagesJSON struct {
 
 func (r *AddressingPrefixGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressingPrefixGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

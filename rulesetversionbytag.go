@@ -87,6 +87,10 @@ func (r *RulesetVersionByTagGetResponse) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetVersionByTagGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The kind of the ruleset.
 type RulesetVersionByTagGetResponseKind string
 
@@ -209,6 +213,10 @@ func (r *RulesetVersionByTagGetResponseRulesRulesetsBlockRule) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetVersionByTagGetResponseRulesRulesetsBlockRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r RulesetVersionByTagGetResponseRulesRulesetsBlockRule) implementsRulesetVersionByTagGetResponseRule() {
 }
 
@@ -239,6 +247,10 @@ func (r *RulesetVersionByTagGetResponseRulesRulesetsBlockRuleActionParameters) U
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetVersionByTagGetResponseRulesRulesetsBlockRuleActionParametersJSON) RawJSON() string {
+	return r.raw
+}
+
 // The response to show when the block is applied.
 type RulesetVersionByTagGetResponseRulesRulesetsBlockRuleActionParametersResponse struct {
 	// The content to return.
@@ -265,6 +277,10 @@ func (r *RulesetVersionByTagGetResponseRulesRulesetsBlockRuleActionParametersRes
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetVersionByTagGetResponseRulesRulesetsBlockRuleActionParametersResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // An object configuring the rule's logging behavior.
 type RulesetVersionByTagGetResponseRulesRulesetsBlockRuleLogging struct {
 	// Whether to generate a log when the rule matches.
@@ -283,6 +299,10 @@ type rulesetVersionByTagGetResponseRulesRulesetsBlockRuleLoggingJSON struct {
 
 func (r *RulesetVersionByTagGetResponseRulesRulesetsBlockRuleLogging) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetVersionByTagGetResponseRulesRulesetsBlockRuleLoggingJSON) RawJSON() string {
+	return r.raw
 }
 
 type RulesetVersionByTagGetResponseRulesRulesetsExecuteRule struct {
@@ -333,6 +353,10 @@ func (r *RulesetVersionByTagGetResponseRulesRulesetsExecuteRule) UnmarshalJSON(d
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetVersionByTagGetResponseRulesRulesetsExecuteRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r RulesetVersionByTagGetResponseRulesRulesetsExecuteRule) implementsRulesetVersionByTagGetResponseRule() {
 }
 
@@ -369,6 +393,10 @@ func (r *RulesetVersionByTagGetResponseRulesRulesetsExecuteRuleActionParameters)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetVersionByTagGetResponseRulesRulesetsExecuteRuleActionParametersJSON) RawJSON() string {
+	return r.raw
+}
+
 // The configuration to use for matched data logging.
 type RulesetVersionByTagGetResponseRulesRulesetsExecuteRuleActionParametersMatchedData struct {
 	// The public key to encrypt matched data logs with.
@@ -387,6 +415,10 @@ type rulesetVersionByTagGetResponseRulesRulesetsExecuteRuleActionParametersMatch
 
 func (r *RulesetVersionByTagGetResponseRulesRulesetsExecuteRuleActionParametersMatchedData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetVersionByTagGetResponseRulesRulesetsExecuteRuleActionParametersMatchedDataJSON) RawJSON() string {
+	return r.raw
 }
 
 // A set of overrides to apply to the target ruleset.
@@ -425,6 +457,10 @@ func (r *RulesetVersionByTagGetResponseRulesRulesetsExecuteRuleActionParametersO
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetVersionByTagGetResponseRulesRulesetsExecuteRuleActionParametersOverridesJSON) RawJSON() string {
+	return r.raw
+}
+
 // A category-level override
 type RulesetVersionByTagGetResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory struct {
 	// The name of the category to override.
@@ -452,6 +488,10 @@ type rulesetVersionByTagGetResponseRulesRulesetsExecuteRuleActionParametersOverr
 
 func (r *RulesetVersionByTagGetResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetVersionByTagGetResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoryJSON) RawJSON() string {
+	return r.raw
 }
 
 // The sensitivity level to use for rules in the category.
@@ -496,6 +536,10 @@ func (r *RulesetVersionByTagGetResponseRulesRulesetsExecuteRuleActionParametersO
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetVersionByTagGetResponseRulesRulesetsExecuteRuleActionParametersOverridesRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 // The sensitivity level to use for the rule.
 type RulesetVersionByTagGetResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel string
 
@@ -535,6 +579,10 @@ type rulesetVersionByTagGetResponseRulesRulesetsExecuteRuleLoggingJSON struct {
 
 func (r *RulesetVersionByTagGetResponseRulesRulesetsExecuteRuleLogging) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetVersionByTagGetResponseRulesRulesetsExecuteRuleLoggingJSON) RawJSON() string {
+	return r.raw
 }
 
 type RulesetVersionByTagGetResponseRulesRulesetsLogRule struct {
@@ -585,6 +633,10 @@ func (r *RulesetVersionByTagGetResponseRulesRulesetsLogRule) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetVersionByTagGetResponseRulesRulesetsLogRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r RulesetVersionByTagGetResponseRulesRulesetsLogRule) implementsRulesetVersionByTagGetResponseRule() {
 }
 
@@ -613,6 +665,10 @@ type rulesetVersionByTagGetResponseRulesRulesetsLogRuleLoggingJSON struct {
 
 func (r *RulesetVersionByTagGetResponseRulesRulesetsLogRuleLogging) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetVersionByTagGetResponseRulesRulesetsLogRuleLoggingJSON) RawJSON() string {
+	return r.raw
 }
 
 type RulesetVersionByTagGetResponseRulesRulesetsSkipRule struct {
@@ -663,6 +719,10 @@ func (r *RulesetVersionByTagGetResponseRulesRulesetsSkipRule) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetVersionByTagGetResponseRulesRulesetsSkipRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r RulesetVersionByTagGetResponseRulesRulesetsSkipRule) implementsRulesetVersionByTagGetResponseRule() {
 }
 
@@ -707,6 +767,10 @@ type rulesetVersionByTagGetResponseRulesRulesetsSkipRuleActionParametersJSON str
 
 func (r *RulesetVersionByTagGetResponseRulesRulesetsSkipRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetVersionByTagGetResponseRulesRulesetsSkipRuleActionParametersJSON) RawJSON() string {
+	return r.raw
 }
 
 // A phase to skip the execution of.
@@ -779,6 +843,10 @@ func (r *RulesetVersionByTagGetResponseRulesRulesetsSkipRuleLogging) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetVersionByTagGetResponseRulesRulesetsSkipRuleLoggingJSON) RawJSON() string {
+	return r.raw
+}
+
 type RulesetVersionByTagGetParams struct {
 	// The unique ID of the account.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -812,6 +880,10 @@ func (r *RulesetVersionByTagGetResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetVersionByTagGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 // A message.
 type RulesetVersionByTagGetResponseEnvelopeErrors struct {
 	// A text description of this message.
@@ -837,6 +909,10 @@ func (r *RulesetVersionByTagGetResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetVersionByTagGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 // The source of this message.
 type RulesetVersionByTagGetResponseEnvelopeErrorsSource struct {
 	// A JSON pointer to the field that is the source of the message.
@@ -854,6 +930,10 @@ type rulesetVersionByTagGetResponseEnvelopeErrorsSourceJSON struct {
 
 func (r *RulesetVersionByTagGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetVersionByTagGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
 }
 
 // A message.
@@ -881,6 +961,10 @@ func (r *RulesetVersionByTagGetResponseEnvelopeMessages) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetVersionByTagGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
 // The source of this message.
 type RulesetVersionByTagGetResponseEnvelopeMessagesSource struct {
 	// A JSON pointer to the field that is the source of the message.
@@ -898,6 +982,10 @@ type rulesetVersionByTagGetResponseEnvelopeMessagesSourceJSON struct {
 
 func (r *RulesetVersionByTagGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetVersionByTagGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful.

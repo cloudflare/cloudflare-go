@@ -158,6 +158,10 @@ func (r *KVNamespaceBulkUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r kvNamespaceBulkUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type KVNamespaceBulkUpdateResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -177,6 +181,10 @@ func (r *KVNamespaceBulkUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r kvNamespaceBulkUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type KVNamespaceBulkUpdateResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -194,6 +202,10 @@ type kvNamespaceBulkUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *KVNamespaceBulkUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r kvNamespaceBulkUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -237,6 +249,10 @@ func (r *KVNamespaceBulkDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r kvNamespaceBulkDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type KVNamespaceBulkDeleteResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -256,6 +272,10 @@ func (r *KVNamespaceBulkDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r kvNamespaceBulkDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type KVNamespaceBulkDeleteResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -273,6 +293,10 @@ type kvNamespaceBulkDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *KVNamespaceBulkDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r kvNamespaceBulkDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

@@ -150,6 +150,10 @@ func (r *RegistrarDomainListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r registrarDomainListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Shows contact information for domain registrant.
 type RegistrarDomainListResponseRegistrantContact struct {
 	// Address.
@@ -205,6 +209,10 @@ func (r *RegistrarDomainListResponseRegistrantContact) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r registrarDomainListResponseRegistrantContactJSON) RawJSON() string {
+	return r.raw
+}
+
 // Statuses for domain transfers into Cloudflare Registrar.
 type RegistrarDomainListResponseTransferIn struct {
 	// Form of authorization has been accepted by the registrant.
@@ -237,6 +245,10 @@ type registrarDomainListResponseTransferInJSON struct {
 
 func (r *RegistrarDomainListResponseTransferIn) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r registrarDomainListResponseTransferInJSON) RawJSON() string {
+	return r.raw
 }
 
 // Union satisfied by [RegistrarDomainGetResponseUnknown],
@@ -300,6 +312,10 @@ func (r *RegistrarDomainUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r registrarDomainUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RegistrarDomainUpdateResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -319,6 +335,10 @@ func (r *RegistrarDomainUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r registrarDomainUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type RegistrarDomainUpdateResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -336,6 +356,10 @@ type registrarDomainUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *RegistrarDomainUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r registrarDomainUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -376,6 +400,10 @@ func (r *RegistrarDomainListResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r registrarDomainListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RegistrarDomainListResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -395,6 +423,10 @@ func (r *RegistrarDomainListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r registrarDomainListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type RegistrarDomainListResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -412,6 +444,10 @@ type registrarDomainListResponseEnvelopeMessagesJSON struct {
 
 func (r *RegistrarDomainListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r registrarDomainListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -448,6 +484,10 @@ func (r *RegistrarDomainListResponseEnvelopeResultInfo) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r registrarDomainListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type RegistrarDomainGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -477,6 +517,10 @@ func (r *RegistrarDomainGetResponseEnvelope) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r registrarDomainGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RegistrarDomainGetResponseEnvelopeErrors struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -496,6 +540,10 @@ func (r *RegistrarDomainGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r registrarDomainGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type RegistrarDomainGetResponseEnvelopeMessages struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -513,6 +561,10 @@ type registrarDomainGetResponseEnvelopeMessagesJSON struct {
 
 func (r *RegistrarDomainGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r registrarDomainGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

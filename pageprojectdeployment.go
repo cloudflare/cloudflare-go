@@ -169,6 +169,10 @@ func (r *PageProjectDeploymentNewResponse) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectDeploymentNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Info about what caused the deployment.
 type PageProjectDeploymentNewResponseDeploymentTrigger struct {
 	// Additional info about the trigger.
@@ -189,6 +193,10 @@ type pageProjectDeploymentNewResponseDeploymentTriggerJSON struct {
 
 func (r *PageProjectDeploymentNewResponseDeploymentTrigger) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectDeploymentNewResponseDeploymentTriggerJSON) RawJSON() string {
+	return r.raw
 }
 
 // Additional info about the trigger.
@@ -217,6 +225,10 @@ func (r *PageProjectDeploymentNewResponseDeploymentTriggerMetadata) UnmarshalJSO
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectDeploymentNewResponseDeploymentTriggerMetadataJSON) RawJSON() string {
+	return r.raw
+}
+
 // The status of the deployment.
 type PageProjectDeploymentNewResponseStage struct {
 	// When the stage ended.
@@ -243,6 +255,10 @@ type pageProjectDeploymentNewResponseStageJSON struct {
 
 func (r *PageProjectDeploymentNewResponseStage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectDeploymentNewResponseStageJSON) RawJSON() string {
+	return r.raw
 }
 
 type PageProjectDeploymentListResponse struct {
@@ -305,6 +321,10 @@ func (r *PageProjectDeploymentListResponse) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectDeploymentListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Info about what caused the deployment.
 type PageProjectDeploymentListResponseDeploymentTrigger struct {
 	// Additional info about the trigger.
@@ -325,6 +345,10 @@ type pageProjectDeploymentListResponseDeploymentTriggerJSON struct {
 
 func (r *PageProjectDeploymentListResponseDeploymentTrigger) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectDeploymentListResponseDeploymentTriggerJSON) RawJSON() string {
+	return r.raw
 }
 
 // Additional info about the trigger.
@@ -353,6 +377,10 @@ func (r *PageProjectDeploymentListResponseDeploymentTriggerMetadata) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectDeploymentListResponseDeploymentTriggerMetadataJSON) RawJSON() string {
+	return r.raw
+}
+
 // The status of the deployment.
 type PageProjectDeploymentListResponseStage struct {
 	// When the stage ended.
@@ -379,6 +407,10 @@ type pageProjectDeploymentListResponseStageJSON struct {
 
 func (r *PageProjectDeploymentListResponseStage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectDeploymentListResponseStageJSON) RawJSON() string {
+	return r.raw
 }
 
 type PageProjectDeploymentDeleteResponse = interface{}
@@ -443,6 +475,10 @@ func (r *PageProjectDeploymentGetResponse) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectDeploymentGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Info about what caused the deployment.
 type PageProjectDeploymentGetResponseDeploymentTrigger struct {
 	// Additional info about the trigger.
@@ -463,6 +499,10 @@ type pageProjectDeploymentGetResponseDeploymentTriggerJSON struct {
 
 func (r *PageProjectDeploymentGetResponseDeploymentTrigger) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectDeploymentGetResponseDeploymentTriggerJSON) RawJSON() string {
+	return r.raw
 }
 
 // Additional info about the trigger.
@@ -491,6 +531,10 @@ func (r *PageProjectDeploymentGetResponseDeploymentTriggerMetadata) UnmarshalJSO
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectDeploymentGetResponseDeploymentTriggerMetadataJSON) RawJSON() string {
+	return r.raw
+}
+
 // The status of the deployment.
 type PageProjectDeploymentGetResponseStage struct {
 	// When the stage ended.
@@ -517,6 +561,10 @@ type pageProjectDeploymentGetResponseStageJSON struct {
 
 func (r *PageProjectDeploymentGetResponseStage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectDeploymentGetResponseStageJSON) RawJSON() string {
+	return r.raw
 }
 
 type PageProjectDeploymentRetryResponse struct {
@@ -579,6 +627,10 @@ func (r *PageProjectDeploymentRetryResponse) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectDeploymentRetryResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Info about what caused the deployment.
 type PageProjectDeploymentRetryResponseDeploymentTrigger struct {
 	// Additional info about the trigger.
@@ -599,6 +651,10 @@ type pageProjectDeploymentRetryResponseDeploymentTriggerJSON struct {
 
 func (r *PageProjectDeploymentRetryResponseDeploymentTrigger) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectDeploymentRetryResponseDeploymentTriggerJSON) RawJSON() string {
+	return r.raw
 }
 
 // Additional info about the trigger.
@@ -627,6 +683,10 @@ func (r *PageProjectDeploymentRetryResponseDeploymentTriggerMetadata) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectDeploymentRetryResponseDeploymentTriggerMetadataJSON) RawJSON() string {
+	return r.raw
+}
+
 // The status of the deployment.
 type PageProjectDeploymentRetryResponseStage struct {
 	// When the stage ended.
@@ -653,6 +713,10 @@ type pageProjectDeploymentRetryResponseStageJSON struct {
 
 func (r *PageProjectDeploymentRetryResponseStage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectDeploymentRetryResponseStageJSON) RawJSON() string {
+	return r.raw
 }
 
 type PageProjectDeploymentRollbackResponse struct {
@@ -715,6 +779,10 @@ func (r *PageProjectDeploymentRollbackResponse) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectDeploymentRollbackResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Info about what caused the deployment.
 type PageProjectDeploymentRollbackResponseDeploymentTrigger struct {
 	// Additional info about the trigger.
@@ -735,6 +803,10 @@ type pageProjectDeploymentRollbackResponseDeploymentTriggerJSON struct {
 
 func (r *PageProjectDeploymentRollbackResponseDeploymentTrigger) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectDeploymentRollbackResponseDeploymentTriggerJSON) RawJSON() string {
+	return r.raw
 }
 
 // Additional info about the trigger.
@@ -763,6 +835,10 @@ func (r *PageProjectDeploymentRollbackResponseDeploymentTriggerMetadata) Unmarsh
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectDeploymentRollbackResponseDeploymentTriggerMetadataJSON) RawJSON() string {
+	return r.raw
+}
+
 // The status of the deployment.
 type PageProjectDeploymentRollbackResponseStage struct {
 	// When the stage ended.
@@ -789,6 +865,10 @@ type pageProjectDeploymentRollbackResponseStageJSON struct {
 
 func (r *PageProjectDeploymentRollbackResponseStage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectDeploymentRollbackResponseStageJSON) RawJSON() string {
+	return r.raw
 }
 
 type PageProjectDeploymentNewParams struct {
@@ -827,6 +907,10 @@ func (r *PageProjectDeploymentNewResponseEnvelope) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectDeploymentNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageProjectDeploymentNewResponseEnvelopeErrors struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -846,6 +930,10 @@ func (r *PageProjectDeploymentNewResponseEnvelopeErrors) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectDeploymentNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageProjectDeploymentNewResponseEnvelopeMessages struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -863,6 +951,10 @@ type pageProjectDeploymentNewResponseEnvelopeMessagesJSON struct {
 
 func (r *PageProjectDeploymentNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectDeploymentNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -903,6 +995,10 @@ func (r *PageProjectDeploymentListResponseEnvelope) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectDeploymentListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageProjectDeploymentListResponseEnvelopeErrors struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -922,6 +1018,10 @@ func (r *PageProjectDeploymentListResponseEnvelopeErrors) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectDeploymentListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageProjectDeploymentListResponseEnvelopeMessages struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -939,6 +1039,10 @@ type pageProjectDeploymentListResponseEnvelopeMessagesJSON struct {
 
 func (r *PageProjectDeploymentListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectDeploymentListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -969,6 +1073,10 @@ type pageProjectDeploymentListResponseEnvelopeResultInfoJSON struct {
 
 func (r *PageProjectDeploymentListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectDeploymentListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type PageProjectDeploymentDeleteParams struct {
@@ -1005,6 +1113,10 @@ func (r *PageProjectDeploymentGetResponseEnvelope) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectDeploymentGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageProjectDeploymentGetResponseEnvelopeErrors struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -1024,6 +1136,10 @@ func (r *PageProjectDeploymentGetResponseEnvelopeErrors) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectDeploymentGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageProjectDeploymentGetResponseEnvelopeMessages struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -1041,6 +1157,10 @@ type pageProjectDeploymentGetResponseEnvelopeMessagesJSON struct {
 
 func (r *PageProjectDeploymentGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectDeploymentGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1079,6 +1199,10 @@ func (r *PageProjectDeploymentRetryResponseEnvelope) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectDeploymentRetryResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageProjectDeploymentRetryResponseEnvelopeErrors struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -1098,6 +1222,10 @@ func (r *PageProjectDeploymentRetryResponseEnvelopeErrors) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectDeploymentRetryResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageProjectDeploymentRetryResponseEnvelopeMessages struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -1115,6 +1243,10 @@ type pageProjectDeploymentRetryResponseEnvelopeMessagesJSON struct {
 
 func (r *PageProjectDeploymentRetryResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectDeploymentRetryResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1153,6 +1285,10 @@ func (r *PageProjectDeploymentRollbackResponseEnvelope) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectDeploymentRollbackResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageProjectDeploymentRollbackResponseEnvelopeErrors struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -1172,6 +1308,10 @@ func (r *PageProjectDeploymentRollbackResponseEnvelopeErrors) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectDeploymentRollbackResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageProjectDeploymentRollbackResponseEnvelopeMessages struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -1189,6 +1329,10 @@ type pageProjectDeploymentRollbackResponseEnvelopeMessagesJSON struct {
 
 func (r *PageProjectDeploymentRollbackResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectDeploymentRollbackResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

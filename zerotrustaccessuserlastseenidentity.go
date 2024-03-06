@@ -95,6 +95,10 @@ func (r *ZeroTrustAccessUserLastSeenIdentityGetResponse) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessUserLastSeenIdentityGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessUserLastSeenIdentityGetResponseDeviceSession struct {
 	LastAuthenticated float64                                                         `json:"last_authenticated"`
 	JSON              zeroTrustAccessUserLastSeenIdentityGetResponseDeviceSessionJSON `json:"-"`
@@ -111,6 +115,10 @@ type zeroTrustAccessUserLastSeenIdentityGetResponseDeviceSessionJSON struct {
 
 func (r *ZeroTrustAccessUserLastSeenIdentityGetResponseDeviceSession) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessUserLastSeenIdentityGetResponseDeviceSessionJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustAccessUserLastSeenIdentityGetResponseDevicePosture struct {
@@ -147,6 +155,10 @@ func (r *ZeroTrustAccessUserLastSeenIdentityGetResponseDevicePosture) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessUserLastSeenIdentityGetResponseDevicePostureJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessUserLastSeenIdentityGetResponseDevicePostureCheck struct {
 	Exists bool                                                                 `json:"exists"`
 	Path   string                                                               `json:"path"`
@@ -167,6 +179,10 @@ func (r *ZeroTrustAccessUserLastSeenIdentityGetResponseDevicePostureCheck) Unmar
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessUserLastSeenIdentityGetResponseDevicePostureCheckJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessUserLastSeenIdentityGetResponseGeo struct {
 	Country string                                                `json:"country"`
 	JSON    zeroTrustAccessUserLastSeenIdentityGetResponseGeoJSON `json:"-"`
@@ -182,6 +198,10 @@ type zeroTrustAccessUserLastSeenIdentityGetResponseGeoJSON struct {
 
 func (r *ZeroTrustAccessUserLastSeenIdentityGetResponseGeo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessUserLastSeenIdentityGetResponseGeoJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustAccessUserLastSeenIdentityGetResponseIdp struct {
@@ -201,6 +221,10 @@ type zeroTrustAccessUserLastSeenIdentityGetResponseIdpJSON struct {
 
 func (r *ZeroTrustAccessUserLastSeenIdentityGetResponseIdp) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessUserLastSeenIdentityGetResponseIdpJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustAccessUserLastSeenIdentityGetResponseMTLSAuth struct {
@@ -228,6 +252,10 @@ func (r *ZeroTrustAccessUserLastSeenIdentityGetResponseMTLSAuth) UnmarshalJSON(d
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessUserLastSeenIdentityGetResponseMTLSAuthJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessUserLastSeenIdentityGetResponseEnvelope struct {
 	Errors   []ZeroTrustAccessUserLastSeenIdentityGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustAccessUserLastSeenIdentityGetResponseEnvelopeMessages `json:"messages,required"`
@@ -252,6 +280,10 @@ func (r *ZeroTrustAccessUserLastSeenIdentityGetResponseEnvelope) UnmarshalJSON(d
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessUserLastSeenIdentityGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessUserLastSeenIdentityGetResponseEnvelopeErrors struct {
 	Code    int64                                                            `json:"code,required"`
 	Message string                                                           `json:"message,required"`
@@ -272,6 +304,10 @@ func (r *ZeroTrustAccessUserLastSeenIdentityGetResponseEnvelopeErrors) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessUserLastSeenIdentityGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessUserLastSeenIdentityGetResponseEnvelopeMessages struct {
 	Code    int64                                                              `json:"code,required"`
 	Message string                                                             `json:"message,required"`
@@ -290,6 +326,10 @@ type zeroTrustAccessUserLastSeenIdentityGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustAccessUserLastSeenIdentityGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessUserLastSeenIdentityGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

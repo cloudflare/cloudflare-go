@@ -135,6 +135,10 @@ func (r *RulesetVersionListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetVersionListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The kind of the ruleset.
 type RulesetVersionListResponseKind string
 
@@ -212,6 +216,10 @@ type rulesetVersionGetResponseJSON struct {
 
 func (r *RulesetVersionGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetVersionGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // The kind of the ruleset.
@@ -336,6 +344,10 @@ func (r *RulesetVersionGetResponseRulesRulesetsBlockRule) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetVersionGetResponseRulesRulesetsBlockRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r RulesetVersionGetResponseRulesRulesetsBlockRule) implementsRulesetVersionGetResponseRule() {}
 
 // The action to perform when the rule matches.
@@ -365,6 +377,10 @@ func (r *RulesetVersionGetResponseRulesRulesetsBlockRuleActionParameters) Unmars
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetVersionGetResponseRulesRulesetsBlockRuleActionParametersJSON) RawJSON() string {
+	return r.raw
+}
+
 // The response to show when the block is applied.
 type RulesetVersionGetResponseRulesRulesetsBlockRuleActionParametersResponse struct {
 	// The content to return.
@@ -391,6 +407,10 @@ func (r *RulesetVersionGetResponseRulesRulesetsBlockRuleActionParametersResponse
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetVersionGetResponseRulesRulesetsBlockRuleActionParametersResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // An object configuring the rule's logging behavior.
 type RulesetVersionGetResponseRulesRulesetsBlockRuleLogging struct {
 	// Whether to generate a log when the rule matches.
@@ -408,6 +428,10 @@ type rulesetVersionGetResponseRulesRulesetsBlockRuleLoggingJSON struct {
 
 func (r *RulesetVersionGetResponseRulesRulesetsBlockRuleLogging) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetVersionGetResponseRulesRulesetsBlockRuleLoggingJSON) RawJSON() string {
+	return r.raw
 }
 
 type RulesetVersionGetResponseRulesRulesetsExecuteRule struct {
@@ -458,6 +482,10 @@ func (r *RulesetVersionGetResponseRulesRulesetsExecuteRule) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetVersionGetResponseRulesRulesetsExecuteRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r RulesetVersionGetResponseRulesRulesetsExecuteRule) implementsRulesetVersionGetResponseRule() {
 }
 
@@ -494,6 +522,10 @@ func (r *RulesetVersionGetResponseRulesRulesetsExecuteRuleActionParameters) Unma
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetVersionGetResponseRulesRulesetsExecuteRuleActionParametersJSON) RawJSON() string {
+	return r.raw
+}
+
 // The configuration to use for matched data logging.
 type RulesetVersionGetResponseRulesRulesetsExecuteRuleActionParametersMatchedData struct {
 	// The public key to encrypt matched data logs with.
@@ -512,6 +544,10 @@ type rulesetVersionGetResponseRulesRulesetsExecuteRuleActionParametersMatchedDat
 
 func (r *RulesetVersionGetResponseRulesRulesetsExecuteRuleActionParametersMatchedData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetVersionGetResponseRulesRulesetsExecuteRuleActionParametersMatchedDataJSON) RawJSON() string {
+	return r.raw
 }
 
 // A set of overrides to apply to the target ruleset.
@@ -550,6 +586,10 @@ func (r *RulesetVersionGetResponseRulesRulesetsExecuteRuleActionParametersOverri
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetVersionGetResponseRulesRulesetsExecuteRuleActionParametersOverridesJSON) RawJSON() string {
+	return r.raw
+}
+
 // A category-level override
 type RulesetVersionGetResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory struct {
 	// The name of the category to override.
@@ -577,6 +617,10 @@ type rulesetVersionGetResponseRulesRulesetsExecuteRuleActionParametersOverridesC
 
 func (r *RulesetVersionGetResponseRulesRulesetsExecuteRuleActionParametersOverridesCategory) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetVersionGetResponseRulesRulesetsExecuteRuleActionParametersOverridesCategoryJSON) RawJSON() string {
+	return r.raw
 }
 
 // The sensitivity level to use for rules in the category.
@@ -621,6 +665,10 @@ func (r *RulesetVersionGetResponseRulesRulesetsExecuteRuleActionParametersOverri
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetVersionGetResponseRulesRulesetsExecuteRuleActionParametersOverridesRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 // The sensitivity level to use for the rule.
 type RulesetVersionGetResponseRulesRulesetsExecuteRuleActionParametersOverridesRulesSensitivityLevel string
 
@@ -660,6 +708,10 @@ type rulesetVersionGetResponseRulesRulesetsExecuteRuleLoggingJSON struct {
 
 func (r *RulesetVersionGetResponseRulesRulesetsExecuteRuleLogging) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetVersionGetResponseRulesRulesetsExecuteRuleLoggingJSON) RawJSON() string {
+	return r.raw
 }
 
 type RulesetVersionGetResponseRulesRulesetsLogRule struct {
@@ -710,6 +762,10 @@ func (r *RulesetVersionGetResponseRulesRulesetsLogRule) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetVersionGetResponseRulesRulesetsLogRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r RulesetVersionGetResponseRulesRulesetsLogRule) implementsRulesetVersionGetResponseRule() {}
 
 // The action to perform when the rule matches.
@@ -736,6 +792,10 @@ type rulesetVersionGetResponseRulesRulesetsLogRuleLoggingJSON struct {
 
 func (r *RulesetVersionGetResponseRulesRulesetsLogRuleLogging) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetVersionGetResponseRulesRulesetsLogRuleLoggingJSON) RawJSON() string {
+	return r.raw
 }
 
 type RulesetVersionGetResponseRulesRulesetsSkipRule struct {
@@ -786,6 +846,10 @@ func (r *RulesetVersionGetResponseRulesRulesetsSkipRule) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetVersionGetResponseRulesRulesetsSkipRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r RulesetVersionGetResponseRulesRulesetsSkipRule) implementsRulesetVersionGetResponseRule() {}
 
 // The action to perform when the rule matches.
@@ -829,6 +893,10 @@ type rulesetVersionGetResponseRulesRulesetsSkipRuleActionParametersJSON struct {
 
 func (r *RulesetVersionGetResponseRulesRulesetsSkipRuleActionParameters) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetVersionGetResponseRulesRulesetsSkipRuleActionParametersJSON) RawJSON() string {
+	return r.raw
 }
 
 // A phase to skip the execution of.
@@ -900,6 +968,10 @@ func (r *RulesetVersionGetResponseRulesRulesetsSkipRuleLogging) UnmarshalJSON(da
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetVersionGetResponseRulesRulesetsSkipRuleLoggingJSON) RawJSON() string {
+	return r.raw
+}
+
 type RulesetVersionListParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
@@ -935,6 +1007,10 @@ func (r *RulesetVersionListResponseEnvelope) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetVersionListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 // A message.
 type RulesetVersionListResponseEnvelopeErrors struct {
 	// A text description of this message.
@@ -960,6 +1036,10 @@ func (r *RulesetVersionListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetVersionListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 // The source of this message.
 type RulesetVersionListResponseEnvelopeErrorsSource struct {
 	// A JSON pointer to the field that is the source of the message.
@@ -977,6 +1057,10 @@ type rulesetVersionListResponseEnvelopeErrorsSourceJSON struct {
 
 func (r *RulesetVersionListResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetVersionListResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
 }
 
 // A message.
@@ -1004,6 +1088,10 @@ func (r *RulesetVersionListResponseEnvelopeMessages) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetVersionListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
 // The source of this message.
 type RulesetVersionListResponseEnvelopeMessagesSource struct {
 	// A JSON pointer to the field that is the source of the message.
@@ -1021,6 +1109,10 @@ type rulesetVersionListResponseEnvelopeMessagesSourceJSON struct {
 
 func (r *RulesetVersionListResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetVersionListResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful.
@@ -1072,6 +1164,10 @@ func (r *RulesetVersionGetResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetVersionGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 // A message.
 type RulesetVersionGetResponseEnvelopeErrors struct {
 	// A text description of this message.
@@ -1097,6 +1193,10 @@ func (r *RulesetVersionGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetVersionGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 // The source of this message.
 type RulesetVersionGetResponseEnvelopeErrorsSource struct {
 	// A JSON pointer to the field that is the source of the message.
@@ -1114,6 +1214,10 @@ type rulesetVersionGetResponseEnvelopeErrorsSourceJSON struct {
 
 func (r *RulesetVersionGetResponseEnvelopeErrorsSource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetVersionGetResponseEnvelopeErrorsSourceJSON) RawJSON() string {
+	return r.raw
 }
 
 // A message.
@@ -1141,6 +1245,10 @@ func (r *RulesetVersionGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rulesetVersionGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
 // The source of this message.
 type RulesetVersionGetResponseEnvelopeMessagesSource struct {
 	// A JSON pointer to the field that is the source of the message.
@@ -1158,6 +1266,10 @@ type rulesetVersionGetResponseEnvelopeMessagesSourceJSON struct {
 
 func (r *RulesetVersionGetResponseEnvelopeMessagesSource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rulesetVersionGetResponseEnvelopeMessagesSourceJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful.

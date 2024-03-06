@@ -91,6 +91,10 @@ func (r *WorkerScriptContentUpdateResponse) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerScriptContentUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // A reference to a script that will consume logs from the attached Worker.
 type WorkerScriptContentUpdateResponseTailConsumer struct {
 	// Name of Worker that is to be the consumer.
@@ -114,6 +118,10 @@ type workerScriptContentUpdateResponseTailConsumerJSON struct {
 
 func (r *WorkerScriptContentUpdateResponseTailConsumer) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerScriptContentUpdateResponseTailConsumerJSON) RawJSON() string {
+	return r.raw
 }
 
 type WorkerScriptContentUpdateParams struct {
@@ -185,6 +193,10 @@ func (r *WorkerScriptContentUpdateResponseEnvelope) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerScriptContentUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerScriptContentUpdateResponseEnvelopeErrors struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -204,6 +216,10 @@ func (r *WorkerScriptContentUpdateResponseEnvelopeErrors) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerScriptContentUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerScriptContentUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -221,6 +237,10 @@ type workerScriptContentUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *WorkerScriptContentUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerScriptContentUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

@@ -112,6 +112,10 @@ func (r *URLScannerScanNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanGetResponse struct {
 	Scan URLScannerScanGetResponseScan `json:"scan,required"`
 	JSON urlScannerScanGetResponseJSON `json:"-"`
@@ -127,6 +131,10 @@ type urlScannerScanGetResponseJSON struct {
 
 func (r *URLScannerScanGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r urlScannerScanGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type URLScannerScanGetResponseScan struct {
@@ -167,6 +175,10 @@ func (r *URLScannerScanGetResponseScan) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanGetResponseScanJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanGetResponseScanCertificate struct {
 	Issuer      string                                       `json:"issuer,required"`
 	SubjectName string                                       `json:"subjectName,required"`
@@ -190,6 +202,10 @@ func (r *URLScannerScanGetResponseScanCertificate) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanGetResponseScanCertificateJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanGetResponseScanGeo struct {
 	// GeoIP continent location
 	Continents []string `json:"continents,required"`
@@ -211,6 +227,10 @@ func (r *URLScannerScanGetResponseScanGeo) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanGetResponseScanGeoJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanGetResponseScanMeta struct {
 	Processors URLScannerScanGetResponseScanMetaProcessors `json:"processors,required"`
 	JSON       urlScannerScanGetResponseScanMetaJSON       `json:"-"`
@@ -226,6 +246,10 @@ type urlScannerScanGetResponseScanMetaJSON struct {
 
 func (r *URLScannerScanGetResponseScanMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r urlScannerScanGetResponseScanMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 type URLScannerScanGetResponseScanMetaProcessors struct {
@@ -251,6 +275,10 @@ func (r *URLScannerScanGetResponseScanMetaProcessors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanGetResponseScanMetaProcessorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanGetResponseScanMetaProcessorsCategories struct {
 	Content []URLScannerScanGetResponseScanMetaProcessorsCategoriesContent `json:"content,required"`
 	Risks   []URLScannerScanGetResponseScanMetaProcessorsCategoriesRisk    `json:"risks,required"`
@@ -268,6 +296,10 @@ type urlScannerScanGetResponseScanMetaProcessorsCategoriesJSON struct {
 
 func (r *URLScannerScanGetResponseScanMetaProcessorsCategories) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r urlScannerScanGetResponseScanMetaProcessorsCategoriesJSON) RawJSON() string {
+	return r.raw
 }
 
 type URLScannerScanGetResponseScanMetaProcessorsCategoriesContent struct {
@@ -292,6 +324,10 @@ func (r *URLScannerScanGetResponseScanMetaProcessorsCategoriesContent) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanGetResponseScanMetaProcessorsCategoriesContentJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanGetResponseScanMetaProcessorsCategoriesRisk struct {
 	ID              int64                                                         `json:"id,required"`
 	Name            string                                                        `json:"name,required"`
@@ -312,6 +348,10 @@ type urlScannerScanGetResponseScanMetaProcessorsCategoriesRiskJSON struct {
 
 func (r *URLScannerScanGetResponseScanMetaProcessorsCategoriesRisk) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r urlScannerScanGetResponseScanMetaProcessorsCategoriesRiskJSON) RawJSON() string {
+	return r.raw
 }
 
 type URLScannerScanGetResponseScanMetaProcessorsRank struct {
@@ -335,6 +375,10 @@ type urlScannerScanGetResponseScanMetaProcessorsRankJSON struct {
 
 func (r *URLScannerScanGetResponseScanMetaProcessorsRank) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r urlScannerScanGetResponseScanMetaProcessorsRankJSON) RawJSON() string {
+	return r.raw
 }
 
 type URLScannerScanGetResponseScanMetaProcessorsTech struct {
@@ -368,6 +412,10 @@ func (r *URLScannerScanGetResponseScanMetaProcessorsTech) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanGetResponseScanMetaProcessorsTechJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanGetResponseScanMetaProcessorsTechCategory struct {
 	ID       int64                                                       `json:"id,required"`
 	Groups   []int64                                                     `json:"groups,required"`
@@ -394,6 +442,10 @@ func (r *URLScannerScanGetResponseScanMetaProcessorsTechCategory) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanGetResponseScanMetaProcessorsTechCategoryJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanGetResponseScanMetaProcessorsTechEvidence struct {
 	ImpliedBy []string                                                         `json:"impliedBy,required"`
 	Patterns  []URLScannerScanGetResponseScanMetaProcessorsTechEvidencePattern `json:"patterns,required"`
@@ -412,6 +464,10 @@ type urlScannerScanGetResponseScanMetaProcessorsTechEvidenceJSON struct {
 
 func (r *URLScannerScanGetResponseScanMetaProcessorsTechEvidence) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r urlScannerScanGetResponseScanMetaProcessorsTechEvidenceJSON) RawJSON() string {
+	return r.raw
 }
 
 type URLScannerScanGetResponseScanMetaProcessorsTechEvidencePattern struct {
@@ -447,6 +503,10 @@ type urlScannerScanGetResponseScanMetaProcessorsTechEvidencePatternJSON struct {
 
 func (r *URLScannerScanGetResponseScanMetaProcessorsTechEvidencePattern) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r urlScannerScanGetResponseScanMetaProcessorsTechEvidencePatternJSON) RawJSON() string {
+	return r.raw
 }
 
 type URLScannerScanGetResponseScanPage struct {
@@ -496,6 +556,10 @@ func (r *URLScannerScanGetResponseScanPage) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanGetResponseScanPageJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanGetResponseScanPageConsole struct {
 	Category string                                       `json:"category,required"`
 	Text     string                                       `json:"text,required"`
@@ -517,6 +581,10 @@ type urlScannerScanGetResponseScanPageConsoleJSON struct {
 
 func (r *URLScannerScanGetResponseScanPageConsole) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r urlScannerScanGetResponseScanPageConsoleJSON) RawJSON() string {
+	return r.raw
 }
 
 type URLScannerScanGetResponseScanPageCooky struct {
@@ -560,6 +628,10 @@ func (r *URLScannerScanGetResponseScanPageCooky) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanGetResponseScanPageCookyJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanGetResponseScanPageHeader struct {
 	Name  string                                      `json:"name,required"`
 	Value string                                      `json:"value,required"`
@@ -579,6 +651,10 @@ func (r *URLScannerScanGetResponseScanPageHeader) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanGetResponseScanPageHeaderJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanGetResponseScanPageJs struct {
 	Variables []URLScannerScanGetResponseScanPageJsVariable `json:"variables,required"`
 	JSON      urlScannerScanGetResponseScanPageJsJSON       `json:"-"`
@@ -594,6 +670,10 @@ type urlScannerScanGetResponseScanPageJsJSON struct {
 
 func (r *URLScannerScanGetResponseScanPageJs) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r urlScannerScanGetResponseScanPageJsJSON) RawJSON() string {
+	return r.raw
 }
 
 type URLScannerScanGetResponseScanPageJsVariable struct {
@@ -615,6 +695,10 @@ func (r *URLScannerScanGetResponseScanPageJsVariable) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanGetResponseScanPageJsVariableJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanGetResponseScanPageSecurityViolation struct {
 	Category string                                                 `json:"category,required"`
 	Text     string                                                 `json:"text,required"`
@@ -634,6 +718,10 @@ type urlScannerScanGetResponseScanPageSecurityViolationJSON struct {
 
 func (r *URLScannerScanGetResponseScanPageSecurityViolation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r urlScannerScanGetResponseScanPageSecurityViolationJSON) RawJSON() string {
+	return r.raw
 }
 
 type URLScannerScanGetResponseScanPerformance struct {
@@ -713,6 +801,10 @@ func (r *URLScannerScanGetResponseScanPerformance) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanGetResponseScanPerformanceJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanGetResponseScanTask struct {
 	// Submitter location
 	ClientLocation string                                      `json:"clientLocation,required"`
@@ -756,6 +848,10 @@ func (r *URLScannerScanGetResponseScanTask) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanGetResponseScanTaskJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanGetResponseScanTaskClientType string
 
 const (
@@ -781,6 +877,10 @@ func (r *URLScannerScanGetResponseScanTaskError) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanGetResponseScanTaskErrorJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanGetResponseScanTaskScannedFrom struct {
 	// IATA code of Cloudflare datacenter
 	Colo string                                           `json:"colo,required"`
@@ -797,6 +897,10 @@ type urlScannerScanGetResponseScanTaskScannedFromJSON struct {
 
 func (r *URLScannerScanGetResponseScanTaskScannedFrom) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r urlScannerScanGetResponseScanTaskScannedFromJSON) RawJSON() string {
+	return r.raw
 }
 
 type URLScannerScanGetResponseScanTaskStatus string
@@ -832,6 +936,10 @@ func (r *URLScannerScanGetResponseScanVerdicts) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanGetResponseScanVerdictsJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanGetResponseScanVerdictsOverall struct {
 	Categories []URLScannerScanGetResponseScanVerdictsOverallCategory `json:"categories,required"`
 	// At least one of our subsystems marked the site as potentially malicious at the
@@ -855,6 +963,10 @@ func (r *URLScannerScanGetResponseScanVerdictsOverall) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanGetResponseScanVerdictsOverallJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanGetResponseScanVerdictsOverallCategory struct {
 	ID              float64                                                  `json:"id,required"`
 	Name            string                                                   `json:"name,required"`
@@ -876,6 +988,10 @@ func (r *URLScannerScanGetResponseScanVerdictsOverallCategory) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanGetResponseScanVerdictsOverallCategoryJSON) RawJSON() string {
+	return r.raw
+}
+
 // Dictionary of Autonomous System Numbers where ASN's are the keys
 type URLScannerScanGetResponseScanASNs struct {
 	// ASN's contacted
@@ -893,6 +1009,10 @@ type urlScannerScanGetResponseScanASNsJSON struct {
 
 func (r *URLScannerScanGetResponseScanASNs) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r urlScannerScanGetResponseScanASNsJSON) RawJSON() string {
+	return r.raw
 }
 
 // ASN's contacted
@@ -921,6 +1041,10 @@ func (r *URLScannerScanGetResponseScanASNsASN) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanGetResponseScanASNsASNJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanGetResponseScanDomains struct {
 	ExampleCom URLScannerScanGetResponseScanDomainsExampleCom `json:"example.com"`
 	JSON       urlScannerScanGetResponseScanDomainsJSON       `json:"-"`
@@ -936,6 +1060,10 @@ type urlScannerScanGetResponseScanDomainsJSON struct {
 
 func (r *URLScannerScanGetResponseScanDomains) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r urlScannerScanGetResponseScanDomainsJSON) RawJSON() string {
+	return r.raw
 }
 
 type URLScannerScanGetResponseScanDomainsExampleCom struct {
@@ -963,6 +1091,10 @@ func (r *URLScannerScanGetResponseScanDomainsExampleCom) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanGetResponseScanDomainsExampleComJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanGetResponseScanDomainsExampleComCategories struct {
 	Inherited URLScannerScanGetResponseScanDomainsExampleComCategoriesInherited `json:"inherited,required"`
 	Content   []URLScannerScanGetResponseScanDomainsExampleComCategoriesContent `json:"content"`
@@ -983,6 +1115,10 @@ type urlScannerScanGetResponseScanDomainsExampleComCategoriesJSON struct {
 
 func (r *URLScannerScanGetResponseScanDomainsExampleComCategories) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r urlScannerScanGetResponseScanDomainsExampleComCategoriesJSON) RawJSON() string {
+	return r.raw
 }
 
 type URLScannerScanGetResponseScanDomainsExampleComCategoriesInherited struct {
@@ -1007,6 +1143,10 @@ func (r *URLScannerScanGetResponseScanDomainsExampleComCategoriesInherited) Unma
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanGetResponseScanDomainsExampleComCategoriesInheritedJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanGetResponseScanDomainsExampleComCategoriesInheritedContent struct {
 	ID              int64                                                                        `json:"id,required"`
 	Name            string                                                                       `json:"name,required"`
@@ -1027,6 +1167,10 @@ type urlScannerScanGetResponseScanDomainsExampleComCategoriesInheritedContentJSO
 
 func (r *URLScannerScanGetResponseScanDomainsExampleComCategoriesInheritedContent) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r urlScannerScanGetResponseScanDomainsExampleComCategoriesInheritedContentJSON) RawJSON() string {
+	return r.raw
 }
 
 type URLScannerScanGetResponseScanDomainsExampleComCategoriesInheritedRisk struct {
@@ -1051,6 +1195,10 @@ func (r *URLScannerScanGetResponseScanDomainsExampleComCategoriesInheritedRisk) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanGetResponseScanDomainsExampleComCategoriesInheritedRiskJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanGetResponseScanDomainsExampleComCategoriesContent struct {
 	ID              int64                                                               `json:"id,required"`
 	Name            string                                                              `json:"name,required"`
@@ -1073,6 +1221,10 @@ func (r *URLScannerScanGetResponseScanDomainsExampleComCategoriesContent) Unmars
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanGetResponseScanDomainsExampleComCategoriesContentJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanGetResponseScanDomainsExampleComCategoriesRisk struct {
 	ID              int64                                                            `json:"id,required"`
 	Name            string                                                           `json:"name,required"`
@@ -1093,6 +1245,10 @@ type urlScannerScanGetResponseScanDomainsExampleComCategoriesRiskJSON struct {
 
 func (r *URLScannerScanGetResponseScanDomainsExampleComCategoriesRisk) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r urlScannerScanGetResponseScanDomainsExampleComCategoriesRiskJSON) RawJSON() string {
+	return r.raw
 }
 
 type URLScannerScanGetResponseScanDomainsExampleComDNS struct {
@@ -1118,6 +1274,10 @@ func (r *URLScannerScanGetResponseScanDomainsExampleComDNS) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanGetResponseScanDomainsExampleComDNSJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanGetResponseScanDomainsExampleComRank struct {
 	Bucket string `json:"bucket,required"`
 	Name   string `json:"name,required"`
@@ -1141,6 +1301,10 @@ func (r *URLScannerScanGetResponseScanDomainsExampleComRank) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanGetResponseScanDomainsExampleComRankJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanGetResponseScanIPs struct {
 	IP   URLScannerScanGetResponseScanIPsIP   `json:"ip"`
 	JSON urlScannerScanGetResponseScanIPsJSON `json:"-"`
@@ -1156,6 +1320,10 @@ type urlScannerScanGetResponseScanIPsJSON struct {
 
 func (r *URLScannerScanGetResponseScanIPs) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r urlScannerScanGetResponseScanIPsJSON) RawJSON() string {
+	return r.raw
 }
 
 type URLScannerScanGetResponseScanIPsIP struct {
@@ -1203,6 +1371,10 @@ func (r *URLScannerScanGetResponseScanIPsIP) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanGetResponseScanIPsIPJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanGetResponseScanLinks struct {
 	Link URLScannerScanGetResponseScanLinksLink `json:"link"`
 	JSON urlScannerScanGetResponseScanLinksJSON `json:"-"`
@@ -1218,6 +1390,10 @@ type urlScannerScanGetResponseScanLinksJSON struct {
 
 func (r *URLScannerScanGetResponseScanLinks) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r urlScannerScanGetResponseScanLinksJSON) RawJSON() string {
+	return r.raw
 }
 
 type URLScannerScanGetResponseScanLinksLink struct {
@@ -1240,6 +1416,10 @@ func (r *URLScannerScanGetResponseScanLinksLink) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanGetResponseScanLinksLinkJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanHarResponse struct {
 	Har  URLScannerScanHarResponseHar  `json:"har,required"`
 	JSON urlScannerScanHarResponseJSON `json:"-"`
@@ -1257,6 +1437,10 @@ func (r *URLScannerScanHarResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanHarResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanHarResponseHar struct {
 	Log  URLScannerScanHarResponseHarLog  `json:"log,required"`
 	JSON urlScannerScanHarResponseHarJSON `json:"-"`
@@ -1272,6 +1456,10 @@ type urlScannerScanHarResponseHarJSON struct {
 
 func (r *URLScannerScanHarResponseHar) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r urlScannerScanHarResponseHarJSON) RawJSON() string {
+	return r.raw
 }
 
 type URLScannerScanHarResponseHarLog struct {
@@ -1297,6 +1485,10 @@ func (r *URLScannerScanHarResponseHarLog) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanHarResponseHarLogJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanHarResponseHarLogCreator struct {
 	Comment string                                     `json:"comment,required"`
 	Name    string                                     `json:"name,required"`
@@ -1316,6 +1508,10 @@ type urlScannerScanHarResponseHarLogCreatorJSON struct {
 
 func (r *URLScannerScanHarResponseHarLogCreator) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r urlScannerScanHarResponseHarLogCreatorJSON) RawJSON() string {
+	return r.raw
 }
 
 type URLScannerScanHarResponseHarLogEntry struct {
@@ -1361,6 +1557,10 @@ func (r *URLScannerScanHarResponseHarLogEntry) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanHarResponseHarLogEntryJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanHarResponseHarLogEntriesRequest struct {
 	BodySize    float64                                               `json:"bodySize,required"`
 	Headers     []URLScannerScanHarResponseHarLogEntriesRequestHeader `json:"headers,required"`
@@ -1388,6 +1588,10 @@ func (r *URLScannerScanHarResponseHarLogEntriesRequest) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanHarResponseHarLogEntriesRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanHarResponseHarLogEntriesRequestHeader struct {
 	Name  string                                                  `json:"name,required"`
 	Value string                                                  `json:"value,required"`
@@ -1405,6 +1609,10 @@ type urlScannerScanHarResponseHarLogEntriesRequestHeaderJSON struct {
 
 func (r *URLScannerScanHarResponseHarLogEntriesRequestHeader) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r urlScannerScanHarResponseHarLogEntriesRequestHeaderJSON) RawJSON() string {
+	return r.raw
 }
 
 type URLScannerScanHarResponseHarLogEntriesResponse struct {
@@ -1440,6 +1648,10 @@ func (r *URLScannerScanHarResponseHarLogEntriesResponse) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanHarResponseHarLogEntriesResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanHarResponseHarLogEntriesResponseContent struct {
 	MimeType    string                                                    `json:"mimeType,required"`
 	Size        float64                                                   `json:"size,required"`
@@ -1461,6 +1673,10 @@ func (r *URLScannerScanHarResponseHarLogEntriesResponseContent) UnmarshalJSON(da
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanHarResponseHarLogEntriesResponseContentJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanHarResponseHarLogEntriesResponseHeader struct {
 	Name  string                                                   `json:"name,required"`
 	Value string                                                   `json:"value,required"`
@@ -1478,6 +1694,10 @@ type urlScannerScanHarResponseHarLogEntriesResponseHeaderJSON struct {
 
 func (r *URLScannerScanHarResponseHarLogEntriesResponseHeader) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r urlScannerScanHarResponseHarLogEntriesResponseHeaderJSON) RawJSON() string {
+	return r.raw
 }
 
 type URLScannerScanHarResponseHarLogPage struct {
@@ -1503,6 +1723,10 @@ func (r *URLScannerScanHarResponseHarLogPage) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanHarResponseHarLogPageJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanHarResponseHarLogPagesPageTimings struct {
 	OnContentLoad float64                                             `json:"onContentLoad,required"`
 	OnLoad        float64                                             `json:"onLoad,required"`
@@ -1520,6 +1744,10 @@ type urlScannerScanHarResponseHarLogPagesPageTimingsJSON struct {
 
 func (r *URLScannerScanHarResponseHarLogPagesPageTimings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r urlScannerScanHarResponseHarLogPagesPageTimingsJSON) RawJSON() string {
+	return r.raw
 }
 
 type URLScannerScanNewParams struct {
@@ -1584,6 +1812,10 @@ func (r *URLScannerScanNewResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanNewResponseEnvelopeErrors struct {
 	Message string                                      `json:"message,required"`
 	JSON    urlScannerScanNewResponseEnvelopeErrorsJSON `json:"-"`
@@ -1601,6 +1833,10 @@ func (r *URLScannerScanNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanNewResponseEnvelopeMessages struct {
 	Message string                                        `json:"message,required"`
 	JSON    urlScannerScanNewResponseEnvelopeMessagesJSON `json:"-"`
@@ -1616,6 +1852,10 @@ type urlScannerScanNewResponseEnvelopeMessagesJSON struct {
 
 func (r *URLScannerScanNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r urlScannerScanNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type URLScannerScanGetResponseEnvelope struct {
@@ -1642,6 +1882,10 @@ func (r *URLScannerScanGetResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanGetResponseEnvelopeErrors struct {
 	Message string                                      `json:"message,required"`
 	JSON    urlScannerScanGetResponseEnvelopeErrorsJSON `json:"-"`
@@ -1659,6 +1903,10 @@ func (r *URLScannerScanGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanGetResponseEnvelopeMessages struct {
 	Message string                                        `json:"message,required"`
 	JSON    urlScannerScanGetResponseEnvelopeMessagesJSON `json:"-"`
@@ -1674,6 +1922,10 @@ type urlScannerScanGetResponseEnvelopeMessagesJSON struct {
 
 func (r *URLScannerScanGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r urlScannerScanGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type URLScannerScanHarResponseEnvelope struct {
@@ -1700,6 +1952,10 @@ func (r *URLScannerScanHarResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanHarResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanHarResponseEnvelopeErrors struct {
 	Message string                                      `json:"message,required"`
 	JSON    urlScannerScanHarResponseEnvelopeErrorsJSON `json:"-"`
@@ -1717,6 +1973,10 @@ func (r *URLScannerScanHarResponseEnvelopeErrors) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlScannerScanHarResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLScannerScanHarResponseEnvelopeMessages struct {
 	Message string                                        `json:"message,required"`
 	JSON    urlScannerScanHarResponseEnvelopeMessagesJSON `json:"-"`
@@ -1732,6 +1992,10 @@ type urlScannerScanHarResponseEnvelopeMessagesJSON struct {
 
 func (r *URLScannerScanHarResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r urlScannerScanHarResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type URLScannerScanScreenshotParams struct {

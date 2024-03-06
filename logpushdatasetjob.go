@@ -121,6 +121,10 @@ func (r *LogpushDatasetJobGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logpushDatasetJobGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The frequency at which Cloudflare sends batches of logs to your destination.
 // Setting frequency to high sends your logs in larger quantities of smaller files.
 // Setting frequency to low sends logs in smaller quantities of larger files.
@@ -194,6 +198,10 @@ func (r *LogpushDatasetJobGetResponseOutputOptions) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logpushDatasetJobGetResponseOutputOptionsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Specifies the output type, such as `ndjson` or `csv`. This sets default values
 // for the rest of the settings, depending on the chosen output type. Some
 // formatting rules, like string quoting, are different between output types.
@@ -245,6 +253,10 @@ func (r *LogpushDatasetJobGetResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logpushDatasetJobGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogpushDatasetJobGetResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -264,6 +276,10 @@ func (r *LogpushDatasetJobGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logpushDatasetJobGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogpushDatasetJobGetResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -281,6 +297,10 @@ type logpushDatasetJobGetResponseEnvelopeMessagesJSON struct {
 
 func (r *LogpushDatasetJobGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r logpushDatasetJobGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

@@ -102,6 +102,10 @@ func (r *StreamKeyNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamKeyNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Union satisfied by [StreamKeyDeleteResponseUnknown] or [shared.UnionString].
 type StreamKeyDeleteResponse interface {
 	ImplementsStreamKeyDeleteResponse()
@@ -139,6 +143,10 @@ func (r *StreamKeyGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamKeyGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamKeyNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -168,6 +176,10 @@ func (r *StreamKeyNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamKeyNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamKeyNewResponseEnvelopeErrors struct {
 	Code    int64                                  `json:"code,required"`
 	Message string                                 `json:"message,required"`
@@ -187,6 +199,10 @@ func (r *StreamKeyNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamKeyNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamKeyNewResponseEnvelopeMessages struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -204,6 +220,10 @@ type streamKeyNewResponseEnvelopeMessagesJSON struct {
 
 func (r *StreamKeyNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamKeyNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -242,6 +262,10 @@ func (r *StreamKeyDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamKeyDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamKeyDeleteResponseEnvelopeErrors struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -261,6 +285,10 @@ func (r *StreamKeyDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamKeyDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamKeyDeleteResponseEnvelopeMessages struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -278,6 +306,10 @@ type streamKeyDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *StreamKeyDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamKeyDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -316,6 +348,10 @@ func (r *StreamKeyGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamKeyGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamKeyGetResponseEnvelopeErrors struct {
 	Code    int64                                  `json:"code,required"`
 	Message string                                 `json:"message,required"`
@@ -335,6 +371,10 @@ func (r *StreamKeyGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamKeyGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamKeyGetResponseEnvelopeMessages struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -352,6 +392,10 @@ type streamKeyGetResponseEnvelopeMessagesJSON struct {
 
 func (r *StreamKeyGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamKeyGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

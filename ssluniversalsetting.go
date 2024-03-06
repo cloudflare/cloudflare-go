@@ -99,6 +99,10 @@ func (r *SSLUniversalSettingEditResponse) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r sslUniversalSettingEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type SSLUniversalSettingGetResponse struct {
 	// Disabling Universal SSL removes any currently active Universal SSL certificates
 	// for your zone from the edge and prevents any future Universal SSL certificates
@@ -139,6 +143,10 @@ type sslUniversalSettingGetResponseJSON struct {
 
 func (r *SSLUniversalSettingGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sslUniversalSettingGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type SSLUniversalSettingEditParams struct {
@@ -200,6 +208,10 @@ func (r *SSLUniversalSettingEditResponseEnvelope) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r sslUniversalSettingEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type SSLUniversalSettingEditResponseEnvelopeErrors struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -219,6 +231,10 @@ func (r *SSLUniversalSettingEditResponseEnvelopeErrors) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r sslUniversalSettingEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type SSLUniversalSettingEditResponseEnvelopeMessages struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -236,6 +252,10 @@ type sslUniversalSettingEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SSLUniversalSettingEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sslUniversalSettingEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -274,6 +294,10 @@ func (r *SSLUniversalSettingGetResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r sslUniversalSettingGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type SSLUniversalSettingGetResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -293,6 +317,10 @@ func (r *SSLUniversalSettingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r sslUniversalSettingGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type SSLUniversalSettingGetResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -310,6 +338,10 @@ type sslUniversalSettingGetResponseEnvelopeMessagesJSON struct {
 
 func (r *SSLUniversalSettingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sslUniversalSettingGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

@@ -107,6 +107,10 @@ func (r *ZoneSettingDevelopmentModeEditResponse) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingDevelopmentModeEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // ID of the zone setting.
 type ZoneSettingDevelopmentModeEditResponseID string
 
@@ -168,6 +172,10 @@ type zoneSettingDevelopmentModeGetResponseJSON struct {
 
 func (r *ZoneSettingDevelopmentModeGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingDevelopmentModeGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // ID of the zone setting.
@@ -243,6 +251,10 @@ func (r *ZoneSettingDevelopmentModeEditResponseEnvelope) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingDevelopmentModeEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingDevelopmentModeEditResponseEnvelopeErrors struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -262,6 +274,10 @@ func (r *ZoneSettingDevelopmentModeEditResponseEnvelopeErrors) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingDevelopmentModeEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingDevelopmentModeEditResponseEnvelopeMessages struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -279,6 +295,10 @@ type zoneSettingDevelopmentModeEditResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingDevelopmentModeEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingDevelopmentModeEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneSettingDevelopmentModeGetParams struct {
@@ -316,6 +336,10 @@ func (r *ZoneSettingDevelopmentModeGetResponseEnvelope) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingDevelopmentModeGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingDevelopmentModeGetResponseEnvelopeErrors struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -335,6 +359,10 @@ func (r *ZoneSettingDevelopmentModeGetResponseEnvelopeErrors) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingDevelopmentModeGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingDevelopmentModeGetResponseEnvelopeMessages struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -352,4 +380,8 @@ type zoneSettingDevelopmentModeGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingDevelopmentModeGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingDevelopmentModeGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }

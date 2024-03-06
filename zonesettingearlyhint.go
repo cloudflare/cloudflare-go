@@ -96,6 +96,10 @@ func (r *ZoneSettingEarlyHintEditResponse) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEarlyHintEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // ID of the zone setting.
 type ZoneSettingEarlyHintEditResponseID string
 
@@ -150,6 +154,10 @@ type zoneSettingEarlyHintGetResponseJSON struct {
 
 func (r *ZoneSettingEarlyHintGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEarlyHintGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // ID of the zone setting.
@@ -223,6 +231,10 @@ func (r *ZoneSettingEarlyHintEditResponseEnvelope) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEarlyHintEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingEarlyHintEditResponseEnvelopeErrors struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -242,6 +254,10 @@ func (r *ZoneSettingEarlyHintEditResponseEnvelopeErrors) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEarlyHintEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingEarlyHintEditResponseEnvelopeMessages struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -259,6 +275,10 @@ type zoneSettingEarlyHintEditResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingEarlyHintEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEarlyHintEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneSettingEarlyHintGetParams struct {
@@ -294,6 +314,10 @@ func (r *ZoneSettingEarlyHintGetResponseEnvelope) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEarlyHintGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingEarlyHintGetResponseEnvelopeErrors struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -313,6 +337,10 @@ func (r *ZoneSettingEarlyHintGetResponseEnvelopeErrors) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingEarlyHintGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingEarlyHintGetResponseEnvelopeMessages struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -330,4 +358,8 @@ type zoneSettingEarlyHintGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingEarlyHintGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingEarlyHintGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }

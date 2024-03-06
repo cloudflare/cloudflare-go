@@ -65,6 +65,10 @@ func (r *IntelIPListGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r intelIPListGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type IntelIPListGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -96,6 +100,10 @@ func (r *IntelIPListGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r intelIPListGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type IntelIPListGetResponseEnvelopeErrors struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -115,6 +123,10 @@ func (r *IntelIPListGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r intelIPListGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type IntelIPListGetResponseEnvelopeMessages struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -132,6 +144,10 @@ type intelIPListGetResponseEnvelopeMessagesJSON struct {
 
 func (r *IntelIPListGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r intelIPListGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -166,4 +182,8 @@ type intelIPListGetResponseEnvelopeResultInfoJSON struct {
 
 func (r *IntelIPListGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r intelIPListGetResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

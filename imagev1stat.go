@@ -61,6 +61,10 @@ func (r *ImageV1StatGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r imageV1StatGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ImageV1StatGetResponseCount struct {
 	// Cloudflare Images allowed usage.
 	Allowed float64 `json:"allowed"`
@@ -80,6 +84,10 @@ type imageV1StatGetResponseCountJSON struct {
 
 func (r *ImageV1StatGetResponseCount) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r imageV1StatGetResponseCountJSON) RawJSON() string {
+	return r.raw
 }
 
 type ImageV1StatGetParams struct {
@@ -111,6 +119,10 @@ func (r *ImageV1StatGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r imageV1StatGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ImageV1StatGetResponseEnvelopeErrors struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -130,6 +142,10 @@ func (r *ImageV1StatGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r imageV1StatGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ImageV1StatGetResponseEnvelopeMessages struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -147,6 +163,10 @@ type imageV1StatGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ImageV1StatGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r imageV1StatGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

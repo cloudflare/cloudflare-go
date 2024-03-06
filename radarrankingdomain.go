@@ -66,6 +66,10 @@ func (r *RadarRankingDomainGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarRankingDomainGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarRankingDomainGetResponseDetails0 struct {
 	Categories   []RadarRankingDomainGetResponseDetails0Category    `json:"categories,required"`
 	TopLocations []RadarRankingDomainGetResponseDetails0TopLocation `json:"top_locations,required"`
@@ -90,6 +94,10 @@ func (r *RadarRankingDomainGetResponseDetails0) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarRankingDomainGetResponseDetails0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarRankingDomainGetResponseDetails0Category struct {
 	ID              float64                                           `json:"id,required"`
 	Name            string                                            `json:"name,required"`
@@ -111,6 +119,10 @@ func (r *RadarRankingDomainGetResponseDetails0Category) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarRankingDomainGetResponseDetails0CategoryJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarRankingDomainGetResponseDetails0TopLocation struct {
 	LocationCode string                                               `json:"locationCode,required"`
 	LocationName string                                               `json:"locationName,required"`
@@ -130,6 +142,10 @@ type radarRankingDomainGetResponseDetails0TopLocationJSON struct {
 
 func (r *RadarRankingDomainGetResponseDetails0TopLocation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarRankingDomainGetResponseDetails0TopLocationJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarRankingDomainGetParams struct {
@@ -188,4 +204,8 @@ type radarRankingDomainGetResponseEnvelopeJSON struct {
 
 func (r *RadarRankingDomainGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarRankingDomainGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

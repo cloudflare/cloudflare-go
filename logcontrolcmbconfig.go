@@ -91,6 +91,10 @@ func (r *LogControlCmbConfigNewResponse) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logControlCmbConfigNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Union satisfied by [LogControlCmbConfigDeleteResponseUnknown],
 // [LogControlCmbConfigDeleteResponseArray] or [shared.UnionString].
 type LogControlCmbConfigDeleteResponse interface {
@@ -130,6 +134,10 @@ func (r *LogControlCmbConfigGetResponse) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logControlCmbConfigGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogControlCmbConfigNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -165,6 +173,10 @@ func (r *LogControlCmbConfigNewResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logControlCmbConfigNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogControlCmbConfigNewResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -184,6 +196,10 @@ func (r *LogControlCmbConfigNewResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logControlCmbConfigNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogControlCmbConfigNewResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -201,6 +217,10 @@ type logControlCmbConfigNewResponseEnvelopeMessagesJSON struct {
 
 func (r *LogControlCmbConfigNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r logControlCmbConfigNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -239,6 +259,10 @@ func (r *LogControlCmbConfigDeleteResponseEnvelope) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logControlCmbConfigDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogControlCmbConfigDeleteResponseEnvelopeErrors struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -258,6 +282,10 @@ func (r *LogControlCmbConfigDeleteResponseEnvelopeErrors) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logControlCmbConfigDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogControlCmbConfigDeleteResponseEnvelopeMessages struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -275,6 +303,10 @@ type logControlCmbConfigDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *LogControlCmbConfigDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r logControlCmbConfigDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -313,6 +345,10 @@ func (r *LogControlCmbConfigGetResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logControlCmbConfigGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogControlCmbConfigGetResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -332,6 +368,10 @@ func (r *LogControlCmbConfigGetResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logControlCmbConfigGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogControlCmbConfigGetResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -349,6 +389,10 @@ type logControlCmbConfigGetResponseEnvelopeMessagesJSON struct {
 
 func (r *LogControlCmbConfigGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r logControlCmbConfigGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

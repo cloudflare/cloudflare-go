@@ -76,6 +76,10 @@ func (r *RadarAnnotationOutageGetResponse) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAnnotationOutageGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAnnotationOutageGetResponseAnnotation struct {
 	ID               string                                                       `json:"id,required"`
 	ASNs             []int64                                                      `json:"asns,required"`
@@ -117,6 +121,10 @@ func (r *RadarAnnotationOutageGetResponseAnnotation) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAnnotationOutageGetResponseAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAnnotationOutageGetResponseAnnotationsASNsDetail struct {
 	ASN       string                                                          `json:"asn,required"`
 	Name      string                                                          `json:"name,required"`
@@ -136,6 +144,10 @@ type radarAnnotationOutageGetResponseAnnotationsASNsDetailJSON struct {
 
 func (r *RadarAnnotationOutageGetResponseAnnotationsASNsDetail) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAnnotationOutageGetResponseAnnotationsASNsDetailJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarAnnotationOutageGetResponseAnnotationsASNsDetailsLocations struct {
@@ -158,6 +170,10 @@ func (r *RadarAnnotationOutageGetResponseAnnotationsASNsDetailsLocations) Unmars
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAnnotationOutageGetResponseAnnotationsASNsDetailsLocationsJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAnnotationOutageGetResponseAnnotationsLocationsDetail struct {
 	Code string                                                         `json:"code,required"`
 	Name string                                                         `json:"name,required"`
@@ -176,6 +192,10 @@ type radarAnnotationOutageGetResponseAnnotationsLocationsDetailJSON struct {
 
 func (r *RadarAnnotationOutageGetResponseAnnotationsLocationsDetail) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAnnotationOutageGetResponseAnnotationsLocationsDetailJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarAnnotationOutageGetResponseAnnotationsOutage struct {
@@ -197,6 +217,10 @@ func (r *RadarAnnotationOutageGetResponseAnnotationsOutage) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAnnotationOutageGetResponseAnnotationsOutageJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAnnotationOutageLocationsResponse struct {
 	Annotations []RadarAnnotationOutageLocationsResponseAnnotation `json:"annotations,required"`
 	JSON        radarAnnotationOutageLocationsResponseJSON         `json:"-"`
@@ -212,6 +236,10 @@ type radarAnnotationOutageLocationsResponseJSON struct {
 
 func (r *RadarAnnotationOutageLocationsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAnnotationOutageLocationsResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarAnnotationOutageLocationsResponseAnnotation struct {
@@ -233,6 +261,10 @@ type radarAnnotationOutageLocationsResponseAnnotationJSON struct {
 
 func (r *RadarAnnotationOutageLocationsResponseAnnotation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAnnotationOutageLocationsResponseAnnotationJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarAnnotationOutageGetParams struct {
@@ -313,6 +345,10 @@ func (r *RadarAnnotationOutageGetResponseEnvelope) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAnnotationOutageGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAnnotationOutageLocationsParams struct {
 	// End of the date range (inclusive).
 	DateEnd param.Field[time.Time] `query:"dateEnd" format:"date-time"`
@@ -383,4 +419,8 @@ type radarAnnotationOutageLocationsResponseEnvelopeJSON struct {
 
 func (r *RadarAnnotationOutageLocationsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAnnotationOutageLocationsResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

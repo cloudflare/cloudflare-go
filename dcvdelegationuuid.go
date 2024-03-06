@@ -63,6 +63,10 @@ func (r *DCVDelegationUUIDGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dcvDelegationUUIDGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type DCVDelegationUUIDGetParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -92,6 +96,10 @@ func (r *DCVDelegationUUIDGetResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dcvDelegationUUIDGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type DCVDelegationUUIDGetResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -111,6 +119,10 @@ func (r *DCVDelegationUUIDGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dcvDelegationUUIDGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type DCVDelegationUUIDGetResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -128,6 +140,10 @@ type dcvDelegationUUIDGetResponseEnvelopeMessagesJSON struct {
 
 func (r *DCVDelegationUUIDGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dcvDelegationUUIDGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

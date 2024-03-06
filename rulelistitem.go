@@ -132,6 +132,10 @@ func (r *RuleListItemNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r ruleListItemNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RuleListItemUpdateResponse struct {
 	// The unique operation ID of the asynchronous action.
 	OperationID string                         `json:"operation_id"`
@@ -148,6 +152,10 @@ type ruleListItemUpdateResponseJSON struct {
 
 func (r *RuleListItemUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleListItemUpdateResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RuleListItemListResponse = interface{}
@@ -168,6 +176,10 @@ type ruleListItemDeleteResponseJSON struct {
 
 func (r *RuleListItemDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleListItemDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // An IPv4 address, an IPv4 CIDR, or an IPv6 CIDR. IPv6 CIDRs are limited to a
@@ -225,6 +237,10 @@ func (r *RuleListItemGetResponseListsItemRedirect) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r ruleListItemGetResponseListsItemRedirectJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r RuleListItemGetResponseListsItemRedirect) ImplementsRuleListItemGetResponse() {}
 
 type RuleListItemGetResponseListsItemRedirectStatusCode int64
@@ -253,6 +269,10 @@ type ruleListItemGetResponseListsItemHostnameJSON struct {
 
 func (r *RuleListItemGetResponseListsItemHostname) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleListItemGetResponseListsItemHostnameJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r RuleListItemGetResponseListsItemHostname) ImplementsRuleListItemGetResponse() {}
@@ -344,6 +364,10 @@ func (r *RuleListItemNewResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r ruleListItemNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RuleListItemNewResponseEnvelopeErrors struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -363,6 +387,10 @@ func (r *RuleListItemNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r ruleListItemNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type RuleListItemNewResponseEnvelopeMessages struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -380,6 +408,10 @@ type ruleListItemNewResponseEnvelopeMessagesJSON struct {
 
 func (r *RuleListItemNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleListItemNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -476,6 +508,10 @@ func (r *RuleListItemUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r ruleListItemUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RuleListItemUpdateResponseEnvelopeErrors struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -495,6 +531,10 @@ func (r *RuleListItemUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r ruleListItemUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type RuleListItemUpdateResponseEnvelopeMessages struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -512,6 +552,10 @@ type ruleListItemUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *RuleListItemUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleListItemUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -572,6 +616,10 @@ func (r *RuleListItemListResponseEnvelope) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r ruleListItemListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RuleListItemListResponseEnvelopeErrors struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -591,6 +639,10 @@ func (r *RuleListItemListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r ruleListItemListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type RuleListItemListResponseEnvelopeMessages struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -608,6 +660,10 @@ type ruleListItemListResponseEnvelopeMessagesJSON struct {
 
 func (r *RuleListItemListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleListItemListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -634,6 +690,10 @@ func (r *RuleListItemListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r ruleListItemListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type RuleListItemListResponseEnvelopeResultInfoCursors struct {
 	After  string                                                `json:"after"`
 	Before string                                                `json:"before"`
@@ -651,6 +711,10 @@ type ruleListItemListResponseEnvelopeResultInfoCursorsJSON struct {
 
 func (r *RuleListItemListResponseEnvelopeResultInfoCursors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleListItemListResponseEnvelopeResultInfoCursorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type RuleListItemDeleteParams struct {
@@ -696,6 +760,10 @@ func (r *RuleListItemDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r ruleListItemDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RuleListItemDeleteResponseEnvelopeErrors struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -715,6 +783,10 @@ func (r *RuleListItemDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r ruleListItemDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type RuleListItemDeleteResponseEnvelopeMessages struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -732,6 +804,10 @@ type ruleListItemDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *RuleListItemDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleListItemDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -767,6 +843,10 @@ func (r *RuleListItemGetResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r ruleListItemGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RuleListItemGetResponseEnvelopeErrors struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -786,6 +866,10 @@ func (r *RuleListItemGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r ruleListItemGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type RuleListItemGetResponseEnvelopeMessages struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -803,6 +887,10 @@ type ruleListItemGetResponseEnvelopeMessagesJSON struct {
 
 func (r *RuleListItemGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ruleListItemGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

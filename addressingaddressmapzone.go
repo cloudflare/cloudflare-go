@@ -155,6 +155,10 @@ func (r *AddressingAddressMapZoneUpdateResponseEnvelope) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingAddressMapZoneUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingAddressMapZoneUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -174,6 +178,10 @@ func (r *AddressingAddressMapZoneUpdateResponseEnvelopeErrors) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingAddressMapZoneUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingAddressMapZoneUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -191,6 +199,10 @@ type addressingAddressMapZoneUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *AddressingAddressMapZoneUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressingAddressMapZoneUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -228,6 +240,10 @@ func (r *AddressingAddressMapZoneUpdateResponseEnvelopeResultInfo) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingAddressMapZoneUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingAddressMapZoneDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -261,6 +277,10 @@ func (r *AddressingAddressMapZoneDeleteResponseEnvelope) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingAddressMapZoneDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingAddressMapZoneDeleteResponseEnvelopeErrors struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -280,6 +300,10 @@ func (r *AddressingAddressMapZoneDeleteResponseEnvelopeErrors) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingAddressMapZoneDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingAddressMapZoneDeleteResponseEnvelopeMessages struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -297,6 +321,10 @@ type addressingAddressMapZoneDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *AddressingAddressMapZoneDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressingAddressMapZoneDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -332,4 +360,8 @@ type addressingAddressMapZoneDeleteResponseEnvelopeResultInfoJSON struct {
 
 func (r *AddressingAddressMapZoneDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressingAddressMapZoneDeleteResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

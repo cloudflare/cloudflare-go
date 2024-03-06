@@ -123,6 +123,10 @@ func (r *ZeroTrustAccessTagNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessTagNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // A tag
 type ZeroTrustAccessTagUpdateResponse struct {
 	// The name of the tag
@@ -147,6 +151,10 @@ type zeroTrustAccessTagUpdateResponseJSON struct {
 
 func (r *ZeroTrustAccessTagUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessTagUpdateResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // A tag
@@ -175,6 +183,10 @@ func (r *ZeroTrustAccessTagListResponse) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessTagListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessTagDeleteResponse struct {
 	// The name of the tag
 	Name string                               `json:"name"`
@@ -191,6 +203,10 @@ type zeroTrustAccessTagDeleteResponseJSON struct {
 
 func (r *ZeroTrustAccessTagDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessTagDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // A tag
@@ -217,6 +233,10 @@ type zeroTrustAccessTagGetResponseJSON struct {
 
 func (r *ZeroTrustAccessTagGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessTagGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustAccessTagNewParams struct {
@@ -253,6 +273,10 @@ func (r *ZeroTrustAccessTagNewResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessTagNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessTagNewResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -272,6 +296,10 @@ func (r *ZeroTrustAccessTagNewResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessTagNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessTagNewResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -289,6 +317,10 @@ type zeroTrustAccessTagNewResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustAccessTagNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessTagNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -332,6 +364,10 @@ func (r *ZeroTrustAccessTagUpdateResponseEnvelope) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessTagUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessTagUpdateResponseEnvelopeErrors struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -351,6 +387,10 @@ func (r *ZeroTrustAccessTagUpdateResponseEnvelopeErrors) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessTagUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessTagUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -368,6 +408,10 @@ type zeroTrustAccessTagUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustAccessTagUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessTagUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -403,6 +447,10 @@ func (r *ZeroTrustAccessTagListResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessTagListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessTagListResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -422,6 +470,10 @@ func (r *ZeroTrustAccessTagListResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessTagListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessTagListResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -439,6 +491,10 @@ type zeroTrustAccessTagListResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustAccessTagListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessTagListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -475,6 +531,10 @@ func (r *ZeroTrustAccessTagListResponseEnvelopeResultInfo) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessTagListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessTagDeleteResponseEnvelope struct {
 	Errors   []ZeroTrustAccessTagDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustAccessTagDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -499,6 +559,10 @@ func (r *ZeroTrustAccessTagDeleteResponseEnvelope) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessTagDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessTagDeleteResponseEnvelopeErrors struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -518,6 +582,10 @@ func (r *ZeroTrustAccessTagDeleteResponseEnvelopeErrors) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessTagDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessTagDeleteResponseEnvelopeMessages struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -535,6 +603,10 @@ type zeroTrustAccessTagDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustAccessTagDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessTagDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -569,6 +641,10 @@ func (r *ZeroTrustAccessTagGetResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessTagGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessTagGetResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -588,6 +664,10 @@ func (r *ZeroTrustAccessTagGetResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessTagGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessTagGetResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -605,6 +685,10 @@ type zeroTrustAccessTagGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustAccessTagGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessTagGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

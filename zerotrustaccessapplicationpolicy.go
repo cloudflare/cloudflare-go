@@ -209,6 +209,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponse) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // A group of email addresses that can approve a temporary authentication request.
 type ZeroTrustAccessApplicationPolicyNewResponseApprovalGroup struct {
 	// The number of approvals needed to obtain access.
@@ -233,6 +237,10 @@ type zeroTrustAccessApplicationPolicyNewResponseApprovalGroupJSON struct {
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseApprovalGroup) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseApprovalGroupJSON) RawJSON() string {
+	return r.raw
 }
 
 // The action Access will take if a user matches this policy.
@@ -294,6 +302,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessEmailRule) Unma
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseExcludeAccessEmailRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessEmailRule) implementsZeroTrustAccessApplicationPolicyNewResponseExclude() {
 }
 
@@ -316,6 +328,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessEmailRuleEmail)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseExcludeAccessEmailRuleEmailJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an email address from a list.
 type ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessEmailListRule struct {
 	EmailList ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessEmailListRuleEmailList `json:"email_list,required"`
@@ -333,6 +349,10 @@ type zeroTrustAccessApplicationPolicyNewResponseExcludeAccessEmailListRuleJSON s
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessEmailListRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseExcludeAccessEmailListRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessEmailListRule) implementsZeroTrustAccessApplicationPolicyNewResponseExclude() {
@@ -357,6 +377,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessEmailListRuleEm
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseExcludeAccessEmailListRuleEmailListJSON) RawJSON() string {
+	return r.raw
+}
+
 // Match an entire email domain.
 type ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessDomainRule struct {
 	EmailDomain ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessDomainRuleEmailDomain `json:"email_domain,required"`
@@ -374,6 +398,10 @@ type zeroTrustAccessApplicationPolicyNewResponseExcludeAccessDomainRuleJSON stru
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessDomainRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseExcludeAccessDomainRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessDomainRule) implementsZeroTrustAccessApplicationPolicyNewResponseExclude() {
@@ -398,6 +426,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessDomainRuleEmail
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseExcludeAccessDomainRuleEmailDomainJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches everyone.
 type ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessEveryoneRule struct {
 	// An empty object which matches on all users.
@@ -416,6 +448,10 @@ type zeroTrustAccessApplicationPolicyNewResponseExcludeAccessEveryoneRuleJSON st
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessEveryoneRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseExcludeAccessEveryoneRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessEveryoneRule) implementsZeroTrustAccessApplicationPolicyNewResponseExclude() {
@@ -440,6 +476,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessIPRule) Unmarsh
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseExcludeAccessIPRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessIPRule) implementsZeroTrustAccessApplicationPolicyNewResponseExclude() {
 }
 
@@ -462,6 +502,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessIPRuleIP) Unmar
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseExcludeAccessIPRuleIPJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an IP address from a list.
 type ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessIPListRule struct {
 	IPList ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessIPListRuleIPList `json:"ip_list,required"`
@@ -479,6 +523,10 @@ type zeroTrustAccessApplicationPolicyNewResponseExcludeAccessIPListRuleJSON stru
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessIPListRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseExcludeAccessIPListRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessIPListRule) implementsZeroTrustAccessApplicationPolicyNewResponseExclude() {
@@ -503,6 +551,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessIPListRuleIPLis
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseExcludeAccessIPListRuleIPListJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches any valid client certificate.
 type ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessCertificateRule struct {
 	Certificate interface{}                                                                 `json:"certificate,required"`
@@ -520,6 +572,10 @@ type zeroTrustAccessApplicationPolicyNewResponseExcludeAccessCertificateRuleJSON
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessCertificateRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseExcludeAccessCertificateRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessCertificateRule) implementsZeroTrustAccessApplicationPolicyNewResponseExclude() {
@@ -544,6 +600,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessAccessGroupRule
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseExcludeAccessAccessGroupRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessAccessGroupRule) implementsZeroTrustAccessApplicationPolicyNewResponseExclude() {
 }
 
@@ -566,6 +626,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessAccessGroupRule
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseExcludeAccessAccessGroupRuleGroupJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an Azure group. Requires an Azure identity provider.
 type ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessAzureGroupRule struct {
 	AzureAd ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessAzureGroupRuleAzureAd `json:"azureAD,required"`
@@ -583,6 +647,10 @@ type zeroTrustAccessApplicationPolicyNewResponseExcludeAccessAzureGroupRuleJSON 
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessAzureGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseExcludeAccessAzureGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessAzureGroupRule) implementsZeroTrustAccessApplicationPolicyNewResponseExclude() {
@@ -610,6 +678,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessAzureGroupRuleA
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseExcludeAccessAzureGroupRuleAzureAdJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a Github organization. Requires a Github identity provider.
 type ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessGitHubOrganizationRule struct {
 	GitHubOrganization ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessGitHubOrganizationRuleGitHubOrganization `json:"github-organization,required"`
@@ -627,6 +699,10 @@ type zeroTrustAccessApplicationPolicyNewResponseExcludeAccessGitHubOrganizationR
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessGitHubOrganizationRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseExcludeAccessGitHubOrganizationRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessGitHubOrganizationRule) implementsZeroTrustAccessApplicationPolicyNewResponseExclude() {
@@ -654,6 +730,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessGitHubOrganizat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseExcludeAccessGitHubOrganizationRuleGitHubOrganizationJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a group in Google Workspace. Requires a Google Workspace identity
 // provider.
 type ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessGsuiteGroupRule struct {
@@ -672,6 +752,10 @@ type zeroTrustAccessApplicationPolicyNewResponseExcludeAccessGsuiteGroupRuleJSON
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessGsuiteGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseExcludeAccessGsuiteGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessGsuiteGroupRule) implementsZeroTrustAccessApplicationPolicyNewResponseExclude() {
@@ -699,6 +783,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessGsuiteGroupRule
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseExcludeAccessGsuiteGroupRuleGsuiteJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an Okta group. Requires an Okta identity provider.
 type ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessOktaGroupRule struct {
 	Okta ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessOktaGroupRuleOkta `json:"okta,required"`
@@ -716,6 +804,10 @@ type zeroTrustAccessApplicationPolicyNewResponseExcludeAccessOktaGroupRuleJSON s
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessOktaGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseExcludeAccessOktaGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessOktaGroupRule) implementsZeroTrustAccessApplicationPolicyNewResponseExclude() {
@@ -743,6 +835,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessOktaGroupRuleOk
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseExcludeAccessOktaGroupRuleOktaJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a SAML group. Requires a SAML identity provider.
 type ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessSamlGroupRule struct {
 	Saml ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessSamlGroupRuleSaml `json:"saml,required"`
@@ -760,6 +856,10 @@ type zeroTrustAccessApplicationPolicyNewResponseExcludeAccessSamlGroupRuleJSON s
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessSamlGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseExcludeAccessSamlGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessSamlGroupRule) implementsZeroTrustAccessApplicationPolicyNewResponseExclude() {
@@ -787,6 +887,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessSamlGroupRuleSa
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseExcludeAccessSamlGroupRuleSamlJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a specific Access Service Token
 type ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessServiceTokenRule struct {
 	ServiceToken ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessServiceTokenRuleServiceToken `json:"service_token,required"`
@@ -804,6 +908,10 @@ type zeroTrustAccessApplicationPolicyNewResponseExcludeAccessServiceTokenRuleJSO
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseExcludeAccessServiceTokenRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessServiceTokenRule) implementsZeroTrustAccessApplicationPolicyNewResponseExclude() {
@@ -828,6 +936,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessServiceTokenRul
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseExcludeAccessServiceTokenRuleServiceTokenJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches any valid Access Service Token
 type ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessAnyValidServiceTokenRule struct {
 	// An empty object which matches on all service tokens.
@@ -846,6 +958,10 @@ type zeroTrustAccessApplicationPolicyNewResponseExcludeAccessAnyValidServiceToke
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessAnyValidServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseExcludeAccessAnyValidServiceTokenRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessAnyValidServiceTokenRule) implementsZeroTrustAccessApplicationPolicyNewResponseExclude() {
@@ -868,6 +984,10 @@ type zeroTrustAccessApplicationPolicyNewResponseExcludeAccessExternalEvaluationR
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessExternalEvaluationRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseExcludeAccessExternalEvaluationRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessExternalEvaluationRule) implementsZeroTrustAccessApplicationPolicyNewResponseExclude() {
@@ -896,6 +1016,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessExternalEvaluat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseExcludeAccessExternalEvaluationRuleExternalEvaluationJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a specific country
 type ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessCountryRule struct {
 	Geo  ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessCountryRuleGeo  `json:"geo,required"`
@@ -913,6 +1037,10 @@ type zeroTrustAccessApplicationPolicyNewResponseExcludeAccessCountryRuleJSON str
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessCountryRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseExcludeAccessCountryRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessCountryRule) implementsZeroTrustAccessApplicationPolicyNewResponseExclude() {
@@ -937,6 +1065,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessCountryRuleGeo)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseExcludeAccessCountryRuleGeoJSON) RawJSON() string {
+	return r.raw
+}
+
 // Enforce different MFA options
 type ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessAuthenticationMethodRule struct {
 	AuthMethod ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessAuthenticationMethodRuleAuthMethod `json:"auth_method,required"`
@@ -954,6 +1086,10 @@ type zeroTrustAccessApplicationPolicyNewResponseExcludeAccessAuthenticationMetho
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessAuthenticationMethodRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseExcludeAccessAuthenticationMethodRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessAuthenticationMethodRule) implementsZeroTrustAccessApplicationPolicyNewResponseExclude() {
@@ -978,6 +1114,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessAuthenticationM
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseExcludeAccessAuthenticationMethodRuleAuthMethodJSON) RawJSON() string {
+	return r.raw
+}
+
 // Enforces a device posture rule has run successfully
 type ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessDevicePostureRule struct {
 	DevicePosture ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessDevicePostureRuleDevicePosture `json:"device_posture,required"`
@@ -995,6 +1135,10 @@ type zeroTrustAccessApplicationPolicyNewResponseExcludeAccessDevicePostureRuleJS
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessDevicePostureRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseExcludeAccessDevicePostureRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessDevicePostureRule) implementsZeroTrustAccessApplicationPolicyNewResponseExclude() {
@@ -1017,6 +1161,10 @@ type zeroTrustAccessApplicationPolicyNewResponseExcludeAccessDevicePostureRuleDe
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseExcludeAccessDevicePostureRuleDevicePosture) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseExcludeAccessDevicePostureRuleDevicePostureJSON) RawJSON() string {
+	return r.raw
 }
 
 // Matches a specific email.
@@ -1068,6 +1216,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessEmailRule) Unma
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseIncludeAccessEmailRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessEmailRule) implementsZeroTrustAccessApplicationPolicyNewResponseInclude() {
 }
 
@@ -1090,6 +1242,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessEmailRuleEmail)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseIncludeAccessEmailRuleEmailJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an email address from a list.
 type ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessEmailListRule struct {
 	EmailList ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessEmailListRuleEmailList `json:"email_list,required"`
@@ -1107,6 +1263,10 @@ type zeroTrustAccessApplicationPolicyNewResponseIncludeAccessEmailListRuleJSON s
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessEmailListRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseIncludeAccessEmailListRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessEmailListRule) implementsZeroTrustAccessApplicationPolicyNewResponseInclude() {
@@ -1131,6 +1291,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessEmailListRuleEm
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseIncludeAccessEmailListRuleEmailListJSON) RawJSON() string {
+	return r.raw
+}
+
 // Match an entire email domain.
 type ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessDomainRule struct {
 	EmailDomain ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessDomainRuleEmailDomain `json:"email_domain,required"`
@@ -1148,6 +1312,10 @@ type zeroTrustAccessApplicationPolicyNewResponseIncludeAccessDomainRuleJSON stru
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessDomainRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseIncludeAccessDomainRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessDomainRule) implementsZeroTrustAccessApplicationPolicyNewResponseInclude() {
@@ -1172,6 +1340,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessDomainRuleEmail
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseIncludeAccessDomainRuleEmailDomainJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches everyone.
 type ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessEveryoneRule struct {
 	// An empty object which matches on all users.
@@ -1190,6 +1362,10 @@ type zeroTrustAccessApplicationPolicyNewResponseIncludeAccessEveryoneRuleJSON st
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessEveryoneRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseIncludeAccessEveryoneRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessEveryoneRule) implementsZeroTrustAccessApplicationPolicyNewResponseInclude() {
@@ -1214,6 +1390,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessIPRule) Unmarsh
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseIncludeAccessIPRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessIPRule) implementsZeroTrustAccessApplicationPolicyNewResponseInclude() {
 }
 
@@ -1236,6 +1416,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessIPRuleIP) Unmar
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseIncludeAccessIPRuleIPJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an IP address from a list.
 type ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessIPListRule struct {
 	IPList ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessIPListRuleIPList `json:"ip_list,required"`
@@ -1253,6 +1437,10 @@ type zeroTrustAccessApplicationPolicyNewResponseIncludeAccessIPListRuleJSON stru
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessIPListRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseIncludeAccessIPListRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessIPListRule) implementsZeroTrustAccessApplicationPolicyNewResponseInclude() {
@@ -1277,6 +1465,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessIPListRuleIPLis
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseIncludeAccessIPListRuleIPListJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches any valid client certificate.
 type ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessCertificateRule struct {
 	Certificate interface{}                                                                 `json:"certificate,required"`
@@ -1294,6 +1486,10 @@ type zeroTrustAccessApplicationPolicyNewResponseIncludeAccessCertificateRuleJSON
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessCertificateRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseIncludeAccessCertificateRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessCertificateRule) implementsZeroTrustAccessApplicationPolicyNewResponseInclude() {
@@ -1318,6 +1514,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessAccessGroupRule
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseIncludeAccessAccessGroupRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessAccessGroupRule) implementsZeroTrustAccessApplicationPolicyNewResponseInclude() {
 }
 
@@ -1340,6 +1540,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessAccessGroupRule
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseIncludeAccessAccessGroupRuleGroupJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an Azure group. Requires an Azure identity provider.
 type ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessAzureGroupRule struct {
 	AzureAd ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessAzureGroupRuleAzureAd `json:"azureAD,required"`
@@ -1357,6 +1561,10 @@ type zeroTrustAccessApplicationPolicyNewResponseIncludeAccessAzureGroupRuleJSON 
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessAzureGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseIncludeAccessAzureGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessAzureGroupRule) implementsZeroTrustAccessApplicationPolicyNewResponseInclude() {
@@ -1384,6 +1592,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessAzureGroupRuleA
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseIncludeAccessAzureGroupRuleAzureAdJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a Github organization. Requires a Github identity provider.
 type ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessGitHubOrganizationRule struct {
 	GitHubOrganization ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessGitHubOrganizationRuleGitHubOrganization `json:"github-organization,required"`
@@ -1401,6 +1613,10 @@ type zeroTrustAccessApplicationPolicyNewResponseIncludeAccessGitHubOrganizationR
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessGitHubOrganizationRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseIncludeAccessGitHubOrganizationRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessGitHubOrganizationRule) implementsZeroTrustAccessApplicationPolicyNewResponseInclude() {
@@ -1428,6 +1644,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessGitHubOrganizat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseIncludeAccessGitHubOrganizationRuleGitHubOrganizationJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a group in Google Workspace. Requires a Google Workspace identity
 // provider.
 type ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessGsuiteGroupRule struct {
@@ -1446,6 +1666,10 @@ type zeroTrustAccessApplicationPolicyNewResponseIncludeAccessGsuiteGroupRuleJSON
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessGsuiteGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseIncludeAccessGsuiteGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessGsuiteGroupRule) implementsZeroTrustAccessApplicationPolicyNewResponseInclude() {
@@ -1473,6 +1697,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessGsuiteGroupRule
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseIncludeAccessGsuiteGroupRuleGsuiteJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an Okta group. Requires an Okta identity provider.
 type ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessOktaGroupRule struct {
 	Okta ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessOktaGroupRuleOkta `json:"okta,required"`
@@ -1490,6 +1718,10 @@ type zeroTrustAccessApplicationPolicyNewResponseIncludeAccessOktaGroupRuleJSON s
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessOktaGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseIncludeAccessOktaGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessOktaGroupRule) implementsZeroTrustAccessApplicationPolicyNewResponseInclude() {
@@ -1517,6 +1749,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessOktaGroupRuleOk
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseIncludeAccessOktaGroupRuleOktaJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a SAML group. Requires a SAML identity provider.
 type ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessSamlGroupRule struct {
 	Saml ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessSamlGroupRuleSaml `json:"saml,required"`
@@ -1534,6 +1770,10 @@ type zeroTrustAccessApplicationPolicyNewResponseIncludeAccessSamlGroupRuleJSON s
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessSamlGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseIncludeAccessSamlGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessSamlGroupRule) implementsZeroTrustAccessApplicationPolicyNewResponseInclude() {
@@ -1561,6 +1801,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessSamlGroupRuleSa
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseIncludeAccessSamlGroupRuleSamlJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a specific Access Service Token
 type ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessServiceTokenRule struct {
 	ServiceToken ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessServiceTokenRuleServiceToken `json:"service_token,required"`
@@ -1578,6 +1822,10 @@ type zeroTrustAccessApplicationPolicyNewResponseIncludeAccessServiceTokenRuleJSO
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseIncludeAccessServiceTokenRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessServiceTokenRule) implementsZeroTrustAccessApplicationPolicyNewResponseInclude() {
@@ -1602,6 +1850,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessServiceTokenRul
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseIncludeAccessServiceTokenRuleServiceTokenJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches any valid Access Service Token
 type ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessAnyValidServiceTokenRule struct {
 	// An empty object which matches on all service tokens.
@@ -1620,6 +1872,10 @@ type zeroTrustAccessApplicationPolicyNewResponseIncludeAccessAnyValidServiceToke
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessAnyValidServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseIncludeAccessAnyValidServiceTokenRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessAnyValidServiceTokenRule) implementsZeroTrustAccessApplicationPolicyNewResponseInclude() {
@@ -1642,6 +1898,10 @@ type zeroTrustAccessApplicationPolicyNewResponseIncludeAccessExternalEvaluationR
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessExternalEvaluationRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseIncludeAccessExternalEvaluationRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessExternalEvaluationRule) implementsZeroTrustAccessApplicationPolicyNewResponseInclude() {
@@ -1670,6 +1930,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessExternalEvaluat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseIncludeAccessExternalEvaluationRuleExternalEvaluationJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a specific country
 type ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessCountryRule struct {
 	Geo  ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessCountryRuleGeo  `json:"geo,required"`
@@ -1687,6 +1951,10 @@ type zeroTrustAccessApplicationPolicyNewResponseIncludeAccessCountryRuleJSON str
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessCountryRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseIncludeAccessCountryRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessCountryRule) implementsZeroTrustAccessApplicationPolicyNewResponseInclude() {
@@ -1711,6 +1979,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessCountryRuleGeo)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseIncludeAccessCountryRuleGeoJSON) RawJSON() string {
+	return r.raw
+}
+
 // Enforce different MFA options
 type ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessAuthenticationMethodRule struct {
 	AuthMethod ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessAuthenticationMethodRuleAuthMethod `json:"auth_method,required"`
@@ -1728,6 +2000,10 @@ type zeroTrustAccessApplicationPolicyNewResponseIncludeAccessAuthenticationMetho
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessAuthenticationMethodRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseIncludeAccessAuthenticationMethodRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessAuthenticationMethodRule) implementsZeroTrustAccessApplicationPolicyNewResponseInclude() {
@@ -1752,6 +2028,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessAuthenticationM
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseIncludeAccessAuthenticationMethodRuleAuthMethodJSON) RawJSON() string {
+	return r.raw
+}
+
 // Enforces a device posture rule has run successfully
 type ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessDevicePostureRule struct {
 	DevicePosture ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessDevicePostureRuleDevicePosture `json:"device_posture,required"`
@@ -1769,6 +2049,10 @@ type zeroTrustAccessApplicationPolicyNewResponseIncludeAccessDevicePostureRuleJS
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessDevicePostureRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseIncludeAccessDevicePostureRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessDevicePostureRule) implementsZeroTrustAccessApplicationPolicyNewResponseInclude() {
@@ -1791,6 +2075,10 @@ type zeroTrustAccessApplicationPolicyNewResponseIncludeAccessDevicePostureRuleDe
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseIncludeAccessDevicePostureRuleDevicePosture) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseIncludeAccessDevicePostureRuleDevicePostureJSON) RawJSON() string {
+	return r.raw
 }
 
 // Matches a specific email.
@@ -1842,6 +2130,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseRequireAccessEmailRule) Unma
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseRequireAccessEmailRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationPolicyNewResponseRequireAccessEmailRule) implementsZeroTrustAccessApplicationPolicyNewResponseRequire() {
 }
 
@@ -1864,6 +2156,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseRequireAccessEmailRuleEmail)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseRequireAccessEmailRuleEmailJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an email address from a list.
 type ZeroTrustAccessApplicationPolicyNewResponseRequireAccessEmailListRule struct {
 	EmailList ZeroTrustAccessApplicationPolicyNewResponseRequireAccessEmailListRuleEmailList `json:"email_list,required"`
@@ -1881,6 +2177,10 @@ type zeroTrustAccessApplicationPolicyNewResponseRequireAccessEmailListRuleJSON s
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseRequireAccessEmailListRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseRequireAccessEmailListRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseRequireAccessEmailListRule) implementsZeroTrustAccessApplicationPolicyNewResponseRequire() {
@@ -1905,6 +2205,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseRequireAccessEmailListRuleEm
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseRequireAccessEmailListRuleEmailListJSON) RawJSON() string {
+	return r.raw
+}
+
 // Match an entire email domain.
 type ZeroTrustAccessApplicationPolicyNewResponseRequireAccessDomainRule struct {
 	EmailDomain ZeroTrustAccessApplicationPolicyNewResponseRequireAccessDomainRuleEmailDomain `json:"email_domain,required"`
@@ -1922,6 +2226,10 @@ type zeroTrustAccessApplicationPolicyNewResponseRequireAccessDomainRuleJSON stru
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseRequireAccessDomainRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseRequireAccessDomainRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseRequireAccessDomainRule) implementsZeroTrustAccessApplicationPolicyNewResponseRequire() {
@@ -1946,6 +2254,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseRequireAccessDomainRuleEmail
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseRequireAccessDomainRuleEmailDomainJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches everyone.
 type ZeroTrustAccessApplicationPolicyNewResponseRequireAccessEveryoneRule struct {
 	// An empty object which matches on all users.
@@ -1964,6 +2276,10 @@ type zeroTrustAccessApplicationPolicyNewResponseRequireAccessEveryoneRuleJSON st
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseRequireAccessEveryoneRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseRequireAccessEveryoneRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseRequireAccessEveryoneRule) implementsZeroTrustAccessApplicationPolicyNewResponseRequire() {
@@ -1988,6 +2304,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseRequireAccessIPRule) Unmarsh
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseRequireAccessIPRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationPolicyNewResponseRequireAccessIPRule) implementsZeroTrustAccessApplicationPolicyNewResponseRequire() {
 }
 
@@ -2010,6 +2330,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseRequireAccessIPRuleIP) Unmar
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseRequireAccessIPRuleIPJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an IP address from a list.
 type ZeroTrustAccessApplicationPolicyNewResponseRequireAccessIPListRule struct {
 	IPList ZeroTrustAccessApplicationPolicyNewResponseRequireAccessIPListRuleIPList `json:"ip_list,required"`
@@ -2027,6 +2351,10 @@ type zeroTrustAccessApplicationPolicyNewResponseRequireAccessIPListRuleJSON stru
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseRequireAccessIPListRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseRequireAccessIPListRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseRequireAccessIPListRule) implementsZeroTrustAccessApplicationPolicyNewResponseRequire() {
@@ -2051,6 +2379,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseRequireAccessIPListRuleIPLis
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseRequireAccessIPListRuleIPListJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches any valid client certificate.
 type ZeroTrustAccessApplicationPolicyNewResponseRequireAccessCertificateRule struct {
 	Certificate interface{}                                                                 `json:"certificate,required"`
@@ -2068,6 +2400,10 @@ type zeroTrustAccessApplicationPolicyNewResponseRequireAccessCertificateRuleJSON
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseRequireAccessCertificateRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseRequireAccessCertificateRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseRequireAccessCertificateRule) implementsZeroTrustAccessApplicationPolicyNewResponseRequire() {
@@ -2092,6 +2428,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseRequireAccessAccessGroupRule
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseRequireAccessAccessGroupRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationPolicyNewResponseRequireAccessAccessGroupRule) implementsZeroTrustAccessApplicationPolicyNewResponseRequire() {
 }
 
@@ -2114,6 +2454,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseRequireAccessAccessGroupRule
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseRequireAccessAccessGroupRuleGroupJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an Azure group. Requires an Azure identity provider.
 type ZeroTrustAccessApplicationPolicyNewResponseRequireAccessAzureGroupRule struct {
 	AzureAd ZeroTrustAccessApplicationPolicyNewResponseRequireAccessAzureGroupRuleAzureAd `json:"azureAD,required"`
@@ -2131,6 +2475,10 @@ type zeroTrustAccessApplicationPolicyNewResponseRequireAccessAzureGroupRuleJSON 
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseRequireAccessAzureGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseRequireAccessAzureGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseRequireAccessAzureGroupRule) implementsZeroTrustAccessApplicationPolicyNewResponseRequire() {
@@ -2158,6 +2506,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseRequireAccessAzureGroupRuleA
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseRequireAccessAzureGroupRuleAzureAdJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a Github organization. Requires a Github identity provider.
 type ZeroTrustAccessApplicationPolicyNewResponseRequireAccessGitHubOrganizationRule struct {
 	GitHubOrganization ZeroTrustAccessApplicationPolicyNewResponseRequireAccessGitHubOrganizationRuleGitHubOrganization `json:"github-organization,required"`
@@ -2175,6 +2527,10 @@ type zeroTrustAccessApplicationPolicyNewResponseRequireAccessGitHubOrganizationR
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseRequireAccessGitHubOrganizationRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseRequireAccessGitHubOrganizationRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseRequireAccessGitHubOrganizationRule) implementsZeroTrustAccessApplicationPolicyNewResponseRequire() {
@@ -2202,6 +2558,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseRequireAccessGitHubOrganizat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseRequireAccessGitHubOrganizationRuleGitHubOrganizationJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a group in Google Workspace. Requires a Google Workspace identity
 // provider.
 type ZeroTrustAccessApplicationPolicyNewResponseRequireAccessGsuiteGroupRule struct {
@@ -2220,6 +2580,10 @@ type zeroTrustAccessApplicationPolicyNewResponseRequireAccessGsuiteGroupRuleJSON
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseRequireAccessGsuiteGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseRequireAccessGsuiteGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseRequireAccessGsuiteGroupRule) implementsZeroTrustAccessApplicationPolicyNewResponseRequire() {
@@ -2247,6 +2611,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseRequireAccessGsuiteGroupRule
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseRequireAccessGsuiteGroupRuleGsuiteJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an Okta group. Requires an Okta identity provider.
 type ZeroTrustAccessApplicationPolicyNewResponseRequireAccessOktaGroupRule struct {
 	Okta ZeroTrustAccessApplicationPolicyNewResponseRequireAccessOktaGroupRuleOkta `json:"okta,required"`
@@ -2264,6 +2632,10 @@ type zeroTrustAccessApplicationPolicyNewResponseRequireAccessOktaGroupRuleJSON s
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseRequireAccessOktaGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseRequireAccessOktaGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseRequireAccessOktaGroupRule) implementsZeroTrustAccessApplicationPolicyNewResponseRequire() {
@@ -2291,6 +2663,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseRequireAccessOktaGroupRuleOk
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseRequireAccessOktaGroupRuleOktaJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a SAML group. Requires a SAML identity provider.
 type ZeroTrustAccessApplicationPolicyNewResponseRequireAccessSamlGroupRule struct {
 	Saml ZeroTrustAccessApplicationPolicyNewResponseRequireAccessSamlGroupRuleSaml `json:"saml,required"`
@@ -2308,6 +2684,10 @@ type zeroTrustAccessApplicationPolicyNewResponseRequireAccessSamlGroupRuleJSON s
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseRequireAccessSamlGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseRequireAccessSamlGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseRequireAccessSamlGroupRule) implementsZeroTrustAccessApplicationPolicyNewResponseRequire() {
@@ -2335,6 +2715,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseRequireAccessSamlGroupRuleSa
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseRequireAccessSamlGroupRuleSamlJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a specific Access Service Token
 type ZeroTrustAccessApplicationPolicyNewResponseRequireAccessServiceTokenRule struct {
 	ServiceToken ZeroTrustAccessApplicationPolicyNewResponseRequireAccessServiceTokenRuleServiceToken `json:"service_token,required"`
@@ -2352,6 +2736,10 @@ type zeroTrustAccessApplicationPolicyNewResponseRequireAccessServiceTokenRuleJSO
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseRequireAccessServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseRequireAccessServiceTokenRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseRequireAccessServiceTokenRule) implementsZeroTrustAccessApplicationPolicyNewResponseRequire() {
@@ -2376,6 +2764,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseRequireAccessServiceTokenRul
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseRequireAccessServiceTokenRuleServiceTokenJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches any valid Access Service Token
 type ZeroTrustAccessApplicationPolicyNewResponseRequireAccessAnyValidServiceTokenRule struct {
 	// An empty object which matches on all service tokens.
@@ -2394,6 +2786,10 @@ type zeroTrustAccessApplicationPolicyNewResponseRequireAccessAnyValidServiceToke
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseRequireAccessAnyValidServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseRequireAccessAnyValidServiceTokenRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseRequireAccessAnyValidServiceTokenRule) implementsZeroTrustAccessApplicationPolicyNewResponseRequire() {
@@ -2416,6 +2812,10 @@ type zeroTrustAccessApplicationPolicyNewResponseRequireAccessExternalEvaluationR
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseRequireAccessExternalEvaluationRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseRequireAccessExternalEvaluationRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseRequireAccessExternalEvaluationRule) implementsZeroTrustAccessApplicationPolicyNewResponseRequire() {
@@ -2444,6 +2844,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseRequireAccessExternalEvaluat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseRequireAccessExternalEvaluationRuleExternalEvaluationJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a specific country
 type ZeroTrustAccessApplicationPolicyNewResponseRequireAccessCountryRule struct {
 	Geo  ZeroTrustAccessApplicationPolicyNewResponseRequireAccessCountryRuleGeo  `json:"geo,required"`
@@ -2461,6 +2865,10 @@ type zeroTrustAccessApplicationPolicyNewResponseRequireAccessCountryRuleJSON str
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseRequireAccessCountryRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseRequireAccessCountryRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseRequireAccessCountryRule) implementsZeroTrustAccessApplicationPolicyNewResponseRequire() {
@@ -2485,6 +2893,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseRequireAccessCountryRuleGeo)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseRequireAccessCountryRuleGeoJSON) RawJSON() string {
+	return r.raw
+}
+
 // Enforce different MFA options
 type ZeroTrustAccessApplicationPolicyNewResponseRequireAccessAuthenticationMethodRule struct {
 	AuthMethod ZeroTrustAccessApplicationPolicyNewResponseRequireAccessAuthenticationMethodRuleAuthMethod `json:"auth_method,required"`
@@ -2502,6 +2914,10 @@ type zeroTrustAccessApplicationPolicyNewResponseRequireAccessAuthenticationMetho
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseRequireAccessAuthenticationMethodRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseRequireAccessAuthenticationMethodRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseRequireAccessAuthenticationMethodRule) implementsZeroTrustAccessApplicationPolicyNewResponseRequire() {
@@ -2526,6 +2942,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseRequireAccessAuthenticationM
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseRequireAccessAuthenticationMethodRuleAuthMethodJSON) RawJSON() string {
+	return r.raw
+}
+
 // Enforces a device posture rule has run successfully
 type ZeroTrustAccessApplicationPolicyNewResponseRequireAccessDevicePostureRule struct {
 	DevicePosture ZeroTrustAccessApplicationPolicyNewResponseRequireAccessDevicePostureRuleDevicePosture `json:"device_posture,required"`
@@ -2543,6 +2963,10 @@ type zeroTrustAccessApplicationPolicyNewResponseRequireAccessDevicePostureRuleJS
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseRequireAccessDevicePostureRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseRequireAccessDevicePostureRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyNewResponseRequireAccessDevicePostureRule) implementsZeroTrustAccessApplicationPolicyNewResponseRequire() {
@@ -2565,6 +2989,10 @@ type zeroTrustAccessApplicationPolicyNewResponseRequireAccessDevicePostureRuleDe
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseRequireAccessDevicePostureRuleDevicePosture) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseRequireAccessDevicePostureRuleDevicePostureJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustAccessApplicationPolicyUpdateResponse struct {
@@ -2633,6 +3061,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponse) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // A group of email addresses that can approve a temporary authentication request.
 type ZeroTrustAccessApplicationPolicyUpdateResponseApprovalGroup struct {
 	// The number of approvals needed to obtain access.
@@ -2657,6 +3089,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseApprovalGroupJSON struct {
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseApprovalGroup) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseApprovalGroupJSON) RawJSON() string {
+	return r.raw
 }
 
 // The action Access will take if a user matches this policy.
@@ -2719,6 +3155,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessEmailRule) U
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessEmailRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessEmailRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseExclude() {
 }
 
@@ -2741,6 +3181,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessEmailRuleEma
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessEmailRuleEmailJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an email address from a list.
 type ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessEmailListRule struct {
 	EmailList ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessEmailListRuleEmailList `json:"email_list,required"`
@@ -2758,6 +3202,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessEmailListRuleJSO
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessEmailListRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessEmailListRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessEmailListRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseExclude() {
@@ -2782,6 +3230,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessEmailListRul
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessEmailListRuleEmailListJSON) RawJSON() string {
+	return r.raw
+}
+
 // Match an entire email domain.
 type ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessDomainRule struct {
 	EmailDomain ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessDomainRuleEmailDomain `json:"email_domain,required"`
@@ -2799,6 +3251,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessDomainRuleJSON s
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessDomainRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessDomainRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessDomainRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseExclude() {
@@ -2823,6 +3279,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessDomainRuleEm
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessDomainRuleEmailDomainJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches everyone.
 type ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessEveryoneRule struct {
 	// An empty object which matches on all users.
@@ -2841,6 +3301,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessEveryoneRuleJSON
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessEveryoneRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessEveryoneRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessEveryoneRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseExclude() {
@@ -2865,6 +3329,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessIPRule) Unma
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessIPRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessIPRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseExclude() {
 }
 
@@ -2887,6 +3355,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessIPRuleIP) Un
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessIPRuleIPJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an IP address from a list.
 type ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessIPListRule struct {
 	IPList ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessIPListRuleIPList `json:"ip_list,required"`
@@ -2904,6 +3376,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessIPListRuleJSON s
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessIPListRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessIPListRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessIPListRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseExclude() {
@@ -2928,6 +3404,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessIPListRuleIP
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessIPListRuleIPListJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches any valid client certificate.
 type ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessCertificateRule struct {
 	Certificate interface{}                                                                    `json:"certificate,required"`
@@ -2945,6 +3425,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessCertificateRuleJ
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessCertificateRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessCertificateRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessCertificateRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseExclude() {
@@ -2969,6 +3453,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessAccessGroupR
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessAccessGroupRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessAccessGroupRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseExclude() {
 }
 
@@ -2991,6 +3479,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessAccessGroupR
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessAccessGroupRuleGroupJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an Azure group. Requires an Azure identity provider.
 type ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessAzureGroupRule struct {
 	AzureAd ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessAzureGroupRuleAzureAd `json:"azureAD,required"`
@@ -3008,6 +3500,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessAzureGroupRuleJS
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessAzureGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessAzureGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessAzureGroupRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseExclude() {
@@ -3035,6 +3531,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessAzureGroupRu
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessAzureGroupRuleAzureAdJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a Github organization. Requires a Github identity provider.
 type ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessGitHubOrganizationRule struct {
 	GitHubOrganization ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessGitHubOrganizationRuleGitHubOrganization `json:"github-organization,required"`
@@ -3052,6 +3552,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessGitHubOrganizati
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessGitHubOrganizationRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessGitHubOrganizationRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessGitHubOrganizationRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseExclude() {
@@ -3079,6 +3583,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessGitHubOrgani
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessGitHubOrganizationRuleGitHubOrganizationJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a group in Google Workspace. Requires a Google Workspace identity
 // provider.
 type ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessGsuiteGroupRule struct {
@@ -3097,6 +3605,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessGsuiteGroupRuleJ
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessGsuiteGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessGsuiteGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessGsuiteGroupRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseExclude() {
@@ -3124,6 +3636,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessGsuiteGroupR
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessGsuiteGroupRuleGsuiteJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an Okta group. Requires an Okta identity provider.
 type ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessOktaGroupRule struct {
 	Okta ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessOktaGroupRuleOkta `json:"okta,required"`
@@ -3141,6 +3657,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessOktaGroupRuleJSO
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessOktaGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessOktaGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessOktaGroupRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseExclude() {
@@ -3168,6 +3688,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessOktaGroupRul
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessOktaGroupRuleOktaJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a SAML group. Requires a SAML identity provider.
 type ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessSamlGroupRule struct {
 	Saml ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessSamlGroupRuleSaml `json:"saml,required"`
@@ -3185,6 +3709,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessSamlGroupRuleJSO
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessSamlGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessSamlGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessSamlGroupRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseExclude() {
@@ -3212,6 +3740,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessSamlGroupRul
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessSamlGroupRuleSamlJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a specific Access Service Token
 type ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessServiceTokenRule struct {
 	ServiceToken ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessServiceTokenRuleServiceToken `json:"service_token,required"`
@@ -3229,6 +3761,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessServiceTokenRule
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessServiceTokenRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessServiceTokenRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseExclude() {
@@ -3253,6 +3789,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessServiceToken
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessServiceTokenRuleServiceTokenJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches any valid Access Service Token
 type ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessAnyValidServiceTokenRule struct {
 	// An empty object which matches on all service tokens.
@@ -3271,6 +3811,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessAnyValidServiceT
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessAnyValidServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessAnyValidServiceTokenRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessAnyValidServiceTokenRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseExclude() {
@@ -3293,6 +3837,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessExternalEvaluati
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessExternalEvaluationRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessExternalEvaluationRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessExternalEvaluationRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseExclude() {
@@ -3321,6 +3869,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessExternalEval
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessExternalEvaluationRuleExternalEvaluationJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a specific country
 type ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessCountryRule struct {
 	Geo  ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessCountryRuleGeo  `json:"geo,required"`
@@ -3338,6 +3890,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessCountryRuleJSON 
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessCountryRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessCountryRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessCountryRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseExclude() {
@@ -3362,6 +3918,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessCountryRuleG
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessCountryRuleGeoJSON) RawJSON() string {
+	return r.raw
+}
+
 // Enforce different MFA options
 type ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessAuthenticationMethodRule struct {
 	AuthMethod ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessAuthenticationMethodRuleAuthMethod `json:"auth_method,required"`
@@ -3379,6 +3939,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessAuthenticationMe
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessAuthenticationMethodRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessAuthenticationMethodRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessAuthenticationMethodRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseExclude() {
@@ -3403,6 +3967,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessAuthenticati
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessAuthenticationMethodRuleAuthMethodJSON) RawJSON() string {
+	return r.raw
+}
+
 // Enforces a device posture rule has run successfully
 type ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessDevicePostureRule struct {
 	DevicePosture ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessDevicePostureRuleDevicePosture `json:"device_posture,required"`
@@ -3420,6 +3988,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessDevicePostureRul
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessDevicePostureRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessDevicePostureRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessDevicePostureRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseExclude() {
@@ -3442,6 +4014,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessDevicePostureRul
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessDevicePostureRuleDevicePosture) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseExcludeAccessDevicePostureRuleDevicePostureJSON) RawJSON() string {
+	return r.raw
 }
 
 // Matches a specific email.
@@ -3494,6 +4070,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessEmailRule) U
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessEmailRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessEmailRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseInclude() {
 }
 
@@ -3516,6 +4096,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessEmailRuleEma
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessEmailRuleEmailJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an email address from a list.
 type ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessEmailListRule struct {
 	EmailList ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessEmailListRuleEmailList `json:"email_list,required"`
@@ -3533,6 +4117,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessEmailListRuleJSO
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessEmailListRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessEmailListRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessEmailListRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseInclude() {
@@ -3557,6 +4145,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessEmailListRul
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessEmailListRuleEmailListJSON) RawJSON() string {
+	return r.raw
+}
+
 // Match an entire email domain.
 type ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessDomainRule struct {
 	EmailDomain ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessDomainRuleEmailDomain `json:"email_domain,required"`
@@ -3574,6 +4166,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessDomainRuleJSON s
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessDomainRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessDomainRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessDomainRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseInclude() {
@@ -3598,6 +4194,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessDomainRuleEm
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessDomainRuleEmailDomainJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches everyone.
 type ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessEveryoneRule struct {
 	// An empty object which matches on all users.
@@ -3616,6 +4216,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessEveryoneRuleJSON
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessEveryoneRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessEveryoneRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessEveryoneRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseInclude() {
@@ -3640,6 +4244,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessIPRule) Unma
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessIPRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessIPRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseInclude() {
 }
 
@@ -3662,6 +4270,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessIPRuleIP) Un
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessIPRuleIPJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an IP address from a list.
 type ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessIPListRule struct {
 	IPList ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessIPListRuleIPList `json:"ip_list,required"`
@@ -3679,6 +4291,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessIPListRuleJSON s
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessIPListRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessIPListRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessIPListRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseInclude() {
@@ -3703,6 +4319,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessIPListRuleIP
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessIPListRuleIPListJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches any valid client certificate.
 type ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessCertificateRule struct {
 	Certificate interface{}                                                                    `json:"certificate,required"`
@@ -3720,6 +4340,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessCertificateRuleJ
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessCertificateRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessCertificateRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessCertificateRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseInclude() {
@@ -3744,6 +4368,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessAccessGroupR
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessAccessGroupRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessAccessGroupRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseInclude() {
 }
 
@@ -3766,6 +4394,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessAccessGroupR
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessAccessGroupRuleGroupJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an Azure group. Requires an Azure identity provider.
 type ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessAzureGroupRule struct {
 	AzureAd ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessAzureGroupRuleAzureAd `json:"azureAD,required"`
@@ -3783,6 +4415,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessAzureGroupRuleJS
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessAzureGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessAzureGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessAzureGroupRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseInclude() {
@@ -3810,6 +4446,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessAzureGroupRu
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessAzureGroupRuleAzureAdJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a Github organization. Requires a Github identity provider.
 type ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessGitHubOrganizationRule struct {
 	GitHubOrganization ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessGitHubOrganizationRuleGitHubOrganization `json:"github-organization,required"`
@@ -3827,6 +4467,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessGitHubOrganizati
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessGitHubOrganizationRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessGitHubOrganizationRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessGitHubOrganizationRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseInclude() {
@@ -3854,6 +4498,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessGitHubOrgani
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessGitHubOrganizationRuleGitHubOrganizationJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a group in Google Workspace. Requires a Google Workspace identity
 // provider.
 type ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessGsuiteGroupRule struct {
@@ -3872,6 +4520,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessGsuiteGroupRuleJ
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessGsuiteGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessGsuiteGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessGsuiteGroupRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseInclude() {
@@ -3899,6 +4551,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessGsuiteGroupR
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessGsuiteGroupRuleGsuiteJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an Okta group. Requires an Okta identity provider.
 type ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessOktaGroupRule struct {
 	Okta ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessOktaGroupRuleOkta `json:"okta,required"`
@@ -3916,6 +4572,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessOktaGroupRuleJSO
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessOktaGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessOktaGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessOktaGroupRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseInclude() {
@@ -3943,6 +4603,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessOktaGroupRul
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessOktaGroupRuleOktaJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a SAML group. Requires a SAML identity provider.
 type ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessSamlGroupRule struct {
 	Saml ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessSamlGroupRuleSaml `json:"saml,required"`
@@ -3960,6 +4624,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessSamlGroupRuleJSO
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessSamlGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessSamlGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessSamlGroupRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseInclude() {
@@ -3987,6 +4655,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessSamlGroupRul
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessSamlGroupRuleSamlJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a specific Access Service Token
 type ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessServiceTokenRule struct {
 	ServiceToken ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessServiceTokenRuleServiceToken `json:"service_token,required"`
@@ -4004,6 +4676,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessServiceTokenRule
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessServiceTokenRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessServiceTokenRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseInclude() {
@@ -4028,6 +4704,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessServiceToken
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessServiceTokenRuleServiceTokenJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches any valid Access Service Token
 type ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessAnyValidServiceTokenRule struct {
 	// An empty object which matches on all service tokens.
@@ -4046,6 +4726,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessAnyValidServiceT
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessAnyValidServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessAnyValidServiceTokenRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessAnyValidServiceTokenRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseInclude() {
@@ -4068,6 +4752,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessExternalEvaluati
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessExternalEvaluationRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessExternalEvaluationRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessExternalEvaluationRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseInclude() {
@@ -4096,6 +4784,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessExternalEval
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessExternalEvaluationRuleExternalEvaluationJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a specific country
 type ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessCountryRule struct {
 	Geo  ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessCountryRuleGeo  `json:"geo,required"`
@@ -4113,6 +4805,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessCountryRuleJSON 
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessCountryRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessCountryRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessCountryRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseInclude() {
@@ -4137,6 +4833,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessCountryRuleG
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessCountryRuleGeoJSON) RawJSON() string {
+	return r.raw
+}
+
 // Enforce different MFA options
 type ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessAuthenticationMethodRule struct {
 	AuthMethod ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessAuthenticationMethodRuleAuthMethod `json:"auth_method,required"`
@@ -4154,6 +4854,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessAuthenticationMe
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessAuthenticationMethodRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessAuthenticationMethodRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessAuthenticationMethodRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseInclude() {
@@ -4178,6 +4882,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessAuthenticati
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessAuthenticationMethodRuleAuthMethodJSON) RawJSON() string {
+	return r.raw
+}
+
 // Enforces a device posture rule has run successfully
 type ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessDevicePostureRule struct {
 	DevicePosture ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessDevicePostureRuleDevicePosture `json:"device_posture,required"`
@@ -4195,6 +4903,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessDevicePostureRul
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessDevicePostureRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessDevicePostureRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessDevicePostureRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseInclude() {
@@ -4217,6 +4929,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessDevicePostureRul
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessDevicePostureRuleDevicePosture) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseIncludeAccessDevicePostureRuleDevicePostureJSON) RawJSON() string {
+	return r.raw
 }
 
 // Matches a specific email.
@@ -4269,6 +4985,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessEmailRule) U
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessEmailRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessEmailRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseRequire() {
 }
 
@@ -4291,6 +5011,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessEmailRuleEma
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessEmailRuleEmailJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an email address from a list.
 type ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessEmailListRule struct {
 	EmailList ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessEmailListRuleEmailList `json:"email_list,required"`
@@ -4308,6 +5032,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessEmailListRuleJSO
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessEmailListRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessEmailListRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessEmailListRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseRequire() {
@@ -4332,6 +5060,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessEmailListRul
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessEmailListRuleEmailListJSON) RawJSON() string {
+	return r.raw
+}
+
 // Match an entire email domain.
 type ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessDomainRule struct {
 	EmailDomain ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessDomainRuleEmailDomain `json:"email_domain,required"`
@@ -4349,6 +5081,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessDomainRuleJSON s
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessDomainRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessDomainRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessDomainRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseRequire() {
@@ -4373,6 +5109,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessDomainRuleEm
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessDomainRuleEmailDomainJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches everyone.
 type ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessEveryoneRule struct {
 	// An empty object which matches on all users.
@@ -4391,6 +5131,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessEveryoneRuleJSON
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessEveryoneRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessEveryoneRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessEveryoneRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseRequire() {
@@ -4415,6 +5159,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessIPRule) Unma
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessIPRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessIPRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseRequire() {
 }
 
@@ -4437,6 +5185,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessIPRuleIP) Un
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessIPRuleIPJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an IP address from a list.
 type ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessIPListRule struct {
 	IPList ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessIPListRuleIPList `json:"ip_list,required"`
@@ -4454,6 +5206,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessIPListRuleJSON s
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessIPListRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessIPListRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessIPListRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseRequire() {
@@ -4478,6 +5234,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessIPListRuleIP
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessIPListRuleIPListJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches any valid client certificate.
 type ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessCertificateRule struct {
 	Certificate interface{}                                                                    `json:"certificate,required"`
@@ -4495,6 +5255,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessCertificateRuleJ
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessCertificateRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessCertificateRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessCertificateRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseRequire() {
@@ -4519,6 +5283,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessAccessGroupR
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessAccessGroupRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessAccessGroupRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseRequire() {
 }
 
@@ -4541,6 +5309,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessAccessGroupR
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessAccessGroupRuleGroupJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an Azure group. Requires an Azure identity provider.
 type ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessAzureGroupRule struct {
 	AzureAd ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessAzureGroupRuleAzureAd `json:"azureAD,required"`
@@ -4558,6 +5330,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessAzureGroupRuleJS
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessAzureGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessAzureGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessAzureGroupRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseRequire() {
@@ -4585,6 +5361,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessAzureGroupRu
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessAzureGroupRuleAzureAdJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a Github organization. Requires a Github identity provider.
 type ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessGitHubOrganizationRule struct {
 	GitHubOrganization ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessGitHubOrganizationRuleGitHubOrganization `json:"github-organization,required"`
@@ -4602,6 +5382,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessGitHubOrganizati
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessGitHubOrganizationRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessGitHubOrganizationRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessGitHubOrganizationRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseRequire() {
@@ -4629,6 +5413,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessGitHubOrgani
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessGitHubOrganizationRuleGitHubOrganizationJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a group in Google Workspace. Requires a Google Workspace identity
 // provider.
 type ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessGsuiteGroupRule struct {
@@ -4647,6 +5435,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessGsuiteGroupRuleJ
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessGsuiteGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessGsuiteGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessGsuiteGroupRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseRequire() {
@@ -4674,6 +5466,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessGsuiteGroupR
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessGsuiteGroupRuleGsuiteJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an Okta group. Requires an Okta identity provider.
 type ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessOktaGroupRule struct {
 	Okta ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessOktaGroupRuleOkta `json:"okta,required"`
@@ -4691,6 +5487,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessOktaGroupRuleJSO
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessOktaGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessOktaGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessOktaGroupRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseRequire() {
@@ -4718,6 +5518,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessOktaGroupRul
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessOktaGroupRuleOktaJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a SAML group. Requires a SAML identity provider.
 type ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessSamlGroupRule struct {
 	Saml ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessSamlGroupRuleSaml `json:"saml,required"`
@@ -4735,6 +5539,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessSamlGroupRuleJSO
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessSamlGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessSamlGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessSamlGroupRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseRequire() {
@@ -4762,6 +5570,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessSamlGroupRul
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessSamlGroupRuleSamlJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a specific Access Service Token
 type ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessServiceTokenRule struct {
 	ServiceToken ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessServiceTokenRuleServiceToken `json:"service_token,required"`
@@ -4779,6 +5591,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessServiceTokenRule
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessServiceTokenRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessServiceTokenRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseRequire() {
@@ -4803,6 +5619,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessServiceToken
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessServiceTokenRuleServiceTokenJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches any valid Access Service Token
 type ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessAnyValidServiceTokenRule struct {
 	// An empty object which matches on all service tokens.
@@ -4821,6 +5641,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessAnyValidServiceT
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessAnyValidServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessAnyValidServiceTokenRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessAnyValidServiceTokenRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseRequire() {
@@ -4843,6 +5667,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessExternalEvaluati
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessExternalEvaluationRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessExternalEvaluationRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessExternalEvaluationRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseRequire() {
@@ -4871,6 +5699,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessExternalEval
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessExternalEvaluationRuleExternalEvaluationJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a specific country
 type ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessCountryRule struct {
 	Geo  ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessCountryRuleGeo  `json:"geo,required"`
@@ -4888,6 +5720,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessCountryRuleJSON 
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessCountryRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessCountryRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessCountryRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseRequire() {
@@ -4912,6 +5748,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessCountryRuleG
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessCountryRuleGeoJSON) RawJSON() string {
+	return r.raw
+}
+
 // Enforce different MFA options
 type ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessAuthenticationMethodRule struct {
 	AuthMethod ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessAuthenticationMethodRuleAuthMethod `json:"auth_method,required"`
@@ -4929,6 +5769,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessAuthenticationMe
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessAuthenticationMethodRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessAuthenticationMethodRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessAuthenticationMethodRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseRequire() {
@@ -4953,6 +5797,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessAuthenticati
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessAuthenticationMethodRuleAuthMethodJSON) RawJSON() string {
+	return r.raw
+}
+
 // Enforces a device posture rule has run successfully
 type ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessDevicePostureRule struct {
 	DevicePosture ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessDevicePostureRuleDevicePosture `json:"device_posture,required"`
@@ -4970,6 +5818,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessDevicePostureRul
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessDevicePostureRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessDevicePostureRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessDevicePostureRule) implementsZeroTrustAccessApplicationPolicyUpdateResponseRequire() {
@@ -4992,6 +5844,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessDevicePostureRul
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseRequireAccessDevicePostureRuleDevicePosture) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseRequireAccessDevicePostureRuleDevicePostureJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustAccessApplicationPolicyListResponse struct {
@@ -5060,6 +5916,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponse) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // A group of email addresses that can approve a temporary authentication request.
 type ZeroTrustAccessApplicationPolicyListResponseApprovalGroup struct {
 	// The number of approvals needed to obtain access.
@@ -5084,6 +5944,10 @@ type zeroTrustAccessApplicationPolicyListResponseApprovalGroupJSON struct {
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseApprovalGroup) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseApprovalGroupJSON) RawJSON() string {
+	return r.raw
 }
 
 // The action Access will take if a user matches this policy.
@@ -5145,6 +6009,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseExcludeAccessEmailRule) Unm
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseExcludeAccessEmailRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationPolicyListResponseExcludeAccessEmailRule) implementsZeroTrustAccessApplicationPolicyListResponseExclude() {
 }
 
@@ -5167,6 +6035,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseExcludeAccessEmailRuleEmail
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseExcludeAccessEmailRuleEmailJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an email address from a list.
 type ZeroTrustAccessApplicationPolicyListResponseExcludeAccessEmailListRule struct {
 	EmailList ZeroTrustAccessApplicationPolicyListResponseExcludeAccessEmailListRuleEmailList `json:"email_list,required"`
@@ -5184,6 +6056,10 @@ type zeroTrustAccessApplicationPolicyListResponseExcludeAccessEmailListRuleJSON 
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseExcludeAccessEmailListRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseExcludeAccessEmailListRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseExcludeAccessEmailListRule) implementsZeroTrustAccessApplicationPolicyListResponseExclude() {
@@ -5208,6 +6084,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseExcludeAccessEmailListRuleE
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseExcludeAccessEmailListRuleEmailListJSON) RawJSON() string {
+	return r.raw
+}
+
 // Match an entire email domain.
 type ZeroTrustAccessApplicationPolicyListResponseExcludeAccessDomainRule struct {
 	EmailDomain ZeroTrustAccessApplicationPolicyListResponseExcludeAccessDomainRuleEmailDomain `json:"email_domain,required"`
@@ -5225,6 +6105,10 @@ type zeroTrustAccessApplicationPolicyListResponseExcludeAccessDomainRuleJSON str
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseExcludeAccessDomainRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseExcludeAccessDomainRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseExcludeAccessDomainRule) implementsZeroTrustAccessApplicationPolicyListResponseExclude() {
@@ -5249,6 +6133,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseExcludeAccessDomainRuleEmai
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseExcludeAccessDomainRuleEmailDomainJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches everyone.
 type ZeroTrustAccessApplicationPolicyListResponseExcludeAccessEveryoneRule struct {
 	// An empty object which matches on all users.
@@ -5267,6 +6155,10 @@ type zeroTrustAccessApplicationPolicyListResponseExcludeAccessEveryoneRuleJSON s
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseExcludeAccessEveryoneRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseExcludeAccessEveryoneRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseExcludeAccessEveryoneRule) implementsZeroTrustAccessApplicationPolicyListResponseExclude() {
@@ -5291,6 +6183,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseExcludeAccessIPRule) Unmars
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseExcludeAccessIPRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationPolicyListResponseExcludeAccessIPRule) implementsZeroTrustAccessApplicationPolicyListResponseExclude() {
 }
 
@@ -5313,6 +6209,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseExcludeAccessIPRuleIP) Unma
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseExcludeAccessIPRuleIPJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an IP address from a list.
 type ZeroTrustAccessApplicationPolicyListResponseExcludeAccessIPListRule struct {
 	IPList ZeroTrustAccessApplicationPolicyListResponseExcludeAccessIPListRuleIPList `json:"ip_list,required"`
@@ -5330,6 +6230,10 @@ type zeroTrustAccessApplicationPolicyListResponseExcludeAccessIPListRuleJSON str
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseExcludeAccessIPListRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseExcludeAccessIPListRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseExcludeAccessIPListRule) implementsZeroTrustAccessApplicationPolicyListResponseExclude() {
@@ -5354,6 +6258,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseExcludeAccessIPListRuleIPLi
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseExcludeAccessIPListRuleIPListJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches any valid client certificate.
 type ZeroTrustAccessApplicationPolicyListResponseExcludeAccessCertificateRule struct {
 	Certificate interface{}                                                                  `json:"certificate,required"`
@@ -5371,6 +6279,10 @@ type zeroTrustAccessApplicationPolicyListResponseExcludeAccessCertificateRuleJSO
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseExcludeAccessCertificateRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseExcludeAccessCertificateRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseExcludeAccessCertificateRule) implementsZeroTrustAccessApplicationPolicyListResponseExclude() {
@@ -5395,6 +6307,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseExcludeAccessAccessGroupRul
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseExcludeAccessAccessGroupRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationPolicyListResponseExcludeAccessAccessGroupRule) implementsZeroTrustAccessApplicationPolicyListResponseExclude() {
 }
 
@@ -5417,6 +6333,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseExcludeAccessAccessGroupRul
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseExcludeAccessAccessGroupRuleGroupJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an Azure group. Requires an Azure identity provider.
 type ZeroTrustAccessApplicationPolicyListResponseExcludeAccessAzureGroupRule struct {
 	AzureAd ZeroTrustAccessApplicationPolicyListResponseExcludeAccessAzureGroupRuleAzureAd `json:"azureAD,required"`
@@ -5434,6 +6354,10 @@ type zeroTrustAccessApplicationPolicyListResponseExcludeAccessAzureGroupRuleJSON
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseExcludeAccessAzureGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseExcludeAccessAzureGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseExcludeAccessAzureGroupRule) implementsZeroTrustAccessApplicationPolicyListResponseExclude() {
@@ -5461,6 +6385,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseExcludeAccessAzureGroupRule
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseExcludeAccessAzureGroupRuleAzureAdJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a Github organization. Requires a Github identity provider.
 type ZeroTrustAccessApplicationPolicyListResponseExcludeAccessGitHubOrganizationRule struct {
 	GitHubOrganization ZeroTrustAccessApplicationPolicyListResponseExcludeAccessGitHubOrganizationRuleGitHubOrganization `json:"github-organization,required"`
@@ -5478,6 +6406,10 @@ type zeroTrustAccessApplicationPolicyListResponseExcludeAccessGitHubOrganization
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseExcludeAccessGitHubOrganizationRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseExcludeAccessGitHubOrganizationRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseExcludeAccessGitHubOrganizationRule) implementsZeroTrustAccessApplicationPolicyListResponseExclude() {
@@ -5505,6 +6437,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseExcludeAccessGitHubOrganiza
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseExcludeAccessGitHubOrganizationRuleGitHubOrganizationJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a group in Google Workspace. Requires a Google Workspace identity
 // provider.
 type ZeroTrustAccessApplicationPolicyListResponseExcludeAccessGsuiteGroupRule struct {
@@ -5523,6 +6459,10 @@ type zeroTrustAccessApplicationPolicyListResponseExcludeAccessGsuiteGroupRuleJSO
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseExcludeAccessGsuiteGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseExcludeAccessGsuiteGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseExcludeAccessGsuiteGroupRule) implementsZeroTrustAccessApplicationPolicyListResponseExclude() {
@@ -5550,6 +6490,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseExcludeAccessGsuiteGroupRul
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseExcludeAccessGsuiteGroupRuleGsuiteJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an Okta group. Requires an Okta identity provider.
 type ZeroTrustAccessApplicationPolicyListResponseExcludeAccessOktaGroupRule struct {
 	Okta ZeroTrustAccessApplicationPolicyListResponseExcludeAccessOktaGroupRuleOkta `json:"okta,required"`
@@ -5567,6 +6511,10 @@ type zeroTrustAccessApplicationPolicyListResponseExcludeAccessOktaGroupRuleJSON 
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseExcludeAccessOktaGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseExcludeAccessOktaGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseExcludeAccessOktaGroupRule) implementsZeroTrustAccessApplicationPolicyListResponseExclude() {
@@ -5594,6 +6542,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseExcludeAccessOktaGroupRuleO
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseExcludeAccessOktaGroupRuleOktaJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a SAML group. Requires a SAML identity provider.
 type ZeroTrustAccessApplicationPolicyListResponseExcludeAccessSamlGroupRule struct {
 	Saml ZeroTrustAccessApplicationPolicyListResponseExcludeAccessSamlGroupRuleSaml `json:"saml,required"`
@@ -5611,6 +6563,10 @@ type zeroTrustAccessApplicationPolicyListResponseExcludeAccessSamlGroupRuleJSON 
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseExcludeAccessSamlGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseExcludeAccessSamlGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseExcludeAccessSamlGroupRule) implementsZeroTrustAccessApplicationPolicyListResponseExclude() {
@@ -5638,6 +6594,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseExcludeAccessSamlGroupRuleS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseExcludeAccessSamlGroupRuleSamlJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a specific Access Service Token
 type ZeroTrustAccessApplicationPolicyListResponseExcludeAccessServiceTokenRule struct {
 	ServiceToken ZeroTrustAccessApplicationPolicyListResponseExcludeAccessServiceTokenRuleServiceToken `json:"service_token,required"`
@@ -5655,6 +6615,10 @@ type zeroTrustAccessApplicationPolicyListResponseExcludeAccessServiceTokenRuleJS
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseExcludeAccessServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseExcludeAccessServiceTokenRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseExcludeAccessServiceTokenRule) implementsZeroTrustAccessApplicationPolicyListResponseExclude() {
@@ -5679,6 +6643,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseExcludeAccessServiceTokenRu
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseExcludeAccessServiceTokenRuleServiceTokenJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches any valid Access Service Token
 type ZeroTrustAccessApplicationPolicyListResponseExcludeAccessAnyValidServiceTokenRule struct {
 	// An empty object which matches on all service tokens.
@@ -5697,6 +6665,10 @@ type zeroTrustAccessApplicationPolicyListResponseExcludeAccessAnyValidServiceTok
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseExcludeAccessAnyValidServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseExcludeAccessAnyValidServiceTokenRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseExcludeAccessAnyValidServiceTokenRule) implementsZeroTrustAccessApplicationPolicyListResponseExclude() {
@@ -5719,6 +6691,10 @@ type zeroTrustAccessApplicationPolicyListResponseExcludeAccessExternalEvaluation
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseExcludeAccessExternalEvaluationRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseExcludeAccessExternalEvaluationRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseExcludeAccessExternalEvaluationRule) implementsZeroTrustAccessApplicationPolicyListResponseExclude() {
@@ -5747,6 +6723,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseExcludeAccessExternalEvalua
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseExcludeAccessExternalEvaluationRuleExternalEvaluationJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a specific country
 type ZeroTrustAccessApplicationPolicyListResponseExcludeAccessCountryRule struct {
 	Geo  ZeroTrustAccessApplicationPolicyListResponseExcludeAccessCountryRuleGeo  `json:"geo,required"`
@@ -5764,6 +6744,10 @@ type zeroTrustAccessApplicationPolicyListResponseExcludeAccessCountryRuleJSON st
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseExcludeAccessCountryRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseExcludeAccessCountryRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseExcludeAccessCountryRule) implementsZeroTrustAccessApplicationPolicyListResponseExclude() {
@@ -5788,6 +6772,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseExcludeAccessCountryRuleGeo
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseExcludeAccessCountryRuleGeoJSON) RawJSON() string {
+	return r.raw
+}
+
 // Enforce different MFA options
 type ZeroTrustAccessApplicationPolicyListResponseExcludeAccessAuthenticationMethodRule struct {
 	AuthMethod ZeroTrustAccessApplicationPolicyListResponseExcludeAccessAuthenticationMethodRuleAuthMethod `json:"auth_method,required"`
@@ -5805,6 +6793,10 @@ type zeroTrustAccessApplicationPolicyListResponseExcludeAccessAuthenticationMeth
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseExcludeAccessAuthenticationMethodRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseExcludeAccessAuthenticationMethodRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseExcludeAccessAuthenticationMethodRule) implementsZeroTrustAccessApplicationPolicyListResponseExclude() {
@@ -5829,6 +6821,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseExcludeAccessAuthentication
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseExcludeAccessAuthenticationMethodRuleAuthMethodJSON) RawJSON() string {
+	return r.raw
+}
+
 // Enforces a device posture rule has run successfully
 type ZeroTrustAccessApplicationPolicyListResponseExcludeAccessDevicePostureRule struct {
 	DevicePosture ZeroTrustAccessApplicationPolicyListResponseExcludeAccessDevicePostureRuleDevicePosture `json:"device_posture,required"`
@@ -5846,6 +6842,10 @@ type zeroTrustAccessApplicationPolicyListResponseExcludeAccessDevicePostureRuleJ
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseExcludeAccessDevicePostureRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseExcludeAccessDevicePostureRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseExcludeAccessDevicePostureRule) implementsZeroTrustAccessApplicationPolicyListResponseExclude() {
@@ -5868,6 +6868,10 @@ type zeroTrustAccessApplicationPolicyListResponseExcludeAccessDevicePostureRuleD
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseExcludeAccessDevicePostureRuleDevicePosture) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseExcludeAccessDevicePostureRuleDevicePostureJSON) RawJSON() string {
+	return r.raw
 }
 
 // Matches a specific email.
@@ -5919,6 +6923,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseIncludeAccessEmailRule) Unm
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseIncludeAccessEmailRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationPolicyListResponseIncludeAccessEmailRule) implementsZeroTrustAccessApplicationPolicyListResponseInclude() {
 }
 
@@ -5941,6 +6949,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseIncludeAccessEmailRuleEmail
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseIncludeAccessEmailRuleEmailJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an email address from a list.
 type ZeroTrustAccessApplicationPolicyListResponseIncludeAccessEmailListRule struct {
 	EmailList ZeroTrustAccessApplicationPolicyListResponseIncludeAccessEmailListRuleEmailList `json:"email_list,required"`
@@ -5958,6 +6970,10 @@ type zeroTrustAccessApplicationPolicyListResponseIncludeAccessEmailListRuleJSON 
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseIncludeAccessEmailListRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseIncludeAccessEmailListRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseIncludeAccessEmailListRule) implementsZeroTrustAccessApplicationPolicyListResponseInclude() {
@@ -5982,6 +6998,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseIncludeAccessEmailListRuleE
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseIncludeAccessEmailListRuleEmailListJSON) RawJSON() string {
+	return r.raw
+}
+
 // Match an entire email domain.
 type ZeroTrustAccessApplicationPolicyListResponseIncludeAccessDomainRule struct {
 	EmailDomain ZeroTrustAccessApplicationPolicyListResponseIncludeAccessDomainRuleEmailDomain `json:"email_domain,required"`
@@ -5999,6 +7019,10 @@ type zeroTrustAccessApplicationPolicyListResponseIncludeAccessDomainRuleJSON str
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseIncludeAccessDomainRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseIncludeAccessDomainRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseIncludeAccessDomainRule) implementsZeroTrustAccessApplicationPolicyListResponseInclude() {
@@ -6023,6 +7047,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseIncludeAccessDomainRuleEmai
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseIncludeAccessDomainRuleEmailDomainJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches everyone.
 type ZeroTrustAccessApplicationPolicyListResponseIncludeAccessEveryoneRule struct {
 	// An empty object which matches on all users.
@@ -6041,6 +7069,10 @@ type zeroTrustAccessApplicationPolicyListResponseIncludeAccessEveryoneRuleJSON s
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseIncludeAccessEveryoneRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseIncludeAccessEveryoneRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseIncludeAccessEveryoneRule) implementsZeroTrustAccessApplicationPolicyListResponseInclude() {
@@ -6065,6 +7097,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseIncludeAccessIPRule) Unmars
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseIncludeAccessIPRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationPolicyListResponseIncludeAccessIPRule) implementsZeroTrustAccessApplicationPolicyListResponseInclude() {
 }
 
@@ -6087,6 +7123,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseIncludeAccessIPRuleIP) Unma
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseIncludeAccessIPRuleIPJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an IP address from a list.
 type ZeroTrustAccessApplicationPolicyListResponseIncludeAccessIPListRule struct {
 	IPList ZeroTrustAccessApplicationPolicyListResponseIncludeAccessIPListRuleIPList `json:"ip_list,required"`
@@ -6104,6 +7144,10 @@ type zeroTrustAccessApplicationPolicyListResponseIncludeAccessIPListRuleJSON str
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseIncludeAccessIPListRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseIncludeAccessIPListRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseIncludeAccessIPListRule) implementsZeroTrustAccessApplicationPolicyListResponseInclude() {
@@ -6128,6 +7172,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseIncludeAccessIPListRuleIPLi
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseIncludeAccessIPListRuleIPListJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches any valid client certificate.
 type ZeroTrustAccessApplicationPolicyListResponseIncludeAccessCertificateRule struct {
 	Certificate interface{}                                                                  `json:"certificate,required"`
@@ -6145,6 +7193,10 @@ type zeroTrustAccessApplicationPolicyListResponseIncludeAccessCertificateRuleJSO
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseIncludeAccessCertificateRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseIncludeAccessCertificateRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseIncludeAccessCertificateRule) implementsZeroTrustAccessApplicationPolicyListResponseInclude() {
@@ -6169,6 +7221,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseIncludeAccessAccessGroupRul
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseIncludeAccessAccessGroupRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationPolicyListResponseIncludeAccessAccessGroupRule) implementsZeroTrustAccessApplicationPolicyListResponseInclude() {
 }
 
@@ -6191,6 +7247,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseIncludeAccessAccessGroupRul
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseIncludeAccessAccessGroupRuleGroupJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an Azure group. Requires an Azure identity provider.
 type ZeroTrustAccessApplicationPolicyListResponseIncludeAccessAzureGroupRule struct {
 	AzureAd ZeroTrustAccessApplicationPolicyListResponseIncludeAccessAzureGroupRuleAzureAd `json:"azureAD,required"`
@@ -6208,6 +7268,10 @@ type zeroTrustAccessApplicationPolicyListResponseIncludeAccessAzureGroupRuleJSON
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseIncludeAccessAzureGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseIncludeAccessAzureGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseIncludeAccessAzureGroupRule) implementsZeroTrustAccessApplicationPolicyListResponseInclude() {
@@ -6235,6 +7299,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseIncludeAccessAzureGroupRule
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseIncludeAccessAzureGroupRuleAzureAdJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a Github organization. Requires a Github identity provider.
 type ZeroTrustAccessApplicationPolicyListResponseIncludeAccessGitHubOrganizationRule struct {
 	GitHubOrganization ZeroTrustAccessApplicationPolicyListResponseIncludeAccessGitHubOrganizationRuleGitHubOrganization `json:"github-organization,required"`
@@ -6252,6 +7320,10 @@ type zeroTrustAccessApplicationPolicyListResponseIncludeAccessGitHubOrganization
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseIncludeAccessGitHubOrganizationRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseIncludeAccessGitHubOrganizationRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseIncludeAccessGitHubOrganizationRule) implementsZeroTrustAccessApplicationPolicyListResponseInclude() {
@@ -6279,6 +7351,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseIncludeAccessGitHubOrganiza
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseIncludeAccessGitHubOrganizationRuleGitHubOrganizationJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a group in Google Workspace. Requires a Google Workspace identity
 // provider.
 type ZeroTrustAccessApplicationPolicyListResponseIncludeAccessGsuiteGroupRule struct {
@@ -6297,6 +7373,10 @@ type zeroTrustAccessApplicationPolicyListResponseIncludeAccessGsuiteGroupRuleJSO
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseIncludeAccessGsuiteGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseIncludeAccessGsuiteGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseIncludeAccessGsuiteGroupRule) implementsZeroTrustAccessApplicationPolicyListResponseInclude() {
@@ -6324,6 +7404,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseIncludeAccessGsuiteGroupRul
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseIncludeAccessGsuiteGroupRuleGsuiteJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an Okta group. Requires an Okta identity provider.
 type ZeroTrustAccessApplicationPolicyListResponseIncludeAccessOktaGroupRule struct {
 	Okta ZeroTrustAccessApplicationPolicyListResponseIncludeAccessOktaGroupRuleOkta `json:"okta,required"`
@@ -6341,6 +7425,10 @@ type zeroTrustAccessApplicationPolicyListResponseIncludeAccessOktaGroupRuleJSON 
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseIncludeAccessOktaGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseIncludeAccessOktaGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseIncludeAccessOktaGroupRule) implementsZeroTrustAccessApplicationPolicyListResponseInclude() {
@@ -6368,6 +7456,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseIncludeAccessOktaGroupRuleO
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseIncludeAccessOktaGroupRuleOktaJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a SAML group. Requires a SAML identity provider.
 type ZeroTrustAccessApplicationPolicyListResponseIncludeAccessSamlGroupRule struct {
 	Saml ZeroTrustAccessApplicationPolicyListResponseIncludeAccessSamlGroupRuleSaml `json:"saml,required"`
@@ -6385,6 +7477,10 @@ type zeroTrustAccessApplicationPolicyListResponseIncludeAccessSamlGroupRuleJSON 
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseIncludeAccessSamlGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseIncludeAccessSamlGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseIncludeAccessSamlGroupRule) implementsZeroTrustAccessApplicationPolicyListResponseInclude() {
@@ -6412,6 +7508,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseIncludeAccessSamlGroupRuleS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseIncludeAccessSamlGroupRuleSamlJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a specific Access Service Token
 type ZeroTrustAccessApplicationPolicyListResponseIncludeAccessServiceTokenRule struct {
 	ServiceToken ZeroTrustAccessApplicationPolicyListResponseIncludeAccessServiceTokenRuleServiceToken `json:"service_token,required"`
@@ -6429,6 +7529,10 @@ type zeroTrustAccessApplicationPolicyListResponseIncludeAccessServiceTokenRuleJS
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseIncludeAccessServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseIncludeAccessServiceTokenRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseIncludeAccessServiceTokenRule) implementsZeroTrustAccessApplicationPolicyListResponseInclude() {
@@ -6453,6 +7557,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseIncludeAccessServiceTokenRu
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseIncludeAccessServiceTokenRuleServiceTokenJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches any valid Access Service Token
 type ZeroTrustAccessApplicationPolicyListResponseIncludeAccessAnyValidServiceTokenRule struct {
 	// An empty object which matches on all service tokens.
@@ -6471,6 +7579,10 @@ type zeroTrustAccessApplicationPolicyListResponseIncludeAccessAnyValidServiceTok
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseIncludeAccessAnyValidServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseIncludeAccessAnyValidServiceTokenRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseIncludeAccessAnyValidServiceTokenRule) implementsZeroTrustAccessApplicationPolicyListResponseInclude() {
@@ -6493,6 +7605,10 @@ type zeroTrustAccessApplicationPolicyListResponseIncludeAccessExternalEvaluation
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseIncludeAccessExternalEvaluationRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseIncludeAccessExternalEvaluationRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseIncludeAccessExternalEvaluationRule) implementsZeroTrustAccessApplicationPolicyListResponseInclude() {
@@ -6521,6 +7637,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseIncludeAccessExternalEvalua
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseIncludeAccessExternalEvaluationRuleExternalEvaluationJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a specific country
 type ZeroTrustAccessApplicationPolicyListResponseIncludeAccessCountryRule struct {
 	Geo  ZeroTrustAccessApplicationPolicyListResponseIncludeAccessCountryRuleGeo  `json:"geo,required"`
@@ -6538,6 +7658,10 @@ type zeroTrustAccessApplicationPolicyListResponseIncludeAccessCountryRuleJSON st
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseIncludeAccessCountryRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseIncludeAccessCountryRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseIncludeAccessCountryRule) implementsZeroTrustAccessApplicationPolicyListResponseInclude() {
@@ -6562,6 +7686,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseIncludeAccessCountryRuleGeo
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseIncludeAccessCountryRuleGeoJSON) RawJSON() string {
+	return r.raw
+}
+
 // Enforce different MFA options
 type ZeroTrustAccessApplicationPolicyListResponseIncludeAccessAuthenticationMethodRule struct {
 	AuthMethod ZeroTrustAccessApplicationPolicyListResponseIncludeAccessAuthenticationMethodRuleAuthMethod `json:"auth_method,required"`
@@ -6579,6 +7707,10 @@ type zeroTrustAccessApplicationPolicyListResponseIncludeAccessAuthenticationMeth
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseIncludeAccessAuthenticationMethodRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseIncludeAccessAuthenticationMethodRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseIncludeAccessAuthenticationMethodRule) implementsZeroTrustAccessApplicationPolicyListResponseInclude() {
@@ -6603,6 +7735,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseIncludeAccessAuthentication
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseIncludeAccessAuthenticationMethodRuleAuthMethodJSON) RawJSON() string {
+	return r.raw
+}
+
 // Enforces a device posture rule has run successfully
 type ZeroTrustAccessApplicationPolicyListResponseIncludeAccessDevicePostureRule struct {
 	DevicePosture ZeroTrustAccessApplicationPolicyListResponseIncludeAccessDevicePostureRuleDevicePosture `json:"device_posture,required"`
@@ -6620,6 +7756,10 @@ type zeroTrustAccessApplicationPolicyListResponseIncludeAccessDevicePostureRuleJ
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseIncludeAccessDevicePostureRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseIncludeAccessDevicePostureRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseIncludeAccessDevicePostureRule) implementsZeroTrustAccessApplicationPolicyListResponseInclude() {
@@ -6642,6 +7782,10 @@ type zeroTrustAccessApplicationPolicyListResponseIncludeAccessDevicePostureRuleD
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseIncludeAccessDevicePostureRuleDevicePosture) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseIncludeAccessDevicePostureRuleDevicePostureJSON) RawJSON() string {
+	return r.raw
 }
 
 // Matches a specific email.
@@ -6693,6 +7837,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseRequireAccessEmailRule) Unm
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseRequireAccessEmailRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationPolicyListResponseRequireAccessEmailRule) implementsZeroTrustAccessApplicationPolicyListResponseRequire() {
 }
 
@@ -6715,6 +7863,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseRequireAccessEmailRuleEmail
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseRequireAccessEmailRuleEmailJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an email address from a list.
 type ZeroTrustAccessApplicationPolicyListResponseRequireAccessEmailListRule struct {
 	EmailList ZeroTrustAccessApplicationPolicyListResponseRequireAccessEmailListRuleEmailList `json:"email_list,required"`
@@ -6732,6 +7884,10 @@ type zeroTrustAccessApplicationPolicyListResponseRequireAccessEmailListRuleJSON 
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseRequireAccessEmailListRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseRequireAccessEmailListRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseRequireAccessEmailListRule) implementsZeroTrustAccessApplicationPolicyListResponseRequire() {
@@ -6756,6 +7912,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseRequireAccessEmailListRuleE
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseRequireAccessEmailListRuleEmailListJSON) RawJSON() string {
+	return r.raw
+}
+
 // Match an entire email domain.
 type ZeroTrustAccessApplicationPolicyListResponseRequireAccessDomainRule struct {
 	EmailDomain ZeroTrustAccessApplicationPolicyListResponseRequireAccessDomainRuleEmailDomain `json:"email_domain,required"`
@@ -6773,6 +7933,10 @@ type zeroTrustAccessApplicationPolicyListResponseRequireAccessDomainRuleJSON str
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseRequireAccessDomainRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseRequireAccessDomainRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseRequireAccessDomainRule) implementsZeroTrustAccessApplicationPolicyListResponseRequire() {
@@ -6797,6 +7961,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseRequireAccessDomainRuleEmai
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseRequireAccessDomainRuleEmailDomainJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches everyone.
 type ZeroTrustAccessApplicationPolicyListResponseRequireAccessEveryoneRule struct {
 	// An empty object which matches on all users.
@@ -6815,6 +7983,10 @@ type zeroTrustAccessApplicationPolicyListResponseRequireAccessEveryoneRuleJSON s
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseRequireAccessEveryoneRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseRequireAccessEveryoneRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseRequireAccessEveryoneRule) implementsZeroTrustAccessApplicationPolicyListResponseRequire() {
@@ -6839,6 +8011,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseRequireAccessIPRule) Unmars
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseRequireAccessIPRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationPolicyListResponseRequireAccessIPRule) implementsZeroTrustAccessApplicationPolicyListResponseRequire() {
 }
 
@@ -6861,6 +8037,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseRequireAccessIPRuleIP) Unma
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseRequireAccessIPRuleIPJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an IP address from a list.
 type ZeroTrustAccessApplicationPolicyListResponseRequireAccessIPListRule struct {
 	IPList ZeroTrustAccessApplicationPolicyListResponseRequireAccessIPListRuleIPList `json:"ip_list,required"`
@@ -6878,6 +8058,10 @@ type zeroTrustAccessApplicationPolicyListResponseRequireAccessIPListRuleJSON str
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseRequireAccessIPListRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseRequireAccessIPListRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseRequireAccessIPListRule) implementsZeroTrustAccessApplicationPolicyListResponseRequire() {
@@ -6902,6 +8086,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseRequireAccessIPListRuleIPLi
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseRequireAccessIPListRuleIPListJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches any valid client certificate.
 type ZeroTrustAccessApplicationPolicyListResponseRequireAccessCertificateRule struct {
 	Certificate interface{}                                                                  `json:"certificate,required"`
@@ -6919,6 +8107,10 @@ type zeroTrustAccessApplicationPolicyListResponseRequireAccessCertificateRuleJSO
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseRequireAccessCertificateRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseRequireAccessCertificateRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseRequireAccessCertificateRule) implementsZeroTrustAccessApplicationPolicyListResponseRequire() {
@@ -6943,6 +8135,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseRequireAccessAccessGroupRul
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseRequireAccessAccessGroupRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationPolicyListResponseRequireAccessAccessGroupRule) implementsZeroTrustAccessApplicationPolicyListResponseRequire() {
 }
 
@@ -6965,6 +8161,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseRequireAccessAccessGroupRul
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseRequireAccessAccessGroupRuleGroupJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an Azure group. Requires an Azure identity provider.
 type ZeroTrustAccessApplicationPolicyListResponseRequireAccessAzureGroupRule struct {
 	AzureAd ZeroTrustAccessApplicationPolicyListResponseRequireAccessAzureGroupRuleAzureAd `json:"azureAD,required"`
@@ -6982,6 +8182,10 @@ type zeroTrustAccessApplicationPolicyListResponseRequireAccessAzureGroupRuleJSON
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseRequireAccessAzureGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseRequireAccessAzureGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseRequireAccessAzureGroupRule) implementsZeroTrustAccessApplicationPolicyListResponseRequire() {
@@ -7009,6 +8213,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseRequireAccessAzureGroupRule
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseRequireAccessAzureGroupRuleAzureAdJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a Github organization. Requires a Github identity provider.
 type ZeroTrustAccessApplicationPolicyListResponseRequireAccessGitHubOrganizationRule struct {
 	GitHubOrganization ZeroTrustAccessApplicationPolicyListResponseRequireAccessGitHubOrganizationRuleGitHubOrganization `json:"github-organization,required"`
@@ -7026,6 +8234,10 @@ type zeroTrustAccessApplicationPolicyListResponseRequireAccessGitHubOrganization
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseRequireAccessGitHubOrganizationRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseRequireAccessGitHubOrganizationRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseRequireAccessGitHubOrganizationRule) implementsZeroTrustAccessApplicationPolicyListResponseRequire() {
@@ -7053,6 +8265,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseRequireAccessGitHubOrganiza
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseRequireAccessGitHubOrganizationRuleGitHubOrganizationJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a group in Google Workspace. Requires a Google Workspace identity
 // provider.
 type ZeroTrustAccessApplicationPolicyListResponseRequireAccessGsuiteGroupRule struct {
@@ -7071,6 +8287,10 @@ type zeroTrustAccessApplicationPolicyListResponseRequireAccessGsuiteGroupRuleJSO
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseRequireAccessGsuiteGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseRequireAccessGsuiteGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseRequireAccessGsuiteGroupRule) implementsZeroTrustAccessApplicationPolicyListResponseRequire() {
@@ -7098,6 +8318,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseRequireAccessGsuiteGroupRul
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseRequireAccessGsuiteGroupRuleGsuiteJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an Okta group. Requires an Okta identity provider.
 type ZeroTrustAccessApplicationPolicyListResponseRequireAccessOktaGroupRule struct {
 	Okta ZeroTrustAccessApplicationPolicyListResponseRequireAccessOktaGroupRuleOkta `json:"okta,required"`
@@ -7115,6 +8339,10 @@ type zeroTrustAccessApplicationPolicyListResponseRequireAccessOktaGroupRuleJSON 
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseRequireAccessOktaGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseRequireAccessOktaGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseRequireAccessOktaGroupRule) implementsZeroTrustAccessApplicationPolicyListResponseRequire() {
@@ -7142,6 +8370,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseRequireAccessOktaGroupRuleO
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseRequireAccessOktaGroupRuleOktaJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a SAML group. Requires a SAML identity provider.
 type ZeroTrustAccessApplicationPolicyListResponseRequireAccessSamlGroupRule struct {
 	Saml ZeroTrustAccessApplicationPolicyListResponseRequireAccessSamlGroupRuleSaml `json:"saml,required"`
@@ -7159,6 +8391,10 @@ type zeroTrustAccessApplicationPolicyListResponseRequireAccessSamlGroupRuleJSON 
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseRequireAccessSamlGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseRequireAccessSamlGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseRequireAccessSamlGroupRule) implementsZeroTrustAccessApplicationPolicyListResponseRequire() {
@@ -7186,6 +8422,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseRequireAccessSamlGroupRuleS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseRequireAccessSamlGroupRuleSamlJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a specific Access Service Token
 type ZeroTrustAccessApplicationPolicyListResponseRequireAccessServiceTokenRule struct {
 	ServiceToken ZeroTrustAccessApplicationPolicyListResponseRequireAccessServiceTokenRuleServiceToken `json:"service_token,required"`
@@ -7203,6 +8443,10 @@ type zeroTrustAccessApplicationPolicyListResponseRequireAccessServiceTokenRuleJS
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseRequireAccessServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseRequireAccessServiceTokenRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseRequireAccessServiceTokenRule) implementsZeroTrustAccessApplicationPolicyListResponseRequire() {
@@ -7227,6 +8471,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseRequireAccessServiceTokenRu
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseRequireAccessServiceTokenRuleServiceTokenJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches any valid Access Service Token
 type ZeroTrustAccessApplicationPolicyListResponseRequireAccessAnyValidServiceTokenRule struct {
 	// An empty object which matches on all service tokens.
@@ -7245,6 +8493,10 @@ type zeroTrustAccessApplicationPolicyListResponseRequireAccessAnyValidServiceTok
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseRequireAccessAnyValidServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseRequireAccessAnyValidServiceTokenRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseRequireAccessAnyValidServiceTokenRule) implementsZeroTrustAccessApplicationPolicyListResponseRequire() {
@@ -7267,6 +8519,10 @@ type zeroTrustAccessApplicationPolicyListResponseRequireAccessExternalEvaluation
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseRequireAccessExternalEvaluationRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseRequireAccessExternalEvaluationRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseRequireAccessExternalEvaluationRule) implementsZeroTrustAccessApplicationPolicyListResponseRequire() {
@@ -7295,6 +8551,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseRequireAccessExternalEvalua
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseRequireAccessExternalEvaluationRuleExternalEvaluationJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a specific country
 type ZeroTrustAccessApplicationPolicyListResponseRequireAccessCountryRule struct {
 	Geo  ZeroTrustAccessApplicationPolicyListResponseRequireAccessCountryRuleGeo  `json:"geo,required"`
@@ -7312,6 +8572,10 @@ type zeroTrustAccessApplicationPolicyListResponseRequireAccessCountryRuleJSON st
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseRequireAccessCountryRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseRequireAccessCountryRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseRequireAccessCountryRule) implementsZeroTrustAccessApplicationPolicyListResponseRequire() {
@@ -7336,6 +8600,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseRequireAccessCountryRuleGeo
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseRequireAccessCountryRuleGeoJSON) RawJSON() string {
+	return r.raw
+}
+
 // Enforce different MFA options
 type ZeroTrustAccessApplicationPolicyListResponseRequireAccessAuthenticationMethodRule struct {
 	AuthMethod ZeroTrustAccessApplicationPolicyListResponseRequireAccessAuthenticationMethodRuleAuthMethod `json:"auth_method,required"`
@@ -7353,6 +8621,10 @@ type zeroTrustAccessApplicationPolicyListResponseRequireAccessAuthenticationMeth
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseRequireAccessAuthenticationMethodRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseRequireAccessAuthenticationMethodRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseRequireAccessAuthenticationMethodRule) implementsZeroTrustAccessApplicationPolicyListResponseRequire() {
@@ -7377,6 +8649,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseRequireAccessAuthentication
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseRequireAccessAuthenticationMethodRuleAuthMethodJSON) RawJSON() string {
+	return r.raw
+}
+
 // Enforces a device posture rule has run successfully
 type ZeroTrustAccessApplicationPolicyListResponseRequireAccessDevicePostureRule struct {
 	DevicePosture ZeroTrustAccessApplicationPolicyListResponseRequireAccessDevicePostureRuleDevicePosture `json:"device_posture,required"`
@@ -7394,6 +8670,10 @@ type zeroTrustAccessApplicationPolicyListResponseRequireAccessDevicePostureRuleJ
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseRequireAccessDevicePostureRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseRequireAccessDevicePostureRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyListResponseRequireAccessDevicePostureRule) implementsZeroTrustAccessApplicationPolicyListResponseRequire() {
@@ -7418,6 +8698,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseRequireAccessDevicePostureR
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseRequireAccessDevicePostureRuleDevicePostureJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessApplicationPolicyDeleteResponse struct {
 	// UUID
 	ID   string                                             `json:"id"`
@@ -7434,6 +8718,10 @@ type zeroTrustAccessApplicationPolicyDeleteResponseJSON struct {
 
 func (r *ZeroTrustAccessApplicationPolicyDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustAccessApplicationPolicyGetResponse struct {
@@ -7502,6 +8790,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponse) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // A group of email addresses that can approve a temporary authentication request.
 type ZeroTrustAccessApplicationPolicyGetResponseApprovalGroup struct {
 	// The number of approvals needed to obtain access.
@@ -7526,6 +8818,10 @@ type zeroTrustAccessApplicationPolicyGetResponseApprovalGroupJSON struct {
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseApprovalGroup) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseApprovalGroupJSON) RawJSON() string {
+	return r.raw
 }
 
 // The action Access will take if a user matches this policy.
@@ -7587,6 +8883,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessEmailRule) Unma
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseExcludeAccessEmailRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessEmailRule) implementsZeroTrustAccessApplicationPolicyGetResponseExclude() {
 }
 
@@ -7609,6 +8909,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessEmailRuleEmail)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseExcludeAccessEmailRuleEmailJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an email address from a list.
 type ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessEmailListRule struct {
 	EmailList ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessEmailListRuleEmailList `json:"email_list,required"`
@@ -7626,6 +8930,10 @@ type zeroTrustAccessApplicationPolicyGetResponseExcludeAccessEmailListRuleJSON s
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessEmailListRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseExcludeAccessEmailListRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessEmailListRule) implementsZeroTrustAccessApplicationPolicyGetResponseExclude() {
@@ -7650,6 +8958,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessEmailListRuleEm
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseExcludeAccessEmailListRuleEmailListJSON) RawJSON() string {
+	return r.raw
+}
+
 // Match an entire email domain.
 type ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessDomainRule struct {
 	EmailDomain ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessDomainRuleEmailDomain `json:"email_domain,required"`
@@ -7667,6 +8979,10 @@ type zeroTrustAccessApplicationPolicyGetResponseExcludeAccessDomainRuleJSON stru
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessDomainRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseExcludeAccessDomainRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessDomainRule) implementsZeroTrustAccessApplicationPolicyGetResponseExclude() {
@@ -7691,6 +9007,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessDomainRuleEmail
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseExcludeAccessDomainRuleEmailDomainJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches everyone.
 type ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessEveryoneRule struct {
 	// An empty object which matches on all users.
@@ -7709,6 +9029,10 @@ type zeroTrustAccessApplicationPolicyGetResponseExcludeAccessEveryoneRuleJSON st
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessEveryoneRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseExcludeAccessEveryoneRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessEveryoneRule) implementsZeroTrustAccessApplicationPolicyGetResponseExclude() {
@@ -7733,6 +9057,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessIPRule) Unmarsh
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseExcludeAccessIPRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessIPRule) implementsZeroTrustAccessApplicationPolicyGetResponseExclude() {
 }
 
@@ -7755,6 +9083,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessIPRuleIP) Unmar
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseExcludeAccessIPRuleIPJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an IP address from a list.
 type ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessIPListRule struct {
 	IPList ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessIPListRuleIPList `json:"ip_list,required"`
@@ -7772,6 +9104,10 @@ type zeroTrustAccessApplicationPolicyGetResponseExcludeAccessIPListRuleJSON stru
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessIPListRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseExcludeAccessIPListRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessIPListRule) implementsZeroTrustAccessApplicationPolicyGetResponseExclude() {
@@ -7796,6 +9132,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessIPListRuleIPLis
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseExcludeAccessIPListRuleIPListJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches any valid client certificate.
 type ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessCertificateRule struct {
 	Certificate interface{}                                                                 `json:"certificate,required"`
@@ -7813,6 +9153,10 @@ type zeroTrustAccessApplicationPolicyGetResponseExcludeAccessCertificateRuleJSON
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessCertificateRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseExcludeAccessCertificateRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessCertificateRule) implementsZeroTrustAccessApplicationPolicyGetResponseExclude() {
@@ -7837,6 +9181,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessAccessGroupRule
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseExcludeAccessAccessGroupRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessAccessGroupRule) implementsZeroTrustAccessApplicationPolicyGetResponseExclude() {
 }
 
@@ -7859,6 +9207,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessAccessGroupRule
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseExcludeAccessAccessGroupRuleGroupJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an Azure group. Requires an Azure identity provider.
 type ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessAzureGroupRule struct {
 	AzureAd ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessAzureGroupRuleAzureAd `json:"azureAD,required"`
@@ -7876,6 +9228,10 @@ type zeroTrustAccessApplicationPolicyGetResponseExcludeAccessAzureGroupRuleJSON 
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessAzureGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseExcludeAccessAzureGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessAzureGroupRule) implementsZeroTrustAccessApplicationPolicyGetResponseExclude() {
@@ -7903,6 +9259,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessAzureGroupRuleA
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseExcludeAccessAzureGroupRuleAzureAdJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a Github organization. Requires a Github identity provider.
 type ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessGitHubOrganizationRule struct {
 	GitHubOrganization ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessGitHubOrganizationRuleGitHubOrganization `json:"github-organization,required"`
@@ -7920,6 +9280,10 @@ type zeroTrustAccessApplicationPolicyGetResponseExcludeAccessGitHubOrganizationR
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessGitHubOrganizationRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseExcludeAccessGitHubOrganizationRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessGitHubOrganizationRule) implementsZeroTrustAccessApplicationPolicyGetResponseExclude() {
@@ -7947,6 +9311,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessGitHubOrganizat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseExcludeAccessGitHubOrganizationRuleGitHubOrganizationJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a group in Google Workspace. Requires a Google Workspace identity
 // provider.
 type ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessGsuiteGroupRule struct {
@@ -7965,6 +9333,10 @@ type zeroTrustAccessApplicationPolicyGetResponseExcludeAccessGsuiteGroupRuleJSON
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessGsuiteGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseExcludeAccessGsuiteGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessGsuiteGroupRule) implementsZeroTrustAccessApplicationPolicyGetResponseExclude() {
@@ -7992,6 +9364,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessGsuiteGroupRule
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseExcludeAccessGsuiteGroupRuleGsuiteJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an Okta group. Requires an Okta identity provider.
 type ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessOktaGroupRule struct {
 	Okta ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessOktaGroupRuleOkta `json:"okta,required"`
@@ -8009,6 +9385,10 @@ type zeroTrustAccessApplicationPolicyGetResponseExcludeAccessOktaGroupRuleJSON s
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessOktaGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseExcludeAccessOktaGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessOktaGroupRule) implementsZeroTrustAccessApplicationPolicyGetResponseExclude() {
@@ -8036,6 +9416,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessOktaGroupRuleOk
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseExcludeAccessOktaGroupRuleOktaJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a SAML group. Requires a SAML identity provider.
 type ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessSamlGroupRule struct {
 	Saml ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessSamlGroupRuleSaml `json:"saml,required"`
@@ -8053,6 +9437,10 @@ type zeroTrustAccessApplicationPolicyGetResponseExcludeAccessSamlGroupRuleJSON s
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessSamlGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseExcludeAccessSamlGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessSamlGroupRule) implementsZeroTrustAccessApplicationPolicyGetResponseExclude() {
@@ -8080,6 +9468,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessSamlGroupRuleSa
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseExcludeAccessSamlGroupRuleSamlJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a specific Access Service Token
 type ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessServiceTokenRule struct {
 	ServiceToken ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessServiceTokenRuleServiceToken `json:"service_token,required"`
@@ -8097,6 +9489,10 @@ type zeroTrustAccessApplicationPolicyGetResponseExcludeAccessServiceTokenRuleJSO
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseExcludeAccessServiceTokenRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessServiceTokenRule) implementsZeroTrustAccessApplicationPolicyGetResponseExclude() {
@@ -8121,6 +9517,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessServiceTokenRul
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseExcludeAccessServiceTokenRuleServiceTokenJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches any valid Access Service Token
 type ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessAnyValidServiceTokenRule struct {
 	// An empty object which matches on all service tokens.
@@ -8139,6 +9539,10 @@ type zeroTrustAccessApplicationPolicyGetResponseExcludeAccessAnyValidServiceToke
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessAnyValidServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseExcludeAccessAnyValidServiceTokenRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessAnyValidServiceTokenRule) implementsZeroTrustAccessApplicationPolicyGetResponseExclude() {
@@ -8161,6 +9565,10 @@ type zeroTrustAccessApplicationPolicyGetResponseExcludeAccessExternalEvaluationR
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessExternalEvaluationRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseExcludeAccessExternalEvaluationRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessExternalEvaluationRule) implementsZeroTrustAccessApplicationPolicyGetResponseExclude() {
@@ -8189,6 +9597,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessExternalEvaluat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseExcludeAccessExternalEvaluationRuleExternalEvaluationJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a specific country
 type ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessCountryRule struct {
 	Geo  ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessCountryRuleGeo  `json:"geo,required"`
@@ -8206,6 +9618,10 @@ type zeroTrustAccessApplicationPolicyGetResponseExcludeAccessCountryRuleJSON str
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessCountryRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseExcludeAccessCountryRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessCountryRule) implementsZeroTrustAccessApplicationPolicyGetResponseExclude() {
@@ -8230,6 +9646,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessCountryRuleGeo)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseExcludeAccessCountryRuleGeoJSON) RawJSON() string {
+	return r.raw
+}
+
 // Enforce different MFA options
 type ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessAuthenticationMethodRule struct {
 	AuthMethod ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessAuthenticationMethodRuleAuthMethod `json:"auth_method,required"`
@@ -8247,6 +9667,10 @@ type zeroTrustAccessApplicationPolicyGetResponseExcludeAccessAuthenticationMetho
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessAuthenticationMethodRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseExcludeAccessAuthenticationMethodRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessAuthenticationMethodRule) implementsZeroTrustAccessApplicationPolicyGetResponseExclude() {
@@ -8271,6 +9695,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessAuthenticationM
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseExcludeAccessAuthenticationMethodRuleAuthMethodJSON) RawJSON() string {
+	return r.raw
+}
+
 // Enforces a device posture rule has run successfully
 type ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessDevicePostureRule struct {
 	DevicePosture ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessDevicePostureRuleDevicePosture `json:"device_posture,required"`
@@ -8288,6 +9716,10 @@ type zeroTrustAccessApplicationPolicyGetResponseExcludeAccessDevicePostureRuleJS
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessDevicePostureRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseExcludeAccessDevicePostureRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessDevicePostureRule) implementsZeroTrustAccessApplicationPolicyGetResponseExclude() {
@@ -8310,6 +9742,10 @@ type zeroTrustAccessApplicationPolicyGetResponseExcludeAccessDevicePostureRuleDe
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseExcludeAccessDevicePostureRuleDevicePosture) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseExcludeAccessDevicePostureRuleDevicePostureJSON) RawJSON() string {
+	return r.raw
 }
 
 // Matches a specific email.
@@ -8361,6 +9797,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessEmailRule) Unma
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseIncludeAccessEmailRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessEmailRule) implementsZeroTrustAccessApplicationPolicyGetResponseInclude() {
 }
 
@@ -8383,6 +9823,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessEmailRuleEmail)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseIncludeAccessEmailRuleEmailJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an email address from a list.
 type ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessEmailListRule struct {
 	EmailList ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessEmailListRuleEmailList `json:"email_list,required"`
@@ -8400,6 +9844,10 @@ type zeroTrustAccessApplicationPolicyGetResponseIncludeAccessEmailListRuleJSON s
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessEmailListRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseIncludeAccessEmailListRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessEmailListRule) implementsZeroTrustAccessApplicationPolicyGetResponseInclude() {
@@ -8424,6 +9872,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessEmailListRuleEm
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseIncludeAccessEmailListRuleEmailListJSON) RawJSON() string {
+	return r.raw
+}
+
 // Match an entire email domain.
 type ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessDomainRule struct {
 	EmailDomain ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessDomainRuleEmailDomain `json:"email_domain,required"`
@@ -8441,6 +9893,10 @@ type zeroTrustAccessApplicationPolicyGetResponseIncludeAccessDomainRuleJSON stru
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessDomainRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseIncludeAccessDomainRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessDomainRule) implementsZeroTrustAccessApplicationPolicyGetResponseInclude() {
@@ -8465,6 +9921,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessDomainRuleEmail
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseIncludeAccessDomainRuleEmailDomainJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches everyone.
 type ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessEveryoneRule struct {
 	// An empty object which matches on all users.
@@ -8483,6 +9943,10 @@ type zeroTrustAccessApplicationPolicyGetResponseIncludeAccessEveryoneRuleJSON st
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessEveryoneRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseIncludeAccessEveryoneRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessEveryoneRule) implementsZeroTrustAccessApplicationPolicyGetResponseInclude() {
@@ -8507,6 +9971,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessIPRule) Unmarsh
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseIncludeAccessIPRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessIPRule) implementsZeroTrustAccessApplicationPolicyGetResponseInclude() {
 }
 
@@ -8529,6 +9997,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessIPRuleIP) Unmar
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseIncludeAccessIPRuleIPJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an IP address from a list.
 type ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessIPListRule struct {
 	IPList ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessIPListRuleIPList `json:"ip_list,required"`
@@ -8546,6 +10018,10 @@ type zeroTrustAccessApplicationPolicyGetResponseIncludeAccessIPListRuleJSON stru
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessIPListRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseIncludeAccessIPListRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessIPListRule) implementsZeroTrustAccessApplicationPolicyGetResponseInclude() {
@@ -8570,6 +10046,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessIPListRuleIPLis
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseIncludeAccessIPListRuleIPListJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches any valid client certificate.
 type ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessCertificateRule struct {
 	Certificate interface{}                                                                 `json:"certificate,required"`
@@ -8587,6 +10067,10 @@ type zeroTrustAccessApplicationPolicyGetResponseIncludeAccessCertificateRuleJSON
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessCertificateRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseIncludeAccessCertificateRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessCertificateRule) implementsZeroTrustAccessApplicationPolicyGetResponseInclude() {
@@ -8611,6 +10095,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessAccessGroupRule
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseIncludeAccessAccessGroupRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessAccessGroupRule) implementsZeroTrustAccessApplicationPolicyGetResponseInclude() {
 }
 
@@ -8633,6 +10121,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessAccessGroupRule
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseIncludeAccessAccessGroupRuleGroupJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an Azure group. Requires an Azure identity provider.
 type ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessAzureGroupRule struct {
 	AzureAd ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessAzureGroupRuleAzureAd `json:"azureAD,required"`
@@ -8650,6 +10142,10 @@ type zeroTrustAccessApplicationPolicyGetResponseIncludeAccessAzureGroupRuleJSON 
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessAzureGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseIncludeAccessAzureGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessAzureGroupRule) implementsZeroTrustAccessApplicationPolicyGetResponseInclude() {
@@ -8677,6 +10173,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessAzureGroupRuleA
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseIncludeAccessAzureGroupRuleAzureAdJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a Github organization. Requires a Github identity provider.
 type ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessGitHubOrganizationRule struct {
 	GitHubOrganization ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessGitHubOrganizationRuleGitHubOrganization `json:"github-organization,required"`
@@ -8694,6 +10194,10 @@ type zeroTrustAccessApplicationPolicyGetResponseIncludeAccessGitHubOrganizationR
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessGitHubOrganizationRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseIncludeAccessGitHubOrganizationRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessGitHubOrganizationRule) implementsZeroTrustAccessApplicationPolicyGetResponseInclude() {
@@ -8721,6 +10225,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessGitHubOrganizat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseIncludeAccessGitHubOrganizationRuleGitHubOrganizationJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a group in Google Workspace. Requires a Google Workspace identity
 // provider.
 type ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessGsuiteGroupRule struct {
@@ -8739,6 +10247,10 @@ type zeroTrustAccessApplicationPolicyGetResponseIncludeAccessGsuiteGroupRuleJSON
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessGsuiteGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseIncludeAccessGsuiteGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessGsuiteGroupRule) implementsZeroTrustAccessApplicationPolicyGetResponseInclude() {
@@ -8766,6 +10278,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessGsuiteGroupRule
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseIncludeAccessGsuiteGroupRuleGsuiteJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an Okta group. Requires an Okta identity provider.
 type ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessOktaGroupRule struct {
 	Okta ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessOktaGroupRuleOkta `json:"okta,required"`
@@ -8783,6 +10299,10 @@ type zeroTrustAccessApplicationPolicyGetResponseIncludeAccessOktaGroupRuleJSON s
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessOktaGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseIncludeAccessOktaGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessOktaGroupRule) implementsZeroTrustAccessApplicationPolicyGetResponseInclude() {
@@ -8810,6 +10330,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessOktaGroupRuleOk
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseIncludeAccessOktaGroupRuleOktaJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a SAML group. Requires a SAML identity provider.
 type ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessSamlGroupRule struct {
 	Saml ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessSamlGroupRuleSaml `json:"saml,required"`
@@ -8827,6 +10351,10 @@ type zeroTrustAccessApplicationPolicyGetResponseIncludeAccessSamlGroupRuleJSON s
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessSamlGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseIncludeAccessSamlGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessSamlGroupRule) implementsZeroTrustAccessApplicationPolicyGetResponseInclude() {
@@ -8854,6 +10382,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessSamlGroupRuleSa
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseIncludeAccessSamlGroupRuleSamlJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a specific Access Service Token
 type ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessServiceTokenRule struct {
 	ServiceToken ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessServiceTokenRuleServiceToken `json:"service_token,required"`
@@ -8871,6 +10403,10 @@ type zeroTrustAccessApplicationPolicyGetResponseIncludeAccessServiceTokenRuleJSO
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseIncludeAccessServiceTokenRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessServiceTokenRule) implementsZeroTrustAccessApplicationPolicyGetResponseInclude() {
@@ -8895,6 +10431,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessServiceTokenRul
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseIncludeAccessServiceTokenRuleServiceTokenJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches any valid Access Service Token
 type ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessAnyValidServiceTokenRule struct {
 	// An empty object which matches on all service tokens.
@@ -8913,6 +10453,10 @@ type zeroTrustAccessApplicationPolicyGetResponseIncludeAccessAnyValidServiceToke
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessAnyValidServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseIncludeAccessAnyValidServiceTokenRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessAnyValidServiceTokenRule) implementsZeroTrustAccessApplicationPolicyGetResponseInclude() {
@@ -8935,6 +10479,10 @@ type zeroTrustAccessApplicationPolicyGetResponseIncludeAccessExternalEvaluationR
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessExternalEvaluationRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseIncludeAccessExternalEvaluationRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessExternalEvaluationRule) implementsZeroTrustAccessApplicationPolicyGetResponseInclude() {
@@ -8963,6 +10511,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessExternalEvaluat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseIncludeAccessExternalEvaluationRuleExternalEvaluationJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a specific country
 type ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessCountryRule struct {
 	Geo  ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessCountryRuleGeo  `json:"geo,required"`
@@ -8980,6 +10532,10 @@ type zeroTrustAccessApplicationPolicyGetResponseIncludeAccessCountryRuleJSON str
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessCountryRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseIncludeAccessCountryRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessCountryRule) implementsZeroTrustAccessApplicationPolicyGetResponseInclude() {
@@ -9004,6 +10560,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessCountryRuleGeo)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseIncludeAccessCountryRuleGeoJSON) RawJSON() string {
+	return r.raw
+}
+
 // Enforce different MFA options
 type ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessAuthenticationMethodRule struct {
 	AuthMethod ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessAuthenticationMethodRuleAuthMethod `json:"auth_method,required"`
@@ -9021,6 +10581,10 @@ type zeroTrustAccessApplicationPolicyGetResponseIncludeAccessAuthenticationMetho
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessAuthenticationMethodRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseIncludeAccessAuthenticationMethodRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessAuthenticationMethodRule) implementsZeroTrustAccessApplicationPolicyGetResponseInclude() {
@@ -9045,6 +10609,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessAuthenticationM
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseIncludeAccessAuthenticationMethodRuleAuthMethodJSON) RawJSON() string {
+	return r.raw
+}
+
 // Enforces a device posture rule has run successfully
 type ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessDevicePostureRule struct {
 	DevicePosture ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessDevicePostureRuleDevicePosture `json:"device_posture,required"`
@@ -9062,6 +10630,10 @@ type zeroTrustAccessApplicationPolicyGetResponseIncludeAccessDevicePostureRuleJS
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessDevicePostureRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseIncludeAccessDevicePostureRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessDevicePostureRule) implementsZeroTrustAccessApplicationPolicyGetResponseInclude() {
@@ -9084,6 +10656,10 @@ type zeroTrustAccessApplicationPolicyGetResponseIncludeAccessDevicePostureRuleDe
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseIncludeAccessDevicePostureRuleDevicePosture) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseIncludeAccessDevicePostureRuleDevicePostureJSON) RawJSON() string {
+	return r.raw
 }
 
 // Matches a specific email.
@@ -9135,6 +10711,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseRequireAccessEmailRule) Unma
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseRequireAccessEmailRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationPolicyGetResponseRequireAccessEmailRule) implementsZeroTrustAccessApplicationPolicyGetResponseRequire() {
 }
 
@@ -9157,6 +10737,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseRequireAccessEmailRuleEmail)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseRequireAccessEmailRuleEmailJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an email address from a list.
 type ZeroTrustAccessApplicationPolicyGetResponseRequireAccessEmailListRule struct {
 	EmailList ZeroTrustAccessApplicationPolicyGetResponseRequireAccessEmailListRuleEmailList `json:"email_list,required"`
@@ -9174,6 +10758,10 @@ type zeroTrustAccessApplicationPolicyGetResponseRequireAccessEmailListRuleJSON s
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseRequireAccessEmailListRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseRequireAccessEmailListRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseRequireAccessEmailListRule) implementsZeroTrustAccessApplicationPolicyGetResponseRequire() {
@@ -9198,6 +10786,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseRequireAccessEmailListRuleEm
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseRequireAccessEmailListRuleEmailListJSON) RawJSON() string {
+	return r.raw
+}
+
 // Match an entire email domain.
 type ZeroTrustAccessApplicationPolicyGetResponseRequireAccessDomainRule struct {
 	EmailDomain ZeroTrustAccessApplicationPolicyGetResponseRequireAccessDomainRuleEmailDomain `json:"email_domain,required"`
@@ -9215,6 +10807,10 @@ type zeroTrustAccessApplicationPolicyGetResponseRequireAccessDomainRuleJSON stru
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseRequireAccessDomainRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseRequireAccessDomainRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseRequireAccessDomainRule) implementsZeroTrustAccessApplicationPolicyGetResponseRequire() {
@@ -9239,6 +10835,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseRequireAccessDomainRuleEmail
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseRequireAccessDomainRuleEmailDomainJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches everyone.
 type ZeroTrustAccessApplicationPolicyGetResponseRequireAccessEveryoneRule struct {
 	// An empty object which matches on all users.
@@ -9257,6 +10857,10 @@ type zeroTrustAccessApplicationPolicyGetResponseRequireAccessEveryoneRuleJSON st
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseRequireAccessEveryoneRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseRequireAccessEveryoneRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseRequireAccessEveryoneRule) implementsZeroTrustAccessApplicationPolicyGetResponseRequire() {
@@ -9281,6 +10885,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseRequireAccessIPRule) Unmarsh
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseRequireAccessIPRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationPolicyGetResponseRequireAccessIPRule) implementsZeroTrustAccessApplicationPolicyGetResponseRequire() {
 }
 
@@ -9303,6 +10911,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseRequireAccessIPRuleIP) Unmar
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseRequireAccessIPRuleIPJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an IP address from a list.
 type ZeroTrustAccessApplicationPolicyGetResponseRequireAccessIPListRule struct {
 	IPList ZeroTrustAccessApplicationPolicyGetResponseRequireAccessIPListRuleIPList `json:"ip_list,required"`
@@ -9320,6 +10932,10 @@ type zeroTrustAccessApplicationPolicyGetResponseRequireAccessIPListRuleJSON stru
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseRequireAccessIPListRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseRequireAccessIPListRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseRequireAccessIPListRule) implementsZeroTrustAccessApplicationPolicyGetResponseRequire() {
@@ -9344,6 +10960,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseRequireAccessIPListRuleIPLis
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseRequireAccessIPListRuleIPListJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches any valid client certificate.
 type ZeroTrustAccessApplicationPolicyGetResponseRequireAccessCertificateRule struct {
 	Certificate interface{}                                                                 `json:"certificate,required"`
@@ -9361,6 +10981,10 @@ type zeroTrustAccessApplicationPolicyGetResponseRequireAccessCertificateRuleJSON
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseRequireAccessCertificateRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseRequireAccessCertificateRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseRequireAccessCertificateRule) implementsZeroTrustAccessApplicationPolicyGetResponseRequire() {
@@ -9385,6 +11009,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseRequireAccessAccessGroupRule
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseRequireAccessAccessGroupRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationPolicyGetResponseRequireAccessAccessGroupRule) implementsZeroTrustAccessApplicationPolicyGetResponseRequire() {
 }
 
@@ -9407,6 +11035,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseRequireAccessAccessGroupRule
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseRequireAccessAccessGroupRuleGroupJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an Azure group. Requires an Azure identity provider.
 type ZeroTrustAccessApplicationPolicyGetResponseRequireAccessAzureGroupRule struct {
 	AzureAd ZeroTrustAccessApplicationPolicyGetResponseRequireAccessAzureGroupRuleAzureAd `json:"azureAD,required"`
@@ -9424,6 +11056,10 @@ type zeroTrustAccessApplicationPolicyGetResponseRequireAccessAzureGroupRuleJSON 
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseRequireAccessAzureGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseRequireAccessAzureGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseRequireAccessAzureGroupRule) implementsZeroTrustAccessApplicationPolicyGetResponseRequire() {
@@ -9451,6 +11087,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseRequireAccessAzureGroupRuleA
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseRequireAccessAzureGroupRuleAzureAdJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a Github organization. Requires a Github identity provider.
 type ZeroTrustAccessApplicationPolicyGetResponseRequireAccessGitHubOrganizationRule struct {
 	GitHubOrganization ZeroTrustAccessApplicationPolicyGetResponseRequireAccessGitHubOrganizationRuleGitHubOrganization `json:"github-organization,required"`
@@ -9468,6 +11108,10 @@ type zeroTrustAccessApplicationPolicyGetResponseRequireAccessGitHubOrganizationR
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseRequireAccessGitHubOrganizationRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseRequireAccessGitHubOrganizationRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseRequireAccessGitHubOrganizationRule) implementsZeroTrustAccessApplicationPolicyGetResponseRequire() {
@@ -9495,6 +11139,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseRequireAccessGitHubOrganizat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseRequireAccessGitHubOrganizationRuleGitHubOrganizationJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a group in Google Workspace. Requires a Google Workspace identity
 // provider.
 type ZeroTrustAccessApplicationPolicyGetResponseRequireAccessGsuiteGroupRule struct {
@@ -9513,6 +11161,10 @@ type zeroTrustAccessApplicationPolicyGetResponseRequireAccessGsuiteGroupRuleJSON
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseRequireAccessGsuiteGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseRequireAccessGsuiteGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseRequireAccessGsuiteGroupRule) implementsZeroTrustAccessApplicationPolicyGetResponseRequire() {
@@ -9540,6 +11192,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseRequireAccessGsuiteGroupRule
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseRequireAccessGsuiteGroupRuleGsuiteJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches an Okta group. Requires an Okta identity provider.
 type ZeroTrustAccessApplicationPolicyGetResponseRequireAccessOktaGroupRule struct {
 	Okta ZeroTrustAccessApplicationPolicyGetResponseRequireAccessOktaGroupRuleOkta `json:"okta,required"`
@@ -9557,6 +11213,10 @@ type zeroTrustAccessApplicationPolicyGetResponseRequireAccessOktaGroupRuleJSON s
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseRequireAccessOktaGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseRequireAccessOktaGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseRequireAccessOktaGroupRule) implementsZeroTrustAccessApplicationPolicyGetResponseRequire() {
@@ -9584,6 +11244,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseRequireAccessOktaGroupRuleOk
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseRequireAccessOktaGroupRuleOktaJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a SAML group. Requires a SAML identity provider.
 type ZeroTrustAccessApplicationPolicyGetResponseRequireAccessSamlGroupRule struct {
 	Saml ZeroTrustAccessApplicationPolicyGetResponseRequireAccessSamlGroupRuleSaml `json:"saml,required"`
@@ -9601,6 +11265,10 @@ type zeroTrustAccessApplicationPolicyGetResponseRequireAccessSamlGroupRuleJSON s
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseRequireAccessSamlGroupRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseRequireAccessSamlGroupRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseRequireAccessSamlGroupRule) implementsZeroTrustAccessApplicationPolicyGetResponseRequire() {
@@ -9628,6 +11296,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseRequireAccessSamlGroupRuleSa
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseRequireAccessSamlGroupRuleSamlJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a specific Access Service Token
 type ZeroTrustAccessApplicationPolicyGetResponseRequireAccessServiceTokenRule struct {
 	ServiceToken ZeroTrustAccessApplicationPolicyGetResponseRequireAccessServiceTokenRuleServiceToken `json:"service_token,required"`
@@ -9645,6 +11317,10 @@ type zeroTrustAccessApplicationPolicyGetResponseRequireAccessServiceTokenRuleJSO
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseRequireAccessServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseRequireAccessServiceTokenRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseRequireAccessServiceTokenRule) implementsZeroTrustAccessApplicationPolicyGetResponseRequire() {
@@ -9669,6 +11345,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseRequireAccessServiceTokenRul
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseRequireAccessServiceTokenRuleServiceTokenJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches any valid Access Service Token
 type ZeroTrustAccessApplicationPolicyGetResponseRequireAccessAnyValidServiceTokenRule struct {
 	// An empty object which matches on all service tokens.
@@ -9687,6 +11367,10 @@ type zeroTrustAccessApplicationPolicyGetResponseRequireAccessAnyValidServiceToke
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseRequireAccessAnyValidServiceTokenRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseRequireAccessAnyValidServiceTokenRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseRequireAccessAnyValidServiceTokenRule) implementsZeroTrustAccessApplicationPolicyGetResponseRequire() {
@@ -9709,6 +11393,10 @@ type zeroTrustAccessApplicationPolicyGetResponseRequireAccessExternalEvaluationR
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseRequireAccessExternalEvaluationRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseRequireAccessExternalEvaluationRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseRequireAccessExternalEvaluationRule) implementsZeroTrustAccessApplicationPolicyGetResponseRequire() {
@@ -9737,6 +11425,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseRequireAccessExternalEvaluat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseRequireAccessExternalEvaluationRuleExternalEvaluationJSON) RawJSON() string {
+	return r.raw
+}
+
 // Matches a specific country
 type ZeroTrustAccessApplicationPolicyGetResponseRequireAccessCountryRule struct {
 	Geo  ZeroTrustAccessApplicationPolicyGetResponseRequireAccessCountryRuleGeo  `json:"geo,required"`
@@ -9754,6 +11446,10 @@ type zeroTrustAccessApplicationPolicyGetResponseRequireAccessCountryRuleJSON str
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseRequireAccessCountryRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseRequireAccessCountryRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseRequireAccessCountryRule) implementsZeroTrustAccessApplicationPolicyGetResponseRequire() {
@@ -9778,6 +11474,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseRequireAccessCountryRuleGeo)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseRequireAccessCountryRuleGeoJSON) RawJSON() string {
+	return r.raw
+}
+
 // Enforce different MFA options
 type ZeroTrustAccessApplicationPolicyGetResponseRequireAccessAuthenticationMethodRule struct {
 	AuthMethod ZeroTrustAccessApplicationPolicyGetResponseRequireAccessAuthenticationMethodRuleAuthMethod `json:"auth_method,required"`
@@ -9795,6 +11495,10 @@ type zeroTrustAccessApplicationPolicyGetResponseRequireAccessAuthenticationMetho
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseRequireAccessAuthenticationMethodRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseRequireAccessAuthenticationMethodRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseRequireAccessAuthenticationMethodRule) implementsZeroTrustAccessApplicationPolicyGetResponseRequire() {
@@ -9819,6 +11523,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseRequireAccessAuthenticationM
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseRequireAccessAuthenticationMethodRuleAuthMethodJSON) RawJSON() string {
+	return r.raw
+}
+
 // Enforces a device posture rule has run successfully
 type ZeroTrustAccessApplicationPolicyGetResponseRequireAccessDevicePostureRule struct {
 	DevicePosture ZeroTrustAccessApplicationPolicyGetResponseRequireAccessDevicePostureRuleDevicePosture `json:"device_posture,required"`
@@ -9836,6 +11544,10 @@ type zeroTrustAccessApplicationPolicyGetResponseRequireAccessDevicePostureRuleJS
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseRequireAccessDevicePostureRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseRequireAccessDevicePostureRuleJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationPolicyGetResponseRequireAccessDevicePostureRule) implementsZeroTrustAccessApplicationPolicyGetResponseRequire() {
@@ -9858,6 +11570,10 @@ type zeroTrustAccessApplicationPolicyGetResponseRequireAccessDevicePostureRuleDe
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseRequireAccessDevicePostureRuleDevicePosture) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseRequireAccessDevicePostureRuleDevicePostureJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustAccessApplicationPolicyNewParams struct {
@@ -11190,6 +12906,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseEnvelope) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessApplicationPolicyNewResponseEnvelopeErrors struct {
 	Code    int64                                                         `json:"code,required"`
 	Message string                                                        `json:"message,required"`
@@ -11210,6 +12930,10 @@ func (r *ZeroTrustAccessApplicationPolicyNewResponseEnvelopeErrors) UnmarshalJSO
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessApplicationPolicyNewResponseEnvelopeMessages struct {
 	Code    int64                                                           `json:"code,required"`
 	Message string                                                          `json:"message,required"`
@@ -11228,6 +12952,10 @@ type zeroTrustAccessApplicationPolicyNewResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustAccessApplicationPolicyNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -12570,6 +14298,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseEnvelope) UnmarshalJSON(d
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessApplicationPolicyUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                            `json:"code,required"`
 	Message string                                                           `json:"message,required"`
@@ -12590,6 +14322,10 @@ func (r *ZeroTrustAccessApplicationPolicyUpdateResponseEnvelopeErrors) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessApplicationPolicyUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                              `json:"code,required"`
 	Message string                                                             `json:"message,required"`
@@ -12608,6 +14344,10 @@ type zeroTrustAccessApplicationPolicyUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustAccessApplicationPolicyUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -12650,6 +14390,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseEnvelope) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessApplicationPolicyListResponseEnvelopeErrors struct {
 	Code    int64                                                          `json:"code,required"`
 	Message string                                                         `json:"message,required"`
@@ -12670,6 +14414,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseEnvelopeErrors) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessApplicationPolicyListResponseEnvelopeMessages struct {
 	Code    int64                                                            `json:"code,required"`
 	Message string                                                           `json:"message,required"`
@@ -12688,6 +14436,10 @@ type zeroTrustAccessApplicationPolicyListResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustAccessApplicationPolicyListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -12725,6 +14477,10 @@ func (r *ZeroTrustAccessApplicationPolicyListResponseEnvelopeResultInfo) Unmarsh
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessApplicationPolicyDeleteParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
@@ -12756,6 +14512,10 @@ func (r *ZeroTrustAccessApplicationPolicyDeleteResponseEnvelope) UnmarshalJSON(d
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessApplicationPolicyDeleteResponseEnvelopeErrors struct {
 	Code    int64                                                            `json:"code,required"`
 	Message string                                                           `json:"message,required"`
@@ -12776,6 +14536,10 @@ func (r *ZeroTrustAccessApplicationPolicyDeleteResponseEnvelopeErrors) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessApplicationPolicyDeleteResponseEnvelopeMessages struct {
 	Code    int64                                                              `json:"code,required"`
 	Message string                                                             `json:"message,required"`
@@ -12794,6 +14558,10 @@ type zeroTrustAccessApplicationPolicyDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustAccessApplicationPolicyDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -12834,6 +14602,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseEnvelope) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessApplicationPolicyGetResponseEnvelopeErrors struct {
 	Code    int64                                                         `json:"code,required"`
 	Message string                                                        `json:"message,required"`
@@ -12854,6 +14626,10 @@ func (r *ZeroTrustAccessApplicationPolicyGetResponseEnvelopeErrors) UnmarshalJSO
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationPolicyGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessApplicationPolicyGetResponseEnvelopeMessages struct {
 	Code    int64                                                           `json:"code,required"`
 	Message string                                                          `json:"message,required"`
@@ -12872,6 +14648,10 @@ type zeroTrustAccessApplicationPolicyGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustAccessApplicationPolicyGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationPolicyGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

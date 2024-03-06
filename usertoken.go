@@ -146,6 +146,10 @@ func (r *UserTokenNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userTokenNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Union satisfied by [UserTokenUpdateResponseUnknown] or [shared.UnionString].
 type UserTokenUpdateResponse interface {
 	ImplementsUserTokenUpdateResponse()
@@ -180,6 +184,10 @@ type userTokenDeleteResponseJSON struct {
 
 func (r *UserTokenDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userTokenDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Union satisfied by [UserTokenGetResponseUnknown] or [shared.UnionString].
@@ -224,6 +232,10 @@ type userTokenVerifyResponseJSON struct {
 
 func (r *UserTokenVerifyResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userTokenVerifyResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Status of the token.
@@ -327,6 +339,10 @@ func (r *UserTokenNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userTokenNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserTokenNewResponseEnvelopeErrors struct {
 	Code    int64                                  `json:"code,required"`
 	Message string                                 `json:"message,required"`
@@ -346,6 +362,10 @@ func (r *UserTokenNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userTokenNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserTokenNewResponseEnvelopeMessages struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -363,6 +383,10 @@ type userTokenNewResponseEnvelopeMessagesJSON struct {
 
 func (r *UserTokenNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userTokenNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -475,6 +499,10 @@ func (r *UserTokenUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userTokenUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserTokenUpdateResponseEnvelopeErrors struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -494,6 +522,10 @@ func (r *UserTokenUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userTokenUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserTokenUpdateResponseEnvelopeMessages struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -511,6 +543,10 @@ type userTokenUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *UserTokenUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userTokenUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -569,6 +605,10 @@ func (r *UserTokenDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userTokenDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserTokenDeleteResponseEnvelopeErrors struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -588,6 +628,10 @@ func (r *UserTokenDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userTokenDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserTokenDeleteResponseEnvelopeMessages struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -605,6 +649,10 @@ type userTokenDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *UserTokenDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userTokenDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -638,6 +686,10 @@ func (r *UserTokenGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userTokenGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserTokenGetResponseEnvelopeErrors struct {
 	Code    int64                                  `json:"code,required"`
 	Message string                                 `json:"message,required"`
@@ -657,6 +709,10 @@ func (r *UserTokenGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userTokenGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserTokenGetResponseEnvelopeMessages struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -674,6 +730,10 @@ type userTokenGetResponseEnvelopeMessagesJSON struct {
 
 func (r *UserTokenGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userTokenGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -707,6 +767,10 @@ func (r *UserTokenVerifyResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userTokenVerifyResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserTokenVerifyResponseEnvelopeErrors struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -726,6 +790,10 @@ func (r *UserTokenVerifyResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userTokenVerifyResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserTokenVerifyResponseEnvelopeMessages struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -743,6 +811,10 @@ type userTokenVerifyResponseEnvelopeMessagesJSON struct {
 
 func (r *UserTokenVerifyResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userTokenVerifyResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

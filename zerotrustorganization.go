@@ -179,6 +179,10 @@ func (r *ZeroTrustOrganizationNewResponse) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustOrganizationNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustOrganizationNewResponseCustomPages struct {
 	// The uid of the custom page to use when a user is denied access after failing a
 	// non-identity rule.
@@ -199,6 +203,10 @@ type zeroTrustOrganizationNewResponseCustomPagesJSON struct {
 
 func (r *ZeroTrustOrganizationNewResponseCustomPages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustOrganizationNewResponseCustomPagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustOrganizationNewResponseLoginDesign struct {
@@ -229,6 +237,10 @@ type zeroTrustOrganizationNewResponseLoginDesignJSON struct {
 
 func (r *ZeroTrustOrganizationNewResponseLoginDesign) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustOrganizationNewResponseLoginDesignJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustOrganizationUpdateResponse struct {
@@ -290,6 +302,10 @@ func (r *ZeroTrustOrganizationUpdateResponse) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustOrganizationUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustOrganizationUpdateResponseCustomPages struct {
 	// The uid of the custom page to use when a user is denied access after failing a
 	// non-identity rule.
@@ -310,6 +326,10 @@ type zeroTrustOrganizationUpdateResponseCustomPagesJSON struct {
 
 func (r *ZeroTrustOrganizationUpdateResponseCustomPages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustOrganizationUpdateResponseCustomPagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustOrganizationUpdateResponseLoginDesign struct {
@@ -340,6 +360,10 @@ type zeroTrustOrganizationUpdateResponseLoginDesignJSON struct {
 
 func (r *ZeroTrustOrganizationUpdateResponseLoginDesign) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustOrganizationUpdateResponseLoginDesignJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustOrganizationListResponse struct {
@@ -401,6 +425,10 @@ func (r *ZeroTrustOrganizationListResponse) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustOrganizationListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustOrganizationListResponseCustomPages struct {
 	// The uid of the custom page to use when a user is denied access after failing a
 	// non-identity rule.
@@ -421,6 +449,10 @@ type zeroTrustOrganizationListResponseCustomPagesJSON struct {
 
 func (r *ZeroTrustOrganizationListResponseCustomPages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustOrganizationListResponseCustomPagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustOrganizationListResponseLoginDesign struct {
@@ -451,6 +483,10 @@ type zeroTrustOrganizationListResponseLoginDesignJSON struct {
 
 func (r *ZeroTrustOrganizationListResponseLoginDesign) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustOrganizationListResponseLoginDesignJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustOrganizationRevokeUsersResponse bool
@@ -540,6 +576,10 @@ func (r *ZeroTrustOrganizationNewResponseEnvelope) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustOrganizationNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustOrganizationNewResponseEnvelopeErrors struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -559,6 +599,10 @@ func (r *ZeroTrustOrganizationNewResponseEnvelopeErrors) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustOrganizationNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustOrganizationNewResponseEnvelopeMessages struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -576,6 +620,10 @@ type zeroTrustOrganizationNewResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustOrganizationNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustOrganizationNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -678,6 +726,10 @@ func (r *ZeroTrustOrganizationUpdateResponseEnvelope) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustOrganizationUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustOrganizationUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -697,6 +749,10 @@ func (r *ZeroTrustOrganizationUpdateResponseEnvelopeErrors) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustOrganizationUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustOrganizationUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -714,6 +770,10 @@ type zeroTrustOrganizationUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustOrganizationUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustOrganizationUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -754,6 +814,10 @@ func (r *ZeroTrustOrganizationListResponseEnvelope) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustOrganizationListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustOrganizationListResponseEnvelopeErrors struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -773,6 +837,10 @@ func (r *ZeroTrustOrganizationListResponseEnvelopeErrors) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustOrganizationListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustOrganizationListResponseEnvelopeMessages struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -790,6 +858,10 @@ type zeroTrustOrganizationListResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustOrganizationListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustOrganizationListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -829,6 +901,10 @@ type zeroTrustOrganizationRevokeUsersResponseEnvelopeJSON struct {
 
 func (r *ZeroTrustOrganizationRevokeUsersResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustOrganizationRevokeUsersResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustOrganizationRevokeUsersResponseEnvelopeSuccess bool

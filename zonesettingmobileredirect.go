@@ -96,6 +96,10 @@ func (r *ZoneSettingMobileRedirectEditResponse) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingMobileRedirectEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Identifier of the zone setting.
 type ZoneSettingMobileRedirectEditResponseID string
 
@@ -128,6 +132,10 @@ type zoneSettingMobileRedirectEditResponseValueJSON struct {
 
 func (r *ZoneSettingMobileRedirectEditResponseValue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingMobileRedirectEditResponseValueJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether or not mobile redirect is enabled.
@@ -179,6 +187,10 @@ func (r *ZoneSettingMobileRedirectGetResponse) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingMobileRedirectGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Identifier of the zone setting.
 type ZoneSettingMobileRedirectGetResponseID string
 
@@ -211,6 +223,10 @@ type zoneSettingMobileRedirectGetResponseValueJSON struct {
 
 func (r *ZoneSettingMobileRedirectGetResponseValue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingMobileRedirectGetResponseValueJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether or not mobile redirect is enabled.
@@ -293,6 +309,10 @@ func (r *ZoneSettingMobileRedirectEditResponseEnvelope) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingMobileRedirectEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingMobileRedirectEditResponseEnvelopeErrors struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -312,6 +332,10 @@ func (r *ZoneSettingMobileRedirectEditResponseEnvelopeErrors) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingMobileRedirectEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingMobileRedirectEditResponseEnvelopeMessages struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -329,6 +353,10 @@ type zoneSettingMobileRedirectEditResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingMobileRedirectEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingMobileRedirectEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneSettingMobileRedirectGetParams struct {
@@ -364,6 +392,10 @@ func (r *ZoneSettingMobileRedirectGetResponseEnvelope) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingMobileRedirectGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingMobileRedirectGetResponseEnvelopeErrors struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -383,6 +415,10 @@ func (r *ZoneSettingMobileRedirectGetResponseEnvelopeErrors) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingMobileRedirectGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingMobileRedirectGetResponseEnvelopeMessages struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -400,4 +436,8 @@ type zoneSettingMobileRedirectGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingMobileRedirectGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingMobileRedirectGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }

@@ -94,6 +94,10 @@ func (r *ZoneSettingOriginErrorPagePassThruEditResponse) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingOriginErrorPagePassThruEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // ID of the zone setting.
 type ZoneSettingOriginErrorPagePassThruEditResponseID string
 
@@ -147,6 +151,10 @@ type zoneSettingOriginErrorPagePassThruGetResponseJSON struct {
 
 func (r *ZoneSettingOriginErrorPagePassThruGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingOriginErrorPagePassThruGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // ID of the zone setting.
@@ -219,6 +227,10 @@ func (r *ZoneSettingOriginErrorPagePassThruEditResponseEnvelope) UnmarshalJSON(d
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingOriginErrorPagePassThruEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingOriginErrorPagePassThruEditResponseEnvelopeErrors struct {
 	Code    int64                                                            `json:"code,required"`
 	Message string                                                           `json:"message,required"`
@@ -239,6 +251,10 @@ func (r *ZoneSettingOriginErrorPagePassThruEditResponseEnvelopeErrors) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingOriginErrorPagePassThruEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingOriginErrorPagePassThruEditResponseEnvelopeMessages struct {
 	Code    int64                                                              `json:"code,required"`
 	Message string                                                             `json:"message,required"`
@@ -257,6 +273,10 @@ type zoneSettingOriginErrorPagePassThruEditResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingOriginErrorPagePassThruEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingOriginErrorPagePassThruEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneSettingOriginErrorPagePassThruGetParams struct {
@@ -291,6 +311,10 @@ func (r *ZoneSettingOriginErrorPagePassThruGetResponseEnvelope) UnmarshalJSON(da
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingOriginErrorPagePassThruGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingOriginErrorPagePassThruGetResponseEnvelopeErrors struct {
 	Code    int64                                                           `json:"code,required"`
 	Message string                                                          `json:"message,required"`
@@ -311,6 +335,10 @@ func (r *ZoneSettingOriginErrorPagePassThruGetResponseEnvelopeErrors) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingOriginErrorPagePassThruGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingOriginErrorPagePassThruGetResponseEnvelopeMessages struct {
 	Code    int64                                                             `json:"code,required"`
 	Message string                                                            `json:"message,required"`
@@ -329,4 +357,8 @@ type zoneSettingOriginErrorPagePassThruGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingOriginErrorPagePassThruGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingOriginErrorPagePassThruGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }

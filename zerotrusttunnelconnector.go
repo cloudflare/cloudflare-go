@@ -84,6 +84,10 @@ func (r *ZeroTrustTunnelConnectorGetResponse) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustTunnelConnectorGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustTunnelConnectorGetResponseConn struct {
 	// UUID of the Cloudflare Tunnel connection.
 	ID string `json:"id"`
@@ -126,6 +130,10 @@ func (r *ZeroTrustTunnelConnectorGetResponseConn) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustTunnelConnectorGetResponseConnJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustTunnelConnectorGetParams struct {
 	// Cloudflare account ID
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -157,6 +165,10 @@ func (r *ZeroTrustTunnelConnectorGetResponseEnvelope) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustTunnelConnectorGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustTunnelConnectorGetResponseEnvelopeErrors struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -176,6 +188,10 @@ func (r *ZeroTrustTunnelConnectorGetResponseEnvelopeErrors) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustTunnelConnectorGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustTunnelConnectorGetResponseEnvelopeMessages struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -193,6 +209,10 @@ type zeroTrustTunnelConnectorGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustTunnelConnectorGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustTunnelConnectorGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

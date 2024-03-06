@@ -121,6 +121,10 @@ func (r *IntelMiscategorizationNewResponseEnvelope) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r intelMiscategorizationNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type IntelMiscategorizationNewResponseEnvelopeErrors struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -140,6 +144,10 @@ func (r *IntelMiscategorizationNewResponseEnvelopeErrors) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r intelMiscategorizationNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type IntelMiscategorizationNewResponseEnvelopeMessages struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -157,6 +165,10 @@ type intelMiscategorizationNewResponseEnvelopeMessagesJSON struct {
 
 func (r *IntelMiscategorizationNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r intelMiscategorizationNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

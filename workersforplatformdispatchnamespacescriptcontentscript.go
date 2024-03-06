@@ -104,6 +104,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentScriptUpdateResponse) U
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptContentScriptUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // A reference to a script that will consume logs from the attached Worker.
 type WorkersForPlatformDispatchNamespaceScriptContentScriptUpdateResponseTailConsumer struct {
 	// Name of Worker that is to be the consumer.
@@ -128,6 +132,10 @@ type workersForPlatformDispatchNamespaceScriptContentScriptUpdateResponseTailCon
 
 func (r *WorkersForPlatformDispatchNamespaceScriptContentScriptUpdateResponseTailConsumer) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workersForPlatformDispatchNamespaceScriptContentScriptUpdateResponseTailConsumerJSON) RawJSON() string {
+	return r.raw
 }
 
 type WorkersForPlatformDispatchNamespaceScriptContentScriptUpdateParams struct {
@@ -200,6 +208,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentScriptUpdateResponseEnv
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptContentScriptUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkersForPlatformDispatchNamespaceScriptContentScriptUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                                                  `json:"code,required"`
 	Message string                                                                                 `json:"message,required"`
@@ -220,6 +232,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentScriptUpdateResponseEnv
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptContentScriptUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkersForPlatformDispatchNamespaceScriptContentScriptUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                                                    `json:"code,required"`
 	Message string                                                                                   `json:"message,required"`
@@ -238,6 +254,10 @@ type workersForPlatformDispatchNamespaceScriptContentScriptUpdateResponseEnvelop
 
 func (r *WorkersForPlatformDispatchNamespaceScriptContentScriptUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workersForPlatformDispatchNamespaceScriptContentScriptUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

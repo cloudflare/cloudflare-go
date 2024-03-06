@@ -96,6 +96,10 @@ func (r *RadarAttackLayer3TopAttacksResponse) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer3TopAttacksResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer3TopAttacksResponseMeta struct {
 	DateRange      []RadarAttackLayer3TopAttacksResponseMetaDateRange    `json:"dateRange,required"`
 	LastUpdated    string                                                `json:"lastUpdated,required"`
@@ -115,6 +119,10 @@ type radarAttackLayer3TopAttacksResponseMetaJSON struct {
 
 func (r *RadarAttackLayer3TopAttacksResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAttackLayer3TopAttacksResponseMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarAttackLayer3TopAttacksResponseMetaDateRange struct {
@@ -138,6 +146,10 @@ func (r *RadarAttackLayer3TopAttacksResponseMetaDateRange) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer3TopAttacksResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer3TopAttacksResponseMetaConfidenceInfo struct {
 	Annotations []RadarAttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                             `json:"level"`
@@ -155,6 +167,10 @@ type radarAttackLayer3TopAttacksResponseMetaConfidenceInfoJSON struct {
 
 func (r *RadarAttackLayer3TopAttacksResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAttackLayer3TopAttacksResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarAttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotation struct {
@@ -187,6 +203,10 @@ func (r *RadarAttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotation) Unmars
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer3TopAttacksResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer3TopAttacksResponseTop0 struct {
 	OriginCountryAlpha2 string                                      `json:"originCountryAlpha2,required"`
 	OriginCountryName   string                                      `json:"originCountryName,required"`
@@ -208,6 +228,10 @@ func (r *RadarAttackLayer3TopAttacksResponseTop0) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer3TopAttacksResponseTop0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer3TopIndustryResponse struct {
 	Meta RadarAttackLayer3TopIndustryResponseMeta   `json:"meta,required"`
 	Top0 []RadarAttackLayer3TopIndustryResponseTop0 `json:"top_0,required"`
@@ -225,6 +249,10 @@ type radarAttackLayer3TopIndustryResponseJSON struct {
 
 func (r *RadarAttackLayer3TopIndustryResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAttackLayer3TopIndustryResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarAttackLayer3TopIndustryResponseMeta struct {
@@ -248,6 +276,10 @@ func (r *RadarAttackLayer3TopIndustryResponseMeta) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer3TopIndustryResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer3TopIndustryResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
@@ -269,6 +301,10 @@ func (r *RadarAttackLayer3TopIndustryResponseMetaDateRange) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer3TopIndustryResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer3TopIndustryResponseMetaConfidenceInfo struct {
 	Annotations []RadarAttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                              `json:"level"`
@@ -286,6 +322,10 @@ type radarAttackLayer3TopIndustryResponseMetaConfidenceInfoJSON struct {
 
 func (r *RadarAttackLayer3TopIndustryResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAttackLayer3TopIndustryResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarAttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotation struct {
@@ -318,6 +358,10 @@ func (r *RadarAttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotation) Unmar
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer3TopIndustryResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer3TopIndustryResponseTop0 struct {
 	Name  string                                       `json:"name,required"`
 	Value string                                       `json:"value,required"`
@@ -337,6 +381,10 @@ func (r *RadarAttackLayer3TopIndustryResponseTop0) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer3TopIndustryResponseTop0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer3TopVerticalResponse struct {
 	Meta RadarAttackLayer3TopVerticalResponseMeta   `json:"meta,required"`
 	Top0 []RadarAttackLayer3TopVerticalResponseTop0 `json:"top_0,required"`
@@ -354,6 +402,10 @@ type radarAttackLayer3TopVerticalResponseJSON struct {
 
 func (r *RadarAttackLayer3TopVerticalResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAttackLayer3TopVerticalResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarAttackLayer3TopVerticalResponseMeta struct {
@@ -377,6 +429,10 @@ func (r *RadarAttackLayer3TopVerticalResponseMeta) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer3TopVerticalResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer3TopVerticalResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
@@ -398,6 +454,10 @@ func (r *RadarAttackLayer3TopVerticalResponseMetaDateRange) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer3TopVerticalResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer3TopVerticalResponseMetaConfidenceInfo struct {
 	Annotations []RadarAttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                              `json:"level"`
@@ -415,6 +475,10 @@ type radarAttackLayer3TopVerticalResponseMetaConfidenceInfoJSON struct {
 
 func (r *RadarAttackLayer3TopVerticalResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAttackLayer3TopVerticalResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarAttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotation struct {
@@ -447,6 +511,10 @@ func (r *RadarAttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotation) Unmar
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer3TopVerticalResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer3TopVerticalResponseTop0 struct {
 	Name  string                                       `json:"name,required"`
 	Value string                                       `json:"value,required"`
@@ -464,6 +532,10 @@ type radarAttackLayer3TopVerticalResponseTop0JSON struct {
 
 func (r *RadarAttackLayer3TopVerticalResponseTop0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAttackLayer3TopVerticalResponseTop0JSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarAttackLayer3TopAttacksParams struct {
@@ -584,6 +656,10 @@ func (r *RadarAttackLayer3TopAttacksResponseEnvelope) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer3TopAttacksResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer3TopIndustryParams struct {
 	// Array of comma separated list of continents (alpha-2 continent codes). Start
 	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
@@ -685,6 +761,10 @@ func (r *RadarAttackLayer3TopIndustryResponseEnvelope) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer3TopIndustryResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer3TopVerticalParams struct {
 	// Array of comma separated list of continents (alpha-2 continent codes). Start
 	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
@@ -784,4 +864,8 @@ type radarAttackLayer3TopVerticalResponseEnvelopeJSON struct {
 
 func (r *RadarAttackLayer3TopVerticalResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAttackLayer3TopVerticalResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

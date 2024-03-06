@@ -156,6 +156,10 @@ func (r *DNSSECEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnssecEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Status of DNSSEC, based on user-desired state and presence of necessary records.
 type DNSSECEditResponseStatus string
 
@@ -234,6 +238,10 @@ func (r *DNSSECGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnssecGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Status of DNSSEC, based on user-desired state and presence of necessary records.
 type DNSSECGetResponseStatus string
 
@@ -274,6 +282,10 @@ func (r *DNSSECDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnssecDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSSECDeleteResponseEnvelopeErrors struct {
 	Code    int64                                  `json:"code,required"`
 	Message string                                 `json:"message,required"`
@@ -293,6 +305,10 @@ func (r *DNSSECDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnssecDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSSECDeleteResponseEnvelopeMessages struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -310,6 +326,10 @@ type dnssecDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *DNSSECDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnssecDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -379,6 +399,10 @@ func (r *DNSSECEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnssecEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSSECEditResponseEnvelopeErrors struct {
 	Code    int64                                `json:"code,required"`
 	Message string                               `json:"message,required"`
@@ -398,6 +422,10 @@ func (r *DNSSECEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnssecEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSSECEditResponseEnvelopeMessages struct {
 	Code    int64                                  `json:"code,required"`
 	Message string                                 `json:"message,required"`
@@ -415,6 +443,10 @@ type dnssecEditResponseEnvelopeMessagesJSON struct {
 
 func (r *DNSSECEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnssecEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -453,6 +485,10 @@ func (r *DNSSECGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnssecGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSSECGetResponseEnvelopeErrors struct {
 	Code    int64                               `json:"code,required"`
 	Message string                              `json:"message,required"`
@@ -472,6 +508,10 @@ func (r *DNSSECGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnssecGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSSECGetResponseEnvelopeMessages struct {
 	Code    int64                                 `json:"code,required"`
 	Message string                                `json:"message,required"`
@@ -489,6 +529,10 @@ type dnssecGetResponseEnvelopeMessagesJSON struct {
 
 func (r *DNSSECGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnssecGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

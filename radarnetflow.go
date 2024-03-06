@@ -68,6 +68,10 @@ func (r *RadarNetflowTimeseriesResponse) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarNetflowTimeseriesResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarNetflowTimeseriesResponseMeta struct {
 	AggInterval    string                                           `json:"aggInterval,required"`
 	DateRange      []RadarNetflowTimeseriesResponseMetaDateRange    `json:"dateRange,required"`
@@ -91,6 +95,10 @@ func (r *RadarNetflowTimeseriesResponseMeta) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarNetflowTimeseriesResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarNetflowTimeseriesResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
@@ -112,6 +120,10 @@ func (r *RadarNetflowTimeseriesResponseMetaDateRange) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarNetflowTimeseriesResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarNetflowTimeseriesResponseMetaConfidenceInfo struct {
 	Annotations []RadarNetflowTimeseriesResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                        `json:"level"`
@@ -129,6 +141,10 @@ type radarNetflowTimeseriesResponseMetaConfidenceInfoJSON struct {
 
 func (r *RadarNetflowTimeseriesResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarNetflowTimeseriesResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarNetflowTimeseriesResponseMetaConfidenceInfoAnnotation struct {
@@ -161,6 +177,10 @@ func (r *RadarNetflowTimeseriesResponseMetaConfidenceInfoAnnotation) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarNetflowTimeseriesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarNetflowTimeseriesResponseSerie0 struct {
 	Timestamps []time.Time                              `json:"timestamps,required" format:"date-time"`
 	Values     []string                                 `json:"values,required"`
@@ -178,6 +198,10 @@ type radarNetflowTimeseriesResponseSerie0JSON struct {
 
 func (r *RadarNetflowTimeseriesResponseSerie0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarNetflowTimeseriesResponseSerie0JSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarNetflowTimeseriesParams struct {
@@ -298,4 +322,8 @@ type radarNetflowTimeseriesResponseEnvelopeJSON struct {
 
 func (r *RadarNetflowTimeseriesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarNetflowTimeseriesResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

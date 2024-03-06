@@ -142,6 +142,10 @@ func (r *ZeroTrustGatewayLocationNewResponse) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayLocationNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayLocationNewResponseNetwork struct {
 	// The IPv4 address or IPv4 CIDR. IPv4 CIDRs are limited to a maximum of /24.
 	Network string                                         `json:"network,required"`
@@ -158,6 +162,10 @@ type zeroTrustGatewayLocationNewResponseNetworkJSON struct {
 
 func (r *ZeroTrustGatewayLocationNewResponseNetwork) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayLocationNewResponseNetworkJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustGatewayLocationUpdateResponse struct {
@@ -202,6 +210,10 @@ func (r *ZeroTrustGatewayLocationUpdateResponse) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayLocationUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayLocationUpdateResponseNetwork struct {
 	// The IPv4 address or IPv4 CIDR. IPv4 CIDRs are limited to a maximum of /24.
 	Network string                                            `json:"network,required"`
@@ -218,6 +230,10 @@ type zeroTrustGatewayLocationUpdateResponseNetworkJSON struct {
 
 func (r *ZeroTrustGatewayLocationUpdateResponseNetwork) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayLocationUpdateResponseNetworkJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustGatewayLocationListResponse struct {
@@ -262,6 +278,10 @@ func (r *ZeroTrustGatewayLocationListResponse) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayLocationListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayLocationListResponseNetwork struct {
 	// The IPv4 address or IPv4 CIDR. IPv4 CIDRs are limited to a maximum of /24.
 	Network string                                          `json:"network,required"`
@@ -278,6 +298,10 @@ type zeroTrustGatewayLocationListResponseNetworkJSON struct {
 
 func (r *ZeroTrustGatewayLocationListResponseNetwork) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayLocationListResponseNetworkJSON) RawJSON() string {
+	return r.raw
 }
 
 // Union satisfied by [ZeroTrustGatewayLocationDeleteResponseUnknown] or
@@ -339,6 +363,10 @@ func (r *ZeroTrustGatewayLocationGetResponse) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayLocationGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayLocationGetResponseNetwork struct {
 	// The IPv4 address or IPv4 CIDR. IPv4 CIDRs are limited to a maximum of /24.
 	Network string                                         `json:"network,required"`
@@ -355,6 +383,10 @@ type zeroTrustGatewayLocationGetResponseNetworkJSON struct {
 
 func (r *ZeroTrustGatewayLocationGetResponseNetwork) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayLocationGetResponseNetworkJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustGatewayLocationNewParams struct {
@@ -406,6 +438,10 @@ func (r *ZeroTrustGatewayLocationNewResponseEnvelope) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayLocationNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayLocationNewResponseEnvelopeErrors struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -425,6 +461,10 @@ func (r *ZeroTrustGatewayLocationNewResponseEnvelopeErrors) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayLocationNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayLocationNewResponseEnvelopeMessages struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -442,6 +482,10 @@ type zeroTrustGatewayLocationNewResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustGatewayLocationNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayLocationNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -500,6 +544,10 @@ func (r *ZeroTrustGatewayLocationUpdateResponseEnvelope) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayLocationUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayLocationUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -519,6 +567,10 @@ func (r *ZeroTrustGatewayLocationUpdateResponseEnvelopeErrors) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayLocationUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayLocationUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -536,6 +588,10 @@ type zeroTrustGatewayLocationUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustGatewayLocationUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayLocationUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -575,6 +631,10 @@ func (r *ZeroTrustGatewayLocationListResponseEnvelope) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayLocationListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayLocationListResponseEnvelopeErrors struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -594,6 +654,10 @@ func (r *ZeroTrustGatewayLocationListResponseEnvelopeErrors) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayLocationListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayLocationListResponseEnvelopeMessages struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -611,6 +675,10 @@ type zeroTrustGatewayLocationListResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustGatewayLocationListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayLocationListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -647,6 +715,10 @@ func (r *ZeroTrustGatewayLocationListResponseEnvelopeResultInfo) UnmarshalJSON(d
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayLocationListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayLocationDeleteParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
@@ -675,6 +747,10 @@ func (r *ZeroTrustGatewayLocationDeleteResponseEnvelope) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayLocationDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayLocationDeleteResponseEnvelopeErrors struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -694,6 +770,10 @@ func (r *ZeroTrustGatewayLocationDeleteResponseEnvelopeErrors) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayLocationDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayLocationDeleteResponseEnvelopeMessages struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -711,6 +791,10 @@ type zeroTrustGatewayLocationDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustGatewayLocationDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayLocationDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -748,6 +832,10 @@ func (r *ZeroTrustGatewayLocationGetResponseEnvelope) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayLocationGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayLocationGetResponseEnvelopeErrors struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -767,6 +855,10 @@ func (r *ZeroTrustGatewayLocationGetResponseEnvelopeErrors) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayLocationGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayLocationGetResponseEnvelopeMessages struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -784,6 +876,10 @@ type zeroTrustGatewayLocationGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustGatewayLocationGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayLocationGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

@@ -112,6 +112,10 @@ func (r *PCAPOwnershipNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pcapOwnershipNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The status of the ownership challenge. Can be pending, success or failed.
 type PCAPOwnershipNewResponseStatus string
 
@@ -154,6 +158,10 @@ func (r *PCAPOwnershipGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pcapOwnershipGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The status of the ownership challenge. Can be pending, success or failed.
 type PCAPOwnershipGetResponseStatus string
 
@@ -194,6 +202,10 @@ type pcapOwnershipValidateResponseJSON struct {
 
 func (r *PCAPOwnershipValidateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pcapOwnershipValidateResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // The status of the ownership challenge. Can be pending, success or failed.
@@ -240,6 +252,10 @@ func (r *PCAPOwnershipNewResponseEnvelope) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pcapOwnershipNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type PCAPOwnershipNewResponseEnvelopeErrors struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -259,6 +275,10 @@ func (r *PCAPOwnershipNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pcapOwnershipNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type PCAPOwnershipNewResponseEnvelopeMessages struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -276,6 +296,10 @@ type pcapOwnershipNewResponseEnvelopeMessagesJSON struct {
 
 func (r *PCAPOwnershipNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pcapOwnershipNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -321,6 +345,10 @@ func (r *PCAPOwnershipGetResponseEnvelope) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pcapOwnershipGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type PCAPOwnershipGetResponseEnvelopeErrors struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -340,6 +368,10 @@ func (r *PCAPOwnershipGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pcapOwnershipGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type PCAPOwnershipGetResponseEnvelopeMessages struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -357,6 +389,10 @@ type pcapOwnershipGetResponseEnvelopeMessagesJSON struct {
 
 func (r *PCAPOwnershipGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pcapOwnershipGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -391,6 +427,10 @@ type pcapOwnershipGetResponseEnvelopeResultInfoJSON struct {
 
 func (r *PCAPOwnershipGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pcapOwnershipGetResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type PCAPOwnershipValidateParams struct {
@@ -430,6 +470,10 @@ func (r *PCAPOwnershipValidateResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pcapOwnershipValidateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type PCAPOwnershipValidateResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -449,6 +493,10 @@ func (r *PCAPOwnershipValidateResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pcapOwnershipValidateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type PCAPOwnershipValidateResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -466,6 +514,10 @@ type pcapOwnershipValidateResponseEnvelopeMessagesJSON struct {
 
 func (r *PCAPOwnershipValidateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pcapOwnershipValidateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

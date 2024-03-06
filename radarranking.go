@@ -83,6 +83,10 @@ func (r *RadarRankingTimeseriesGroupsResponse) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarRankingTimeseriesGroupsResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarRankingTimeseriesGroupsResponseMeta struct {
 	DateRange []RadarRankingTimeseriesGroupsResponseMetaDateRange `json:"dateRange,required"`
 	JSON      radarRankingTimeseriesGroupsResponseMetaJSON        `json:"-"`
@@ -98,6 +102,10 @@ type radarRankingTimeseriesGroupsResponseMetaJSON struct {
 
 func (r *RadarRankingTimeseriesGroupsResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarRankingTimeseriesGroupsResponseMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarRankingTimeseriesGroupsResponseMetaDateRange struct {
@@ -121,6 +129,10 @@ func (r *RadarRankingTimeseriesGroupsResponseMetaDateRange) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarRankingTimeseriesGroupsResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarRankingTimeseriesGroupsResponseSerie0 struct {
 	Timestamps  []string                                                `json:"timestamps,required"`
 	ExtraFields map[string][]RadarRankingTimeseriesGroupsResponseSerie0 `json:"-,extras"`
@@ -137,6 +149,10 @@ type radarRankingTimeseriesGroupsResponseSerie0JSON struct {
 
 func (r *RadarRankingTimeseriesGroupsResponseSerie0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarRankingTimeseriesGroupsResponseSerie0JSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarRankingTopResponse struct {
@@ -158,6 +174,10 @@ func (r *RadarRankingTopResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarRankingTopResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarRankingTopResponseMeta struct {
 	Top0 RadarRankingTopResponseMetaTop0 `json:"top_0,required"`
 	JSON radarRankingTopResponseMetaJSON `json:"-"`
@@ -175,6 +195,10 @@ func (r *RadarRankingTopResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarRankingTopResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarRankingTopResponseMetaTop0 struct {
 	Date string                              `json:"date,required"`
 	JSON radarRankingTopResponseMetaTop0JSON `json:"-"`
@@ -190,6 +214,10 @@ type radarRankingTopResponseMetaTop0JSON struct {
 
 func (r *RadarRankingTopResponseMetaTop0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarRankingTopResponseMetaTop0JSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarRankingTopResponseTop0 struct {
@@ -216,6 +244,10 @@ func (r *RadarRankingTopResponseTop0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarRankingTopResponseTop0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarRankingTopResponseTop0Category struct {
 	ID              float64                                 `json:"id,required"`
 	Name            string                                  `json:"name,required"`
@@ -235,6 +267,10 @@ type radarRankingTopResponseTop0CategoryJSON struct {
 
 func (r *RadarRankingTopResponseTop0Category) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarRankingTopResponseTop0CategoryJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarRankingTimeseriesGroupsParams struct {
@@ -325,6 +361,10 @@ func (r *RadarRankingTimeseriesGroupsResponseEnvelope) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarRankingTimeseriesGroupsResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarRankingTopParams struct {
 	// Array of dates to filter the ranking.
 	Date param.Field[[]string] `query:"date"`
@@ -382,4 +422,8 @@ type radarRankingTopResponseEnvelopeJSON struct {
 
 func (r *RadarRankingTopResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarRankingTopResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

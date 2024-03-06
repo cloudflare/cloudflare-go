@@ -123,6 +123,10 @@ func (r *ZeroTrustDLPProfileCustomNewResponse) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPProfileCustomNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Scan the context of predefined entries to only return matches surrounded by
 // keywords.
 type ZeroTrustDLPProfileCustomNewResponseContextAwareness struct {
@@ -147,6 +151,10 @@ func (r *ZeroTrustDLPProfileCustomNewResponseContextAwareness) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPProfileCustomNewResponseContextAwarenessJSON) RawJSON() string {
+	return r.raw
+}
+
 // Content types to exclude from context analysis and return all matches.
 type ZeroTrustDLPProfileCustomNewResponseContextAwarenessSkip struct {
 	// If the content type is a file, skip context analysis and return all matches.
@@ -165,6 +173,10 @@ type zeroTrustDLPProfileCustomNewResponseContextAwarenessSkipJSON struct {
 
 func (r *ZeroTrustDLPProfileCustomNewResponseContextAwarenessSkip) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDLPProfileCustomNewResponseContextAwarenessSkipJSON) RawJSON() string {
+	return r.raw
 }
 
 // A custom entry that matches a profile
@@ -202,6 +214,10 @@ func (r *ZeroTrustDLPProfileCustomNewResponseEntry) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPProfileCustomNewResponseEntryJSON) RawJSON() string {
+	return r.raw
+}
+
 // A pattern that matches an entry
 type ZeroTrustDLPProfileCustomNewResponseEntriesPattern struct {
 	// The regex pattern.
@@ -223,6 +239,10 @@ type zeroTrustDLPProfileCustomNewResponseEntriesPatternJSON struct {
 
 func (r *ZeroTrustDLPProfileCustomNewResponseEntriesPattern) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDLPProfileCustomNewResponseEntriesPatternJSON) RawJSON() string {
+	return r.raw
 }
 
 // Validation algorithm for the pattern. This algorithm will get run on potential
@@ -281,6 +301,10 @@ func (r *ZeroTrustDLPProfileCustomUpdateResponse) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPProfileCustomUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Scan the context of predefined entries to only return matches surrounded by
 // keywords.
 type ZeroTrustDLPProfileCustomUpdateResponseContextAwareness struct {
@@ -306,6 +330,10 @@ func (r *ZeroTrustDLPProfileCustomUpdateResponseContextAwareness) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPProfileCustomUpdateResponseContextAwarenessJSON) RawJSON() string {
+	return r.raw
+}
+
 // Content types to exclude from context analysis and return all matches.
 type ZeroTrustDLPProfileCustomUpdateResponseContextAwarenessSkip struct {
 	// If the content type is a file, skip context analysis and return all matches.
@@ -324,6 +352,10 @@ type zeroTrustDLPProfileCustomUpdateResponseContextAwarenessSkipJSON struct {
 
 func (r *ZeroTrustDLPProfileCustomUpdateResponseContextAwarenessSkip) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDLPProfileCustomUpdateResponseContextAwarenessSkipJSON) RawJSON() string {
+	return r.raw
 }
 
 // A custom entry that matches a profile
@@ -361,6 +393,10 @@ func (r *ZeroTrustDLPProfileCustomUpdateResponseEntry) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPProfileCustomUpdateResponseEntryJSON) RawJSON() string {
+	return r.raw
+}
+
 // A pattern that matches an entry
 type ZeroTrustDLPProfileCustomUpdateResponseEntriesPattern struct {
 	// The regex pattern.
@@ -382,6 +418,10 @@ type zeroTrustDLPProfileCustomUpdateResponseEntriesPatternJSON struct {
 
 func (r *ZeroTrustDLPProfileCustomUpdateResponseEntriesPattern) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDLPProfileCustomUpdateResponseEntriesPatternJSON) RawJSON() string {
+	return r.raw
 }
 
 // Validation algorithm for the pattern. This algorithm will get run on potential
@@ -457,6 +497,10 @@ func (r *ZeroTrustDLPProfileCustomGetResponse) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPProfileCustomGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Scan the context of predefined entries to only return matches surrounded by
 // keywords.
 type ZeroTrustDLPProfileCustomGetResponseContextAwareness struct {
@@ -481,6 +525,10 @@ func (r *ZeroTrustDLPProfileCustomGetResponseContextAwareness) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPProfileCustomGetResponseContextAwarenessJSON) RawJSON() string {
+	return r.raw
+}
+
 // Content types to exclude from context analysis and return all matches.
 type ZeroTrustDLPProfileCustomGetResponseContextAwarenessSkip struct {
 	// If the content type is a file, skip context analysis and return all matches.
@@ -499,6 +547,10 @@ type zeroTrustDLPProfileCustomGetResponseContextAwarenessSkipJSON struct {
 
 func (r *ZeroTrustDLPProfileCustomGetResponseContextAwarenessSkip) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDLPProfileCustomGetResponseContextAwarenessSkipJSON) RawJSON() string {
+	return r.raw
 }
 
 // A custom entry that matches a profile
@@ -536,6 +588,10 @@ func (r *ZeroTrustDLPProfileCustomGetResponseEntry) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPProfileCustomGetResponseEntryJSON) RawJSON() string {
+	return r.raw
+}
+
 // A pattern that matches an entry
 type ZeroTrustDLPProfileCustomGetResponseEntriesPattern struct {
 	// The regex pattern.
@@ -557,6 +613,10 @@ type zeroTrustDLPProfileCustomGetResponseEntriesPatternJSON struct {
 
 func (r *ZeroTrustDLPProfileCustomGetResponseEntriesPattern) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDLPProfileCustomGetResponseEntriesPatternJSON) RawJSON() string {
+	return r.raw
 }
 
 // Validation algorithm for the pattern. This algorithm will get run on potential
@@ -687,6 +747,10 @@ func (r *ZeroTrustDLPProfileCustomNewResponseEnvelope) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPProfileCustomNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDLPProfileCustomNewResponseEnvelopeErrors struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -706,6 +770,10 @@ func (r *ZeroTrustDLPProfileCustomNewResponseEnvelopeErrors) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPProfileCustomNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDLPProfileCustomNewResponseEnvelopeMessages struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -723,6 +791,10 @@ type zeroTrustDLPProfileCustomNewResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustDLPProfileCustomNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDLPProfileCustomNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -757,6 +829,10 @@ type zeroTrustDLPProfileCustomNewResponseEnvelopeResultInfoJSON struct {
 
 func (r *ZeroTrustDLPProfileCustomNewResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDLPProfileCustomNewResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDLPProfileCustomUpdateParams struct {
@@ -909,6 +985,10 @@ func (r *ZeroTrustDLPProfileCustomDeleteResponseEnvelope) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPProfileCustomDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDLPProfileCustomDeleteResponseEnvelopeErrors struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -926,6 +1006,10 @@ type zeroTrustDLPProfileCustomDeleteResponseEnvelopeErrorsJSON struct {
 
 func (r *ZeroTrustDLPProfileCustomDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDLPProfileCustomDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDLPProfileCustomDeleteResponseEnvelopeMessages struct {
@@ -946,6 +1030,10 @@ type zeroTrustDLPProfileCustomDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustDLPProfileCustomDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDLPProfileCustomDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -984,6 +1072,10 @@ func (r *ZeroTrustDLPProfileCustomGetResponseEnvelope) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPProfileCustomGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDLPProfileCustomGetResponseEnvelopeErrors struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -1003,6 +1095,10 @@ func (r *ZeroTrustDLPProfileCustomGetResponseEnvelopeErrors) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPProfileCustomGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDLPProfileCustomGetResponseEnvelopeMessages struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -1020,6 +1116,10 @@ type zeroTrustDLPProfileCustomGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustDLPProfileCustomGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDLPProfileCustomGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

@@ -68,6 +68,10 @@ func (r *AddressingServiceListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingServiceListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingServiceListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -97,6 +101,10 @@ func (r *AddressingServiceListResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingServiceListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingServiceListResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -116,6 +124,10 @@ func (r *AddressingServiceListResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingServiceListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingServiceListResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -133,6 +145,10 @@ type addressingServiceListResponseEnvelopeMessagesJSON struct {
 
 func (r *AddressingServiceListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressingServiceListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

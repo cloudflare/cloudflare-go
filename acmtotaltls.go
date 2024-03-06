@@ -82,6 +82,10 @@ func (r *ACMTotalTLSNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r acmTotalTLSNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The Certificate Authority that Total TLS certificates will be issued through.
 type ACMTotalTLSNewResponseCertificateAuthority string
 
@@ -120,6 +124,10 @@ type acmTotalTLSGetResponseJSON struct {
 
 func (r *ACMTotalTLSGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r acmTotalTLSGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // The Certificate Authority that Total TLS certificates will be issued through.
@@ -183,6 +191,10 @@ func (r *ACMTotalTLSNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r acmTotalTLSNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ACMTotalTLSNewResponseEnvelopeErrors struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -202,6 +214,10 @@ func (r *ACMTotalTLSNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r acmTotalTLSNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ACMTotalTLSNewResponseEnvelopeMessages struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -219,6 +235,10 @@ type acmTotalTLSNewResponseEnvelopeMessagesJSON struct {
 
 func (r *ACMTotalTLSNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r acmTotalTLSNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -257,6 +277,10 @@ func (r *ACMTotalTLSGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r acmTotalTLSGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ACMTotalTLSGetResponseEnvelopeErrors struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -276,6 +300,10 @@ func (r *ACMTotalTLSGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r acmTotalTLSGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ACMTotalTLSGetResponseEnvelopeMessages struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -293,6 +321,10 @@ type acmTotalTLSGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ACMTotalTLSGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r acmTotalTLSGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

@@ -136,6 +136,10 @@ func (r *Web3HostnameNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r web3HostnameNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Status of the hostname's activation.
 type Web3HostnameNewResponseStatus string
 
@@ -192,6 +196,10 @@ func (r *Web3HostnameListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r web3HostnameListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Status of the hostname's activation.
 type Web3HostnameListResponseStatus string
 
@@ -229,6 +237,10 @@ func (r *Web3HostnameDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r web3HostnameDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type Web3HostnameEditResponse struct {
 	// Identifier
 	ID        string    `json:"id"`
@@ -264,6 +276,10 @@ type web3HostnameEditResponseJSON struct {
 
 func (r *Web3HostnameEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r web3HostnameEditResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Status of the hostname's activation.
@@ -320,6 +336,10 @@ type web3HostnameGetResponseJSON struct {
 
 func (r *Web3HostnameGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r web3HostnameGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Status of the hostname's activation.
@@ -387,6 +407,10 @@ func (r *Web3HostnameNewResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r web3HostnameNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type Web3HostnameNewResponseEnvelopeErrors struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -406,6 +430,10 @@ func (r *Web3HostnameNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r web3HostnameNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type Web3HostnameNewResponseEnvelopeMessages struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -423,6 +451,10 @@ type web3HostnameNewResponseEnvelopeMessagesJSON struct {
 
 func (r *Web3HostnameNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r web3HostnameNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -458,6 +490,10 @@ func (r *Web3HostnameListResponseEnvelope) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r web3HostnameListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type Web3HostnameListResponseEnvelopeErrors struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -477,6 +513,10 @@ func (r *Web3HostnameListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r web3HostnameListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type Web3HostnameListResponseEnvelopeMessages struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -494,6 +534,10 @@ type web3HostnameListResponseEnvelopeMessagesJSON struct {
 
 func (r *Web3HostnameListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r web3HostnameListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -530,6 +574,10 @@ func (r *Web3HostnameListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r web3HostnameListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type Web3HostnameDeleteResponseEnvelope struct {
 	Errors   []Web3HostnameDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []Web3HostnameDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -554,6 +602,10 @@ func (r *Web3HostnameDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r web3HostnameDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type Web3HostnameDeleteResponseEnvelopeErrors struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -573,6 +625,10 @@ func (r *Web3HostnameDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r web3HostnameDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type Web3HostnameDeleteResponseEnvelopeMessages struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -590,6 +646,10 @@ type web3HostnameDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *Web3HostnameDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r web3HostnameDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -634,6 +694,10 @@ func (r *Web3HostnameEditResponseEnvelope) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r web3HostnameEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type Web3HostnameEditResponseEnvelopeErrors struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -653,6 +717,10 @@ func (r *Web3HostnameEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r web3HostnameEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type Web3HostnameEditResponseEnvelopeMessages struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -670,6 +738,10 @@ type web3HostnameEditResponseEnvelopeMessagesJSON struct {
 
 func (r *Web3HostnameEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r web3HostnameEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -703,6 +775,10 @@ func (r *Web3HostnameGetResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r web3HostnameGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type Web3HostnameGetResponseEnvelopeErrors struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -722,6 +798,10 @@ func (r *Web3HostnameGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r web3HostnameGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type Web3HostnameGetResponseEnvelopeMessages struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -739,6 +819,10 @@ type web3HostnameGetResponseEnvelopeMessagesJSON struct {
 
 func (r *Web3HostnameGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r web3HostnameGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

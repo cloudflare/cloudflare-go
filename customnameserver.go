@@ -130,6 +130,10 @@ func (r *CustomNameserverNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customNameserverNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type CustomNameserverNewResponseDNSRecord struct {
 	// DNS record type.
 	Type CustomNameserverNewResponseDNSRecordsType `json:"type"`
@@ -149,6 +153,10 @@ type customNameserverNewResponseDNSRecordJSON struct {
 
 func (r *CustomNameserverNewResponseDNSRecord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customNameserverNewResponseDNSRecordJSON) RawJSON() string {
+	return r.raw
 }
 
 // DNS record type.
@@ -220,6 +228,10 @@ func (r *CustomNameserverGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customNameserverGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type CustomNameserverGetResponseDNSRecord struct {
 	// DNS record type.
 	Type CustomNameserverGetResponseDNSRecordsType `json:"type"`
@@ -239,6 +251,10 @@ type customNameserverGetResponseDNSRecordJSON struct {
 
 func (r *CustomNameserverGetResponseDNSRecord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customNameserverGetResponseDNSRecordJSON) RawJSON() string {
+	return r.raw
 }
 
 // DNS record type.
@@ -289,6 +305,10 @@ func (r *CustomNameserverVerifyResponse) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customNameserverVerifyResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type CustomNameserverVerifyResponseDNSRecord struct {
 	// DNS record type.
 	Type CustomNameserverVerifyResponseDNSRecordsType `json:"type"`
@@ -308,6 +328,10 @@ type customNameserverVerifyResponseDNSRecordJSON struct {
 
 func (r *CustomNameserverVerifyResponseDNSRecord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customNameserverVerifyResponseDNSRecordJSON) RawJSON() string {
+	return r.raw
 }
 
 // DNS record type.
@@ -365,6 +389,10 @@ func (r *CustomNameserverNewResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customNameserverNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CustomNameserverNewResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -384,6 +412,10 @@ func (r *CustomNameserverNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customNameserverNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type CustomNameserverNewResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -401,6 +433,10 @@ type customNameserverNewResponseEnvelopeMessagesJSON struct {
 
 func (r *CustomNameserverNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customNameserverNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -441,6 +477,10 @@ func (r *CustomNameserverDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customNameserverDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CustomNameserverDeleteResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -460,6 +500,10 @@ func (r *CustomNameserverDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customNameserverDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type CustomNameserverDeleteResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -477,6 +521,10 @@ type customNameserverDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *CustomNameserverDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customNameserverDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -513,6 +561,10 @@ func (r *CustomNameserverDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customNameserverDeleteResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type CustomNameserverAvailabiltyParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -544,6 +596,10 @@ func (r *CustomNameserverAvailabiltyResponseEnvelope) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customNameserverAvailabiltyResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CustomNameserverAvailabiltyResponseEnvelopeErrors struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -563,6 +619,10 @@ func (r *CustomNameserverAvailabiltyResponseEnvelopeErrors) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customNameserverAvailabiltyResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type CustomNameserverAvailabiltyResponseEnvelopeMessages struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -580,6 +640,10 @@ type customNameserverAvailabiltyResponseEnvelopeMessagesJSON struct {
 
 func (r *CustomNameserverAvailabiltyResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customNameserverAvailabiltyResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -616,6 +680,10 @@ func (r *CustomNameserverAvailabiltyResponseEnvelopeResultInfo) UnmarshalJSON(da
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customNameserverAvailabiltyResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type CustomNameserverGetParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -647,6 +715,10 @@ func (r *CustomNameserverGetResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customNameserverGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CustomNameserverGetResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -666,6 +738,10 @@ func (r *CustomNameserverGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customNameserverGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type CustomNameserverGetResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -683,6 +759,10 @@ type customNameserverGetResponseEnvelopeMessagesJSON struct {
 
 func (r *CustomNameserverGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customNameserverGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -719,6 +799,10 @@ func (r *CustomNameserverGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customNameserverGetResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type CustomNameserverVerifyParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -750,6 +834,10 @@ func (r *CustomNameserverVerifyResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customNameserverVerifyResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CustomNameserverVerifyResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -769,6 +857,10 @@ func (r *CustomNameserverVerifyResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customNameserverVerifyResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type CustomNameserverVerifyResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -786,6 +878,10 @@ type customNameserverVerifyResponseEnvelopeMessagesJSON struct {
 
 func (r *CustomNameserverVerifyResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customNameserverVerifyResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -820,4 +916,8 @@ type customNameserverVerifyResponseEnvelopeResultInfoJSON struct {
 
 func (r *CustomNameserverVerifyResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customNameserverVerifyResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

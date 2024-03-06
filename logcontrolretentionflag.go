@@ -74,6 +74,10 @@ func (r *LogControlRetentionFlagNewResponse) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logControlRetentionFlagNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogControlRetentionFlagGetResponse struct {
 	Flag bool                                   `json:"flag"`
 	JSON logControlRetentionFlagGetResponseJSON `json:"-"`
@@ -89,6 +93,10 @@ type logControlRetentionFlagGetResponseJSON struct {
 
 func (r *LogControlRetentionFlagGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r logControlRetentionFlagGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type LogControlRetentionFlagNewParams struct {
@@ -124,6 +132,10 @@ func (r *LogControlRetentionFlagNewResponseEnvelope) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logControlRetentionFlagNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogControlRetentionFlagNewResponseEnvelopeErrors struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -143,6 +155,10 @@ func (r *LogControlRetentionFlagNewResponseEnvelopeErrors) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logControlRetentionFlagNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogControlRetentionFlagNewResponseEnvelopeMessages struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -160,6 +176,10 @@ type logControlRetentionFlagNewResponseEnvelopeMessagesJSON struct {
 
 func (r *LogControlRetentionFlagNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r logControlRetentionFlagNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -193,6 +213,10 @@ func (r *LogControlRetentionFlagGetResponseEnvelope) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logControlRetentionFlagGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogControlRetentionFlagGetResponseEnvelopeErrors struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -212,6 +236,10 @@ func (r *LogControlRetentionFlagGetResponseEnvelopeErrors) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logControlRetentionFlagGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogControlRetentionFlagGetResponseEnvelopeMessages struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -229,6 +257,10 @@ type logControlRetentionFlagGetResponseEnvelopeMessagesJSON struct {
 
 func (r *LogControlRetentionFlagGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r logControlRetentionFlagGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

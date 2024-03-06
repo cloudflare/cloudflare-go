@@ -102,6 +102,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponse) Un
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptContentSettingEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // A binding to allow the Worker to communicate with resources
 //
 // Union satisfied by
@@ -147,6 +151,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBind
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindingsWorkersKVNamespaceBindingJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindingsWorkersKVNamespaceBinding) implementsWorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBinding() {
 }
 
@@ -183,6 +191,10 @@ type workersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindings
 
 func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindingsWorkersServiceBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindingsWorkersServiceBindingJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindingsWorkersServiceBinding) implementsWorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBinding() {
@@ -229,6 +241,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBind
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindingsWorkersDoBindingJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindingsWorkersDoBinding) implementsWorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBinding() {
 }
 
@@ -264,6 +280,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBind
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindingsWorkersR2BindingJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindingsWorkersR2Binding) implementsWorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBinding() {
 }
 
@@ -297,6 +317,10 @@ type workersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindings
 
 func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindingsWorkersQueueBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindingsWorkersQueueBindingJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindingsWorkersQueueBinding) implementsWorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBinding() {
@@ -337,6 +361,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBind
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindingsWorkersD1BindingJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindingsWorkersD1Binding) implementsWorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBinding() {
 }
 
@@ -375,6 +403,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBind
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindingsWorkersDispatchNamespaceBindingJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindingsWorkersDispatchNamespaceBinding) implementsWorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBinding() {
 }
 
@@ -409,6 +441,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBind
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindingsWorkersDispatchNamespaceBindingOutboundJSON) RawJSON() string {
+	return r.raw
+}
+
 // Outbound worker
 type WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindingsWorkersDispatchNamespaceBindingOutboundWorker struct {
 	// Environment of the outbound worker
@@ -430,6 +466,10 @@ type workersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindings
 
 func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindingsWorkersDispatchNamespaceBindingOutboundWorker) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindingsWorkersDispatchNamespaceBindingOutboundWorkerJSON) RawJSON() string {
+	return r.raw
 }
 
 type WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMTLSCertBinding struct {
@@ -455,6 +495,10 @@ type workersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindings
 
 func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMTLSCertBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMTLSCertBindingJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBindingsWorkersMTLSCertBinding) implementsWorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseBinding() {
@@ -518,6 +562,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseMigr
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptContentSettingEditResponseMigrationsWorkersSingleStepMigrationsJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseMigrationsWorkersSingleStepMigrations) implementsWorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseMigrations() {
 }
 
@@ -541,6 +589,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseMigr
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptContentSettingEditResponseMigrationsWorkersSingleStepMigrationsRenamedClassJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseMigrationsWorkersSingleStepMigrationsTransferredClass struct {
 	From       string                                                                                                                       `json:"from"`
 	FromScript string                                                                                                                       `json:"from_script"`
@@ -561,6 +613,10 @@ type workersForPlatformDispatchNamespaceScriptContentSettingEditResponseMigratio
 
 func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseMigrationsWorkersSingleStepMigrationsTransferredClass) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workersForPlatformDispatchNamespaceScriptContentSettingEditResponseMigrationsWorkersSingleStepMigrationsTransferredClassJSON) RawJSON() string {
+	return r.raw
 }
 
 type WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseMigrationsWorkersSteppedMigrations struct {
@@ -587,6 +643,10 @@ type workersForPlatformDispatchNamespaceScriptContentSettingEditResponseMigratio
 
 func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseMigrationsWorkersSteppedMigrations) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workersForPlatformDispatchNamespaceScriptContentSettingEditResponseMigrationsWorkersSteppedMigrationsJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseMigrationsWorkersSteppedMigrations) implementsWorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseMigrations() {
@@ -621,6 +681,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseMigr
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptContentSettingEditResponseMigrationsWorkersSteppedMigrationsStepJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseMigrationsWorkersSteppedMigrationsStepsRenamedClass struct {
 	From string                                                                                                                     `json:"from"`
 	To   string                                                                                                                     `json:"to"`
@@ -639,6 +703,10 @@ type workersForPlatformDispatchNamespaceScriptContentSettingEditResponseMigratio
 
 func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseMigrationsWorkersSteppedMigrationsStepsRenamedClass) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workersForPlatformDispatchNamespaceScriptContentSettingEditResponseMigrationsWorkersSteppedMigrationsStepsRenamedClassJSON) RawJSON() string {
+	return r.raw
 }
 
 type WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseMigrationsWorkersSteppedMigrationsStepsTransferredClass struct {
@@ -663,6 +731,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseMigr
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptContentSettingEditResponseMigrationsWorkersSteppedMigrationsStepsTransferredClassJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponsePlacement struct {
 	// Enables
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
@@ -682,6 +754,10 @@ type workersForPlatformDispatchNamespaceScriptContentSettingEditResponsePlacemen
 
 func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponsePlacement) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workersForPlatformDispatchNamespaceScriptContentSettingEditResponsePlacementJSON) RawJSON() string {
+	return r.raw
 }
 
 // Enables
@@ -717,6 +793,10 @@ type workersForPlatformDispatchNamespaceScriptContentSettingEditResponseTailCons
 
 func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseTailConsumer) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workersForPlatformDispatchNamespaceScriptContentSettingEditResponseTailConsumerJSON) RawJSON() string {
+	return r.raw
 }
 
 type WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponse struct {
@@ -759,6 +839,10 @@ type workersForPlatformDispatchNamespaceScriptContentSettingGetResponseJSON stru
 
 func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workersForPlatformDispatchNamespaceScriptContentSettingGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // A binding to allow the Worker to communicate with resources
@@ -806,6 +890,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindi
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsWorkersKVNamespaceBindingJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsWorkersKVNamespaceBinding) implementsWorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBinding() {
 }
 
@@ -842,6 +930,10 @@ type workersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsW
 
 func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsWorkersServiceBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsWorkersServiceBindingJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsWorkersServiceBinding) implementsWorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBinding() {
@@ -888,6 +980,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindi
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsWorkersDoBindingJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsWorkersDoBinding) implementsWorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBinding() {
 }
 
@@ -923,6 +1019,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindi
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsWorkersR2BindingJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsWorkersR2Binding) implementsWorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBinding() {
 }
 
@@ -956,6 +1056,10 @@ type workersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsW
 
 func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsWorkersQueueBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsWorkersQueueBindingJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsWorkersQueueBinding) implementsWorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBinding() {
@@ -996,6 +1100,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindi
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsWorkersD1BindingJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsWorkersD1Binding) implementsWorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBinding() {
 }
 
@@ -1034,6 +1142,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindi
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsWorkersDispatchNamespaceBindingJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsWorkersDispatchNamespaceBinding) implementsWorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBinding() {
 }
 
@@ -1068,6 +1180,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindi
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsWorkersDispatchNamespaceBindingOutboundJSON) RawJSON() string {
+	return r.raw
+}
+
 // Outbound worker
 type WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsWorkersDispatchNamespaceBindingOutboundWorker struct {
 	// Environment of the outbound worker
@@ -1089,6 +1205,10 @@ type workersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsW
 
 func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsWorkersDispatchNamespaceBindingOutboundWorker) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsWorkersDispatchNamespaceBindingOutboundWorkerJSON) RawJSON() string {
+	return r.raw
 }
 
 type WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMTLSCertBinding struct {
@@ -1114,6 +1234,10 @@ type workersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsW
 
 func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMTLSCertBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMTLSCertBindingJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBindingsWorkersMTLSCertBinding) implementsWorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseBinding() {
@@ -1177,6 +1301,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseMigra
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptContentSettingGetResponseMigrationsWorkersSingleStepMigrationsJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseMigrationsWorkersSingleStepMigrations) implementsWorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseMigrations() {
 }
 
@@ -1200,6 +1328,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseMigra
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptContentSettingGetResponseMigrationsWorkersSingleStepMigrationsRenamedClassJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseMigrationsWorkersSingleStepMigrationsTransferredClass struct {
 	From       string                                                                                                                      `json:"from"`
 	FromScript string                                                                                                                      `json:"from_script"`
@@ -1220,6 +1352,10 @@ type workersForPlatformDispatchNamespaceScriptContentSettingGetResponseMigration
 
 func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseMigrationsWorkersSingleStepMigrationsTransferredClass) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workersForPlatformDispatchNamespaceScriptContentSettingGetResponseMigrationsWorkersSingleStepMigrationsTransferredClassJSON) RawJSON() string {
+	return r.raw
 }
 
 type WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseMigrationsWorkersSteppedMigrations struct {
@@ -1246,6 +1382,10 @@ type workersForPlatformDispatchNamespaceScriptContentSettingGetResponseMigration
 
 func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseMigrationsWorkersSteppedMigrations) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workersForPlatformDispatchNamespaceScriptContentSettingGetResponseMigrationsWorkersSteppedMigrationsJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseMigrationsWorkersSteppedMigrations) implementsWorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseMigrations() {
@@ -1280,6 +1420,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseMigra
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptContentSettingGetResponseMigrationsWorkersSteppedMigrationsStepJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseMigrationsWorkersSteppedMigrationsStepsRenamedClass struct {
 	From string                                                                                                                    `json:"from"`
 	To   string                                                                                                                    `json:"to"`
@@ -1298,6 +1442,10 @@ type workersForPlatformDispatchNamespaceScriptContentSettingGetResponseMigration
 
 func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseMigrationsWorkersSteppedMigrationsStepsRenamedClass) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workersForPlatformDispatchNamespaceScriptContentSettingGetResponseMigrationsWorkersSteppedMigrationsStepsRenamedClassJSON) RawJSON() string {
+	return r.raw
 }
 
 type WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseMigrationsWorkersSteppedMigrationsStepsTransferredClass struct {
@@ -1322,6 +1470,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseMigra
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptContentSettingGetResponseMigrationsWorkersSteppedMigrationsStepsTransferredClassJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponsePlacement struct {
 	// Enables
 	// [Smart Placement](https://developers.cloudflare.com/workers/configuration/smart-placement).
@@ -1341,6 +1493,10 @@ type workersForPlatformDispatchNamespaceScriptContentSettingGetResponsePlacement
 
 func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponsePlacement) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workersForPlatformDispatchNamespaceScriptContentSettingGetResponsePlacementJSON) RawJSON() string {
+	return r.raw
 }
 
 // Enables
@@ -1376,6 +1532,10 @@ type workersForPlatformDispatchNamespaceScriptContentSettingGetResponseTailConsu
 
 func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseTailConsumer) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workersForPlatformDispatchNamespaceScriptContentSettingGetResponseTailConsumerJSON) RawJSON() string {
+	return r.raw
 }
 
 type WorkersForPlatformDispatchNamespaceScriptContentSettingEditParams struct {
@@ -1821,6 +1981,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseEnve
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptContentSettingEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseEnvelopeErrors struct {
 	Code    int64                                                                                 `json:"code,required"`
 	Message string                                                                                `json:"message,required"`
@@ -1841,6 +2005,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseEnve
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptContentSettingEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseEnvelopeMessages struct {
 	Code    int64                                                                                   `json:"code,required"`
 	Message string                                                                                  `json:"message,required"`
@@ -1859,6 +2027,10 @@ type workersForPlatformDispatchNamespaceScriptContentSettingEditResponseEnvelope
 
 func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workersForPlatformDispatchNamespaceScriptContentSettingEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1898,6 +2070,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseEnvel
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptContentSettingGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseEnvelopeErrors struct {
 	Code    int64                                                                                `json:"code,required"`
 	Message string                                                                               `json:"message,required"`
@@ -1918,6 +2094,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseEnvel
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptContentSettingGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseEnvelopeMessages struct {
 	Code    int64                                                                                  `json:"code,required"`
 	Message string                                                                                 `json:"message,required"`
@@ -1936,6 +2116,10 @@ type workersForPlatformDispatchNamespaceScriptContentSettingGetResponseEnvelopeM
 
 func (r *WorkersForPlatformDispatchNamespaceScriptContentSettingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workersForPlatformDispatchNamespaceScriptContentSettingGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

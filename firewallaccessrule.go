@@ -205,6 +205,10 @@ func (r *FirewallAccessRuleDeleteResponse) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallAccessRuleDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Union satisfied by [FirewallAccessRuleEditResponseUnknown] or
 // [shared.UnionString].
 type FirewallAccessRuleEditResponse interface {
@@ -420,6 +424,10 @@ func (r *FirewallAccessRuleNewResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallAccessRuleNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallAccessRuleNewResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -439,6 +447,10 @@ func (r *FirewallAccessRuleNewResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallAccessRuleNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallAccessRuleNewResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -456,6 +468,10 @@ type firewallAccessRuleNewResponseEnvelopeMessagesJSON struct {
 
 func (r *FirewallAccessRuleNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallAccessRuleNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -627,6 +643,10 @@ func (r *FirewallAccessRuleDeleteResponseEnvelope) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallAccessRuleDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallAccessRuleDeleteResponseEnvelopeErrors struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -646,6 +666,10 @@ func (r *FirewallAccessRuleDeleteResponseEnvelopeErrors) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallAccessRuleDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallAccessRuleDeleteResponseEnvelopeMessages struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -663,6 +687,10 @@ type firewallAccessRuleDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *FirewallAccessRuleDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallAccessRuleDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -854,6 +882,10 @@ func (r *FirewallAccessRuleEditResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallAccessRuleEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallAccessRuleEditResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -873,6 +905,10 @@ func (r *FirewallAccessRuleEditResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallAccessRuleEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallAccessRuleEditResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -890,6 +926,10 @@ type firewallAccessRuleEditResponseEnvelopeMessagesJSON struct {
 
 func (r *FirewallAccessRuleEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallAccessRuleEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -930,6 +970,10 @@ func (r *FirewallAccessRuleGetResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallAccessRuleGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallAccessRuleGetResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -949,6 +993,10 @@ func (r *FirewallAccessRuleGetResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallAccessRuleGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallAccessRuleGetResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -966,6 +1014,10 @@ type firewallAccessRuleGetResponseEnvelopeMessagesJSON struct {
 
 func (r *FirewallAccessRuleGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallAccessRuleGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

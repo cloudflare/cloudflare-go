@@ -71,6 +71,10 @@ func (r *IntelIPGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r intelIPGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Specifies a reference to the autonomous systems (AS) that the IP address belongs
 // to.
 type IntelIPGetResponseBelongsToRef struct {
@@ -97,6 +101,10 @@ type intelIPGetResponseBelongsToRefJSON struct {
 
 func (r *IntelIPGetResponseBelongsToRef) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r intelIPGetResponseBelongsToRefJSON) RawJSON() string {
+	return r.raw
 }
 
 // Infrastructure type of this ASN.
@@ -169,6 +177,10 @@ func (r *IntelIPGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r intelIPGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type IntelIPGetResponseEnvelopeErrors struct {
 	Code    int64                                `json:"code,required"`
 	Message string                               `json:"message,required"`
@@ -188,6 +200,10 @@ func (r *IntelIPGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r intelIPGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type IntelIPGetResponseEnvelopeMessages struct {
 	Code    int64                                  `json:"code,required"`
 	Message string                                 `json:"message,required"`
@@ -205,6 +221,10 @@ type intelIPGetResponseEnvelopeMessagesJSON struct {
 
 func (r *IntelIPGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r intelIPGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -239,4 +259,8 @@ type intelIPGetResponseEnvelopeResultInfoJSON struct {
 
 func (r *IntelIPGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r intelIPGetResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

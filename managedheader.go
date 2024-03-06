@@ -66,6 +66,10 @@ func (r *ManagedHeaderListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r managedHeaderListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ManagedHeaderListResponseManagedRequestHeader struct {
 	// Human-readable identifier of the Managed Transform.
 	ID string `json:"id"`
@@ -85,6 +89,10 @@ type managedHeaderListResponseManagedRequestHeaderJSON struct {
 
 func (r *ManagedHeaderListResponseManagedRequestHeader) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r managedHeaderListResponseManagedRequestHeaderJSON) RawJSON() string {
+	return r.raw
 }
 
 type ManagedHeaderListResponseManagedResponseHeader struct {
@@ -108,6 +116,10 @@ func (r *ManagedHeaderListResponseManagedResponseHeader) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r managedHeaderListResponseManagedResponseHeaderJSON) RawJSON() string {
+	return r.raw
+}
+
 type ManagedHeaderEditResponse struct {
 	ManagedRequestHeaders  []ManagedHeaderEditResponseManagedRequestHeader  `json:"managed_request_headers"`
 	ManagedResponseHeaders []ManagedHeaderEditResponseManagedResponseHeader `json:"managed_response_headers"`
@@ -125,6 +137,10 @@ type managedHeaderEditResponseJSON struct {
 
 func (r *ManagedHeaderEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r managedHeaderEditResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type ManagedHeaderEditResponseManagedRequestHeader struct {
@@ -151,6 +167,10 @@ func (r *ManagedHeaderEditResponseManagedRequestHeader) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r managedHeaderEditResponseManagedRequestHeaderJSON) RawJSON() string {
+	return r.raw
+}
+
 type ManagedHeaderEditResponseManagedResponseHeader struct {
 	// Human-readable identifier of the Managed Transform.
 	ID string `json:"id"`
@@ -173,6 +193,10 @@ type managedHeaderEditResponseManagedResponseHeaderJSON struct {
 
 func (r *ManagedHeaderEditResponseManagedResponseHeader) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r managedHeaderEditResponseManagedResponseHeaderJSON) RawJSON() string {
+	return r.raw
 }
 
 type ManagedHeaderListParams struct {

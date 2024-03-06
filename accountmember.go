@@ -133,6 +133,10 @@ func (r *AccountMember) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountMemberJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccountMemberRole struct {
 	// Role identifier tag.
 	ID string `json:"id,required"`
@@ -157,6 +161,10 @@ type accountMemberRoleJSON struct {
 
 func (r *AccountMemberRole) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountMemberRoleJSON) RawJSON() string {
+	return r.raw
 }
 
 type AccountMemberRolesPermissions struct {
@@ -198,6 +206,10 @@ func (r *AccountMemberRolesPermissions) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountMemberRolesPermissionsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccountMemberRolesPermissionsAnalytics struct {
 	Read  bool                                       `json:"read"`
 	Write bool                                       `json:"write"`
@@ -215,6 +227,10 @@ type accountMemberRolesPermissionsAnalyticsJSON struct {
 
 func (r *AccountMemberRolesPermissionsAnalytics) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountMemberRolesPermissionsAnalyticsJSON) RawJSON() string {
+	return r.raw
 }
 
 type AccountMemberRolesPermissionsBilling struct {
@@ -236,6 +252,10 @@ func (r *AccountMemberRolesPermissionsBilling) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountMemberRolesPermissionsBillingJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccountMemberRolesPermissionsCachePurge struct {
 	Read  bool                                        `json:"read"`
 	Write bool                                        `json:"write"`
@@ -253,6 +273,10 @@ type accountMemberRolesPermissionsCachePurgeJSON struct {
 
 func (r *AccountMemberRolesPermissionsCachePurge) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountMemberRolesPermissionsCachePurgeJSON) RawJSON() string {
+	return r.raw
 }
 
 type AccountMemberRolesPermissionsDNS struct {
@@ -274,6 +298,10 @@ func (r *AccountMemberRolesPermissionsDNS) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountMemberRolesPermissionsDNSJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccountMemberRolesPermissionsDNSRecords struct {
 	Read  bool                                        `json:"read"`
 	Write bool                                        `json:"write"`
@@ -291,6 +319,10 @@ type accountMemberRolesPermissionsDNSRecordsJSON struct {
 
 func (r *AccountMemberRolesPermissionsDNSRecords) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountMemberRolesPermissionsDNSRecordsJSON) RawJSON() string {
+	return r.raw
 }
 
 type AccountMemberRolesPermissionsLb struct {
@@ -312,6 +344,10 @@ func (r *AccountMemberRolesPermissionsLb) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountMemberRolesPermissionsLbJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccountMemberRolesPermissionsLogs struct {
 	Read  bool                                  `json:"read"`
 	Write bool                                  `json:"write"`
@@ -329,6 +365,10 @@ type accountMemberRolesPermissionsLogsJSON struct {
 
 func (r *AccountMemberRolesPermissionsLogs) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountMemberRolesPermissionsLogsJSON) RawJSON() string {
+	return r.raw
 }
 
 type AccountMemberRolesPermissionsOrganization struct {
@@ -350,6 +390,10 @@ func (r *AccountMemberRolesPermissionsOrganization) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountMemberRolesPermissionsOrganizationJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccountMemberRolesPermissionsSSL struct {
 	Read  bool                                 `json:"read"`
 	Write bool                                 `json:"write"`
@@ -367,6 +411,10 @@ type accountMemberRolesPermissionsSSLJSON struct {
 
 func (r *AccountMemberRolesPermissionsSSL) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountMemberRolesPermissionsSSLJSON) RawJSON() string {
+	return r.raw
 }
 
 type AccountMemberRolesPermissionsWAF struct {
@@ -388,6 +436,10 @@ func (r *AccountMemberRolesPermissionsWAF) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountMemberRolesPermissionsWAFJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccountMemberRolesPermissionsZoneSettings struct {
 	Read  bool                                          `json:"read"`
 	Write bool                                          `json:"write"`
@@ -407,6 +459,10 @@ func (r *AccountMemberRolesPermissionsZoneSettings) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountMemberRolesPermissionsZoneSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccountMemberRolesPermissionsZones struct {
 	Read  bool                                   `json:"read"`
 	Write bool                                   `json:"write"`
@@ -424,6 +480,10 @@ type accountMemberRolesPermissionsZonesJSON struct {
 
 func (r *AccountMemberRolesPermissionsZones) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountMemberRolesPermissionsZonesJSON) RawJSON() string {
+	return r.raw
 }
 
 type AccountMemberUser struct {
@@ -457,6 +517,10 @@ func (r *AccountMemberUser) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountMemberUserJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccountMemberWithID struct {
 	// Membership identifier tag.
 	ID string `json:"id,required"`
@@ -485,6 +549,10 @@ func (r *AccountMemberWithID) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountMemberWithIDJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccountMemberWithIDRole struct {
 	// Role identifier tag.
 	ID string `json:"id,required"`
@@ -509,6 +577,10 @@ type accountMemberWithIDRoleJSON struct {
 
 func (r *AccountMemberWithIDRole) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountMemberWithIDRoleJSON) RawJSON() string {
+	return r.raw
 }
 
 type AccountMemberWithIDRolesPermissions struct {
@@ -550,6 +622,10 @@ func (r *AccountMemberWithIDRolesPermissions) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountMemberWithIDRolesPermissionsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccountMemberWithIDRolesPermissionsAnalytics struct {
 	Read  bool                                             `json:"read"`
 	Write bool                                             `json:"write"`
@@ -567,6 +643,10 @@ type accountMemberWithIDRolesPermissionsAnalyticsJSON struct {
 
 func (r *AccountMemberWithIDRolesPermissionsAnalytics) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountMemberWithIDRolesPermissionsAnalyticsJSON) RawJSON() string {
+	return r.raw
 }
 
 type AccountMemberWithIDRolesPermissionsBilling struct {
@@ -588,6 +668,10 @@ func (r *AccountMemberWithIDRolesPermissionsBilling) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountMemberWithIDRolesPermissionsBillingJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccountMemberWithIDRolesPermissionsCachePurge struct {
 	Read  bool                                              `json:"read"`
 	Write bool                                              `json:"write"`
@@ -605,6 +689,10 @@ type accountMemberWithIDRolesPermissionsCachePurgeJSON struct {
 
 func (r *AccountMemberWithIDRolesPermissionsCachePurge) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountMemberWithIDRolesPermissionsCachePurgeJSON) RawJSON() string {
+	return r.raw
 }
 
 type AccountMemberWithIDRolesPermissionsDNS struct {
@@ -626,6 +714,10 @@ func (r *AccountMemberWithIDRolesPermissionsDNS) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountMemberWithIDRolesPermissionsDNSJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccountMemberWithIDRolesPermissionsDNSRecords struct {
 	Read  bool                                              `json:"read"`
 	Write bool                                              `json:"write"`
@@ -643,6 +735,10 @@ type accountMemberWithIDRolesPermissionsDNSRecordsJSON struct {
 
 func (r *AccountMemberWithIDRolesPermissionsDNSRecords) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountMemberWithIDRolesPermissionsDNSRecordsJSON) RawJSON() string {
+	return r.raw
 }
 
 type AccountMemberWithIDRolesPermissionsLb struct {
@@ -664,6 +760,10 @@ func (r *AccountMemberWithIDRolesPermissionsLb) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountMemberWithIDRolesPermissionsLbJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccountMemberWithIDRolesPermissionsLogs struct {
 	Read  bool                                        `json:"read"`
 	Write bool                                        `json:"write"`
@@ -681,6 +781,10 @@ type accountMemberWithIDRolesPermissionsLogsJSON struct {
 
 func (r *AccountMemberWithIDRolesPermissionsLogs) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountMemberWithIDRolesPermissionsLogsJSON) RawJSON() string {
+	return r.raw
 }
 
 type AccountMemberWithIDRolesPermissionsOrganization struct {
@@ -702,6 +806,10 @@ func (r *AccountMemberWithIDRolesPermissionsOrganization) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountMemberWithIDRolesPermissionsOrganizationJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccountMemberWithIDRolesPermissionsSSL struct {
 	Read  bool                                       `json:"read"`
 	Write bool                                       `json:"write"`
@@ -719,6 +827,10 @@ type accountMemberWithIDRolesPermissionsSSLJSON struct {
 
 func (r *AccountMemberWithIDRolesPermissionsSSL) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountMemberWithIDRolesPermissionsSSLJSON) RawJSON() string {
+	return r.raw
 }
 
 type AccountMemberWithIDRolesPermissionsWAF struct {
@@ -740,6 +852,10 @@ func (r *AccountMemberWithIDRolesPermissionsWAF) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountMemberWithIDRolesPermissionsWAFJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccountMemberWithIDRolesPermissionsZoneSettings struct {
 	Read  bool                                                `json:"read"`
 	Write bool                                                `json:"write"`
@@ -759,6 +875,10 @@ func (r *AccountMemberWithIDRolesPermissionsZoneSettings) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountMemberWithIDRolesPermissionsZoneSettingsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccountMemberWithIDRolesPermissionsZones struct {
 	Read  bool                                         `json:"read"`
 	Write bool                                         `json:"write"`
@@ -776,6 +896,10 @@ type accountMemberWithIDRolesPermissionsZonesJSON struct {
 
 func (r *AccountMemberWithIDRolesPermissionsZones) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountMemberWithIDRolesPermissionsZonesJSON) RawJSON() string {
+	return r.raw
 }
 
 type AccountMemberWithIDUser struct {
@@ -809,6 +933,10 @@ func (r *AccountMemberWithIDUser) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountMemberWithIDUserJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccountMemberListResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
@@ -839,6 +967,10 @@ func (r *AccountMemberListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountMemberListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccountMemberListResponseRole struct {
 	// Role identifier tag.
 	ID string `json:"id,required"`
@@ -866,6 +998,10 @@ func (r *AccountMemberListResponseRole) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountMemberListResponseRoleJSON) RawJSON() string {
+	return r.raw
+}
+
 // A member's status in the organization.
 type AccountMemberListResponseStatus string
 
@@ -890,6 +1026,10 @@ type accountMemberDeleteResponseJSON struct {
 
 func (r *AccountMemberDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountMemberDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type AccountMemberNewParams struct {
@@ -936,6 +1076,10 @@ func (r *AccountMemberNewResponseEnvelope) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountMemberNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccountMemberNewResponseEnvelopeErrors struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -955,6 +1099,10 @@ func (r *AccountMemberNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountMemberNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccountMemberNewResponseEnvelopeMessages struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -972,6 +1120,10 @@ type accountMemberNewResponseEnvelopeMessagesJSON struct {
 
 func (r *AccountMemberNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountMemberNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1151,6 +1303,10 @@ func (r *AccountMemberUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountMemberUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccountMemberUpdateResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -1170,6 +1326,10 @@ func (r *AccountMemberUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountMemberUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccountMemberUpdateResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -1187,6 +1347,10 @@ type accountMemberUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *AccountMemberUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountMemberUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1274,6 +1438,10 @@ func (r *AccountMemberDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountMemberDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccountMemberDeleteResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -1293,6 +1461,10 @@ func (r *AccountMemberDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountMemberDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccountMemberDeleteResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -1310,6 +1482,10 @@ type accountMemberDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *AccountMemberDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountMemberDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1347,6 +1523,10 @@ func (r *AccountMemberGetResponseEnvelope) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountMemberGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccountMemberGetResponseEnvelopeErrors struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -1366,6 +1546,10 @@ func (r *AccountMemberGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountMemberGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccountMemberGetResponseEnvelopeMessages struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -1383,6 +1567,10 @@ type accountMemberGetResponseEnvelopeMessagesJSON struct {
 
 func (r *AccountMemberGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountMemberGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

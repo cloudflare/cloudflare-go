@@ -120,6 +120,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptUpdateResponse) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // A reference to a script that will consume logs from the attached Worker.
 type WorkersForPlatformDispatchNamespaceScriptUpdateResponseTailConsumer struct {
 	// Name of Worker that is to be the consumer.
@@ -144,6 +148,10 @@ type workersForPlatformDispatchNamespaceScriptUpdateResponseTailConsumerJSON str
 
 func (r *WorkersForPlatformDispatchNamespaceScriptUpdateResponseTailConsumer) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workersForPlatformDispatchNamespaceScriptUpdateResponseTailConsumerJSON) RawJSON() string {
+	return r.raw
 }
 
 // Details about a worker uploaded to a Workers for Platforms namespace.
@@ -171,6 +179,10 @@ type workersForPlatformDispatchNamespaceScriptGetResponseJSON struct {
 
 func (r *WorkersForPlatformDispatchNamespaceScriptGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workersForPlatformDispatchNamespaceScriptGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type WorkersForPlatformDispatchNamespaceScriptGetResponseScript struct {
@@ -216,6 +228,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptGetResponseScript) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptGetResponseScriptJSON) RawJSON() string {
+	return r.raw
+}
+
 // A reference to a script that will consume logs from the attached Worker.
 type WorkersForPlatformDispatchNamespaceScriptGetResponseScriptTailConsumer struct {
 	// Name of Worker that is to be the consumer.
@@ -240,6 +256,10 @@ type workersForPlatformDispatchNamespaceScriptGetResponseScriptTailConsumerJSON 
 
 func (r *WorkersForPlatformDispatchNamespaceScriptGetResponseScriptTailConsumer) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workersForPlatformDispatchNamespaceScriptGetResponseScriptTailConsumerJSON) RawJSON() string {
+	return r.raw
 }
 
 type WorkersForPlatformDispatchNamespaceScriptUpdateParams struct {
@@ -482,6 +502,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptUpdateResponseEnvelope) Unmars
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkersForPlatformDispatchNamespaceScriptUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                                     `json:"code,required"`
 	Message string                                                                    `json:"message,required"`
@@ -502,6 +526,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptUpdateResponseEnvelopeErrors) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkersForPlatformDispatchNamespaceScriptUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                                       `json:"code,required"`
 	Message string                                                                      `json:"message,required"`
@@ -520,6 +548,10 @@ type workersForPlatformDispatchNamespaceScriptUpdateResponseEnvelopeMessagesJSON
 
 func (r *WorkersForPlatformDispatchNamespaceScriptUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workersForPlatformDispatchNamespaceScriptUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -578,6 +610,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptGetResponseEnvelope) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkersForPlatformDispatchNamespaceScriptGetResponseEnvelopeErrors struct {
 	Code    int64                                                                  `json:"code,required"`
 	Message string                                                                 `json:"message,required"`
@@ -598,6 +634,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptGetResponseEnvelopeErrors) Unm
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkersForPlatformDispatchNamespaceScriptGetResponseEnvelopeMessages struct {
 	Code    int64                                                                    `json:"code,required"`
 	Message string                                                                   `json:"message,required"`
@@ -616,6 +656,10 @@ type workersForPlatformDispatchNamespaceScriptGetResponseEnvelopeMessagesJSON st
 
 func (r *WorkersForPlatformDispatchNamespaceScriptGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workersForPlatformDispatchNamespaceScriptGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

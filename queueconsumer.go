@@ -113,6 +113,10 @@ func (r *QueueConsumerNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r queueConsumerNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type QueueConsumerNewResponseSettings struct {
 	BatchSize     float64                              `json:"batch_size"`
 	MaxRetries    float64                              `json:"max_retries"`
@@ -132,6 +136,10 @@ type queueConsumerNewResponseSettingsJSON struct {
 
 func (r *QueueConsumerNewResponseSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r queueConsumerNewResponseSettingsJSON) RawJSON() string {
+	return r.raw
 }
 
 type QueueConsumerUpdateResponse struct {
@@ -161,6 +169,10 @@ func (r *QueueConsumerUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r queueConsumerUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type QueueConsumerUpdateResponseSettings struct {
 	BatchSize     float64                                 `json:"batch_size"`
 	MaxRetries    float64                                 `json:"max_retries"`
@@ -180,6 +192,10 @@ type queueConsumerUpdateResponseSettingsJSON struct {
 
 func (r *QueueConsumerUpdateResponseSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r queueConsumerUpdateResponseSettingsJSON) RawJSON() string {
+	return r.raw
 }
 
 // Union satisfied by [QueueConsumerDeleteResponseUnknown],
@@ -228,6 +244,10 @@ func (r *QueueConsumerGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r queueConsumerGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type QueueConsumerGetResponseSettings struct {
 	BatchSize     float64                              `json:"batch_size"`
 	MaxRetries    float64                              `json:"max_retries"`
@@ -247,6 +267,10 @@ type queueConsumerGetResponseSettingsJSON struct {
 
 func (r *QueueConsumerGetResponseSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r queueConsumerGetResponseSettingsJSON) RawJSON() string {
+	return r.raw
 }
 
 type QueueConsumerNewParams struct {
@@ -285,6 +309,10 @@ func (r *QueueConsumerNewResponseEnvelope) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r queueConsumerNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type QueueConsumerNewResponseEnvelopeErrors struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -304,6 +332,10 @@ func (r *QueueConsumerNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r queueConsumerNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type QueueConsumerNewResponseEnvelopeMessages struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -321,6 +353,10 @@ type queueConsumerNewResponseEnvelopeMessagesJSON struct {
 
 func (r *QueueConsumerNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r queueConsumerNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -355,6 +391,10 @@ type queueConsumerNewResponseEnvelopeResultInfoJSON struct {
 
 func (r *QueueConsumerNewResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r queueConsumerNewResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type QueueConsumerUpdateParams struct {
@@ -393,6 +433,10 @@ func (r *QueueConsumerUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r queueConsumerUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type QueueConsumerUpdateResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -412,6 +456,10 @@ func (r *QueueConsumerUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r queueConsumerUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type QueueConsumerUpdateResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -429,6 +477,10 @@ type queueConsumerUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *QueueConsumerUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r queueConsumerUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -465,6 +517,10 @@ func (r *QueueConsumerUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r queueConsumerUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type QueueConsumerDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -496,6 +552,10 @@ func (r *QueueConsumerDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r queueConsumerDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type QueueConsumerDeleteResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -515,6 +575,10 @@ func (r *QueueConsumerDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r queueConsumerDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type QueueConsumerDeleteResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -532,6 +596,10 @@ type queueConsumerDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *QueueConsumerDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r queueConsumerDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -568,6 +636,10 @@ func (r *QueueConsumerDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r queueConsumerDeleteResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type QueueConsumerGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -597,6 +669,10 @@ type queueConsumerGetResponseEnvelopeJSON struct {
 
 func (r *QueueConsumerGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r queueConsumerGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -633,4 +709,8 @@ type queueConsumerGetResponseEnvelopeResultInfoJSON struct {
 
 func (r *QueueConsumerGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r queueConsumerGetResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

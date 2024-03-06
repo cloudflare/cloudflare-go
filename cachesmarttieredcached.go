@@ -153,6 +153,10 @@ func (r *CacheSmartTieredCachedDeleteResponseEnvelope) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cacheSmartTieredCachedDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CacheSmartTieredCachedDeleteResponseEnvelopeErrors struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -172,6 +176,10 @@ func (r *CacheSmartTieredCachedDeleteResponseEnvelopeErrors) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cacheSmartTieredCachedDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type CacheSmartTieredCachedDeleteResponseEnvelopeMessages struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -189,6 +197,10 @@ type cacheSmartTieredCachedDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *CacheSmartTieredCachedDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cacheSmartTieredCachedDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -241,6 +253,10 @@ func (r *CacheSmartTieredCachedEditResponseEnvelope) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cacheSmartTieredCachedEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CacheSmartTieredCachedEditResponseEnvelopeErrors struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -260,6 +276,10 @@ func (r *CacheSmartTieredCachedEditResponseEnvelopeErrors) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cacheSmartTieredCachedEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type CacheSmartTieredCachedEditResponseEnvelopeMessages struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -277,6 +297,10 @@ type cacheSmartTieredCachedEditResponseEnvelopeMessagesJSON struct {
 
 func (r *CacheSmartTieredCachedEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cacheSmartTieredCachedEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -315,6 +339,10 @@ func (r *CacheSmartTieredCachedGetResponseEnvelope) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cacheSmartTieredCachedGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CacheSmartTieredCachedGetResponseEnvelopeErrors struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -334,6 +362,10 @@ func (r *CacheSmartTieredCachedGetResponseEnvelopeErrors) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cacheSmartTieredCachedGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type CacheSmartTieredCachedGetResponseEnvelopeMessages struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -351,6 +383,10 @@ type cacheSmartTieredCachedGetResponseEnvelopeMessagesJSON struct {
 
 func (r *CacheSmartTieredCachedGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cacheSmartTieredCachedGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

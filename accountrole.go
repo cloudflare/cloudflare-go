@@ -87,6 +87,10 @@ func (r *AccountRoleListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountRoleListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Union satisfied by [AccountRoleGetResponseUnknown] or [shared.UnionString].
 type AccountRoleGetResponse interface {
 	ImplementsAccountRoleGetResponse()
@@ -133,6 +137,10 @@ func (r *AccountRoleListResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountRoleListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccountRoleListResponseEnvelopeErrors struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -152,6 +160,10 @@ func (r *AccountRoleListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountRoleListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccountRoleListResponseEnvelopeMessages struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -169,6 +181,10 @@ type accountRoleListResponseEnvelopeMessagesJSON struct {
 
 func (r *AccountRoleListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountRoleListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -205,6 +221,10 @@ func (r *AccountRoleListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountRoleListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccountRoleGetParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
@@ -233,6 +253,10 @@ func (r *AccountRoleGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountRoleGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccountRoleGetResponseEnvelopeErrors struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -252,6 +276,10 @@ func (r *AccountRoleGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountRoleGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccountRoleGetResponseEnvelopeMessages struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -269,6 +297,10 @@ type accountRoleGetResponseEnvelopeMessagesJSON struct {
 
 func (r *AccountRoleGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountRoleGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

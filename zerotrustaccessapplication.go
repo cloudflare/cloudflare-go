@@ -294,6 +294,10 @@ func (r *ZeroTrustAccessApplicationNewResponseSelfHostedApplication) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationNewResponseSelfHostedApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationNewResponseSelfHostedApplication) implementsZeroTrustAccessApplicationNewResponse() {
 }
 
@@ -336,6 +340,10 @@ type zeroTrustAccessApplicationNewResponseSelfHostedApplicationCorsHeadersJSON s
 
 func (r *ZeroTrustAccessApplicationNewResponseSelfHostedApplicationCorsHeaders) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationNewResponseSelfHostedApplicationCorsHeadersJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustAccessApplicationNewResponseSelfHostedApplicationCorsHeadersAllowedMethod string
@@ -404,6 +412,10 @@ type zeroTrustAccessApplicationNewResponseSaaSApplicationJSON struct {
 
 func (r *ZeroTrustAccessApplicationNewResponseSaaSApplication) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationNewResponseSaaSApplicationJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationNewResponseSaaSApplication) implementsZeroTrustAccessApplicationNewResponse() {
@@ -476,6 +488,10 @@ func (r *ZeroTrustAccessApplicationNewResponseSaaSApplicationSaasAppAccessSamlSa
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationNewResponseSaaSApplicationSaasAppAccessSamlSaasAppJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationNewResponseSaaSApplicationSaasAppAccessSamlSaasApp) implementsZeroTrustAccessApplicationNewResponseSaaSApplicationSaasApp() {
 }
 
@@ -512,6 +528,10 @@ func (r *ZeroTrustAccessApplicationNewResponseSaaSApplicationSaasAppAccessSamlSa
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationNewResponseSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesJSON) RawJSON() string {
+	return r.raw
+}
+
 // A globally unique name for an identity or service provider.
 type ZeroTrustAccessApplicationNewResponseSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormat string
 
@@ -538,6 +558,10 @@ type zeroTrustAccessApplicationNewResponseSaaSApplicationSaasAppAccessSamlSaasAp
 
 func (r *ZeroTrustAccessApplicationNewResponseSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationNewResponseSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSourceJSON) RawJSON() string {
+	return r.raw
 }
 
 // The format of the name identifier sent to the SaaS application.
@@ -595,6 +619,10 @@ type zeroTrustAccessApplicationNewResponseSaaSApplicationSaasAppAccessOidcSaasAp
 
 func (r *ZeroTrustAccessApplicationNewResponseSaaSApplicationSaasAppAccessOidcSaasApp) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationNewResponseSaaSApplicationSaasAppAccessOidcSaasAppJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationNewResponseSaaSApplicationSaasAppAccessOidcSaasApp) implementsZeroTrustAccessApplicationNewResponseSaaSApplicationSaasApp() {
@@ -732,6 +760,10 @@ func (r *ZeroTrustAccessApplicationNewResponseBrowserSSHApplication) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationNewResponseBrowserSSHApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationNewResponseBrowserSSHApplication) implementsZeroTrustAccessApplicationNewResponse() {
 }
 
@@ -774,6 +806,10 @@ type zeroTrustAccessApplicationNewResponseBrowserSSHApplicationCorsHeadersJSON s
 
 func (r *ZeroTrustAccessApplicationNewResponseBrowserSSHApplicationCorsHeaders) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationNewResponseBrowserSSHApplicationCorsHeadersJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustAccessApplicationNewResponseBrowserSSHApplicationCorsHeadersAllowedMethod string
@@ -897,6 +933,10 @@ func (r *ZeroTrustAccessApplicationNewResponseBrowserVncApplication) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationNewResponseBrowserVncApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationNewResponseBrowserVncApplication) implementsZeroTrustAccessApplicationNewResponse() {
 }
 
@@ -939,6 +979,10 @@ type zeroTrustAccessApplicationNewResponseBrowserVncApplicationCorsHeadersJSON s
 
 func (r *ZeroTrustAccessApplicationNewResponseBrowserVncApplicationCorsHeaders) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationNewResponseBrowserVncApplicationCorsHeadersJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustAccessApplicationNewResponseBrowserVncApplicationCorsHeadersAllowedMethod string
@@ -1002,6 +1046,10 @@ type zeroTrustAccessApplicationNewResponseAppLauncherApplicationJSON struct {
 
 func (r *ZeroTrustAccessApplicationNewResponseAppLauncherApplication) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationNewResponseAppLauncherApplicationJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationNewResponseAppLauncherApplication) implementsZeroTrustAccessApplicationNewResponse() {
@@ -1071,6 +1119,10 @@ func (r *ZeroTrustAccessApplicationNewResponseDeviceEnrollmentPermissionsApplica
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationNewResponseDeviceEnrollmentPermissionsApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationNewResponseDeviceEnrollmentPermissionsApplication) implementsZeroTrustAccessApplicationNewResponse() {
 }
 
@@ -1138,6 +1190,10 @@ func (r *ZeroTrustAccessApplicationNewResponseBrowserIsolationPermissionsApplica
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationNewResponseBrowserIsolationPermissionsApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationNewResponseBrowserIsolationPermissionsApplication) implementsZeroTrustAccessApplicationNewResponse() {
 }
 
@@ -1198,6 +1254,10 @@ type zeroTrustAccessApplicationNewResponseBookmarkApplicationJSON struct {
 
 func (r *ZeroTrustAccessApplicationNewResponseBookmarkApplication) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationNewResponseBookmarkApplicationJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationNewResponseBookmarkApplication) implementsZeroTrustAccessApplicationNewResponse() {
@@ -1327,6 +1387,10 @@ func (r *ZeroTrustAccessApplicationUpdateResponseSelfHostedApplication) Unmarsha
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationUpdateResponseSelfHostedApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationUpdateResponseSelfHostedApplication) implementsZeroTrustAccessApplicationUpdateResponse() {
 }
 
@@ -1369,6 +1433,10 @@ type zeroTrustAccessApplicationUpdateResponseSelfHostedApplicationCorsHeadersJSO
 
 func (r *ZeroTrustAccessApplicationUpdateResponseSelfHostedApplicationCorsHeaders) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationUpdateResponseSelfHostedApplicationCorsHeadersJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustAccessApplicationUpdateResponseSelfHostedApplicationCorsHeadersAllowedMethod string
@@ -1438,6 +1506,10 @@ type zeroTrustAccessApplicationUpdateResponseSaaSApplicationJSON struct {
 
 func (r *ZeroTrustAccessApplicationUpdateResponseSaaSApplication) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationUpdateResponseSaaSApplicationJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationUpdateResponseSaaSApplication) implementsZeroTrustAccessApplicationUpdateResponse() {
@@ -1510,6 +1582,10 @@ func (r *ZeroTrustAccessApplicationUpdateResponseSaaSApplicationSaasAppAccessSam
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationUpdateResponseSaaSApplicationSaasAppAccessSamlSaasAppJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationUpdateResponseSaaSApplicationSaasAppAccessSamlSaasApp) implementsZeroTrustAccessApplicationUpdateResponseSaaSApplicationSaasApp() {
 }
 
@@ -1546,6 +1622,10 @@ func (r *ZeroTrustAccessApplicationUpdateResponseSaaSApplicationSaasAppAccessSam
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationUpdateResponseSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesJSON) RawJSON() string {
+	return r.raw
+}
+
 // A globally unique name for an identity or service provider.
 type ZeroTrustAccessApplicationUpdateResponseSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormat string
 
@@ -1572,6 +1652,10 @@ type zeroTrustAccessApplicationUpdateResponseSaaSApplicationSaasAppAccessSamlSaa
 
 func (r *ZeroTrustAccessApplicationUpdateResponseSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationUpdateResponseSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSourceJSON) RawJSON() string {
+	return r.raw
 }
 
 // The format of the name identifier sent to the SaaS application.
@@ -1629,6 +1713,10 @@ type zeroTrustAccessApplicationUpdateResponseSaaSApplicationSaasAppAccessOidcSaa
 
 func (r *ZeroTrustAccessApplicationUpdateResponseSaaSApplicationSaasAppAccessOidcSaasApp) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationUpdateResponseSaaSApplicationSaasAppAccessOidcSaasAppJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationUpdateResponseSaaSApplicationSaasAppAccessOidcSaasApp) implementsZeroTrustAccessApplicationUpdateResponseSaaSApplicationSaasApp() {
@@ -1766,6 +1854,10 @@ func (r *ZeroTrustAccessApplicationUpdateResponseBrowserSSHApplication) Unmarsha
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationUpdateResponseBrowserSSHApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationUpdateResponseBrowserSSHApplication) implementsZeroTrustAccessApplicationUpdateResponse() {
 }
 
@@ -1808,6 +1900,10 @@ type zeroTrustAccessApplicationUpdateResponseBrowserSSHApplicationCorsHeadersJSO
 
 func (r *ZeroTrustAccessApplicationUpdateResponseBrowserSSHApplicationCorsHeaders) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationUpdateResponseBrowserSSHApplicationCorsHeadersJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustAccessApplicationUpdateResponseBrowserSSHApplicationCorsHeadersAllowedMethod string
@@ -1931,6 +2027,10 @@ func (r *ZeroTrustAccessApplicationUpdateResponseBrowserVncApplication) Unmarsha
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationUpdateResponseBrowserVncApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationUpdateResponseBrowserVncApplication) implementsZeroTrustAccessApplicationUpdateResponse() {
 }
 
@@ -1973,6 +2073,10 @@ type zeroTrustAccessApplicationUpdateResponseBrowserVncApplicationCorsHeadersJSO
 
 func (r *ZeroTrustAccessApplicationUpdateResponseBrowserVncApplicationCorsHeaders) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationUpdateResponseBrowserVncApplicationCorsHeadersJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustAccessApplicationUpdateResponseBrowserVncApplicationCorsHeadersAllowedMethod string
@@ -2036,6 +2140,10 @@ type zeroTrustAccessApplicationUpdateResponseAppLauncherApplicationJSON struct {
 
 func (r *ZeroTrustAccessApplicationUpdateResponseAppLauncherApplication) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationUpdateResponseAppLauncherApplicationJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationUpdateResponseAppLauncherApplication) implementsZeroTrustAccessApplicationUpdateResponse() {
@@ -2105,6 +2213,10 @@ func (r *ZeroTrustAccessApplicationUpdateResponseDeviceEnrollmentPermissionsAppl
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationUpdateResponseDeviceEnrollmentPermissionsApplication) implementsZeroTrustAccessApplicationUpdateResponse() {
 }
 
@@ -2172,6 +2284,10 @@ func (r *ZeroTrustAccessApplicationUpdateResponseBrowserIsolationPermissionsAppl
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationUpdateResponseBrowserIsolationPermissionsApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationUpdateResponseBrowserIsolationPermissionsApplication) implementsZeroTrustAccessApplicationUpdateResponse() {
 }
 
@@ -2232,6 +2348,10 @@ type zeroTrustAccessApplicationUpdateResponseBookmarkApplicationJSON struct {
 
 func (r *ZeroTrustAccessApplicationUpdateResponseBookmarkApplication) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationUpdateResponseBookmarkApplicationJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationUpdateResponseBookmarkApplication) implementsZeroTrustAccessApplicationUpdateResponse() {
@@ -2361,6 +2481,10 @@ func (r *ZeroTrustAccessApplicationListResponseSelfHostedApplication) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationListResponseSelfHostedApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationListResponseSelfHostedApplication) implementsZeroTrustAccessApplicationListResponse() {
 }
 
@@ -2403,6 +2527,10 @@ type zeroTrustAccessApplicationListResponseSelfHostedApplicationCorsHeadersJSON 
 
 func (r *ZeroTrustAccessApplicationListResponseSelfHostedApplicationCorsHeaders) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationListResponseSelfHostedApplicationCorsHeadersJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustAccessApplicationListResponseSelfHostedApplicationCorsHeadersAllowedMethod string
@@ -2471,6 +2599,10 @@ type zeroTrustAccessApplicationListResponseSaaSApplicationJSON struct {
 
 func (r *ZeroTrustAccessApplicationListResponseSaaSApplication) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationListResponseSaaSApplicationJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationListResponseSaaSApplication) implementsZeroTrustAccessApplicationListResponse() {
@@ -2543,6 +2675,10 @@ func (r *ZeroTrustAccessApplicationListResponseSaaSApplicationSaasAppAccessSamlS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationListResponseSaaSApplicationSaasAppAccessSamlSaasAppJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationListResponseSaaSApplicationSaasAppAccessSamlSaasApp) implementsZeroTrustAccessApplicationListResponseSaaSApplicationSaasApp() {
 }
 
@@ -2579,6 +2715,10 @@ func (r *ZeroTrustAccessApplicationListResponseSaaSApplicationSaasAppAccessSamlS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationListResponseSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesJSON) RawJSON() string {
+	return r.raw
+}
+
 // A globally unique name for an identity or service provider.
 type ZeroTrustAccessApplicationListResponseSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormat string
 
@@ -2605,6 +2745,10 @@ type zeroTrustAccessApplicationListResponseSaaSApplicationSaasAppAccessSamlSaasA
 
 func (r *ZeroTrustAccessApplicationListResponseSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationListResponseSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSourceJSON) RawJSON() string {
+	return r.raw
 }
 
 // The format of the name identifier sent to the SaaS application.
@@ -2662,6 +2806,10 @@ type zeroTrustAccessApplicationListResponseSaaSApplicationSaasAppAccessOidcSaasA
 
 func (r *ZeroTrustAccessApplicationListResponseSaaSApplicationSaasAppAccessOidcSaasApp) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationListResponseSaaSApplicationSaasAppAccessOidcSaasAppJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationListResponseSaaSApplicationSaasAppAccessOidcSaasApp) implementsZeroTrustAccessApplicationListResponseSaaSApplicationSaasApp() {
@@ -2799,6 +2947,10 @@ func (r *ZeroTrustAccessApplicationListResponseBrowserSSHApplication) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationListResponseBrowserSSHApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationListResponseBrowserSSHApplication) implementsZeroTrustAccessApplicationListResponse() {
 }
 
@@ -2841,6 +2993,10 @@ type zeroTrustAccessApplicationListResponseBrowserSSHApplicationCorsHeadersJSON 
 
 func (r *ZeroTrustAccessApplicationListResponseBrowserSSHApplicationCorsHeaders) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationListResponseBrowserSSHApplicationCorsHeadersJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustAccessApplicationListResponseBrowserSSHApplicationCorsHeadersAllowedMethod string
@@ -2964,6 +3120,10 @@ func (r *ZeroTrustAccessApplicationListResponseBrowserVncApplication) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationListResponseBrowserVncApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationListResponseBrowserVncApplication) implementsZeroTrustAccessApplicationListResponse() {
 }
 
@@ -3006,6 +3166,10 @@ type zeroTrustAccessApplicationListResponseBrowserVncApplicationCorsHeadersJSON 
 
 func (r *ZeroTrustAccessApplicationListResponseBrowserVncApplicationCorsHeaders) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationListResponseBrowserVncApplicationCorsHeadersJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustAccessApplicationListResponseBrowserVncApplicationCorsHeadersAllowedMethod string
@@ -3069,6 +3233,10 @@ type zeroTrustAccessApplicationListResponseAppLauncherApplicationJSON struct {
 
 func (r *ZeroTrustAccessApplicationListResponseAppLauncherApplication) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationListResponseAppLauncherApplicationJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationListResponseAppLauncherApplication) implementsZeroTrustAccessApplicationListResponse() {
@@ -3138,6 +3306,10 @@ func (r *ZeroTrustAccessApplicationListResponseDeviceEnrollmentPermissionsApplic
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationListResponseDeviceEnrollmentPermissionsApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationListResponseDeviceEnrollmentPermissionsApplication) implementsZeroTrustAccessApplicationListResponse() {
 }
 
@@ -3205,6 +3377,10 @@ func (r *ZeroTrustAccessApplicationListResponseBrowserIsolationPermissionsApplic
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationListResponseBrowserIsolationPermissionsApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationListResponseBrowserIsolationPermissionsApplication) implementsZeroTrustAccessApplicationListResponse() {
 }
 
@@ -3267,6 +3443,10 @@ func (r *ZeroTrustAccessApplicationListResponseBookmarkApplication) UnmarshalJSO
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationListResponseBookmarkApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationListResponseBookmarkApplication) implementsZeroTrustAccessApplicationListResponse() {
 }
 
@@ -3286,6 +3466,10 @@ type zeroTrustAccessApplicationDeleteResponseJSON struct {
 
 func (r *ZeroTrustAccessApplicationDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Union satisfied by [ZeroTrustAccessApplicationGetResponseSelfHostedApplication],
@@ -3411,6 +3595,10 @@ func (r *ZeroTrustAccessApplicationGetResponseSelfHostedApplication) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationGetResponseSelfHostedApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationGetResponseSelfHostedApplication) implementsZeroTrustAccessApplicationGetResponse() {
 }
 
@@ -3453,6 +3641,10 @@ type zeroTrustAccessApplicationGetResponseSelfHostedApplicationCorsHeadersJSON s
 
 func (r *ZeroTrustAccessApplicationGetResponseSelfHostedApplicationCorsHeaders) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationGetResponseSelfHostedApplicationCorsHeadersJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustAccessApplicationGetResponseSelfHostedApplicationCorsHeadersAllowedMethod string
@@ -3521,6 +3713,10 @@ type zeroTrustAccessApplicationGetResponseSaaSApplicationJSON struct {
 
 func (r *ZeroTrustAccessApplicationGetResponseSaaSApplication) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationGetResponseSaaSApplicationJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationGetResponseSaaSApplication) implementsZeroTrustAccessApplicationGetResponse() {
@@ -3593,6 +3789,10 @@ func (r *ZeroTrustAccessApplicationGetResponseSaaSApplicationSaasAppAccessSamlSa
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationGetResponseSaaSApplicationSaasAppAccessSamlSaasAppJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationGetResponseSaaSApplicationSaasAppAccessSamlSaasApp) implementsZeroTrustAccessApplicationGetResponseSaaSApplicationSaasApp() {
 }
 
@@ -3629,6 +3829,10 @@ func (r *ZeroTrustAccessApplicationGetResponseSaaSApplicationSaasAppAccessSamlSa
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationGetResponseSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesJSON) RawJSON() string {
+	return r.raw
+}
+
 // A globally unique name for an identity or service provider.
 type ZeroTrustAccessApplicationGetResponseSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesNameFormat string
 
@@ -3655,6 +3859,10 @@ type zeroTrustAccessApplicationGetResponseSaaSApplicationSaasAppAccessSamlSaasAp
 
 func (r *ZeroTrustAccessApplicationGetResponseSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSource) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationGetResponseSaaSApplicationSaasAppAccessSamlSaasAppCustomAttributesSourceJSON) RawJSON() string {
+	return r.raw
 }
 
 // The format of the name identifier sent to the SaaS application.
@@ -3712,6 +3920,10 @@ type zeroTrustAccessApplicationGetResponseSaaSApplicationSaasAppAccessOidcSaasAp
 
 func (r *ZeroTrustAccessApplicationGetResponseSaaSApplicationSaasAppAccessOidcSaasApp) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationGetResponseSaaSApplicationSaasAppAccessOidcSaasAppJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationGetResponseSaaSApplicationSaasAppAccessOidcSaasApp) implementsZeroTrustAccessApplicationGetResponseSaaSApplicationSaasApp() {
@@ -3849,6 +4061,10 @@ func (r *ZeroTrustAccessApplicationGetResponseBrowserSSHApplication) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationGetResponseBrowserSSHApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationGetResponseBrowserSSHApplication) implementsZeroTrustAccessApplicationGetResponse() {
 }
 
@@ -3891,6 +4107,10 @@ type zeroTrustAccessApplicationGetResponseBrowserSSHApplicationCorsHeadersJSON s
 
 func (r *ZeroTrustAccessApplicationGetResponseBrowserSSHApplicationCorsHeaders) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationGetResponseBrowserSSHApplicationCorsHeadersJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustAccessApplicationGetResponseBrowserSSHApplicationCorsHeadersAllowedMethod string
@@ -4014,6 +4234,10 @@ func (r *ZeroTrustAccessApplicationGetResponseBrowserVncApplication) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationGetResponseBrowserVncApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationGetResponseBrowserVncApplication) implementsZeroTrustAccessApplicationGetResponse() {
 }
 
@@ -4056,6 +4280,10 @@ type zeroTrustAccessApplicationGetResponseBrowserVncApplicationCorsHeadersJSON s
 
 func (r *ZeroTrustAccessApplicationGetResponseBrowserVncApplicationCorsHeaders) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationGetResponseBrowserVncApplicationCorsHeadersJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustAccessApplicationGetResponseBrowserVncApplicationCorsHeadersAllowedMethod string
@@ -4119,6 +4347,10 @@ type zeroTrustAccessApplicationGetResponseAppLauncherApplicationJSON struct {
 
 func (r *ZeroTrustAccessApplicationGetResponseAppLauncherApplication) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationGetResponseAppLauncherApplicationJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationGetResponseAppLauncherApplication) implementsZeroTrustAccessApplicationGetResponse() {
@@ -4188,6 +4420,10 @@ func (r *ZeroTrustAccessApplicationGetResponseDeviceEnrollmentPermissionsApplica
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationGetResponseDeviceEnrollmentPermissionsApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationGetResponseDeviceEnrollmentPermissionsApplication) implementsZeroTrustAccessApplicationGetResponse() {
 }
 
@@ -4255,6 +4491,10 @@ func (r *ZeroTrustAccessApplicationGetResponseBrowserIsolationPermissionsApplica
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationGetResponseBrowserIsolationPermissionsApplicationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r ZeroTrustAccessApplicationGetResponseBrowserIsolationPermissionsApplication) implementsZeroTrustAccessApplicationGetResponse() {
 }
 
@@ -4315,6 +4555,10 @@ type zeroTrustAccessApplicationGetResponseBookmarkApplicationJSON struct {
 
 func (r *ZeroTrustAccessApplicationGetResponseBookmarkApplication) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationGetResponseBookmarkApplicationJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r ZeroTrustAccessApplicationGetResponseBookmarkApplication) implementsZeroTrustAccessApplicationGetResponse() {
@@ -4596,6 +4840,10 @@ func (r *ZeroTrustAccessApplicationNewResponseEnvelope) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessApplicationNewResponseEnvelopeErrors struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -4615,6 +4863,10 @@ func (r *ZeroTrustAccessApplicationNewResponseEnvelopeErrors) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessApplicationNewResponseEnvelopeMessages struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -4632,6 +4884,10 @@ type zeroTrustAccessApplicationNewResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustAccessApplicationNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -4922,6 +5178,10 @@ func (r *ZeroTrustAccessApplicationUpdateResponseEnvelope) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessApplicationUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -4939,6 +5199,10 @@ type zeroTrustAccessApplicationUpdateResponseEnvelopeErrorsJSON struct {
 
 func (r *ZeroTrustAccessApplicationUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustAccessApplicationUpdateResponseEnvelopeMessages struct {
@@ -4959,6 +5223,10 @@ type zeroTrustAccessApplicationUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustAccessApplicationUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -5001,6 +5269,10 @@ func (r *ZeroTrustAccessApplicationListResponseEnvelope) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessApplicationListResponseEnvelopeErrors struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -5020,6 +5292,10 @@ func (r *ZeroTrustAccessApplicationListResponseEnvelopeErrors) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessApplicationListResponseEnvelopeMessages struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -5037,6 +5313,10 @@ type zeroTrustAccessApplicationListResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustAccessApplicationListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -5072,6 +5352,10 @@ type zeroTrustAccessApplicationListResponseEnvelopeResultInfoJSON struct {
 
 func (r *ZeroTrustAccessApplicationListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustAccessApplicationDeleteParams struct {
@@ -5112,6 +5396,10 @@ func (r *ZeroTrustAccessApplicationDeleteResponseEnvelope) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessApplicationDeleteResponseEnvelopeErrors struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -5129,6 +5417,10 @@ type zeroTrustAccessApplicationDeleteResponseEnvelopeErrorsJSON struct {
 
 func (r *ZeroTrustAccessApplicationDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustAccessApplicationDeleteResponseEnvelopeMessages struct {
@@ -5149,6 +5441,10 @@ type zeroTrustAccessApplicationDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustAccessApplicationDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -5196,6 +5492,10 @@ func (r *ZeroTrustAccessApplicationGetResponseEnvelope) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessApplicationGetResponseEnvelopeErrors struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -5215,6 +5515,10 @@ func (r *ZeroTrustAccessApplicationGetResponseEnvelopeErrors) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessApplicationGetResponseEnvelopeMessages struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -5232,6 +5536,10 @@ type zeroTrustAccessApplicationGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustAccessApplicationGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -5272,6 +5580,10 @@ type zeroTrustAccessApplicationRevokeTokensResponseEnvelopeJSON struct {
 
 func (r *ZeroTrustAccessApplicationRevokeTokensResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationRevokeTokensResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustAccessApplicationRevokeTokensResponseEnvelopeSuccess bool

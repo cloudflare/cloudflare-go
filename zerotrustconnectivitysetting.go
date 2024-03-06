@@ -78,6 +78,10 @@ func (r *ZeroTrustConnectivitySettingEditResponse) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustConnectivitySettingEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustConnectivitySettingGetResponse struct {
 	// A flag to enable the ICMP proxy for the account network.
 	IcmpProxyEnabled bool `json:"icmp_proxy_enabled"`
@@ -97,6 +101,10 @@ type zeroTrustConnectivitySettingGetResponseJSON struct {
 
 func (r *ZeroTrustConnectivitySettingGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustConnectivitySettingGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustConnectivitySettingEditParams struct {
@@ -136,6 +144,10 @@ func (r *ZeroTrustConnectivitySettingEditResponseEnvelope) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustConnectivitySettingEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustConnectivitySettingEditResponseEnvelopeErrors struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -153,6 +165,10 @@ type zeroTrustConnectivitySettingEditResponseEnvelopeErrorsJSON struct {
 
 func (r *ZeroTrustConnectivitySettingEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustConnectivitySettingEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustConnectivitySettingEditResponseEnvelopeMessages struct {
@@ -173,6 +189,10 @@ type zeroTrustConnectivitySettingEditResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustConnectivitySettingEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustConnectivitySettingEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -211,6 +231,10 @@ func (r *ZeroTrustConnectivitySettingGetResponseEnvelope) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustConnectivitySettingGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustConnectivitySettingGetResponseEnvelopeErrors struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -228,6 +252,10 @@ type zeroTrustConnectivitySettingGetResponseEnvelopeErrorsJSON struct {
 
 func (r *ZeroTrustConnectivitySettingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustConnectivitySettingGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustConnectivitySettingGetResponseEnvelopeMessages struct {
@@ -248,6 +276,10 @@ type zeroTrustConnectivitySettingGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustConnectivitySettingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustConnectivitySettingGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

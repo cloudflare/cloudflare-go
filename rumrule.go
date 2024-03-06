@@ -117,6 +117,10 @@ func (r *RUMRuleNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rumRuleNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RUMRuleUpdateResponse struct {
 	// The Web Analytics rule identifier.
 	ID      string    `json:"id"`
@@ -151,6 +155,10 @@ func (r *RUMRuleUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rumRuleUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RUMRuleListResponse struct {
 	// A list of rules.
 	Rules   []RUMRuleListResponseRule  `json:"rules"`
@@ -169,6 +177,10 @@ type rumRuleListResponseJSON struct {
 
 func (r *RUMRuleListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rumRuleListResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RUMRuleListResponseRule struct {
@@ -205,6 +217,10 @@ func (r *RUMRuleListResponseRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rumRuleListResponseRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 type RUMRuleListResponseRuleset struct {
 	// The Web Analytics ruleset identifier.
 	ID string `json:"id"`
@@ -231,6 +247,10 @@ func (r *RUMRuleListResponseRuleset) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rumRuleListResponseRulesetJSON) RawJSON() string {
+	return r.raw
+}
+
 type RUMRuleDeleteResponse struct {
 	// The Web Analytics rule identifier.
 	ID   string                    `json:"id"`
@@ -247,6 +267,10 @@ type rumRuleDeleteResponseJSON struct {
 
 func (r *RUMRuleDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rumRuleDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RUMRuleNewParams struct {
@@ -281,6 +305,10 @@ func (r *RUMRuleNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rumRuleNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RUMRuleUpdateParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -313,6 +341,10 @@ func (r *RUMRuleUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rumRuleUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RUMRuleListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -335,6 +367,10 @@ func (r *RUMRuleListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rumRuleListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RUMRuleDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -355,4 +391,8 @@ type rumRuleDeleteResponseEnvelopeJSON struct {
 
 func (r *RUMRuleDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rumRuleDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

@@ -88,6 +88,10 @@ func (r *IntelIndicatorFeedPermissionNewResponse) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r intelIndicatorFeedPermissionNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type IntelIndicatorFeedPermissionListResponse struct {
 	// The unique identifier for the indicator feed
 	ID int64 `json:"id"`
@@ -112,6 +116,10 @@ func (r *IntelIndicatorFeedPermissionListResponse) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r intelIndicatorFeedPermissionListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type IntelIndicatorFeedPermissionDeleteResponse struct {
 	// Whether the update succeeded or not
 	Success bool                                           `json:"success"`
@@ -128,6 +136,10 @@ type intelIndicatorFeedPermissionDeleteResponseJSON struct {
 
 func (r *IntelIndicatorFeedPermissionDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r intelIndicatorFeedPermissionDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type IntelIndicatorFeedPermissionNewParams struct {
@@ -167,6 +179,10 @@ func (r *IntelIndicatorFeedPermissionNewResponseEnvelope) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r intelIndicatorFeedPermissionNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type IntelIndicatorFeedPermissionNewResponseEnvelopeErrors struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -184,6 +200,10 @@ type intelIndicatorFeedPermissionNewResponseEnvelopeErrorsJSON struct {
 
 func (r *IntelIndicatorFeedPermissionNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r intelIndicatorFeedPermissionNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type IntelIndicatorFeedPermissionNewResponseEnvelopeMessages struct {
@@ -204,6 +224,10 @@ type intelIndicatorFeedPermissionNewResponseEnvelopeMessagesJSON struct {
 
 func (r *IntelIndicatorFeedPermissionNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r intelIndicatorFeedPermissionNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -242,6 +266,10 @@ func (r *IntelIndicatorFeedPermissionListResponseEnvelope) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r intelIndicatorFeedPermissionListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type IntelIndicatorFeedPermissionListResponseEnvelopeErrors struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -259,6 +287,10 @@ type intelIndicatorFeedPermissionListResponseEnvelopeErrorsJSON struct {
 
 func (r *IntelIndicatorFeedPermissionListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r intelIndicatorFeedPermissionListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type IntelIndicatorFeedPermissionListResponseEnvelopeMessages struct {
@@ -279,6 +311,10 @@ type intelIndicatorFeedPermissionListResponseEnvelopeMessagesJSON struct {
 
 func (r *IntelIndicatorFeedPermissionListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r intelIndicatorFeedPermissionListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -325,6 +361,10 @@ func (r *IntelIndicatorFeedPermissionDeleteResponseEnvelope) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r intelIndicatorFeedPermissionDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type IntelIndicatorFeedPermissionDeleteResponseEnvelopeErrors struct {
 	Code    int64                                                        `json:"code,required"`
 	Message string                                                       `json:"message,required"`
@@ -345,6 +385,10 @@ func (r *IntelIndicatorFeedPermissionDeleteResponseEnvelopeErrors) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r intelIndicatorFeedPermissionDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type IntelIndicatorFeedPermissionDeleteResponseEnvelopeMessages struct {
 	Code    int64                                                          `json:"code,required"`
 	Message string                                                         `json:"message,required"`
@@ -363,6 +407,10 @@ type intelIndicatorFeedPermissionDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *IntelIndicatorFeedPermissionDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r intelIndicatorFeedPermissionDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

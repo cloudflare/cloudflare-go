@@ -73,6 +73,10 @@ func (r *SecondaryDNSOutgoingStatusGetResponseEnvelope) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r secondaryDNSOutgoingStatusGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type SecondaryDNSOutgoingStatusGetResponseEnvelopeErrors struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -92,6 +96,10 @@ func (r *SecondaryDNSOutgoingStatusGetResponseEnvelopeErrors) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r secondaryDNSOutgoingStatusGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type SecondaryDNSOutgoingStatusGetResponseEnvelopeMessages struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -109,6 +117,10 @@ type secondaryDNSOutgoingStatusGetResponseEnvelopeMessagesJSON struct {
 
 func (r *SecondaryDNSOutgoingStatusGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r secondaryDNSOutgoingStatusGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

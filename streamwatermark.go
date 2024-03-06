@@ -162,6 +162,10 @@ func (r *StreamWatermarkListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamWatermarkListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Union satisfied by [StreamWatermarkDeleteResponseUnknown] or
 // [shared.UnionString].
 type StreamWatermarkDeleteResponse interface {
@@ -249,6 +253,10 @@ func (r *StreamWatermarkNewResponseEnvelope) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamWatermarkNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamWatermarkNewResponseEnvelopeErrors struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -268,6 +276,10 @@ func (r *StreamWatermarkNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamWatermarkNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamWatermarkNewResponseEnvelopeMessages struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -285,6 +297,10 @@ type streamWatermarkNewResponseEnvelopeMessagesJSON struct {
 
 func (r *StreamWatermarkNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamWatermarkNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -323,6 +339,10 @@ func (r *StreamWatermarkListResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamWatermarkListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamWatermarkListResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -342,6 +362,10 @@ func (r *StreamWatermarkListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamWatermarkListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamWatermarkListResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -359,6 +383,10 @@ type streamWatermarkListResponseEnvelopeMessagesJSON struct {
 
 func (r *StreamWatermarkListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamWatermarkListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -397,6 +425,10 @@ func (r *StreamWatermarkDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamWatermarkDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamWatermarkDeleteResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -416,6 +448,10 @@ func (r *StreamWatermarkDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamWatermarkDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamWatermarkDeleteResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -433,6 +469,10 @@ type streamWatermarkDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *StreamWatermarkDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamWatermarkDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -471,6 +511,10 @@ func (r *StreamWatermarkGetResponseEnvelope) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamWatermarkGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamWatermarkGetResponseEnvelopeErrors struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -490,6 +534,10 @@ func (r *StreamWatermarkGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamWatermarkGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamWatermarkGetResponseEnvelopeMessages struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -507,6 +555,10 @@ type streamWatermarkGetResponseEnvelopeMessagesJSON struct {
 
 func (r *StreamWatermarkGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamWatermarkGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

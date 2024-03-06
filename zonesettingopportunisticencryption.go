@@ -88,6 +88,10 @@ func (r *ZoneSettingOpportunisticEncryptionEditResponse) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingOpportunisticEncryptionEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // ID of the zone setting.
 type ZoneSettingOpportunisticEncryptionEditResponseID string
 
@@ -139,6 +143,10 @@ type zoneSettingOpportunisticEncryptionGetResponseJSON struct {
 
 func (r *ZoneSettingOpportunisticEncryptionGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingOpportunisticEncryptionGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // ID of the zone setting.
@@ -211,6 +219,10 @@ func (r *ZoneSettingOpportunisticEncryptionEditResponseEnvelope) UnmarshalJSON(d
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingOpportunisticEncryptionEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingOpportunisticEncryptionEditResponseEnvelopeErrors struct {
 	Code    int64                                                            `json:"code,required"`
 	Message string                                                           `json:"message,required"`
@@ -231,6 +243,10 @@ func (r *ZoneSettingOpportunisticEncryptionEditResponseEnvelopeErrors) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingOpportunisticEncryptionEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingOpportunisticEncryptionEditResponseEnvelopeMessages struct {
 	Code    int64                                                              `json:"code,required"`
 	Message string                                                             `json:"message,required"`
@@ -249,6 +265,10 @@ type zoneSettingOpportunisticEncryptionEditResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingOpportunisticEncryptionEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingOpportunisticEncryptionEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneSettingOpportunisticEncryptionGetParams struct {
@@ -281,6 +301,10 @@ func (r *ZoneSettingOpportunisticEncryptionGetResponseEnvelope) UnmarshalJSON(da
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingOpportunisticEncryptionGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingOpportunisticEncryptionGetResponseEnvelopeErrors struct {
 	Code    int64                                                           `json:"code,required"`
 	Message string                                                          `json:"message,required"`
@@ -301,6 +325,10 @@ func (r *ZoneSettingOpportunisticEncryptionGetResponseEnvelopeErrors) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingOpportunisticEncryptionGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingOpportunisticEncryptionGetResponseEnvelopeMessages struct {
 	Code    int64                                                             `json:"code,required"`
 	Message string                                                            `json:"message,required"`
@@ -319,4 +347,8 @@ type zoneSettingOpportunisticEncryptionGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingOpportunisticEncryptionGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingOpportunisticEncryptionGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }

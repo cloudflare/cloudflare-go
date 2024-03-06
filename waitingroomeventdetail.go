@@ -110,6 +110,10 @@ func (r *WaitingRoomEventDetailGetResponse) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomEventDetailGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomEventDetailGetResponseEnvelope struct {
 	Result WaitingRoomEventDetailGetResponse             `json:"result,required"`
 	JSON   waitingRoomEventDetailGetResponseEnvelopeJSON `json:"-"`
@@ -125,4 +129,8 @@ type waitingRoomEventDetailGetResponseEnvelopeJSON struct {
 
 func (r *WaitingRoomEventDetailGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomEventDetailGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

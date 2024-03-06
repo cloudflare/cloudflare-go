@@ -137,6 +137,10 @@ func (r *ArgoTieredCachingEditResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r argoTieredCachingEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ArgoTieredCachingEditResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -156,6 +160,10 @@ func (r *ArgoTieredCachingEditResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r argoTieredCachingEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ArgoTieredCachingEditResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -173,6 +181,10 @@ type argoTieredCachingEditResponseEnvelopeMessagesJSON struct {
 
 func (r *ArgoTieredCachingEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r argoTieredCachingEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -211,6 +223,10 @@ func (r *ArgoTieredCachingGetResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r argoTieredCachingGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ArgoTieredCachingGetResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -230,6 +246,10 @@ func (r *ArgoTieredCachingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r argoTieredCachingGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ArgoTieredCachingGetResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -247,6 +267,10 @@ type argoTieredCachingGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ArgoTieredCachingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r argoTieredCachingGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

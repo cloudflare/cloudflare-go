@@ -153,6 +153,10 @@ func (r *FirewallLockdownNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallLockdownNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // A list of IP addresses or CIDR ranges that will be allowed to access the URLs
 // specified in the Zone Lockdown rule. You can include any number of `ip` or
 // `ip_range` configurations.
@@ -192,6 +196,10 @@ func (r *FirewallLockdownNewResponseConfigurationsLegacyJhsSchemasIPConfiguratio
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallLockdownNewResponseConfigurationsLegacyJhsSchemasIPConfigurationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r FirewallLockdownNewResponseConfigurationsLegacyJhsSchemasIPConfiguration) implementsFirewallLockdownNewResponseConfigurations() {
 }
 
@@ -224,6 +232,10 @@ type firewallLockdownNewResponseConfigurationsLegacyJhsSchemasCidrConfigurationJ
 
 func (r *FirewallLockdownNewResponseConfigurationsLegacyJhsSchemasCidrConfiguration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallLockdownNewResponseConfigurationsLegacyJhsSchemasCidrConfigurationJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r FirewallLockdownNewResponseConfigurationsLegacyJhsSchemasCidrConfiguration) implementsFirewallLockdownNewResponseConfigurations() {
@@ -277,6 +289,10 @@ func (r *FirewallLockdownUpdateResponse) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallLockdownUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // A list of IP addresses or CIDR ranges that will be allowed to access the URLs
 // specified in the Zone Lockdown rule. You can include any number of `ip` or
 // `ip_range` configurations.
@@ -316,6 +332,10 @@ func (r *FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasIPConfigura
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasIPConfigurationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasIPConfiguration) implementsFirewallLockdownUpdateResponseConfigurations() {
 }
 
@@ -348,6 +368,10 @@ type firewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasCidrConfigurati
 
 func (r *FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasCidrConfiguration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasCidrConfigurationJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r FirewallLockdownUpdateResponseConfigurationsLegacyJhsSchemasCidrConfiguration) implementsFirewallLockdownUpdateResponseConfigurations() {
@@ -401,6 +425,10 @@ func (r *FirewallLockdownListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallLockdownListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // A list of IP addresses or CIDR ranges that will be allowed to access the URLs
 // specified in the Zone Lockdown rule. You can include any number of `ip` or
 // `ip_range` configurations.
@@ -440,6 +468,10 @@ func (r *FirewallLockdownListResponseConfigurationsLegacyJhsSchemasIPConfigurati
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallLockdownListResponseConfigurationsLegacyJhsSchemasIPConfigurationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r FirewallLockdownListResponseConfigurationsLegacyJhsSchemasIPConfiguration) implementsFirewallLockdownListResponseConfigurations() {
 }
 
@@ -474,6 +506,10 @@ func (r *FirewallLockdownListResponseConfigurationsLegacyJhsSchemasCidrConfigura
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallLockdownListResponseConfigurationsLegacyJhsSchemasCidrConfigurationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r FirewallLockdownListResponseConfigurationsLegacyJhsSchemasCidrConfiguration) implementsFirewallLockdownListResponseConfigurations() {
 }
 
@@ -501,6 +537,10 @@ type firewallLockdownDeleteResponseJSON struct {
 
 func (r *FirewallLockdownDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallLockdownDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type FirewallLockdownGetResponse struct {
@@ -543,6 +583,10 @@ func (r *FirewallLockdownGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallLockdownGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // A list of IP addresses or CIDR ranges that will be allowed to access the URLs
 // specified in the Zone Lockdown rule. You can include any number of `ip` or
 // `ip_range` configurations.
@@ -582,6 +626,10 @@ func (r *FirewallLockdownGetResponseConfigurationsLegacyJhsSchemasIPConfiguratio
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallLockdownGetResponseConfigurationsLegacyJhsSchemasIPConfigurationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r FirewallLockdownGetResponseConfigurationsLegacyJhsSchemasIPConfiguration) implementsFirewallLockdownGetResponseConfigurations() {
 }
 
@@ -614,6 +662,10 @@ type firewallLockdownGetResponseConfigurationsLegacyJhsSchemasCidrConfigurationJ
 
 func (r *FirewallLockdownGetResponseConfigurationsLegacyJhsSchemasCidrConfiguration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallLockdownGetResponseConfigurationsLegacyJhsSchemasCidrConfigurationJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r FirewallLockdownGetResponseConfigurationsLegacyJhsSchemasCidrConfiguration) implementsFirewallLockdownGetResponseConfigurations() {
@@ -659,6 +711,10 @@ func (r *FirewallLockdownNewResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallLockdownNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallLockdownNewResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -678,6 +734,10 @@ func (r *FirewallLockdownNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallLockdownNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallLockdownNewResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -695,6 +755,10 @@ type firewallLockdownNewResponseEnvelopeMessagesJSON struct {
 
 func (r *FirewallLockdownNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallLockdownNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -736,6 +800,10 @@ func (r *FirewallLockdownUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallLockdownUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallLockdownUpdateResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -755,6 +823,10 @@ func (r *FirewallLockdownUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallLockdownUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallLockdownUpdateResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -772,6 +844,10 @@ type firewallLockdownUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *FirewallLockdownUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallLockdownUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -831,6 +907,10 @@ func (r *FirewallLockdownDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallLockdownDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallLockdownGetResponseEnvelope struct {
 	Errors   []FirewallLockdownGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []FirewallLockdownGetResponseEnvelopeMessages `json:"messages,required"`
@@ -855,6 +935,10 @@ func (r *FirewallLockdownGetResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallLockdownGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallLockdownGetResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -874,6 +958,10 @@ func (r *FirewallLockdownGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallLockdownGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallLockdownGetResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -891,6 +979,10 @@ type firewallLockdownGetResponseEnvelopeMessagesJSON struct {
 
 func (r *FirewallLockdownGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallLockdownGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

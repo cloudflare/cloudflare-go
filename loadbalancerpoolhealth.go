@@ -81,6 +81,10 @@ func (r *LoadBalancerPoolHealthNewResponse) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolHealthNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // A list of regions from which to run health checks. Null means every Cloudflare
 // data center.
 //
@@ -196,6 +200,10 @@ func (r *LoadBalancerPoolHealthNewResponseEnvelope) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolHealthNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoadBalancerPoolHealthNewResponseEnvelopeErrors struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -215,6 +223,10 @@ func (r *LoadBalancerPoolHealthNewResponseEnvelopeErrors) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolHealthNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoadBalancerPoolHealthNewResponseEnvelopeMessages struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -232,6 +244,10 @@ type loadBalancerPoolHealthNewResponseEnvelopeMessagesJSON struct {
 
 func (r *LoadBalancerPoolHealthNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerPoolHealthNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -272,6 +288,10 @@ func (r *LoadBalancerPoolHealthGetResponseEnvelope) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolHealthGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoadBalancerPoolHealthGetResponseEnvelopeErrors struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -291,6 +311,10 @@ func (r *LoadBalancerPoolHealthGetResponseEnvelopeErrors) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolHealthGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoadBalancerPoolHealthGetResponseEnvelopeMessages struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -308,6 +332,10 @@ type loadBalancerPoolHealthGetResponseEnvelopeMessagesJSON struct {
 
 func (r *LoadBalancerPoolHealthGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerPoolHealthGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

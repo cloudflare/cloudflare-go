@@ -93,6 +93,10 @@ func (r *ZoneSettingMinifyEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingMinifyEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Zone setting identifier.
 type ZoneSettingMinifyEditResponseID string
 
@@ -123,6 +127,10 @@ type zoneSettingMinifyEditResponseValueJSON struct {
 
 func (r *ZoneSettingMinifyEditResponseValue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingMinifyEditResponseValueJSON) RawJSON() string {
+	return r.raw
 }
 
 // Automatically minify all CSS files for your website.
@@ -189,6 +197,10 @@ func (r *ZoneSettingMinifyGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingMinifyGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Zone setting identifier.
 type ZoneSettingMinifyGetResponseID string
 
@@ -219,6 +231,10 @@ type zoneSettingMinifyGetResponseValueJSON struct {
 
 func (r *ZoneSettingMinifyGetResponseValue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingMinifyGetResponseValueJSON) RawJSON() string {
+	return r.raw
 }
 
 // Automatically minify all CSS files for your website.
@@ -330,6 +346,10 @@ func (r *ZoneSettingMinifyEditResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingMinifyEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingMinifyEditResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -349,6 +369,10 @@ func (r *ZoneSettingMinifyEditResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingMinifyEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingMinifyEditResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -366,6 +390,10 @@ type zoneSettingMinifyEditResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingMinifyEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingMinifyEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneSettingMinifyGetParams struct {
@@ -400,6 +428,10 @@ func (r *ZoneSettingMinifyGetResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingMinifyGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingMinifyGetResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -419,6 +451,10 @@ func (r *ZoneSettingMinifyGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingMinifyGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingMinifyGetResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -436,4 +472,8 @@ type zoneSettingMinifyGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingMinifyGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingMinifyGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }

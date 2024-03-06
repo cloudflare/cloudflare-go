@@ -83,6 +83,10 @@ func (r *SSLVerificationEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r sslVerificationEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Desired validation method.
 type SSLVerificationEditResponseValidationMethod string
 
@@ -131,6 +135,10 @@ type sslVerificationGetResponseJSON struct {
 
 func (r *SSLVerificationGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sslVerificationGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Current status of certificate.
@@ -184,6 +192,10 @@ type sslVerificationGetResponseVerificationInfoJSON struct {
 
 func (r *SSLVerificationGetResponseVerificationInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sslVerificationGetResponseVerificationInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 // Name of CNAME record.
@@ -259,6 +271,10 @@ func (r *SSLVerificationEditResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r sslVerificationEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type SSLVerificationEditResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -278,6 +294,10 @@ func (r *SSLVerificationEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r sslVerificationEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type SSLVerificationEditResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -295,6 +315,10 @@ type sslVerificationEditResponseEnvelopeMessagesJSON struct {
 
 func (r *SSLVerificationEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sslVerificationEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -342,4 +366,8 @@ type sslVerificationGetResponseEnvelopeJSON struct {
 
 func (r *SSLVerificationGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sslVerificationGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

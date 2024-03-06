@@ -78,6 +78,10 @@ func (r *ZoneSettingAdvancedDDOSGetResponse) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingAdvancedDDOSGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // ID of the zone setting.
 type ZoneSettingAdvancedDDOSGetResponseID string
 
@@ -134,6 +138,10 @@ func (r *ZoneSettingAdvancedDDOSGetResponseEnvelope) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingAdvancedDDOSGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingAdvancedDDOSGetResponseEnvelopeErrors struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -153,6 +161,10 @@ func (r *ZoneSettingAdvancedDDOSGetResponseEnvelopeErrors) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingAdvancedDDOSGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingAdvancedDDOSGetResponseEnvelopeMessages struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -170,4 +182,8 @@ type zoneSettingAdvancedDDOSGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingAdvancedDDOSGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingAdvancedDDOSGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }

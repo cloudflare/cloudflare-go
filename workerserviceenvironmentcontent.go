@@ -100,6 +100,10 @@ func (r *WorkerServiceEnvironmentContentUpdateResponse) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerServiceEnvironmentContentUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // A reference to a script that will consume logs from the attached Worker.
 type WorkerServiceEnvironmentContentUpdateResponseTailConsumer struct {
 	// Name of Worker that is to be the consumer.
@@ -124,6 +128,10 @@ type workerServiceEnvironmentContentUpdateResponseTailConsumerJSON struct {
 
 func (r *WorkerServiceEnvironmentContentUpdateResponseTailConsumer) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerServiceEnvironmentContentUpdateResponseTailConsumerJSON) RawJSON() string {
+	return r.raw
 }
 
 type WorkerServiceEnvironmentContentUpdateParams struct {
@@ -195,6 +203,10 @@ func (r *WorkerServiceEnvironmentContentUpdateResponseEnvelope) UnmarshalJSON(da
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerServiceEnvironmentContentUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerServiceEnvironmentContentUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                           `json:"code,required"`
 	Message string                                                          `json:"message,required"`
@@ -215,6 +227,10 @@ func (r *WorkerServiceEnvironmentContentUpdateResponseEnvelopeErrors) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerServiceEnvironmentContentUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerServiceEnvironmentContentUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                             `json:"code,required"`
 	Message string                                                            `json:"message,required"`
@@ -233,6 +249,10 @@ type workerServiceEnvironmentContentUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *WorkerServiceEnvironmentContentUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerServiceEnvironmentContentUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

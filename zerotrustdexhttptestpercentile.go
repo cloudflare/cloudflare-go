@@ -68,6 +68,10 @@ func (r *ZeroTrustDexhttpTestPercentileListResponse) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDexhttpTestPercentileListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDexhttpTestPercentileListResponseDNSResponseTimeMs struct {
 	// p50 observed in the time period
 	P50 float64 `json:"p50,nullable"`
@@ -94,6 +98,10 @@ type zeroTrustDexhttpTestPercentileListResponseDNSResponseTimeMsJSON struct {
 
 func (r *ZeroTrustDexhttpTestPercentileListResponseDNSResponseTimeMs) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDexhttpTestPercentileListResponseDNSResponseTimeMsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDexhttpTestPercentileListResponseResourceFetchTimeMs struct {
@@ -124,6 +132,10 @@ func (r *ZeroTrustDexhttpTestPercentileListResponseResourceFetchTimeMs) Unmarsha
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDexhttpTestPercentileListResponseResourceFetchTimeMsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDexhttpTestPercentileListResponseServerResponseTimeMs struct {
 	// p50 observed in the time period
 	P50 float64 `json:"p50,nullable"`
@@ -150,6 +162,10 @@ type zeroTrustDexhttpTestPercentileListResponseServerResponseTimeMsJSON struct {
 
 func (r *ZeroTrustDexhttpTestPercentileListResponseServerResponseTimeMs) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDexhttpTestPercentileListResponseServerResponseTimeMsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDEXHTTPTestPercentileListParams struct {
@@ -199,6 +215,10 @@ func (r *ZeroTrustDexhttpTestPercentileListResponseEnvelope) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDexhttpTestPercentileListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDexhttpTestPercentileListResponseEnvelopeErrors struct {
 	Code    int64                                                        `json:"code,required"`
 	Message string                                                       `json:"message,required"`
@@ -219,6 +239,10 @@ func (r *ZeroTrustDexhttpTestPercentileListResponseEnvelopeErrors) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDexhttpTestPercentileListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDexhttpTestPercentileListResponseEnvelopeMessages struct {
 	Code    int64                                                          `json:"code,required"`
 	Message string                                                         `json:"message,required"`
@@ -237,6 +261,10 @@ type zeroTrustDexhttpTestPercentileListResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustDexhttpTestPercentileListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDexhttpTestPercentileListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

@@ -101,6 +101,10 @@ func (r *AvailablePlanListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r availablePlanListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The frequency at which you will be billed for this plan.
 type AvailablePlanListResponseFrequency string
 
@@ -156,6 +160,10 @@ func (r *AvailablePlanGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r availablePlanGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The frequency at which you will be billed for this plan.
 type AvailablePlanGetResponseFrequency string
 
@@ -192,6 +200,10 @@ func (r *AvailablePlanListResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r availablePlanListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AvailablePlanListResponseEnvelopeErrors struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -211,6 +223,10 @@ func (r *AvailablePlanListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r availablePlanListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AvailablePlanListResponseEnvelopeMessages struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -228,6 +244,10 @@ type availablePlanListResponseEnvelopeMessagesJSON struct {
 
 func (r *AvailablePlanListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r availablePlanListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -264,6 +284,10 @@ func (r *AvailablePlanListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r availablePlanListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type AvailablePlanGetResponseEnvelope struct {
 	Errors   []AvailablePlanGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AvailablePlanGetResponseEnvelopeMessages `json:"messages,required"`
@@ -288,6 +312,10 @@ func (r *AvailablePlanGetResponseEnvelope) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r availablePlanGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AvailablePlanGetResponseEnvelopeErrors struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -307,6 +335,10 @@ func (r *AvailablePlanGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r availablePlanGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AvailablePlanGetResponseEnvelopeMessages struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -324,6 +356,10 @@ type availablePlanGetResponseEnvelopeMessagesJSON struct {
 
 func (r *AvailablePlanGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r availablePlanGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

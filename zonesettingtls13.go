@@ -87,6 +87,10 @@ func (r *ZoneSettingTls1_3EditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingTls1_3EditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // ID of the zone setting.
 type ZoneSettingTls1_3EditResponseID string
 
@@ -139,6 +143,10 @@ type zoneSettingTls1_3GetResponseJSON struct {
 
 func (r *ZoneSettingTls1_3GetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingTls1_3GetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // ID of the zone setting.
@@ -213,6 +221,10 @@ func (r *ZoneSettingTls1_3EditResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingTls1_3EditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingTls1_3EditResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -232,6 +244,10 @@ func (r *ZoneSettingTls1_3EditResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingTls1_3EditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingTls1_3EditResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -249,6 +265,10 @@ type zoneSettingTls1_3EditResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingTls1_3EditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingTls1_3EditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneSettingTLS1_3GetParams struct {
@@ -281,6 +301,10 @@ func (r *ZoneSettingTls1_3GetResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingTls1_3GetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingTls1_3GetResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -300,6 +324,10 @@ func (r *ZoneSettingTls1_3GetResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingTls1_3GetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingTls1_3GetResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -317,4 +345,8 @@ type zoneSettingTls1_3GetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingTls1_3GetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingTls1_3GetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }

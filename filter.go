@@ -141,6 +141,10 @@ func (r *FilterNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r filterNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type FilterUpdateResponse struct {
 	// The unique identifier of the filter.
 	ID string `json:"id,required"`
@@ -170,6 +174,10 @@ type filterUpdateResponseJSON struct {
 
 func (r *FilterUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r filterUpdateResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type FilterListResponse struct {
@@ -203,6 +211,10 @@ func (r *FilterListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r filterListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type FilterDeleteResponse struct {
 	// The unique identifier of the filter.
 	ID string `json:"id,required"`
@@ -234,6 +246,10 @@ func (r *FilterDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r filterDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type FilterGetResponse struct {
 	// The unique identifier of the filter.
 	ID string `json:"id,required"`
@@ -263,6 +279,10 @@ type filterGetResponseJSON struct {
 
 func (r *FilterGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r filterGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type FilterNewParams struct {
@@ -299,6 +319,10 @@ func (r *FilterNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r filterNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type FilterNewResponseEnvelopeErrors struct {
 	Code    int64                               `json:"code,required"`
 	Message string                              `json:"message,required"`
@@ -318,6 +342,10 @@ func (r *FilterNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r filterNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type FilterNewResponseEnvelopeMessages struct {
 	Code    int64                                 `json:"code,required"`
 	Message string                                `json:"message,required"`
@@ -335,6 +363,10 @@ type filterNewResponseEnvelopeMessagesJSON struct {
 
 func (r *FilterNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r filterNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -371,6 +403,10 @@ func (r *FilterNewResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r filterNewResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type FilterUpdateParams struct {
 	Body param.Field[interface{}] `json:"body,required"`
 }
@@ -403,6 +439,10 @@ func (r *FilterUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r filterUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type FilterUpdateResponseEnvelopeErrors struct {
 	Code    int64                                  `json:"code,required"`
 	Message string                                 `json:"message,required"`
@@ -422,6 +462,10 @@ func (r *FilterUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r filterUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type FilterUpdateResponseEnvelopeMessages struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -439,6 +483,10 @@ type filterUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *FilterUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r filterUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -495,6 +543,10 @@ func (r *FilterDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r filterDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type FilterDeleteResponseEnvelopeErrors struct {
 	Code    int64                                  `json:"code,required"`
 	Message string                                 `json:"message,required"`
@@ -514,6 +566,10 @@ func (r *FilterDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r filterDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type FilterDeleteResponseEnvelopeMessages struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -531,6 +587,10 @@ type filterDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *FilterDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r filterDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -564,6 +624,10 @@ func (r *FilterGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r filterGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type FilterGetResponseEnvelopeErrors struct {
 	Code    int64                               `json:"code,required"`
 	Message string                              `json:"message,required"`
@@ -583,6 +647,10 @@ func (r *FilterGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r filterGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type FilterGetResponseEnvelopeMessages struct {
 	Code    int64                                 `json:"code,required"`
 	Message string                                `json:"message,required"`
@@ -600,6 +668,10 @@ type filterGetResponseEnvelopeMessagesJSON struct {
 
 func (r *FilterGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r filterGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

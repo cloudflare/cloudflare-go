@@ -130,6 +130,10 @@ func (r *RadarEmailRoutingTimeseriesGroupARCResponse) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingTimeseriesGroupARCResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingTimeseriesGroupARCResponseSerie0 struct {
 	Fail []string                                              `json:"FAIL,required"`
 	None []string                                              `json:"NONE,required"`
@@ -151,6 +155,10 @@ func (r *RadarEmailRoutingTimeseriesGroupARCResponseSerie0) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingTimeseriesGroupARCResponseSerie0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingTimeseriesGroupDKIMResponse struct {
 	Meta   interface{}                                        `json:"meta,required"`
 	Serie0 RadarEmailRoutingTimeseriesGroupDKIMResponseSerie0 `json:"serie_0,required"`
@@ -168,6 +176,10 @@ type radarEmailRoutingTimeseriesGroupDKIMResponseJSON struct {
 
 func (r *RadarEmailRoutingTimeseriesGroupDKIMResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailRoutingTimeseriesGroupDKIMResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailRoutingTimeseriesGroupDKIMResponseSerie0 struct {
@@ -191,6 +203,10 @@ func (r *RadarEmailRoutingTimeseriesGroupDKIMResponseSerie0) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingTimeseriesGroupDKIMResponseSerie0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingTimeseriesGroupDMARCResponse struct {
 	Meta   interface{}                                         `json:"meta,required"`
 	Serie0 RadarEmailRoutingTimeseriesGroupDMARCResponseSerie0 `json:"serie_0,required"`
@@ -208,6 +224,10 @@ type radarEmailRoutingTimeseriesGroupDMARCResponseJSON struct {
 
 func (r *RadarEmailRoutingTimeseriesGroupDMARCResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailRoutingTimeseriesGroupDMARCResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailRoutingTimeseriesGroupDMARCResponseSerie0 struct {
@@ -231,6 +251,10 @@ func (r *RadarEmailRoutingTimeseriesGroupDMARCResponseSerie0) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingTimeseriesGroupDMARCResponseSerie0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingTimeseriesGroupEncryptedResponse struct {
 	Meta   interface{}                                             `json:"meta,required"`
 	Serie0 RadarEmailRoutingTimeseriesGroupEncryptedResponseSerie0 `json:"serie_0,required"`
@@ -248,6 +272,10 @@ type radarEmailRoutingTimeseriesGroupEncryptedResponseJSON struct {
 
 func (r *RadarEmailRoutingTimeseriesGroupEncryptedResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailRoutingTimeseriesGroupEncryptedResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailRoutingTimeseriesGroupEncryptedResponseSerie0 struct {
@@ -270,6 +298,10 @@ func (r *RadarEmailRoutingTimeseriesGroupEncryptedResponseSerie0) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingTimeseriesGroupEncryptedResponseSerie0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingTimeseriesGroupIPVersionResponse struct {
 	Meta   interface{}                                             `json:"meta,required"`
 	Serie0 RadarEmailRoutingTimeseriesGroupIPVersionResponseSerie0 `json:"serie_0,required"`
@@ -287,6 +319,10 @@ type radarEmailRoutingTimeseriesGroupIPVersionResponseJSON struct {
 
 func (r *RadarEmailRoutingTimeseriesGroupIPVersionResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailRoutingTimeseriesGroupIPVersionResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailRoutingTimeseriesGroupIPVersionResponseSerie0 struct {
@@ -309,6 +345,10 @@ func (r *RadarEmailRoutingTimeseriesGroupIPVersionResponseSerie0) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingTimeseriesGroupIPVersionResponseSerie0JSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingTimeseriesGroupSPFResponse struct {
 	Meta   interface{}                                       `json:"meta,required"`
 	Serie0 RadarEmailRoutingTimeseriesGroupSPFResponseSerie0 `json:"serie_0,required"`
@@ -326,6 +366,10 @@ type radarEmailRoutingTimeseriesGroupSPFResponseJSON struct {
 
 func (r *RadarEmailRoutingTimeseriesGroupSPFResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailRoutingTimeseriesGroupSPFResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailRoutingTimeseriesGroupSPFResponseSerie0 struct {
@@ -347,6 +391,10 @@ type radarEmailRoutingTimeseriesGroupSPFResponseSerie0JSON struct {
 
 func (r *RadarEmailRoutingTimeseriesGroupSPFResponseSerie0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailRoutingTimeseriesGroupSPFResponseSerie0JSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailRoutingTimeseriesGroupARCParams struct {
@@ -484,6 +532,10 @@ func (r *RadarEmailRoutingTimeseriesGroupARCResponseEnvelope) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingTimeseriesGroupARCResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingTimeseriesGroupDKIMParams struct {
 	// Aggregation interval results should be returned in (for example, in 15 minutes
 	// or 1 hour intervals). Refer to
@@ -619,6 +671,10 @@ func (r *RadarEmailRoutingTimeseriesGroupDKIMResponseEnvelope) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingTimeseriesGroupDKIMResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingTimeseriesGroupDMARCParams struct {
 	// Aggregation interval results should be returned in (for example, in 15 minutes
 	// or 1 hour intervals). Refer to
@@ -752,6 +808,10 @@ type radarEmailRoutingTimeseriesGroupDMARCResponseEnvelopeJSON struct {
 
 func (r *RadarEmailRoutingTimeseriesGroupDMARCResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailRoutingTimeseriesGroupDMARCResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailRoutingTimeseriesGroupEncryptedParams struct {
@@ -891,6 +951,10 @@ func (r *RadarEmailRoutingTimeseriesGroupEncryptedResponseEnvelope) UnmarshalJSO
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingTimeseriesGroupEncryptedResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingTimeseriesGroupIPVersionParams struct {
 	// Aggregation interval results should be returned in (for example, in 15 minutes
 	// or 1 hour intervals). Refer to
@@ -1028,6 +1092,10 @@ func (r *RadarEmailRoutingTimeseriesGroupIPVersionResponseEnvelope) UnmarshalJSO
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailRoutingTimeseriesGroupIPVersionResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailRoutingTimeseriesGroupSPFParams struct {
 	// Aggregation interval results should be returned in (for example, in 15 minutes
 	// or 1 hour intervals). Refer to
@@ -1161,4 +1229,8 @@ type radarEmailRoutingTimeseriesGroupSPFResponseEnvelopeJSON struct {
 
 func (r *RadarEmailRoutingTimeseriesGroupSPFResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailRoutingTimeseriesGroupSPFResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

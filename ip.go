@@ -71,6 +71,10 @@ func (r *IPs) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r ipsJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r IPs) implementsIPListResponse() {}
 
 type JdcloudIPs struct {
@@ -97,6 +101,10 @@ type jdcloudIPsJSON struct {
 
 func (r *JdcloudIPs) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r jdcloudIPsJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r JdcloudIPs) implementsIPListResponse() {}
@@ -147,6 +155,10 @@ func (r *IPListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r ipListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type IPListResponseEnvelopeErrors struct {
 	Code    int64                            `json:"code,required"`
 	Message string                           `json:"message,required"`
@@ -166,6 +178,10 @@ func (r *IPListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r ipListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type IPListResponseEnvelopeMessages struct {
 	Code    int64                              `json:"code,required"`
 	Message string                             `json:"message,required"`
@@ -183,6 +199,10 @@ type ipListResponseEnvelopeMessagesJSON struct {
 
 func (r *IPListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r ipListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

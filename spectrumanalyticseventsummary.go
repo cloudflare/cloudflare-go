@@ -170,6 +170,10 @@ func (r *SpectrumAnalyticsEventSummaryGetResponseEnvelope) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r spectrumAnalyticsEventSummaryGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type SpectrumAnalyticsEventSummaryGetResponseEnvelopeErrors struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -187,6 +191,10 @@ type spectrumAnalyticsEventSummaryGetResponseEnvelopeErrorsJSON struct {
 
 func (r *SpectrumAnalyticsEventSummaryGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r spectrumAnalyticsEventSummaryGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type SpectrumAnalyticsEventSummaryGetResponseEnvelopeMessages struct {
@@ -207,6 +215,10 @@ type spectrumAnalyticsEventSummaryGetResponseEnvelopeMessagesJSON struct {
 
 func (r *SpectrumAnalyticsEventSummaryGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r spectrumAnalyticsEventSummaryGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

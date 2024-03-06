@@ -104,6 +104,10 @@ func (r *AlertingV3DestinationPagerdutyNewResponse) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3DestinationPagerdutyNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Union satisfied by [AlertingV3DestinationPagerdutyDeleteResponseUnknown],
 // [AlertingV3DestinationPagerdutyDeleteResponseArray] or [shared.UnionString].
 type AlertingV3DestinationPagerdutyDeleteResponse interface {
@@ -147,6 +151,10 @@ func (r *AlertingV3DestinationPagerdutyGetResponse) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3DestinationPagerdutyGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3DestinationPagerdutyLinkResponse struct {
 	// UUID
 	ID   string                                         `json:"id"`
@@ -163,6 +171,10 @@ type alertingV3DestinationPagerdutyLinkResponseJSON struct {
 
 func (r *AlertingV3DestinationPagerdutyLinkResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r alertingV3DestinationPagerdutyLinkResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type AlertingV3DestinationPagerdutyNewParams struct {
@@ -194,6 +206,10 @@ func (r *AlertingV3DestinationPagerdutyNewResponseEnvelope) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3DestinationPagerdutyNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3DestinationPagerdutyNewResponseEnvelopeErrors struct {
 	Code    int64                                                       `json:"code,required"`
 	Message string                                                      `json:"message,required"`
@@ -214,6 +230,10 @@ func (r *AlertingV3DestinationPagerdutyNewResponseEnvelopeErrors) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3DestinationPagerdutyNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3DestinationPagerdutyNewResponseEnvelopeMessages struct {
 	Code    int64                                                         `json:"code,required"`
 	Message string                                                        `json:"message,required"`
@@ -232,6 +252,10 @@ type alertingV3DestinationPagerdutyNewResponseEnvelopeMessagesJSON struct {
 
 func (r *AlertingV3DestinationPagerdutyNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r alertingV3DestinationPagerdutyNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -272,6 +296,10 @@ func (r *AlertingV3DestinationPagerdutyDeleteResponseEnvelope) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3DestinationPagerdutyDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3DestinationPagerdutyDeleteResponseEnvelopeErrors struct {
 	Code    int64                                                          `json:"code,required"`
 	Message string                                                         `json:"message,required"`
@@ -292,6 +320,10 @@ func (r *AlertingV3DestinationPagerdutyDeleteResponseEnvelopeErrors) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3DestinationPagerdutyDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3DestinationPagerdutyDeleteResponseEnvelopeMessages struct {
 	Code    int64                                                            `json:"code,required"`
 	Message string                                                           `json:"message,required"`
@@ -310,6 +342,10 @@ type alertingV3DestinationPagerdutyDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *AlertingV3DestinationPagerdutyDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r alertingV3DestinationPagerdutyDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -347,6 +383,10 @@ func (r *AlertingV3DestinationPagerdutyDeleteResponseEnvelopeResultInfo) Unmarsh
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3DestinationPagerdutyDeleteResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3DestinationPagerdutyGetParams struct {
 	// The account id
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -378,6 +418,10 @@ func (r *AlertingV3DestinationPagerdutyGetResponseEnvelope) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3DestinationPagerdutyGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3DestinationPagerdutyGetResponseEnvelopeErrors struct {
 	Code    int64                                                       `json:"code,required"`
 	Message string                                                      `json:"message,required"`
@@ -398,6 +442,10 @@ func (r *AlertingV3DestinationPagerdutyGetResponseEnvelopeErrors) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3DestinationPagerdutyGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3DestinationPagerdutyGetResponseEnvelopeMessages struct {
 	Code    int64                                                         `json:"code,required"`
 	Message string                                                        `json:"message,required"`
@@ -416,6 +464,10 @@ type alertingV3DestinationPagerdutyGetResponseEnvelopeMessagesJSON struct {
 
 func (r *AlertingV3DestinationPagerdutyGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r alertingV3DestinationPagerdutyGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -453,6 +505,10 @@ func (r *AlertingV3DestinationPagerdutyGetResponseEnvelopeResultInfo) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3DestinationPagerdutyGetResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3DestinationPagerdutyLinkParams struct {
 	// The account id
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -482,6 +538,10 @@ func (r *AlertingV3DestinationPagerdutyLinkResponseEnvelope) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3DestinationPagerdutyLinkResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3DestinationPagerdutyLinkResponseEnvelopeErrors struct {
 	Code    int64                                                        `json:"code,required"`
 	Message string                                                       `json:"message,required"`
@@ -502,6 +562,10 @@ func (r *AlertingV3DestinationPagerdutyLinkResponseEnvelopeErrors) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r alertingV3DestinationPagerdutyLinkResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AlertingV3DestinationPagerdutyLinkResponseEnvelopeMessages struct {
 	Code    int64                                                          `json:"code,required"`
 	Message string                                                         `json:"message,required"`
@@ -520,6 +584,10 @@ type alertingV3DestinationPagerdutyLinkResponseEnvelopeMessagesJSON struct {
 
 func (r *AlertingV3DestinationPagerdutyLinkResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r alertingV3DestinationPagerdutyLinkResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

@@ -93,6 +93,10 @@ func (r *ZoneSettingAlwaysUseHTTPSEditResponse) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingAlwaysUseHTTPSEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // ID of the zone setting.
 type ZoneSettingAlwaysUseHTTPSEditResponseID string
 
@@ -146,6 +150,10 @@ type zoneSettingAlwaysUseHTTPSGetResponseJSON struct {
 
 func (r *ZoneSettingAlwaysUseHTTPSGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingAlwaysUseHTTPSGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // ID of the zone setting.
@@ -218,6 +226,10 @@ func (r *ZoneSettingAlwaysUseHTTPSEditResponseEnvelope) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingAlwaysUseHTTPSEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingAlwaysUseHTTPSEditResponseEnvelopeErrors struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -237,6 +249,10 @@ func (r *ZoneSettingAlwaysUseHTTPSEditResponseEnvelopeErrors) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingAlwaysUseHTTPSEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingAlwaysUseHTTPSEditResponseEnvelopeMessages struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -254,6 +270,10 @@ type zoneSettingAlwaysUseHTTPSEditResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingAlwaysUseHTTPSEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingAlwaysUseHTTPSEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneSettingAlwaysUseHTTPSGetParams struct {
@@ -288,6 +308,10 @@ func (r *ZoneSettingAlwaysUseHTTPSGetResponseEnvelope) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingAlwaysUseHTTPSGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingAlwaysUseHTTPSGetResponseEnvelopeErrors struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -307,6 +331,10 @@ func (r *ZoneSettingAlwaysUseHTTPSGetResponseEnvelopeErrors) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingAlwaysUseHTTPSGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingAlwaysUseHTTPSGetResponseEnvelopeMessages struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -324,4 +352,8 @@ type zoneSettingAlwaysUseHTTPSGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingAlwaysUseHTTPSGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingAlwaysUseHTTPSGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }

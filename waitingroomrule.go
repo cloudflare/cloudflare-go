@@ -134,6 +134,10 @@ func (r *WaitingRoomRuleNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomRuleNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The action to take when the expression matches.
 type WaitingRoomRuleNewResponseAction string
 
@@ -174,6 +178,10 @@ type waitingRoomRuleUpdateResponseJSON struct {
 
 func (r *WaitingRoomRuleUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomRuleUpdateResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // The action to take when the expression matches.
@@ -218,6 +226,10 @@ func (r *WaitingRoomRuleListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomRuleListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The action to take when the expression matches.
 type WaitingRoomRuleListResponseAction string
 
@@ -260,6 +272,10 @@ func (r *WaitingRoomRuleDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomRuleDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The action to take when the expression matches.
 type WaitingRoomRuleDeleteResponseAction string
 
@@ -300,6 +316,10 @@ type waitingRoomRuleEditResponseJSON struct {
 
 func (r *WaitingRoomRuleEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomRuleEditResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // The action to take when the expression matches.
@@ -357,6 +377,10 @@ func (r *WaitingRoomRuleNewResponseEnvelope) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomRuleNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomRuleNewResponseEnvelopeErrors struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -376,6 +400,10 @@ func (r *WaitingRoomRuleNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomRuleNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomRuleNewResponseEnvelopeMessages struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -393,6 +421,10 @@ type waitingRoomRuleNewResponseEnvelopeMessagesJSON struct {
 
 func (r *WaitingRoomRuleNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomRuleNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -427,6 +459,10 @@ type waitingRoomRuleNewResponseEnvelopeResultInfoJSON struct {
 
 func (r *WaitingRoomRuleNewResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomRuleNewResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type WaitingRoomRuleUpdateParams struct {
@@ -485,6 +521,10 @@ func (r *WaitingRoomRuleUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomRuleUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomRuleUpdateResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -504,6 +544,10 @@ func (r *WaitingRoomRuleUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomRuleUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomRuleUpdateResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -521,6 +565,10 @@ type waitingRoomRuleUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *WaitingRoomRuleUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomRuleUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -557,6 +605,10 @@ func (r *WaitingRoomRuleUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomRuleUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomRuleListResponseEnvelope struct {
 	Errors   []WaitingRoomRuleListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []WaitingRoomRuleListResponseEnvelopeMessages `json:"messages,required"`
@@ -583,6 +635,10 @@ func (r *WaitingRoomRuleListResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomRuleListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomRuleListResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -602,6 +658,10 @@ func (r *WaitingRoomRuleListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomRuleListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomRuleListResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -619,6 +679,10 @@ type waitingRoomRuleListResponseEnvelopeMessagesJSON struct {
 
 func (r *WaitingRoomRuleListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomRuleListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -655,6 +719,10 @@ func (r *WaitingRoomRuleListResponseEnvelopeResultInfo) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomRuleListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomRuleDeleteResponseEnvelope struct {
 	Errors   []WaitingRoomRuleDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []WaitingRoomRuleDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -681,6 +749,10 @@ func (r *WaitingRoomRuleDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomRuleDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomRuleDeleteResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -700,6 +772,10 @@ func (r *WaitingRoomRuleDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomRuleDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomRuleDeleteResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -717,6 +793,10 @@ type waitingRoomRuleDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *WaitingRoomRuleDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomRuleDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -751,6 +831,10 @@ type waitingRoomRuleDeleteResponseEnvelopeResultInfoJSON struct {
 
 func (r *WaitingRoomRuleDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomRuleDeleteResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type WaitingRoomRuleEditParams struct {
@@ -826,6 +910,10 @@ func (r *WaitingRoomRuleEditResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomRuleEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomRuleEditResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -845,6 +933,10 @@ func (r *WaitingRoomRuleEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomRuleEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomRuleEditResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -862,6 +954,10 @@ type waitingRoomRuleEditResponseEnvelopeMessagesJSON struct {
 
 func (r *WaitingRoomRuleEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomRuleEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -896,4 +992,8 @@ type waitingRoomRuleEditResponseEnvelopeResultInfoJSON struct {
 
 func (r *WaitingRoomRuleEditResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomRuleEditResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

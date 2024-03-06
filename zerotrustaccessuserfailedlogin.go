@@ -62,6 +62,10 @@ func (r *ZeroTrustAccessUserFailedLoginListResponse) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessUserFailedLoginListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessUserFailedLoginListResponseEnvelope struct {
 	Errors   []ZeroTrustAccessUserFailedLoginListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustAccessUserFailedLoginListResponseEnvelopeMessages `json:"messages,required"`
@@ -88,6 +92,10 @@ func (r *ZeroTrustAccessUserFailedLoginListResponseEnvelope) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessUserFailedLoginListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessUserFailedLoginListResponseEnvelopeErrors struct {
 	Code    int64                                                        `json:"code,required"`
 	Message string                                                       `json:"message,required"`
@@ -108,6 +116,10 @@ func (r *ZeroTrustAccessUserFailedLoginListResponseEnvelopeErrors) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessUserFailedLoginListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessUserFailedLoginListResponseEnvelopeMessages struct {
 	Code    int64                                                          `json:"code,required"`
 	Message string                                                         `json:"message,required"`
@@ -126,6 +138,10 @@ type zeroTrustAccessUserFailedLoginListResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustAccessUserFailedLoginListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessUserFailedLoginListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -161,4 +177,8 @@ type zeroTrustAccessUserFailedLoginListResponseEnvelopeResultInfoJSON struct {
 
 func (r *ZeroTrustAccessUserFailedLoginListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessUserFailedLoginListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

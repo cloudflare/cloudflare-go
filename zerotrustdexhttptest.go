@@ -82,6 +82,10 @@ func (r *ZeroTrustDexhttpTestGetResponse) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDexhttpTestGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDexhttpTestGetResponseHTTPStats struct {
 	DNSResponseTimeMs    ZeroTrustDexhttpTestGetResponseHTTPStatsDNSResponseTimeMs    `json:"dnsResponseTimeMs,required"`
 	HTTPStatusCode       []ZeroTrustDexhttpTestGetResponseHTTPStatsHTTPStatusCode     `json:"httpStatusCode,required"`
@@ -106,6 +110,10 @@ type zeroTrustDexhttpTestGetResponseHTTPStatsJSON struct {
 
 func (r *ZeroTrustDexhttpTestGetResponseHTTPStats) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDexhttpTestGetResponseHTTPStatsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDexhttpTestGetResponseHTTPStatsDNSResponseTimeMs struct {
@@ -135,6 +143,10 @@ func (r *ZeroTrustDexhttpTestGetResponseHTTPStatsDNSResponseTimeMs) UnmarshalJSO
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDexhttpTestGetResponseHTTPStatsDNSResponseTimeMsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDexhttpTestGetResponseHTTPStatsDNSResponseTimeMsSlot struct {
 	Timestamp string                                                            `json:"timestamp,required"`
 	Value     int64                                                             `json:"value,required"`
@@ -153,6 +165,10 @@ type zeroTrustDexhttpTestGetResponseHTTPStatsDNSResponseTimeMsSlotJSON struct {
 
 func (r *ZeroTrustDexhttpTestGetResponseHTTPStatsDNSResponseTimeMsSlot) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDexhttpTestGetResponseHTTPStatsDNSResponseTimeMsSlotJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDexhttpTestGetResponseHTTPStatsHTTPStatusCode struct {
@@ -178,6 +194,10 @@ type zeroTrustDexhttpTestGetResponseHTTPStatsHTTPStatusCodeJSON struct {
 
 func (r *ZeroTrustDexhttpTestGetResponseHTTPStatsHTTPStatusCode) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDexhttpTestGetResponseHTTPStatsHTTPStatusCodeJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDexhttpTestGetResponseHTTPStatsResourceFetchTimeMs struct {
@@ -207,6 +227,10 @@ func (r *ZeroTrustDexhttpTestGetResponseHTTPStatsResourceFetchTimeMs) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDexhttpTestGetResponseHTTPStatsResourceFetchTimeMsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDexhttpTestGetResponseHTTPStatsResourceFetchTimeMsSlot struct {
 	Timestamp string                                                              `json:"timestamp,required"`
 	Value     int64                                                               `json:"value,required"`
@@ -225,6 +249,10 @@ type zeroTrustDexhttpTestGetResponseHTTPStatsResourceFetchTimeMsSlotJSON struct 
 
 func (r *ZeroTrustDexhttpTestGetResponseHTTPStatsResourceFetchTimeMsSlot) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDexhttpTestGetResponseHTTPStatsResourceFetchTimeMsSlotJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDexhttpTestGetResponseHTTPStatsServerResponseTimeMs struct {
@@ -254,6 +282,10 @@ func (r *ZeroTrustDexhttpTestGetResponseHTTPStatsServerResponseTimeMs) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDexhttpTestGetResponseHTTPStatsServerResponseTimeMsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDexhttpTestGetResponseHTTPStatsServerResponseTimeMsSlot struct {
 	Timestamp string                                                               `json:"timestamp,required"`
 	Value     int64                                                                `json:"value,required"`
@@ -272,6 +304,10 @@ type zeroTrustDexhttpTestGetResponseHTTPStatsServerResponseTimeMsSlotJSON struct
 
 func (r *ZeroTrustDexhttpTestGetResponseHTTPStatsServerResponseTimeMsSlot) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDexhttpTestGetResponseHTTPStatsServerResponseTimeMsSlotJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDexhttpTestGetResponseHTTPStatsByColo struct {
@@ -302,6 +338,10 @@ func (r *ZeroTrustDexhttpTestGetResponseHTTPStatsByColo) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDexhttpTestGetResponseHTTPStatsByColoJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDexhttpTestGetResponseHTTPStatsByColoDNSResponseTimeMs struct {
 	Slots []ZeroTrustDexhttpTestGetResponseHTTPStatsByColoDNSResponseTimeMsSlot `json:"slots,required"`
 	// average observed in the time period
@@ -329,6 +369,10 @@ func (r *ZeroTrustDexhttpTestGetResponseHTTPStatsByColoDNSResponseTimeMs) Unmars
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDexhttpTestGetResponseHTTPStatsByColoDNSResponseTimeMsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDexhttpTestGetResponseHTTPStatsByColoDNSResponseTimeMsSlot struct {
 	Timestamp string                                                                  `json:"timestamp,required"`
 	Value     int64                                                                   `json:"value,required"`
@@ -347,6 +391,10 @@ type zeroTrustDexhttpTestGetResponseHTTPStatsByColoDNSResponseTimeMsSlotJSON str
 
 func (r *ZeroTrustDexhttpTestGetResponseHTTPStatsByColoDNSResponseTimeMsSlot) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDexhttpTestGetResponseHTTPStatsByColoDNSResponseTimeMsSlotJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDexhttpTestGetResponseHTTPStatsByColoHTTPStatusCode struct {
@@ -373,6 +421,10 @@ type zeroTrustDexhttpTestGetResponseHTTPStatsByColoHTTPStatusCodeJSON struct {
 
 func (r *ZeroTrustDexhttpTestGetResponseHTTPStatsByColoHTTPStatusCode) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDexhttpTestGetResponseHTTPStatsByColoHTTPStatusCodeJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDexhttpTestGetResponseHTTPStatsByColoResourceFetchTimeMs struct {
@@ -402,6 +454,10 @@ func (r *ZeroTrustDexhttpTestGetResponseHTTPStatsByColoResourceFetchTimeMs) Unma
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDexhttpTestGetResponseHTTPStatsByColoResourceFetchTimeMsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDexhttpTestGetResponseHTTPStatsByColoResourceFetchTimeMsSlot struct {
 	Timestamp string                                                                    `json:"timestamp,required"`
 	Value     int64                                                                     `json:"value,required"`
@@ -420,6 +476,10 @@ type zeroTrustDexhttpTestGetResponseHTTPStatsByColoResourceFetchTimeMsSlotJSON s
 
 func (r *ZeroTrustDexhttpTestGetResponseHTTPStatsByColoResourceFetchTimeMsSlot) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDexhttpTestGetResponseHTTPStatsByColoResourceFetchTimeMsSlotJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDexhttpTestGetResponseHTTPStatsByColoServerResponseTimeMs struct {
@@ -449,6 +509,10 @@ func (r *ZeroTrustDexhttpTestGetResponseHTTPStatsByColoServerResponseTimeMs) Unm
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDexhttpTestGetResponseHTTPStatsByColoServerResponseTimeMsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDexhttpTestGetResponseHTTPStatsByColoServerResponseTimeMsSlot struct {
 	Timestamp string                                                                     `json:"timestamp,required"`
 	Value     int64                                                                      `json:"value,required"`
@@ -467,6 +531,10 @@ type zeroTrustDexhttpTestGetResponseHTTPStatsByColoServerResponseTimeMsSlotJSON 
 
 func (r *ZeroTrustDexhttpTestGetResponseHTTPStatsByColoServerResponseTimeMsSlot) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDexhttpTestGetResponseHTTPStatsByColoServerResponseTimeMsSlotJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDexhttpTestGetResponseKind string
@@ -532,6 +600,10 @@ func (r *ZeroTrustDexhttpTestGetResponseEnvelope) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDexhttpTestGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDexhttpTestGetResponseEnvelopeErrors struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -551,6 +623,10 @@ func (r *ZeroTrustDexhttpTestGetResponseEnvelopeErrors) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDexhttpTestGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDexhttpTestGetResponseEnvelopeMessages struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -568,6 +644,10 @@ type zeroTrustDexhttpTestGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustDexhttpTestGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDexhttpTestGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

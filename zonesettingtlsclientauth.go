@@ -90,6 +90,10 @@ func (r *ZoneSettingTLSClientAuthEditResponse) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingTLSClientAuthEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // ID of the zone setting.
 type ZoneSettingTLSClientAuthEditResponseID string
 
@@ -142,6 +146,10 @@ type zoneSettingTLSClientAuthGetResponseJSON struct {
 
 func (r *ZoneSettingTLSClientAuthGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingTLSClientAuthGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // ID of the zone setting.
@@ -213,6 +221,10 @@ func (r *ZoneSettingTLSClientAuthEditResponseEnvelope) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingTLSClientAuthEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingTLSClientAuthEditResponseEnvelopeErrors struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -232,6 +244,10 @@ func (r *ZoneSettingTLSClientAuthEditResponseEnvelopeErrors) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingTLSClientAuthEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingTLSClientAuthEditResponseEnvelopeMessages struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -249,6 +265,10 @@ type zoneSettingTLSClientAuthEditResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingTLSClientAuthEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingTLSClientAuthEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneSettingTLSClientAuthGetParams struct {
@@ -282,6 +302,10 @@ func (r *ZoneSettingTLSClientAuthGetResponseEnvelope) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingTLSClientAuthGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingTLSClientAuthGetResponseEnvelopeErrors struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -301,6 +325,10 @@ func (r *ZoneSettingTLSClientAuthGetResponseEnvelopeErrors) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingTLSClientAuthGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingTLSClientAuthGetResponseEnvelopeMessages struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -318,4 +346,8 @@ type zoneSettingTLSClientAuthGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingTLSClientAuthGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingTLSClientAuthGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }

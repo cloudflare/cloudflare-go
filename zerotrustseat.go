@@ -74,6 +74,10 @@ func (r *ZeroTrustSeatEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustSeatEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustSeatEditParams struct {
 	Body param.Field[[]ZeroTrustSeatEditParamsBody] `json:"body,required"`
 }
@@ -119,6 +123,10 @@ func (r *ZeroTrustSeatEditResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustSeatEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustSeatEditResponseEnvelopeErrors struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -138,6 +146,10 @@ func (r *ZeroTrustSeatEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustSeatEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustSeatEditResponseEnvelopeMessages struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -155,6 +167,10 @@ type zeroTrustSeatEditResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustSeatEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustSeatEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -189,4 +205,8 @@ type zeroTrustSeatEditResponseEnvelopeResultInfoJSON struct {
 
 func (r *ZeroTrustSeatEditResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustSeatEditResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

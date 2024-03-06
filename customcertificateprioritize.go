@@ -122,6 +122,10 @@ func (r *CustomCertificatePrioritizeUpdateResponse) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customCertificatePrioritizeUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // A ubiquitous bundle has the highest probability of being verified everywhere,
 // even by clients using outdated or unusual trust stores. An optimal bundle uses
 // the shortest chain and newest intermediates. And the force bundle verifies the
@@ -168,6 +172,10 @@ type customCertificatePrioritizeUpdateResponseGeoRestrictionsJSON struct {
 
 func (r *CustomCertificatePrioritizeUpdateResponseGeoRestrictions) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customCertificatePrioritizeUpdateResponseGeoRestrictionsJSON) RawJSON() string {
+	return r.raw
 }
 
 type CustomCertificatePrioritizeUpdateResponseGeoRestrictionsLabel string
@@ -225,6 +233,10 @@ func (r *CustomCertificatePrioritizeUpdateResponseKeylessServer) UnmarshalJSON(d
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customCertificatePrioritizeUpdateResponseKeylessServerJSON) RawJSON() string {
+	return r.raw
+}
+
 // Status of the Keyless SSL.
 type CustomCertificatePrioritizeUpdateResponseKeylessServerStatus string
 
@@ -254,6 +266,10 @@ type customCertificatePrioritizeUpdateResponseKeylessServerTunnelJSON struct {
 
 func (r *CustomCertificatePrioritizeUpdateResponseKeylessServerTunnel) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customCertificatePrioritizeUpdateResponseKeylessServerTunnelJSON) RawJSON() string {
+	return r.raw
 }
 
 type CustomCertificatePrioritizeUpdateParams struct {
@@ -305,6 +321,10 @@ func (r *CustomCertificatePrioritizeUpdateResponseEnvelope) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customCertificatePrioritizeUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CustomCertificatePrioritizeUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                       `json:"code,required"`
 	Message string                                                      `json:"message,required"`
@@ -325,6 +345,10 @@ func (r *CustomCertificatePrioritizeUpdateResponseEnvelopeErrors) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r customCertificatePrioritizeUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type CustomCertificatePrioritizeUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                         `json:"code,required"`
 	Message string                                                        `json:"message,required"`
@@ -343,6 +367,10 @@ type customCertificatePrioritizeUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *CustomCertificatePrioritizeUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customCertificatePrioritizeUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -378,4 +406,8 @@ type customCertificatePrioritizeUpdateResponseEnvelopeResultInfoJSON struct {
 
 func (r *CustomCertificatePrioritizeUpdateResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r customCertificatePrioritizeUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

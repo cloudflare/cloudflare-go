@@ -128,6 +128,10 @@ func (r *ZeroTrustAccessCustomPageNewResponse) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessCustomPageNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Custom page type.
 type ZeroTrustAccessCustomPageNewResponseType string
 
@@ -165,6 +169,10 @@ type zeroTrustAccessCustomPageUpdateResponseJSON struct {
 
 func (r *ZeroTrustAccessCustomPageUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessCustomPageUpdateResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Custom page type.
@@ -206,6 +214,10 @@ func (r *ZeroTrustAccessCustomPageListResponse) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessCustomPageListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Custom page type.
 type ZeroTrustAccessCustomPageListResponseType string
 
@@ -230,6 +242,10 @@ type zeroTrustAccessCustomPageDeleteResponseJSON struct {
 
 func (r *ZeroTrustAccessCustomPageDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessCustomPageDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustAccessCustomPageGetResponse struct {
@@ -264,6 +280,10 @@ type zeroTrustAccessCustomPageGetResponseJSON struct {
 
 func (r *ZeroTrustAccessCustomPageGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessCustomPageGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Custom page type.
@@ -321,6 +341,10 @@ func (r *ZeroTrustAccessCustomPageNewResponseEnvelope) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessCustomPageNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessCustomPageNewResponseEnvelopeErrors struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -340,6 +364,10 @@ func (r *ZeroTrustAccessCustomPageNewResponseEnvelopeErrors) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessCustomPageNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessCustomPageNewResponseEnvelopeMessages struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -357,6 +385,10 @@ type zeroTrustAccessCustomPageNewResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustAccessCustomPageNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessCustomPageNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -413,6 +445,10 @@ func (r *ZeroTrustAccessCustomPageUpdateResponseEnvelope) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessCustomPageUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessCustomPageUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -430,6 +466,10 @@ type zeroTrustAccessCustomPageUpdateResponseEnvelopeErrorsJSON struct {
 
 func (r *ZeroTrustAccessCustomPageUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessCustomPageUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustAccessCustomPageUpdateResponseEnvelopeMessages struct {
@@ -450,6 +490,10 @@ type zeroTrustAccessCustomPageUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustAccessCustomPageUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessCustomPageUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -485,6 +529,10 @@ func (r *ZeroTrustAccessCustomPageListResponseEnvelope) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessCustomPageListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessCustomPageListResponseEnvelopeErrors struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -504,6 +552,10 @@ func (r *ZeroTrustAccessCustomPageListResponseEnvelopeErrors) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessCustomPageListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessCustomPageListResponseEnvelopeMessages struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -521,6 +573,10 @@ type zeroTrustAccessCustomPageListResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustAccessCustomPageListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessCustomPageListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -558,6 +614,10 @@ func (r *ZeroTrustAccessCustomPageListResponseEnvelopeResultInfo) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessCustomPageListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessCustomPageDeleteResponseEnvelope struct {
 	Errors   []ZeroTrustAccessCustomPageDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustAccessCustomPageDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -582,6 +642,10 @@ func (r *ZeroTrustAccessCustomPageDeleteResponseEnvelope) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessCustomPageDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessCustomPageDeleteResponseEnvelopeErrors struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -599,6 +663,10 @@ type zeroTrustAccessCustomPageDeleteResponseEnvelopeErrorsJSON struct {
 
 func (r *ZeroTrustAccessCustomPageDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessCustomPageDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustAccessCustomPageDeleteResponseEnvelopeMessages struct {
@@ -619,6 +687,10 @@ type zeroTrustAccessCustomPageDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustAccessCustomPageDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessCustomPageDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -652,6 +724,10 @@ func (r *ZeroTrustAccessCustomPageGetResponseEnvelope) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessCustomPageGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessCustomPageGetResponseEnvelopeErrors struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -671,6 +747,10 @@ func (r *ZeroTrustAccessCustomPageGetResponseEnvelopeErrors) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessCustomPageGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessCustomPageGetResponseEnvelopeMessages struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -688,6 +768,10 @@ type zeroTrustAccessCustomPageGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustAccessCustomPageGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessCustomPageGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

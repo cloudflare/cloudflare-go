@@ -65,6 +65,10 @@ func (r *LoadBalancerMonitorPreviewNewResponse) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerMonitorPreviewNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoadBalancerMonitorPreviewNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -160,6 +164,10 @@ func (r *LoadBalancerMonitorPreviewNewResponseEnvelope) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerMonitorPreviewNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoadBalancerMonitorPreviewNewResponseEnvelopeErrors struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -179,6 +187,10 @@ func (r *LoadBalancerMonitorPreviewNewResponseEnvelopeErrors) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerMonitorPreviewNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoadBalancerMonitorPreviewNewResponseEnvelopeMessages struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -196,6 +208,10 @@ type loadBalancerMonitorPreviewNewResponseEnvelopeMessagesJSON struct {
 
 func (r *LoadBalancerMonitorPreviewNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerMonitorPreviewNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

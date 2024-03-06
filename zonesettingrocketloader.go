@@ -114,6 +114,10 @@ func (r *ZoneSettingRocketLoaderEditResponse) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingRocketLoaderEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // ID of the zone setting.
 type ZoneSettingRocketLoaderEditResponseID string
 
@@ -174,6 +178,10 @@ type zoneSettingRocketLoaderGetResponseJSON struct {
 
 func (r *ZoneSettingRocketLoaderGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingRocketLoaderGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // ID of the zone setting.
@@ -299,6 +307,10 @@ func (r *ZoneSettingRocketLoaderEditResponseEnvelope) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingRocketLoaderEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingRocketLoaderEditResponseEnvelopeErrors struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -318,6 +330,10 @@ func (r *ZoneSettingRocketLoaderEditResponseEnvelopeErrors) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingRocketLoaderEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingRocketLoaderEditResponseEnvelopeMessages struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -335,6 +351,10 @@ type zoneSettingRocketLoaderEditResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingRocketLoaderEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingRocketLoaderEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneSettingRocketLoaderGetParams struct {
@@ -376,6 +396,10 @@ func (r *ZoneSettingRocketLoaderGetResponseEnvelope) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingRocketLoaderGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingRocketLoaderGetResponseEnvelopeErrors struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -395,6 +419,10 @@ func (r *ZoneSettingRocketLoaderGetResponseEnvelopeErrors) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingRocketLoaderGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingRocketLoaderGetResponseEnvelopeMessages struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -412,4 +440,8 @@ type zoneSettingRocketLoaderGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingRocketLoaderGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingRocketLoaderGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }

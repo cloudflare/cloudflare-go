@@ -137,6 +137,10 @@ func (r *MagicTransitIPSECTunnelNewResponse) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitIPSECTunnelNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitIPSECTunnelNewResponseIPSECTunnel struct {
 	// The IP address assigned to the Cloudflare side of the IPsec tunnel.
 	CloudflareEndpoint string `json:"cloudflare_endpoint,required"`
@@ -191,6 +195,10 @@ func (r *MagicTransitIPSECTunnelNewResponseIPSECTunnel) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitIPSECTunnelNewResponseIPSECTunnelJSON) RawJSON() string {
+	return r.raw
+}
+
 // The PSK metadata that includes when the PSK was generated.
 type MagicTransitIPSECTunnelNewResponseIPSECTunnelsPSKMetadata struct {
 	// The date and time the tunnel was last modified.
@@ -209,6 +217,10 @@ type magicTransitIPSECTunnelNewResponseIPSECTunnelsPSKMetadataJSON struct {
 
 func (r *MagicTransitIPSECTunnelNewResponseIPSECTunnelsPSKMetadata) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitIPSECTunnelNewResponseIPSECTunnelsPSKMetadataJSON) RawJSON() string {
+	return r.raw
 }
 
 type MagicTransitIPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheck struct {
@@ -239,6 +251,10 @@ type magicTransitIPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckJSON struct 
 
 func (r *MagicTransitIPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheck) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitIPSECTunnelNewResponseIPSECTunnelsTunnelHealthCheckJSON) RawJSON() string {
+	return r.raw
 }
 
 // How frequent the health check is run. The default value is `mid`.
@@ -277,6 +293,10 @@ func (r *MagicTransitIPSECTunnelUpdateResponse) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitIPSECTunnelUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitIPSECTunnelListResponse struct {
 	IPSECTunnels []MagicTransitIPSECTunnelListResponseIPSECTunnel `json:"ipsec_tunnels"`
 	JSON         magicTransitIPSECTunnelListResponseJSON          `json:"-"`
@@ -292,6 +312,10 @@ type magicTransitIPSECTunnelListResponseJSON struct {
 
 func (r *MagicTransitIPSECTunnelListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitIPSECTunnelListResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type MagicTransitIPSECTunnelListResponseIPSECTunnel struct {
@@ -348,6 +372,10 @@ func (r *MagicTransitIPSECTunnelListResponseIPSECTunnel) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitIPSECTunnelListResponseIPSECTunnelJSON) RawJSON() string {
+	return r.raw
+}
+
 // The PSK metadata that includes when the PSK was generated.
 type MagicTransitIPSECTunnelListResponseIPSECTunnelsPSKMetadata struct {
 	// The date and time the tunnel was last modified.
@@ -366,6 +394,10 @@ type magicTransitIPSECTunnelListResponseIPSECTunnelsPSKMetadataJSON struct {
 
 func (r *MagicTransitIPSECTunnelListResponseIPSECTunnelsPSKMetadata) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitIPSECTunnelListResponseIPSECTunnelsPSKMetadataJSON) RawJSON() string {
+	return r.raw
 }
 
 type MagicTransitIPSECTunnelListResponseIPSECTunnelsTunnelHealthCheck struct {
@@ -396,6 +428,10 @@ type magicTransitIPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckJSON struct
 
 func (r *MagicTransitIPSECTunnelListResponseIPSECTunnelsTunnelHealthCheck) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitIPSECTunnelListResponseIPSECTunnelsTunnelHealthCheckJSON) RawJSON() string {
+	return r.raw
 }
 
 // How frequent the health check is run. The default value is `mid`.
@@ -434,6 +470,10 @@ func (r *MagicTransitIPSECTunnelDeleteResponse) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitIPSECTunnelDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitIPSECTunnelGetResponse struct {
 	IPSECTunnel interface{}                            `json:"ipsec_tunnel"`
 	JSON        magicTransitIPSECTunnelGetResponseJSON `json:"-"`
@@ -449,6 +489,10 @@ type magicTransitIPSECTunnelGetResponseJSON struct {
 
 func (r *MagicTransitIPSECTunnelGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitIPSECTunnelGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type MagicTransitIPSECTunnelPSKGenerateResponse struct {
@@ -475,6 +519,10 @@ func (r *MagicTransitIPSECTunnelPSKGenerateResponse) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitIPSECTunnelPSKGenerateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The PSK metadata that includes when the PSK was generated.
 type MagicTransitIPSECTunnelPSKGenerateResponsePSKMetadata struct {
 	// The date and time the tunnel was last modified.
@@ -492,6 +540,10 @@ type magicTransitIPSECTunnelPSKGenerateResponsePSKMetadataJSON struct {
 
 func (r *MagicTransitIPSECTunnelPSKGenerateResponsePSKMetadata) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitIPSECTunnelPSKGenerateResponsePSKMetadataJSON) RawJSON() string {
+	return r.raw
 }
 
 type MagicTransitIPSECTunnelNewParams struct {
@@ -599,6 +651,10 @@ func (r *MagicTransitIPSECTunnelNewResponseEnvelope) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitIPSECTunnelNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitIPSECTunnelNewResponseEnvelopeErrors struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -618,6 +674,10 @@ func (r *MagicTransitIPSECTunnelNewResponseEnvelopeErrors) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitIPSECTunnelNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitIPSECTunnelNewResponseEnvelopeMessages struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -635,6 +695,10 @@ type magicTransitIPSECTunnelNewResponseEnvelopeMessagesJSON struct {
 
 func (r *MagicTransitIPSECTunnelNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitIPSECTunnelNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -749,6 +813,10 @@ func (r *MagicTransitIPSECTunnelUpdateResponseEnvelope) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitIPSECTunnelUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitIPSECTunnelUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -768,6 +836,10 @@ func (r *MagicTransitIPSECTunnelUpdateResponseEnvelopeErrors) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitIPSECTunnelUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitIPSECTunnelUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -785,6 +857,10 @@ type magicTransitIPSECTunnelUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *MagicTransitIPSECTunnelUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitIPSECTunnelUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -818,6 +894,10 @@ func (r *MagicTransitIPSECTunnelListResponseEnvelope) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitIPSECTunnelListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitIPSECTunnelListResponseEnvelopeErrors struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -837,6 +917,10 @@ func (r *MagicTransitIPSECTunnelListResponseEnvelopeErrors) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitIPSECTunnelListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitIPSECTunnelListResponseEnvelopeMessages struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -854,6 +938,10 @@ type magicTransitIPSECTunnelListResponseEnvelopeMessagesJSON struct {
 
 func (r *MagicTransitIPSECTunnelListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitIPSECTunnelListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -887,6 +975,10 @@ func (r *MagicTransitIPSECTunnelDeleteResponseEnvelope) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitIPSECTunnelDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitIPSECTunnelDeleteResponseEnvelopeErrors struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -906,6 +998,10 @@ func (r *MagicTransitIPSECTunnelDeleteResponseEnvelopeErrors) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitIPSECTunnelDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitIPSECTunnelDeleteResponseEnvelopeMessages struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -923,6 +1019,10 @@ type magicTransitIPSECTunnelDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *MagicTransitIPSECTunnelDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitIPSECTunnelDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -956,6 +1056,10 @@ func (r *MagicTransitIPSECTunnelGetResponseEnvelope) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitIPSECTunnelGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitIPSECTunnelGetResponseEnvelopeErrors struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -975,6 +1079,10 @@ func (r *MagicTransitIPSECTunnelGetResponseEnvelopeErrors) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitIPSECTunnelGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitIPSECTunnelGetResponseEnvelopeMessages struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -992,6 +1100,10 @@ type magicTransitIPSECTunnelGetResponseEnvelopeMessagesJSON struct {
 
 func (r *MagicTransitIPSECTunnelGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitIPSECTunnelGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1025,6 +1137,10 @@ func (r *MagicTransitIPSECTunnelPSKGenerateResponseEnvelope) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitIPSECTunnelPSKGenerateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitIPSECTunnelPSKGenerateResponseEnvelopeErrors struct {
 	Code    int64                                                        `json:"code,required"`
 	Message string                                                       `json:"message,required"`
@@ -1045,6 +1161,10 @@ func (r *MagicTransitIPSECTunnelPSKGenerateResponseEnvelopeErrors) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitIPSECTunnelPSKGenerateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitIPSECTunnelPSKGenerateResponseEnvelopeMessages struct {
 	Code    int64                                                          `json:"code,required"`
 	Message string                                                         `json:"message,required"`
@@ -1063,6 +1183,10 @@ type magicTransitIPSECTunnelPSKGenerateResponseEnvelopeMessagesJSON struct {
 
 func (r *MagicTransitIPSECTunnelPSKGenerateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitIPSECTunnelPSKGenerateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

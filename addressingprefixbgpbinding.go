@@ -124,6 +124,10 @@ func (r *AddressingPrefixBGPBindingNewResponse) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingPrefixBGPBindingNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Status of a Service Binding's deployment to the Cloudflare network
 type AddressingPrefixBGPBindingNewResponseProvisioning struct {
 	// When a binding has been deployed to a majority of Cloudflare datacenters, the
@@ -142,6 +146,10 @@ type addressingPrefixBGPBindingNewResponseProvisioningJSON struct {
 
 func (r *AddressingPrefixBGPBindingNewResponseProvisioning) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressingPrefixBGPBindingNewResponseProvisioningJSON) RawJSON() string {
+	return r.raw
 }
 
 // When a binding has been deployed to a majority of Cloudflare datacenters, the
@@ -183,6 +191,10 @@ func (r *AddressingPrefixBGPBindingListResponse) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingPrefixBGPBindingListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Status of a Service Binding's deployment to the Cloudflare network
 type AddressingPrefixBGPBindingListResponseProvisioning struct {
 	// When a binding has been deployed to a majority of Cloudflare datacenters, the
@@ -201,6 +213,10 @@ type addressingPrefixBGPBindingListResponseProvisioningJSON struct {
 
 func (r *AddressingPrefixBGPBindingListResponseProvisioning) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressingPrefixBGPBindingListResponseProvisioningJSON) RawJSON() string {
+	return r.raw
 }
 
 // When a binding has been deployed to a majority of Cloudflare datacenters, the
@@ -264,6 +280,10 @@ func (r *AddressingPrefixBGPBindingGetResponse) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingPrefixBGPBindingGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Status of a Service Binding's deployment to the Cloudflare network
 type AddressingPrefixBGPBindingGetResponseProvisioning struct {
 	// When a binding has been deployed to a majority of Cloudflare datacenters, the
@@ -282,6 +302,10 @@ type addressingPrefixBGPBindingGetResponseProvisioningJSON struct {
 
 func (r *AddressingPrefixBGPBindingGetResponseProvisioning) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressingPrefixBGPBindingGetResponseProvisioningJSON) RawJSON() string {
+	return r.raw
 }
 
 // When a binding has been deployed to a majority of Cloudflare datacenters, the
@@ -330,6 +354,10 @@ func (r *AddressingPrefixBGPBindingNewResponseEnvelope) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingPrefixBGPBindingNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingPrefixBGPBindingNewResponseEnvelopeErrors struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -349,6 +377,10 @@ func (r *AddressingPrefixBGPBindingNewResponseEnvelopeErrors) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingPrefixBGPBindingNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingPrefixBGPBindingNewResponseEnvelopeMessages struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -366,6 +398,10 @@ type addressingPrefixBGPBindingNewResponseEnvelopeMessagesJSON struct {
 
 func (r *AddressingPrefixBGPBindingNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressingPrefixBGPBindingNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -404,6 +440,10 @@ func (r *AddressingPrefixBGPBindingListResponseEnvelope) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingPrefixBGPBindingListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingPrefixBGPBindingListResponseEnvelopeErrors struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -423,6 +463,10 @@ func (r *AddressingPrefixBGPBindingListResponseEnvelopeErrors) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingPrefixBGPBindingListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingPrefixBGPBindingListResponseEnvelopeMessages struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -440,6 +484,10 @@ type addressingPrefixBGPBindingListResponseEnvelopeMessagesJSON struct {
 
 func (r *AddressingPrefixBGPBindingListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressingPrefixBGPBindingListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -478,6 +526,10 @@ func (r *AddressingPrefixBGPBindingDeleteResponseEnvelope) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingPrefixBGPBindingDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingPrefixBGPBindingDeleteResponseEnvelopeErrors struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -495,6 +547,10 @@ type addressingPrefixBGPBindingDeleteResponseEnvelopeErrorsJSON struct {
 
 func (r *AddressingPrefixBGPBindingDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressingPrefixBGPBindingDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type AddressingPrefixBGPBindingDeleteResponseEnvelopeMessages struct {
@@ -515,6 +571,10 @@ type addressingPrefixBGPBindingDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *AddressingPrefixBGPBindingDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressingPrefixBGPBindingDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -553,6 +613,10 @@ func (r *AddressingPrefixBGPBindingGetResponseEnvelope) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingPrefixBGPBindingGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingPrefixBGPBindingGetResponseEnvelopeErrors struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -572,6 +636,10 @@ func (r *AddressingPrefixBGPBindingGetResponseEnvelopeErrors) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingPrefixBGPBindingGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingPrefixBGPBindingGetResponseEnvelopeMessages struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -589,6 +657,10 @@ type addressingPrefixBGPBindingGetResponseEnvelopeMessagesJSON struct {
 
 func (r *AddressingPrefixBGPBindingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressingPrefixBGPBindingGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

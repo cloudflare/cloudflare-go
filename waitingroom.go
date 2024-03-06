@@ -467,6 +467,10 @@ func (r *WaitingRoomNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomNewResponseAdditionalRoute struct {
 	// The hostname to which this waiting room will be applied (no wildcards). The
 	// hostname must be the primary domain, subdomain, or custom hostname (if using SSL
@@ -491,6 +495,10 @@ type waitingRoomNewResponseAdditionalRouteJSON struct {
 
 func (r *WaitingRoomNewResponseAdditionalRoute) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomNewResponseAdditionalRouteJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configures cookie attributes for the waiting room cookie. This encrypted cookie
@@ -520,6 +528,10 @@ type waitingRoomNewResponseCookieAttributesJSON struct {
 
 func (r *WaitingRoomNewResponseCookieAttributes) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomNewResponseCookieAttributesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configures the SameSite attribute on the waiting room cookie. Value `auto` will
@@ -917,6 +929,10 @@ func (r *WaitingRoomUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomUpdateResponseAdditionalRoute struct {
 	// The hostname to which this waiting room will be applied (no wildcards). The
 	// hostname must be the primary domain, subdomain, or custom hostname (if using SSL
@@ -941,6 +957,10 @@ type waitingRoomUpdateResponseAdditionalRouteJSON struct {
 
 func (r *WaitingRoomUpdateResponseAdditionalRoute) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomUpdateResponseAdditionalRouteJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configures cookie attributes for the waiting room cookie. This encrypted cookie
@@ -970,6 +990,10 @@ type waitingRoomUpdateResponseCookieAttributesJSON struct {
 
 func (r *WaitingRoomUpdateResponseCookieAttributes) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomUpdateResponseCookieAttributesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configures the SameSite attribute on the waiting room cookie. Value `auto` will
@@ -1367,6 +1391,10 @@ func (r *WaitingRoomListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomListResponseAdditionalRoute struct {
 	// The hostname to which this waiting room will be applied (no wildcards). The
 	// hostname must be the primary domain, subdomain, or custom hostname (if using SSL
@@ -1391,6 +1419,10 @@ type waitingRoomListResponseAdditionalRouteJSON struct {
 
 func (r *WaitingRoomListResponseAdditionalRoute) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomListResponseAdditionalRouteJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configures cookie attributes for the waiting room cookie. This encrypted cookie
@@ -1420,6 +1452,10 @@ type waitingRoomListResponseCookieAttributesJSON struct {
 
 func (r *WaitingRoomListResponseCookieAttributes) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomListResponseCookieAttributesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configures the SameSite attribute on the waiting room cookie. Value `auto` will
@@ -1531,6 +1567,10 @@ type waitingRoomDeleteResponseJSON struct {
 
 func (r *WaitingRoomDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type WaitingRoomEditResponse struct {
@@ -1834,6 +1874,10 @@ func (r *WaitingRoomEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomEditResponseAdditionalRoute struct {
 	// The hostname to which this waiting room will be applied (no wildcards). The
 	// hostname must be the primary domain, subdomain, or custom hostname (if using SSL
@@ -1858,6 +1902,10 @@ type waitingRoomEditResponseAdditionalRouteJSON struct {
 
 func (r *WaitingRoomEditResponseAdditionalRoute) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomEditResponseAdditionalRouteJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configures cookie attributes for the waiting room cookie. This encrypted cookie
@@ -1887,6 +1935,10 @@ type waitingRoomEditResponseCookieAttributesJSON struct {
 
 func (r *WaitingRoomEditResponseCookieAttributes) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomEditResponseCookieAttributesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configures the SameSite attribute on the waiting room cookie. Value `auto` will
@@ -2284,6 +2336,10 @@ func (r *WaitingRoomGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomGetResponseAdditionalRoute struct {
 	// The hostname to which this waiting room will be applied (no wildcards). The
 	// hostname must be the primary domain, subdomain, or custom hostname (if using SSL
@@ -2308,6 +2364,10 @@ type waitingRoomGetResponseAdditionalRouteJSON struct {
 
 func (r *WaitingRoomGetResponseAdditionalRoute) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomGetResponseAdditionalRouteJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configures cookie attributes for the waiting room cookie. This encrypted cookie
@@ -2337,6 +2397,10 @@ type waitingRoomGetResponseCookieAttributesJSON struct {
 
 func (r *WaitingRoomGetResponseCookieAttributes) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomGetResponseCookieAttributesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configures the SameSite attribute on the waiting room cookie. Value `auto` will
@@ -2449,6 +2513,10 @@ type waitingRoomPreviewResponseJSON struct {
 
 func (r *WaitingRoomPreviewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomPreviewResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type WaitingRoomNewParams struct {
@@ -2860,6 +2928,10 @@ func (r *WaitingRoomNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomUpdateParams struct {
 	// The host name to which the waiting room will be applied (no wildcards). Please
 	// do not include the scheme (http:// or https://). The host and path combination
@@ -3269,6 +3341,10 @@ func (r *WaitingRoomUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomListResponseEnvelope struct {
 	Errors   []WaitingRoomListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []WaitingRoomListResponseEnvelopeMessages `json:"messages,required"`
@@ -3295,6 +3371,10 @@ func (r *WaitingRoomListResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomListResponseEnvelopeErrors struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -3314,6 +3394,10 @@ func (r *WaitingRoomListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomListResponseEnvelopeMessages struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -3331,6 +3415,10 @@ type waitingRoomListResponseEnvelopeMessagesJSON struct {
 
 func (r *WaitingRoomListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -3367,6 +3455,10 @@ func (r *WaitingRoomListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomDeleteResponseEnvelope struct {
 	Result WaitingRoomDeleteResponse             `json:"result,required"`
 	JSON   waitingRoomDeleteResponseEnvelopeJSON `json:"-"`
@@ -3382,6 +3474,10 @@ type waitingRoomDeleteResponseEnvelopeJSON struct {
 
 func (r *WaitingRoomDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
 
 type WaitingRoomEditParams struct {
@@ -3793,6 +3889,10 @@ func (r *WaitingRoomEditResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r waitingRoomEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WaitingRoomGetResponseEnvelope struct {
 	Result WaitingRoomGetResponse             `json:"result,required"`
 	JSON   waitingRoomGetResponseEnvelopeJSON `json:"-"`
@@ -3808,6 +3908,10 @@ type waitingRoomGetResponseEnvelopeJSON struct {
 
 func (r *WaitingRoomGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
 
 type WaitingRoomPreviewParams struct {
@@ -3854,4 +3958,8 @@ type waitingRoomPreviewResponseEnvelopeJSON struct {
 
 func (r *WaitingRoomPreviewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r waitingRoomPreviewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

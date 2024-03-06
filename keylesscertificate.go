@@ -145,6 +145,10 @@ func (r *KeylessCertificateNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r keylessCertificateNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Status of the Keyless SSL.
 type KeylessCertificateNewResponseStatus string
 
@@ -173,6 +177,10 @@ type keylessCertificateNewResponseTunnelJSON struct {
 
 func (r *KeylessCertificateNewResponseTunnel) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r keylessCertificateNewResponseTunnelJSON) RawJSON() string {
+	return r.raw
 }
 
 type KeylessCertificateListResponse struct {
@@ -222,6 +230,10 @@ func (r *KeylessCertificateListResponse) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r keylessCertificateListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Status of the Keyless SSL.
 type KeylessCertificateListResponseStatus string
 
@@ -252,6 +264,10 @@ func (r *KeylessCertificateListResponseTunnel) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r keylessCertificateListResponseTunnelJSON) RawJSON() string {
+	return r.raw
+}
+
 type KeylessCertificateDeleteResponse struct {
 	// Identifier
 	ID   string                               `json:"id"`
@@ -268,6 +284,10 @@ type keylessCertificateDeleteResponseJSON struct {
 
 func (r *KeylessCertificateDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r keylessCertificateDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type KeylessCertificateEditResponse struct {
@@ -317,6 +337,10 @@ func (r *KeylessCertificateEditResponse) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r keylessCertificateEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Status of the Keyless SSL.
 type KeylessCertificateEditResponseStatus string
 
@@ -345,6 +369,10 @@ type keylessCertificateEditResponseTunnelJSON struct {
 
 func (r *KeylessCertificateEditResponseTunnel) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r keylessCertificateEditResponseTunnelJSON) RawJSON() string {
+	return r.raw
 }
 
 type KeylessCertificateGetResponse struct {
@@ -394,6 +422,10 @@ func (r *KeylessCertificateGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r keylessCertificateGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Status of the Keyless SSL.
 type KeylessCertificateGetResponseStatus string
 
@@ -422,6 +454,10 @@ type keylessCertificateGetResponseTunnelJSON struct {
 
 func (r *KeylessCertificateGetResponseTunnel) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r keylessCertificateGetResponseTunnelJSON) RawJSON() string {
+	return r.raw
 }
 
 type KeylessCertificateNewParams struct {
@@ -497,6 +533,10 @@ func (r *KeylessCertificateNewResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r keylessCertificateNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type KeylessCertificateNewResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -516,6 +556,10 @@ func (r *KeylessCertificateNewResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r keylessCertificateNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type KeylessCertificateNewResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -533,6 +577,10 @@ type keylessCertificateNewResponseEnvelopeMessagesJSON struct {
 
 func (r *KeylessCertificateNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r keylessCertificateNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -573,6 +621,10 @@ func (r *KeylessCertificateListResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r keylessCertificateListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type KeylessCertificateListResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -592,6 +644,10 @@ func (r *KeylessCertificateListResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r keylessCertificateListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type KeylessCertificateListResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -609,6 +665,10 @@ type keylessCertificateListResponseEnvelopeMessagesJSON struct {
 
 func (r *KeylessCertificateListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r keylessCertificateListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -645,6 +705,10 @@ func (r *KeylessCertificateListResponseEnvelopeResultInfo) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r keylessCertificateListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type KeylessCertificateDeleteParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -674,6 +738,10 @@ func (r *KeylessCertificateDeleteResponseEnvelope) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r keylessCertificateDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type KeylessCertificateDeleteResponseEnvelopeErrors struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -693,6 +761,10 @@ func (r *KeylessCertificateDeleteResponseEnvelopeErrors) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r keylessCertificateDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type KeylessCertificateDeleteResponseEnvelopeMessages struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -710,6 +782,10 @@ type keylessCertificateDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *KeylessCertificateDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r keylessCertificateDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -775,6 +851,10 @@ func (r *KeylessCertificateEditResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r keylessCertificateEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type KeylessCertificateEditResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -794,6 +874,10 @@ func (r *KeylessCertificateEditResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r keylessCertificateEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type KeylessCertificateEditResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -811,6 +895,10 @@ type keylessCertificateEditResponseEnvelopeMessagesJSON struct {
 
 func (r *KeylessCertificateEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r keylessCertificateEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -849,6 +937,10 @@ func (r *KeylessCertificateGetResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r keylessCertificateGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type KeylessCertificateGetResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -868,6 +960,10 @@ func (r *KeylessCertificateGetResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r keylessCertificateGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type KeylessCertificateGetResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -885,6 +981,10 @@ type keylessCertificateGetResponseEnvelopeMessagesJSON struct {
 
 func (r *KeylessCertificateGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r keylessCertificateGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

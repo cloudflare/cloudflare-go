@@ -190,6 +190,10 @@ func (r *PageruleListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageruleListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageruleListResponseAction struct {
 	// The timestamp of when the override was last modified.
 	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
@@ -211,6 +215,10 @@ type pageruleListResponseActionJSON struct {
 
 func (r *PageruleListResponseAction) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageruleListResponseActionJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of route.
@@ -240,6 +248,10 @@ type pageruleListResponseActionsValueJSON struct {
 
 func (r *PageruleListResponseActionsValue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageruleListResponseActionsValueJSON) RawJSON() string {
+	return r.raw
 }
 
 // The response type for the URL redirect.
@@ -280,6 +292,10 @@ func (r *PageruleListResponseTarget) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageruleListResponseTargetJSON) RawJSON() string {
+	return r.raw
+}
+
 // String constraint.
 type PageruleListResponseTargetsConstraint struct {
 	// The matches operator can use asterisks and pipes as wildcard and 'or' operators.
@@ -301,6 +317,10 @@ type pageruleListResponseTargetsConstraintJSON struct {
 
 func (r *PageruleListResponseTargetsConstraint) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageruleListResponseTargetsConstraintJSON) RawJSON() string {
+	return r.raw
 }
 
 // The matches operator can use asterisks and pipes as wildcard and 'or' operators.
@@ -337,6 +357,10 @@ type pageruleDeleteResponseJSON struct {
 
 func (r *PageruleDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageruleDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Union satisfied by [PageruleEditResponseUnknown] or [shared.UnionString].
@@ -505,6 +529,10 @@ func (r *PageruleNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageruleNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageruleNewResponseEnvelopeErrors struct {
 	Code    int64                                 `json:"code,required"`
 	Message string                                `json:"message,required"`
@@ -524,6 +552,10 @@ func (r *PageruleNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageruleNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageruleNewResponseEnvelopeMessages struct {
 	Code    int64                                   `json:"code,required"`
 	Message string                                  `json:"message,required"`
@@ -541,6 +573,10 @@ type pageruleNewResponseEnvelopeMessagesJSON struct {
 
 func (r *PageruleNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageruleNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -684,6 +720,10 @@ func (r *PageruleUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageruleUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageruleUpdateResponseEnvelopeErrors struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -703,6 +743,10 @@ func (r *PageruleUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageruleUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageruleUpdateResponseEnvelopeMessages struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -720,6 +764,10 @@ type pageruleUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *PageruleUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageruleUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -808,6 +856,10 @@ func (r *PageruleListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageruleListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageruleListResponseEnvelopeErrors struct {
 	Code    int64                                  `json:"code,required"`
 	Message string                                 `json:"message,required"`
@@ -827,6 +879,10 @@ func (r *PageruleListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageruleListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageruleListResponseEnvelopeMessages struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -844,6 +900,10 @@ type pageruleListResponseEnvelopeMessagesJSON struct {
 
 func (r *PageruleListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageruleListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -882,6 +942,10 @@ func (r *PageruleDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageruleDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageruleDeleteResponseEnvelopeErrors struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -901,6 +965,10 @@ func (r *PageruleDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageruleDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageruleDeleteResponseEnvelopeMessages struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -918,6 +986,10 @@ type pageruleDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *PageruleDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageruleDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1061,6 +1133,10 @@ func (r *PageruleEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageruleEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageruleEditResponseEnvelopeErrors struct {
 	Code    int64                                  `json:"code,required"`
 	Message string                                 `json:"message,required"`
@@ -1080,6 +1156,10 @@ func (r *PageruleEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageruleEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageruleEditResponseEnvelopeMessages struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -1097,6 +1177,10 @@ type pageruleEditResponseEnvelopeMessagesJSON struct {
 
 func (r *PageruleEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageruleEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1135,6 +1219,10 @@ func (r *PageruleGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageruleGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageruleGetResponseEnvelopeErrors struct {
 	Code    int64                                 `json:"code,required"`
 	Message string                                `json:"message,required"`
@@ -1154,6 +1242,10 @@ func (r *PageruleGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageruleGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageruleGetResponseEnvelopeMessages struct {
 	Code    int64                                   `json:"code,required"`
 	Message string                                  `json:"message,required"`
@@ -1171,6 +1263,10 @@ type pageruleGetResponseEnvelopeMessagesJSON struct {
 
 func (r *PageruleGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageruleGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

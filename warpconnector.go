@@ -197,6 +197,10 @@ func (r *WARPConnectorNewResponseTunnelCfdTunnel) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r warpConnectorNewResponseTunnelCfdTunnelJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r WARPConnectorNewResponseTunnelCfdTunnel) implementsWARPConnectorNewResponse() {}
 
 type WARPConnectorNewResponseTunnelCfdTunnelConnection struct {
@@ -239,6 +243,10 @@ type warpConnectorNewResponseTunnelCfdTunnelConnectionJSON struct {
 
 func (r *WARPConnectorNewResponseTunnelCfdTunnelConnection) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r warpConnectorNewResponseTunnelCfdTunnelConnectionJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of tunnel.
@@ -307,6 +315,10 @@ func (r *WARPConnectorNewResponseTunnelWARPConnectorTunnel) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r warpConnectorNewResponseTunnelWARPConnectorTunnelJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r WARPConnectorNewResponseTunnelWARPConnectorTunnel) implementsWARPConnectorNewResponse() {}
 
 type WARPConnectorNewResponseTunnelWARPConnectorTunnelConnection struct {
@@ -350,6 +362,10 @@ type warpConnectorNewResponseTunnelWARPConnectorTunnelConnectionJSON struct {
 
 func (r *WARPConnectorNewResponseTunnelWARPConnectorTunnelConnection) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r warpConnectorNewResponseTunnelWARPConnectorTunnelConnectionJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of tunnel.
@@ -434,6 +450,10 @@ func (r *WARPConnectorListResponseTunnelCfdTunnel) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r warpConnectorListResponseTunnelCfdTunnelJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r WARPConnectorListResponseTunnelCfdTunnel) implementsWARPConnectorListResponse() {}
 
 type WARPConnectorListResponseTunnelCfdTunnelConnection struct {
@@ -476,6 +496,10 @@ type warpConnectorListResponseTunnelCfdTunnelConnectionJSON struct {
 
 func (r *WARPConnectorListResponseTunnelCfdTunnelConnection) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r warpConnectorListResponseTunnelCfdTunnelConnectionJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of tunnel.
@@ -544,6 +568,10 @@ func (r *WARPConnectorListResponseTunnelWARPConnectorTunnel) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r warpConnectorListResponseTunnelWARPConnectorTunnelJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r WARPConnectorListResponseTunnelWARPConnectorTunnel) implementsWARPConnectorListResponse() {}
 
 type WARPConnectorListResponseTunnelWARPConnectorTunnelConnection struct {
@@ -587,6 +615,10 @@ type warpConnectorListResponseTunnelWARPConnectorTunnelConnectionJSON struct {
 
 func (r *WARPConnectorListResponseTunnelWARPConnectorTunnelConnection) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r warpConnectorListResponseTunnelWARPConnectorTunnelConnectionJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of tunnel.
@@ -671,6 +703,10 @@ func (r *WARPConnectorDeleteResponseTunnelCfdTunnel) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r warpConnectorDeleteResponseTunnelCfdTunnelJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r WARPConnectorDeleteResponseTunnelCfdTunnel) implementsWARPConnectorDeleteResponse() {}
 
 type WARPConnectorDeleteResponseTunnelCfdTunnelConnection struct {
@@ -713,6 +749,10 @@ type warpConnectorDeleteResponseTunnelCfdTunnelConnectionJSON struct {
 
 func (r *WARPConnectorDeleteResponseTunnelCfdTunnelConnection) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r warpConnectorDeleteResponseTunnelCfdTunnelConnectionJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of tunnel.
@@ -781,6 +821,10 @@ func (r *WARPConnectorDeleteResponseTunnelWARPConnectorTunnel) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r warpConnectorDeleteResponseTunnelWARPConnectorTunnelJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r WARPConnectorDeleteResponseTunnelWARPConnectorTunnel) implementsWARPConnectorDeleteResponse() {
 }
 
@@ -825,6 +869,10 @@ type warpConnectorDeleteResponseTunnelWARPConnectorTunnelConnectionJSON struct {
 
 func (r *WARPConnectorDeleteResponseTunnelWARPConnectorTunnelConnection) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r warpConnectorDeleteResponseTunnelWARPConnectorTunnelConnectionJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of tunnel.
@@ -909,6 +957,10 @@ func (r *WARPConnectorEditResponseTunnelCfdTunnel) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r warpConnectorEditResponseTunnelCfdTunnelJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r WARPConnectorEditResponseTunnelCfdTunnel) implementsWARPConnectorEditResponse() {}
 
 type WARPConnectorEditResponseTunnelCfdTunnelConnection struct {
@@ -951,6 +1003,10 @@ type warpConnectorEditResponseTunnelCfdTunnelConnectionJSON struct {
 
 func (r *WARPConnectorEditResponseTunnelCfdTunnelConnection) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r warpConnectorEditResponseTunnelCfdTunnelConnectionJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of tunnel.
@@ -1019,6 +1075,10 @@ func (r *WARPConnectorEditResponseTunnelWARPConnectorTunnel) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r warpConnectorEditResponseTunnelWARPConnectorTunnelJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r WARPConnectorEditResponseTunnelWARPConnectorTunnel) implementsWARPConnectorEditResponse() {}
 
 type WARPConnectorEditResponseTunnelWARPConnectorTunnelConnection struct {
@@ -1062,6 +1122,10 @@ type warpConnectorEditResponseTunnelWARPConnectorTunnelConnectionJSON struct {
 
 func (r *WARPConnectorEditResponseTunnelWARPConnectorTunnelConnection) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r warpConnectorEditResponseTunnelWARPConnectorTunnelConnectionJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of tunnel.
@@ -1146,6 +1210,10 @@ func (r *WARPConnectorGetResponseTunnelCfdTunnel) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r warpConnectorGetResponseTunnelCfdTunnelJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r WARPConnectorGetResponseTunnelCfdTunnel) implementsWARPConnectorGetResponse() {}
 
 type WARPConnectorGetResponseTunnelCfdTunnelConnection struct {
@@ -1188,6 +1256,10 @@ type warpConnectorGetResponseTunnelCfdTunnelConnectionJSON struct {
 
 func (r *WARPConnectorGetResponseTunnelCfdTunnelConnection) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r warpConnectorGetResponseTunnelCfdTunnelConnectionJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of tunnel.
@@ -1256,6 +1328,10 @@ func (r *WARPConnectorGetResponseTunnelWARPConnectorTunnel) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r warpConnectorGetResponseTunnelWARPConnectorTunnelJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r WARPConnectorGetResponseTunnelWARPConnectorTunnel) implementsWARPConnectorGetResponse() {}
 
 type WARPConnectorGetResponseTunnelWARPConnectorTunnelConnection struct {
@@ -1299,6 +1375,10 @@ type warpConnectorGetResponseTunnelWARPConnectorTunnelConnectionJSON struct {
 
 func (r *WARPConnectorGetResponseTunnelWARPConnectorTunnelConnection) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r warpConnectorGetResponseTunnelWARPConnectorTunnelConnectionJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of tunnel.
@@ -1369,6 +1449,10 @@ func (r *WARPConnectorNewResponseEnvelope) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r warpConnectorNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WARPConnectorNewResponseEnvelopeErrors struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -1388,6 +1472,10 @@ func (r *WARPConnectorNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r warpConnectorNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type WARPConnectorNewResponseEnvelopeMessages struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -1405,6 +1493,10 @@ type warpConnectorNewResponseEnvelopeMessagesJSON struct {
 
 func (r *WARPConnectorNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r warpConnectorNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1479,6 +1571,10 @@ func (r *WARPConnectorDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r warpConnectorDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WARPConnectorDeleteResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -1498,6 +1594,10 @@ func (r *WARPConnectorDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r warpConnectorDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type WARPConnectorDeleteResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -1515,6 +1615,10 @@ type warpConnectorDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *WARPConnectorDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r warpConnectorDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1563,6 +1667,10 @@ func (r *WARPConnectorEditResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r warpConnectorEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WARPConnectorEditResponseEnvelopeErrors struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -1582,6 +1690,10 @@ func (r *WARPConnectorEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r warpConnectorEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type WARPConnectorEditResponseEnvelopeMessages struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -1599,6 +1711,10 @@ type warpConnectorEditResponseEnvelopeMessagesJSON struct {
 
 func (r *WARPConnectorEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r warpConnectorEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1638,6 +1754,10 @@ func (r *WARPConnectorGetResponseEnvelope) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r warpConnectorGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WARPConnectorGetResponseEnvelopeErrors struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -1657,6 +1777,10 @@ func (r *WARPConnectorGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r warpConnectorGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type WARPConnectorGetResponseEnvelopeMessages struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -1674,6 +1798,10 @@ type warpConnectorGetResponseEnvelopeMessagesJSON struct {
 
 func (r *WARPConnectorGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r warpConnectorGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1712,6 +1840,10 @@ func (r *WARPConnectorTokenResponseEnvelope) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r warpConnectorTokenResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WARPConnectorTokenResponseEnvelopeErrors struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -1731,6 +1863,10 @@ func (r *WARPConnectorTokenResponseEnvelopeErrors) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r warpConnectorTokenResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type WARPConnectorTokenResponseEnvelopeMessages struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -1748,6 +1884,10 @@ type warpConnectorTokenResponseEnvelopeMessagesJSON struct {
 
 func (r *WARPConnectorTokenResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r warpConnectorTokenResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

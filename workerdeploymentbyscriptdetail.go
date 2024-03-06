@@ -67,6 +67,10 @@ func (r *WorkerDeploymentByScriptDetailGetResponse) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerDeploymentByScriptDetailGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerDeploymentByScriptDetailGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -96,6 +100,10 @@ func (r *WorkerDeploymentByScriptDetailGetResponseEnvelope) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerDeploymentByScriptDetailGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerDeploymentByScriptDetailGetResponseEnvelopeErrors struct {
 	Code    int64                                                       `json:"code,required"`
 	Message string                                                      `json:"message,required"`
@@ -116,6 +124,10 @@ func (r *WorkerDeploymentByScriptDetailGetResponseEnvelopeErrors) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerDeploymentByScriptDetailGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerDeploymentByScriptDetailGetResponseEnvelopeMessages struct {
 	Code    int64                                                         `json:"code,required"`
 	Message string                                                        `json:"message,required"`
@@ -134,6 +146,10 @@ type workerDeploymentByScriptDetailGetResponseEnvelopeMessagesJSON struct {
 
 func (r *WorkerDeploymentByScriptDetailGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerDeploymentByScriptDetailGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

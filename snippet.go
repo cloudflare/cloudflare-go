@@ -114,6 +114,10 @@ func (r *SnippetUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r snippetUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Snippet Information
 type SnippetListResponse struct {
 	// Creation time of the snippet
@@ -137,6 +141,10 @@ type snippetListResponseJSON struct {
 
 func (r *SnippetListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r snippetListResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Union satisfied by [SnippetDeleteResponseUnknown], [SnippetDeleteResponseArray]
@@ -185,6 +193,10 @@ func (r *SnippetGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r snippetGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type SnippetUpdateParams struct {
 	// Content files of uploaded snippet
 	Files    param.Field[string]                      `json:"files"`
@@ -229,6 +241,10 @@ func (r *SnippetUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r snippetUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type SnippetUpdateResponseEnvelopeErrors struct {
 	Code    int64                                   `json:"code,required"`
 	Message string                                  `json:"message,required"`
@@ -248,6 +264,10 @@ func (r *SnippetUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r snippetUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type SnippetUpdateResponseEnvelopeMessages struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -265,6 +285,10 @@ type snippetUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *SnippetUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r snippetUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -299,6 +323,10 @@ func (r *SnippetListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r snippetListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type SnippetListResponseEnvelopeErrors struct {
 	Code    int64                                 `json:"code,required"`
 	Message string                                `json:"message,required"`
@@ -318,6 +346,10 @@ func (r *SnippetListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r snippetListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type SnippetListResponseEnvelopeMessages struct {
 	Code    int64                                   `json:"code,required"`
 	Message string                                  `json:"message,required"`
@@ -335,6 +367,10 @@ type snippetListResponseEnvelopeMessagesJSON struct {
 
 func (r *SnippetListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r snippetListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -368,6 +404,10 @@ func (r *SnippetDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r snippetDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type SnippetDeleteResponseEnvelopeErrors struct {
 	Code    int64                                   `json:"code,required"`
 	Message string                                  `json:"message,required"`
@@ -387,6 +427,10 @@ func (r *SnippetDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r snippetDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type SnippetDeleteResponseEnvelopeMessages struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -404,6 +448,10 @@ type snippetDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *SnippetDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r snippetDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -438,6 +486,10 @@ func (r *SnippetGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r snippetGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type SnippetGetResponseEnvelopeErrors struct {
 	Code    int64                                `json:"code,required"`
 	Message string                               `json:"message,required"`
@@ -457,6 +509,10 @@ func (r *SnippetGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r snippetGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type SnippetGetResponseEnvelopeMessages struct {
 	Code    int64                                  `json:"code,required"`
 	Message string                                 `json:"message,required"`
@@ -474,6 +530,10 @@ type snippetGetResponseEnvelopeMessagesJSON struct {
 
 func (r *SnippetGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r snippetGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

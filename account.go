@@ -115,6 +115,10 @@ func (r *Account) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountJSON) RawJSON() string {
+	return r.raw
+}
+
 // Account settings
 type AccountSettings struct {
 	// Specifies the default nameservers to be used for new zones added to this
@@ -150,6 +154,10 @@ type accountSettingsJSON struct {
 
 func (r *AccountSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountSettingsJSON) RawJSON() string {
+	return r.raw
 }
 
 // Specifies the default nameservers to be used for new zones added to this
@@ -285,6 +293,10 @@ func (r *AccountUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccountUpdateResponseEnvelopeErrors struct {
 	Code    int64                                   `json:"code,required"`
 	Message string                                  `json:"message,required"`
@@ -304,6 +316,10 @@ func (r *AccountUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccountUpdateResponseEnvelopeMessages struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -321,6 +337,10 @@ type accountUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *AccountUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -383,6 +403,10 @@ func (r *AccountGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccountGetResponseEnvelopeErrors struct {
 	Code    int64                                `json:"code,required"`
 	Message string                               `json:"message,required"`
@@ -402,6 +426,10 @@ func (r *AccountGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r accountGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AccountGetResponseEnvelopeMessages struct {
 	Code    int64                                  `json:"code,required"`
 	Message string                                 `json:"message,required"`
@@ -419,6 +447,10 @@ type accountGetResponseEnvelopeMessagesJSON struct {
 
 func (r *AccountGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accountGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

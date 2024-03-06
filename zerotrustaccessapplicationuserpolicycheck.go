@@ -73,6 +73,10 @@ func (r *ZeroTrustAccessApplicationUserPolicyCheckListResponse) UnmarshalJSON(da
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationUserPolicyCheckListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessApplicationUserPolicyCheckListResponseAppState struct {
 	// UUID
 	AppUid   string                                                            `json:"app_uid"`
@@ -100,6 +104,10 @@ type zeroTrustAccessApplicationUserPolicyCheckListResponseAppStateJSON struct {
 
 func (r *ZeroTrustAccessApplicationUserPolicyCheckListResponseAppState) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationUserPolicyCheckListResponseAppStateJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustAccessApplicationUserPolicyCheckListResponseUserIdentity struct {
@@ -141,6 +149,10 @@ func (r *ZeroTrustAccessApplicationUserPolicyCheckListResponseUserIdentity) Unma
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationUserPolicyCheckListResponseUserIdentityJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessApplicationUserPolicyCheckListResponseUserIdentityGeo struct {
 	Country string                                                                   `json:"country"`
 	JSON    zeroTrustAccessApplicationUserPolicyCheckListResponseUserIdentityGeoJSON `json:"-"`
@@ -157,6 +169,10 @@ type zeroTrustAccessApplicationUserPolicyCheckListResponseUserIdentityGeoJSON st
 
 func (r *ZeroTrustAccessApplicationUserPolicyCheckListResponseUserIdentityGeo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationUserPolicyCheckListResponseUserIdentityGeoJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustAccessApplicationUserPolicyCheckListParams struct {
@@ -198,6 +214,10 @@ func (r *ZeroTrustAccessApplicationUserPolicyCheckListResponseEnvelope) Unmarsha
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationUserPolicyCheckListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessApplicationUserPolicyCheckListResponseEnvelopeErrors struct {
 	Code    int64                                                                   `json:"code,required"`
 	Message string                                                                  `json:"message,required"`
@@ -218,6 +238,10 @@ func (r *ZeroTrustAccessApplicationUserPolicyCheckListResponseEnvelopeErrors) Un
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustAccessApplicationUserPolicyCheckListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustAccessApplicationUserPolicyCheckListResponseEnvelopeMessages struct {
 	Code    int64                                                                     `json:"code,required"`
 	Message string                                                                    `json:"message,required"`
@@ -236,6 +260,10 @@ type zeroTrustAccessApplicationUserPolicyCheckListResponseEnvelopeMessagesJSON s
 
 func (r *ZeroTrustAccessApplicationUserPolicyCheckListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustAccessApplicationUserPolicyCheckListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

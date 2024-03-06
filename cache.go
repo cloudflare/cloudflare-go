@@ -96,6 +96,10 @@ func (r *CachePurgeResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cachePurgeResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type CachePurgeParams struct {
 	ZoneID          param.Field[string]                 `path:"zone_id,required"`
 	Files           param.Field[[]CachePurgeParamsFile] `json:"files"`
@@ -150,6 +154,10 @@ func (r *CachePurgeResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cachePurgeResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type CachePurgeResponseEnvelopeErrors struct {
 	Code    int64                                `json:"code,required"`
 	Message string                               `json:"message,required"`
@@ -169,6 +177,10 @@ func (r *CachePurgeResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r cachePurgeResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type CachePurgeResponseEnvelopeMessages struct {
 	Code    int64                                  `json:"code,required"`
 	Message string                                 `json:"message,required"`
@@ -186,6 +198,10 @@ type cachePurgeResponseEnvelopeMessagesJSON struct {
 
 func (r *CachePurgeResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cachePurgeResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

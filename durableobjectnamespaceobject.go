@@ -67,6 +67,10 @@ func (r *DurableObjectNamespaceObjectListResponse) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r durableObjectNamespaceObjectListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type DurableObjectNamespaceObjectListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -114,6 +118,10 @@ func (r *DurableObjectNamespaceObjectListResponseEnvelope) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r durableObjectNamespaceObjectListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type DurableObjectNamespaceObjectListResponseEnvelopeErrors struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -131,6 +139,10 @@ type durableObjectNamespaceObjectListResponseEnvelopeErrorsJSON struct {
 
 func (r *DurableObjectNamespaceObjectListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r durableObjectNamespaceObjectListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type DurableObjectNamespaceObjectListResponseEnvelopeMessages struct {
@@ -151,6 +163,10 @@ type durableObjectNamespaceObjectListResponseEnvelopeMessagesJSON struct {
 
 func (r *DurableObjectNamespaceObjectListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r durableObjectNamespaceObjectListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -191,4 +207,8 @@ type durableObjectNamespaceObjectListResponseEnvelopeResultInfoJSON struct {
 
 func (r *DurableObjectNamespaceObjectListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r durableObjectNamespaceObjectListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

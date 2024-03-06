@@ -157,6 +157,10 @@ func (r *FirewallWAFPackageRuleListResponseWAFManagedRulesAnomalyRule) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallWAFPackageRuleListResponseWAFManagedRulesAnomalyRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r FirewallWAFPackageRuleListResponseWAFManagedRulesAnomalyRule) implementsFirewallWAFPackageRuleListResponse() {
 }
 
@@ -190,6 +194,10 @@ type firewallWAFPackageRuleListResponseWAFManagedRulesAnomalyRuleGroupJSON struc
 
 func (r *FirewallWAFPackageRuleListResponseWAFManagedRulesAnomalyRuleGroup) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallWAFPackageRuleListResponseWAFManagedRulesAnomalyRuleGroupJSON) RawJSON() string {
+	return r.raw
 }
 
 // When set to `on`, the current WAF rule will be used when evaluating the request.
@@ -246,6 +254,10 @@ func (r *FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRule) U
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRule) implementsFirewallWAFPackageRuleListResponse() {
 }
 
@@ -292,6 +304,10 @@ type firewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleGroupJS
 
 func (r *FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleGroup) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleGroupJSON) RawJSON() string {
+	return r.raw
 }
 
 // The action that the current WAF rule will perform when triggered. Applies to
@@ -347,6 +363,10 @@ func (r *FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRule) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallWAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRule) implementsFirewallWAFPackageRuleListResponse() {
 }
 
@@ -380,6 +400,10 @@ type firewallWAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleGroupJ
 
 func (r *FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleGroup) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallWAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleGroupJSON) RawJSON() string {
+	return r.raw
 }
 
 // When set to `on`, the current rule will be used when evaluating the request.
@@ -451,6 +475,10 @@ func (r *FirewallWAFPackageRuleEditResponseWAFManagedRulesAnomalyRule) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallWAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r FirewallWAFPackageRuleEditResponseWAFManagedRulesAnomalyRule) implementsFirewallWAFPackageRuleEditResponse() {
 }
 
@@ -484,6 +512,10 @@ type firewallWAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleGroupJSON struc
 
 func (r *FirewallWAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleGroup) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallWAFPackageRuleEditResponseWAFManagedRulesAnomalyRuleGroupJSON) RawJSON() string {
+	return r.raw
 }
 
 // When set to `on`, the current WAF rule will be used when evaluating the request.
@@ -540,6 +572,10 @@ func (r *FirewallWAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRule) U
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallWAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r FirewallWAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRule) implementsFirewallWAFPackageRuleEditResponse() {
 }
 
@@ -586,6 +622,10 @@ type firewallWAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleGroupJS
 
 func (r *FirewallWAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleGroup) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallWAFPackageRuleEditResponseWAFManagedRulesTraditionalDenyRuleGroupJSON) RawJSON() string {
+	return r.raw
 }
 
 // The action that the current WAF rule will perform when triggered. Applies to
@@ -641,6 +681,10 @@ func (r *FirewallWAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRule) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallWAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r FirewallWAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRule) implementsFirewallWAFPackageRuleEditResponse() {
 }
 
@@ -674,6 +718,10 @@ type firewallWAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleGroupJ
 
 func (r *FirewallWAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleGroup) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallWAFPackageRuleEditResponseWAFManagedRulesTraditionalAllowRuleGroupJSON) RawJSON() string {
+	return r.raw
 }
 
 // When set to `on`, the current rule will be used when evaluating the request.
@@ -823,6 +871,10 @@ func (r *FirewallWAFPackageRuleEditResponseEnvelope) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallWAFPackageRuleEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallWAFPackageRuleEditResponseEnvelopeErrors struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -842,6 +894,10 @@ func (r *FirewallWAFPackageRuleEditResponseEnvelopeErrors) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallWAFPackageRuleEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallWAFPackageRuleEditResponseEnvelopeMessages struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -859,6 +915,10 @@ type firewallWAFPackageRuleEditResponseEnvelopeMessagesJSON struct {
 
 func (r *FirewallWAFPackageRuleEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallWAFPackageRuleEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -897,6 +957,10 @@ func (r *FirewallWAFPackageRuleGetResponseEnvelope) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallWAFPackageRuleGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallWAFPackageRuleGetResponseEnvelopeErrors struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -916,6 +980,10 @@ func (r *FirewallWAFPackageRuleGetResponseEnvelopeErrors) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallWAFPackageRuleGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallWAFPackageRuleGetResponseEnvelopeMessages struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -933,6 +1001,10 @@ type firewallWAFPackageRuleGetResponseEnvelopeMessagesJSON struct {
 
 func (r *FirewallWAFPackageRuleGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallWAFPackageRuleGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

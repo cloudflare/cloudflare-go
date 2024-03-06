@@ -85,6 +85,10 @@ func (r *ZoneSettingSSLRecommenderEditResponse) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingSSLRecommenderEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Enrollment value for SSL/TLS Recommender.
 type ZoneSettingSSLRecommenderEditResponseID string
 
@@ -114,6 +118,10 @@ type zoneSettingSSLRecommenderGetResponseJSON struct {
 
 func (r *ZoneSettingSSLRecommenderGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingSSLRecommenderGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Enrollment value for SSL/TLS Recommender.
@@ -184,6 +192,10 @@ func (r *ZoneSettingSSLRecommenderEditResponseEnvelope) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingSSLRecommenderEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingSSLRecommenderEditResponseEnvelopeErrors struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -203,6 +215,10 @@ func (r *ZoneSettingSSLRecommenderEditResponseEnvelopeErrors) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingSSLRecommenderEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingSSLRecommenderEditResponseEnvelopeMessages struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -220,6 +236,10 @@ type zoneSettingSSLRecommenderEditResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingSSLRecommenderEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingSSLRecommenderEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneSettingSSLRecommenderGetParams struct {
@@ -254,6 +274,10 @@ func (r *ZoneSettingSSLRecommenderGetResponseEnvelope) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingSSLRecommenderGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingSSLRecommenderGetResponseEnvelopeErrors struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -273,6 +297,10 @@ func (r *ZoneSettingSSLRecommenderGetResponseEnvelopeErrors) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingSSLRecommenderGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingSSLRecommenderGetResponseEnvelopeMessages struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -290,4 +318,8 @@ type zoneSettingSSLRecommenderGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingSSLRecommenderGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingSSLRecommenderGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }

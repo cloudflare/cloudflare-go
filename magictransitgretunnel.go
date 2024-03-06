@@ -117,6 +117,10 @@ func (r *MagicTransitGRETunnelNewResponse) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitGRETunnelNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitGRETunnelNewResponseGRETunnel struct {
 	// The IP address assigned to the Cloudflare side of the GRE tunnel.
 	CloudflareGREEndpoint string `json:"cloudflare_gre_endpoint,required"`
@@ -168,6 +172,10 @@ func (r *MagicTransitGRETunnelNewResponseGRETunnel) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitGRETunnelNewResponseGRETunnelJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitGRETunnelNewResponseGRETunnelsHealthCheck struct {
 	// The direction of the flow of the healthcheck. Either unidirectional, where the
 	// probe comes to you via the tunnel and the result comes back to Cloudflare via
@@ -205,6 +213,10 @@ type magicTransitGRETunnelNewResponseGRETunnelsHealthCheckJSON struct {
 
 func (r *MagicTransitGRETunnelNewResponseGRETunnelsHealthCheck) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitGRETunnelNewResponseGRETunnelsHealthCheckJSON) RawJSON() string {
+	return r.raw
 }
 
 // The direction of the flow of the healthcheck. Either unidirectional, where the
@@ -256,6 +268,10 @@ func (r *MagicTransitGRETunnelUpdateResponse) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitGRETunnelUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitGRETunnelListResponse struct {
 	GRETunnels []MagicTransitGRETunnelListResponseGRETunnel `json:"gre_tunnels"`
 	JSON       magicTransitGRETunnelListResponseJSON        `json:"-"`
@@ -271,6 +287,10 @@ type magicTransitGRETunnelListResponseJSON struct {
 
 func (r *MagicTransitGRETunnelListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitGRETunnelListResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type MagicTransitGRETunnelListResponseGRETunnel struct {
@@ -324,6 +344,10 @@ func (r *MagicTransitGRETunnelListResponseGRETunnel) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitGRETunnelListResponseGRETunnelJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitGRETunnelListResponseGRETunnelsHealthCheck struct {
 	// The direction of the flow of the healthcheck. Either unidirectional, where the
 	// probe comes to you via the tunnel and the result comes back to Cloudflare via
@@ -361,6 +385,10 @@ type magicTransitGRETunnelListResponseGRETunnelsHealthCheckJSON struct {
 
 func (r *MagicTransitGRETunnelListResponseGRETunnelsHealthCheck) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitGRETunnelListResponseGRETunnelsHealthCheckJSON) RawJSON() string {
+	return r.raw
 }
 
 // The direction of the flow of the healthcheck. Either unidirectional, where the
@@ -412,6 +440,10 @@ func (r *MagicTransitGRETunnelDeleteResponse) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitGRETunnelDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitGRETunnelGetResponse struct {
 	GRETunnel interface{}                          `json:"gre_tunnel"`
 	JSON      magicTransitGRETunnelGetResponseJSON `json:"-"`
@@ -427,6 +459,10 @@ type magicTransitGRETunnelGetResponseJSON struct {
 
 func (r *MagicTransitGRETunnelGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitGRETunnelGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type MagicTransitGRETunnelNewParams struct {
@@ -461,6 +497,10 @@ func (r *MagicTransitGRETunnelNewResponseEnvelope) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitGRETunnelNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitGRETunnelNewResponseEnvelopeErrors struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -480,6 +520,10 @@ func (r *MagicTransitGRETunnelNewResponseEnvelopeErrors) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitGRETunnelNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitGRETunnelNewResponseEnvelopeMessages struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -497,6 +541,10 @@ type magicTransitGRETunnelNewResponseEnvelopeMessagesJSON struct {
 
 func (r *MagicTransitGRETunnelNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitGRETunnelNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -612,6 +660,10 @@ func (r *MagicTransitGRETunnelUpdateResponseEnvelope) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitGRETunnelUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitGRETunnelUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -631,6 +683,10 @@ func (r *MagicTransitGRETunnelUpdateResponseEnvelopeErrors) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitGRETunnelUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitGRETunnelUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -648,6 +704,10 @@ type magicTransitGRETunnelUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *MagicTransitGRETunnelUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitGRETunnelUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -681,6 +741,10 @@ func (r *MagicTransitGRETunnelListResponseEnvelope) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitGRETunnelListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitGRETunnelListResponseEnvelopeErrors struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -700,6 +764,10 @@ func (r *MagicTransitGRETunnelListResponseEnvelopeErrors) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitGRETunnelListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitGRETunnelListResponseEnvelopeMessages struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -717,6 +785,10 @@ type magicTransitGRETunnelListResponseEnvelopeMessagesJSON struct {
 
 func (r *MagicTransitGRETunnelListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitGRETunnelListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -750,6 +822,10 @@ func (r *MagicTransitGRETunnelDeleteResponseEnvelope) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitGRETunnelDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitGRETunnelDeleteResponseEnvelopeErrors struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -769,6 +845,10 @@ func (r *MagicTransitGRETunnelDeleteResponseEnvelopeErrors) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitGRETunnelDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitGRETunnelDeleteResponseEnvelopeMessages struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -786,6 +866,10 @@ type magicTransitGRETunnelDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *MagicTransitGRETunnelDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitGRETunnelDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -819,6 +903,10 @@ func (r *MagicTransitGRETunnelGetResponseEnvelope) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitGRETunnelGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitGRETunnelGetResponseEnvelopeErrors struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -838,6 +926,10 @@ func (r *MagicTransitGRETunnelGetResponseEnvelopeErrors) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicTransitGRETunnelGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicTransitGRETunnelGetResponseEnvelopeMessages struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -855,6 +947,10 @@ type magicTransitGRETunnelGetResponseEnvelopeMessagesJSON struct {
 
 func (r *MagicTransitGRETunnelGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicTransitGRETunnelGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

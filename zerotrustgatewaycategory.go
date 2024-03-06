@@ -80,6 +80,10 @@ func (r *ZeroTrustGatewayCategoryListResponse) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayCategoryListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Which account types are allowed to create policies based on this category.
 // `blocked` categories are blocked unconditionally for all accounts.
 // `removalPending` categories can be removed from policies but not added.
@@ -127,6 +131,10 @@ func (r *ZeroTrustGatewayCategoryListResponseSubcategory) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayCategoryListResponseSubcategoryJSON) RawJSON() string {
+	return r.raw
+}
+
 // Which account types are allowed to create policies based on this category.
 // `blocked` categories are blocked unconditionally for all accounts.
 // `removalPending` categories can be removed from policies but not added.
@@ -172,6 +180,10 @@ func (r *ZeroTrustGatewayCategoryListResponseEnvelope) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayCategoryListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayCategoryListResponseEnvelopeErrors struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -191,6 +203,10 @@ func (r *ZeroTrustGatewayCategoryListResponseEnvelopeErrors) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustGatewayCategoryListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustGatewayCategoryListResponseEnvelopeMessages struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -208,6 +224,10 @@ type zeroTrustGatewayCategoryListResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustGatewayCategoryListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayCategoryListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -242,4 +262,8 @@ type zeroTrustGatewayCategoryListResponseEnvelopeResultInfoJSON struct {
 
 func (r *ZeroTrustGatewayCategoryListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustGatewayCategoryListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

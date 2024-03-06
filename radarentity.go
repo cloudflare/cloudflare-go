@@ -66,6 +66,10 @@ func (r *RadarEntityGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEntityGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEntityGetResponseIP struct {
 	ASN          string                       `json:"asn,required"`
 	ASNLocation  string                       `json:"asnLocation,required"`
@@ -95,6 +99,10 @@ type radarEntityGetResponseIPJSON struct {
 
 func (r *RadarEntityGetResponseIP) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEntityGetResponseIPJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEntityGetParams struct {
@@ -137,4 +145,8 @@ type radarEntityGetResponseEnvelopeJSON struct {
 
 func (r *RadarEntityGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEntityGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

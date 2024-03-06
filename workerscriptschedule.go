@@ -74,6 +74,10 @@ func (r *WorkerScriptScheduleUpdateResponse) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerScriptScheduleUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerScriptScheduleUpdateResponseSchedule struct {
 	CreatedOn  interface{}                                    `json:"created_on"`
 	Cron       interface{}                                    `json:"cron"`
@@ -95,6 +99,10 @@ func (r *WorkerScriptScheduleUpdateResponseSchedule) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerScriptScheduleUpdateResponseScheduleJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerScriptScheduleGetResponse struct {
 	Schedules []WorkerScriptScheduleGetResponseSchedule `json:"schedules"`
 	JSON      workerScriptScheduleGetResponseJSON       `json:"-"`
@@ -110,6 +118,10 @@ type workerScriptScheduleGetResponseJSON struct {
 
 func (r *WorkerScriptScheduleGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerScriptScheduleGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type WorkerScriptScheduleGetResponseSchedule struct {
@@ -131,6 +143,10 @@ type workerScriptScheduleGetResponseScheduleJSON struct {
 
 func (r *WorkerScriptScheduleGetResponseSchedule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerScriptScheduleGetResponseScheduleJSON) RawJSON() string {
+	return r.raw
 }
 
 type WorkerScriptScheduleUpdateParams struct {
@@ -167,6 +183,10 @@ func (r *WorkerScriptScheduleUpdateResponseEnvelope) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerScriptScheduleUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerScriptScheduleUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -186,6 +206,10 @@ func (r *WorkerScriptScheduleUpdateResponseEnvelopeErrors) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerScriptScheduleUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerScriptScheduleUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -203,6 +227,10 @@ type workerScriptScheduleUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *WorkerScriptScheduleUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerScriptScheduleUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -241,6 +269,10 @@ func (r *WorkerScriptScheduleGetResponseEnvelope) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerScriptScheduleGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerScriptScheduleGetResponseEnvelopeErrors struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -260,6 +292,10 @@ func (r *WorkerScriptScheduleGetResponseEnvelopeErrors) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerScriptScheduleGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerScriptScheduleGetResponseEnvelopeMessages struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -277,6 +313,10 @@ type workerScriptScheduleGetResponseEnvelopeMessagesJSON struct {
 
 func (r *WorkerScriptScheduleGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerScriptScheduleGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

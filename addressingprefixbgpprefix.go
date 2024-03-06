@@ -107,6 +107,10 @@ func (r *AddressingPrefixBGPPrefixListResponse) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingPrefixBGPPrefixListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingPrefixBGPPrefixListResponseBGPSignalOpts struct {
 	// Whether control of advertisement of the prefix to the Internet is enabled to be
 	// performed via BGP signal
@@ -128,6 +132,10 @@ type addressingPrefixBGPPrefixListResponseBGPSignalOptsJSON struct {
 
 func (r *AddressingPrefixBGPPrefixListResponseBGPSignalOpts) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressingPrefixBGPPrefixListResponseBGPSignalOptsJSON) RawJSON() string {
+	return r.raw
 }
 
 type AddressingPrefixBGPPrefixListResponseOnDemand struct {
@@ -159,6 +167,10 @@ type addressingPrefixBGPPrefixListResponseOnDemandJSON struct {
 
 func (r *AddressingPrefixBGPPrefixListResponseOnDemand) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressingPrefixBGPPrefixListResponseOnDemandJSON) RawJSON() string {
+	return r.raw
 }
 
 type AddressingPrefixBGPPrefixEditResponse struct {
@@ -193,6 +205,10 @@ func (r *AddressingPrefixBGPPrefixEditResponse) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingPrefixBGPPrefixEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingPrefixBGPPrefixEditResponseBGPSignalOpts struct {
 	// Whether control of advertisement of the prefix to the Internet is enabled to be
 	// performed via BGP signal
@@ -214,6 +230,10 @@ type addressingPrefixBGPPrefixEditResponseBGPSignalOptsJSON struct {
 
 func (r *AddressingPrefixBGPPrefixEditResponseBGPSignalOpts) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressingPrefixBGPPrefixEditResponseBGPSignalOptsJSON) RawJSON() string {
+	return r.raw
 }
 
 type AddressingPrefixBGPPrefixEditResponseOnDemand struct {
@@ -245,6 +265,10 @@ type addressingPrefixBGPPrefixEditResponseOnDemandJSON struct {
 
 func (r *AddressingPrefixBGPPrefixEditResponseOnDemand) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressingPrefixBGPPrefixEditResponseOnDemandJSON) RawJSON() string {
+	return r.raw
 }
 
 type AddressingPrefixBGPPrefixGetResponse struct {
@@ -279,6 +303,10 @@ func (r *AddressingPrefixBGPPrefixGetResponse) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingPrefixBGPPrefixGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingPrefixBGPPrefixGetResponseBGPSignalOpts struct {
 	// Whether control of advertisement of the prefix to the Internet is enabled to be
 	// performed via BGP signal
@@ -300,6 +328,10 @@ type addressingPrefixBGPPrefixGetResponseBGPSignalOptsJSON struct {
 
 func (r *AddressingPrefixBGPPrefixGetResponseBGPSignalOpts) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressingPrefixBGPPrefixGetResponseBGPSignalOptsJSON) RawJSON() string {
+	return r.raw
 }
 
 type AddressingPrefixBGPPrefixGetResponseOnDemand struct {
@@ -333,6 +365,10 @@ func (r *AddressingPrefixBGPPrefixGetResponseOnDemand) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingPrefixBGPPrefixGetResponseOnDemandJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingPrefixBGPPrefixListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -364,6 +400,10 @@ func (r *AddressingPrefixBGPPrefixListResponseEnvelope) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingPrefixBGPPrefixListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingPrefixBGPPrefixListResponseEnvelopeErrors struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -383,6 +423,10 @@ func (r *AddressingPrefixBGPPrefixListResponseEnvelopeErrors) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingPrefixBGPPrefixListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingPrefixBGPPrefixListResponseEnvelopeMessages struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -400,6 +444,10 @@ type addressingPrefixBGPPrefixListResponseEnvelopeMessagesJSON struct {
 
 func (r *AddressingPrefixBGPPrefixListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressingPrefixBGPPrefixListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -435,6 +483,10 @@ type addressingPrefixBGPPrefixListResponseEnvelopeResultInfoJSON struct {
 
 func (r *AddressingPrefixBGPPrefixListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressingPrefixBGPPrefixListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type AddressingPrefixBGPPrefixEditParams struct {
@@ -479,6 +531,10 @@ func (r *AddressingPrefixBGPPrefixEditResponseEnvelope) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingPrefixBGPPrefixEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingPrefixBGPPrefixEditResponseEnvelopeErrors struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -498,6 +554,10 @@ func (r *AddressingPrefixBGPPrefixEditResponseEnvelopeErrors) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingPrefixBGPPrefixEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingPrefixBGPPrefixEditResponseEnvelopeMessages struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -515,6 +575,10 @@ type addressingPrefixBGPPrefixEditResponseEnvelopeMessagesJSON struct {
 
 func (r *AddressingPrefixBGPPrefixEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressingPrefixBGPPrefixEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -553,6 +617,10 @@ func (r *AddressingPrefixBGPPrefixGetResponseEnvelope) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingPrefixBGPPrefixGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingPrefixBGPPrefixGetResponseEnvelopeErrors struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -572,6 +640,10 @@ func (r *AddressingPrefixBGPPrefixGetResponseEnvelopeErrors) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingPrefixBGPPrefixGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingPrefixBGPPrefixGetResponseEnvelopeMessages struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -589,6 +661,10 @@ type addressingPrefixBGPPrefixGetResponseEnvelopeMessagesJSON struct {
 
 func (r *AddressingPrefixBGPPrefixGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressingPrefixBGPPrefixGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

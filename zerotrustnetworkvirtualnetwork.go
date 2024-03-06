@@ -144,6 +144,10 @@ func (r *ZeroTrustNetworkVirtualNetworkListResponse) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustNetworkVirtualNetworkListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Union satisfied by [ZeroTrustNetworkVirtualNetworkDeleteResponseUnknown],
 // [ZeroTrustNetworkVirtualNetworkDeleteResponseArray] or [shared.UnionString].
 type ZeroTrustNetworkVirtualNetworkDeleteResponse interface {
@@ -227,6 +231,10 @@ func (r *ZeroTrustNetworkVirtualNetworkNewResponseEnvelope) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustNetworkVirtualNetworkNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustNetworkVirtualNetworkNewResponseEnvelopeErrors struct {
 	Code    int64                                                       `json:"code,required"`
 	Message string                                                      `json:"message,required"`
@@ -247,6 +255,10 @@ func (r *ZeroTrustNetworkVirtualNetworkNewResponseEnvelopeErrors) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustNetworkVirtualNetworkNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustNetworkVirtualNetworkNewResponseEnvelopeMessages struct {
 	Code    int64                                                         `json:"code,required"`
 	Message string                                                        `json:"message,required"`
@@ -265,6 +277,10 @@ type zeroTrustNetworkVirtualNetworkNewResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustNetworkVirtualNetworkNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustNetworkVirtualNetworkNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -324,6 +340,10 @@ func (r *ZeroTrustNetworkVirtualNetworkListResponseEnvelope) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustNetworkVirtualNetworkListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustNetworkVirtualNetworkListResponseEnvelopeErrors struct {
 	Code    int64                                                        `json:"code,required"`
 	Message string                                                       `json:"message,required"`
@@ -344,6 +364,10 @@ func (r *ZeroTrustNetworkVirtualNetworkListResponseEnvelopeErrors) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustNetworkVirtualNetworkListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustNetworkVirtualNetworkListResponseEnvelopeMessages struct {
 	Code    int64                                                          `json:"code,required"`
 	Message string                                                         `json:"message,required"`
@@ -362,6 +386,10 @@ type zeroTrustNetworkVirtualNetworkListResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustNetworkVirtualNetworkListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustNetworkVirtualNetworkListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -399,6 +427,10 @@ func (r *ZeroTrustNetworkVirtualNetworkListResponseEnvelopeResultInfo) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustNetworkVirtualNetworkListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustNetworkVirtualNetworkDeleteParams struct {
 	// Cloudflare account ID
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -428,6 +460,10 @@ func (r *ZeroTrustNetworkVirtualNetworkDeleteResponseEnvelope) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustNetworkVirtualNetworkDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustNetworkVirtualNetworkDeleteResponseEnvelopeErrors struct {
 	Code    int64                                                          `json:"code,required"`
 	Message string                                                         `json:"message,required"`
@@ -448,6 +484,10 @@ func (r *ZeroTrustNetworkVirtualNetworkDeleteResponseEnvelopeErrors) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustNetworkVirtualNetworkDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustNetworkVirtualNetworkDeleteResponseEnvelopeMessages struct {
 	Code    int64                                                            `json:"code,required"`
 	Message string                                                           `json:"message,required"`
@@ -466,6 +506,10 @@ type zeroTrustNetworkVirtualNetworkDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustNetworkVirtualNetworkDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustNetworkVirtualNetworkDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -514,6 +558,10 @@ func (r *ZeroTrustNetworkVirtualNetworkEditResponseEnvelope) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustNetworkVirtualNetworkEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustNetworkVirtualNetworkEditResponseEnvelopeErrors struct {
 	Code    int64                                                        `json:"code,required"`
 	Message string                                                       `json:"message,required"`
@@ -534,6 +582,10 @@ func (r *ZeroTrustNetworkVirtualNetworkEditResponseEnvelopeErrors) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustNetworkVirtualNetworkEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustNetworkVirtualNetworkEditResponseEnvelopeMessages struct {
 	Code    int64                                                          `json:"code,required"`
 	Message string                                                         `json:"message,required"`
@@ -552,6 +604,10 @@ type zeroTrustNetworkVirtualNetworkEditResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustNetworkVirtualNetworkEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustNetworkVirtualNetworkEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

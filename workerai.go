@@ -82,6 +82,10 @@ func (r *WorkerAIRunResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerAIRunResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerAIRunResponseEnvelopeErrors struct {
 	Message string                                `json:"message,required"`
 	JSON    workerAIRunResponseEnvelopeErrorsJSON `json:"-"`
@@ -97,4 +101,8 @@ type workerAIRunResponseEnvelopeErrorsJSON struct {
 
 func (r *WorkerAIRunResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerAIRunResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }

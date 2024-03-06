@@ -68,6 +68,10 @@ func (r *URLNormalizationUpdateResponse) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r urlNormalizationUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type URLNormalizationGetResponse struct {
 	// The scope of the URL normalization.
 	Scope string `json:"scope"`
@@ -87,6 +91,10 @@ type urlNormalizationGetResponseJSON struct {
 
 func (r *URLNormalizationGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r urlNormalizationGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type URLNormalizationUpdateParams struct {

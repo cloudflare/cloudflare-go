@@ -80,6 +80,10 @@ func (r *ZeroTrustDEXTracerouteTestResultNetworkPathListResponse) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTracerouteTestResultNetworkPathListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTracerouteTestResultNetworkPathListResponseHop struct {
 	TTL           int64                                                               `json:"ttl,required"`
 	ASN           int64                                                               `json:"asn,nullable"`
@@ -114,6 +118,10 @@ func (r *ZeroTrustDEXTracerouteTestResultNetworkPathListResponseHop) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTracerouteTestResultNetworkPathListResponseHopJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTracerouteTestResultNetworkPathListResponseHopsLocation struct {
 	City  string                                                                  `json:"city,nullable"`
 	State string                                                                  `json:"state,nullable"`
@@ -134,6 +142,10 @@ type zeroTrustDEXTracerouteTestResultNetworkPathListResponseHopsLocationJSON str
 
 func (r *ZeroTrustDEXTracerouteTestResultNetworkPathListResponseHopsLocation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXTracerouteTestResultNetworkPathListResponseHopsLocationJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDEXTracerouteTestResultNetworkPathListResponseHopsMile string
@@ -174,6 +186,10 @@ func (r *ZeroTrustDEXTracerouteTestResultNetworkPathListResponseEnvelope) Unmars
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTracerouteTestResultNetworkPathListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTracerouteTestResultNetworkPathListResponseEnvelopeErrors struct {
 	Code    int64                                                                     `json:"code,required"`
 	Message string                                                                    `json:"message,required"`
@@ -194,6 +210,10 @@ func (r *ZeroTrustDEXTracerouteTestResultNetworkPathListResponseEnvelopeErrors) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTracerouteTestResultNetworkPathListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTracerouteTestResultNetworkPathListResponseEnvelopeMessages struct {
 	Code    int64                                                                       `json:"code,required"`
 	Message string                                                                      `json:"message,required"`
@@ -212,6 +232,10 @@ type zeroTrustDEXTracerouteTestResultNetworkPathListResponseEnvelopeMessagesJSON
 
 func (r *ZeroTrustDEXTracerouteTestResultNetworkPathListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXTracerouteTestResultNetworkPathListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

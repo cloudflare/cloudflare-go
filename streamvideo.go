@@ -73,6 +73,10 @@ func (r *StreamVideoStorageUsageResponse) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamVideoStorageUsageResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamVideoStorageUsageParams struct {
 	// The account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -113,6 +117,10 @@ func (r *StreamVideoStorageUsageResponseEnvelope) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamVideoStorageUsageResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamVideoStorageUsageResponseEnvelopeErrors struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -132,6 +140,10 @@ func (r *StreamVideoStorageUsageResponseEnvelopeErrors) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r streamVideoStorageUsageResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type StreamVideoStorageUsageResponseEnvelopeMessages struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -149,6 +161,10 @@ type streamVideoStorageUsageResponseEnvelopeMessagesJSON struct {
 
 func (r *StreamVideoStorageUsageResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamVideoStorageUsageResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

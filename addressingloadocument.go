@@ -64,6 +64,10 @@ func (r *AddressingLOADocumentNewResponse) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingLOADocumentNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingLOADocumentNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -99,6 +103,10 @@ func (r *AddressingLOADocumentNewResponseEnvelope) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingLOADocumentNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingLOADocumentNewResponseEnvelopeErrors struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -118,6 +126,10 @@ func (r *AddressingLOADocumentNewResponseEnvelopeErrors) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingLOADocumentNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingLOADocumentNewResponseEnvelopeMessages struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -135,6 +147,10 @@ type addressingLOADocumentNewResponseEnvelopeMessagesJSON struct {
 
 func (r *AddressingLOADocumentNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressingLOADocumentNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

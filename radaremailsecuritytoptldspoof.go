@@ -66,6 +66,10 @@ func (r *RadarEmailSecurityTopTldSpoofGetResponse) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecurityTopTldSpoofGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecurityTopTldSpoofGetResponseMeta struct {
 	DateRange      []RadarEmailSecurityTopTldSpoofGetResponseMetaDateRange    `json:"dateRange,required"`
 	LastUpdated    string                                                     `json:"lastUpdated,required"`
@@ -85,6 +89,10 @@ type radarEmailSecurityTopTldSpoofGetResponseMetaJSON struct {
 
 func (r *RadarEmailSecurityTopTldSpoofGetResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailSecurityTopTldSpoofGetResponseMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailSecurityTopTldSpoofGetResponseMetaDateRange struct {
@@ -108,6 +116,10 @@ func (r *RadarEmailSecurityTopTldSpoofGetResponseMetaDateRange) UnmarshalJSON(da
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecurityTopTldSpoofGetResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecurityTopTldSpoofGetResponseMetaConfidenceInfo struct {
 	Annotations []RadarEmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                                  `json:"level"`
@@ -126,6 +138,10 @@ type radarEmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoJSON struct {
 
 func (r *RadarEmailSecurityTopTldSpoofGetResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotation struct {
@@ -158,6 +174,10 @@ func (r *RadarEmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotation) U
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecurityTopTldSpoofGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecurityTopTldSpoofGetResponseTop0 struct {
 	Name  string                                           `json:"name,required"`
 	Value string                                           `json:"value,required"`
@@ -175,6 +195,10 @@ type radarEmailSecurityTopTldSpoofGetResponseTop0JSON struct {
 
 func (r *RadarEmailSecurityTopTldSpoofGetResponseTop0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailSecurityTopTldSpoofGetResponseTop0JSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailSecurityTopTldSpoofGetParams struct {
@@ -317,4 +341,8 @@ type radarEmailSecurityTopTldSpoofGetResponseEnvelopeJSON struct {
 
 func (r *RadarEmailSecurityTopTldSpoofGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailSecurityTopTldSpoofGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

@@ -72,6 +72,10 @@ func (r *RadarAttackLayer7TimeseriesResponse) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer7TimeseriesResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer7TimeseriesResponseMeta struct {
 	AggInterval    string                                                `json:"aggInterval,required"`
 	DateRange      []RadarAttackLayer7TimeseriesResponseMetaDateRange    `json:"dateRange,required"`
@@ -95,6 +99,10 @@ func (r *RadarAttackLayer7TimeseriesResponseMeta) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer7TimeseriesResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer7TimeseriesResponseMetaDateRange struct {
 	// Adjusted end of date range.
 	EndTime time.Time `json:"endTime,required" format:"date-time"`
@@ -116,6 +124,10 @@ func (r *RadarAttackLayer7TimeseriesResponseMetaDateRange) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer7TimeseriesResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer7TimeseriesResponseMetaConfidenceInfo struct {
 	Annotations []RadarAttackLayer7TimeseriesResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                             `json:"level"`
@@ -133,6 +145,10 @@ type radarAttackLayer7TimeseriesResponseMetaConfidenceInfoJSON struct {
 
 func (r *RadarAttackLayer7TimeseriesResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAttackLayer7TimeseriesResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarAttackLayer7TimeseriesResponseMetaConfidenceInfoAnnotation struct {
@@ -165,6 +181,10 @@ func (r *RadarAttackLayer7TimeseriesResponseMetaConfidenceInfoAnnotation) Unmars
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarAttackLayer7TimeseriesResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarAttackLayer7TimeseriesResponseSerie0 struct {
 	Timestamps []time.Time                                   `json:"timestamps,required" format:"date-time"`
 	Values     []string                                      `json:"values,required"`
@@ -182,6 +202,10 @@ type radarAttackLayer7TimeseriesResponseSerie0JSON struct {
 
 func (r *RadarAttackLayer7TimeseriesResponseSerie0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAttackLayer7TimeseriesResponseSerie0JSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarAttackLayer7TimeseriesParams struct {
@@ -307,4 +331,8 @@ type radarAttackLayer7TimeseriesResponseEnvelopeJSON struct {
 
 func (r *RadarAttackLayer7TimeseriesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarAttackLayer7TimeseriesResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

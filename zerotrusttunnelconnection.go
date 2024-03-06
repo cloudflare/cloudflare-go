@@ -123,6 +123,10 @@ func (r *ZeroTrustTunnelConnectionGetResponse) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustTunnelConnectionGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustTunnelConnectionGetResponseConn struct {
 	// UUID of the Cloudflare Tunnel connection.
 	ID string `json:"id"`
@@ -165,6 +169,10 @@ func (r *ZeroTrustTunnelConnectionGetResponseConn) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustTunnelConnectionGetResponseConnJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustTunnelConnectionDeleteParams struct {
 	// Cloudflare account ID
 	AccountID param.Field[string]      `path:"account_id,required"`
@@ -199,6 +207,10 @@ func (r *ZeroTrustTunnelConnectionDeleteResponseEnvelope) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustTunnelConnectionDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustTunnelConnectionDeleteResponseEnvelopeErrors struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -216,6 +228,10 @@ type zeroTrustTunnelConnectionDeleteResponseEnvelopeErrorsJSON struct {
 
 func (r *ZeroTrustTunnelConnectionDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustTunnelConnectionDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustTunnelConnectionDeleteResponseEnvelopeMessages struct {
@@ -236,6 +252,10 @@ type zeroTrustTunnelConnectionDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustTunnelConnectionDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustTunnelConnectionDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -276,6 +296,10 @@ func (r *ZeroTrustTunnelConnectionGetResponseEnvelope) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustTunnelConnectionGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustTunnelConnectionGetResponseEnvelopeErrors struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -295,6 +319,10 @@ func (r *ZeroTrustTunnelConnectionGetResponseEnvelopeErrors) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustTunnelConnectionGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustTunnelConnectionGetResponseEnvelopeMessages struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -312,6 +340,10 @@ type zeroTrustTunnelConnectionGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustTunnelConnectionGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustTunnelConnectionGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -346,4 +378,8 @@ type zeroTrustTunnelConnectionGetResponseEnvelopeResultInfoJSON struct {
 
 func (r *ZeroTrustTunnelConnectionGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustTunnelConnectionGetResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

@@ -75,6 +75,10 @@ func (r *WorkerScriptUsageModelUpdateResponse) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerScriptUsageModelUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerScriptUsageModelGetResponse struct {
 	UsageModel interface{}                           `json:"usage_model"`
 	JSON       workerScriptUsageModelGetResponseJSON `json:"-"`
@@ -90,6 +94,10 @@ type workerScriptUsageModelGetResponseJSON struct {
 
 func (r *WorkerScriptUsageModelGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerScriptUsageModelGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type WorkerScriptUsageModelUpdateParams struct {
@@ -126,6 +134,10 @@ func (r *WorkerScriptUsageModelUpdateResponseEnvelope) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerScriptUsageModelUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerScriptUsageModelUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -145,6 +157,10 @@ func (r *WorkerScriptUsageModelUpdateResponseEnvelopeErrors) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerScriptUsageModelUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerScriptUsageModelUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -162,6 +178,10 @@ type workerScriptUsageModelUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *WorkerScriptUsageModelUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerScriptUsageModelUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -200,6 +220,10 @@ func (r *WorkerScriptUsageModelGetResponseEnvelope) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerScriptUsageModelGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerScriptUsageModelGetResponseEnvelopeErrors struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -219,6 +243,10 @@ func (r *WorkerScriptUsageModelGetResponseEnvelopeErrors) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerScriptUsageModelGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerScriptUsageModelGetResponseEnvelopeMessages struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -236,6 +264,10 @@ type workerScriptUsageModelGetResponseEnvelopeMessagesJSON struct {
 
 func (r *WorkerScriptUsageModelGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerScriptUsageModelGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

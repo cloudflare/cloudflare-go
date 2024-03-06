@@ -172,6 +172,10 @@ func (r *RateLimitListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rateLimitListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The action to perform when the threshold of matched traffic within the
 // configured period is exceeded.
 type RateLimitListResponseAction struct {
@@ -204,6 +208,10 @@ type rateLimitListResponseActionJSON struct {
 
 func (r *RateLimitListResponseAction) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rateLimitListResponseActionJSON) RawJSON() string {
+	return r.raw
 }
 
 // The action to perform.
@@ -246,6 +254,10 @@ func (r *RateLimitListResponseActionResponse) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rateLimitListResponseActionResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RateLimitListResponseBypass struct {
 	Name RateLimitListResponseBypassName `json:"name"`
 	// The URL to bypass.
@@ -264,6 +276,10 @@ type rateLimitListResponseBypassJSON struct {
 
 func (r *RateLimitListResponseBypass) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rateLimitListResponseBypassJSON) RawJSON() string {
+	return r.raw
 }
 
 type RateLimitListResponseBypassName string
@@ -294,6 +310,10 @@ func (r *RateLimitListResponseMatch) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rateLimitListResponseMatchJSON) RawJSON() string {
+	return r.raw
+}
+
 type RateLimitListResponseMatchHeader struct {
 	// The name of the response header to match.
 	Name string `json:"name"`
@@ -316,6 +336,10 @@ type rateLimitListResponseMatchHeaderJSON struct {
 
 func (r *RateLimitListResponseMatchHeader) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rateLimitListResponseMatchHeaderJSON) RawJSON() string {
+	return r.raw
 }
 
 // The operator used when matching: `eq` means "equal" and `ne` means "not equal".
@@ -357,6 +381,10 @@ func (r *RateLimitListResponseMatchRequest) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rateLimitListResponseMatchRequestJSON) RawJSON() string {
+	return r.raw
+}
+
 // An HTTP method or `_ALL_` to indicate all methods.
 type RateLimitListResponseMatchRequestMethod string
 
@@ -392,6 +420,10 @@ func (r *RateLimitListResponseMatchResponse) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rateLimitListResponseMatchResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RateLimitDeleteResponse struct {
 	// The unique identifier of the rate limit.
 	ID   string                      `json:"id"`
@@ -408,6 +440,10 @@ type rateLimitDeleteResponseJSON struct {
 
 func (r *RateLimitDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rateLimitDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Union satisfied by [RateLimitEditResponseUnknown] or [shared.UnionString].
@@ -474,6 +510,10 @@ func (r *RateLimitNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rateLimitNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RateLimitNewResponseEnvelopeErrors struct {
 	Code    int64                                  `json:"code,required"`
 	Message string                                 `json:"message,required"`
@@ -493,6 +533,10 @@ func (r *RateLimitNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rateLimitNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type RateLimitNewResponseEnvelopeMessages struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -510,6 +554,10 @@ type rateLimitNewResponseEnvelopeMessagesJSON struct {
 
 func (r *RateLimitNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rateLimitNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -559,6 +607,10 @@ func (r *RateLimitDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rateLimitDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RateLimitDeleteResponseEnvelopeErrors struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -578,6 +630,10 @@ func (r *RateLimitDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rateLimitDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type RateLimitDeleteResponseEnvelopeMessages struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -595,6 +651,10 @@ type rateLimitDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *RateLimitDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rateLimitDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -636,6 +696,10 @@ func (r *RateLimitEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rateLimitEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RateLimitEditResponseEnvelopeErrors struct {
 	Code    int64                                   `json:"code,required"`
 	Message string                                  `json:"message,required"`
@@ -655,6 +719,10 @@ func (r *RateLimitEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rateLimitEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type RateLimitEditResponseEnvelopeMessages struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -672,6 +740,10 @@ type rateLimitEditResponseEnvelopeMessagesJSON struct {
 
 func (r *RateLimitEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rateLimitEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -705,6 +777,10 @@ func (r *RateLimitGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rateLimitGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RateLimitGetResponseEnvelopeErrors struct {
 	Code    int64                                  `json:"code,required"`
 	Message string                                 `json:"message,required"`
@@ -724,6 +800,10 @@ func (r *RateLimitGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r rateLimitGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type RateLimitGetResponseEnvelopeMessages struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -741,6 +821,10 @@ type rateLimitGetResponseEnvelopeMessagesJSON struct {
 
 func (r *RateLimitGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r rateLimitGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

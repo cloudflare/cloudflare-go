@@ -69,6 +69,10 @@ func (r *DurableObjectNamespaceListResponse) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r durableObjectNamespaceListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type DurableObjectNamespaceListParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -100,6 +104,10 @@ func (r *DurableObjectNamespaceListResponseEnvelope) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r durableObjectNamespaceListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type DurableObjectNamespaceListResponseEnvelopeErrors struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -119,6 +127,10 @@ func (r *DurableObjectNamespaceListResponseEnvelopeErrors) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r durableObjectNamespaceListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type DurableObjectNamespaceListResponseEnvelopeMessages struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -136,6 +148,10 @@ type durableObjectNamespaceListResponseEnvelopeMessagesJSON struct {
 
 func (r *DurableObjectNamespaceListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r durableObjectNamespaceListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -170,4 +186,8 @@ type durableObjectNamespaceListResponseEnvelopeResultInfoJSON struct {
 
 func (r *DurableObjectNamespaceListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r durableObjectNamespaceListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

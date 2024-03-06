@@ -105,6 +105,10 @@ func (r *RadarBGPRouteMoasResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarBGPRouteMoasResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarBGPRouteMoasResponseMeta struct {
 	DataTime   string                            `json:"data_time,required"`
 	QueryTime  string                            `json:"query_time,required"`
@@ -126,6 +130,10 @@ func (r *RadarBGPRouteMoasResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarBGPRouteMoasResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarBGPRouteMoasResponseMoa struct {
 	Origins []RadarBGPRouteMoasResponseMoasOrigin `json:"origins,required"`
 	Prefix  string                                `json:"prefix,required"`
@@ -143,6 +151,10 @@ type radarBGPRouteMoasResponseMoaJSON struct {
 
 func (r *RadarBGPRouteMoasResponseMoa) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarBGPRouteMoasResponseMoaJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarBGPRouteMoasResponseMoasOrigin struct {
@@ -166,6 +178,10 @@ func (r *RadarBGPRouteMoasResponseMoasOrigin) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarBGPRouteMoasResponseMoasOriginJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarBGPRoutePfx2asResponse struct {
 	Meta          RadarBGPRoutePfx2asResponseMeta           `json:"meta,required"`
 	PrefixOrigins []RadarBGPRoutePfx2asResponsePrefixOrigin `json:"prefix_origins,required"`
@@ -183,6 +199,10 @@ type radarBGPRoutePfx2asResponseJSON struct {
 
 func (r *RadarBGPRoutePfx2asResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarBGPRoutePfx2asResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarBGPRoutePfx2asResponseMeta struct {
@@ -204,6 +224,10 @@ type radarBGPRoutePfx2asResponseMetaJSON struct {
 
 func (r *RadarBGPRoutePfx2asResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarBGPRoutePfx2asResponseMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarBGPRoutePfx2asResponsePrefixOrigin struct {
@@ -229,6 +253,10 @@ func (r *RadarBGPRoutePfx2asResponsePrefixOrigin) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarBGPRoutePfx2asResponsePrefixOriginJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarBGPRouteStatsResponse struct {
 	Meta  RadarBGPRouteStatsResponseMeta  `json:"meta,required"`
 	Stats RadarBGPRouteStatsResponseStats `json:"stats,required"`
@@ -246,6 +274,10 @@ type radarBGPRouteStatsResponseJSON struct {
 
 func (r *RadarBGPRouteStatsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarBGPRouteStatsResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarBGPRouteStatsResponseMeta struct {
@@ -267,6 +299,10 @@ type radarBGPRouteStatsResponseMetaJSON struct {
 
 func (r *RadarBGPRouteStatsResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarBGPRouteStatsResponseMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarBGPRouteStatsResponseStats struct {
@@ -320,6 +356,10 @@ func (r *RadarBGPRouteStatsResponseStats) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarBGPRouteStatsResponseStatsJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarBGPRouteTimeseriesResponse struct {
 	Meta          RadarBGPRouteTimeseriesResponseMeta          `json:"meta,required"`
 	SerieIPV4_24s RadarBGPRouteTimeseriesResponseSerieIPV4_24s `json:"serie_ipv4_24s,required"`
@@ -341,6 +381,10 @@ func (r *RadarBGPRouteTimeseriesResponse) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarBGPRouteTimeseriesResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarBGPRouteTimeseriesResponseMeta struct {
 	DateRange []RadarBGPRouteTimeseriesResponseMetaDateRange `json:"dateRange,required"`
 	JSON      radarBGPRouteTimeseriesResponseMetaJSON        `json:"-"`
@@ -356,6 +400,10 @@ type radarBGPRouteTimeseriesResponseMetaJSON struct {
 
 func (r *RadarBGPRouteTimeseriesResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarBGPRouteTimeseriesResponseMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarBGPRouteTimeseriesResponseMetaDateRange struct {
@@ -379,6 +427,10 @@ func (r *RadarBGPRouteTimeseriesResponseMetaDateRange) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarBGPRouteTimeseriesResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarBGPRouteTimeseriesResponseSerieIPV4_24s struct {
 	Timestamps []time.Time                                      `json:"timestamps,required" format:"date-time"`
 	Values     []int64                                          `json:"values,required"`
@@ -398,6 +450,10 @@ func (r *RadarBGPRouteTimeseriesResponseSerieIPV4_24s) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarBGPRouteTimeseriesResponseSerieIPV4_24sJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarBGPRouteTimeseriesResponseSerieIPV6_48s struct {
 	Timestamps []time.Time                                      `json:"timestamps,required" format:"date-time"`
 	Values     []int64                                          `json:"values,required"`
@@ -415,6 +471,10 @@ type radarBGPRouteTimeseriesResponseSerieIPV6_48sJSON struct {
 
 func (r *RadarBGPRouteTimeseriesResponseSerieIPV6_48s) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarBGPRouteTimeseriesResponseSerieIPV6_48sJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarBGPRouteMoasParams struct {
@@ -462,6 +522,10 @@ type radarBGPRouteMoasResponseEnvelopeJSON struct {
 
 func (r *RadarBGPRouteMoasResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarBGPRouteMoasResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarBGPRoutePfx2asParams struct {
@@ -520,6 +584,10 @@ func (r *RadarBGPRoutePfx2asResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarBGPRoutePfx2asResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarBGPRouteStatsParams struct {
 	// Single ASN as integer.
 	ASN param.Field[int64] `query:"asn"`
@@ -563,6 +631,10 @@ type radarBGPRouteStatsResponseEnvelopeJSON struct {
 
 func (r *RadarBGPRouteStatsResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarBGPRouteStatsResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarBGPRouteTimeseriesParams struct {
@@ -635,4 +707,8 @@ type radarBGPRouteTimeseriesResponseEnvelopeJSON struct {
 
 func (r *RadarBGPRouteTimeseriesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarBGPRouteTimeseriesResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

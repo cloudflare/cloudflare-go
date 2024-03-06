@@ -111,6 +111,10 @@ func (r *PageShieldPolicyNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageShieldPolicyNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The action to take if the expression matches
 type PageShieldPolicyNewResponseAction string
 
@@ -151,6 +155,10 @@ type pageShieldPolicyUpdateResponseJSON struct {
 
 func (r *PageShieldPolicyUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageShieldPolicyUpdateResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // The action to take if the expression matches
@@ -195,6 +203,10 @@ func (r *PageShieldPolicyListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageShieldPolicyListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The action to take if the expression matches
 type PageShieldPolicyListResponseAction string
 
@@ -235,6 +247,10 @@ type pageShieldPolicyGetResponseJSON struct {
 
 func (r *PageShieldPolicyGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageShieldPolicyGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // The action to take if the expression matches
@@ -332,6 +348,10 @@ func (r *PageShieldPolicyListResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageShieldPolicyListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageShieldPolicyListResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -351,6 +371,10 @@ func (r *PageShieldPolicyListResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageShieldPolicyListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageShieldPolicyListResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -368,6 +392,10 @@ type pageShieldPolicyListResponseEnvelopeMessagesJSON struct {
 
 func (r *PageShieldPolicyListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageShieldPolicyListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -402,6 +430,10 @@ type pageShieldPolicyListResponseEnvelopeResultInfoJSON struct {
 
 func (r *PageShieldPolicyListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageShieldPolicyListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type PageShieldPolicyDeleteParams struct {

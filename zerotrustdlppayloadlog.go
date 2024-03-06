@@ -74,6 +74,10 @@ func (r *ZeroTrustDLPPayloadLogUpdateResponse) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPPayloadLogUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDLPPayloadLogGetResponse struct {
 	PublicKey string                                `json:"public_key,required,nullable"`
 	JSON      zeroTrustDLPPayloadLogGetResponseJSON `json:"-"`
@@ -89,6 +93,10 @@ type zeroTrustDLPPayloadLogGetResponseJSON struct {
 
 func (r *ZeroTrustDLPPayloadLogGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDLPPayloadLogGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDLPPayloadLogUpdateParams struct {
@@ -126,6 +134,10 @@ func (r *ZeroTrustDLPPayloadLogUpdateResponseEnvelope) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPPayloadLogUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDLPPayloadLogUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -145,6 +157,10 @@ func (r *ZeroTrustDLPPayloadLogUpdateResponseEnvelopeErrors) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPPayloadLogUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDLPPayloadLogUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -162,6 +178,10 @@ type zeroTrustDLPPayloadLogUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustDLPPayloadLogUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDLPPayloadLogUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -200,6 +220,10 @@ func (r *ZeroTrustDLPPayloadLogGetResponseEnvelope) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPPayloadLogGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDLPPayloadLogGetResponseEnvelopeErrors struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -219,6 +243,10 @@ func (r *ZeroTrustDLPPayloadLogGetResponseEnvelopeErrors) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDLPPayloadLogGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDLPPayloadLogGetResponseEnvelopeMessages struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -236,6 +264,10 @@ type zeroTrustDLPPayloadLogGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustDLPPayloadLogGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDLPPayloadLogGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

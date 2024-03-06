@@ -66,6 +66,10 @@ func (r *SSLRecommendationGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r sslRecommendationGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type SSLRecommendationGetResponseValue string
 
 const (
@@ -98,6 +102,10 @@ func (r *SSLRecommendationGetResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r sslRecommendationGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type SSLRecommendationGetResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -117,6 +125,10 @@ func (r *SSLRecommendationGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r sslRecommendationGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type SSLRecommendationGetResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -134,6 +146,10 @@ type sslRecommendationGetResponseEnvelopeMessagesJSON struct {
 
 func (r *SSLRecommendationGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sslRecommendationGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

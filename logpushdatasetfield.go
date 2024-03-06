@@ -87,6 +87,10 @@ func (r *LogpushDatasetFieldGetResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logpushDatasetFieldGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogpushDatasetFieldGetResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -106,6 +110,10 @@ func (r *LogpushDatasetFieldGetResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r logpushDatasetFieldGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type LogpushDatasetFieldGetResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -123,6 +131,10 @@ type logpushDatasetFieldGetResponseEnvelopeMessagesJSON struct {
 
 func (r *LogpushDatasetFieldGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r logpushDatasetFieldGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

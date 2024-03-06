@@ -155,6 +155,10 @@ func (r *MagicNetworkMonitoringRuleNewResponse) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicNetworkMonitoringRuleNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicNetworkMonitoringRuleUpdateResponse struct {
 	// Toggle on if you would like Cloudflare to automatically advertise the IP
 	// Prefixes within the rule via Magic Transit when the rule is triggered. Only
@@ -197,6 +201,10 @@ type magicNetworkMonitoringRuleUpdateResponseJSON struct {
 
 func (r *MagicNetworkMonitoringRuleUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicNetworkMonitoringRuleUpdateResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type MagicNetworkMonitoringRuleListResponse struct {
@@ -243,6 +251,10 @@ func (r *MagicNetworkMonitoringRuleListResponse) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicNetworkMonitoringRuleListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicNetworkMonitoringRuleDeleteResponse struct {
 	// Toggle on if you would like Cloudflare to automatically advertise the IP
 	// Prefixes within the rule via Magic Transit when the rule is triggered. Only
@@ -285,6 +297,10 @@ type magicNetworkMonitoringRuleDeleteResponseJSON struct {
 
 func (r *MagicNetworkMonitoringRuleDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicNetworkMonitoringRuleDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type MagicNetworkMonitoringRuleEditResponse struct {
@@ -331,6 +347,10 @@ func (r *MagicNetworkMonitoringRuleEditResponse) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicNetworkMonitoringRuleEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicNetworkMonitoringRuleGetResponse struct {
 	// Toggle on if you would like Cloudflare to automatically advertise the IP
 	// Prefixes within the rule via Magic Transit when the rule is triggered. Only
@@ -375,6 +395,10 @@ func (r *MagicNetworkMonitoringRuleGetResponse) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicNetworkMonitoringRuleGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicNetworkMonitoringRuleNewResponseEnvelope struct {
 	Errors   []MagicNetworkMonitoringRuleNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []MagicNetworkMonitoringRuleNewResponseEnvelopeMessages `json:"messages,required"`
@@ -399,6 +423,10 @@ func (r *MagicNetworkMonitoringRuleNewResponseEnvelope) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicNetworkMonitoringRuleNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicNetworkMonitoringRuleNewResponseEnvelopeErrors struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -418,6 +446,10 @@ func (r *MagicNetworkMonitoringRuleNewResponseEnvelopeErrors) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicNetworkMonitoringRuleNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicNetworkMonitoringRuleNewResponseEnvelopeMessages struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -435,6 +467,10 @@ type magicNetworkMonitoringRuleNewResponseEnvelopeMessagesJSON struct {
 
 func (r *MagicNetworkMonitoringRuleNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicNetworkMonitoringRuleNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -468,6 +504,10 @@ func (r *MagicNetworkMonitoringRuleUpdateResponseEnvelope) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicNetworkMonitoringRuleUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicNetworkMonitoringRuleUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -485,6 +525,10 @@ type magicNetworkMonitoringRuleUpdateResponseEnvelopeErrorsJSON struct {
 
 func (r *MagicNetworkMonitoringRuleUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicNetworkMonitoringRuleUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type MagicNetworkMonitoringRuleUpdateResponseEnvelopeMessages struct {
@@ -505,6 +549,10 @@ type magicNetworkMonitoringRuleUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *MagicNetworkMonitoringRuleUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicNetworkMonitoringRuleUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -540,6 +588,10 @@ func (r *MagicNetworkMonitoringRuleListResponseEnvelope) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicNetworkMonitoringRuleListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicNetworkMonitoringRuleListResponseEnvelopeErrors struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -559,6 +611,10 @@ func (r *MagicNetworkMonitoringRuleListResponseEnvelopeErrors) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicNetworkMonitoringRuleListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicNetworkMonitoringRuleListResponseEnvelopeMessages struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -576,6 +632,10 @@ type magicNetworkMonitoringRuleListResponseEnvelopeMessagesJSON struct {
 
 func (r *MagicNetworkMonitoringRuleListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicNetworkMonitoringRuleListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -613,6 +673,10 @@ func (r *MagicNetworkMonitoringRuleListResponseEnvelopeResultInfo) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicNetworkMonitoringRuleListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicNetworkMonitoringRuleDeleteResponseEnvelope struct {
 	Errors   []MagicNetworkMonitoringRuleDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []MagicNetworkMonitoringRuleDeleteResponseEnvelopeMessages `json:"messages,required"`
@@ -637,6 +701,10 @@ func (r *MagicNetworkMonitoringRuleDeleteResponseEnvelope) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicNetworkMonitoringRuleDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicNetworkMonitoringRuleDeleteResponseEnvelopeErrors struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -654,6 +722,10 @@ type magicNetworkMonitoringRuleDeleteResponseEnvelopeErrorsJSON struct {
 
 func (r *MagicNetworkMonitoringRuleDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicNetworkMonitoringRuleDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type MagicNetworkMonitoringRuleDeleteResponseEnvelopeMessages struct {
@@ -674,6 +746,10 @@ type magicNetworkMonitoringRuleDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *MagicNetworkMonitoringRuleDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicNetworkMonitoringRuleDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -707,6 +783,10 @@ func (r *MagicNetworkMonitoringRuleEditResponseEnvelope) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicNetworkMonitoringRuleEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicNetworkMonitoringRuleEditResponseEnvelopeErrors struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -726,6 +806,10 @@ func (r *MagicNetworkMonitoringRuleEditResponseEnvelopeErrors) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicNetworkMonitoringRuleEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicNetworkMonitoringRuleEditResponseEnvelopeMessages struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -743,6 +827,10 @@ type magicNetworkMonitoringRuleEditResponseEnvelopeMessagesJSON struct {
 
 func (r *MagicNetworkMonitoringRuleEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicNetworkMonitoringRuleEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -776,6 +864,10 @@ func (r *MagicNetworkMonitoringRuleGetResponseEnvelope) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicNetworkMonitoringRuleGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicNetworkMonitoringRuleGetResponseEnvelopeErrors struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -795,6 +887,10 @@ func (r *MagicNetworkMonitoringRuleGetResponseEnvelopeErrors) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r magicNetworkMonitoringRuleGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type MagicNetworkMonitoringRuleGetResponseEnvelopeMessages struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -812,6 +908,10 @@ type magicNetworkMonitoringRuleGetResponseEnvelopeMessagesJSON struct {
 
 func (r *MagicNetworkMonitoringRuleGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r magicNetworkMonitoringRuleGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

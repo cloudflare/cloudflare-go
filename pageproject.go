@@ -189,6 +189,10 @@ func (r *PageProjectListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Info about what caused the deployment.
 type PageProjectListResponseDeploymentTrigger struct {
 	// Additional info about the trigger.
@@ -209,6 +213,10 @@ type pageProjectListResponseDeploymentTriggerJSON struct {
 
 func (r *PageProjectListResponseDeploymentTrigger) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectListResponseDeploymentTriggerJSON) RawJSON() string {
+	return r.raw
 }
 
 // Additional info about the trigger.
@@ -234,6 +242,10 @@ type pageProjectListResponseDeploymentTriggerMetadataJSON struct {
 
 func (r *PageProjectListResponseDeploymentTriggerMetadata) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectListResponseDeploymentTriggerMetadataJSON) RawJSON() string {
+	return r.raw
 }
 
 // The status of the deployment.
@@ -262,6 +274,10 @@ type pageProjectListResponseStageJSON struct {
 
 func (r *PageProjectListResponseStage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectListResponseStageJSON) RawJSON() string {
+	return r.raw
 }
 
 type PageProjectDeleteResponse = interface{}
@@ -332,6 +348,10 @@ func (r *PageProjectGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Configs for the project build process.
 type PageProjectGetResponseBuildConfig struct {
 	// Enable build caching for the project.
@@ -364,6 +384,10 @@ type pageProjectGetResponseBuildConfigJSON struct {
 
 func (r *PageProjectGetResponseBuildConfig) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectGetResponseBuildConfigJSON) RawJSON() string {
+	return r.raw
 }
 
 type PageProjectGetResponseCanonicalDeployment struct {
@@ -426,6 +450,10 @@ func (r *PageProjectGetResponseCanonicalDeployment) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectGetResponseCanonicalDeploymentJSON) RawJSON() string {
+	return r.raw
+}
+
 // Info about what caused the deployment.
 type PageProjectGetResponseCanonicalDeploymentDeploymentTrigger struct {
 	// Additional info about the trigger.
@@ -447,6 +475,10 @@ type pageProjectGetResponseCanonicalDeploymentDeploymentTriggerJSON struct {
 
 func (r *PageProjectGetResponseCanonicalDeploymentDeploymentTrigger) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectGetResponseCanonicalDeploymentDeploymentTriggerJSON) RawJSON() string {
+	return r.raw
 }
 
 // Additional info about the trigger.
@@ -473,6 +505,10 @@ type pageProjectGetResponseCanonicalDeploymentDeploymentTriggerMetadataJSON stru
 
 func (r *PageProjectGetResponseCanonicalDeploymentDeploymentTriggerMetadata) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectGetResponseCanonicalDeploymentDeploymentTriggerMetadataJSON) RawJSON() string {
+	return r.raw
 }
 
 // The status of the deployment.
@@ -503,6 +539,10 @@ func (r *PageProjectGetResponseCanonicalDeploymentStage) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectGetResponseCanonicalDeploymentStageJSON) RawJSON() string {
+	return r.raw
+}
+
 // Configs for deployments in a project.
 type PageProjectGetResponseDeploymentConfigs struct {
 	// Configs for preview deploys.
@@ -523,6 +563,10 @@ type pageProjectGetResponseDeploymentConfigsJSON struct {
 
 func (r *PageProjectGetResponseDeploymentConfigs) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectGetResponseDeploymentConfigsJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configs for preview deploys.
@@ -577,6 +621,10 @@ func (r *PageProjectGetResponseDeploymentConfigsPreview) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectGetResponseDeploymentConfigsPreviewJSON) RawJSON() string {
+	return r.raw
+}
+
 // Constellation bindings used for Pages Functions.
 type PageProjectGetResponseDeploymentConfigsPreviewAIBindings struct {
 	// AI binding.
@@ -597,6 +645,10 @@ func (r *PageProjectGetResponseDeploymentConfigsPreviewAIBindings) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectGetResponseDeploymentConfigsPreviewAIBindingsJSON) RawJSON() string {
+	return r.raw
+}
+
 // AI binding.
 type PageProjectGetResponseDeploymentConfigsPreviewAIBindingsAIBinding struct {
 	ProjectID interface{}                                                           `json:"project_id"`
@@ -614,6 +666,10 @@ type pageProjectGetResponseDeploymentConfigsPreviewAIBindingsAIBindingJSON struc
 
 func (r *PageProjectGetResponseDeploymentConfigsPreviewAIBindingsAIBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectGetResponseDeploymentConfigsPreviewAIBindingsAIBindingJSON) RawJSON() string {
+	return r.raw
 }
 
 // Analytics Engine bindings used for Pages Functions.
@@ -636,6 +692,10 @@ func (r *PageProjectGetResponseDeploymentConfigsPreviewAnalyticsEngineDatasets) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectGetResponseDeploymentConfigsPreviewAnalyticsEngineDatasetsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Analytics Engine binding.
 type PageProjectGetResponseDeploymentConfigsPreviewAnalyticsEngineDatasetsAnalyticsEngineBinding struct {
 	// Name of the dataset.
@@ -654,6 +714,10 @@ type pageProjectGetResponseDeploymentConfigsPreviewAnalyticsEngineDatasetsAnalyt
 
 func (r *PageProjectGetResponseDeploymentConfigsPreviewAnalyticsEngineDatasetsAnalyticsEngineBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectGetResponseDeploymentConfigsPreviewAnalyticsEngineDatasetsAnalyticsEngineBindingJSON) RawJSON() string {
+	return r.raw
 }
 
 // D1 databases used for Pages Functions.
@@ -676,6 +740,10 @@ func (r *PageProjectGetResponseDeploymentConfigsPreviewD1Databases) UnmarshalJSO
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectGetResponseDeploymentConfigsPreviewD1DatabasesJSON) RawJSON() string {
+	return r.raw
+}
+
 // D1 binding.
 type PageProjectGetResponseDeploymentConfigsPreviewD1DatabasesD1Binding struct {
 	// UUID of the D1 database.
@@ -694,6 +762,10 @@ type pageProjectGetResponseDeploymentConfigsPreviewD1DatabasesD1BindingJSON stru
 
 func (r *PageProjectGetResponseDeploymentConfigsPreviewD1DatabasesD1Binding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectGetResponseDeploymentConfigsPreviewD1DatabasesD1BindingJSON) RawJSON() string {
+	return r.raw
 }
 
 // Durabble Object namespaces used for Pages Functions.
@@ -716,6 +788,10 @@ func (r *PageProjectGetResponseDeploymentConfigsPreviewDurableObjectNamespaces) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectGetResponseDeploymentConfigsPreviewDurableObjectNamespacesJSON) RawJSON() string {
+	return r.raw
+}
+
 // Durabble Object binding.
 type PageProjectGetResponseDeploymentConfigsPreviewDurableObjectNamespacesDoBinding struct {
 	// ID of the Durabble Object namespace.
@@ -736,6 +812,10 @@ func (r *PageProjectGetResponseDeploymentConfigsPreviewDurableObjectNamespacesDo
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectGetResponseDeploymentConfigsPreviewDurableObjectNamespacesDoBindingJSON) RawJSON() string {
+	return r.raw
+}
+
 // Environment variables for build configs.
 type PageProjectGetResponseDeploymentConfigsPreviewEnvVars struct {
 	// Environment variable.
@@ -753,6 +833,10 @@ type pageProjectGetResponseDeploymentConfigsPreviewEnvVarsJSON struct {
 
 func (r *PageProjectGetResponseDeploymentConfigsPreviewEnvVars) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectGetResponseDeploymentConfigsPreviewEnvVarsJSON) RawJSON() string {
+	return r.raw
 }
 
 // Environment variable.
@@ -776,6 +860,10 @@ type pageProjectGetResponseDeploymentConfigsPreviewEnvVarsEnvironmentVariableJSO
 
 func (r *PageProjectGetResponseDeploymentConfigsPreviewEnvVarsEnvironmentVariable) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectGetResponseDeploymentConfigsPreviewEnvVarsEnvironmentVariableJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of environment variable (plain text or secret)
@@ -806,6 +894,10 @@ func (r *PageProjectGetResponseDeploymentConfigsPreviewKVNamespaces) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectGetResponseDeploymentConfigsPreviewKVNamespacesJSON) RawJSON() string {
+	return r.raw
+}
+
 // KV binding.
 type PageProjectGetResponseDeploymentConfigsPreviewKVNamespacesKVBinding struct {
 	// ID of the KV namespace.
@@ -824,6 +916,10 @@ type pageProjectGetResponseDeploymentConfigsPreviewKVNamespacesKVBindingJSON str
 
 func (r *PageProjectGetResponseDeploymentConfigsPreviewKVNamespacesKVBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectGetResponseDeploymentConfigsPreviewKVNamespacesKVBindingJSON) RawJSON() string {
+	return r.raw
 }
 
 // Placement setting used for Pages Functions.
@@ -846,6 +942,10 @@ func (r *PageProjectGetResponseDeploymentConfigsPreviewPlacement) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectGetResponseDeploymentConfigsPreviewPlacementJSON) RawJSON() string {
+	return r.raw
+}
+
 // Queue Producer bindings used for Pages Functions.
 type PageProjectGetResponseDeploymentConfigsPreviewQueueProducers struct {
 	// Queue Producer binding.
@@ -864,6 +964,10 @@ type pageProjectGetResponseDeploymentConfigsPreviewQueueProducersJSON struct {
 
 func (r *PageProjectGetResponseDeploymentConfigsPreviewQueueProducers) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectGetResponseDeploymentConfigsPreviewQueueProducersJSON) RawJSON() string {
+	return r.raw
 }
 
 // Queue Producer binding.
@@ -886,6 +990,10 @@ func (r *PageProjectGetResponseDeploymentConfigsPreviewQueueProducersQueueProduc
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectGetResponseDeploymentConfigsPreviewQueueProducersQueueProducerBindingJSON) RawJSON() string {
+	return r.raw
+}
+
 // R2 buckets used for Pages Functions.
 type PageProjectGetResponseDeploymentConfigsPreviewR2Buckets struct {
 	// R2 binding.
@@ -904,6 +1012,10 @@ type pageProjectGetResponseDeploymentConfigsPreviewR2BucketsJSON struct {
 
 func (r *PageProjectGetResponseDeploymentConfigsPreviewR2Buckets) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectGetResponseDeploymentConfigsPreviewR2BucketsJSON) RawJSON() string {
+	return r.raw
 }
 
 // R2 binding.
@@ -926,6 +1038,10 @@ func (r *PageProjectGetResponseDeploymentConfigsPreviewR2BucketsR2Binding) Unmar
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectGetResponseDeploymentConfigsPreviewR2BucketsR2BindingJSON) RawJSON() string {
+	return r.raw
+}
+
 // Services used for Pages Functions.
 type PageProjectGetResponseDeploymentConfigsPreviewServiceBindings struct {
 	// Service binding.
@@ -944,6 +1060,10 @@ type pageProjectGetResponseDeploymentConfigsPreviewServiceBindingsJSON struct {
 
 func (r *PageProjectGetResponseDeploymentConfigsPreviewServiceBindings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectGetResponseDeploymentConfigsPreviewServiceBindingsJSON) RawJSON() string {
+	return r.raw
 }
 
 // Service binding.
@@ -967,6 +1087,10 @@ type pageProjectGetResponseDeploymentConfigsPreviewServiceBindingsServiceBinding
 
 func (r *PageProjectGetResponseDeploymentConfigsPreviewServiceBindingsServiceBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectGetResponseDeploymentConfigsPreviewServiceBindingsServiceBindingJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configs for production deploys.
@@ -1021,6 +1145,10 @@ func (r *PageProjectGetResponseDeploymentConfigsProduction) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectGetResponseDeploymentConfigsProductionJSON) RawJSON() string {
+	return r.raw
+}
+
 // Constellation bindings used for Pages Functions.
 type PageProjectGetResponseDeploymentConfigsProductionAIBindings struct {
 	// AI binding.
@@ -1041,6 +1169,10 @@ func (r *PageProjectGetResponseDeploymentConfigsProductionAIBindings) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectGetResponseDeploymentConfigsProductionAIBindingsJSON) RawJSON() string {
+	return r.raw
+}
+
 // AI binding.
 type PageProjectGetResponseDeploymentConfigsProductionAIBindingsAIBinding struct {
 	ProjectID interface{}                                                              `json:"project_id"`
@@ -1058,6 +1190,10 @@ type pageProjectGetResponseDeploymentConfigsProductionAIBindingsAIBindingJSON st
 
 func (r *PageProjectGetResponseDeploymentConfigsProductionAIBindingsAIBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectGetResponseDeploymentConfigsProductionAIBindingsAIBindingJSON) RawJSON() string {
+	return r.raw
 }
 
 // Analytics Engine bindings used for Pages Functions.
@@ -1080,6 +1216,10 @@ func (r *PageProjectGetResponseDeploymentConfigsProductionAnalyticsEngineDataset
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectGetResponseDeploymentConfigsProductionAnalyticsEngineDatasetsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Analytics Engine binding.
 type PageProjectGetResponseDeploymentConfigsProductionAnalyticsEngineDatasetsAnalyticsEngineBinding struct {
 	// Name of the dataset.
@@ -1098,6 +1238,10 @@ type pageProjectGetResponseDeploymentConfigsProductionAnalyticsEngineDatasetsAna
 
 func (r *PageProjectGetResponseDeploymentConfigsProductionAnalyticsEngineDatasetsAnalyticsEngineBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectGetResponseDeploymentConfigsProductionAnalyticsEngineDatasetsAnalyticsEngineBindingJSON) RawJSON() string {
+	return r.raw
 }
 
 // D1 databases used for Pages Functions.
@@ -1120,6 +1264,10 @@ func (r *PageProjectGetResponseDeploymentConfigsProductionD1Databases) Unmarshal
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectGetResponseDeploymentConfigsProductionD1DatabasesJSON) RawJSON() string {
+	return r.raw
+}
+
 // D1 binding.
 type PageProjectGetResponseDeploymentConfigsProductionD1DatabasesD1Binding struct {
 	// UUID of the D1 database.
@@ -1138,6 +1286,10 @@ type pageProjectGetResponseDeploymentConfigsProductionD1DatabasesD1BindingJSON s
 
 func (r *PageProjectGetResponseDeploymentConfigsProductionD1DatabasesD1Binding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectGetResponseDeploymentConfigsProductionD1DatabasesD1BindingJSON) RawJSON() string {
+	return r.raw
 }
 
 // Durabble Object namespaces used for Pages Functions.
@@ -1160,6 +1312,10 @@ func (r *PageProjectGetResponseDeploymentConfigsProductionDurableObjectNamespace
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectGetResponseDeploymentConfigsProductionDurableObjectNamespacesJSON) RawJSON() string {
+	return r.raw
+}
+
 // Durabble Object binding.
 type PageProjectGetResponseDeploymentConfigsProductionDurableObjectNamespacesDoBinding struct {
 	// ID of the Durabble Object namespace.
@@ -1180,6 +1336,10 @@ func (r *PageProjectGetResponseDeploymentConfigsProductionDurableObjectNamespace
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectGetResponseDeploymentConfigsProductionDurableObjectNamespacesDoBindingJSON) RawJSON() string {
+	return r.raw
+}
+
 // Environment variables for build configs.
 type PageProjectGetResponseDeploymentConfigsProductionEnvVars struct {
 	// Environment variable.
@@ -1198,6 +1358,10 @@ type pageProjectGetResponseDeploymentConfigsProductionEnvVarsJSON struct {
 
 func (r *PageProjectGetResponseDeploymentConfigsProductionEnvVars) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectGetResponseDeploymentConfigsProductionEnvVarsJSON) RawJSON() string {
+	return r.raw
 }
 
 // Environment variable.
@@ -1221,6 +1385,10 @@ type pageProjectGetResponseDeploymentConfigsProductionEnvVarsEnvironmentVariable
 
 func (r *PageProjectGetResponseDeploymentConfigsProductionEnvVarsEnvironmentVariable) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectGetResponseDeploymentConfigsProductionEnvVarsEnvironmentVariableJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of environment variable (plain text or secret)
@@ -1251,6 +1419,10 @@ func (r *PageProjectGetResponseDeploymentConfigsProductionKVNamespaces) Unmarsha
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectGetResponseDeploymentConfigsProductionKVNamespacesJSON) RawJSON() string {
+	return r.raw
+}
+
 // KV binding.
 type PageProjectGetResponseDeploymentConfigsProductionKVNamespacesKVBinding struct {
 	// ID of the KV namespace.
@@ -1269,6 +1441,10 @@ type pageProjectGetResponseDeploymentConfigsProductionKVNamespacesKVBindingJSON 
 
 func (r *PageProjectGetResponseDeploymentConfigsProductionKVNamespacesKVBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectGetResponseDeploymentConfigsProductionKVNamespacesKVBindingJSON) RawJSON() string {
+	return r.raw
 }
 
 // Placement setting used for Pages Functions.
@@ -1291,6 +1467,10 @@ func (r *PageProjectGetResponseDeploymentConfigsProductionPlacement) UnmarshalJS
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectGetResponseDeploymentConfigsProductionPlacementJSON) RawJSON() string {
+	return r.raw
+}
+
 // Queue Producer bindings used for Pages Functions.
 type PageProjectGetResponseDeploymentConfigsProductionQueueProducers struct {
 	// Queue Producer binding.
@@ -1309,6 +1489,10 @@ type pageProjectGetResponseDeploymentConfigsProductionQueueProducersJSON struct 
 
 func (r *PageProjectGetResponseDeploymentConfigsProductionQueueProducers) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectGetResponseDeploymentConfigsProductionQueueProducersJSON) RawJSON() string {
+	return r.raw
 }
 
 // Queue Producer binding.
@@ -1331,6 +1515,10 @@ func (r *PageProjectGetResponseDeploymentConfigsProductionQueueProducersQueuePro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectGetResponseDeploymentConfigsProductionQueueProducersQueueProducerBindingJSON) RawJSON() string {
+	return r.raw
+}
+
 // R2 buckets used for Pages Functions.
 type PageProjectGetResponseDeploymentConfigsProductionR2Buckets struct {
 	// R2 binding.
@@ -1349,6 +1537,10 @@ type pageProjectGetResponseDeploymentConfigsProductionR2BucketsJSON struct {
 
 func (r *PageProjectGetResponseDeploymentConfigsProductionR2Buckets) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectGetResponseDeploymentConfigsProductionR2BucketsJSON) RawJSON() string {
+	return r.raw
 }
 
 // R2 binding.
@@ -1371,6 +1563,10 @@ func (r *PageProjectGetResponseDeploymentConfigsProductionR2BucketsR2Binding) Un
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectGetResponseDeploymentConfigsProductionR2BucketsR2BindingJSON) RawJSON() string {
+	return r.raw
+}
+
 // Services used for Pages Functions.
 type PageProjectGetResponseDeploymentConfigsProductionServiceBindings struct {
 	// Service binding.
@@ -1389,6 +1585,10 @@ type pageProjectGetResponseDeploymentConfigsProductionServiceBindingsJSON struct
 
 func (r *PageProjectGetResponseDeploymentConfigsProductionServiceBindings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectGetResponseDeploymentConfigsProductionServiceBindingsJSON) RawJSON() string {
+	return r.raw
 }
 
 // Service binding.
@@ -1412,6 +1612,10 @@ type pageProjectGetResponseDeploymentConfigsProductionServiceBindingsServiceBind
 
 func (r *PageProjectGetResponseDeploymentConfigsProductionServiceBindingsServiceBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectGetResponseDeploymentConfigsProductionServiceBindingsServiceBindingJSON) RawJSON() string {
+	return r.raw
 }
 
 type PageProjectGetResponseLatestDeployment struct {
@@ -1474,6 +1678,10 @@ func (r *PageProjectGetResponseLatestDeployment) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectGetResponseLatestDeploymentJSON) RawJSON() string {
+	return r.raw
+}
+
 // Info about what caused the deployment.
 type PageProjectGetResponseLatestDeploymentDeploymentTrigger struct {
 	// Additional info about the trigger.
@@ -1495,6 +1703,10 @@ type pageProjectGetResponseLatestDeploymentDeploymentTriggerJSON struct {
 
 func (r *PageProjectGetResponseLatestDeploymentDeploymentTrigger) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectGetResponseLatestDeploymentDeploymentTriggerJSON) RawJSON() string {
+	return r.raw
 }
 
 // Additional info about the trigger.
@@ -1523,6 +1735,10 @@ func (r *PageProjectGetResponseLatestDeploymentDeploymentTriggerMetadata) Unmars
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectGetResponseLatestDeploymentDeploymentTriggerMetadataJSON) RawJSON() string {
+	return r.raw
+}
+
 // The status of the deployment.
 type PageProjectGetResponseLatestDeploymentStage struct {
 	// When the stage ended.
@@ -1549,6 +1765,10 @@ type pageProjectGetResponseLatestDeploymentStageJSON struct {
 
 func (r *PageProjectGetResponseLatestDeploymentStage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectGetResponseLatestDeploymentStageJSON) RawJSON() string {
+	return r.raw
 }
 
 type PageProjectPurgeBuildCacheResponse = interface{}
@@ -2164,6 +2384,10 @@ func (r *PageProjectNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageProjectNewResponseEnvelopeErrors struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -2183,6 +2407,10 @@ func (r *PageProjectNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageProjectNewResponseEnvelopeMessages struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -2200,6 +2428,10 @@ type pageProjectNewResponseEnvelopeMessagesJSON struct {
 
 func (r *PageProjectNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -2240,6 +2472,10 @@ func (r *PageProjectListResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageProjectListResponseEnvelopeErrors struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -2259,6 +2495,10 @@ func (r *PageProjectListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageProjectListResponseEnvelopeMessages struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -2276,6 +2516,10 @@ type pageProjectListResponseEnvelopeMessagesJSON struct {
 
 func (r *PageProjectListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -2306,6 +2550,10 @@ type pageProjectListResponseEnvelopeResultInfoJSON struct {
 
 func (r *PageProjectListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type PageProjectDeleteParams struct {
@@ -2347,6 +2595,10 @@ func (r *PageProjectEditResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageProjectEditResponseEnvelopeErrors struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -2366,6 +2618,10 @@ func (r *PageProjectEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageProjectEditResponseEnvelopeMessages struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -2383,6 +2639,10 @@ type pageProjectEditResponseEnvelopeMessagesJSON struct {
 
 func (r *PageProjectEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -2421,6 +2681,10 @@ func (r *PageProjectGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageProjectGetResponseEnvelopeErrors struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -2440,6 +2704,10 @@ func (r *PageProjectGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageProjectGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageProjectGetResponseEnvelopeMessages struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -2457,6 +2725,10 @@ type pageProjectGetResponseEnvelopeMessagesJSON struct {
 
 func (r *PageProjectGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageProjectGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

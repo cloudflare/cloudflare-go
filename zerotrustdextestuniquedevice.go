@@ -65,6 +65,10 @@ func (r *ZeroTrustDEXTestUniqueDeviceListResponse) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTestUniqueDeviceListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTestUniqueDeviceListParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// Optionally filter result stats to a specific device(s). Cannot be used in
@@ -107,6 +111,10 @@ func (r *ZeroTrustDEXTestUniqueDeviceListResponseEnvelope) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTestUniqueDeviceListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTestUniqueDeviceListResponseEnvelopeErrors struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -124,6 +132,10 @@ type zeroTrustDEXTestUniqueDeviceListResponseEnvelopeErrorsJSON struct {
 
 func (r *ZeroTrustDEXTestUniqueDeviceListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXTestUniqueDeviceListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDEXTestUniqueDeviceListResponseEnvelopeMessages struct {
@@ -144,6 +156,10 @@ type zeroTrustDEXTestUniqueDeviceListResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustDEXTestUniqueDeviceListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXTestUniqueDeviceListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

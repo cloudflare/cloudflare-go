@@ -165,6 +165,10 @@ func (r *FirewallRuleNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallRuleNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The action to apply to a matched request. The `log` action is only available on
 // an Enterprise plan.
 type FirewallRuleNewResponseAction string
@@ -220,6 +224,10 @@ func (r *FirewallRuleNewResponseFilterLegacyJhsFilter) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallRuleNewResponseFilterLegacyJhsFilterJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r FirewallRuleNewResponseFilterLegacyJhsFilter) implementsFirewallRuleNewResponseFilter() {}
 
 type FirewallRuleNewResponseFilterLegacyJhsDeletedFilter struct {
@@ -241,6 +249,10 @@ type firewallRuleNewResponseFilterLegacyJhsDeletedFilterJSON struct {
 
 func (r *FirewallRuleNewResponseFilterLegacyJhsDeletedFilter) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallRuleNewResponseFilterLegacyJhsDeletedFilterJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r FirewallRuleNewResponseFilterLegacyJhsDeletedFilter) implementsFirewallRuleNewResponseFilter() {
@@ -299,6 +311,10 @@ func (r *FirewallRuleUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallRuleUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The action to apply to a matched request. The `log` action is only available on
 // an Enterprise plan.
 type FirewallRuleUpdateResponseAction string
@@ -354,6 +370,10 @@ func (r *FirewallRuleUpdateResponseFilterLegacyJhsFilter) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallRuleUpdateResponseFilterLegacyJhsFilterJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r FirewallRuleUpdateResponseFilterLegacyJhsFilter) implementsFirewallRuleUpdateResponseFilter() {
 }
 
@@ -376,6 +396,10 @@ type firewallRuleUpdateResponseFilterLegacyJhsDeletedFilterJSON struct {
 
 func (r *FirewallRuleUpdateResponseFilterLegacyJhsDeletedFilter) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallRuleUpdateResponseFilterLegacyJhsDeletedFilterJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r FirewallRuleUpdateResponseFilterLegacyJhsDeletedFilter) implementsFirewallRuleUpdateResponseFilter() {
@@ -434,6 +458,10 @@ func (r *FirewallRuleListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallRuleListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The action to apply to a matched request. The `log` action is only available on
 // an Enterprise plan.
 type FirewallRuleListResponseAction string
@@ -489,6 +517,10 @@ func (r *FirewallRuleListResponseFilterLegacyJhsFilter) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallRuleListResponseFilterLegacyJhsFilterJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r FirewallRuleListResponseFilterLegacyJhsFilter) implementsFirewallRuleListResponseFilter() {}
 
 type FirewallRuleListResponseFilterLegacyJhsDeletedFilter struct {
@@ -510,6 +542,10 @@ type firewallRuleListResponseFilterLegacyJhsDeletedFilterJSON struct {
 
 func (r *FirewallRuleListResponseFilterLegacyJhsDeletedFilter) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallRuleListResponseFilterLegacyJhsDeletedFilterJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r FirewallRuleListResponseFilterLegacyJhsDeletedFilter) implementsFirewallRuleListResponseFilter() {
@@ -568,6 +604,10 @@ func (r *FirewallRuleDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallRuleDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The action to apply to a matched request. The `log` action is only available on
 // an Enterprise plan.
 type FirewallRuleDeleteResponseAction string
@@ -623,6 +663,10 @@ func (r *FirewallRuleDeleteResponseFilterLegacyJhsFilter) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallRuleDeleteResponseFilterLegacyJhsFilterJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r FirewallRuleDeleteResponseFilterLegacyJhsFilter) implementsFirewallRuleDeleteResponseFilter() {
 }
 
@@ -645,6 +689,10 @@ type firewallRuleDeleteResponseFilterLegacyJhsDeletedFilterJSON struct {
 
 func (r *FirewallRuleDeleteResponseFilterLegacyJhsDeletedFilter) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallRuleDeleteResponseFilterLegacyJhsDeletedFilterJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r FirewallRuleDeleteResponseFilterLegacyJhsDeletedFilter) implementsFirewallRuleDeleteResponseFilter() {
@@ -703,6 +751,10 @@ func (r *FirewallRuleEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallRuleEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The action to apply to a matched request. The `log` action is only available on
 // an Enterprise plan.
 type FirewallRuleEditResponseAction string
@@ -758,6 +810,10 @@ func (r *FirewallRuleEditResponseFilterLegacyJhsFilter) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallRuleEditResponseFilterLegacyJhsFilterJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r FirewallRuleEditResponseFilterLegacyJhsFilter) implementsFirewallRuleEditResponseFilter() {}
 
 type FirewallRuleEditResponseFilterLegacyJhsDeletedFilter struct {
@@ -779,6 +835,10 @@ type firewallRuleEditResponseFilterLegacyJhsDeletedFilterJSON struct {
 
 func (r *FirewallRuleEditResponseFilterLegacyJhsDeletedFilter) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallRuleEditResponseFilterLegacyJhsDeletedFilterJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r FirewallRuleEditResponseFilterLegacyJhsDeletedFilter) implementsFirewallRuleEditResponseFilter() {
@@ -837,6 +897,10 @@ func (r *FirewallRuleGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallRuleGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The action to apply to a matched request. The `log` action is only available on
 // an Enterprise plan.
 type FirewallRuleGetResponseAction string
@@ -892,6 +956,10 @@ func (r *FirewallRuleGetResponseFilterLegacyJhsFilter) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallRuleGetResponseFilterLegacyJhsFilterJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r FirewallRuleGetResponseFilterLegacyJhsFilter) implementsFirewallRuleGetResponseFilter() {}
 
 type FirewallRuleGetResponseFilterLegacyJhsDeletedFilter struct {
@@ -913,6 +981,10 @@ type firewallRuleGetResponseFilterLegacyJhsDeletedFilterJSON struct {
 
 func (r *FirewallRuleGetResponseFilterLegacyJhsDeletedFilter) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallRuleGetResponseFilterLegacyJhsDeletedFilterJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r FirewallRuleGetResponseFilterLegacyJhsDeletedFilter) implementsFirewallRuleGetResponseFilter() {
@@ -965,6 +1037,10 @@ func (r *FirewallRuleNewResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallRuleNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallRuleNewResponseEnvelopeErrors struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -984,6 +1060,10 @@ func (r *FirewallRuleNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallRuleNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallRuleNewResponseEnvelopeMessages struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -1001,6 +1081,10 @@ type firewallRuleNewResponseEnvelopeMessagesJSON struct {
 
 func (r *FirewallRuleNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallRuleNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1037,6 +1121,10 @@ func (r *FirewallRuleNewResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallRuleNewResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallRuleUpdateParams struct {
 	Body param.Field[interface{}] `json:"body,required"`
 }
@@ -1069,6 +1157,10 @@ func (r *FirewallRuleUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallRuleUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallRuleUpdateResponseEnvelopeErrors struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -1088,6 +1180,10 @@ func (r *FirewallRuleUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallRuleUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallRuleUpdateResponseEnvelopeMessages struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -1105,6 +1201,10 @@ type firewallRuleUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *FirewallRuleUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallRuleUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1169,6 +1269,10 @@ func (r *FirewallRuleDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallRuleDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallRuleDeleteResponseEnvelopeErrors struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -1188,6 +1292,10 @@ func (r *FirewallRuleDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallRuleDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallRuleDeleteResponseEnvelopeMessages struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -1205,6 +1313,10 @@ type firewallRuleDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *FirewallRuleDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallRuleDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1248,6 +1360,10 @@ func (r *FirewallRuleEditResponseEnvelope) UnmarshalJSON(data []byte) (err error
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallRuleEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallRuleEditResponseEnvelopeErrors struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -1267,6 +1383,10 @@ func (r *FirewallRuleEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallRuleEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallRuleEditResponseEnvelopeMessages struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -1284,6 +1404,10 @@ type firewallRuleEditResponseEnvelopeMessagesJSON struct {
 
 func (r *FirewallRuleEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallRuleEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1320,6 +1444,10 @@ func (r *FirewallRuleEditResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallRuleEditResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallRuleGetParams struct {
 }
 
@@ -1347,6 +1475,10 @@ func (r *FirewallRuleGetResponseEnvelope) UnmarshalJSON(data []byte) (err error)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallRuleGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallRuleGetResponseEnvelopeErrors struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -1366,6 +1498,10 @@ func (r *FirewallRuleGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r firewallRuleGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type FirewallRuleGetResponseEnvelopeMessages struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -1383,6 +1519,10 @@ type firewallRuleGetResponseEnvelopeMessagesJSON struct {
 
 func (r *FirewallRuleGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r firewallRuleGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

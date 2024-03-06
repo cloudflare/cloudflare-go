@@ -196,6 +196,10 @@ func (r *LoadBalancerPoolNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // WNAM: Western North America, ENAM: Eastern North America, WEU: Western Europe,
 // EEU: Eastern Europe, NSAM: Northern South America, SSAM: Southern South America,
 // OC: Oceania, ME: Middle East, NAF: North Africa, SAF: South Africa, SAS:
@@ -254,6 +258,10 @@ func (r *LoadBalancerPoolNewResponseLoadShedding) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolNewResponseLoadSheddingJSON) RawJSON() string {
+	return r.raw
+}
+
 // The default policy to use when load shedding. A random policy randomly sheds a
 // given percent of requests. A hash policy computes a hash over the
 // CF-Connecting-IP address and sheds all requests originating from a percent of
@@ -298,6 +306,10 @@ func (r *LoadBalancerPoolNewResponseNotificationFilter) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolNewResponseNotificationFilterJSON) RawJSON() string {
+	return r.raw
+}
+
 // Filter options for a particular resource type (pool or origin). Use null to
 // reset.
 type LoadBalancerPoolNewResponseNotificationFilterOrigin struct {
@@ -322,6 +334,10 @@ func (r *LoadBalancerPoolNewResponseNotificationFilterOrigin) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolNewResponseNotificationFilterOriginJSON) RawJSON() string {
+	return r.raw
+}
+
 // Filter options for a particular resource type (pool or origin). Use null to
 // reset.
 type LoadBalancerPoolNewResponseNotificationFilterPool struct {
@@ -344,6 +360,10 @@ type loadBalancerPoolNewResponseNotificationFilterPoolJSON struct {
 
 func (r *LoadBalancerPoolNewResponseNotificationFilterPool) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerPoolNewResponseNotificationFilterPoolJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configures origin steering for the pool. Controls how origins are selected for
@@ -376,6 +396,10 @@ type loadBalancerPoolNewResponseOriginSteeringJSON struct {
 
 func (r *LoadBalancerPoolNewResponseOriginSteering) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerPoolNewResponseOriginSteeringJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of origin steering policy to use.
@@ -451,6 +475,10 @@ func (r *LoadBalancerPoolNewResponseOrigin) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolNewResponseOriginJSON) RawJSON() string {
+	return r.raw
+}
+
 // The request header is used to pass additional information with an HTTP request.
 // Currently supported header is 'Host'.
 type LoadBalancerPoolNewResponseOriginsHeader struct {
@@ -470,6 +498,10 @@ type loadBalancerPoolNewResponseOriginsHeaderJSON struct {
 
 func (r *LoadBalancerPoolNewResponseOriginsHeader) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerPoolNewResponseOriginsHeaderJSON) RawJSON() string {
+	return r.raw
 }
 
 type LoadBalancerPoolUpdateResponse struct {
@@ -552,6 +584,10 @@ func (r *LoadBalancerPoolUpdateResponse) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // WNAM: Western North America, ENAM: Eastern North America, WEU: Western Europe,
 // EEU: Eastern Europe, NSAM: Northern South America, SSAM: Southern South America,
 // OC: Oceania, ME: Middle East, NAF: North Africa, SAF: South Africa, SAS:
@@ -610,6 +646,10 @@ func (r *LoadBalancerPoolUpdateResponseLoadShedding) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolUpdateResponseLoadSheddingJSON) RawJSON() string {
+	return r.raw
+}
+
 // The default policy to use when load shedding. A random policy randomly sheds a
 // given percent of requests. A hash policy computes a hash over the
 // CF-Connecting-IP address and sheds all requests originating from a percent of
@@ -654,6 +694,10 @@ func (r *LoadBalancerPoolUpdateResponseNotificationFilter) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolUpdateResponseNotificationFilterJSON) RawJSON() string {
+	return r.raw
+}
+
 // Filter options for a particular resource type (pool or origin). Use null to
 // reset.
 type LoadBalancerPoolUpdateResponseNotificationFilterOrigin struct {
@@ -678,6 +722,10 @@ func (r *LoadBalancerPoolUpdateResponseNotificationFilterOrigin) UnmarshalJSON(d
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolUpdateResponseNotificationFilterOriginJSON) RawJSON() string {
+	return r.raw
+}
+
 // Filter options for a particular resource type (pool or origin). Use null to
 // reset.
 type LoadBalancerPoolUpdateResponseNotificationFilterPool struct {
@@ -700,6 +748,10 @@ type loadBalancerPoolUpdateResponseNotificationFilterPoolJSON struct {
 
 func (r *LoadBalancerPoolUpdateResponseNotificationFilterPool) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerPoolUpdateResponseNotificationFilterPoolJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configures origin steering for the pool. Controls how origins are selected for
@@ -732,6 +784,10 @@ type loadBalancerPoolUpdateResponseOriginSteeringJSON struct {
 
 func (r *LoadBalancerPoolUpdateResponseOriginSteering) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerPoolUpdateResponseOriginSteeringJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of origin steering policy to use.
@@ -807,6 +863,10 @@ func (r *LoadBalancerPoolUpdateResponseOrigin) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolUpdateResponseOriginJSON) RawJSON() string {
+	return r.raw
+}
+
 // The request header is used to pass additional information with an HTTP request.
 // Currently supported header is 'Host'.
 type LoadBalancerPoolUpdateResponseOriginsHeader struct {
@@ -826,6 +886,10 @@ type loadBalancerPoolUpdateResponseOriginsHeaderJSON struct {
 
 func (r *LoadBalancerPoolUpdateResponseOriginsHeader) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerPoolUpdateResponseOriginsHeaderJSON) RawJSON() string {
+	return r.raw
 }
 
 type LoadBalancerPoolListResponse struct {
@@ -908,6 +972,10 @@ func (r *LoadBalancerPoolListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // WNAM: Western North America, ENAM: Eastern North America, WEU: Western Europe,
 // EEU: Eastern Europe, NSAM: Northern South America, SSAM: Southern South America,
 // OC: Oceania, ME: Middle East, NAF: North Africa, SAF: South Africa, SAS:
@@ -966,6 +1034,10 @@ func (r *LoadBalancerPoolListResponseLoadShedding) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolListResponseLoadSheddingJSON) RawJSON() string {
+	return r.raw
+}
+
 // The default policy to use when load shedding. A random policy randomly sheds a
 // given percent of requests. A hash policy computes a hash over the
 // CF-Connecting-IP address and sheds all requests originating from a percent of
@@ -1010,6 +1082,10 @@ func (r *LoadBalancerPoolListResponseNotificationFilter) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolListResponseNotificationFilterJSON) RawJSON() string {
+	return r.raw
+}
+
 // Filter options for a particular resource type (pool or origin). Use null to
 // reset.
 type LoadBalancerPoolListResponseNotificationFilterOrigin struct {
@@ -1034,6 +1110,10 @@ func (r *LoadBalancerPoolListResponseNotificationFilterOrigin) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolListResponseNotificationFilterOriginJSON) RawJSON() string {
+	return r.raw
+}
+
 // Filter options for a particular resource type (pool or origin). Use null to
 // reset.
 type LoadBalancerPoolListResponseNotificationFilterPool struct {
@@ -1056,6 +1136,10 @@ type loadBalancerPoolListResponseNotificationFilterPoolJSON struct {
 
 func (r *LoadBalancerPoolListResponseNotificationFilterPool) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerPoolListResponseNotificationFilterPoolJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configures origin steering for the pool. Controls how origins are selected for
@@ -1088,6 +1172,10 @@ type loadBalancerPoolListResponseOriginSteeringJSON struct {
 
 func (r *LoadBalancerPoolListResponseOriginSteering) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerPoolListResponseOriginSteeringJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of origin steering policy to use.
@@ -1163,6 +1251,10 @@ func (r *LoadBalancerPoolListResponseOrigin) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolListResponseOriginJSON) RawJSON() string {
+	return r.raw
+}
+
 // The request header is used to pass additional information with an HTTP request.
 // Currently supported header is 'Host'.
 type LoadBalancerPoolListResponseOriginsHeader struct {
@@ -1184,6 +1276,10 @@ func (r *LoadBalancerPoolListResponseOriginsHeader) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolListResponseOriginsHeaderJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoadBalancerPoolDeleteResponse struct {
 	ID   string                             `json:"id"`
 	JSON loadBalancerPoolDeleteResponseJSON `json:"-"`
@@ -1199,6 +1295,10 @@ type loadBalancerPoolDeleteResponseJSON struct {
 
 func (r *LoadBalancerPoolDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerPoolDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type LoadBalancerPoolEditResponse struct {
@@ -1281,6 +1381,10 @@ func (r *LoadBalancerPoolEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // WNAM: Western North America, ENAM: Eastern North America, WEU: Western Europe,
 // EEU: Eastern Europe, NSAM: Northern South America, SSAM: Southern South America,
 // OC: Oceania, ME: Middle East, NAF: North Africa, SAF: South Africa, SAS:
@@ -1339,6 +1443,10 @@ func (r *LoadBalancerPoolEditResponseLoadShedding) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolEditResponseLoadSheddingJSON) RawJSON() string {
+	return r.raw
+}
+
 // The default policy to use when load shedding. A random policy randomly sheds a
 // given percent of requests. A hash policy computes a hash over the
 // CF-Connecting-IP address and sheds all requests originating from a percent of
@@ -1383,6 +1491,10 @@ func (r *LoadBalancerPoolEditResponseNotificationFilter) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolEditResponseNotificationFilterJSON) RawJSON() string {
+	return r.raw
+}
+
 // Filter options for a particular resource type (pool or origin). Use null to
 // reset.
 type LoadBalancerPoolEditResponseNotificationFilterOrigin struct {
@@ -1407,6 +1519,10 @@ func (r *LoadBalancerPoolEditResponseNotificationFilterOrigin) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolEditResponseNotificationFilterOriginJSON) RawJSON() string {
+	return r.raw
+}
+
 // Filter options for a particular resource type (pool or origin). Use null to
 // reset.
 type LoadBalancerPoolEditResponseNotificationFilterPool struct {
@@ -1429,6 +1545,10 @@ type loadBalancerPoolEditResponseNotificationFilterPoolJSON struct {
 
 func (r *LoadBalancerPoolEditResponseNotificationFilterPool) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerPoolEditResponseNotificationFilterPoolJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configures origin steering for the pool. Controls how origins are selected for
@@ -1461,6 +1581,10 @@ type loadBalancerPoolEditResponseOriginSteeringJSON struct {
 
 func (r *LoadBalancerPoolEditResponseOriginSteering) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerPoolEditResponseOriginSteeringJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of origin steering policy to use.
@@ -1536,6 +1660,10 @@ func (r *LoadBalancerPoolEditResponseOrigin) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolEditResponseOriginJSON) RawJSON() string {
+	return r.raw
+}
+
 // The request header is used to pass additional information with an HTTP request.
 // Currently supported header is 'Host'.
 type LoadBalancerPoolEditResponseOriginsHeader struct {
@@ -1555,6 +1683,10 @@ type loadBalancerPoolEditResponseOriginsHeaderJSON struct {
 
 func (r *LoadBalancerPoolEditResponseOriginsHeader) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerPoolEditResponseOriginsHeaderJSON) RawJSON() string {
+	return r.raw
 }
 
 type LoadBalancerPoolGetResponse struct {
@@ -1637,6 +1769,10 @@ func (r *LoadBalancerPoolGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // WNAM: Western North America, ENAM: Eastern North America, WEU: Western Europe,
 // EEU: Eastern Europe, NSAM: Northern South America, SSAM: Southern South America,
 // OC: Oceania, ME: Middle East, NAF: North Africa, SAF: South Africa, SAS:
@@ -1695,6 +1831,10 @@ func (r *LoadBalancerPoolGetResponseLoadShedding) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolGetResponseLoadSheddingJSON) RawJSON() string {
+	return r.raw
+}
+
 // The default policy to use when load shedding. A random policy randomly sheds a
 // given percent of requests. A hash policy computes a hash over the
 // CF-Connecting-IP address and sheds all requests originating from a percent of
@@ -1739,6 +1879,10 @@ func (r *LoadBalancerPoolGetResponseNotificationFilter) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolGetResponseNotificationFilterJSON) RawJSON() string {
+	return r.raw
+}
+
 // Filter options for a particular resource type (pool or origin). Use null to
 // reset.
 type LoadBalancerPoolGetResponseNotificationFilterOrigin struct {
@@ -1763,6 +1907,10 @@ func (r *LoadBalancerPoolGetResponseNotificationFilterOrigin) UnmarshalJSON(data
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolGetResponseNotificationFilterOriginJSON) RawJSON() string {
+	return r.raw
+}
+
 // Filter options for a particular resource type (pool or origin). Use null to
 // reset.
 type LoadBalancerPoolGetResponseNotificationFilterPool struct {
@@ -1785,6 +1933,10 @@ type loadBalancerPoolGetResponseNotificationFilterPoolJSON struct {
 
 func (r *LoadBalancerPoolGetResponseNotificationFilterPool) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerPoolGetResponseNotificationFilterPoolJSON) RawJSON() string {
+	return r.raw
 }
 
 // Configures origin steering for the pool. Controls how origins are selected for
@@ -1817,6 +1969,10 @@ type loadBalancerPoolGetResponseOriginSteeringJSON struct {
 
 func (r *LoadBalancerPoolGetResponseOriginSteering) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerPoolGetResponseOriginSteeringJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of origin steering policy to use.
@@ -1892,6 +2048,10 @@ func (r *LoadBalancerPoolGetResponseOrigin) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolGetResponseOriginJSON) RawJSON() string {
+	return r.raw
+}
+
 // The request header is used to pass additional information with an HTTP request.
 // Currently supported header is 'Host'.
 type LoadBalancerPoolGetResponseOriginsHeader struct {
@@ -1911,6 +2071,10 @@ type loadBalancerPoolGetResponseOriginsHeaderJSON struct {
 
 func (r *LoadBalancerPoolGetResponseOriginsHeader) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerPoolGetResponseOriginsHeaderJSON) RawJSON() string {
+	return r.raw
 }
 
 type LoadBalancerPoolNewParams struct {
@@ -2159,6 +2323,10 @@ func (r *LoadBalancerPoolNewResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoadBalancerPoolNewResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -2178,6 +2346,10 @@ func (r *LoadBalancerPoolNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoadBalancerPoolNewResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -2195,6 +2367,10 @@ type loadBalancerPoolNewResponseEnvelopeMessagesJSON struct {
 
 func (r *LoadBalancerPoolNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerPoolNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -2477,6 +2653,10 @@ func (r *LoadBalancerPoolUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoadBalancerPoolUpdateResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -2496,6 +2676,10 @@ func (r *LoadBalancerPoolUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoadBalancerPoolUpdateResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -2513,6 +2697,10 @@ type loadBalancerPoolUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *LoadBalancerPoolUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerPoolUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -2565,6 +2753,10 @@ func (r *LoadBalancerPoolListResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoadBalancerPoolListResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -2584,6 +2776,10 @@ func (r *LoadBalancerPoolListResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoadBalancerPoolListResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -2601,6 +2797,10 @@ type loadBalancerPoolListResponseEnvelopeMessagesJSON struct {
 
 func (r *LoadBalancerPoolListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerPoolListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -2637,6 +2837,10 @@ func (r *LoadBalancerPoolListResponseEnvelopeResultInfo) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoadBalancerPoolDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -2666,6 +2870,10 @@ func (r *LoadBalancerPoolDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoadBalancerPoolDeleteResponseEnvelopeErrors struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -2685,6 +2893,10 @@ func (r *LoadBalancerPoolDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoadBalancerPoolDeleteResponseEnvelopeMessages struct {
 	Code    int64                                              `json:"code,required"`
 	Message string                                             `json:"message,required"`
@@ -2702,6 +2914,10 @@ type loadBalancerPoolDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *LoadBalancerPoolDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerPoolDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -2984,6 +3200,10 @@ func (r *LoadBalancerPoolEditResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoadBalancerPoolEditResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -3003,6 +3223,10 @@ func (r *LoadBalancerPoolEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoadBalancerPoolEditResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -3020,6 +3244,10 @@ type loadBalancerPoolEditResponseEnvelopeMessagesJSON struct {
 
 func (r *LoadBalancerPoolEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerPoolEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -3058,6 +3286,10 @@ func (r *LoadBalancerPoolGetResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoadBalancerPoolGetResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -3077,6 +3309,10 @@ func (r *LoadBalancerPoolGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r loadBalancerPoolGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type LoadBalancerPoolGetResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -3094,6 +3330,10 @@ type loadBalancerPoolGetResponseEnvelopeMessagesJSON struct {
 
 func (r *LoadBalancerPoolGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r loadBalancerPoolGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

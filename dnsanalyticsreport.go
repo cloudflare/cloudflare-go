@@ -92,6 +92,10 @@ func (r *DNSAnalyticsReportGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsAnalyticsReportGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSAnalyticsReportGetResponseData struct {
 	// Array of dimension values, representing the combination of dimension values
 	// corresponding to this row.
@@ -112,6 +116,10 @@ type dnsAnalyticsReportGetResponseDataJSON struct {
 
 func (r *DNSAnalyticsReportGetResponseData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsAnalyticsReportGetResponseDataJSON) RawJSON() string {
+	return r.raw
 }
 
 type DNSAnalyticsReportGetResponseQuery struct {
@@ -149,6 +157,10 @@ type dnsAnalyticsReportGetResponseQueryJSON struct {
 
 func (r *DNSAnalyticsReportGetResponseQuery) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsAnalyticsReportGetResponseQueryJSON) RawJSON() string {
+	return r.raw
 }
 
 type DNSAnalyticsReportGetParams struct {
@@ -202,6 +214,10 @@ func (r *DNSAnalyticsReportGetResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsAnalyticsReportGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSAnalyticsReportGetResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -221,6 +237,10 @@ func (r *DNSAnalyticsReportGetResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r dnsAnalyticsReportGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type DNSAnalyticsReportGetResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -238,6 +258,10 @@ type dnsAnalyticsReportGetResponseEnvelopeMessagesJSON struct {
 
 func (r *DNSAnalyticsReportGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r dnsAnalyticsReportGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

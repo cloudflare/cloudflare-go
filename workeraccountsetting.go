@@ -76,6 +76,10 @@ func (r *WorkerAccountSettingUpdateResponse) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerAccountSettingUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerAccountSettingGetResponse struct {
 	DefaultUsageModel interface{}                         `json:"default_usage_model"`
 	GreenCompute      interface{}                         `json:"green_compute"`
@@ -93,6 +97,10 @@ type workerAccountSettingGetResponseJSON struct {
 
 func (r *WorkerAccountSettingGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerAccountSettingGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type WorkerAccountSettingUpdateParams struct {
@@ -129,6 +137,10 @@ func (r *WorkerAccountSettingUpdateResponseEnvelope) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerAccountSettingUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerAccountSettingUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -148,6 +160,10 @@ func (r *WorkerAccountSettingUpdateResponseEnvelopeErrors) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerAccountSettingUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerAccountSettingUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -165,6 +181,10 @@ type workerAccountSettingUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *WorkerAccountSettingUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerAccountSettingUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -203,6 +223,10 @@ func (r *WorkerAccountSettingGetResponseEnvelope) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerAccountSettingGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerAccountSettingGetResponseEnvelopeErrors struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -222,6 +246,10 @@ func (r *WorkerAccountSettingGetResponseEnvelopeErrors) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workerAccountSettingGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type WorkerAccountSettingGetResponseEnvelopeMessages struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -239,6 +267,10 @@ type workerAccountSettingGetResponseEnvelopeMessagesJSON struct {
 
 func (r *WorkerAccountSettingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workerAccountSettingGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

@@ -133,6 +133,10 @@ func (r *AddressingAddressMapIPUpdateResponseEnvelope) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingAddressMapIPUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingAddressMapIPUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -152,6 +156,10 @@ func (r *AddressingAddressMapIPUpdateResponseEnvelopeErrors) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingAddressMapIPUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingAddressMapIPUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -169,6 +177,10 @@ type addressingAddressMapIPUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *AddressingAddressMapIPUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressingAddressMapIPUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -205,6 +217,10 @@ func (r *AddressingAddressMapIPUpdateResponseEnvelopeResultInfo) UnmarshalJSON(d
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingAddressMapIPUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingAddressMapIPDeleteParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -236,6 +252,10 @@ func (r *AddressingAddressMapIPDeleteResponseEnvelope) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingAddressMapIPDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingAddressMapIPDeleteResponseEnvelopeErrors struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -255,6 +275,10 @@ func (r *AddressingAddressMapIPDeleteResponseEnvelopeErrors) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r addressingAddressMapIPDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type AddressingAddressMapIPDeleteResponseEnvelopeMessages struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -272,6 +296,10 @@ type addressingAddressMapIPDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *AddressingAddressMapIPDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressingAddressMapIPDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -306,4 +334,8 @@ type addressingAddressMapIPDeleteResponseEnvelopeResultInfoJSON struct {
 
 func (r *AddressingAddressMapIPDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressingAddressMapIPDeleteResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

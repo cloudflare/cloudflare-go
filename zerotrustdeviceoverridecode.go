@@ -62,6 +62,10 @@ func (r *ZeroTrustDeviceOverrideCodeListResponse) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDeviceOverrideCodeListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDeviceOverrideCodeListResponseDisableForTime struct {
 	// Override code that is valid for 1 hour.
 	Number1 interface{} `json:"1"`
@@ -90,6 +94,10 @@ type zeroTrustDeviceOverrideCodeListResponseDisableForTimeJSON struct {
 
 func (r *ZeroTrustDeviceOverrideCodeListResponseDisableForTime) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDeviceOverrideCodeListResponseDisableForTimeJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDeviceOverrideCodeListParams struct {
@@ -122,6 +130,10 @@ func (r *ZeroTrustDeviceOverrideCodeListResponseEnvelope) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDeviceOverrideCodeListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDeviceOverrideCodeListResponseEnvelopeErrors struct {
 	Code    int64                                                     `json:"code,required"`
 	Message string                                                    `json:"message,required"`
@@ -139,6 +151,10 @@ type zeroTrustDeviceOverrideCodeListResponseEnvelopeErrorsJSON struct {
 
 func (r *ZeroTrustDeviceOverrideCodeListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDeviceOverrideCodeListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDeviceOverrideCodeListResponseEnvelopeMessages struct {
@@ -159,6 +175,10 @@ type zeroTrustDeviceOverrideCodeListResponseEnvelopeMessagesJSON struct {
 
 func (r *ZeroTrustDeviceOverrideCodeListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDeviceOverrideCodeListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful.
@@ -194,4 +214,8 @@ type zeroTrustDeviceOverrideCodeListResponseEnvelopeResultInfoJSON struct {
 
 func (r *ZeroTrustDeviceOverrideCodeListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDeviceOverrideCodeListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

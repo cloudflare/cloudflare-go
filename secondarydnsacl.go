@@ -123,6 +123,10 @@ func (r *SecondaryDnsaclNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r secondaryDnsaclNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type SecondaryDnsaclUpdateResponse struct {
 	ID interface{} `json:"id,required"`
 	// Allowed IPv4/IPv6 address range of primary or secondary nameservers. This will
@@ -148,6 +152,10 @@ type secondaryDnsaclUpdateResponseJSON struct {
 
 func (r *SecondaryDnsaclUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r secondaryDnsaclUpdateResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type SecondaryDnsaclListResponse struct {
@@ -177,6 +185,10 @@ func (r *SecondaryDnsaclListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r secondaryDnsaclListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type SecondaryDnsaclDeleteResponse struct {
 	ID   interface{}                       `json:"id"`
 	JSON secondaryDnsaclDeleteResponseJSON `json:"-"`
@@ -192,6 +204,10 @@ type secondaryDnsaclDeleteResponseJSON struct {
 
 func (r *SecondaryDnsaclDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r secondaryDnsaclDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type SecondaryDnsaclGetResponse struct {
@@ -219,6 +235,10 @@ type secondaryDnsaclGetResponseJSON struct {
 
 func (r *SecondaryDnsaclGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r secondaryDnsaclGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 type SecondaryDNSACLNewParams struct {
@@ -254,6 +274,10 @@ func (r *SecondaryDnsaclNewResponseEnvelope) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r secondaryDnsaclNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type SecondaryDnsaclNewResponseEnvelopeErrors struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -273,6 +297,10 @@ func (r *SecondaryDnsaclNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r secondaryDnsaclNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type SecondaryDnsaclNewResponseEnvelopeMessages struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -290,6 +318,10 @@ type secondaryDnsaclNewResponseEnvelopeMessagesJSON struct {
 
 func (r *SecondaryDnsaclNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r secondaryDnsaclNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -339,6 +371,10 @@ func (r *SecondaryDnsaclUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r secondaryDnsaclUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type SecondaryDnsaclUpdateResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -358,6 +394,10 @@ func (r *SecondaryDnsaclUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r secondaryDnsaclUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type SecondaryDnsaclUpdateResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -375,6 +415,10 @@ type secondaryDnsaclUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *SecondaryDnsaclUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r secondaryDnsaclUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -414,6 +458,10 @@ func (r *SecondaryDnsaclListResponseEnvelope) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r secondaryDnsaclListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type SecondaryDnsaclListResponseEnvelopeErrors struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -433,6 +481,10 @@ func (r *SecondaryDnsaclListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r secondaryDnsaclListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type SecondaryDnsaclListResponseEnvelopeMessages struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -450,6 +502,10 @@ type secondaryDnsaclListResponseEnvelopeMessagesJSON struct {
 
 func (r *SecondaryDnsaclListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r secondaryDnsaclListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -486,6 +542,10 @@ func (r *SecondaryDnsaclListResponseEnvelopeResultInfo) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r secondaryDnsaclListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
 type SecondaryDNSACLDeleteParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 }
@@ -514,6 +574,10 @@ func (r *SecondaryDnsaclDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r secondaryDnsaclDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type SecondaryDnsaclDeleteResponseEnvelopeErrors struct {
 	Code    int64                                           `json:"code,required"`
 	Message string                                          `json:"message,required"`
@@ -533,6 +597,10 @@ func (r *SecondaryDnsaclDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r secondaryDnsaclDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type SecondaryDnsaclDeleteResponseEnvelopeMessages struct {
 	Code    int64                                             `json:"code,required"`
 	Message string                                            `json:"message,required"`
@@ -550,6 +618,10 @@ type secondaryDnsaclDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *SecondaryDnsaclDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r secondaryDnsaclDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -587,6 +659,10 @@ func (r *SecondaryDnsaclGetResponseEnvelope) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r secondaryDnsaclGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type SecondaryDnsaclGetResponseEnvelopeErrors struct {
 	Code    int64                                        `json:"code,required"`
 	Message string                                       `json:"message,required"`
@@ -606,6 +682,10 @@ func (r *SecondaryDnsaclGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r secondaryDnsaclGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type SecondaryDnsaclGetResponseEnvelopeMessages struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -623,6 +703,10 @@ type secondaryDnsaclGetResponseEnvelopeMessagesJSON struct {
 
 func (r *SecondaryDnsaclGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r secondaryDnsaclGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

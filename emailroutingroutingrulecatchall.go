@@ -91,6 +91,10 @@ func (r *EmailRoutingRoutingRuleCatchAllUpdateResponse) UnmarshalJSON(data []byt
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r emailRoutingRoutingRuleCatchAllUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Action for the catch-all routing rule.
 type EmailRoutingRoutingRuleCatchAllUpdateResponseAction struct {
 	// Type of action for catch-all rule.
@@ -110,6 +114,10 @@ type emailRoutingRoutingRuleCatchAllUpdateResponseActionJSON struct {
 
 func (r *EmailRoutingRoutingRuleCatchAllUpdateResponseAction) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailRoutingRoutingRuleCatchAllUpdateResponseActionJSON) RawJSON() string {
+	return r.raw
 }
 
 // Type of action for catch-all rule.
@@ -146,6 +154,10 @@ type emailRoutingRoutingRuleCatchAllUpdateResponseMatcherJSON struct {
 
 func (r *EmailRoutingRoutingRuleCatchAllUpdateResponseMatcher) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailRoutingRoutingRuleCatchAllUpdateResponseMatcherJSON) RawJSON() string {
+	return r.raw
 }
 
 // Type of matcher. Default is 'all'.
@@ -188,6 +200,10 @@ func (r *EmailRoutingRoutingRuleCatchAllGetResponse) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r emailRoutingRoutingRuleCatchAllGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // Action for the catch-all routing rule.
 type EmailRoutingRoutingRuleCatchAllGetResponseAction struct {
 	// Type of action for catch-all rule.
@@ -207,6 +223,10 @@ type emailRoutingRoutingRuleCatchAllGetResponseActionJSON struct {
 
 func (r *EmailRoutingRoutingRuleCatchAllGetResponseAction) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailRoutingRoutingRuleCatchAllGetResponseActionJSON) RawJSON() string {
+	return r.raw
 }
 
 // Type of action for catch-all rule.
@@ -243,6 +263,10 @@ type emailRoutingRoutingRuleCatchAllGetResponseMatcherJSON struct {
 
 func (r *EmailRoutingRoutingRuleCatchAllGetResponseMatcher) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailRoutingRoutingRuleCatchAllGetResponseMatcherJSON) RawJSON() string {
+	return r.raw
 }
 
 // Type of matcher. Default is 'all'.
@@ -336,6 +360,10 @@ func (r *EmailRoutingRoutingRuleCatchAllUpdateResponseEnvelope) UnmarshalJSON(da
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r emailRoutingRoutingRuleCatchAllUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type EmailRoutingRoutingRuleCatchAllUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                           `json:"code,required"`
 	Message string                                                          `json:"message,required"`
@@ -356,6 +384,10 @@ func (r *EmailRoutingRoutingRuleCatchAllUpdateResponseEnvelopeErrors) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r emailRoutingRoutingRuleCatchAllUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type EmailRoutingRoutingRuleCatchAllUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                             `json:"code,required"`
 	Message string                                                            `json:"message,required"`
@@ -374,6 +406,10 @@ type emailRoutingRoutingRuleCatchAllUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *EmailRoutingRoutingRuleCatchAllUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailRoutingRoutingRuleCatchAllUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -407,6 +443,10 @@ func (r *EmailRoutingRoutingRuleCatchAllGetResponseEnvelope) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r emailRoutingRoutingRuleCatchAllGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type EmailRoutingRoutingRuleCatchAllGetResponseEnvelopeErrors struct {
 	Code    int64                                                        `json:"code,required"`
 	Message string                                                       `json:"message,required"`
@@ -427,6 +467,10 @@ func (r *EmailRoutingRoutingRuleCatchAllGetResponseEnvelopeErrors) UnmarshalJSON
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r emailRoutingRoutingRuleCatchAllGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type EmailRoutingRoutingRuleCatchAllGetResponseEnvelopeMessages struct {
 	Code    int64                                                          `json:"code,required"`
 	Message string                                                         `json:"message,required"`
@@ -445,6 +489,10 @@ type emailRoutingRoutingRuleCatchAllGetResponseEnvelopeMessagesJSON struct {
 
 func (r *EmailRoutingRoutingRuleCatchAllGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r emailRoutingRoutingRuleCatchAllGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

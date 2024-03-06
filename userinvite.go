@@ -118,6 +118,10 @@ func (r *UserInviteListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userInviteListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserInviteListResponseRole struct {
 	// Role identifier tag.
 	ID string `json:"id,required"`
@@ -143,6 +147,10 @@ type userInviteListResponseRoleJSON struct {
 
 func (r *UserInviteListResponseRole) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userInviteListResponseRoleJSON) RawJSON() string {
+	return r.raw
 }
 
 // Current status of the invitation.
@@ -213,6 +221,10 @@ func (r *UserInviteListResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userInviteListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserInviteListResponseEnvelopeErrors struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -232,6 +244,10 @@ func (r *UserInviteListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userInviteListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserInviteListResponseEnvelopeMessages struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -249,6 +265,10 @@ type userInviteListResponseEnvelopeMessagesJSON struct {
 
 func (r *UserInviteListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userInviteListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -283,6 +303,10 @@ type userInviteListResponseEnvelopeResultInfoJSON struct {
 
 func (r *UserInviteListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userInviteListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type UserInviteEditParams struct {
@@ -326,6 +350,10 @@ func (r *UserInviteEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userInviteEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserInviteEditResponseEnvelopeErrors struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -345,6 +373,10 @@ func (r *UserInviteEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userInviteEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserInviteEditResponseEnvelopeMessages struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -362,6 +394,10 @@ type userInviteEditResponseEnvelopeMessagesJSON struct {
 
 func (r *UserInviteEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userInviteEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -395,6 +431,10 @@ func (r *UserInviteGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userInviteGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserInviteGetResponseEnvelopeErrors struct {
 	Code    int64                                   `json:"code,required"`
 	Message string                                  `json:"message,required"`
@@ -414,6 +454,10 @@ func (r *UserInviteGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userInviteGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserInviteGetResponseEnvelopeMessages struct {
 	Code    int64                                     `json:"code,required"`
 	Message string                                    `json:"message,required"`
@@ -431,6 +475,10 @@ type userInviteGetResponseEnvelopeMessagesJSON struct {
 
 func (r *UserInviteGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userInviteGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

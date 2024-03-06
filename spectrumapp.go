@@ -182,6 +182,10 @@ func (r *SpectrumAppNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r spectrumAppNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The name and type of DNS record for the Spectrum application.
 type SpectrumAppNewResponseDNS struct {
 	// The name of the DNS record associated with the application.
@@ -202,6 +206,10 @@ type spectrumAppNewResponseDNSJSON struct {
 
 func (r *SpectrumAppNewResponseDNS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r spectrumAppNewResponseDNSJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of DNS record associated with the application.
@@ -247,6 +255,10 @@ type spectrumAppNewResponseEdgeIPsSpectrumEdgeIPEyeballIPsVariableJSON struct {
 
 func (r *SpectrumAppNewResponseEdgeIPsSpectrumEdgeIPEyeballIPsVariable) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r spectrumAppNewResponseEdgeIPsSpectrumEdgeIPEyeballIPsVariableJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r SpectrumAppNewResponseEdgeIPsSpectrumEdgeIPEyeballIPsVariable) implementsSpectrumAppNewResponseEdgeIPs() {
@@ -295,6 +307,10 @@ func (r *SpectrumAppNewResponseEdgeIPsSpectrumEdgeIPCustomerOwnedIPsVariable) Un
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r spectrumAppNewResponseEdgeIPsSpectrumEdgeIPCustomerOwnedIPsVariableJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r SpectrumAppNewResponseEdgeIPsSpectrumEdgeIPCustomerOwnedIPsVariable) implementsSpectrumAppNewResponseEdgeIPs() {
 }
 
@@ -331,6 +347,10 @@ type spectrumAppNewResponseOriginDNSJSON struct {
 
 func (r *SpectrumAppNewResponseOriginDNS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r spectrumAppNewResponseOriginDNSJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of DNS record associated with the origin. "" is used to specify a
@@ -474,6 +494,10 @@ func (r *SpectrumAppUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r spectrumAppUpdateResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The name and type of DNS record for the Spectrum application.
 type SpectrumAppUpdateResponseDNS struct {
 	// The name of the DNS record associated with the application.
@@ -494,6 +518,10 @@ type spectrumAppUpdateResponseDNSJSON struct {
 
 func (r *SpectrumAppUpdateResponseDNS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r spectrumAppUpdateResponseDNSJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of DNS record associated with the application.
@@ -539,6 +567,10 @@ type spectrumAppUpdateResponseEdgeIPsSpectrumEdgeIPEyeballIPsVariableJSON struct
 
 func (r *SpectrumAppUpdateResponseEdgeIPsSpectrumEdgeIPEyeballIPsVariable) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r spectrumAppUpdateResponseEdgeIPsSpectrumEdgeIPEyeballIPsVariableJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r SpectrumAppUpdateResponseEdgeIPsSpectrumEdgeIPEyeballIPsVariable) implementsSpectrumAppUpdateResponseEdgeIPs() {
@@ -587,6 +619,10 @@ func (r *SpectrumAppUpdateResponseEdgeIPsSpectrumEdgeIPCustomerOwnedIPsVariable)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r spectrumAppUpdateResponseEdgeIPsSpectrumEdgeIPCustomerOwnedIPsVariableJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r SpectrumAppUpdateResponseEdgeIPsSpectrumEdgeIPCustomerOwnedIPsVariable) implementsSpectrumAppUpdateResponseEdgeIPs() {
 }
 
@@ -623,6 +659,10 @@ type spectrumAppUpdateResponseOriginDNSJSON struct {
 
 func (r *SpectrumAppUpdateResponseOriginDNS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r spectrumAppUpdateResponseOriginDNSJSON) RawJSON() string {
+	return r.raw
 }
 
 // The type of DNS record associated with the origin. "" is used to specify a
@@ -716,6 +756,10 @@ type spectrumAppDeleteResponseJSON struct {
 
 func (r *SpectrumAppDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r spectrumAppDeleteResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // Union satisfied by [SpectrumAppGetResponseUnknown] or [shared.UnionString].
@@ -960,6 +1004,10 @@ func (r *SpectrumAppNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r spectrumAppNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type SpectrumAppNewResponseEnvelopeErrors struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -979,6 +1027,10 @@ func (r *SpectrumAppNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r spectrumAppNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type SpectrumAppNewResponseEnvelopeMessages struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -996,6 +1048,10 @@ type spectrumAppNewResponseEnvelopeMessagesJSON struct {
 
 func (r *SpectrumAppNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r spectrumAppNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1231,6 +1287,10 @@ func (r *SpectrumAppUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r spectrumAppUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type SpectrumAppUpdateResponseEnvelopeErrors struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -1250,6 +1310,10 @@ func (r *SpectrumAppUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r spectrumAppUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type SpectrumAppUpdateResponseEnvelopeMessages struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -1267,6 +1331,10 @@ type spectrumAppUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *SpectrumAppUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r spectrumAppUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1340,6 +1408,10 @@ func (r *SpectrumAppDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r spectrumAppDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type SpectrumAppDeleteResponseEnvelopeErrors struct {
 	Code    int64                                       `json:"code,required"`
 	Message string                                      `json:"message,required"`
@@ -1359,6 +1431,10 @@ func (r *SpectrumAppDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r spectrumAppDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type SpectrumAppDeleteResponseEnvelopeMessages struct {
 	Code    int64                                         `json:"code,required"`
 	Message string                                        `json:"message,required"`
@@ -1376,6 +1452,10 @@ type spectrumAppDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *SpectrumAppDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r spectrumAppDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1409,6 +1489,10 @@ func (r *SpectrumAppGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r spectrumAppGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type SpectrumAppGetResponseEnvelopeErrors struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
@@ -1428,6 +1512,10 @@ func (r *SpectrumAppGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r spectrumAppGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type SpectrumAppGetResponseEnvelopeMessages struct {
 	Code    int64                                      `json:"code,required"`
 	Message string                                     `json:"message,required"`
@@ -1445,6 +1533,10 @@ type spectrumAppGetResponseEnvelopeMessagesJSON struct {
 
 func (r *SpectrumAppGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r spectrumAppGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

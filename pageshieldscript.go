@@ -95,6 +95,10 @@ func (r *PageShieldScriptListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageShieldScriptListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageShieldScriptGetResponse struct {
 	ID                      interface{}                          `json:"id"`
 	AddedAt                 interface{}                          `json:"added_at"`
@@ -138,6 +142,10 @@ func (r *PageShieldScriptGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageShieldScriptGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The version of the analyzed script.
 type PageShieldScriptGetResponseVersion struct {
 	// The timestamp of when the script was last fetched.
@@ -161,6 +169,10 @@ type pageShieldScriptGetResponseVersionJSON struct {
 
 func (r *PageShieldScriptGetResponseVersion) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageShieldScriptGetResponseVersionJSON) RawJSON() string {
+	return r.raw
 }
 
 type PageShieldScriptListParams struct {
@@ -278,6 +290,10 @@ func (r *PageShieldScriptListResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageShieldScriptListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageShieldScriptListResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -297,6 +313,10 @@ func (r *PageShieldScriptListResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r pageShieldScriptListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type PageShieldScriptListResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -314,6 +334,10 @@ type pageShieldScriptListResponseEnvelopeMessagesJSON struct {
 
 func (r *PageShieldScriptListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageShieldScriptListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -348,6 +372,10 @@ type pageShieldScriptListResponseEnvelopeResultInfoJSON struct {
 
 func (r *PageShieldScriptListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r pageShieldScriptListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type PageShieldScriptGetParams struct {

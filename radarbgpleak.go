@@ -65,6 +65,10 @@ func (r *RadarBGPLeakEventsResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarBGPLeakEventsResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarBGPLeakEventsResponseASNInfo struct {
 	ASN         int64                                 `json:"asn,required"`
 	CountryCode string                                `json:"country_code,required"`
@@ -84,6 +88,10 @@ type radarBGPLeakEventsResponseASNInfoJSON struct {
 
 func (r *RadarBGPLeakEventsResponseASNInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarBGPLeakEventsResponseASNInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarBGPLeakEventsResponseEvent struct {
@@ -125,6 +133,10 @@ type radarBGPLeakEventsResponseEventJSON struct {
 
 func (r *RadarBGPLeakEventsResponseEvent) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarBGPLeakEventsResponseEventJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarBGPLeakEventsParams struct {
@@ -235,6 +247,10 @@ func (r *RadarBGPLeakEventsResponseEnvelope) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarBGPLeakEventsResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarBGPLeakEventsResponseEnvelopeResultInfo struct {
 	Count      int64                                            `json:"count,required"`
 	Page       int64                                            `json:"page,required"`
@@ -256,4 +272,8 @@ type radarBGPLeakEventsResponseEnvelopeResultInfoJSON struct {
 
 func (r *RadarBGPLeakEventsResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarBGPLeakEventsResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
 }

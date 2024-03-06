@@ -88,6 +88,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorke
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersKVNamespaceBindingJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r WorkersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersKVNamespaceBinding) implementsWorkersForPlatformDispatchNamespaceScriptContentBindingGetResponse() {
 }
 
@@ -124,6 +128,10 @@ type workersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersSe
 
 func (r *WorkersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersServiceBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersServiceBindingJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r WorkersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersServiceBinding) implementsWorkersForPlatformDispatchNamespaceScriptContentBindingGetResponse() {
@@ -170,6 +178,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorke
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersDoBindingJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r WorkersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersDoBinding) implementsWorkersForPlatformDispatchNamespaceScriptContentBindingGetResponse() {
 }
 
@@ -205,6 +217,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorke
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersR2BindingJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r WorkersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersR2Binding) implementsWorkersForPlatformDispatchNamespaceScriptContentBindingGetResponse() {
 }
 
@@ -238,6 +254,10 @@ type workersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersQu
 
 func (r *WorkersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersQueueBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersQueueBindingJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r WorkersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersQueueBinding) implementsWorkersForPlatformDispatchNamespaceScriptContentBindingGetResponse() {
@@ -278,6 +298,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorke
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersD1BindingJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r WorkersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersD1Binding) implementsWorkersForPlatformDispatchNamespaceScriptContentBindingGetResponse() {
 }
 
@@ -316,6 +340,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorke
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersDispatchNamespaceBindingJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r WorkersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersDispatchNamespaceBinding) implementsWorkersForPlatformDispatchNamespaceScriptContentBindingGetResponse() {
 }
 
@@ -350,6 +378,10 @@ func (r *WorkersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorke
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r workersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersDispatchNamespaceBindingOutboundJSON) RawJSON() string {
+	return r.raw
+}
+
 // Outbound worker
 type WorkersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersDispatchNamespaceBindingOutboundWorker struct {
 	// Environment of the outbound worker
@@ -371,6 +403,10 @@ type workersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersDi
 
 func (r *WorkersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersDispatchNamespaceBindingOutboundWorker) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersDispatchNamespaceBindingOutboundWorkerJSON) RawJSON() string {
+	return r.raw
 }
 
 type WorkersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCertBinding struct {
@@ -396,6 +432,10 @@ type workersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersMT
 
 func (r *WorkersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCertBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCertBindingJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r WorkersForPlatformDispatchNamespaceScriptContentBindingGetResponseWorkersMTLSCertBinding) implementsWorkersForPlatformDispatchNamespaceScriptContentBindingGetResponse() {

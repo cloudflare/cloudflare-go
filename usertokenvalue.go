@@ -77,6 +77,10 @@ func (r *UserTokenValueUpdateResponseEnvelope) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userTokenValueUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserTokenValueUpdateResponseEnvelopeErrors struct {
 	Code    int64                                          `json:"code,required"`
 	Message string                                         `json:"message,required"`
@@ -96,6 +100,10 @@ func (r *UserTokenValueUpdateResponseEnvelopeErrors) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userTokenValueUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserTokenValueUpdateResponseEnvelopeMessages struct {
 	Code    int64                                            `json:"code,required"`
 	Message string                                           `json:"message,required"`
@@ -113,6 +121,10 @@ type userTokenValueUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *UserTokenValueUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userTokenValueUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

@@ -148,6 +148,10 @@ func (r *OriginPostQuantumEncryptionUpdateResponseEnvelope) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r originPostQuantumEncryptionUpdateResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type OriginPostQuantumEncryptionUpdateResponseEnvelopeErrors struct {
 	Code    int64                                                       `json:"code,required"`
 	Message string                                                      `json:"message,required"`
@@ -168,6 +172,10 @@ func (r *OriginPostQuantumEncryptionUpdateResponseEnvelopeErrors) UnmarshalJSON(
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r originPostQuantumEncryptionUpdateResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type OriginPostQuantumEncryptionUpdateResponseEnvelopeMessages struct {
 	Code    int64                                                         `json:"code,required"`
 	Message string                                                        `json:"message,required"`
@@ -186,6 +194,10 @@ type originPostQuantumEncryptionUpdateResponseEnvelopeMessagesJSON struct {
 
 func (r *OriginPostQuantumEncryptionUpdateResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r originPostQuantumEncryptionUpdateResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -224,6 +236,10 @@ func (r *OriginPostQuantumEncryptionGetResponseEnvelope) UnmarshalJSON(data []by
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r originPostQuantumEncryptionGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type OriginPostQuantumEncryptionGetResponseEnvelopeErrors struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -243,6 +259,10 @@ func (r *OriginPostQuantumEncryptionGetResponseEnvelopeErrors) UnmarshalJSON(dat
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r originPostQuantumEncryptionGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type OriginPostQuantumEncryptionGetResponseEnvelopeMessages struct {
 	Code    int64                                                      `json:"code,required"`
 	Message string                                                     `json:"message,required"`
@@ -260,6 +280,10 @@ type originPostQuantumEncryptionGetResponseEnvelopeMessagesJSON struct {
 
 func (r *OriginPostQuantumEncryptionGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r originPostQuantumEncryptionGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

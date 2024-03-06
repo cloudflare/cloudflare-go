@@ -89,6 +89,10 @@ func (r *ZoneSettingMinTLSVersionEditResponse) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingMinTLSVersionEditResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // ID of the zone setting.
 type ZoneSettingMinTLSVersionEditResponseID string
 
@@ -144,6 +148,10 @@ type zoneSettingMinTLSVersionGetResponseJSON struct {
 
 func (r *ZoneSettingMinTLSVersionGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingMinTLSVersionGetResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // ID of the zone setting.
@@ -220,6 +228,10 @@ func (r *ZoneSettingMinTLSVersionEditResponseEnvelope) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingMinTLSVersionEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingMinTLSVersionEditResponseEnvelopeErrors struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -239,6 +251,10 @@ func (r *ZoneSettingMinTLSVersionEditResponseEnvelopeErrors) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingMinTLSVersionEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingMinTLSVersionEditResponseEnvelopeMessages struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -256,6 +272,10 @@ type zoneSettingMinTLSVersionEditResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingMinTLSVersionEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingMinTLSVersionEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZoneSettingMinTLSVersionGetParams struct {
@@ -290,6 +310,10 @@ func (r *ZoneSettingMinTLSVersionGetResponseEnvelope) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingMinTLSVersionGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingMinTLSVersionGetResponseEnvelopeErrors struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -309,6 +333,10 @@ func (r *ZoneSettingMinTLSVersionGetResponseEnvelopeErrors) UnmarshalJSON(data [
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zoneSettingMinTLSVersionGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZoneSettingMinTLSVersionGetResponseEnvelopeMessages struct {
 	Code    int64                                                   `json:"code,required"`
 	Message string                                                  `json:"message,required"`
@@ -326,4 +354,8 @@ type zoneSettingMinTLSVersionGetResponseEnvelopeMessagesJSON struct {
 
 func (r *ZoneSettingMinTLSVersionGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zoneSettingMinTLSVersionGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }

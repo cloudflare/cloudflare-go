@@ -66,6 +66,10 @@ func (r *RadarEmailSecurityTopTldMaliciousGetResponse) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecurityTopTldMaliciousGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecurityTopTldMaliciousGetResponseMeta struct {
 	DateRange      []RadarEmailSecurityTopTldMaliciousGetResponseMetaDateRange    `json:"dateRange,required"`
 	LastUpdated    string                                                         `json:"lastUpdated,required"`
@@ -85,6 +89,10 @@ type radarEmailSecurityTopTldMaliciousGetResponseMetaJSON struct {
 
 func (r *RadarEmailSecurityTopTldMaliciousGetResponseMeta) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailSecurityTopTldMaliciousGetResponseMetaJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailSecurityTopTldMaliciousGetResponseMetaDateRange struct {
@@ -109,6 +117,10 @@ func (r *RadarEmailSecurityTopTldMaliciousGetResponseMetaDateRange) UnmarshalJSO
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecurityTopTldMaliciousGetResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfo struct {
 	Annotations []RadarEmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotation `json:"annotations"`
 	Level       int64                                                                      `json:"level"`
@@ -127,6 +139,10 @@ type radarEmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoJSON struct {
 
 func (r *RadarEmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotation struct {
@@ -159,6 +175,10 @@ func (r *RadarEmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotatio
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r radarEmailSecurityTopTldMaliciousGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
 type RadarEmailSecurityTopTldMaliciousGetResponseTop0 struct {
 	Name  string                                               `json:"name,required"`
 	Value string                                               `json:"value,required"`
@@ -176,6 +196,10 @@ type radarEmailSecurityTopTldMaliciousGetResponseTop0JSON struct {
 
 func (r *RadarEmailSecurityTopTldMaliciousGetResponseTop0) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailSecurityTopTldMaliciousGetResponseTop0JSON) RawJSON() string {
+	return r.raw
 }
 
 type RadarEmailSecurityTopTldMaliciousGetParams struct {
@@ -318,4 +342,8 @@ type radarEmailSecurityTopTldMaliciousGetResponseEnvelopeJSON struct {
 
 func (r *RadarEmailSecurityTopTldMaliciousGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r radarEmailSecurityTopTldMaliciousGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
 }

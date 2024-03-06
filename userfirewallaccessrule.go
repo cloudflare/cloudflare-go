@@ -142,6 +142,10 @@ func (r *UserFirewallAccessRuleNewResponse) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userFirewallAccessRuleNewResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The action to apply to a matched request.
 type UserFirewallAccessRuleNewResponseAllowedMode string
 
@@ -193,6 +197,10 @@ func (r *UserFirewallAccessRuleNewResponseConfigurationLegacyJhsIPConfiguration)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userFirewallAccessRuleNewResponseConfigurationLegacyJhsIPConfigurationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r UserFirewallAccessRuleNewResponseConfigurationLegacyJhsIPConfiguration) implementsUserFirewallAccessRuleNewResponseConfiguration() {
 }
 
@@ -225,6 +233,10 @@ type userFirewallAccessRuleNewResponseConfigurationLegacyJhsIPV6ConfigurationJSO
 
 func (r *UserFirewallAccessRuleNewResponseConfigurationLegacyJhsIPV6Configuration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userFirewallAccessRuleNewResponseConfigurationLegacyJhsIPV6ConfigurationJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r UserFirewallAccessRuleNewResponseConfigurationLegacyJhsIPV6Configuration) implementsUserFirewallAccessRuleNewResponseConfiguration() {
@@ -262,6 +274,10 @@ func (r *UserFirewallAccessRuleNewResponseConfigurationLegacyJhsCidrConfiguratio
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userFirewallAccessRuleNewResponseConfigurationLegacyJhsCidrConfigurationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r UserFirewallAccessRuleNewResponseConfigurationLegacyJhsCidrConfiguration) implementsUserFirewallAccessRuleNewResponseConfiguration() {
 }
 
@@ -294,6 +310,10 @@ type userFirewallAccessRuleNewResponseConfigurationLegacyJhsASNConfigurationJSON
 
 func (r *UserFirewallAccessRuleNewResponseConfigurationLegacyJhsASNConfiguration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userFirewallAccessRuleNewResponseConfigurationLegacyJhsASNConfigurationJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r UserFirewallAccessRuleNewResponseConfigurationLegacyJhsASNConfiguration) implementsUserFirewallAccessRuleNewResponseConfiguration() {
@@ -329,6 +349,10 @@ type userFirewallAccessRuleNewResponseConfigurationLegacyJhsCountryConfiguration
 
 func (r *UserFirewallAccessRuleNewResponseConfigurationLegacyJhsCountryConfiguration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userFirewallAccessRuleNewResponseConfigurationLegacyJhsCountryConfigurationJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r UserFirewallAccessRuleNewResponseConfigurationLegacyJhsCountryConfiguration) implementsUserFirewallAccessRuleNewResponseConfiguration() {
@@ -389,6 +413,10 @@ func (r *UserFirewallAccessRuleListResponse) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userFirewallAccessRuleListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 // The action to apply to a matched request.
 type UserFirewallAccessRuleListResponseAllowedMode string
 
@@ -440,6 +468,10 @@ func (r *UserFirewallAccessRuleListResponseConfigurationLegacyJhsIPConfiguration
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userFirewallAccessRuleListResponseConfigurationLegacyJhsIPConfigurationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r UserFirewallAccessRuleListResponseConfigurationLegacyJhsIPConfiguration) implementsUserFirewallAccessRuleListResponseConfiguration() {
 }
 
@@ -472,6 +504,10 @@ type userFirewallAccessRuleListResponseConfigurationLegacyJhsIPV6ConfigurationJS
 
 func (r *UserFirewallAccessRuleListResponseConfigurationLegacyJhsIPV6Configuration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userFirewallAccessRuleListResponseConfigurationLegacyJhsIPV6ConfigurationJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r UserFirewallAccessRuleListResponseConfigurationLegacyJhsIPV6Configuration) implementsUserFirewallAccessRuleListResponseConfiguration() {
@@ -509,6 +545,10 @@ func (r *UserFirewallAccessRuleListResponseConfigurationLegacyJhsCidrConfigurati
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userFirewallAccessRuleListResponseConfigurationLegacyJhsCidrConfigurationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r UserFirewallAccessRuleListResponseConfigurationLegacyJhsCidrConfiguration) implementsUserFirewallAccessRuleListResponseConfiguration() {
 }
 
@@ -541,6 +581,10 @@ type userFirewallAccessRuleListResponseConfigurationLegacyJhsASNConfigurationJSO
 
 func (r *UserFirewallAccessRuleListResponseConfigurationLegacyJhsASNConfiguration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userFirewallAccessRuleListResponseConfigurationLegacyJhsASNConfigurationJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r UserFirewallAccessRuleListResponseConfigurationLegacyJhsASNConfiguration) implementsUserFirewallAccessRuleListResponseConfiguration() {
@@ -576,6 +620,10 @@ type userFirewallAccessRuleListResponseConfigurationLegacyJhsCountryConfiguratio
 
 func (r *UserFirewallAccessRuleListResponseConfigurationLegacyJhsCountryConfiguration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userFirewallAccessRuleListResponseConfigurationLegacyJhsCountryConfigurationJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r UserFirewallAccessRuleListResponseConfigurationLegacyJhsCountryConfiguration) implementsUserFirewallAccessRuleListResponseConfiguration() {
@@ -618,6 +666,10 @@ func (r *UserFirewallAccessRuleDeleteResponse) UnmarshalJSON(data []byte) (err e
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userFirewallAccessRuleDeleteResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserFirewallAccessRuleEditResponse struct {
 	// The unique identifier of the IP Access rule.
 	ID string `json:"id,required"`
@@ -652,6 +704,10 @@ type userFirewallAccessRuleEditResponseJSON struct {
 
 func (r *UserFirewallAccessRuleEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userFirewallAccessRuleEditResponseJSON) RawJSON() string {
+	return r.raw
 }
 
 // The action to apply to a matched request.
@@ -705,6 +761,10 @@ func (r *UserFirewallAccessRuleEditResponseConfigurationLegacyJhsIPConfiguration
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userFirewallAccessRuleEditResponseConfigurationLegacyJhsIPConfigurationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r UserFirewallAccessRuleEditResponseConfigurationLegacyJhsIPConfiguration) implementsUserFirewallAccessRuleEditResponseConfiguration() {
 }
 
@@ -737,6 +797,10 @@ type userFirewallAccessRuleEditResponseConfigurationLegacyJhsIPV6ConfigurationJS
 
 func (r *UserFirewallAccessRuleEditResponseConfigurationLegacyJhsIPV6Configuration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userFirewallAccessRuleEditResponseConfigurationLegacyJhsIPV6ConfigurationJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r UserFirewallAccessRuleEditResponseConfigurationLegacyJhsIPV6Configuration) implementsUserFirewallAccessRuleEditResponseConfiguration() {
@@ -774,6 +838,10 @@ func (r *UserFirewallAccessRuleEditResponseConfigurationLegacyJhsCidrConfigurati
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userFirewallAccessRuleEditResponseConfigurationLegacyJhsCidrConfigurationJSON) RawJSON() string {
+	return r.raw
+}
+
 func (r UserFirewallAccessRuleEditResponseConfigurationLegacyJhsCidrConfiguration) implementsUserFirewallAccessRuleEditResponseConfiguration() {
 }
 
@@ -806,6 +874,10 @@ type userFirewallAccessRuleEditResponseConfigurationLegacyJhsASNConfigurationJSO
 
 func (r *UserFirewallAccessRuleEditResponseConfigurationLegacyJhsASNConfiguration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userFirewallAccessRuleEditResponseConfigurationLegacyJhsASNConfigurationJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r UserFirewallAccessRuleEditResponseConfigurationLegacyJhsASNConfiguration) implementsUserFirewallAccessRuleEditResponseConfiguration() {
@@ -841,6 +913,10 @@ type userFirewallAccessRuleEditResponseConfigurationLegacyJhsCountryConfiguratio
 
 func (r *UserFirewallAccessRuleEditResponseConfigurationLegacyJhsCountryConfiguration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userFirewallAccessRuleEditResponseConfigurationLegacyJhsCountryConfigurationJSON) RawJSON() string {
+	return r.raw
 }
 
 func (r UserFirewallAccessRuleEditResponseConfigurationLegacyJhsCountryConfiguration) implementsUserFirewallAccessRuleEditResponseConfiguration() {
@@ -1043,6 +1119,10 @@ func (r *UserFirewallAccessRuleNewResponseEnvelope) UnmarshalJSON(data []byte) (
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userFirewallAccessRuleNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserFirewallAccessRuleNewResponseEnvelopeErrors struct {
 	Code    int64                                               `json:"code,required"`
 	Message string                                              `json:"message,required"`
@@ -1062,6 +1142,10 @@ func (r *UserFirewallAccessRuleNewResponseEnvelopeErrors) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userFirewallAccessRuleNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserFirewallAccessRuleNewResponseEnvelopeMessages struct {
 	Code    int64                                                 `json:"code,required"`
 	Message string                                                `json:"message,required"`
@@ -1079,6 +1163,10 @@ type userFirewallAccessRuleNewResponseEnvelopeMessagesJSON struct {
 
 func (r *UserFirewallAccessRuleNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userFirewallAccessRuleNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1239,6 +1327,10 @@ func (r *UserFirewallAccessRuleDeleteResponseEnvelope) UnmarshalJSON(data []byte
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userFirewallAccessRuleDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserFirewallAccessRuleDeleteResponseEnvelopeErrors struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -1258,6 +1350,10 @@ func (r *UserFirewallAccessRuleDeleteResponseEnvelopeErrors) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userFirewallAccessRuleDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserFirewallAccessRuleDeleteResponseEnvelopeMessages struct {
 	Code    int64                                                    `json:"code,required"`
 	Message string                                                   `json:"message,required"`
@@ -1275,6 +1371,10 @@ type userFirewallAccessRuleDeleteResponseEnvelopeMessagesJSON struct {
 
 func (r *UserFirewallAccessRuleDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userFirewallAccessRuleDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -1330,6 +1430,10 @@ func (r *UserFirewallAccessRuleEditResponseEnvelope) UnmarshalJSON(data []byte) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userFirewallAccessRuleEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserFirewallAccessRuleEditResponseEnvelopeErrors struct {
 	Code    int64                                                `json:"code,required"`
 	Message string                                               `json:"message,required"`
@@ -1349,6 +1453,10 @@ func (r *UserFirewallAccessRuleEditResponseEnvelopeErrors) UnmarshalJSON(data []
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r userFirewallAccessRuleEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
 type UserFirewallAccessRuleEditResponseEnvelopeMessages struct {
 	Code    int64                                                  `json:"code,required"`
 	Message string                                                 `json:"message,required"`
@@ -1366,6 +1474,10 @@ type userFirewallAccessRuleEditResponseEnvelopeMessagesJSON struct {
 
 func (r *UserFirewallAccessRuleEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userFirewallAccessRuleEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful

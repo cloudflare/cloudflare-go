@@ -85,6 +85,10 @@ func (r *ZeroTrustDEXTestListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTestListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTestListResponseError struct {
 	Code    int64                                 `json:"code,required"`
 	Message string                                `json:"message,required"`
@@ -104,6 +108,10 @@ func (r *ZeroTrustDEXTestListResponseError) UnmarshalJSON(data []byte) (err erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTestListResponseErrorJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTestListResponseMessage struct {
 	Code    int64                                   `json:"code,required"`
 	Message string                                  `json:"message,required"`
@@ -121,6 +129,10 @@ type zeroTrustDEXTestListResponseMessageJSON struct {
 
 func (r *ZeroTrustDEXTestListResponseMessage) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXTestListResponseMessageJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDEXTestListResponseResult struct {
@@ -143,6 +155,10 @@ func (r *ZeroTrustDEXTestListResponseResult) UnmarshalJSON(data []byte) (err err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTestListResponseResultJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTestListResponseResultOverviewMetrics struct {
 	// number of tests.
 	TestsTotal int64 `json:"testsTotal,required"`
@@ -162,6 +178,10 @@ type zeroTrustDEXTestListResponseResultOverviewMetricsJSON struct {
 
 func (r *ZeroTrustDEXTestListResponseResultOverviewMetrics) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXTestListResponseResultOverviewMetricsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDEXTestListResponseResultTest struct {
@@ -216,6 +236,10 @@ func (r *ZeroTrustDEXTestListResponseResultTest) UnmarshalJSON(data []byte) (err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTestListResponseResultTestJSON) RawJSON() string {
+	return r.raw
+}
+
 // test type, http or traceroute
 type ZeroTrustDEXTestListResponseResultTestsKind string
 
@@ -241,6 +265,10 @@ func (r *ZeroTrustDEXTestListResponseResultTestsHTTPResults) UnmarshalJSON(data 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTestListResponseResultTestsHTTPResultsJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTestListResponseResultTestsHTTPResultsResourceFetchTime struct {
 	History  []ZeroTrustDEXTestListResponseResultTestsHTTPResultsResourceFetchTimeHistory `json:"history,required"`
 	AvgMs    int64                                                                        `json:"avgMs,nullable"`
@@ -261,6 +289,10 @@ type zeroTrustDEXTestListResponseResultTestsHTTPResultsResourceFetchTimeJSON str
 
 func (r *ZeroTrustDEXTestListResponseResultTestsHTTPResultsResourceFetchTime) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXTestListResponseResultTestsHTTPResultsResourceFetchTimeJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDEXTestListResponseResultTestsHTTPResultsResourceFetchTimeHistory struct {
@@ -285,6 +317,10 @@ func (r *ZeroTrustDEXTestListResponseResultTestsHTTPResultsResourceFetchTimeHist
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTestListResponseResultTestsHTTPResultsResourceFetchTimeHistoryJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTestListResponseResultTestsHTTPResultsResourceFetchTimeHistoryTimePeriod struct {
 	Units ZeroTrustDEXTestListResponseResultTestsHTTPResultsResourceFetchTimeHistoryTimePeriodUnits `json:"units,required"`
 	Value int64                                                                                     `json:"value,required"`
@@ -303,6 +339,10 @@ type zeroTrustDEXTestListResponseResultTestsHTTPResultsResourceFetchTimeHistoryT
 
 func (r *ZeroTrustDEXTestListResponseResultTestsHTTPResultsResourceFetchTimeHistoryTimePeriod) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXTestListResponseResultTestsHTTPResultsResourceFetchTimeHistoryTimePeriodJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDEXTestListResponseResultTestsHTTPResultsResourceFetchTimeHistoryTimePeriodUnits string
@@ -333,6 +373,10 @@ func (r *ZeroTrustDEXTestListResponseResultTestsHTTPResultsResourceFetchTimeOver
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTestListResponseResultTestsHTTPResultsResourceFetchTimeOverTimeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTestListResponseResultTestsHTTPResultsResourceFetchTimeOverTimeTimePeriod struct {
 	Units ZeroTrustDEXTestListResponseResultTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnits `json:"units,required"`
 	Value int64                                                                                      `json:"value,required"`
@@ -351,6 +395,10 @@ type zeroTrustDEXTestListResponseResultTestsHTTPResultsResourceFetchTimeOverTime
 
 func (r *ZeroTrustDEXTestListResponseResultTestsHTTPResultsResourceFetchTimeOverTimeTimePeriod) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXTestListResponseResultTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDEXTestListResponseResultTestsHTTPResultsResourceFetchTimeOverTimeTimePeriodUnits string
@@ -381,6 +429,10 @@ func (r *ZeroTrustDEXTestListResponseResultTestsHTTPResultsResourceFetchTimeOver
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTestListResponseResultTestsHTTPResultsResourceFetchTimeOverTimeValueJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTestListResponseResultTestsHTTPResultsByColo struct {
 	// Cloudflare colo
 	Colo              string                                                                    `json:"colo,required"`
@@ -400,6 +452,10 @@ type zeroTrustDEXTestListResponseResultTestsHTTPResultsByColoJSON struct {
 
 func (r *ZeroTrustDEXTestListResponseResultTestsHTTPResultsByColo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXTestListResponseResultTestsHTTPResultsByColoJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDEXTestListResponseResultTestsHTTPResultsByColoResourceFetchTime struct {
@@ -424,6 +480,10 @@ func (r *ZeroTrustDEXTestListResponseResultTestsHTTPResultsByColoResourceFetchTi
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTestListResponseResultTestsHTTPResultsByColoResourceFetchTimeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTestListResponseResultTestsHTTPResultsByColoResourceFetchTimeHistory struct {
 	TimePeriod ZeroTrustDEXTestListResponseResultTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriod `json:"timePeriod,required"`
 	AvgMs      int64                                                                                      `json:"avgMs,nullable"`
@@ -446,6 +506,10 @@ func (r *ZeroTrustDEXTestListResponseResultTestsHTTPResultsByColoResourceFetchTi
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTestListResponseResultTestsHTTPResultsByColoResourceFetchTimeHistoryJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTestListResponseResultTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriod struct {
 	Units ZeroTrustDEXTestListResponseResultTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodUnits `json:"units,required"`
 	Value int64                                                                                           `json:"value,required"`
@@ -464,6 +528,10 @@ type zeroTrustDEXTestListResponseResultTestsHTTPResultsByColoResourceFetchTimeHi
 
 func (r *ZeroTrustDEXTestListResponseResultTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriod) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXTestListResponseResultTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDEXTestListResponseResultTestsHTTPResultsByColoResourceFetchTimeHistoryTimePeriodUnits string
@@ -494,6 +562,10 @@ func (r *ZeroTrustDEXTestListResponseResultTestsHTTPResultsByColoResourceFetchTi
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTestListResponseResultTestsHTTPResultsByColoResourceFetchTimeOverTimeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTestListResponseResultTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriod struct {
 	Units ZeroTrustDEXTestListResponseResultTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnits `json:"units,required"`
 	Value int64                                                                                            `json:"value,required"`
@@ -512,6 +584,10 @@ type zeroTrustDEXTestListResponseResultTestsHTTPResultsByColoResourceFetchTimeOv
 
 func (r *ZeroTrustDEXTestListResponseResultTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriod) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXTestListResponseResultTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDEXTestListResponseResultTestsHTTPResultsByColoResourceFetchTimeOverTimeTimePeriodUnits string
@@ -542,6 +618,10 @@ func (r *ZeroTrustDEXTestListResponseResultTestsHTTPResultsByColoResourceFetchTi
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTestListResponseResultTestsHTTPResultsByColoResourceFetchTimeOverTimeValueJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTestListResponseResultTestsTracerouteResults struct {
 	RoundTripTime ZeroTrustDEXTestListResponseResultTestsTracerouteResultsRoundTripTime `json:"roundTripTime,required"`
 	JSON          zeroTrustDEXTestListResponseResultTestsTracerouteResultsJSON          `json:"-"`
@@ -558,6 +638,10 @@ type zeroTrustDEXTestListResponseResultTestsTracerouteResultsJSON struct {
 
 func (r *ZeroTrustDEXTestListResponseResultTestsTracerouteResults) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXTestListResponseResultTestsTracerouteResultsJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDEXTestListResponseResultTestsTracerouteResultsRoundTripTime struct {
@@ -582,6 +666,10 @@ func (r *ZeroTrustDEXTestListResponseResultTestsTracerouteResultsRoundTripTime) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTestListResponseResultTestsTracerouteResultsRoundTripTimeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTestListResponseResultTestsTracerouteResultsRoundTripTimeHistory struct {
 	TimePeriod ZeroTrustDEXTestListResponseResultTestsTracerouteResultsRoundTripTimeHistoryTimePeriod `json:"timePeriod,required"`
 	AvgMs      int64                                                                                  `json:"avgMs,nullable"`
@@ -604,6 +692,10 @@ func (r *ZeroTrustDEXTestListResponseResultTestsTracerouteResultsRoundTripTimeHi
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTestListResponseResultTestsTracerouteResultsRoundTripTimeHistoryJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTestListResponseResultTestsTracerouteResultsRoundTripTimeHistoryTimePeriod struct {
 	Units ZeroTrustDEXTestListResponseResultTestsTracerouteResultsRoundTripTimeHistoryTimePeriodUnits `json:"units,required"`
 	Value int64                                                                                       `json:"value,required"`
@@ -622,6 +714,10 @@ type zeroTrustDEXTestListResponseResultTestsTracerouteResultsRoundTripTimeHistor
 
 func (r *ZeroTrustDEXTestListResponseResultTestsTracerouteResultsRoundTripTimeHistoryTimePeriod) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXTestListResponseResultTestsTracerouteResultsRoundTripTimeHistoryTimePeriodJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDEXTestListResponseResultTestsTracerouteResultsRoundTripTimeHistoryTimePeriodUnits string
@@ -652,6 +748,10 @@ func (r *ZeroTrustDEXTestListResponseResultTestsTracerouteResultsRoundTripTimeOv
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTestListResponseResultTestsTracerouteResultsRoundTripTimeOverTimeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTestListResponseResultTestsTracerouteResultsRoundTripTimeOverTimeTimePeriod struct {
 	Units ZeroTrustDEXTestListResponseResultTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnits `json:"units,required"`
 	Value int64                                                                                        `json:"value,required"`
@@ -670,6 +770,10 @@ type zeroTrustDEXTestListResponseResultTestsTracerouteResultsRoundTripTimeOverTi
 
 func (r *ZeroTrustDEXTestListResponseResultTestsTracerouteResultsRoundTripTimeOverTimeTimePeriod) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXTestListResponseResultTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDEXTestListResponseResultTestsTracerouteResultsRoundTripTimeOverTimeTimePeriodUnits string
@@ -700,6 +804,10 @@ func (r *ZeroTrustDEXTestListResponseResultTestsTracerouteResultsRoundTripTimeOv
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTestListResponseResultTestsTracerouteResultsRoundTripTimeOverTimeValueJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTestListResponseResultTestsTracerouteResultsByColo struct {
 	// Cloudflare colo
 	Colo          string                                                                      `json:"colo,required"`
@@ -719,6 +827,10 @@ type zeroTrustDEXTestListResponseResultTestsTracerouteResultsByColoJSON struct {
 
 func (r *ZeroTrustDEXTestListResponseResultTestsTracerouteResultsByColo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXTestListResponseResultTestsTracerouteResultsByColoJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDEXTestListResponseResultTestsTracerouteResultsByColoRoundTripTime struct {
@@ -743,6 +855,10 @@ func (r *ZeroTrustDEXTestListResponseResultTestsTracerouteResultsByColoRoundTrip
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTestListResponseResultTestsTracerouteResultsByColoRoundTripTimeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTestListResponseResultTestsTracerouteResultsByColoRoundTripTimeHistory struct {
 	TimePeriod ZeroTrustDEXTestListResponseResultTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriod `json:"timePeriod,required"`
 	AvgMs      int64                                                                                        `json:"avgMs,nullable"`
@@ -765,6 +881,10 @@ func (r *ZeroTrustDEXTestListResponseResultTestsTracerouteResultsByColoRoundTrip
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTestListResponseResultTestsTracerouteResultsByColoRoundTripTimeHistoryJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTestListResponseResultTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriod struct {
 	Units ZeroTrustDEXTestListResponseResultTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodUnits `json:"units,required"`
 	Value int64                                                                                             `json:"value,required"`
@@ -783,6 +903,10 @@ type zeroTrustDEXTestListResponseResultTestsTracerouteResultsByColoRoundTripTime
 
 func (r *ZeroTrustDEXTestListResponseResultTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriod) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXTestListResponseResultTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDEXTestListResponseResultTestsTracerouteResultsByColoRoundTripTimeHistoryTimePeriodUnits string
@@ -813,6 +937,10 @@ func (r *ZeroTrustDEXTestListResponseResultTestsTracerouteResultsByColoRoundTrip
 	return apijson.UnmarshalRoot(data, r)
 }
 
+func (r zeroTrustDEXTestListResponseResultTestsTracerouteResultsByColoRoundTripTimeOverTimeJSON) RawJSON() string {
+	return r.raw
+}
+
 type ZeroTrustDEXTestListResponseResultTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriod struct {
 	Units ZeroTrustDEXTestListResponseResultTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnits `json:"units,required"`
 	Value int64                                                                                              `json:"value,required"`
@@ -831,6 +959,10 @@ type zeroTrustDEXTestListResponseResultTestsTracerouteResultsByColoRoundTripTime
 
 func (r *ZeroTrustDEXTestListResponseResultTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriod) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXTestListResponseResultTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDEXTestListResponseResultTestsTracerouteResultsByColoRoundTripTimeOverTimeTimePeriodUnits string
@@ -859,6 +991,10 @@ type zeroTrustDEXTestListResponseResultTestsTracerouteResultsByColoRoundTripTime
 
 func (r *ZeroTrustDEXTestListResponseResultTestsTracerouteResultsByColoRoundTripTimeOverTimeValue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXTestListResponseResultTestsTracerouteResultsByColoRoundTripTimeOverTimeValueJSON) RawJSON() string {
+	return r.raw
 }
 
 // Whether the API call was successful
@@ -893,6 +1029,10 @@ type zeroTrustDEXTestListResponseResultInfoJSON struct {
 
 func (r *ZeroTrustDEXTestListResponseResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zeroTrustDEXTestListResponseResultInfoJSON) RawJSON() string {
+	return r.raw
 }
 
 type ZeroTrustDEXTestListParams struct {
