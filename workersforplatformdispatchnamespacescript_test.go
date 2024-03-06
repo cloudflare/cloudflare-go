@@ -38,7 +38,11 @@ func TestWorkersForPlatformDispatchNamespaceScriptUpdateWithOptionalParams(t *te
 			AnyPartName: cloudflare.F([]io.Reader{io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents"))), io.Reader(bytes.NewBuffer([]byte("some file contents")))}),
 			Message:     cloudflare.F("string"),
 			Metadata: cloudflare.F(cloudflare.WorkersForPlatformDispatchNamespaceScriptUpdateParamsMetadata{
-				Bindings:           cloudflare.F([]interface{}{map[string]interface{}{}, map[string]interface{}{}, map[string]interface{}{}}),
+				Bindings: cloudflare.F([]interface{}{map[string]interface{}{
+					"name": "MY_ENV_VAR",
+					"text": "my_data",
+					"type": "plain_text",
+				}}),
 				BodyPart:           cloudflare.F("worker.js"),
 				CompatibilityDate:  cloudflare.F("2023-07-25"),
 				CompatibilityFlags: cloudflare.F([]string{"string", "string", "string"}),
