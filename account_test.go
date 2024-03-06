@@ -33,7 +33,7 @@ func TestAccountUpdateWithOptionalParams(t *testing.T) {
 		Settings: cloudflare.F(cloudflare.AccountUpdateParamsSettings{
 			DefaultNameservers:          cloudflare.F(cloudflare.AccountUpdateParamsSettingsDefaultNameserversCloudflareStandard),
 			EnforceTwofactor:            cloudflare.F(true),
-			UseAccountCustomNsByDefault: cloudflare.F(true),
+			UseAccountCustomNSByDefault: cloudflare.F(true),
 		}),
 	})
 	if err != nil {

@@ -40,7 +40,7 @@ func NewZeroTrustNetworkRouteService(opts ...option.RequestOption) (r *ZeroTrust
 }
 
 // Routes a private network through a Cloudflare Tunnel.
-func (r *ZeroTrustNetworkRouteService) New(ctx context.Context, params ZeroTrustNetworkRouteNewParams, opts ...option.RequestOption) (res *TunnelRoute, err error) {
+func (r *ZeroTrustNetworkRouteService) New(ctx context.Context, params ZeroTrustNetworkRouteNewParams, opts ...option.RequestOption) (res *ZeroTrustNetworkRouteNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustNetworkRouteNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/teamnet/routes", params.AccountID)
@@ -53,7 +53,7 @@ func (r *ZeroTrustNetworkRouteService) New(ctx context.Context, params ZeroTrust
 }
 
 // Lists and filters private network routes in an account.
-func (r *ZeroTrustNetworkRouteService) List(ctx context.Context, params ZeroTrustNetworkRouteListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[TunnelTeamnet], err error) {
+func (r *ZeroTrustNetworkRouteService) List(ctx context.Context, params ZeroTrustNetworkRouteListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[ZeroTrustNetworkRouteListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -71,12 +71,12 @@ func (r *ZeroTrustNetworkRouteService) List(ctx context.Context, params ZeroTrus
 }
 
 // Lists and filters private network routes in an account.
-func (r *ZeroTrustNetworkRouteService) ListAutoPaging(ctx context.Context, params ZeroTrustNetworkRouteListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[TunnelTeamnet] {
+func (r *ZeroTrustNetworkRouteService) ListAutoPaging(ctx context.Context, params ZeroTrustNetworkRouteListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[ZeroTrustNetworkRouteListResponse] {
 	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes a private network route from an account.
-func (r *ZeroTrustNetworkRouteService) Delete(ctx context.Context, routeID string, body ZeroTrustNetworkRouteDeleteParams, opts ...option.RequestOption) (res *TunnelRoute, err error) {
+func (r *ZeroTrustNetworkRouteService) Delete(ctx context.Context, routeID string, body ZeroTrustNetworkRouteDeleteParams, opts ...option.RequestOption) (res *ZeroTrustNetworkRouteDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustNetworkRouteDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/teamnet/routes/%s", body.AccountID, routeID)
@@ -90,7 +90,7 @@ func (r *ZeroTrustNetworkRouteService) Delete(ctx context.Context, routeID strin
 
 // Updates an existing private network route in an account. The fields that are
 // meant to be updated should be provided in the body of the request.
-func (r *ZeroTrustNetworkRouteService) Edit(ctx context.Context, routeID string, params ZeroTrustNetworkRouteEditParams, opts ...option.RequestOption) (res *TunnelRoute, err error) {
+func (r *ZeroTrustNetworkRouteService) Edit(ctx context.Context, routeID string, params ZeroTrustNetworkRouteEditParams, opts ...option.RequestOption) (res *ZeroTrustNetworkRouteEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustNetworkRouteEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/teamnet/routes/%s", params.AccountID, routeID)
@@ -102,7 +102,7 @@ func (r *ZeroTrustNetworkRouteService) Edit(ctx context.Context, routeID string,
 	return
 }
 
-type TunnelRoute struct {
+type ZeroTrustNetworkRouteNewResponse struct {
 	// UUID of the route.
 	ID string `json:"id"`
 	// Optional remark describing the route.
@@ -119,12 +119,13 @@ type TunnelRoute struct {
 	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks
 	// are configured, the route is assigned to the default virtual network of the
 	// account.
-	VirtualNetworkID interface{}     `json:"virtual_network_id"`
-	JSON             tunnelRouteJSON `json:"-"`
+	VirtualNetworkID interface{}                          `json:"virtual_network_id"`
+	JSON             zeroTrustNetworkRouteNewResponseJSON `json:"-"`
 }
 
-// tunnelRouteJSON contains the JSON metadata for the struct [TunnelRoute]
-type tunnelRouteJSON struct {
+// zeroTrustNetworkRouteNewResponseJSON contains the JSON metadata for the struct
+// [ZeroTrustNetworkRouteNewResponse]
+type zeroTrustNetworkRouteNewResponseJSON struct {
 	ID               apijson.Field
 	Comment          apijson.Field
 	CreatedAt        apijson.Field
@@ -136,11 +137,11 @@ type tunnelRouteJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *TunnelRoute) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustNetworkRouteNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type TunnelTeamnet struct {
+type ZeroTrustNetworkRouteListResponse struct {
 	// UUID of the route.
 	ID string `json:"id"`
 	// Optional remark describing the route.
@@ -153,7 +154,7 @@ type TunnelTeamnet struct {
 	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
 	Network string `json:"network"`
 	// The type of tunnel.
-	TunType TunnelTeamnetTunType `json:"tun_type"`
+	TunType ZeroTrustNetworkRouteListResponseTunType `json:"tun_type"`
 	// UUID of the Cloudflare Tunnel serving the route.
 	TunnelID interface{} `json:"tunnel_id"`
 	// The user-friendly name of the Cloudflare Tunnel serving the route.
@@ -163,12 +164,13 @@ type TunnelTeamnet struct {
 	// account.
 	VirtualNetworkID interface{} `json:"virtual_network_id"`
 	// A user-friendly name for the virtual network.
-	VirtualNetworkName string            `json:"virtual_network_name"`
-	JSON               tunnelTeamnetJSON `json:"-"`
+	VirtualNetworkName string                                `json:"virtual_network_name"`
+	JSON               zeroTrustNetworkRouteListResponseJSON `json:"-"`
 }
 
-// tunnelTeamnetJSON contains the JSON metadata for the struct [TunnelTeamnet]
-type tunnelTeamnetJSON struct {
+// zeroTrustNetworkRouteListResponseJSON contains the JSON metadata for the struct
+// [ZeroTrustNetworkRouteListResponse]
+type zeroTrustNetworkRouteListResponseJSON struct {
 	ID                 apijson.Field
 	Comment            apijson.Field
 	CreatedAt          apijson.Field
@@ -183,20 +185,98 @@ type tunnelTeamnetJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *TunnelTeamnet) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustNetworkRouteListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The type of tunnel.
-type TunnelTeamnetTunType string
+type ZeroTrustNetworkRouteListResponseTunType string
 
 const (
-	TunnelTeamnetTunTypeCfdTunnel     TunnelTeamnetTunType = "cfd_tunnel"
-	TunnelTeamnetTunTypeWARPConnector TunnelTeamnetTunType = "warp_connector"
-	TunnelTeamnetTunTypeIPSec         TunnelTeamnetTunType = "ip_sec"
-	TunnelTeamnetTunTypeGRE           TunnelTeamnetTunType = "gre"
-	TunnelTeamnetTunTypeCni           TunnelTeamnetTunType = "cni"
+	ZeroTrustNetworkRouteListResponseTunTypeCfdTunnel     ZeroTrustNetworkRouteListResponseTunType = "cfd_tunnel"
+	ZeroTrustNetworkRouteListResponseTunTypeWARPConnector ZeroTrustNetworkRouteListResponseTunType = "warp_connector"
+	ZeroTrustNetworkRouteListResponseTunTypeIPSec         ZeroTrustNetworkRouteListResponseTunType = "ip_sec"
+	ZeroTrustNetworkRouteListResponseTunTypeGRE           ZeroTrustNetworkRouteListResponseTunType = "gre"
+	ZeroTrustNetworkRouteListResponseTunTypeCni           ZeroTrustNetworkRouteListResponseTunType = "cni"
 )
+
+type ZeroTrustNetworkRouteDeleteResponse struct {
+	// UUID of the route.
+	ID string `json:"id"`
+	// Optional remark describing the route.
+	Comment string `json:"comment"`
+	// Timestamp of when the route was created.
+	CreatedAt interface{} `json:"created_at"`
+	// Timestamp of when the route was deleted. If `null`, the route has not been
+	// deleted.
+	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
+	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
+	Network string `json:"network"`
+	// UUID of the Cloudflare Tunnel serving the route.
+	TunnelID interface{} `json:"tunnel_id"`
+	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks
+	// are configured, the route is assigned to the default virtual network of the
+	// account.
+	VirtualNetworkID interface{}                             `json:"virtual_network_id"`
+	JSON             zeroTrustNetworkRouteDeleteResponseJSON `json:"-"`
+}
+
+// zeroTrustNetworkRouteDeleteResponseJSON contains the JSON metadata for the
+// struct [ZeroTrustNetworkRouteDeleteResponse]
+type zeroTrustNetworkRouteDeleteResponseJSON struct {
+	ID               apijson.Field
+	Comment          apijson.Field
+	CreatedAt        apijson.Field
+	DeletedAt        apijson.Field
+	Network          apijson.Field
+	TunnelID         apijson.Field
+	VirtualNetworkID apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ZeroTrustNetworkRouteDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZeroTrustNetworkRouteEditResponse struct {
+	// UUID of the route.
+	ID string `json:"id"`
+	// Optional remark describing the route.
+	Comment string `json:"comment"`
+	// Timestamp of when the route was created.
+	CreatedAt interface{} `json:"created_at"`
+	// Timestamp of when the route was deleted. If `null`, the route has not been
+	// deleted.
+	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
+	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
+	Network string `json:"network"`
+	// UUID of the Cloudflare Tunnel serving the route.
+	TunnelID interface{} `json:"tunnel_id"`
+	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks
+	// are configured, the route is assigned to the default virtual network of the
+	// account.
+	VirtualNetworkID interface{}                           `json:"virtual_network_id"`
+	JSON             zeroTrustNetworkRouteEditResponseJSON `json:"-"`
+}
+
+// zeroTrustNetworkRouteEditResponseJSON contains the JSON metadata for the struct
+// [ZeroTrustNetworkRouteEditResponse]
+type zeroTrustNetworkRouteEditResponseJSON struct {
+	ID               apijson.Field
+	Comment          apijson.Field
+	CreatedAt        apijson.Field
+	DeletedAt        apijson.Field
+	Network          apijson.Field
+	TunnelID         apijson.Field
+	VirtualNetworkID apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ZeroTrustNetworkRouteEditResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type ZeroTrustNetworkRouteNewParams struct {
 	// Cloudflare account ID
@@ -218,7 +298,7 @@ func (r ZeroTrustNetworkRouteNewParams) MarshalJSON() (data []byte, err error) {
 type ZeroTrustNetworkRouteNewResponseEnvelope struct {
 	Errors   []ZeroTrustNetworkRouteNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustNetworkRouteNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   TunnelRoute                                        `json:"result,required"`
+	Result   ZeroTrustNetworkRouteNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success ZeroTrustNetworkRouteNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustNetworkRouteNewResponseEnvelopeJSON    `json:"-"`
@@ -330,7 +410,7 @@ type ZeroTrustNetworkRouteDeleteParams struct {
 type ZeroTrustNetworkRouteDeleteResponseEnvelope struct {
 	Errors   []ZeroTrustNetworkRouteDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustNetworkRouteDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   TunnelRoute                                           `json:"result,required"`
+	Result   ZeroTrustNetworkRouteDeleteResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success ZeroTrustNetworkRouteDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustNetworkRouteDeleteResponseEnvelopeJSON    `json:"-"`
@@ -431,7 +511,7 @@ const (
 type ZeroTrustNetworkRouteEditResponseEnvelope struct {
 	Errors   []ZeroTrustNetworkRouteEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustNetworkRouteEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   TunnelRoute                                         `json:"result,required"`
+	Result   ZeroTrustNetworkRouteEditResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success ZeroTrustNetworkRouteEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustNetworkRouteEditResponseEnvelopeJSON    `json:"-"`

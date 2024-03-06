@@ -35,7 +35,7 @@ func NewClientCertificateService(opts ...option.RequestOption) (r *ClientCertifi
 }
 
 // Create a new API Shield mTLS Client Certificate
-func (r *ClientCertificateService) New(ctx context.Context, params ClientCertificateNewParams, opts ...option.RequestOption) (res *TLSCertificatesAndHostnamesClientCertificate, err error) {
+func (r *ClientCertificateService) New(ctx context.Context, params ClientCertificateNewParams, opts ...option.RequestOption) (res *ClientCertificateNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ClientCertificateNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/client_certificates", params.ZoneID)
@@ -49,7 +49,7 @@ func (r *ClientCertificateService) New(ctx context.Context, params ClientCertifi
 
 // List all of your Zone's API Shield mTLS Client Certificates by Status and/or
 // using Pagination
-func (r *ClientCertificateService) List(ctx context.Context, params ClientCertificateListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[TLSCertificatesAndHostnamesClientCertificate], err error) {
+func (r *ClientCertificateService) List(ctx context.Context, params ClientCertificateListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[ClientCertificateListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -68,13 +68,13 @@ func (r *ClientCertificateService) List(ctx context.Context, params ClientCertif
 
 // List all of your Zone's API Shield mTLS Client Certificates by Status and/or
 // using Pagination
-func (r *ClientCertificateService) ListAutoPaging(ctx context.Context, params ClientCertificateListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[TLSCertificatesAndHostnamesClientCertificate] {
+func (r *ClientCertificateService) ListAutoPaging(ctx context.Context, params ClientCertificateListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[ClientCertificateListResponse] {
 	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Set a API Shield mTLS Client Certificate to pending_revocation status for
 // processing to revoked status.
-func (r *ClientCertificateService) Delete(ctx context.Context, clientCertificateID string, body ClientCertificateDeleteParams, opts ...option.RequestOption) (res *TLSCertificatesAndHostnamesClientCertificate, err error) {
+func (r *ClientCertificateService) Delete(ctx context.Context, clientCertificateID string, body ClientCertificateDeleteParams, opts ...option.RequestOption) (res *ClientCertificateDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ClientCertificateDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/client_certificates/%s", body.ZoneID, clientCertificateID)
@@ -88,7 +88,7 @@ func (r *ClientCertificateService) Delete(ctx context.Context, clientCertificate
 
 // If a API Shield mTLS Client Certificate is in a pending_revocation state, you
 // may reactivate it with this endpoint.
-func (r *ClientCertificateService) Edit(ctx context.Context, clientCertificateID string, body ClientCertificateEditParams, opts ...option.RequestOption) (res *TLSCertificatesAndHostnamesClientCertificate, err error) {
+func (r *ClientCertificateService) Edit(ctx context.Context, clientCertificateID string, body ClientCertificateEditParams, opts ...option.RequestOption) (res *ClientCertificateEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ClientCertificateEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/client_certificates/%s", body.ZoneID, clientCertificateID)
@@ -101,7 +101,7 @@ func (r *ClientCertificateService) Edit(ctx context.Context, clientCertificateID
 }
 
 // Get Details for a single mTLS API Shield Client Certificate
-func (r *ClientCertificateService) Get(ctx context.Context, clientCertificateID string, query ClientCertificateGetParams, opts ...option.RequestOption) (res *TLSCertificatesAndHostnamesClientCertificate, err error) {
+func (r *ClientCertificateService) Get(ctx context.Context, clientCertificateID string, query ClientCertificateGetParams, opts ...option.RequestOption) (res *ClientCertificateGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ClientCertificateGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/client_certificates/%s", query.ZoneID, clientCertificateID)
@@ -113,13 +113,13 @@ func (r *ClientCertificateService) Get(ctx context.Context, clientCertificateID 
 	return
 }
 
-type TLSCertificatesAndHostnamesClientCertificate struct {
+type ClientCertificateNewResponse struct {
 	// Identifier
 	ID string `json:"id"`
 	// The Client Certificate PEM
 	Certificate string `json:"certificate"`
 	// Certificate Authority used to issue the Client Certificate
-	CertificateAuthority TLSCertificatesAndHostnamesClientCertificateCertificateAuthority `json:"certificate_authority"`
+	CertificateAuthority ClientCertificateNewResponseCertificateAuthority `json:"certificate_authority"`
 	// Common Name of the Client Certificate
 	CommonName string `json:"common_name"`
 	// Country, provided by the CSR
@@ -148,15 +148,15 @@ type TLSCertificatesAndHostnamesClientCertificate struct {
 	State string `json:"state"`
 	// Client Certificates may be active or revoked, and the pending_reactivation or
 	// pending_revocation represent in-progress asynchronous transitions
-	Status TLSCertificatesAndHostnamesClientCertificateStatus `json:"status"`
+	Status ClientCertificateNewResponseStatus `json:"status"`
 	// The number of days the Client Certificate will be valid after the issued_on date
-	ValidityDays int64                                            `json:"validity_days"`
-	JSON         tlsCertificatesAndHostnamesClientCertificateJSON `json:"-"`
+	ValidityDays int64                            `json:"validity_days"`
+	JSON         clientCertificateNewResponseJSON `json:"-"`
 }
 
-// tlsCertificatesAndHostnamesClientCertificateJSON contains the JSON metadata for
-// the struct [TLSCertificatesAndHostnamesClientCertificate]
-type tlsCertificatesAndHostnamesClientCertificateJSON struct {
+// clientCertificateNewResponseJSON contains the JSON metadata for the struct
+// [ClientCertificateNewResponse]
+type clientCertificateNewResponseJSON struct {
 	ID                   apijson.Field
 	Certificate          apijson.Field
 	CertificateAuthority apijson.Field
@@ -179,40 +179,443 @@ type tlsCertificatesAndHostnamesClientCertificateJSON struct {
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *TLSCertificatesAndHostnamesClientCertificate) UnmarshalJSON(data []byte) (err error) {
+func (r *ClientCertificateNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Certificate Authority used to issue the Client Certificate
-type TLSCertificatesAndHostnamesClientCertificateCertificateAuthority struct {
-	ID   string                                                               `json:"id"`
-	Name string                                                               `json:"name"`
-	JSON tlsCertificatesAndHostnamesClientCertificateCertificateAuthorityJSON `json:"-"`
+type ClientCertificateNewResponseCertificateAuthority struct {
+	ID   string                                               `json:"id"`
+	Name string                                               `json:"name"`
+	JSON clientCertificateNewResponseCertificateAuthorityJSON `json:"-"`
 }
 
-// tlsCertificatesAndHostnamesClientCertificateCertificateAuthorityJSON contains
-// the JSON metadata for the struct
-// [TLSCertificatesAndHostnamesClientCertificateCertificateAuthority]
-type tlsCertificatesAndHostnamesClientCertificateCertificateAuthorityJSON struct {
+// clientCertificateNewResponseCertificateAuthorityJSON contains the JSON metadata
+// for the struct [ClientCertificateNewResponseCertificateAuthority]
+type clientCertificateNewResponseCertificateAuthorityJSON struct {
 	ID          apijson.Field
 	Name        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TLSCertificatesAndHostnamesClientCertificateCertificateAuthority) UnmarshalJSON(data []byte) (err error) {
+func (r *ClientCertificateNewResponseCertificateAuthority) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Client Certificates may be active or revoked, and the pending_reactivation or
 // pending_revocation represent in-progress asynchronous transitions
-type TLSCertificatesAndHostnamesClientCertificateStatus string
+type ClientCertificateNewResponseStatus string
 
 const (
-	TLSCertificatesAndHostnamesClientCertificateStatusActive              TLSCertificatesAndHostnamesClientCertificateStatus = "active"
-	TLSCertificatesAndHostnamesClientCertificateStatusPendingReactivation TLSCertificatesAndHostnamesClientCertificateStatus = "pending_reactivation"
-	TLSCertificatesAndHostnamesClientCertificateStatusPendingRevocation   TLSCertificatesAndHostnamesClientCertificateStatus = "pending_revocation"
-	TLSCertificatesAndHostnamesClientCertificateStatusRevoked             TLSCertificatesAndHostnamesClientCertificateStatus = "revoked"
+	ClientCertificateNewResponseStatusActive              ClientCertificateNewResponseStatus = "active"
+	ClientCertificateNewResponseStatusPendingReactivation ClientCertificateNewResponseStatus = "pending_reactivation"
+	ClientCertificateNewResponseStatusPendingRevocation   ClientCertificateNewResponseStatus = "pending_revocation"
+	ClientCertificateNewResponseStatusRevoked             ClientCertificateNewResponseStatus = "revoked"
+)
+
+type ClientCertificateListResponse struct {
+	// Identifier
+	ID string `json:"id"`
+	// The Client Certificate PEM
+	Certificate string `json:"certificate"`
+	// Certificate Authority used to issue the Client Certificate
+	CertificateAuthority ClientCertificateListResponseCertificateAuthority `json:"certificate_authority"`
+	// Common Name of the Client Certificate
+	CommonName string `json:"common_name"`
+	// Country, provided by the CSR
+	Country string `json:"country"`
+	// The Certificate Signing Request (CSR). Must be newline-encoded.
+	Csr string `json:"csr"`
+	// Date that the Client Certificate expires
+	ExpiresOn string `json:"expires_on"`
+	// Unique identifier of the Client Certificate
+	FingerprintSha256 string `json:"fingerprint_sha256"`
+	// Date that the Client Certificate was issued by the Certificate Authority
+	IssuedOn string `json:"issued_on"`
+	// Location, provided by the CSR
+	Location string `json:"location"`
+	// Organization, provided by the CSR
+	Organization string `json:"organization"`
+	// Organizational Unit, provided by the CSR
+	OrganizationalUnit string `json:"organizational_unit"`
+	// The serial number on the created Client Certificate.
+	SerialNumber string `json:"serial_number"`
+	// The type of hash used for the Client Certificate..
+	Signature string `json:"signature"`
+	// Subject Key Identifier
+	Ski string `json:"ski"`
+	// State, provided by the CSR
+	State string `json:"state"`
+	// Client Certificates may be active or revoked, and the pending_reactivation or
+	// pending_revocation represent in-progress asynchronous transitions
+	Status ClientCertificateListResponseStatus `json:"status"`
+	// The number of days the Client Certificate will be valid after the issued_on date
+	ValidityDays int64                             `json:"validity_days"`
+	JSON         clientCertificateListResponseJSON `json:"-"`
+}
+
+// clientCertificateListResponseJSON contains the JSON metadata for the struct
+// [ClientCertificateListResponse]
+type clientCertificateListResponseJSON struct {
+	ID                   apijson.Field
+	Certificate          apijson.Field
+	CertificateAuthority apijson.Field
+	CommonName           apijson.Field
+	Country              apijson.Field
+	Csr                  apijson.Field
+	ExpiresOn            apijson.Field
+	FingerprintSha256    apijson.Field
+	IssuedOn             apijson.Field
+	Location             apijson.Field
+	Organization         apijson.Field
+	OrganizationalUnit   apijson.Field
+	SerialNumber         apijson.Field
+	Signature            apijson.Field
+	Ski                  apijson.Field
+	State                apijson.Field
+	Status               apijson.Field
+	ValidityDays         apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *ClientCertificateListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Certificate Authority used to issue the Client Certificate
+type ClientCertificateListResponseCertificateAuthority struct {
+	ID   string                                                `json:"id"`
+	Name string                                                `json:"name"`
+	JSON clientCertificateListResponseCertificateAuthorityJSON `json:"-"`
+}
+
+// clientCertificateListResponseCertificateAuthorityJSON contains the JSON metadata
+// for the struct [ClientCertificateListResponseCertificateAuthority]
+type clientCertificateListResponseCertificateAuthorityJSON struct {
+	ID          apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ClientCertificateListResponseCertificateAuthority) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Client Certificates may be active or revoked, and the pending_reactivation or
+// pending_revocation represent in-progress asynchronous transitions
+type ClientCertificateListResponseStatus string
+
+const (
+	ClientCertificateListResponseStatusActive              ClientCertificateListResponseStatus = "active"
+	ClientCertificateListResponseStatusPendingReactivation ClientCertificateListResponseStatus = "pending_reactivation"
+	ClientCertificateListResponseStatusPendingRevocation   ClientCertificateListResponseStatus = "pending_revocation"
+	ClientCertificateListResponseStatusRevoked             ClientCertificateListResponseStatus = "revoked"
+)
+
+type ClientCertificateDeleteResponse struct {
+	// Identifier
+	ID string `json:"id"`
+	// The Client Certificate PEM
+	Certificate string `json:"certificate"`
+	// Certificate Authority used to issue the Client Certificate
+	CertificateAuthority ClientCertificateDeleteResponseCertificateAuthority `json:"certificate_authority"`
+	// Common Name of the Client Certificate
+	CommonName string `json:"common_name"`
+	// Country, provided by the CSR
+	Country string `json:"country"`
+	// The Certificate Signing Request (CSR). Must be newline-encoded.
+	Csr string `json:"csr"`
+	// Date that the Client Certificate expires
+	ExpiresOn string `json:"expires_on"`
+	// Unique identifier of the Client Certificate
+	FingerprintSha256 string `json:"fingerprint_sha256"`
+	// Date that the Client Certificate was issued by the Certificate Authority
+	IssuedOn string `json:"issued_on"`
+	// Location, provided by the CSR
+	Location string `json:"location"`
+	// Organization, provided by the CSR
+	Organization string `json:"organization"`
+	// Organizational Unit, provided by the CSR
+	OrganizationalUnit string `json:"organizational_unit"`
+	// The serial number on the created Client Certificate.
+	SerialNumber string `json:"serial_number"`
+	// The type of hash used for the Client Certificate..
+	Signature string `json:"signature"`
+	// Subject Key Identifier
+	Ski string `json:"ski"`
+	// State, provided by the CSR
+	State string `json:"state"`
+	// Client Certificates may be active or revoked, and the pending_reactivation or
+	// pending_revocation represent in-progress asynchronous transitions
+	Status ClientCertificateDeleteResponseStatus `json:"status"`
+	// The number of days the Client Certificate will be valid after the issued_on date
+	ValidityDays int64                               `json:"validity_days"`
+	JSON         clientCertificateDeleteResponseJSON `json:"-"`
+}
+
+// clientCertificateDeleteResponseJSON contains the JSON metadata for the struct
+// [ClientCertificateDeleteResponse]
+type clientCertificateDeleteResponseJSON struct {
+	ID                   apijson.Field
+	Certificate          apijson.Field
+	CertificateAuthority apijson.Field
+	CommonName           apijson.Field
+	Country              apijson.Field
+	Csr                  apijson.Field
+	ExpiresOn            apijson.Field
+	FingerprintSha256    apijson.Field
+	IssuedOn             apijson.Field
+	Location             apijson.Field
+	Organization         apijson.Field
+	OrganizationalUnit   apijson.Field
+	SerialNumber         apijson.Field
+	Signature            apijson.Field
+	Ski                  apijson.Field
+	State                apijson.Field
+	Status               apijson.Field
+	ValidityDays         apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *ClientCertificateDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Certificate Authority used to issue the Client Certificate
+type ClientCertificateDeleteResponseCertificateAuthority struct {
+	ID   string                                                  `json:"id"`
+	Name string                                                  `json:"name"`
+	JSON clientCertificateDeleteResponseCertificateAuthorityJSON `json:"-"`
+}
+
+// clientCertificateDeleteResponseCertificateAuthorityJSON contains the JSON
+// metadata for the struct [ClientCertificateDeleteResponseCertificateAuthority]
+type clientCertificateDeleteResponseCertificateAuthorityJSON struct {
+	ID          apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ClientCertificateDeleteResponseCertificateAuthority) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Client Certificates may be active or revoked, and the pending_reactivation or
+// pending_revocation represent in-progress asynchronous transitions
+type ClientCertificateDeleteResponseStatus string
+
+const (
+	ClientCertificateDeleteResponseStatusActive              ClientCertificateDeleteResponseStatus = "active"
+	ClientCertificateDeleteResponseStatusPendingReactivation ClientCertificateDeleteResponseStatus = "pending_reactivation"
+	ClientCertificateDeleteResponseStatusPendingRevocation   ClientCertificateDeleteResponseStatus = "pending_revocation"
+	ClientCertificateDeleteResponseStatusRevoked             ClientCertificateDeleteResponseStatus = "revoked"
+)
+
+type ClientCertificateEditResponse struct {
+	// Identifier
+	ID string `json:"id"`
+	// The Client Certificate PEM
+	Certificate string `json:"certificate"`
+	// Certificate Authority used to issue the Client Certificate
+	CertificateAuthority ClientCertificateEditResponseCertificateAuthority `json:"certificate_authority"`
+	// Common Name of the Client Certificate
+	CommonName string `json:"common_name"`
+	// Country, provided by the CSR
+	Country string `json:"country"`
+	// The Certificate Signing Request (CSR). Must be newline-encoded.
+	Csr string `json:"csr"`
+	// Date that the Client Certificate expires
+	ExpiresOn string `json:"expires_on"`
+	// Unique identifier of the Client Certificate
+	FingerprintSha256 string `json:"fingerprint_sha256"`
+	// Date that the Client Certificate was issued by the Certificate Authority
+	IssuedOn string `json:"issued_on"`
+	// Location, provided by the CSR
+	Location string `json:"location"`
+	// Organization, provided by the CSR
+	Organization string `json:"organization"`
+	// Organizational Unit, provided by the CSR
+	OrganizationalUnit string `json:"organizational_unit"`
+	// The serial number on the created Client Certificate.
+	SerialNumber string `json:"serial_number"`
+	// The type of hash used for the Client Certificate..
+	Signature string `json:"signature"`
+	// Subject Key Identifier
+	Ski string `json:"ski"`
+	// State, provided by the CSR
+	State string `json:"state"`
+	// Client Certificates may be active or revoked, and the pending_reactivation or
+	// pending_revocation represent in-progress asynchronous transitions
+	Status ClientCertificateEditResponseStatus `json:"status"`
+	// The number of days the Client Certificate will be valid after the issued_on date
+	ValidityDays int64                             `json:"validity_days"`
+	JSON         clientCertificateEditResponseJSON `json:"-"`
+}
+
+// clientCertificateEditResponseJSON contains the JSON metadata for the struct
+// [ClientCertificateEditResponse]
+type clientCertificateEditResponseJSON struct {
+	ID                   apijson.Field
+	Certificate          apijson.Field
+	CertificateAuthority apijson.Field
+	CommonName           apijson.Field
+	Country              apijson.Field
+	Csr                  apijson.Field
+	ExpiresOn            apijson.Field
+	FingerprintSha256    apijson.Field
+	IssuedOn             apijson.Field
+	Location             apijson.Field
+	Organization         apijson.Field
+	OrganizationalUnit   apijson.Field
+	SerialNumber         apijson.Field
+	Signature            apijson.Field
+	Ski                  apijson.Field
+	State                apijson.Field
+	Status               apijson.Field
+	ValidityDays         apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *ClientCertificateEditResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Certificate Authority used to issue the Client Certificate
+type ClientCertificateEditResponseCertificateAuthority struct {
+	ID   string                                                `json:"id"`
+	Name string                                                `json:"name"`
+	JSON clientCertificateEditResponseCertificateAuthorityJSON `json:"-"`
+}
+
+// clientCertificateEditResponseCertificateAuthorityJSON contains the JSON metadata
+// for the struct [ClientCertificateEditResponseCertificateAuthority]
+type clientCertificateEditResponseCertificateAuthorityJSON struct {
+	ID          apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ClientCertificateEditResponseCertificateAuthority) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Client Certificates may be active or revoked, and the pending_reactivation or
+// pending_revocation represent in-progress asynchronous transitions
+type ClientCertificateEditResponseStatus string
+
+const (
+	ClientCertificateEditResponseStatusActive              ClientCertificateEditResponseStatus = "active"
+	ClientCertificateEditResponseStatusPendingReactivation ClientCertificateEditResponseStatus = "pending_reactivation"
+	ClientCertificateEditResponseStatusPendingRevocation   ClientCertificateEditResponseStatus = "pending_revocation"
+	ClientCertificateEditResponseStatusRevoked             ClientCertificateEditResponseStatus = "revoked"
+)
+
+type ClientCertificateGetResponse struct {
+	// Identifier
+	ID string `json:"id"`
+	// The Client Certificate PEM
+	Certificate string `json:"certificate"`
+	// Certificate Authority used to issue the Client Certificate
+	CertificateAuthority ClientCertificateGetResponseCertificateAuthority `json:"certificate_authority"`
+	// Common Name of the Client Certificate
+	CommonName string `json:"common_name"`
+	// Country, provided by the CSR
+	Country string `json:"country"`
+	// The Certificate Signing Request (CSR). Must be newline-encoded.
+	Csr string `json:"csr"`
+	// Date that the Client Certificate expires
+	ExpiresOn string `json:"expires_on"`
+	// Unique identifier of the Client Certificate
+	FingerprintSha256 string `json:"fingerprint_sha256"`
+	// Date that the Client Certificate was issued by the Certificate Authority
+	IssuedOn string `json:"issued_on"`
+	// Location, provided by the CSR
+	Location string `json:"location"`
+	// Organization, provided by the CSR
+	Organization string `json:"organization"`
+	// Organizational Unit, provided by the CSR
+	OrganizationalUnit string `json:"organizational_unit"`
+	// The serial number on the created Client Certificate.
+	SerialNumber string `json:"serial_number"`
+	// The type of hash used for the Client Certificate..
+	Signature string `json:"signature"`
+	// Subject Key Identifier
+	Ski string `json:"ski"`
+	// State, provided by the CSR
+	State string `json:"state"`
+	// Client Certificates may be active or revoked, and the pending_reactivation or
+	// pending_revocation represent in-progress asynchronous transitions
+	Status ClientCertificateGetResponseStatus `json:"status"`
+	// The number of days the Client Certificate will be valid after the issued_on date
+	ValidityDays int64                            `json:"validity_days"`
+	JSON         clientCertificateGetResponseJSON `json:"-"`
+}
+
+// clientCertificateGetResponseJSON contains the JSON metadata for the struct
+// [ClientCertificateGetResponse]
+type clientCertificateGetResponseJSON struct {
+	ID                   apijson.Field
+	Certificate          apijson.Field
+	CertificateAuthority apijson.Field
+	CommonName           apijson.Field
+	Country              apijson.Field
+	Csr                  apijson.Field
+	ExpiresOn            apijson.Field
+	FingerprintSha256    apijson.Field
+	IssuedOn             apijson.Field
+	Location             apijson.Field
+	Organization         apijson.Field
+	OrganizationalUnit   apijson.Field
+	SerialNumber         apijson.Field
+	Signature            apijson.Field
+	Ski                  apijson.Field
+	State                apijson.Field
+	Status               apijson.Field
+	ValidityDays         apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *ClientCertificateGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Certificate Authority used to issue the Client Certificate
+type ClientCertificateGetResponseCertificateAuthority struct {
+	ID   string                                               `json:"id"`
+	Name string                                               `json:"name"`
+	JSON clientCertificateGetResponseCertificateAuthorityJSON `json:"-"`
+}
+
+// clientCertificateGetResponseCertificateAuthorityJSON contains the JSON metadata
+// for the struct [ClientCertificateGetResponseCertificateAuthority]
+type clientCertificateGetResponseCertificateAuthorityJSON struct {
+	ID          apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ClientCertificateGetResponseCertificateAuthority) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Client Certificates may be active or revoked, and the pending_reactivation or
+// pending_revocation represent in-progress asynchronous transitions
+type ClientCertificateGetResponseStatus string
+
+const (
+	ClientCertificateGetResponseStatusActive              ClientCertificateGetResponseStatus = "active"
+	ClientCertificateGetResponseStatusPendingReactivation ClientCertificateGetResponseStatus = "pending_reactivation"
+	ClientCertificateGetResponseStatusPendingRevocation   ClientCertificateGetResponseStatus = "pending_revocation"
+	ClientCertificateGetResponseStatusRevoked             ClientCertificateGetResponseStatus = "revoked"
 )
 
 type ClientCertificateNewParams struct {
@@ -231,7 +634,7 @@ func (r ClientCertificateNewParams) MarshalJSON() (data []byte, err error) {
 type ClientCertificateNewResponseEnvelope struct {
 	Errors   []ClientCertificateNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ClientCertificateNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   TLSCertificatesAndHostnamesClientCertificate   `json:"result,required"`
+	Result   ClientCertificateNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success ClientCertificateNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    clientCertificateNewResponseEnvelopeJSON    `json:"-"`
@@ -340,7 +743,7 @@ type ClientCertificateDeleteParams struct {
 type ClientCertificateDeleteResponseEnvelope struct {
 	Errors   []ClientCertificateDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ClientCertificateDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   TLSCertificatesAndHostnamesClientCertificate      `json:"result,required"`
+	Result   ClientCertificateDeleteResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success ClientCertificateDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    clientCertificateDeleteResponseEnvelopeJSON    `json:"-"`
@@ -414,7 +817,7 @@ type ClientCertificateEditParams struct {
 type ClientCertificateEditResponseEnvelope struct {
 	Errors   []ClientCertificateEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ClientCertificateEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   TLSCertificatesAndHostnamesClientCertificate    `json:"result,required"`
+	Result   ClientCertificateEditResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success ClientCertificateEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    clientCertificateEditResponseEnvelopeJSON    `json:"-"`
@@ -488,7 +891,7 @@ type ClientCertificateGetParams struct {
 type ClientCertificateGetResponseEnvelope struct {
 	Errors   []ClientCertificateGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ClientCertificateGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   TLSCertificatesAndHostnamesClientCertificate   `json:"result,required"`
+	Result   ClientCertificateGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success ClientCertificateGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    clientCertificateGetResponseEnvelopeJSON    `json:"-"`

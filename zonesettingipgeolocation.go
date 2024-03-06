@@ -35,7 +35,7 @@ func NewZoneSettingIPGeolocationService(opts ...option.RequestOption) (r *ZoneSe
 // Enable IP Geolocation to have Cloudflare geolocate visitors to your website and
 // pass the country code to you.
 // (https://support.cloudflare.com/hc/en-us/articles/200168236).
-func (r *ZoneSettingIPGeolocationService) Edit(ctx context.Context, params ZoneSettingIPGeolocationEditParams, opts ...option.RequestOption) (res *ZonesIPGeolocation, err error) {
+func (r *ZoneSettingIPGeolocationService) Edit(ctx context.Context, params ZoneSettingIPGeolocationEditParams, opts ...option.RequestOption) (res *ZoneSettingIPGeolocationEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingIPGeolocationEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/ip_geolocation", params.ZoneID)
@@ -50,7 +50,7 @@ func (r *ZoneSettingIPGeolocationService) Edit(ctx context.Context, params ZoneS
 // Enable IP Geolocation to have Cloudflare geolocate visitors to your website and
 // pass the country code to you.
 // (https://support.cloudflare.com/hc/en-us/articles/200168236).
-func (r *ZoneSettingIPGeolocationService) Get(ctx context.Context, query ZoneSettingIPGeolocationGetParams, opts ...option.RequestOption) (res *ZonesIPGeolocation, err error) {
+func (r *ZoneSettingIPGeolocationService) Get(ctx context.Context, query ZoneSettingIPGeolocationGetParams, opts ...option.RequestOption) (res *ZoneSettingIPGeolocationGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingIPGeolocationGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/ip_geolocation", query.ZoneID)
@@ -65,22 +65,22 @@ func (r *ZoneSettingIPGeolocationService) Get(ctx context.Context, query ZoneSet
 // Enable IP Geolocation to have Cloudflare geolocate visitors to your website and
 // pass the country code to you.
 // (https://support.cloudflare.com/hc/en-us/articles/200168236).
-type ZonesIPGeolocation struct {
+type ZoneSettingIPGeolocationEditResponse struct {
 	// ID of the zone setting.
-	ID ZonesIPGeolocationID `json:"id,required"`
+	ID ZoneSettingIPGeolocationEditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZonesIPGeolocationValue `json:"value,required"`
+	Value ZoneSettingIPGeolocationEditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZonesIPGeolocationEditable `json:"editable"`
+	Editable ZoneSettingIPGeolocationEditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time              `json:"modified_on,nullable" format:"date-time"`
-	JSON       zonesIPGeolocationJSON `json:"-"`
+	ModifiedOn time.Time                                `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingIPGeolocationEditResponseJSON `json:"-"`
 }
 
-// zonesIPGeolocationJSON contains the JSON metadata for the struct
-// [ZonesIPGeolocation]
-type zonesIPGeolocationJSON struct {
+// zoneSettingIPGeolocationEditResponseJSON contains the JSON metadata for the
+// struct [ZoneSettingIPGeolocationEditResponse]
+type zoneSettingIPGeolocationEditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -89,53 +89,88 @@ type zonesIPGeolocationJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZonesIPGeolocation) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingIPGeolocationEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ZonesIPGeolocation) implementsZoneSettingEditResponse() {}
-
-func (r ZonesIPGeolocation) implementsZoneSettingGetResponse() {}
-
 // ID of the zone setting.
-type ZonesIPGeolocationID string
+type ZoneSettingIPGeolocationEditResponseID string
 
 const (
-	ZonesIPGeolocationIDIPGeolocation ZonesIPGeolocationID = "ip_geolocation"
+	ZoneSettingIPGeolocationEditResponseIDIPGeolocation ZoneSettingIPGeolocationEditResponseID = "ip_geolocation"
 )
 
 // Current value of the zone setting.
-type ZonesIPGeolocationValue string
+type ZoneSettingIPGeolocationEditResponseValue string
 
 const (
-	ZonesIPGeolocationValueOn  ZonesIPGeolocationValue = "on"
-	ZonesIPGeolocationValueOff ZonesIPGeolocationValue = "off"
+	ZoneSettingIPGeolocationEditResponseValueOn  ZoneSettingIPGeolocationEditResponseValue = "on"
+	ZoneSettingIPGeolocationEditResponseValueOff ZoneSettingIPGeolocationEditResponseValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZonesIPGeolocationEditable bool
+type ZoneSettingIPGeolocationEditResponseEditable bool
 
 const (
-	ZonesIPGeolocationEditableTrue  ZonesIPGeolocationEditable = true
-	ZonesIPGeolocationEditableFalse ZonesIPGeolocationEditable = false
+	ZoneSettingIPGeolocationEditResponseEditableTrue  ZoneSettingIPGeolocationEditResponseEditable = true
+	ZoneSettingIPGeolocationEditResponseEditableFalse ZoneSettingIPGeolocationEditResponseEditable = false
 )
 
 // Enable IP Geolocation to have Cloudflare geolocate visitors to your website and
 // pass the country code to you.
 // (https://support.cloudflare.com/hc/en-us/articles/200168236).
-type ZonesIPGeolocationParam struct {
+type ZoneSettingIPGeolocationGetResponse struct {
 	// ID of the zone setting.
-	ID param.Field[ZonesIPGeolocationID] `json:"id,required"`
+	ID ZoneSettingIPGeolocationGetResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value param.Field[ZonesIPGeolocationValue] `json:"value,required"`
+	Value ZoneSettingIPGeolocationGetResponseValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingIPGeolocationGetResponseEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                               `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingIPGeolocationGetResponseJSON `json:"-"`
 }
 
-func (r ZonesIPGeolocationParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+// zoneSettingIPGeolocationGetResponseJSON contains the JSON metadata for the
+// struct [ZoneSettingIPGeolocationGetResponse]
+type zoneSettingIPGeolocationGetResponseJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
-func (r ZonesIPGeolocationParam) implementsZoneSettingEditParamsItem() {}
+func (r *ZoneSettingIPGeolocationGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// ID of the zone setting.
+type ZoneSettingIPGeolocationGetResponseID string
+
+const (
+	ZoneSettingIPGeolocationGetResponseIDIPGeolocation ZoneSettingIPGeolocationGetResponseID = "ip_geolocation"
+)
+
+// Current value of the zone setting.
+type ZoneSettingIPGeolocationGetResponseValue string
+
+const (
+	ZoneSettingIPGeolocationGetResponseValueOn  ZoneSettingIPGeolocationGetResponseValue = "on"
+	ZoneSettingIPGeolocationGetResponseValueOff ZoneSettingIPGeolocationGetResponseValue = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingIPGeolocationGetResponseEditable bool
+
+const (
+	ZoneSettingIPGeolocationGetResponseEditableTrue  ZoneSettingIPGeolocationGetResponseEditable = true
+	ZoneSettingIPGeolocationGetResponseEditableFalse ZoneSettingIPGeolocationGetResponseEditable = false
+)
 
 type ZoneSettingIPGeolocationEditParams struct {
 	// Identifier
@@ -164,7 +199,7 @@ type ZoneSettingIPGeolocationEditResponseEnvelope struct {
 	// Enable IP Geolocation to have Cloudflare geolocate visitors to your website and
 	// pass the country code to you.
 	// (https://support.cloudflare.com/hc/en-us/articles/200168236).
-	Result ZonesIPGeolocation                               `json:"result"`
+	Result ZoneSettingIPGeolocationEditResponse             `json:"result"`
 	JSON   zoneSettingIPGeolocationEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -234,7 +269,7 @@ type ZoneSettingIPGeolocationGetResponseEnvelope struct {
 	// Enable IP Geolocation to have Cloudflare geolocate visitors to your website and
 	// pass the country code to you.
 	// (https://support.cloudflare.com/hc/en-us/articles/200168236).
-	Result ZonesIPGeolocation                              `json:"result"`
+	Result ZoneSettingIPGeolocationGetResponse             `json:"result"`
 	JSON   zoneSettingIPGeolocationGetResponseEnvelopeJSON `json:"-"`
 }
 

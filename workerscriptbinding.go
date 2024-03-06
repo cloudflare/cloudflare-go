@@ -33,7 +33,7 @@ func NewWorkerScriptBindingService(opts ...option.RequestOption) (r *WorkerScrip
 }
 
 // List the bindings for a Workers script.
-func (r *WorkerScriptBindingService) Get(ctx context.Context, query WorkerScriptBindingGetParams, opts ...option.RequestOption) (res *[]WorkersSchemasBinding, err error) {
+func (r *WorkerScriptBindingService) Get(ctx context.Context, query WorkerScriptBindingGetParams, opts ...option.RequestOption) (res *[]WorkerScriptBindingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerScriptBindingGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/workers/script/bindings", query.ZoneID)
@@ -45,29 +45,30 @@ func (r *WorkerScriptBindingService) Get(ctx context.Context, query WorkerScript
 	return
 }
 
-// Union satisfied by [WorkersSchemasBindingWorkersKVNamespaceBinding] or
-// [WorkersSchemasBindingWorkersWasmModuleBinding].
-type WorkersSchemasBinding interface {
-	implementsWorkersSchemasBinding()
+// Union satisfied by [WorkerScriptBindingGetResponseWorkersKVNamespaceBinding] or
+// [WorkerScriptBindingGetResponseWorkersWasmModuleBinding].
+type WorkerScriptBindingGetResponse interface {
+	implementsWorkerScriptBindingGetResponse()
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*WorkersSchemasBinding)(nil)).Elem(), "")
+	apijson.RegisterUnion(reflect.TypeOf((*WorkerScriptBindingGetResponse)(nil)).Elem(), "")
 }
 
-type WorkersSchemasBindingWorkersKVNamespaceBinding struct {
+type WorkerScriptBindingGetResponseWorkersKVNamespaceBinding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// Namespace identifier tag.
 	NamespaceID string `json:"namespace_id,required"`
 	// The class of resource that the binding provides.
-	Type WorkersSchemasBindingWorkersKVNamespaceBindingType `json:"type,required"`
-	JSON workersSchemasBindingWorkersKVNamespaceBindingJSON `json:"-"`
+	Type WorkerScriptBindingGetResponseWorkersKVNamespaceBindingType `json:"type,required"`
+	JSON workerScriptBindingGetResponseWorkersKVNamespaceBindingJSON `json:"-"`
 }
 
-// workersSchemasBindingWorkersKVNamespaceBindingJSON contains the JSON metadata
-// for the struct [WorkersSchemasBindingWorkersKVNamespaceBinding]
-type workersSchemasBindingWorkersKVNamespaceBindingJSON struct {
+// workerScriptBindingGetResponseWorkersKVNamespaceBindingJSON contains the JSON
+// metadata for the struct
+// [WorkerScriptBindingGetResponseWorkersKVNamespaceBinding]
+type workerScriptBindingGetResponseWorkersKVNamespaceBindingJSON struct {
 	Name        apijson.Field
 	NamespaceID apijson.Field
 	Type        apijson.Field
@@ -75,47 +76,49 @@ type workersSchemasBindingWorkersKVNamespaceBindingJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkersSchemasBindingWorkersKVNamespaceBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerScriptBindingGetResponseWorkersKVNamespaceBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r WorkersSchemasBindingWorkersKVNamespaceBinding) implementsWorkersSchemasBinding() {}
+func (r WorkerScriptBindingGetResponseWorkersKVNamespaceBinding) implementsWorkerScriptBindingGetResponse() {
+}
 
 // The class of resource that the binding provides.
-type WorkersSchemasBindingWorkersKVNamespaceBindingType string
+type WorkerScriptBindingGetResponseWorkersKVNamespaceBindingType string
 
 const (
-	WorkersSchemasBindingWorkersKVNamespaceBindingTypeKVNamespace WorkersSchemasBindingWorkersKVNamespaceBindingType = "kv_namespace"
+	WorkerScriptBindingGetResponseWorkersKVNamespaceBindingTypeKVNamespace WorkerScriptBindingGetResponseWorkersKVNamespaceBindingType = "kv_namespace"
 )
 
-type WorkersSchemasBindingWorkersWasmModuleBinding struct {
+type WorkerScriptBindingGetResponseWorkersWasmModuleBinding struct {
 	// A JavaScript variable name for the binding.
 	Name string `json:"name,required"`
 	// The class of resource that the binding provides.
-	Type WorkersSchemasBindingWorkersWasmModuleBindingType `json:"type,required"`
-	JSON workersSchemasBindingWorkersWasmModuleBindingJSON `json:"-"`
+	Type WorkerScriptBindingGetResponseWorkersWasmModuleBindingType `json:"type,required"`
+	JSON workerScriptBindingGetResponseWorkersWasmModuleBindingJSON `json:"-"`
 }
 
-// workersSchemasBindingWorkersWasmModuleBindingJSON contains the JSON metadata for
-// the struct [WorkersSchemasBindingWorkersWasmModuleBinding]
-type workersSchemasBindingWorkersWasmModuleBindingJSON struct {
+// workerScriptBindingGetResponseWorkersWasmModuleBindingJSON contains the JSON
+// metadata for the struct [WorkerScriptBindingGetResponseWorkersWasmModuleBinding]
+type workerScriptBindingGetResponseWorkersWasmModuleBindingJSON struct {
 	Name        apijson.Field
 	Type        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkersSchemasBindingWorkersWasmModuleBinding) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerScriptBindingGetResponseWorkersWasmModuleBinding) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r WorkersSchemasBindingWorkersWasmModuleBinding) implementsWorkersSchemasBinding() {}
+func (r WorkerScriptBindingGetResponseWorkersWasmModuleBinding) implementsWorkerScriptBindingGetResponse() {
+}
 
 // The class of resource that the binding provides.
-type WorkersSchemasBindingWorkersWasmModuleBindingType string
+type WorkerScriptBindingGetResponseWorkersWasmModuleBindingType string
 
 const (
-	WorkersSchemasBindingWorkersWasmModuleBindingTypeWasmModule WorkersSchemasBindingWorkersWasmModuleBindingType = "wasm_module"
+	WorkerScriptBindingGetResponseWorkersWasmModuleBindingTypeWasmModule WorkerScriptBindingGetResponseWorkersWasmModuleBindingType = "wasm_module"
 )
 
 type WorkerScriptBindingGetParams struct {
@@ -126,7 +129,7 @@ type WorkerScriptBindingGetParams struct {
 type WorkerScriptBindingGetResponseEnvelope struct {
 	Errors   []WorkerScriptBindingGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []WorkerScriptBindingGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []WorkersSchemasBinding                          `json:"result,required"`
+	Result   []WorkerScriptBindingGetResponse                 `json:"result,required"`
 	// Whether the API call was successful
 	Success WorkerScriptBindingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    workerScriptBindingGetResponseEnvelopeJSON    `json:"-"`

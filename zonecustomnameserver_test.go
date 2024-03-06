@@ -30,7 +30,7 @@ func TestZoneCustomNameserverUpdateWithOptionalParams(t *testing.T) {
 	_, err := client.Zones.CustomNameservers.Update(context.TODO(), cloudflare.ZoneCustomNameserverUpdateParams{
 		ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Enabled: cloudflare.F(true),
-		NsSet:   cloudflare.F(1.000000),
+		NSSet:   cloudflare.F(1.000000),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

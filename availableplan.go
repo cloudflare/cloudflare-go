@@ -31,7 +31,7 @@ func NewAvailablePlanService(opts ...option.RequestOption) (r *AvailablePlanServ
 }
 
 // Lists available plans the zone can subscribe to.
-func (r *AvailablePlanService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *[]BillSubsAPIAvailableRatePlan, err error) {
+func (r *AvailablePlanService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *[]AvailablePlanListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AvailablePlanListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/available_plans", zoneIdentifier)
@@ -44,7 +44,7 @@ func (r *AvailablePlanService) List(ctx context.Context, zoneIdentifier string, 
 }
 
 // Details of the available plan that the zone can subscribe to.
-func (r *AvailablePlanService) Get(ctx context.Context, zoneIdentifier string, planIdentifier string, opts ...option.RequestOption) (res *BillSubsAPIAvailableRatePlan, err error) {
+func (r *AvailablePlanService) Get(ctx context.Context, zoneIdentifier string, planIdentifier string, opts ...option.RequestOption) (res *AvailablePlanGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AvailablePlanGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/available_plans/%s", zoneIdentifier, planIdentifier)
@@ -56,7 +56,7 @@ func (r *AvailablePlanService) Get(ctx context.Context, zoneIdentifier string, p
 	return
 }
 
-type BillSubsAPIAvailableRatePlan struct {
+type AvailablePlanListResponse struct {
 	// Identifier
 	ID string `json:"id"`
 	// Indicates whether you can subscribe to this plan.
@@ -66,7 +66,7 @@ type BillSubsAPIAvailableRatePlan struct {
 	// Indicates whether this plan is managed externally.
 	ExternallyManaged bool `json:"externally_managed"`
 	// The frequency at which you will be billed for this plan.
-	Frequency BillSubsAPIAvailableRatePlanFrequency `json:"frequency"`
+	Frequency AvailablePlanListResponseFrequency `json:"frequency"`
 	// Indicates whether you are currently subscribed to this plan.
 	IsSubscribed bool `json:"is_subscribed"`
 	// Indicates whether this plan has a legacy discount applied.
@@ -76,13 +76,13 @@ type BillSubsAPIAvailableRatePlan struct {
 	// The plan name.
 	Name string `json:"name"`
 	// The amount you will be billed for this plan.
-	Price float64                          `json:"price"`
-	JSON  billSubsAPIAvailableRatePlanJSON `json:"-"`
+	Price float64                       `json:"price"`
+	JSON  availablePlanListResponseJSON `json:"-"`
 }
 
-// billSubsAPIAvailableRatePlanJSON contains the JSON metadata for the struct
-// [BillSubsAPIAvailableRatePlan]
-type billSubsAPIAvailableRatePlanJSON struct {
+// availablePlanListResponseJSON contains the JSON metadata for the struct
+// [AvailablePlanListResponse]
+type availablePlanListResponseJSON struct {
 	ID                apijson.Field
 	CanSubscribe      apijson.Field
 	Currency          apijson.Field
@@ -97,24 +97,79 @@ type billSubsAPIAvailableRatePlanJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *BillSubsAPIAvailableRatePlan) UnmarshalJSON(data []byte) (err error) {
+func (r *AvailablePlanListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The frequency at which you will be billed for this plan.
-type BillSubsAPIAvailableRatePlanFrequency string
+type AvailablePlanListResponseFrequency string
 
 const (
-	BillSubsAPIAvailableRatePlanFrequencyWeekly    BillSubsAPIAvailableRatePlanFrequency = "weekly"
-	BillSubsAPIAvailableRatePlanFrequencyMonthly   BillSubsAPIAvailableRatePlanFrequency = "monthly"
-	BillSubsAPIAvailableRatePlanFrequencyQuarterly BillSubsAPIAvailableRatePlanFrequency = "quarterly"
-	BillSubsAPIAvailableRatePlanFrequencyYearly    BillSubsAPIAvailableRatePlanFrequency = "yearly"
+	AvailablePlanListResponseFrequencyWeekly    AvailablePlanListResponseFrequency = "weekly"
+	AvailablePlanListResponseFrequencyMonthly   AvailablePlanListResponseFrequency = "monthly"
+	AvailablePlanListResponseFrequencyQuarterly AvailablePlanListResponseFrequency = "quarterly"
+	AvailablePlanListResponseFrequencyYearly    AvailablePlanListResponseFrequency = "yearly"
+)
+
+type AvailablePlanGetResponse struct {
+	// Identifier
+	ID string `json:"id"`
+	// Indicates whether you can subscribe to this plan.
+	CanSubscribe bool `json:"can_subscribe"`
+	// The monetary unit in which pricing information is displayed.
+	Currency string `json:"currency"`
+	// Indicates whether this plan is managed externally.
+	ExternallyManaged bool `json:"externally_managed"`
+	// The frequency at which you will be billed for this plan.
+	Frequency AvailablePlanGetResponseFrequency `json:"frequency"`
+	// Indicates whether you are currently subscribed to this plan.
+	IsSubscribed bool `json:"is_subscribed"`
+	// Indicates whether this plan has a legacy discount applied.
+	LegacyDiscount bool `json:"legacy_discount"`
+	// The legacy identifier for this rate plan, if any.
+	LegacyID string `json:"legacy_id"`
+	// The plan name.
+	Name string `json:"name"`
+	// The amount you will be billed for this plan.
+	Price float64                      `json:"price"`
+	JSON  availablePlanGetResponseJSON `json:"-"`
+}
+
+// availablePlanGetResponseJSON contains the JSON metadata for the struct
+// [AvailablePlanGetResponse]
+type availablePlanGetResponseJSON struct {
+	ID                apijson.Field
+	CanSubscribe      apijson.Field
+	Currency          apijson.Field
+	ExternallyManaged apijson.Field
+	Frequency         apijson.Field
+	IsSubscribed      apijson.Field
+	LegacyDiscount    apijson.Field
+	LegacyID          apijson.Field
+	Name              apijson.Field
+	Price             apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *AvailablePlanGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The frequency at which you will be billed for this plan.
+type AvailablePlanGetResponseFrequency string
+
+const (
+	AvailablePlanGetResponseFrequencyWeekly    AvailablePlanGetResponseFrequency = "weekly"
+	AvailablePlanGetResponseFrequencyMonthly   AvailablePlanGetResponseFrequency = "monthly"
+	AvailablePlanGetResponseFrequencyQuarterly AvailablePlanGetResponseFrequency = "quarterly"
+	AvailablePlanGetResponseFrequencyYearly    AvailablePlanGetResponseFrequency = "yearly"
 )
 
 type AvailablePlanListResponseEnvelope struct {
 	Errors   []AvailablePlanListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AvailablePlanListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []BillSubsAPIAvailableRatePlan              `json:"result,required,nullable"`
+	Result   []AvailablePlanListResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AvailablePlanListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AvailablePlanListResponseEnvelopeResultInfo `json:"result_info"`
@@ -212,7 +267,7 @@ func (r *AvailablePlanListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte)
 type AvailablePlanGetResponseEnvelope struct {
 	Errors   []AvailablePlanGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AvailablePlanGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   BillSubsAPIAvailableRatePlan               `json:"result,required"`
+	Result   AvailablePlanGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success AvailablePlanGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    availablePlanGetResponseEnvelopeJSON    `json:"-"`

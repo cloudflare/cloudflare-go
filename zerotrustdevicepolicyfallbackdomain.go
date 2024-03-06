@@ -35,7 +35,7 @@ func NewZeroTrustDevicePolicyFallbackDomainService(opts ...option.RequestOption)
 // Sets the list of domains to bypass Gateway DNS resolution. These domains will
 // use the specified local DNS resolver instead. This will only apply to the
 // specified device settings profile.
-func (r *ZeroTrustDevicePolicyFallbackDomainService) Update(ctx context.Context, policyID string, params ZeroTrustDevicePolicyFallbackDomainUpdateParams, opts ...option.RequestOption) (res *[]TeamsDevicesFallbackDomain, err error) {
+func (r *ZeroTrustDevicePolicyFallbackDomainService) Update(ctx context.Context, policyID string, params ZeroTrustDevicePolicyFallbackDomainUpdateParams, opts ...option.RequestOption) (res *[]ZeroTrustDevicePolicyFallbackDomainUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustDevicePolicyFallbackDomainUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/policy/%s/fallback_domains", params.AccountID, policyID)
@@ -49,7 +49,7 @@ func (r *ZeroTrustDevicePolicyFallbackDomainService) Update(ctx context.Context,
 
 // Fetches a list of domains to bypass Gateway DNS resolution. These domains will
 // use the specified local DNS resolver instead.
-func (r *ZeroTrustDevicePolicyFallbackDomainService) List(ctx context.Context, query ZeroTrustDevicePolicyFallbackDomainListParams, opts ...option.RequestOption) (res *[]TeamsDevicesFallbackDomain, err error) {
+func (r *ZeroTrustDevicePolicyFallbackDomainService) List(ctx context.Context, query ZeroTrustDevicePolicyFallbackDomainListParams, opts ...option.RequestOption) (res *[]ZeroTrustDevicePolicyFallbackDomainListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustDevicePolicyFallbackDomainListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/policy/fallback_domains", query.AccountID)
@@ -64,7 +64,7 @@ func (r *ZeroTrustDevicePolicyFallbackDomainService) List(ctx context.Context, q
 // Fetches the list of domains to bypass Gateway DNS resolution from a specified
 // device settings profile. These domains will use the specified local DNS resolver
 // instead.
-func (r *ZeroTrustDevicePolicyFallbackDomainService) Get(ctx context.Context, policyID string, query ZeroTrustDevicePolicyFallbackDomainGetParams, opts ...option.RequestOption) (res *[]TeamsDevicesFallbackDomain, err error) {
+func (r *ZeroTrustDevicePolicyFallbackDomainService) Get(ctx context.Context, policyID string, query ZeroTrustDevicePolicyFallbackDomainGetParams, opts ...option.RequestOption) (res *[]ZeroTrustDevicePolicyFallbackDomainGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustDevicePolicyFallbackDomainGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/policy/%s/fallback_domains", query.AccountID, policyID)
@@ -76,19 +76,19 @@ func (r *ZeroTrustDevicePolicyFallbackDomainService) Get(ctx context.Context, po
 	return
 }
 
-type TeamsDevicesFallbackDomain struct {
+type ZeroTrustDevicePolicyFallbackDomainUpdateResponse struct {
 	// The domain suffix to match when resolving locally.
 	Suffix string `json:"suffix,required"`
 	// A description of the fallback domain, displayed in the client UI.
 	Description string `json:"description"`
 	// A list of IP addresses to handle domain resolution.
-	DNSServer []interface{}                  `json:"dns_server"`
-	JSON      teamsDevicesFallbackDomainJSON `json:"-"`
+	DNSServer []interface{}                                         `json:"dns_server"`
+	JSON      zeroTrustDevicePolicyFallbackDomainUpdateResponseJSON `json:"-"`
 }
 
-// teamsDevicesFallbackDomainJSON contains the JSON metadata for the struct
-// [TeamsDevicesFallbackDomain]
-type teamsDevicesFallbackDomainJSON struct {
+// zeroTrustDevicePolicyFallbackDomainUpdateResponseJSON contains the JSON metadata
+// for the struct [ZeroTrustDevicePolicyFallbackDomainUpdateResponse]
+type zeroTrustDevicePolicyFallbackDomainUpdateResponseJSON struct {
 	Suffix      apijson.Field
 	Description apijson.Field
 	DNSServer   apijson.Field
@@ -96,11 +96,68 @@ type teamsDevicesFallbackDomainJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TeamsDevicesFallbackDomain) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustDevicePolicyFallbackDomainUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type TeamsDevicesFallbackDomainParam struct {
+type ZeroTrustDevicePolicyFallbackDomainListResponse struct {
+	// The domain suffix to match when resolving locally.
+	Suffix string `json:"suffix,required"`
+	// A description of the fallback domain, displayed in the client UI.
+	Description string `json:"description"`
+	// A list of IP addresses to handle domain resolution.
+	DNSServer []interface{}                                       `json:"dns_server"`
+	JSON      zeroTrustDevicePolicyFallbackDomainListResponseJSON `json:"-"`
+}
+
+// zeroTrustDevicePolicyFallbackDomainListResponseJSON contains the JSON metadata
+// for the struct [ZeroTrustDevicePolicyFallbackDomainListResponse]
+type zeroTrustDevicePolicyFallbackDomainListResponseJSON struct {
+	Suffix      apijson.Field
+	Description apijson.Field
+	DNSServer   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZeroTrustDevicePolicyFallbackDomainListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZeroTrustDevicePolicyFallbackDomainGetResponse struct {
+	// The domain suffix to match when resolving locally.
+	Suffix string `json:"suffix,required"`
+	// A description of the fallback domain, displayed in the client UI.
+	Description string `json:"description"`
+	// A list of IP addresses to handle domain resolution.
+	DNSServer []interface{}                                      `json:"dns_server"`
+	JSON      zeroTrustDevicePolicyFallbackDomainGetResponseJSON `json:"-"`
+}
+
+// zeroTrustDevicePolicyFallbackDomainGetResponseJSON contains the JSON metadata
+// for the struct [ZeroTrustDevicePolicyFallbackDomainGetResponse]
+type zeroTrustDevicePolicyFallbackDomainGetResponseJSON struct {
+	Suffix      apijson.Field
+	Description apijson.Field
+	DNSServer   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZeroTrustDevicePolicyFallbackDomainGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZeroTrustDevicePolicyFallbackDomainUpdateParams struct {
+	AccountID param.Field[interface{}]                                           `path:"account_id,required"`
+	Body      param.Field[[]ZeroTrustDevicePolicyFallbackDomainUpdateParamsBody] `json:"body,required"`
+}
+
+func (r ZeroTrustDevicePolicyFallbackDomainUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type ZeroTrustDevicePolicyFallbackDomainUpdateParamsBody struct {
 	// The domain suffix to match when resolving locally.
 	Suffix param.Field[string] `json:"suffix,required"`
 	// A description of the fallback domain, displayed in the client UI.
@@ -109,23 +166,14 @@ type TeamsDevicesFallbackDomainParam struct {
 	DNSServer param.Field[[]interface{}] `json:"dns_server"`
 }
 
-func (r TeamsDevicesFallbackDomainParam) MarshalJSON() (data []byte, err error) {
+func (r ZeroTrustDevicePolicyFallbackDomainUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type ZeroTrustDevicePolicyFallbackDomainUpdateParams struct {
-	AccountID param.Field[interface{}]                       `path:"account_id,required"`
-	Body      param.Field[[]TeamsDevicesFallbackDomainParam] `json:"body,required"`
-}
-
-func (r ZeroTrustDevicePolicyFallbackDomainUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type ZeroTrustDevicePolicyFallbackDomainUpdateResponseEnvelope struct {
 	Errors   []ZeroTrustDevicePolicyFallbackDomainUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustDevicePolicyFallbackDomainUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   []TeamsDevicesFallbackDomain                                        `json:"result,required,nullable"`
+	Result   []ZeroTrustDevicePolicyFallbackDomainUpdateResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    ZeroTrustDevicePolicyFallbackDomainUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ZeroTrustDevicePolicyFallbackDomainUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -231,7 +279,7 @@ type ZeroTrustDevicePolicyFallbackDomainListParams struct {
 type ZeroTrustDevicePolicyFallbackDomainListResponseEnvelope struct {
 	Errors   []ZeroTrustDevicePolicyFallbackDomainListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustDevicePolicyFallbackDomainListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []TeamsDevicesFallbackDomain                                      `json:"result,required,nullable"`
+	Result   []ZeroTrustDevicePolicyFallbackDomainListResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    ZeroTrustDevicePolicyFallbackDomainListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ZeroTrustDevicePolicyFallbackDomainListResponseEnvelopeResultInfo `json:"result_info"`
@@ -337,7 +385,7 @@ type ZeroTrustDevicePolicyFallbackDomainGetParams struct {
 type ZeroTrustDevicePolicyFallbackDomainGetResponseEnvelope struct {
 	Errors   []ZeroTrustDevicePolicyFallbackDomainGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustDevicePolicyFallbackDomainGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []TeamsDevicesFallbackDomain                                     `json:"result,required,nullable"`
+	Result   []ZeroTrustDevicePolicyFallbackDomainGetResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    ZeroTrustDevicePolicyFallbackDomainGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ZeroTrustDevicePolicyFallbackDomainGetResponseEnvelopeResultInfo `json:"result_info"`

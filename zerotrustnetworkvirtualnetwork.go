@@ -50,7 +50,7 @@ func (r *ZeroTrustNetworkVirtualNetworkService) New(ctx context.Context, params 
 }
 
 // Lists and filters virtual networks in an account.
-func (r *ZeroTrustNetworkVirtualNetworkService) List(ctx context.Context, params ZeroTrustNetworkVirtualNetworkListParams, opts ...option.RequestOption) (res *[]TunnelVirtualNetwork, err error) {
+func (r *ZeroTrustNetworkVirtualNetworkService) List(ctx context.Context, params ZeroTrustNetworkVirtualNetworkListParams, opts ...option.RequestOption) (res *[]ZeroTrustNetworkVirtualNetworkListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustNetworkVirtualNetworkListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/teamnet/virtual_networks", params.AccountID)
@@ -88,40 +88,6 @@ func (r *ZeroTrustNetworkVirtualNetworkService) Edit(ctx context.Context, virtua
 	return
 }
 
-type TunnelVirtualNetwork struct {
-	// UUID of the virtual network.
-	ID string `json:"id,required"`
-	// Optional remark describing the virtual network.
-	Comment string `json:"comment,required"`
-	// Timestamp of when the virtual network was created.
-	CreatedAt interface{} `json:"created_at,required"`
-	// If `true`, this virtual network is the default for the account.
-	IsDefaultNetwork bool `json:"is_default_network,required"`
-	// A user-friendly name for the virtual network.
-	Name string `json:"name,required"`
-	// Timestamp of when the virtual network was deleted. If `null`, the virtual
-	// network has not been deleted.
-	DeletedAt interface{}              `json:"deleted_at"`
-	JSON      tunnelVirtualNetworkJSON `json:"-"`
-}
-
-// tunnelVirtualNetworkJSON contains the JSON metadata for the struct
-// [TunnelVirtualNetwork]
-type tunnelVirtualNetworkJSON struct {
-	ID               apijson.Field
-	Comment          apijson.Field
-	CreatedAt        apijson.Field
-	IsDefaultNetwork apijson.Field
-	Name             apijson.Field
-	DeletedAt        apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *TunnelVirtualNetwork) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 // Union satisfied by [ZeroTrustNetworkVirtualNetworkNewResponseUnknown],
 // [ZeroTrustNetworkVirtualNetworkNewResponseArray] or [shared.UnionString].
 type ZeroTrustNetworkVirtualNetworkNewResponse interface {
@@ -142,6 +108,40 @@ func init() {
 type ZeroTrustNetworkVirtualNetworkNewResponseArray []interface{}
 
 func (r ZeroTrustNetworkVirtualNetworkNewResponseArray) ImplementsZeroTrustNetworkVirtualNetworkNewResponse() {
+}
+
+type ZeroTrustNetworkVirtualNetworkListResponse struct {
+	// UUID of the virtual network.
+	ID string `json:"id,required"`
+	// Optional remark describing the virtual network.
+	Comment string `json:"comment,required"`
+	// Timestamp of when the virtual network was created.
+	CreatedAt interface{} `json:"created_at,required"`
+	// If `true`, this virtual network is the default for the account.
+	IsDefaultNetwork bool `json:"is_default_network,required"`
+	// A user-friendly name for the virtual network.
+	Name string `json:"name,required"`
+	// Timestamp of when the virtual network was deleted. If `null`, the virtual
+	// network has not been deleted.
+	DeletedAt interface{}                                    `json:"deleted_at"`
+	JSON      zeroTrustNetworkVirtualNetworkListResponseJSON `json:"-"`
+}
+
+// zeroTrustNetworkVirtualNetworkListResponseJSON contains the JSON metadata for
+// the struct [ZeroTrustNetworkVirtualNetworkListResponse]
+type zeroTrustNetworkVirtualNetworkListResponseJSON struct {
+	ID               apijson.Field
+	Comment          apijson.Field
+	CreatedAt        apijson.Field
+	IsDefaultNetwork apijson.Field
+	Name             apijson.Field
+	DeletedAt        apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *ZeroTrustNetworkVirtualNetworkListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 // Union satisfied by [ZeroTrustNetworkVirtualNetworkDeleteResponseUnknown],
@@ -301,7 +301,7 @@ func (r ZeroTrustNetworkVirtualNetworkListParams) URLQuery() (v url.Values) {
 type ZeroTrustNetworkVirtualNetworkListResponseEnvelope struct {
 	Errors   []ZeroTrustNetworkVirtualNetworkListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustNetworkVirtualNetworkListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []TunnelVirtualNetwork                                       `json:"result,required,nullable"`
+	Result   []ZeroTrustNetworkVirtualNetworkListResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    ZeroTrustNetworkVirtualNetworkListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ZeroTrustNetworkVirtualNetworkListResponseEnvelopeResultInfo `json:"result_info"`

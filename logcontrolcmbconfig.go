@@ -35,7 +35,7 @@ func NewLogControlCmbConfigService(opts ...option.RequestOption) (r *LogControlC
 }
 
 // Updates CMB config.
-func (r *LogControlCmbConfigService) New(ctx context.Context, params LogControlCmbConfigNewParams, opts ...option.RequestOption) (res *LogcontrolCmbConfig, err error) {
+func (r *LogControlCmbConfigService) New(ctx context.Context, params LogControlCmbConfigNewParams, opts ...option.RequestOption) (res *LogControlCmbConfigNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LogControlCmbConfigNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/logs/control/cmb/config", params.AccountID)
@@ -61,7 +61,7 @@ func (r *LogControlCmbConfigService) Delete(ctx context.Context, body LogControl
 }
 
 // Gets CMB config.
-func (r *LogControlCmbConfigService) Get(ctx context.Context, query LogControlCmbConfigGetParams, opts ...option.RequestOption) (res *LogcontrolCmbConfig, err error) {
+func (r *LogControlCmbConfigService) Get(ctx context.Context, query LogControlCmbConfigGetParams, opts ...option.RequestOption) (res *LogControlCmbConfigGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LogControlCmbConfigGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/logs/control/cmb/config", query.AccountID)
@@ -73,21 +73,21 @@ func (r *LogControlCmbConfigService) Get(ctx context.Context, query LogControlCm
 	return
 }
 
-type LogcontrolCmbConfig struct {
+type LogControlCmbConfigNewResponse struct {
 	// Comma-separated list of regions.
-	Regions string                  `json:"regions"`
-	JSON    logcontrolCmbConfigJSON `json:"-"`
+	Regions string                             `json:"regions"`
+	JSON    logControlCmbConfigNewResponseJSON `json:"-"`
 }
 
-// logcontrolCmbConfigJSON contains the JSON metadata for the struct
-// [LogcontrolCmbConfig]
-type logcontrolCmbConfigJSON struct {
+// logControlCmbConfigNewResponseJSON contains the JSON metadata for the struct
+// [LogControlCmbConfigNewResponse]
+type logControlCmbConfigNewResponseJSON struct {
 	Regions     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LogcontrolCmbConfig) UnmarshalJSON(data []byte) (err error) {
+func (r *LogControlCmbConfigNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -112,6 +112,24 @@ type LogControlCmbConfigDeleteResponseArray []interface{}
 
 func (r LogControlCmbConfigDeleteResponseArray) ImplementsLogControlCmbConfigDeleteResponse() {}
 
+type LogControlCmbConfigGetResponse struct {
+	// Comma-separated list of regions.
+	Regions string                             `json:"regions"`
+	JSON    logControlCmbConfigGetResponseJSON `json:"-"`
+}
+
+// logControlCmbConfigGetResponseJSON contains the JSON metadata for the struct
+// [LogControlCmbConfigGetResponse]
+type logControlCmbConfigGetResponseJSON struct {
+	Regions     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *LogControlCmbConfigGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type LogControlCmbConfigNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -126,7 +144,7 @@ func (r LogControlCmbConfigNewParams) MarshalJSON() (data []byte, err error) {
 type LogControlCmbConfigNewResponseEnvelope struct {
 	Errors   []LogControlCmbConfigNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []LogControlCmbConfigNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   LogcontrolCmbConfig                              `json:"result,required,nullable"`
+	Result   LogControlCmbConfigNewResponse                   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success LogControlCmbConfigNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    logControlCmbConfigNewResponseEnvelopeJSON    `json:"-"`
@@ -274,7 +292,7 @@ type LogControlCmbConfigGetParams struct {
 type LogControlCmbConfigGetResponseEnvelope struct {
 	Errors   []LogControlCmbConfigGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []LogControlCmbConfigGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   LogcontrolCmbConfig                              `json:"result,required,nullable"`
+	Result   LogControlCmbConfigGetResponse                   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success LogControlCmbConfigGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    logControlCmbConfigGetResponseEnvelopeJSON    `json:"-"`

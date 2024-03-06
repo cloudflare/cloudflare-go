@@ -100,7 +100,7 @@ func TestFirewallLockdownListWithOptionalParams(t *testing.T) {
 			Page:              cloudflare.F(1.000000),
 			PerPage:           cloudflare.F(1.000000),
 			Priority:          cloudflare.F(5.000000),
-			UriSearch:         cloudflare.F("/some/path"),
+			URISearch:         cloudflare.F("/some/path"),
 		},
 	)
 	if err != nil {

@@ -112,7 +112,7 @@ type ZoneCustomNameserverUpdateParams struct {
 	// Whether zone uses account-level custom nameservers.
 	Enabled param.Field[bool] `json:"enabled"`
 	// The number of the name server set to assign to the zone.
-	NsSet param.Field[float64] `json:"ns_set"`
+	NSSet param.Field[float64] `json:"ns_set"`
 }
 
 func (r ZoneCustomNameserverUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -231,7 +231,7 @@ type ZoneCustomNameserverGetResponseEnvelope struct {
 	// Whether zone uses account-level custom nameservers.
 	Enabled bool `json:"enabled"`
 	// The number of the name server set to assign to the zone.
-	NsSet      float64                                           `json:"ns_set"`
+	NSSet      float64                                           `json:"ns_set"`
 	ResultInfo ZoneCustomNameserverGetResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       zoneCustomNameserverGetResponseEnvelopeJSON       `json:"-"`
 }
@@ -244,7 +244,7 @@ type zoneCustomNameserverGetResponseEnvelopeJSON struct {
 	Result      apijson.Field
 	Success     apijson.Field
 	Enabled     apijson.Field
-	NsSet       apijson.Field
+	NSSet       apijson.Field
 	ResultInfo  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field

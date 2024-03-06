@@ -32,7 +32,7 @@ func NewRUMRuleService(opts ...option.RequestOption) (r *RUMRuleService) {
 }
 
 // Creates a new rule in a Web Analytics ruleset.
-func (r *RUMRuleService) New(ctx context.Context, rulesetID string, params RUMRuleNewParams, opts ...option.RequestOption) (res *RUMRule, err error) {
+func (r *RUMRuleService) New(ctx context.Context, rulesetID string, params RUMRuleNewParams, opts ...option.RequestOption) (res *RUMRuleNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RUMRuleNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/rum/v2/%s/rule", params.AccountID, rulesetID)
@@ -45,7 +45,7 @@ func (r *RUMRuleService) New(ctx context.Context, rulesetID string, params RUMRu
 }
 
 // Updates a rule in a Web Analytics ruleset.
-func (r *RUMRuleService) Update(ctx context.Context, rulesetID string, ruleID string, params RUMRuleUpdateParams, opts ...option.RequestOption) (res *RUMRule, err error) {
+func (r *RUMRuleService) Update(ctx context.Context, rulesetID string, ruleID string, params RUMRuleUpdateParams, opts ...option.RequestOption) (res *RUMRuleUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RUMRuleUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/rum/v2/%s/rule/%s", params.AccountID, rulesetID, ruleID)
@@ -83,7 +83,7 @@ func (r *RUMRuleService) Delete(ctx context.Context, rulesetID string, ruleID st
 	return
 }
 
-type RUMRule struct {
+type RUMRuleNewResponse struct {
 	// The Web Analytics rule identifier.
 	ID      string    `json:"id"`
 	Created time.Time `json:"created" format:"date-time"`
@@ -94,13 +94,14 @@ type RUMRule struct {
 	// Whether the rule is paused or not.
 	IsPaused bool `json:"is_paused"`
 	// The paths the rule will be applied to.
-	Paths    []string    `json:"paths"`
-	Priority float64     `json:"priority"`
-	JSON     rumRuleJSON `json:"-"`
+	Paths    []string               `json:"paths"`
+	Priority float64                `json:"priority"`
+	JSON     rumRuleNewResponseJSON `json:"-"`
 }
 
-// rumRuleJSON contains the JSON metadata for the struct [RUMRule]
-type rumRuleJSON struct {
+// rumRuleNewResponseJSON contains the JSON metadata for the struct
+// [RUMRuleNewResponse]
+type rumRuleNewResponseJSON struct {
 	ID          apijson.Field
 	Created     apijson.Field
 	Host        apijson.Field
@@ -112,13 +113,47 @@ type rumRuleJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RUMRule) UnmarshalJSON(data []byte) (err error) {
+func (r *RUMRuleNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RUMRuleUpdateResponse struct {
+	// The Web Analytics rule identifier.
+	ID      string    `json:"id"`
+	Created time.Time `json:"created" format:"date-time"`
+	// The hostname the rule will be applied to.
+	Host string `json:"host"`
+	// Whether the rule includes or excludes traffic from being measured.
+	Inclusive bool `json:"inclusive"`
+	// Whether the rule is paused or not.
+	IsPaused bool `json:"is_paused"`
+	// The paths the rule will be applied to.
+	Paths    []string                  `json:"paths"`
+	Priority float64                   `json:"priority"`
+	JSON     rumRuleUpdateResponseJSON `json:"-"`
+}
+
+// rumRuleUpdateResponseJSON contains the JSON metadata for the struct
+// [RUMRuleUpdateResponse]
+type rumRuleUpdateResponseJSON struct {
+	ID          apijson.Field
+	Created     apijson.Field
+	Host        apijson.Field
+	Inclusive   apijson.Field
+	IsPaused    apijson.Field
+	Paths       apijson.Field
+	Priority    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RUMRuleUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 type RUMRuleListResponse struct {
 	// A list of rules.
-	Rules   []RUMRule                  `json:"rules"`
+	Rules   []RUMRuleListResponseRule  `json:"rules"`
 	Ruleset RUMRuleListResponseRuleset `json:"ruleset"`
 	JSON    rumRuleListResponseJSON    `json:"-"`
 }
@@ -133,6 +168,40 @@ type rumRuleListResponseJSON struct {
 }
 
 func (r *RUMRuleListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RUMRuleListResponseRule struct {
+	// The Web Analytics rule identifier.
+	ID      string    `json:"id"`
+	Created time.Time `json:"created" format:"date-time"`
+	// The hostname the rule will be applied to.
+	Host string `json:"host"`
+	// Whether the rule includes or excludes traffic from being measured.
+	Inclusive bool `json:"inclusive"`
+	// Whether the rule is paused or not.
+	IsPaused bool `json:"is_paused"`
+	// The paths the rule will be applied to.
+	Paths    []string                    `json:"paths"`
+	Priority float64                     `json:"priority"`
+	JSON     rumRuleListResponseRuleJSON `json:"-"`
+}
+
+// rumRuleListResponseRuleJSON contains the JSON metadata for the struct
+// [RUMRuleListResponseRule]
+type rumRuleListResponseRuleJSON struct {
+	ID          apijson.Field
+	Created     apijson.Field
+	Host        apijson.Field
+	Inclusive   apijson.Field
+	IsPaused    apijson.Field
+	Paths       apijson.Field
+	Priority    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RUMRuleListResponseRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -196,7 +265,7 @@ func (r RUMRuleNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RUMRuleNewResponseEnvelope struct {
-	Result RUMRule                        `json:"result"`
+	Result RUMRuleNewResponse             `json:"result"`
 	JSON   rumRuleNewResponseEnvelopeJSON `json:"-"`
 }
 
@@ -228,7 +297,7 @@ func (r RUMRuleUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RUMRuleUpdateResponseEnvelope struct {
-	Result RUMRule                           `json:"result"`
+	Result RUMRuleUpdateResponse             `json:"result"`
 	JSON   rumRuleUpdateResponseEnvelopeJSON `json:"-"`
 }
 

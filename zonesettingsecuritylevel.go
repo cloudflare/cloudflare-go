@@ -36,7 +36,7 @@ func NewZoneSettingSecurityLevelService(opts ...option.RequestOption) (r *ZoneSe
 // automatically adjust each of the security settings. If you choose to customize
 // an individual security setting, the profile will become Custom.
 // (https://support.cloudflare.com/hc/en-us/articles/200170056).
-func (r *ZoneSettingSecurityLevelService) Edit(ctx context.Context, params ZoneSettingSecurityLevelEditParams, opts ...option.RequestOption) (res *ZonesSecurityLevel, err error) {
+func (r *ZoneSettingSecurityLevelService) Edit(ctx context.Context, params ZoneSettingSecurityLevelEditParams, opts ...option.RequestOption) (res *ZoneSettingSecurityLevelEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingSecurityLevelEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/security_level", params.ZoneID)
@@ -52,7 +52,7 @@ func (r *ZoneSettingSecurityLevelService) Edit(ctx context.Context, params ZoneS
 // automatically adjust each of the security settings. If you choose to customize
 // an individual security setting, the profile will become Custom.
 // (https://support.cloudflare.com/hc/en-us/articles/200170056).
-func (r *ZoneSettingSecurityLevelService) Get(ctx context.Context, query ZoneSettingSecurityLevelGetParams, opts ...option.RequestOption) (res *ZonesSecurityLevel, err error) {
+func (r *ZoneSettingSecurityLevelService) Get(ctx context.Context, query ZoneSettingSecurityLevelGetParams, opts ...option.RequestOption) (res *ZoneSettingSecurityLevelGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingSecurityLevelGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/security_level", query.ZoneID)
@@ -68,22 +68,22 @@ func (r *ZoneSettingSecurityLevelService) Get(ctx context.Context, query ZoneSet
 // automatically adjust each of the security settings. If you choose to customize
 // an individual security setting, the profile will become Custom.
 // (https://support.cloudflare.com/hc/en-us/articles/200170056).
-type ZonesSecurityLevel struct {
+type ZoneSettingSecurityLevelEditResponse struct {
 	// ID of the zone setting.
-	ID ZonesSecurityLevelID `json:"id,required"`
+	ID ZoneSettingSecurityLevelEditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZonesSecurityLevelValue `json:"value,required"`
+	Value ZoneSettingSecurityLevelEditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZonesSecurityLevelEditable `json:"editable"`
+	Editable ZoneSettingSecurityLevelEditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time              `json:"modified_on,nullable" format:"date-time"`
-	JSON       zonesSecurityLevelJSON `json:"-"`
+	ModifiedOn time.Time                                `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingSecurityLevelEditResponseJSON `json:"-"`
 }
 
-// zonesSecurityLevelJSON contains the JSON metadata for the struct
-// [ZonesSecurityLevel]
-type zonesSecurityLevelJSON struct {
+// zoneSettingSecurityLevelEditResponseJSON contains the JSON metadata for the
+// struct [ZoneSettingSecurityLevelEditResponse]
+type zoneSettingSecurityLevelEditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -92,58 +92,97 @@ type zonesSecurityLevelJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZonesSecurityLevel) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingSecurityLevelEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ZonesSecurityLevel) implementsZoneSettingEditResponse() {}
-
-func (r ZonesSecurityLevel) implementsZoneSettingGetResponse() {}
-
 // ID of the zone setting.
-type ZonesSecurityLevelID string
+type ZoneSettingSecurityLevelEditResponseID string
 
 const (
-	ZonesSecurityLevelIDSecurityLevel ZonesSecurityLevelID = "security_level"
+	ZoneSettingSecurityLevelEditResponseIDSecurityLevel ZoneSettingSecurityLevelEditResponseID = "security_level"
 )
 
 // Current value of the zone setting.
-type ZonesSecurityLevelValue string
+type ZoneSettingSecurityLevelEditResponseValue string
 
 const (
-	ZonesSecurityLevelValueOff            ZonesSecurityLevelValue = "off"
-	ZonesSecurityLevelValueEssentiallyOff ZonesSecurityLevelValue = "essentially_off"
-	ZonesSecurityLevelValueLow            ZonesSecurityLevelValue = "low"
-	ZonesSecurityLevelValueMedium         ZonesSecurityLevelValue = "medium"
-	ZonesSecurityLevelValueHigh           ZonesSecurityLevelValue = "high"
-	ZonesSecurityLevelValueUnderAttack    ZonesSecurityLevelValue = "under_attack"
+	ZoneSettingSecurityLevelEditResponseValueOff            ZoneSettingSecurityLevelEditResponseValue = "off"
+	ZoneSettingSecurityLevelEditResponseValueEssentiallyOff ZoneSettingSecurityLevelEditResponseValue = "essentially_off"
+	ZoneSettingSecurityLevelEditResponseValueLow            ZoneSettingSecurityLevelEditResponseValue = "low"
+	ZoneSettingSecurityLevelEditResponseValueMedium         ZoneSettingSecurityLevelEditResponseValue = "medium"
+	ZoneSettingSecurityLevelEditResponseValueHigh           ZoneSettingSecurityLevelEditResponseValue = "high"
+	ZoneSettingSecurityLevelEditResponseValueUnderAttack    ZoneSettingSecurityLevelEditResponseValue = "under_attack"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZonesSecurityLevelEditable bool
+type ZoneSettingSecurityLevelEditResponseEditable bool
 
 const (
-	ZonesSecurityLevelEditableTrue  ZonesSecurityLevelEditable = true
-	ZonesSecurityLevelEditableFalse ZonesSecurityLevelEditable = false
+	ZoneSettingSecurityLevelEditResponseEditableTrue  ZoneSettingSecurityLevelEditResponseEditable = true
+	ZoneSettingSecurityLevelEditResponseEditableFalse ZoneSettingSecurityLevelEditResponseEditable = false
 )
 
 // Choose the appropriate security profile for your website, which will
 // automatically adjust each of the security settings. If you choose to customize
 // an individual security setting, the profile will become Custom.
 // (https://support.cloudflare.com/hc/en-us/articles/200170056).
-type ZonesSecurityLevelParam struct {
+type ZoneSettingSecurityLevelGetResponse struct {
 	// ID of the zone setting.
-	ID param.Field[ZonesSecurityLevelID] `json:"id,required"`
+	ID ZoneSettingSecurityLevelGetResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value param.Field[ZonesSecurityLevelValue] `json:"value,required"`
+	Value ZoneSettingSecurityLevelGetResponseValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingSecurityLevelGetResponseEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                               `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingSecurityLevelGetResponseJSON `json:"-"`
 }
 
-func (r ZonesSecurityLevelParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+// zoneSettingSecurityLevelGetResponseJSON contains the JSON metadata for the
+// struct [ZoneSettingSecurityLevelGetResponse]
+type zoneSettingSecurityLevelGetResponseJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
-func (r ZonesSecurityLevelParam) implementsZoneSettingEditParamsItem() {}
+func (r *ZoneSettingSecurityLevelGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// ID of the zone setting.
+type ZoneSettingSecurityLevelGetResponseID string
+
+const (
+	ZoneSettingSecurityLevelGetResponseIDSecurityLevel ZoneSettingSecurityLevelGetResponseID = "security_level"
+)
+
+// Current value of the zone setting.
+type ZoneSettingSecurityLevelGetResponseValue string
+
+const (
+	ZoneSettingSecurityLevelGetResponseValueOff            ZoneSettingSecurityLevelGetResponseValue = "off"
+	ZoneSettingSecurityLevelGetResponseValueEssentiallyOff ZoneSettingSecurityLevelGetResponseValue = "essentially_off"
+	ZoneSettingSecurityLevelGetResponseValueLow            ZoneSettingSecurityLevelGetResponseValue = "low"
+	ZoneSettingSecurityLevelGetResponseValueMedium         ZoneSettingSecurityLevelGetResponseValue = "medium"
+	ZoneSettingSecurityLevelGetResponseValueHigh           ZoneSettingSecurityLevelGetResponseValue = "high"
+	ZoneSettingSecurityLevelGetResponseValueUnderAttack    ZoneSettingSecurityLevelGetResponseValue = "under_attack"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingSecurityLevelGetResponseEditable bool
+
+const (
+	ZoneSettingSecurityLevelGetResponseEditableTrue  ZoneSettingSecurityLevelGetResponseEditable = true
+	ZoneSettingSecurityLevelGetResponseEditableFalse ZoneSettingSecurityLevelGetResponseEditable = false
+)
 
 type ZoneSettingSecurityLevelEditParams struct {
 	// Identifier
@@ -177,7 +216,7 @@ type ZoneSettingSecurityLevelEditResponseEnvelope struct {
 	// automatically adjust each of the security settings. If you choose to customize
 	// an individual security setting, the profile will become Custom.
 	// (https://support.cloudflare.com/hc/en-us/articles/200170056).
-	Result ZonesSecurityLevel                               `json:"result"`
+	Result ZoneSettingSecurityLevelEditResponse             `json:"result"`
 	JSON   zoneSettingSecurityLevelEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -248,7 +287,7 @@ type ZoneSettingSecurityLevelGetResponseEnvelope struct {
 	// automatically adjust each of the security settings. If you choose to customize
 	// an individual security setting, the profile will become Custom.
 	// (https://support.cloudflare.com/hc/en-us/articles/200170056).
-	Result ZonesSecurityLevel                              `json:"result"`
+	Result ZoneSettingSecurityLevelGetResponse             `json:"result"`
 	JSON   zoneSettingSecurityLevelGetResponseEnvelopeJSON `json:"-"`
 }
 

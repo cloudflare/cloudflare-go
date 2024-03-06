@@ -34,7 +34,7 @@ func NewZoneSettingOrangeToOrangeService(opts ...option.RequestOption) (r *ZoneS
 
 // Orange to Orange (O2O) allows zones on Cloudflare to CNAME to other zones also
 // on Cloudflare.
-func (r *ZoneSettingOrangeToOrangeService) Edit(ctx context.Context, params ZoneSettingOrangeToOrangeEditParams, opts ...option.RequestOption) (res *ZonesOrangeToOrange, err error) {
+func (r *ZoneSettingOrangeToOrangeService) Edit(ctx context.Context, params ZoneSettingOrangeToOrangeEditParams, opts ...option.RequestOption) (res *ZoneSettingOrangeToOrangeEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingOrangeToOrangeEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/orange_to_orange", params.ZoneID)
@@ -48,7 +48,7 @@ func (r *ZoneSettingOrangeToOrangeService) Edit(ctx context.Context, params Zone
 
 // Orange to Orange (O2O) allows zones on Cloudflare to CNAME to other zones also
 // on Cloudflare.
-func (r *ZoneSettingOrangeToOrangeService) Get(ctx context.Context, query ZoneSettingOrangeToOrangeGetParams, opts ...option.RequestOption) (res *ZonesOrangeToOrange, err error) {
+func (r *ZoneSettingOrangeToOrangeService) Get(ctx context.Context, query ZoneSettingOrangeToOrangeGetParams, opts ...option.RequestOption) (res *ZoneSettingOrangeToOrangeGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingOrangeToOrangeGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/orange_to_orange", query.ZoneID)
@@ -62,22 +62,22 @@ func (r *ZoneSettingOrangeToOrangeService) Get(ctx context.Context, query ZoneSe
 
 // Orange to Orange (O2O) allows zones on Cloudflare to CNAME to other zones also
 // on Cloudflare.
-type ZonesOrangeToOrange struct {
+type ZoneSettingOrangeToOrangeEditResponse struct {
 	// ID of the zone setting.
-	ID ZonesOrangeToOrangeID `json:"id,required"`
+	ID ZoneSettingOrangeToOrangeEditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZonesOrangeToOrangeValue `json:"value,required"`
+	Value ZoneSettingOrangeToOrangeEditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZonesOrangeToOrangeEditable `json:"editable"`
+	Editable ZoneSettingOrangeToOrangeEditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time               `json:"modified_on,nullable" format:"date-time"`
-	JSON       zonesOrangeToOrangeJSON `json:"-"`
+	ModifiedOn time.Time                                 `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingOrangeToOrangeEditResponseJSON `json:"-"`
 }
 
-// zonesOrangeToOrangeJSON contains the JSON metadata for the struct
-// [ZonesOrangeToOrange]
-type zonesOrangeToOrangeJSON struct {
+// zoneSettingOrangeToOrangeEditResponseJSON contains the JSON metadata for the
+// struct [ZoneSettingOrangeToOrangeEditResponse]
+type zoneSettingOrangeToOrangeEditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -86,64 +86,136 @@ type zonesOrangeToOrangeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZonesOrangeToOrange) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingOrangeToOrangeEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ZonesOrangeToOrange) implementsZoneSettingEditResponse() {}
-
-func (r ZonesOrangeToOrange) implementsZoneSettingGetResponse() {}
-
 // ID of the zone setting.
-type ZonesOrangeToOrangeID string
+type ZoneSettingOrangeToOrangeEditResponseID string
 
 const (
-	ZonesOrangeToOrangeIDOrangeToOrange ZonesOrangeToOrangeID = "orange_to_orange"
+	ZoneSettingOrangeToOrangeEditResponseIDOrangeToOrange ZoneSettingOrangeToOrangeEditResponseID = "orange_to_orange"
 )
 
 // Current value of the zone setting.
-type ZonesOrangeToOrangeValue string
+type ZoneSettingOrangeToOrangeEditResponseValue string
 
 const (
-	ZonesOrangeToOrangeValueOn  ZonesOrangeToOrangeValue = "on"
-	ZonesOrangeToOrangeValueOff ZonesOrangeToOrangeValue = "off"
+	ZoneSettingOrangeToOrangeEditResponseValueOn  ZoneSettingOrangeToOrangeEditResponseValue = "on"
+	ZoneSettingOrangeToOrangeEditResponseValueOff ZoneSettingOrangeToOrangeEditResponseValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZonesOrangeToOrangeEditable bool
+type ZoneSettingOrangeToOrangeEditResponseEditable bool
 
 const (
-	ZonesOrangeToOrangeEditableTrue  ZonesOrangeToOrangeEditable = true
-	ZonesOrangeToOrangeEditableFalse ZonesOrangeToOrangeEditable = false
+	ZoneSettingOrangeToOrangeEditResponseEditableTrue  ZoneSettingOrangeToOrangeEditResponseEditable = true
+	ZoneSettingOrangeToOrangeEditResponseEditableFalse ZoneSettingOrangeToOrangeEditResponseEditable = false
 )
 
 // Orange to Orange (O2O) allows zones on Cloudflare to CNAME to other zones also
 // on Cloudflare.
-type ZonesOrangeToOrangeParam struct {
+type ZoneSettingOrangeToOrangeGetResponse struct {
 	// ID of the zone setting.
-	ID param.Field[ZonesOrangeToOrangeID] `json:"id,required"`
+	ID ZoneSettingOrangeToOrangeGetResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value param.Field[ZonesOrangeToOrangeValue] `json:"value,required"`
+	Value ZoneSettingOrangeToOrangeGetResponseValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingOrangeToOrangeGetResponseEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingOrangeToOrangeGetResponseJSON `json:"-"`
 }
 
-func (r ZonesOrangeToOrangeParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+// zoneSettingOrangeToOrangeGetResponseJSON contains the JSON metadata for the
+// struct [ZoneSettingOrangeToOrangeGetResponse]
+type zoneSettingOrangeToOrangeGetResponseJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
-func (r ZonesOrangeToOrangeParam) implementsZoneSettingEditParamsItem() {}
+func (r *ZoneSettingOrangeToOrangeGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// ID of the zone setting.
+type ZoneSettingOrangeToOrangeGetResponseID string
+
+const (
+	ZoneSettingOrangeToOrangeGetResponseIDOrangeToOrange ZoneSettingOrangeToOrangeGetResponseID = "orange_to_orange"
+)
+
+// Current value of the zone setting.
+type ZoneSettingOrangeToOrangeGetResponseValue string
+
+const (
+	ZoneSettingOrangeToOrangeGetResponseValueOn  ZoneSettingOrangeToOrangeGetResponseValue = "on"
+	ZoneSettingOrangeToOrangeGetResponseValueOff ZoneSettingOrangeToOrangeGetResponseValue = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingOrangeToOrangeGetResponseEditable bool
+
+const (
+	ZoneSettingOrangeToOrangeGetResponseEditableTrue  ZoneSettingOrangeToOrangeGetResponseEditable = true
+	ZoneSettingOrangeToOrangeGetResponseEditableFalse ZoneSettingOrangeToOrangeGetResponseEditable = false
+)
 
 type ZoneSettingOrangeToOrangeEditParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
 	// Orange to Orange (O2O) allows zones on Cloudflare to CNAME to other zones also
 	// on Cloudflare.
-	Value param.Field[ZonesOrangeToOrangeParam] `json:"value,required"`
+	Value param.Field[ZoneSettingOrangeToOrangeEditParamsValue] `json:"value,required"`
 }
 
 func (r ZoneSettingOrangeToOrangeEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// Orange to Orange (O2O) allows zones on Cloudflare to CNAME to other zones also
+// on Cloudflare.
+type ZoneSettingOrangeToOrangeEditParamsValue struct {
+	// ID of the zone setting.
+	ID param.Field[ZoneSettingOrangeToOrangeEditParamsValueID] `json:"id,required"`
+	// Current value of the zone setting.
+	Value param.Field[ZoneSettingOrangeToOrangeEditParamsValueValue] `json:"value,required"`
+}
+
+func (r ZoneSettingOrangeToOrangeEditParamsValue) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// ID of the zone setting.
+type ZoneSettingOrangeToOrangeEditParamsValueID string
+
+const (
+	ZoneSettingOrangeToOrangeEditParamsValueIDOrangeToOrange ZoneSettingOrangeToOrangeEditParamsValueID = "orange_to_orange"
+)
+
+// Current value of the zone setting.
+type ZoneSettingOrangeToOrangeEditParamsValueValue string
+
+const (
+	ZoneSettingOrangeToOrangeEditParamsValueValueOn  ZoneSettingOrangeToOrangeEditParamsValueValue = "on"
+	ZoneSettingOrangeToOrangeEditParamsValueValueOff ZoneSettingOrangeToOrangeEditParamsValueValue = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingOrangeToOrangeEditParamsValueEditable bool
+
+const (
+	ZoneSettingOrangeToOrangeEditParamsValueEditableTrue  ZoneSettingOrangeToOrangeEditParamsValueEditable = true
+	ZoneSettingOrangeToOrangeEditParamsValueEditableFalse ZoneSettingOrangeToOrangeEditParamsValueEditable = false
+)
 
 type ZoneSettingOrangeToOrangeEditResponseEnvelope struct {
 	Errors   []ZoneSettingOrangeToOrangeEditResponseEnvelopeErrors   `json:"errors,required"`
@@ -152,7 +224,7 @@ type ZoneSettingOrangeToOrangeEditResponseEnvelope struct {
 	Success bool `json:"success,required"`
 	// Orange to Orange (O2O) allows zones on Cloudflare to CNAME to other zones also
 	// on Cloudflare.
-	Result ZonesOrangeToOrange                               `json:"result"`
+	Result ZoneSettingOrangeToOrangeEditResponse             `json:"result"`
 	JSON   zoneSettingOrangeToOrangeEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -221,7 +293,7 @@ type ZoneSettingOrangeToOrangeGetResponseEnvelope struct {
 	Success bool `json:"success,required"`
 	// Orange to Orange (O2O) allows zones on Cloudflare to CNAME to other zones also
 	// on Cloudflare.
-	Result ZonesOrangeToOrange                              `json:"result"`
+	Result ZoneSettingOrangeToOrangeGetResponse             `json:"result"`
 	JSON   zoneSettingOrangeToOrangeGetResponseEnvelopeJSON `json:"-"`
 }
 

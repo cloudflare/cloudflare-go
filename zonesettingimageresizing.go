@@ -36,7 +36,7 @@ func NewZoneSettingImageResizingService(opts ...option.RequestOption) (r *ZoneSe
 // images served through Cloudflare's network. Refer to the
 // [Image Resizing documentation](https://developers.cloudflare.com/images/) for
 // more information.
-func (r *ZoneSettingImageResizingService) Edit(ctx context.Context, params ZoneSettingImageResizingEditParams, opts ...option.RequestOption) (res *ZonesImageResizing, err error) {
+func (r *ZoneSettingImageResizingService) Edit(ctx context.Context, params ZoneSettingImageResizingEditParams, opts ...option.RequestOption) (res *ZoneSettingImageResizingEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingImageResizingEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/image_resizing", params.ZoneID)
@@ -52,7 +52,7 @@ func (r *ZoneSettingImageResizingService) Edit(ctx context.Context, params ZoneS
 // images served through Cloudflare's network. Refer to the
 // [Image Resizing documentation](https://developers.cloudflare.com/images/) for
 // more information.
-func (r *ZoneSettingImageResizingService) Get(ctx context.Context, query ZoneSettingImageResizingGetParams, opts ...option.RequestOption) (res *ZonesImageResizing, err error) {
+func (r *ZoneSettingImageResizingService) Get(ctx context.Context, query ZoneSettingImageResizingGetParams, opts ...option.RequestOption) (res *ZoneSettingImageResizingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingImageResizingGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/image_resizing", query.ZoneID)
@@ -68,22 +68,22 @@ func (r *ZoneSettingImageResizingService) Get(ctx context.Context, query ZoneSet
 // images served through Cloudflare's network. Refer to the
 // [Image Resizing documentation](https://developers.cloudflare.com/images/) for
 // more information.
-type ZonesImageResizing struct {
+type ZoneSettingImageResizingEditResponse struct {
 	// ID of the zone setting.
-	ID ZonesImageResizingID `json:"id,required"`
+	ID ZoneSettingImageResizingEditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZonesImageResizingValue `json:"value,required"`
+	Value ZoneSettingImageResizingEditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZonesImageResizingEditable `json:"editable"`
+	Editable ZoneSettingImageResizingEditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time              `json:"modified_on,nullable" format:"date-time"`
-	JSON       zonesImageResizingJSON `json:"-"`
+	ModifiedOn time.Time                                `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingImageResizingEditResponseJSON `json:"-"`
 }
 
-// zonesImageResizingJSON contains the JSON metadata for the struct
-// [ZonesImageResizing]
-type zonesImageResizingJSON struct {
+// zoneSettingImageResizingEditResponseJSON contains the JSON metadata for the
+// struct [ZoneSettingImageResizingEditResponse]
+type zoneSettingImageResizingEditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -92,55 +92,91 @@ type zonesImageResizingJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZonesImageResizing) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingImageResizingEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ZonesImageResizing) implementsZoneSettingEditResponse() {}
-
-func (r ZonesImageResizing) implementsZoneSettingGetResponse() {}
-
 // ID of the zone setting.
-type ZonesImageResizingID string
+type ZoneSettingImageResizingEditResponseID string
 
 const (
-	ZonesImageResizingIDImageResizing ZonesImageResizingID = "image_resizing"
+	ZoneSettingImageResizingEditResponseIDImageResizing ZoneSettingImageResizingEditResponseID = "image_resizing"
 )
 
 // Current value of the zone setting.
-type ZonesImageResizingValue string
+type ZoneSettingImageResizingEditResponseValue string
 
 const (
-	ZonesImageResizingValueOn   ZonesImageResizingValue = "on"
-	ZonesImageResizingValueOff  ZonesImageResizingValue = "off"
-	ZonesImageResizingValueOpen ZonesImageResizingValue = "open"
+	ZoneSettingImageResizingEditResponseValueOn   ZoneSettingImageResizingEditResponseValue = "on"
+	ZoneSettingImageResizingEditResponseValueOff  ZoneSettingImageResizingEditResponseValue = "off"
+	ZoneSettingImageResizingEditResponseValueOpen ZoneSettingImageResizingEditResponseValue = "open"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZonesImageResizingEditable bool
+type ZoneSettingImageResizingEditResponseEditable bool
 
 const (
-	ZonesImageResizingEditableTrue  ZonesImageResizingEditable = true
-	ZonesImageResizingEditableFalse ZonesImageResizingEditable = false
+	ZoneSettingImageResizingEditResponseEditableTrue  ZoneSettingImageResizingEditResponseEditable = true
+	ZoneSettingImageResizingEditResponseEditableFalse ZoneSettingImageResizingEditResponseEditable = false
 )
 
 // Image Resizing provides on-demand resizing, conversion and optimisation for
 // images served through Cloudflare's network. Refer to the
 // [Image Resizing documentation](https://developers.cloudflare.com/images/) for
 // more information.
-type ZonesImageResizingParam struct {
+type ZoneSettingImageResizingGetResponse struct {
 	// ID of the zone setting.
-	ID param.Field[ZonesImageResizingID] `json:"id,required"`
+	ID ZoneSettingImageResizingGetResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value param.Field[ZonesImageResizingValue] `json:"value,required"`
+	Value ZoneSettingImageResizingGetResponseValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingImageResizingGetResponseEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                               `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingImageResizingGetResponseJSON `json:"-"`
 }
 
-func (r ZonesImageResizingParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+// zoneSettingImageResizingGetResponseJSON contains the JSON metadata for the
+// struct [ZoneSettingImageResizingGetResponse]
+type zoneSettingImageResizingGetResponseJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
-func (r ZonesImageResizingParam) implementsZoneSettingEditParamsItem() {}
+func (r *ZoneSettingImageResizingGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// ID of the zone setting.
+type ZoneSettingImageResizingGetResponseID string
+
+const (
+	ZoneSettingImageResizingGetResponseIDImageResizing ZoneSettingImageResizingGetResponseID = "image_resizing"
+)
+
+// Current value of the zone setting.
+type ZoneSettingImageResizingGetResponseValue string
+
+const (
+	ZoneSettingImageResizingGetResponseValueOn   ZoneSettingImageResizingGetResponseValue = "on"
+	ZoneSettingImageResizingGetResponseValueOff  ZoneSettingImageResizingGetResponseValue = "off"
+	ZoneSettingImageResizingGetResponseValueOpen ZoneSettingImageResizingGetResponseValue = "open"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingImageResizingGetResponseEditable bool
+
+const (
+	ZoneSettingImageResizingGetResponseEditableTrue  ZoneSettingImageResizingGetResponseEditable = true
+	ZoneSettingImageResizingGetResponseEditableFalse ZoneSettingImageResizingGetResponseEditable = false
+)
 
 type ZoneSettingImageResizingEditParams struct {
 	// Identifier
@@ -149,12 +185,52 @@ type ZoneSettingImageResizingEditParams struct {
 	// images served through Cloudflare's network. Refer to the
 	// [Image Resizing documentation](https://developers.cloudflare.com/images/) for
 	// more information.
-	Value param.Field[ZonesImageResizingParam] `json:"value,required"`
+	Value param.Field[ZoneSettingImageResizingEditParamsValue] `json:"value,required"`
 }
 
 func (r ZoneSettingImageResizingEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// Image Resizing provides on-demand resizing, conversion and optimisation for
+// images served through Cloudflare's network. Refer to the
+// [Image Resizing documentation](https://developers.cloudflare.com/images/) for
+// more information.
+type ZoneSettingImageResizingEditParamsValue struct {
+	// ID of the zone setting.
+	ID param.Field[ZoneSettingImageResizingEditParamsValueID] `json:"id,required"`
+	// Current value of the zone setting.
+	Value param.Field[ZoneSettingImageResizingEditParamsValueValue] `json:"value,required"`
+}
+
+func (r ZoneSettingImageResizingEditParamsValue) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// ID of the zone setting.
+type ZoneSettingImageResizingEditParamsValueID string
+
+const (
+	ZoneSettingImageResizingEditParamsValueIDImageResizing ZoneSettingImageResizingEditParamsValueID = "image_resizing"
+)
+
+// Current value of the zone setting.
+type ZoneSettingImageResizingEditParamsValueValue string
+
+const (
+	ZoneSettingImageResizingEditParamsValueValueOn   ZoneSettingImageResizingEditParamsValueValue = "on"
+	ZoneSettingImageResizingEditParamsValueValueOff  ZoneSettingImageResizingEditParamsValueValue = "off"
+	ZoneSettingImageResizingEditParamsValueValueOpen ZoneSettingImageResizingEditParamsValueValue = "open"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingImageResizingEditParamsValueEditable bool
+
+const (
+	ZoneSettingImageResizingEditParamsValueEditableTrue  ZoneSettingImageResizingEditParamsValueEditable = true
+	ZoneSettingImageResizingEditParamsValueEditableFalse ZoneSettingImageResizingEditParamsValueEditable = false
+)
 
 type ZoneSettingImageResizingEditResponseEnvelope struct {
 	Errors   []ZoneSettingImageResizingEditResponseEnvelopeErrors   `json:"errors,required"`
@@ -165,7 +241,7 @@ type ZoneSettingImageResizingEditResponseEnvelope struct {
 	// images served through Cloudflare's network. Refer to the
 	// [Image Resizing documentation](https://developers.cloudflare.com/images/) for
 	// more information.
-	Result ZonesImageResizing                               `json:"result"`
+	Result ZoneSettingImageResizingEditResponse             `json:"result"`
 	JSON   zoneSettingImageResizingEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -236,7 +312,7 @@ type ZoneSettingImageResizingGetResponseEnvelope struct {
 	// images served through Cloudflare's network. Refer to the
 	// [Image Resizing documentation](https://developers.cloudflare.com/images/) for
 	// more information.
-	Result ZonesImageResizing                              `json:"result"`
+	Result ZoneSettingImageResizingGetResponse             `json:"result"`
 	JSON   zoneSettingImageResizingGetResponseEnvelopeJSON `json:"-"`
 }
 

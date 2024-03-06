@@ -32,7 +32,7 @@ func NewMTLSCertificateAssociationService(opts ...option.RequestOption) (r *MTLS
 }
 
 // Lists all active associations between the certificate and Cloudflare services.
-func (r *MTLSCertificateAssociationService) Get(ctx context.Context, mtlsCertificateID string, query MTLSCertificateAssociationGetParams, opts ...option.RequestOption) (res *[]TLSCertificatesAndHostnamesAssociationObject, err error) {
+func (r *MTLSCertificateAssociationService) Get(ctx context.Context, mtlsCertificateID string, query MTLSCertificateAssociationGetParams, opts ...option.RequestOption) (res *[]MTLSCertificateAssociationGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MTLSCertificateAssociationGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/mtls_certificates/%s/associations", query.AccountID, mtlsCertificateID)
@@ -44,24 +44,24 @@ func (r *MTLSCertificateAssociationService) Get(ctx context.Context, mtlsCertifi
 	return
 }
 
-type TLSCertificatesAndHostnamesAssociationObject struct {
+type MTLSCertificateAssociationGetResponse struct {
 	// The service using the certificate.
 	Service string `json:"service"`
 	// Certificate deployment status for the given service.
-	Status string                                           `json:"status"`
-	JSON   tlsCertificatesAndHostnamesAssociationObjectJSON `json:"-"`
+	Status string                                    `json:"status"`
+	JSON   mtlsCertificateAssociationGetResponseJSON `json:"-"`
 }
 
-// tlsCertificatesAndHostnamesAssociationObjectJSON contains the JSON metadata for
-// the struct [TLSCertificatesAndHostnamesAssociationObject]
-type tlsCertificatesAndHostnamesAssociationObjectJSON struct {
+// mtlsCertificateAssociationGetResponseJSON contains the JSON metadata for the
+// struct [MTLSCertificateAssociationGetResponse]
+type mtlsCertificateAssociationGetResponseJSON struct {
 	Service     apijson.Field
 	Status      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TLSCertificatesAndHostnamesAssociationObject) UnmarshalJSON(data []byte) (err error) {
+func (r *MTLSCertificateAssociationGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -73,7 +73,7 @@ type MTLSCertificateAssociationGetParams struct {
 type MTLSCertificateAssociationGetResponseEnvelope struct {
 	Errors   []MTLSCertificateAssociationGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []MTLSCertificateAssociationGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []TLSCertificatesAndHostnamesAssociationObject          `json:"result,required,nullable"`
+	Result   []MTLSCertificateAssociationGetResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    MTLSCertificateAssociationGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo MTLSCertificateAssociationGetResponseEnvelopeResultInfo `json:"result_info"`

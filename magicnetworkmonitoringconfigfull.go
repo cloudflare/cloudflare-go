@@ -31,7 +31,7 @@ func NewMagicNetworkMonitoringConfigFullService(opts ...option.RequestOption) (r
 }
 
 // Lists default sampling, router IPs, and rules for account.
-func (r *MagicNetworkMonitoringConfigFullService) Get(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MagicVisibilityMNMConfig, err error) {
+func (r *MagicNetworkMonitoringConfigFullService) Get(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MagicNetworkMonitoringConfigFullGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MagicNetworkMonitoringConfigFullGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/mnm/config/full", accountIdentifier)
@@ -43,10 +43,34 @@ func (r *MagicNetworkMonitoringConfigFullService) Get(ctx context.Context, accou
 	return
 }
 
+type MagicNetworkMonitoringConfigFullGetResponse struct {
+	// Fallback sampling rate of flow messages being sent in packets per second. This
+	// should match the packet sampling rate configured on the router.
+	DefaultSampling float64 `json:"default_sampling,required"`
+	// The account name.
+	Name      string                                          `json:"name,required"`
+	RouterIPs []string                                        `json:"router_ips,required"`
+	JSON      magicNetworkMonitoringConfigFullGetResponseJSON `json:"-"`
+}
+
+// magicNetworkMonitoringConfigFullGetResponseJSON contains the JSON metadata for
+// the struct [MagicNetworkMonitoringConfigFullGetResponse]
+type magicNetworkMonitoringConfigFullGetResponseJSON struct {
+	DefaultSampling apijson.Field
+	Name            apijson.Field
+	RouterIPs       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *MagicNetworkMonitoringConfigFullGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type MagicNetworkMonitoringConfigFullGetResponseEnvelope struct {
 	Errors   []MagicNetworkMonitoringConfigFullGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []MagicNetworkMonitoringConfigFullGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   MagicVisibilityMNMConfig                                      `json:"result,required"`
+	Result   MagicNetworkMonitoringConfigFullGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success MagicNetworkMonitoringConfigFullGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    magicNetworkMonitoringConfigFullGetResponseEnvelopeJSON    `json:"-"`

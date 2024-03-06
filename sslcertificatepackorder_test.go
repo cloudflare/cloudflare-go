@@ -32,7 +32,7 @@ func TestSSLCertificatePackOrderNewWithOptionalParams(t *testing.T) {
 		CertificateAuthority: cloudflare.F(cloudflare.SSLCertificatePackOrderNewParamsCertificateAuthorityLetsEncrypt),
 		Hosts:                cloudflare.F([]string{"example.com", "*.example.com", "www.example.com"}),
 		Type:                 cloudflare.F(cloudflare.SSLCertificatePackOrderNewParamsTypeAdvanced),
-		ValidationMethod:     cloudflare.F(cloudflare.SSLCertificatePackOrderNewParamsValidationMethodTxt),
+		ValidationMethod:     cloudflare.F(cloudflare.SSLCertificatePackOrderNewParamsValidationMethodTXT),
 		ValidityDays:         cloudflare.F(cloudflare.SSLCertificatePackOrderNewParamsValidityDays14),
 		CloudflareBranding:   cloudflare.F(false),
 	})

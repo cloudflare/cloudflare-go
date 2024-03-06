@@ -208,7 +208,7 @@ func (r *SpectrumAppNewResponseDNS) UnmarshalJSON(data []byte) (err error) {
 type SpectrumAppNewResponseDNSType string
 
 const (
-	SpectrumAppNewResponseDNSTypeCname   SpectrumAppNewResponseDNSType = "CNAME"
+	SpectrumAppNewResponseDNSTypeCNAME   SpectrumAppNewResponseDNSType = "CNAME"
 	SpectrumAppNewResponseDNSTypeAddress SpectrumAppNewResponseDNSType = "ADDRESS"
 )
 
@@ -340,8 +340,8 @@ type SpectrumAppNewResponseOriginDNSType string
 const (
 	SpectrumAppNewResponseOriginDNSTypeEmpty SpectrumAppNewResponseOriginDNSType = ""
 	SpectrumAppNewResponseOriginDNSTypeA     SpectrumAppNewResponseOriginDNSType = "A"
-	SpectrumAppNewResponseOriginDNSTypeAaaa  SpectrumAppNewResponseOriginDNSType = "AAAA"
-	SpectrumAppNewResponseOriginDNSTypeSrv   SpectrumAppNewResponseOriginDNSType = "SRV"
+	SpectrumAppNewResponseOriginDNSTypeAAAA  SpectrumAppNewResponseOriginDNSType = "AAAA"
+	SpectrumAppNewResponseOriginDNSTypeSRV   SpectrumAppNewResponseOriginDNSType = "SRV"
 )
 
 // The destination port at the origin. Only specified in conjunction with
@@ -500,7 +500,7 @@ func (r *SpectrumAppUpdateResponseDNS) UnmarshalJSON(data []byte) (err error) {
 type SpectrumAppUpdateResponseDNSType string
 
 const (
-	SpectrumAppUpdateResponseDNSTypeCname   SpectrumAppUpdateResponseDNSType = "CNAME"
+	SpectrumAppUpdateResponseDNSTypeCNAME   SpectrumAppUpdateResponseDNSType = "CNAME"
 	SpectrumAppUpdateResponseDNSTypeAddress SpectrumAppUpdateResponseDNSType = "ADDRESS"
 )
 
@@ -632,8 +632,8 @@ type SpectrumAppUpdateResponseOriginDNSType string
 const (
 	SpectrumAppUpdateResponseOriginDNSTypeEmpty SpectrumAppUpdateResponseOriginDNSType = ""
 	SpectrumAppUpdateResponseOriginDNSTypeA     SpectrumAppUpdateResponseOriginDNSType = "A"
-	SpectrumAppUpdateResponseOriginDNSTypeAaaa  SpectrumAppUpdateResponseOriginDNSType = "AAAA"
-	SpectrumAppUpdateResponseOriginDNSTypeSrv   SpectrumAppUpdateResponseOriginDNSType = "SRV"
+	SpectrumAppUpdateResponseOriginDNSTypeAAAA  SpectrumAppUpdateResponseOriginDNSType = "AAAA"
+	SpectrumAppUpdateResponseOriginDNSTypeSRV   SpectrumAppUpdateResponseOriginDNSType = "SRV"
 )
 
 // The destination port at the origin. Only specified in conjunction with
@@ -791,7 +791,7 @@ func (r SpectrumAppNewParamsDNS) MarshalJSON() (data []byte, err error) {
 type SpectrumAppNewParamsDNSType string
 
 const (
-	SpectrumAppNewParamsDNSTypeCname   SpectrumAppNewParamsDNSType = "CNAME"
+	SpectrumAppNewParamsDNSTypeCNAME   SpectrumAppNewParamsDNSType = "CNAME"
 	SpectrumAppNewParamsDNSTypeAddress SpectrumAppNewParamsDNSType = "ADDRESS"
 )
 
@@ -817,8 +817,8 @@ type SpectrumAppNewParamsOriginDNSType string
 const (
 	SpectrumAppNewParamsOriginDNSTypeEmpty SpectrumAppNewParamsOriginDNSType = ""
 	SpectrumAppNewParamsOriginDNSTypeA     SpectrumAppNewParamsOriginDNSType = "A"
-	SpectrumAppNewParamsOriginDNSTypeAaaa  SpectrumAppNewParamsOriginDNSType = "AAAA"
-	SpectrumAppNewParamsOriginDNSTypeSrv   SpectrumAppNewParamsOriginDNSType = "SRV"
+	SpectrumAppNewParamsOriginDNSTypeAAAA  SpectrumAppNewParamsOriginDNSType = "AAAA"
+	SpectrumAppNewParamsOriginDNSTypeSRV   SpectrumAppNewParamsOriginDNSType = "SRV"
 )
 
 // The destination port at the origin. Only specified in conjunction with
@@ -1062,7 +1062,7 @@ func (r SpectrumAppUpdateParamsDNS) MarshalJSON() (data []byte, err error) {
 type SpectrumAppUpdateParamsDNSType string
 
 const (
-	SpectrumAppUpdateParamsDNSTypeCname   SpectrumAppUpdateParamsDNSType = "CNAME"
+	SpectrumAppUpdateParamsDNSTypeCNAME   SpectrumAppUpdateParamsDNSType = "CNAME"
 	SpectrumAppUpdateParamsDNSTypeAddress SpectrumAppUpdateParamsDNSType = "ADDRESS"
 )
 
@@ -1088,8 +1088,8 @@ type SpectrumAppUpdateParamsOriginDNSType string
 const (
 	SpectrumAppUpdateParamsOriginDNSTypeEmpty SpectrumAppUpdateParamsOriginDNSType = ""
 	SpectrumAppUpdateParamsOriginDNSTypeA     SpectrumAppUpdateParamsOriginDNSType = "A"
-	SpectrumAppUpdateParamsOriginDNSTypeAaaa  SpectrumAppUpdateParamsOriginDNSType = "AAAA"
-	SpectrumAppUpdateParamsOriginDNSTypeSrv   SpectrumAppUpdateParamsOriginDNSType = "SRV"
+	SpectrumAppUpdateParamsOriginDNSTypeAAAA  SpectrumAppUpdateParamsOriginDNSType = "AAAA"
+	SpectrumAppUpdateParamsOriginDNSTypeSRV   SpectrumAppUpdateParamsOriginDNSType = "SRV"
 )
 
 // The destination port at the origin. Only specified in conjunction with

@@ -61,7 +61,7 @@ func (r *AccountMemberService) Update(ctx context.Context, memberID string, para
 }
 
 // List all members of an account.
-func (r *AccountMemberService) List(ctx context.Context, params AccountMemberListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[IamComponentsSchemasMember], err error) {
+func (r *AccountMemberService) List(ctx context.Context, params AccountMemberListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[AccountMemberListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -79,7 +79,7 @@ func (r *AccountMemberService) List(ctx context.Context, params AccountMemberLis
 }
 
 // List all members of an account.
-func (r *AccountMemberService) ListAutoPaging(ctx context.Context, params AccountMemberListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[IamComponentsSchemasMember] {
+func (r *AccountMemberService) ListAutoPaging(ctx context.Context, params AccountMemberListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[AccountMemberListResponse] {
 	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -809,7 +809,7 @@ func (r *AccountMemberWithIDUser) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type IamComponentsSchemasMember struct {
+type AccountMemberListResponse struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// The contact email address of the user.
@@ -817,15 +817,15 @@ type IamComponentsSchemasMember struct {
 	// Member Name.
 	Name string `json:"name,required,nullable"`
 	// Roles assigned to this Member.
-	Roles []IamSchemasRole `json:"roles,required"`
+	Roles []AccountMemberListResponseRole `json:"roles,required"`
 	// A member's status in the organization.
-	Status IamComponentsSchemasMemberStatus `json:"status,required"`
-	JSON   iamComponentsSchemasMemberJSON   `json:"-"`
+	Status AccountMemberListResponseStatus `json:"status,required"`
+	JSON   accountMemberListResponseJSON   `json:"-"`
 }
 
-// iamComponentsSchemasMemberJSON contains the JSON metadata for the struct
-// [IamComponentsSchemasMember]
-type iamComponentsSchemasMemberJSON struct {
+// accountMemberListResponseJSON contains the JSON metadata for the struct
+// [AccountMemberListResponse]
+type accountMemberListResponseJSON struct {
 	ID          apijson.Field
 	Email       apijson.Field
 	Name        apijson.Field
@@ -835,16 +835,43 @@ type iamComponentsSchemasMemberJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IamComponentsSchemasMember) UnmarshalJSON(data []byte) (err error) {
+func (r *AccountMemberListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type AccountMemberListResponseRole struct {
+	// Role identifier tag.
+	ID string `json:"id,required"`
+	// Description of role's permissions.
+	Description string `json:"description,required"`
+	// Role Name.
+	Name string `json:"name,required"`
+	// Access permissions for this User.
+	Permissions []string                          `json:"permissions,required"`
+	JSON        accountMemberListResponseRoleJSON `json:"-"`
+}
+
+// accountMemberListResponseRoleJSON contains the JSON metadata for the struct
+// [AccountMemberListResponseRole]
+type accountMemberListResponseRoleJSON struct {
+	ID          apijson.Field
+	Description apijson.Field
+	Name        apijson.Field
+	Permissions apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccountMemberListResponseRole) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // A member's status in the organization.
-type IamComponentsSchemasMemberStatus string
+type AccountMemberListResponseStatus string
 
 const (
-	IamComponentsSchemasMemberStatusAccepted IamComponentsSchemasMemberStatus = "accepted"
-	IamComponentsSchemasMemberStatusInvited  IamComponentsSchemasMemberStatus = "invited"
+	AccountMemberListResponseStatusAccepted AccountMemberListResponseStatus = "accepted"
+	AccountMemberListResponseStatusInvited  AccountMemberListResponseStatus = "invited"
 )
 
 type AccountMemberDeleteResponse struct {

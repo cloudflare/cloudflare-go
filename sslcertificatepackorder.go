@@ -135,7 +135,7 @@ const (
 type SSLCertificatePackOrderNewResponseValidationMethod string
 
 const (
-	SSLCertificatePackOrderNewResponseValidationMethodTxt   SSLCertificatePackOrderNewResponseValidationMethod = "txt"
+	SSLCertificatePackOrderNewResponseValidationMethodTXT   SSLCertificatePackOrderNewResponseValidationMethod = "txt"
 	SSLCertificatePackOrderNewResponseValidationMethodHTTP  SSLCertificatePackOrderNewResponseValidationMethod = "http"
 	SSLCertificatePackOrderNewResponseValidationMethodEmail SSLCertificatePackOrderNewResponseValidationMethod = "email"
 )
@@ -196,7 +196,7 @@ const (
 type SSLCertificatePackOrderNewParamsValidationMethod string
 
 const (
-	SSLCertificatePackOrderNewParamsValidationMethodTxt   SSLCertificatePackOrderNewParamsValidationMethod = "txt"
+	SSLCertificatePackOrderNewParamsValidationMethodTXT   SSLCertificatePackOrderNewParamsValidationMethod = "txt"
 	SSLCertificatePackOrderNewParamsValidationMethodHTTP  SSLCertificatePackOrderNewParamsValidationMethod = "http"
 	SSLCertificatePackOrderNewParamsValidationMethodEmail SSLCertificatePackOrderNewParamsValidationMethod = "email"
 )

@@ -32,7 +32,7 @@ func NewZeroTrustAccessBookmarkService(opts ...option.RequestOption) (r *ZeroTru
 }
 
 // Create a new Bookmark application.
-func (r *ZeroTrustAccessBookmarkService) New(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *AccessBookmarks, err error) {
+func (r *ZeroTrustAccessBookmarkService) New(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *ZeroTrustAccessBookmarkNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustAccessBookmarkNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/access/bookmarks/%s", identifier, uuid)
@@ -45,7 +45,7 @@ func (r *ZeroTrustAccessBookmarkService) New(ctx context.Context, identifier int
 }
 
 // Updates a configured Bookmark application.
-func (r *ZeroTrustAccessBookmarkService) Update(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *AccessBookmarks, err error) {
+func (r *ZeroTrustAccessBookmarkService) Update(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *ZeroTrustAccessBookmarkUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustAccessBookmarkUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/access/bookmarks/%s", identifier, uuid)
@@ -58,7 +58,7 @@ func (r *ZeroTrustAccessBookmarkService) Update(ctx context.Context, identifier 
 }
 
 // Lists Bookmark applications.
-func (r *ZeroTrustAccessBookmarkService) List(ctx context.Context, identifier interface{}, opts ...option.RequestOption) (res *[]AccessBookmarks, err error) {
+func (r *ZeroTrustAccessBookmarkService) List(ctx context.Context, identifier interface{}, opts ...option.RequestOption) (res *[]ZeroTrustAccessBookmarkListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustAccessBookmarkListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/access/bookmarks", identifier)
@@ -84,7 +84,7 @@ func (r *ZeroTrustAccessBookmarkService) Delete(ctx context.Context, identifier 
 }
 
 // Fetches a single Bookmark application.
-func (r *ZeroTrustAccessBookmarkService) Get(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *AccessBookmarks, err error) {
+func (r *ZeroTrustAccessBookmarkService) Get(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *ZeroTrustAccessBookmarkGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustAccessBookmarkGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/access/bookmarks/%s", identifier, uuid)
@@ -96,7 +96,7 @@ func (r *ZeroTrustAccessBookmarkService) Get(ctx context.Context, identifier int
 	return
 }
 
-type AccessBookmarks struct {
+type ZeroTrustAccessBookmarkNewResponse struct {
 	// The unique identifier for the Bookmark application.
 	ID interface{} `json:"id"`
 	// Displays the application in the App Launcher.
@@ -107,13 +107,14 @@ type AccessBookmarks struct {
 	// The image URL for the logo shown in the App Launcher dashboard.
 	LogoURL string `json:"logo_url"`
 	// The name of the Bookmark application.
-	Name      string              `json:"name"`
-	UpdatedAt time.Time           `json:"updated_at" format:"date-time"`
-	JSON      accessBookmarksJSON `json:"-"`
+	Name      string                                 `json:"name"`
+	UpdatedAt time.Time                              `json:"updated_at" format:"date-time"`
+	JSON      zeroTrustAccessBookmarkNewResponseJSON `json:"-"`
 }
 
-// accessBookmarksJSON contains the JSON metadata for the struct [AccessBookmarks]
-type accessBookmarksJSON struct {
+// zeroTrustAccessBookmarkNewResponseJSON contains the JSON metadata for the struct
+// [ZeroTrustAccessBookmarkNewResponse]
+type zeroTrustAccessBookmarkNewResponseJSON struct {
 	ID                 apijson.Field
 	AppLauncherVisible apijson.Field
 	CreatedAt          apijson.Field
@@ -125,7 +126,75 @@ type accessBookmarksJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *AccessBookmarks) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustAccessBookmarkNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZeroTrustAccessBookmarkUpdateResponse struct {
+	// The unique identifier for the Bookmark application.
+	ID interface{} `json:"id"`
+	// Displays the application in the App Launcher.
+	AppLauncherVisible bool      `json:"app_launcher_visible"`
+	CreatedAt          time.Time `json:"created_at" format:"date-time"`
+	// The domain of the Bookmark application.
+	Domain string `json:"domain"`
+	// The image URL for the logo shown in the App Launcher dashboard.
+	LogoURL string `json:"logo_url"`
+	// The name of the Bookmark application.
+	Name      string                                    `json:"name"`
+	UpdatedAt time.Time                                 `json:"updated_at" format:"date-time"`
+	JSON      zeroTrustAccessBookmarkUpdateResponseJSON `json:"-"`
+}
+
+// zeroTrustAccessBookmarkUpdateResponseJSON contains the JSON metadata for the
+// struct [ZeroTrustAccessBookmarkUpdateResponse]
+type zeroTrustAccessBookmarkUpdateResponseJSON struct {
+	ID                 apijson.Field
+	AppLauncherVisible apijson.Field
+	CreatedAt          apijson.Field
+	Domain             apijson.Field
+	LogoURL            apijson.Field
+	Name               apijson.Field
+	UpdatedAt          apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *ZeroTrustAccessBookmarkUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZeroTrustAccessBookmarkListResponse struct {
+	// The unique identifier for the Bookmark application.
+	ID interface{} `json:"id"`
+	// Displays the application in the App Launcher.
+	AppLauncherVisible bool      `json:"app_launcher_visible"`
+	CreatedAt          time.Time `json:"created_at" format:"date-time"`
+	// The domain of the Bookmark application.
+	Domain string `json:"domain"`
+	// The image URL for the logo shown in the App Launcher dashboard.
+	LogoURL string `json:"logo_url"`
+	// The name of the Bookmark application.
+	Name      string                                  `json:"name"`
+	UpdatedAt time.Time                               `json:"updated_at" format:"date-time"`
+	JSON      zeroTrustAccessBookmarkListResponseJSON `json:"-"`
+}
+
+// zeroTrustAccessBookmarkListResponseJSON contains the JSON metadata for the
+// struct [ZeroTrustAccessBookmarkListResponse]
+type zeroTrustAccessBookmarkListResponseJSON struct {
+	ID                 apijson.Field
+	AppLauncherVisible apijson.Field
+	CreatedAt          apijson.Field
+	Domain             apijson.Field
+	LogoURL            apijson.Field
+	Name               apijson.Field
+	UpdatedAt          apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *ZeroTrustAccessBookmarkListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -147,10 +216,44 @@ func (r *ZeroTrustAccessBookmarkDeleteResponse) UnmarshalJSON(data []byte) (err 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type ZeroTrustAccessBookmarkGetResponse struct {
+	// The unique identifier for the Bookmark application.
+	ID interface{} `json:"id"`
+	// Displays the application in the App Launcher.
+	AppLauncherVisible bool      `json:"app_launcher_visible"`
+	CreatedAt          time.Time `json:"created_at" format:"date-time"`
+	// The domain of the Bookmark application.
+	Domain string `json:"domain"`
+	// The image URL for the logo shown in the App Launcher dashboard.
+	LogoURL string `json:"logo_url"`
+	// The name of the Bookmark application.
+	Name      string                                 `json:"name"`
+	UpdatedAt time.Time                              `json:"updated_at" format:"date-time"`
+	JSON      zeroTrustAccessBookmarkGetResponseJSON `json:"-"`
+}
+
+// zeroTrustAccessBookmarkGetResponseJSON contains the JSON metadata for the struct
+// [ZeroTrustAccessBookmarkGetResponse]
+type zeroTrustAccessBookmarkGetResponseJSON struct {
+	ID                 apijson.Field
+	AppLauncherVisible apijson.Field
+	CreatedAt          apijson.Field
+	Domain             apijson.Field
+	LogoURL            apijson.Field
+	Name               apijson.Field
+	UpdatedAt          apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *ZeroTrustAccessBookmarkGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type ZeroTrustAccessBookmarkNewResponseEnvelope struct {
 	Errors   []ZeroTrustAccessBookmarkNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustAccessBookmarkNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessBookmarks                                      `json:"result,required"`
+	Result   ZeroTrustAccessBookmarkNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success ZeroTrustAccessBookmarkNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustAccessBookmarkNewResponseEnvelopeJSON    `json:"-"`
@@ -219,7 +322,7 @@ const (
 type ZeroTrustAccessBookmarkUpdateResponseEnvelope struct {
 	Errors   []ZeroTrustAccessBookmarkUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustAccessBookmarkUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessBookmarks                                         `json:"result,required"`
+	Result   ZeroTrustAccessBookmarkUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success ZeroTrustAccessBookmarkUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustAccessBookmarkUpdateResponseEnvelopeJSON    `json:"-"`
@@ -288,7 +391,7 @@ const (
 type ZeroTrustAccessBookmarkListResponseEnvelope struct {
 	Errors   []ZeroTrustAccessBookmarkListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustAccessBookmarkListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AccessBookmarks                                     `json:"result,required,nullable"`
+	Result   []ZeroTrustAccessBookmarkListResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    ZeroTrustAccessBookmarkListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ZeroTrustAccessBookmarkListResponseEnvelopeResultInfo `json:"result_info"`
@@ -455,7 +558,7 @@ const (
 type ZeroTrustAccessBookmarkGetResponseEnvelope struct {
 	Errors   []ZeroTrustAccessBookmarkGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustAccessBookmarkGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessBookmarks                                      `json:"result,required"`
+	Result   ZeroTrustAccessBookmarkGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success ZeroTrustAccessBookmarkGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustAccessBookmarkGetResponseEnvelopeJSON    `json:"-"`

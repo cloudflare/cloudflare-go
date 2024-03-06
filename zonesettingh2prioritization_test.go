@@ -29,9 +29,9 @@ func TestZoneSettingH2PrioritizationEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Zones.Settings.H2Prioritization.Edit(context.TODO(), cloudflare.ZoneSettingH2PrioritizationEditParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Value: cloudflare.F(cloudflare.ZonesH2PrioritizationParam{
-			ID:    cloudflare.F(cloudflare.ZonesH2PrioritizationIDH2Prioritization),
-			Value: cloudflare.F(cloudflare.ZonesH2PrioritizationValueOn),
+		Value: cloudflare.F(cloudflare.ZoneSettingH2PrioritizationEditParamsValue{
+			ID:    cloudflare.F(cloudflare.ZoneSettingH2PrioritizationEditParamsValueIDH2Prioritization),
+			Value: cloudflare.F(cloudflare.ZoneSettingH2PrioritizationEditParamsValueValueOn),
 		}),
 	})
 	if err != nil {

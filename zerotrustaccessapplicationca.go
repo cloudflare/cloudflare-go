@@ -57,7 +57,7 @@ func (r *ZeroTrustAccessApplicationCAService) New(ctx context.Context, uuid stri
 }
 
 // Lists short-lived certificate CAs and their public keys.
-func (r *ZeroTrustAccessApplicationCAService) List(ctx context.Context, query ZeroTrustAccessApplicationCAListParams, opts ...option.RequestOption) (res *[]AccessCA, err error) {
+func (r *ZeroTrustAccessApplicationCAService) List(ctx context.Context, query ZeroTrustAccessApplicationCAListParams, opts ...option.RequestOption) (res *[]ZeroTrustAccessApplicationCAListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustAccessApplicationCAListResponseEnvelope
 	var accountOrZone string
@@ -122,30 +122,6 @@ func (r *ZeroTrustAccessApplicationCAService) Get(ctx context.Context, uuid stri
 	return
 }
 
-type AccessCA struct {
-	// The ID of the CA.
-	ID string `json:"id"`
-	// The Application Audience (AUD) tag. Identifies the application associated with
-	// the CA.
-	Aud string `json:"aud"`
-	// The public key to add to your SSH server configuration.
-	PublicKey string       `json:"public_key"`
-	JSON      accessCAJSON `json:"-"`
-}
-
-// accessCAJSON contains the JSON metadata for the struct [AccessCA]
-type accessCAJSON struct {
-	ID          apijson.Field
-	Aud         apijson.Field
-	PublicKey   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessCA) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 // Union satisfied by [ZeroTrustAccessApplicationCANewResponseUnknown] or
 // [shared.UnionString].
 type ZeroTrustAccessApplicationCANewResponse interface {
@@ -161,6 +137,31 @@ func init() {
 			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
 	)
+}
+
+type ZeroTrustAccessApplicationCAListResponse struct {
+	// The ID of the CA.
+	ID string `json:"id"`
+	// The Application Audience (AUD) tag. Identifies the application associated with
+	// the CA.
+	Aud string `json:"aud"`
+	// The public key to add to your SSH server configuration.
+	PublicKey string                                       `json:"public_key"`
+	JSON      zeroTrustAccessApplicationCAListResponseJSON `json:"-"`
+}
+
+// zeroTrustAccessApplicationCAListResponseJSON contains the JSON metadata for the
+// struct [ZeroTrustAccessApplicationCAListResponse]
+type zeroTrustAccessApplicationCAListResponseJSON struct {
+	ID          apijson.Field
+	Aud         apijson.Field
+	PublicKey   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZeroTrustAccessApplicationCAListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type ZeroTrustAccessApplicationCADeleteResponse struct {
@@ -285,7 +286,7 @@ type ZeroTrustAccessApplicationCAListParams struct {
 type ZeroTrustAccessApplicationCAListResponseEnvelope struct {
 	Errors   []ZeroTrustAccessApplicationCAListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustAccessApplicationCAListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AccessCA                                                 `json:"result,required,nullable"`
+	Result   []ZeroTrustAccessApplicationCAListResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    ZeroTrustAccessApplicationCAListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ZeroTrustAccessApplicationCAListResponseEnvelopeResultInfo `json:"result_info"`

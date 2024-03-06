@@ -38,7 +38,7 @@ func NewSnippetService(opts ...option.RequestOption) (r *SnippetService) {
 }
 
 // Put Snippet
-func (r *SnippetService) Update(ctx context.Context, zoneIdentifier string, snippetName string, body SnippetUpdateParams, opts ...option.RequestOption) (res *Snippet, err error) {
+func (r *SnippetService) Update(ctx context.Context, zoneIdentifier string, snippetName string, body SnippetUpdateParams, opts ...option.RequestOption) (res *SnippetUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SnippetUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/snippets/%s", zoneIdentifier, snippetName)
@@ -51,7 +51,7 @@ func (r *SnippetService) Update(ctx context.Context, zoneIdentifier string, snip
 }
 
 // All Snippets
-func (r *SnippetService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *[]Snippet, err error) {
+func (r *SnippetService) List(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *[]SnippetListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SnippetListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/snippets", zoneIdentifier)
@@ -77,7 +77,7 @@ func (r *SnippetService) Delete(ctx context.Context, zoneIdentifier string, snip
 }
 
 // Snippet
-func (r *SnippetService) Get(ctx context.Context, zoneIdentifier string, snippetName string, opts ...option.RequestOption) (res *Snippet, err error) {
+func (r *SnippetService) Get(ctx context.Context, zoneIdentifier string, snippetName string, opts ...option.RequestOption) (res *SnippetGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SnippetGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/snippets/%s", zoneIdentifier, snippetName)
@@ -90,18 +90,19 @@ func (r *SnippetService) Get(ctx context.Context, zoneIdentifier string, snippet
 }
 
 // Snippet Information
-type Snippet struct {
+type SnippetUpdateResponse struct {
 	// Creation time of the snippet
 	CreatedOn string `json:"created_on"`
 	// Modification time of the snippet
 	ModifiedOn string `json:"modified_on"`
 	// Snippet identifying name
-	SnippetName string      `json:"snippet_name"`
-	JSON        snippetJSON `json:"-"`
+	SnippetName string                    `json:"snippet_name"`
+	JSON        snippetUpdateResponseJSON `json:"-"`
 }
 
-// snippetJSON contains the JSON metadata for the struct [Snippet]
-type snippetJSON struct {
+// snippetUpdateResponseJSON contains the JSON metadata for the struct
+// [SnippetUpdateResponse]
+type snippetUpdateResponseJSON struct {
 	CreatedOn   apijson.Field
 	ModifiedOn  apijson.Field
 	SnippetName apijson.Field
@@ -109,7 +110,32 @@ type snippetJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *Snippet) UnmarshalJSON(data []byte) (err error) {
+func (r *SnippetUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Snippet Information
+type SnippetListResponse struct {
+	// Creation time of the snippet
+	CreatedOn string `json:"created_on"`
+	// Modification time of the snippet
+	ModifiedOn string `json:"modified_on"`
+	// Snippet identifying name
+	SnippetName string                  `json:"snippet_name"`
+	JSON        snippetListResponseJSON `json:"-"`
+}
+
+// snippetListResponseJSON contains the JSON metadata for the struct
+// [SnippetListResponse]
+type snippetListResponseJSON struct {
+	CreatedOn   apijson.Field
+	ModifiedOn  apijson.Field
+	SnippetName apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SnippetListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -134,6 +160,31 @@ type SnippetDeleteResponseArray []interface{}
 
 func (r SnippetDeleteResponseArray) ImplementsSnippetDeleteResponse() {}
 
+// Snippet Information
+type SnippetGetResponse struct {
+	// Creation time of the snippet
+	CreatedOn string `json:"created_on"`
+	// Modification time of the snippet
+	ModifiedOn string `json:"modified_on"`
+	// Snippet identifying name
+	SnippetName string                 `json:"snippet_name"`
+	JSON        snippetGetResponseJSON `json:"-"`
+}
+
+// snippetGetResponseJSON contains the JSON metadata for the struct
+// [SnippetGetResponse]
+type snippetGetResponseJSON struct {
+	CreatedOn   apijson.Field
+	ModifiedOn  apijson.Field
+	SnippetName apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SnippetGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type SnippetUpdateParams struct {
 	// Content files of uploaded snippet
 	Files    param.Field[string]                      `json:"files"`
@@ -157,7 +208,7 @@ type SnippetUpdateResponseEnvelope struct {
 	Errors   []SnippetUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SnippetUpdateResponseEnvelopeMessages `json:"messages,required"`
 	// Snippet Information
-	Result Snippet `json:"result,required"`
+	Result SnippetUpdateResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success SnippetUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    snippetUpdateResponseEnvelopeJSON    `json:"-"`
@@ -227,7 +278,7 @@ type SnippetListResponseEnvelope struct {
 	Errors   []SnippetListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SnippetListResponseEnvelopeMessages `json:"messages,required"`
 	// List of all zone snippets
-	Result []Snippet `json:"result,required"`
+	Result []SnippetListResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success SnippetListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    snippetListResponseEnvelopeJSON    `json:"-"`
@@ -366,7 +417,7 @@ type SnippetGetResponseEnvelope struct {
 	Errors   []SnippetGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SnippetGetResponseEnvelopeMessages `json:"messages,required"`
 	// Snippet Information
-	Result Snippet `json:"result,required"`
+	Result SnippetGetResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success SnippetGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    snippetGetResponseEnvelopeJSON    `json:"-"`

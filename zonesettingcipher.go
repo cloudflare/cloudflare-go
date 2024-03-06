@@ -33,7 +33,7 @@ func NewZoneSettingCipherService(opts ...option.RequestOption) (r *ZoneSettingCi
 }
 
 // Changes ciphers setting.
-func (r *ZoneSettingCipherService) Edit(ctx context.Context, params ZoneSettingCipherEditParams, opts ...option.RequestOption) (res *ZonesCiphers, err error) {
+func (r *ZoneSettingCipherService) Edit(ctx context.Context, params ZoneSettingCipherEditParams, opts ...option.RequestOption) (res *ZoneSettingCipherEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingCipherEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/ciphers", params.ZoneID)
@@ -46,7 +46,7 @@ func (r *ZoneSettingCipherService) Edit(ctx context.Context, params ZoneSettingC
 }
 
 // Gets ciphers setting.
-func (r *ZoneSettingCipherService) Get(ctx context.Context, query ZoneSettingCipherGetParams, opts ...option.RequestOption) (res *ZonesCiphers, err error) {
+func (r *ZoneSettingCipherService) Get(ctx context.Context, query ZoneSettingCipherGetParams, opts ...option.RequestOption) (res *ZoneSettingCipherGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingCipherGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/ciphers", query.ZoneID)
@@ -60,21 +60,22 @@ func (r *ZoneSettingCipherService) Get(ctx context.Context, query ZoneSettingCip
 
 // An allowlist of ciphers for TLS termination. These ciphers must be in the
 // BoringSSL format.
-type ZonesCiphers struct {
+type ZoneSettingCipherEditResponse struct {
 	// ID of the zone setting.
-	ID ZonesCiphersID `json:"id,required"`
+	ID ZoneSettingCipherEditResponseID `json:"id,required"`
 	// Current value of the zone setting.
 	Value []string `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZonesCiphersEditable `json:"editable"`
+	Editable ZoneSettingCipherEditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time        `json:"modified_on,nullable" format:"date-time"`
-	JSON       zonesCiphersJSON `json:"-"`
+	ModifiedOn time.Time                         `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingCipherEditResponseJSON `json:"-"`
 }
 
-// zonesCiphersJSON contains the JSON metadata for the struct [ZonesCiphers]
-type zonesCiphersJSON struct {
+// zoneSettingCipherEditResponseJSON contains the JSON metadata for the struct
+// [ZoneSettingCipherEditResponse]
+type zoneSettingCipherEditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -83,44 +84,71 @@ type zonesCiphersJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZonesCiphers) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingCipherEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ZonesCiphers) implementsZoneSettingEditResponse() {}
-
-func (r ZonesCiphers) implementsZoneSettingGetResponse() {}
-
 // ID of the zone setting.
-type ZonesCiphersID string
+type ZoneSettingCipherEditResponseID string
 
 const (
-	ZonesCiphersIDCiphers ZonesCiphersID = "ciphers"
+	ZoneSettingCipherEditResponseIDCiphers ZoneSettingCipherEditResponseID = "ciphers"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZonesCiphersEditable bool
+type ZoneSettingCipherEditResponseEditable bool
 
 const (
-	ZonesCiphersEditableTrue  ZonesCiphersEditable = true
-	ZonesCiphersEditableFalse ZonesCiphersEditable = false
+	ZoneSettingCipherEditResponseEditableTrue  ZoneSettingCipherEditResponseEditable = true
+	ZoneSettingCipherEditResponseEditableFalse ZoneSettingCipherEditResponseEditable = false
 )
 
 // An allowlist of ciphers for TLS termination. These ciphers must be in the
 // BoringSSL format.
-type ZonesCiphersParam struct {
+type ZoneSettingCipherGetResponse struct {
 	// ID of the zone setting.
-	ID param.Field[ZonesCiphersID] `json:"id,required"`
+	ID ZoneSettingCipherGetResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value param.Field[[]string] `json:"value,required"`
+	Value []string `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingCipherGetResponseEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                        `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingCipherGetResponseJSON `json:"-"`
 }
 
-func (r ZonesCiphersParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+// zoneSettingCipherGetResponseJSON contains the JSON metadata for the struct
+// [ZoneSettingCipherGetResponse]
+type zoneSettingCipherGetResponseJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
-func (r ZonesCiphersParam) implementsZoneSettingEditParamsItem() {}
+func (r *ZoneSettingCipherGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// ID of the zone setting.
+type ZoneSettingCipherGetResponseID string
+
+const (
+	ZoneSettingCipherGetResponseIDCiphers ZoneSettingCipherGetResponseID = "ciphers"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingCipherGetResponseEditable bool
+
+const (
+	ZoneSettingCipherGetResponseEditableTrue  ZoneSettingCipherGetResponseEditable = true
+	ZoneSettingCipherGetResponseEditableFalse ZoneSettingCipherGetResponseEditable = false
+)
 
 type ZoneSettingCipherEditParams struct {
 	// Identifier
@@ -140,7 +168,7 @@ type ZoneSettingCipherEditResponseEnvelope struct {
 	Success bool `json:"success,required"`
 	// An allowlist of ciphers for TLS termination. These ciphers must be in the
 	// BoringSSL format.
-	Result ZonesCiphers                              `json:"result"`
+	Result ZoneSettingCipherEditResponse             `json:"result"`
 	JSON   zoneSettingCipherEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -209,7 +237,7 @@ type ZoneSettingCipherGetResponseEnvelope struct {
 	Success bool `json:"success,required"`
 	// An allowlist of ciphers for TLS termination. These ciphers must be in the
 	// BoringSSL format.
-	Result ZonesCiphers                             `json:"result"`
+	Result ZoneSettingCipherGetResponse             `json:"result"`
 	JSON   zoneSettingCipherGetResponseEnvelopeJSON `json:"-"`
 }
 

@@ -33,7 +33,7 @@ func NewZoneSettingZeroRTTService(opts ...option.RequestOption) (r *ZoneSettingZ
 }
 
 // Changes the 0-RTT session resumption setting.
-func (r *ZoneSettingZeroRTTService) Edit(ctx context.Context, params ZoneSettingZeroRTTEditParams, opts ...option.RequestOption) (res *Zones0rtt, err error) {
+func (r *ZoneSettingZeroRTTService) Edit(ctx context.Context, params ZoneSettingZeroRTTEditParams, opts ...option.RequestOption) (res *ZoneSettingZeroRTTEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingZeroRTTEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/0rtt", params.ZoneID)
@@ -46,7 +46,7 @@ func (r *ZoneSettingZeroRTTService) Edit(ctx context.Context, params ZoneSetting
 }
 
 // Gets 0-RTT session resumption setting.
-func (r *ZoneSettingZeroRTTService) Get(ctx context.Context, query ZoneSettingZeroRTTGetParams, opts ...option.RequestOption) (res *Zones0rtt, err error) {
+func (r *ZoneSettingZeroRTTService) Get(ctx context.Context, query ZoneSettingZeroRTTGetParams, opts ...option.RequestOption) (res *ZoneSettingZeroRTTGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingZeroRTTGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/0rtt", query.ZoneID)
@@ -59,21 +59,22 @@ func (r *ZoneSettingZeroRTTService) Get(ctx context.Context, query ZoneSettingZe
 }
 
 // 0-RTT session resumption enabled for this zone.
-type Zones0rtt struct {
+type ZoneSettingZeroRTTEditResponse struct {
 	// ID of the zone setting.
-	ID Zones0rttID `json:"id,required"`
+	ID ZoneSettingZeroRTTEditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value Zones0rttValue `json:"value,required"`
+	Value ZoneSettingZeroRTTEditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable Zones0rttEditable `json:"editable"`
+	Editable ZoneSettingZeroRTTEditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time     `json:"modified_on,nullable" format:"date-time"`
-	JSON       zones0rttJSON `json:"-"`
+	ModifiedOn time.Time                          `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingZeroRTTEditResponseJSON `json:"-"`
 }
 
-// zones0rttJSON contains the JSON metadata for the struct [Zones0rtt]
-type zones0rttJSON struct {
+// zoneSettingZeroRTTEditResponseJSON contains the JSON metadata for the struct
+// [ZoneSettingZeroRTTEditResponse]
+type zoneSettingZeroRTTEditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -82,51 +83,86 @@ type zones0rttJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *Zones0rtt) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingZeroRTTEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r Zones0rtt) implementsZoneSettingEditResponse() {}
-
-func (r Zones0rtt) implementsZoneSettingGetResponse() {}
-
 // ID of the zone setting.
-type Zones0rttID string
+type ZoneSettingZeroRTTEditResponseID string
 
 const (
-	Zones0rttID0rtt Zones0rttID = "0rtt"
+	ZoneSettingZeroRTTEditResponseID0rtt ZoneSettingZeroRTTEditResponseID = "0rtt"
 )
 
 // Current value of the zone setting.
-type Zones0rttValue string
+type ZoneSettingZeroRTTEditResponseValue string
 
 const (
-	Zones0rttValueOn  Zones0rttValue = "on"
-	Zones0rttValueOff Zones0rttValue = "off"
+	ZoneSettingZeroRTTEditResponseValueOn  ZoneSettingZeroRTTEditResponseValue = "on"
+	ZoneSettingZeroRTTEditResponseValueOff ZoneSettingZeroRTTEditResponseValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type Zones0rttEditable bool
+type ZoneSettingZeroRTTEditResponseEditable bool
 
 const (
-	Zones0rttEditableTrue  Zones0rttEditable = true
-	Zones0rttEditableFalse Zones0rttEditable = false
+	ZoneSettingZeroRTTEditResponseEditableTrue  ZoneSettingZeroRTTEditResponseEditable = true
+	ZoneSettingZeroRTTEditResponseEditableFalse ZoneSettingZeroRTTEditResponseEditable = false
 )
 
 // 0-RTT session resumption enabled for this zone.
-type Zones0rttParam struct {
+type ZoneSettingZeroRTTGetResponse struct {
 	// ID of the zone setting.
-	ID param.Field[Zones0rttID] `json:"id,required"`
+	ID ZoneSettingZeroRTTGetResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value param.Field[Zones0rttValue] `json:"value,required"`
+	Value ZoneSettingZeroRTTGetResponseValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingZeroRTTGetResponseEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                         `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingZeroRTTGetResponseJSON `json:"-"`
 }
 
-func (r Zones0rttParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+// zoneSettingZeroRTTGetResponseJSON contains the JSON metadata for the struct
+// [ZoneSettingZeroRTTGetResponse]
+type zoneSettingZeroRTTGetResponseJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
-func (r Zones0rttParam) implementsZoneSettingEditParamsItem() {}
+func (r *ZoneSettingZeroRTTGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// ID of the zone setting.
+type ZoneSettingZeroRTTGetResponseID string
+
+const (
+	ZoneSettingZeroRTTGetResponseID0rtt ZoneSettingZeroRTTGetResponseID = "0rtt"
+)
+
+// Current value of the zone setting.
+type ZoneSettingZeroRTTGetResponseValue string
+
+const (
+	ZoneSettingZeroRTTGetResponseValueOn  ZoneSettingZeroRTTGetResponseValue = "on"
+	ZoneSettingZeroRTTGetResponseValueOff ZoneSettingZeroRTTGetResponseValue = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingZeroRTTGetResponseEditable bool
+
+const (
+	ZoneSettingZeroRTTGetResponseEditableTrue  ZoneSettingZeroRTTGetResponseEditable = true
+	ZoneSettingZeroRTTGetResponseEditableFalse ZoneSettingZeroRTTGetResponseEditable = false
+)
 
 type ZoneSettingZeroRTTEditParams struct {
 	// Identifier
@@ -153,7 +189,7 @@ type ZoneSettingZeroRTTEditResponseEnvelope struct {
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// 0-RTT session resumption enabled for this zone.
-	Result Zones0rtt                                  `json:"result"`
+	Result ZoneSettingZeroRTTEditResponse             `json:"result"`
 	JSON   zoneSettingZeroRTTEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -221,7 +257,7 @@ type ZoneSettingZeroRTTGetResponseEnvelope struct {
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// 0-RTT session resumption enabled for this zone.
-	Result Zones0rtt                                 `json:"result"`
+	Result ZoneSettingZeroRTTGetResponse             `json:"result"`
 	JSON   zoneSettingZeroRTTGetResponseEnvelopeJSON `json:"-"`
 }
 

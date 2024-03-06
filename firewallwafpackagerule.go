@@ -40,7 +40,7 @@ func NewFirewallWAFPackageRuleService(opts ...option.RequestOption) (r *Firewall
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *FirewallWAFPackageRuleService) List(ctx context.Context, packageID string, params FirewallWAFPackageRuleListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[WAFManagedRulesRule], err error) {
+func (r *FirewallWAFPackageRuleService) List(ctx context.Context, packageID string, params FirewallWAFPackageRuleListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[FirewallWAFPackageRuleListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -61,7 +61,7 @@ func (r *FirewallWAFPackageRuleService) List(ctx context.Context, packageID stri
 //
 // **Note:** Applies only to the
 // [previous version of WAF managed rules](https://developers.cloudflare.com/support/firewall/managed-rules-web-application-firewall-waf/understanding-waf-managed-rules-web-application-firewall/).
-func (r *FirewallWAFPackageRuleService) ListAutoPaging(ctx context.Context, packageID string, params FirewallWAFPackageRuleListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[WAFManagedRulesRule] {
+func (r *FirewallWAFPackageRuleService) ListAutoPaging(ctx context.Context, packageID string, params FirewallWAFPackageRuleListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[FirewallWAFPackageRuleListResponse] {
 	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, packageID, params, opts...))
 }
 
@@ -102,44 +102,46 @@ func (r *FirewallWAFPackageRuleService) Get(ctx context.Context, packageID strin
 // configure the total scoring threshold through the 'sensitivity' property of the
 // WAF package.
 //
-// Union satisfied by [WAFManagedRulesRuleWAFManagedRulesAnomalyRule],
-// [WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRule] or
-// [WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRule].
-type WAFManagedRulesRule interface {
-	implementsWAFManagedRulesRule()
+// Union satisfied by
+// [FirewallWAFPackageRuleListResponseWAFManagedRulesAnomalyRule],
+// [FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRule] or
+// [FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRule].
+type FirewallWAFPackageRuleListResponse interface {
+	implementsFirewallWAFPackageRuleListResponse()
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*WAFManagedRulesRule)(nil)).Elem(), "")
+	apijson.RegisterUnion(reflect.TypeOf((*FirewallWAFPackageRuleListResponse)(nil)).Elem(), "")
 }
 
 // When triggered, anomaly detection WAF rules contribute to an overall threat
 // score that will determine if a request is considered malicious. You can
 // configure the total scoring threshold through the 'sensitivity' property of the
 // WAF package.
-type WAFManagedRulesRuleWAFManagedRulesAnomalyRule struct {
+type FirewallWAFPackageRuleListResponseWAFManagedRulesAnomalyRule struct {
 	// The unique identifier of the WAF rule.
 	ID string `json:"id,required"`
 	// Defines the available modes for the current WAF rule. Applies to anomaly
 	// detection WAF rules.
-	AllowedModes []WAFManagedRulesRuleWAFManagedRulesAnomalyRuleAllowedMode `json:"allowed_modes,required"`
+	AllowedModes []FirewallWAFPackageRuleListResponseWAFManagedRulesAnomalyRuleAllowedMode `json:"allowed_modes,required"`
 	// The public description of the WAF rule.
 	Description string `json:"description,required"`
 	// The rule group to which the current WAF rule belongs.
-	Group WAFManagedRulesRuleWAFManagedRulesAnomalyRuleGroup `json:"group,required"`
+	Group FirewallWAFPackageRuleListResponseWAFManagedRulesAnomalyRuleGroup `json:"group,required"`
 	// When set to `on`, the current WAF rule will be used when evaluating the request.
 	// Applies to anomaly detection WAF rules.
-	Mode WAFManagedRulesRuleWAFManagedRulesAnomalyRuleMode `json:"mode,required"`
+	Mode FirewallWAFPackageRuleListResponseWAFManagedRulesAnomalyRuleMode `json:"mode,required"`
 	// The unique identifier of a WAF package.
 	PackageID string `json:"package_id,required"`
 	// The order in which the individual WAF rule is executed within its rule group.
-	Priority string                                            `json:"priority,required"`
-	JSON     wafManagedRulesRuleWAFManagedRulesAnomalyRuleJSON `json:"-"`
+	Priority string                                                           `json:"priority,required"`
+	JSON     firewallWAFPackageRuleListResponseWAFManagedRulesAnomalyRuleJSON `json:"-"`
 }
 
-// wafManagedRulesRuleWAFManagedRulesAnomalyRuleJSON contains the JSON metadata for
-// the struct [WAFManagedRulesRuleWAFManagedRulesAnomalyRule]
-type wafManagedRulesRuleWAFManagedRulesAnomalyRuleJSON struct {
+// firewallWAFPackageRuleListResponseWAFManagedRulesAnomalyRuleJSON contains the
+// JSON metadata for the struct
+// [FirewallWAFPackageRuleListResponseWAFManagedRulesAnomalyRule]
+type firewallWAFPackageRuleListResponseWAFManagedRulesAnomalyRuleJSON struct {
 	ID           apijson.Field
 	AllowedModes apijson.Field
 	Description  apijson.Field
@@ -151,80 +153,83 @@ type wafManagedRulesRuleWAFManagedRulesAnomalyRuleJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *WAFManagedRulesRuleWAFManagedRulesAnomalyRule) UnmarshalJSON(data []byte) (err error) {
+func (r *FirewallWAFPackageRuleListResponseWAFManagedRulesAnomalyRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r WAFManagedRulesRuleWAFManagedRulesAnomalyRule) implementsWAFManagedRulesRule() {}
+func (r FirewallWAFPackageRuleListResponseWAFManagedRulesAnomalyRule) implementsFirewallWAFPackageRuleListResponse() {
+}
 
 // When set to `on`, the current WAF rule will be used when evaluating the request.
 // Applies to anomaly detection WAF rules.
-type WAFManagedRulesRuleWAFManagedRulesAnomalyRuleAllowedMode string
+type FirewallWAFPackageRuleListResponseWAFManagedRulesAnomalyRuleAllowedMode string
 
 const (
-	WAFManagedRulesRuleWAFManagedRulesAnomalyRuleAllowedModeOn  WAFManagedRulesRuleWAFManagedRulesAnomalyRuleAllowedMode = "on"
-	WAFManagedRulesRuleWAFManagedRulesAnomalyRuleAllowedModeOff WAFManagedRulesRuleWAFManagedRulesAnomalyRuleAllowedMode = "off"
+	FirewallWAFPackageRuleListResponseWAFManagedRulesAnomalyRuleAllowedModeOn  FirewallWAFPackageRuleListResponseWAFManagedRulesAnomalyRuleAllowedMode = "on"
+	FirewallWAFPackageRuleListResponseWAFManagedRulesAnomalyRuleAllowedModeOff FirewallWAFPackageRuleListResponseWAFManagedRulesAnomalyRuleAllowedMode = "off"
 )
 
 // The rule group to which the current WAF rule belongs.
-type WAFManagedRulesRuleWAFManagedRulesAnomalyRuleGroup struct {
+type FirewallWAFPackageRuleListResponseWAFManagedRulesAnomalyRuleGroup struct {
 	// The unique identifier of the rule group.
 	ID string `json:"id"`
 	// The name of the rule group.
-	Name string                                                 `json:"name"`
-	JSON wafManagedRulesRuleWAFManagedRulesAnomalyRuleGroupJSON `json:"-"`
+	Name string                                                                `json:"name"`
+	JSON firewallWAFPackageRuleListResponseWAFManagedRulesAnomalyRuleGroupJSON `json:"-"`
 }
 
-// wafManagedRulesRuleWAFManagedRulesAnomalyRuleGroupJSON contains the JSON
-// metadata for the struct [WAFManagedRulesRuleWAFManagedRulesAnomalyRuleGroup]
-type wafManagedRulesRuleWAFManagedRulesAnomalyRuleGroupJSON struct {
+// firewallWAFPackageRuleListResponseWAFManagedRulesAnomalyRuleGroupJSON contains
+// the JSON metadata for the struct
+// [FirewallWAFPackageRuleListResponseWAFManagedRulesAnomalyRuleGroup]
+type firewallWAFPackageRuleListResponseWAFManagedRulesAnomalyRuleGroupJSON struct {
 	ID          apijson.Field
 	Name        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WAFManagedRulesRuleWAFManagedRulesAnomalyRuleGroup) UnmarshalJSON(data []byte) (err error) {
+func (r *FirewallWAFPackageRuleListResponseWAFManagedRulesAnomalyRuleGroup) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // When set to `on`, the current WAF rule will be used when evaluating the request.
 // Applies to anomaly detection WAF rules.
-type WAFManagedRulesRuleWAFManagedRulesAnomalyRuleMode string
+type FirewallWAFPackageRuleListResponseWAFManagedRulesAnomalyRuleMode string
 
 const (
-	WAFManagedRulesRuleWAFManagedRulesAnomalyRuleModeOn  WAFManagedRulesRuleWAFManagedRulesAnomalyRuleMode = "on"
-	WAFManagedRulesRuleWAFManagedRulesAnomalyRuleModeOff WAFManagedRulesRuleWAFManagedRulesAnomalyRuleMode = "off"
+	FirewallWAFPackageRuleListResponseWAFManagedRulesAnomalyRuleModeOn  FirewallWAFPackageRuleListResponseWAFManagedRulesAnomalyRuleMode = "on"
+	FirewallWAFPackageRuleListResponseWAFManagedRulesAnomalyRuleModeOff FirewallWAFPackageRuleListResponseWAFManagedRulesAnomalyRuleMode = "off"
 )
 
 // When triggered, traditional WAF rules cause the firewall to immediately act upon
 // the request based on the configuration of the rule. A 'deny' rule will
 // immediately respond to the request based on the configured rule action/mode (for
 // example, 'block') and no other rules will be processed.
-type WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRule struct {
+type FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRule struct {
 	// The unique identifier of the WAF rule.
 	ID string `json:"id,required"`
 	// The list of possible actions of the WAF rule when it is triggered.
-	AllowedModes []WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleAllowedMode `json:"allowed_modes,required"`
+	AllowedModes []FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleAllowedMode `json:"allowed_modes,required"`
 	// The default action/mode of a rule.
-	DefaultMode WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleDefaultMode `json:"default_mode,required"`
+	DefaultMode FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleDefaultMode `json:"default_mode,required"`
 	// The public description of the WAF rule.
 	Description string `json:"description,required"`
 	// The rule group to which the current WAF rule belongs.
-	Group WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleGroup `json:"group,required"`
+	Group FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleGroup `json:"group,required"`
 	// The action that the current WAF rule will perform when triggered. Applies to
 	// traditional (deny) WAF rules.
-	Mode WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleMode `json:"mode,required"`
+	Mode FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleMode `json:"mode,required"`
 	// The unique identifier of a WAF package.
 	PackageID string `json:"package_id,required"`
 	// The order in which the individual WAF rule is executed within its rule group.
-	Priority string                                                    `json:"priority,required"`
-	JSON     wafManagedRulesRuleWAFManagedRulesTraditionalDenyRuleJSON `json:"-"`
+	Priority string                                                                   `json:"priority,required"`
+	JSON     firewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleJSON `json:"-"`
 }
 
-// wafManagedRulesRuleWAFManagedRulesTraditionalDenyRuleJSON contains the JSON
-// metadata for the struct [WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRule]
-type wafManagedRulesRuleWAFManagedRulesTraditionalDenyRuleJSON struct {
+// firewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleJSON
+// contains the JSON metadata for the struct
+// [FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRule]
+type firewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleJSON struct {
 	ID           apijson.Field
 	AllowedModes apijson.Field
 	DefaultMode  apijson.Field
@@ -237,94 +242,96 @@ type wafManagedRulesRuleWAFManagedRulesTraditionalDenyRuleJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRule) UnmarshalJSON(data []byte) (err error) {
+func (r *FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRule) implementsWAFManagedRulesRule() {}
+func (r FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRule) implementsFirewallWAFPackageRuleListResponse() {
+}
 
 // The action that the current WAF rule will perform when triggered. Applies to
 // traditional (deny) WAF rules.
-type WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleAllowedMode string
+type FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleAllowedMode string
 
 const (
-	WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleAllowedModeDefault   WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleAllowedMode = "default"
-	WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleAllowedModeDisable   WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleAllowedMode = "disable"
-	WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleAllowedModeSimulate  WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleAllowedMode = "simulate"
-	WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleAllowedModeBlock     WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleAllowedMode = "block"
-	WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleAllowedModeChallenge WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleAllowedMode = "challenge"
+	FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleAllowedModeDefault   FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleAllowedMode = "default"
+	FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleAllowedModeDisable   FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleAllowedMode = "disable"
+	FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleAllowedModeSimulate  FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleAllowedMode = "simulate"
+	FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleAllowedModeBlock     FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleAllowedMode = "block"
+	FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleAllowedModeChallenge FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleAllowedMode = "challenge"
 )
 
 // The default action/mode of a rule.
-type WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleDefaultMode string
+type FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleDefaultMode string
 
 const (
-	WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleDefaultModeDisable   WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleDefaultMode = "disable"
-	WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleDefaultModeSimulate  WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleDefaultMode = "simulate"
-	WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleDefaultModeBlock     WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleDefaultMode = "block"
-	WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleDefaultModeChallenge WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleDefaultMode = "challenge"
+	FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleDefaultModeDisable   FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleDefaultMode = "disable"
+	FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleDefaultModeSimulate  FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleDefaultMode = "simulate"
+	FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleDefaultModeBlock     FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleDefaultMode = "block"
+	FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleDefaultModeChallenge FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleDefaultMode = "challenge"
 )
 
 // The rule group to which the current WAF rule belongs.
-type WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleGroup struct {
+type FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleGroup struct {
 	// The unique identifier of the rule group.
 	ID string `json:"id"`
 	// The name of the rule group.
-	Name string                                                         `json:"name"`
-	JSON wafManagedRulesRuleWAFManagedRulesTraditionalDenyRuleGroupJSON `json:"-"`
+	Name string                                                                        `json:"name"`
+	JSON firewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleGroupJSON `json:"-"`
 }
 
-// wafManagedRulesRuleWAFManagedRulesTraditionalDenyRuleGroupJSON contains the JSON
-// metadata for the struct
-// [WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleGroup]
-type wafManagedRulesRuleWAFManagedRulesTraditionalDenyRuleGroupJSON struct {
+// firewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleGroupJSON
+// contains the JSON metadata for the struct
+// [FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleGroup]
+type firewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleGroupJSON struct {
 	ID          apijson.Field
 	Name        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleGroup) UnmarshalJSON(data []byte) (err error) {
+func (r *FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleGroup) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The action that the current WAF rule will perform when triggered. Applies to
 // traditional (deny) WAF rules.
-type WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleMode string
+type FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleMode string
 
 const (
-	WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleModeDefault   WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleMode = "default"
-	WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleModeDisable   WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleMode = "disable"
-	WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleModeSimulate  WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleMode = "simulate"
-	WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleModeBlock     WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleMode = "block"
-	WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleModeChallenge WAFManagedRulesRuleWAFManagedRulesTraditionalDenyRuleMode = "challenge"
+	FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleModeDefault   FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleMode = "default"
+	FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleModeDisable   FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleMode = "disable"
+	FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleModeSimulate  FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleMode = "simulate"
+	FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleModeBlock     FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleMode = "block"
+	FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleModeChallenge FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalDenyRuleMode = "challenge"
 )
 
 // When triggered, traditional WAF rules cause the firewall to immediately act on
 // the request based on the rule configuration. An 'allow' rule will immediately
 // allow the request and no other rules will be processed.
-type WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRule struct {
+type FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRule struct {
 	// The unique identifier of the WAF rule.
 	ID string `json:"id,required"`
 	// Defines the available modes for the current WAF rule.
-	AllowedModes []WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRuleAllowedMode `json:"allowed_modes,required"`
+	AllowedModes []FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleAllowedMode `json:"allowed_modes,required"`
 	// The public description of the WAF rule.
 	Description string `json:"description,required"`
 	// The rule group to which the current WAF rule belongs.
-	Group WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRuleGroup `json:"group,required"`
+	Group FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleGroup `json:"group,required"`
 	// When set to `on`, the current rule will be used when evaluating the request.
 	// Applies to traditional (allow) WAF rules.
-	Mode WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRuleMode `json:"mode,required"`
+	Mode FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleMode `json:"mode,required"`
 	// The unique identifier of a WAF package.
 	PackageID string `json:"package_id,required"`
 	// The order in which the individual WAF rule is executed within its rule group.
-	Priority string                                                     `json:"priority,required"`
-	JSON     wafManagedRulesRuleWAFManagedRulesTraditionalAllowRuleJSON `json:"-"`
+	Priority string                                                                    `json:"priority,required"`
+	JSON     firewallWAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleJSON `json:"-"`
 }
 
-// wafManagedRulesRuleWAFManagedRulesTraditionalAllowRuleJSON contains the JSON
-// metadata for the struct [WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRule]
-type wafManagedRulesRuleWAFManagedRulesTraditionalAllowRuleJSON struct {
+// firewallWAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleJSON
+// contains the JSON metadata for the struct
+// [FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRule]
+type firewallWAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleJSON struct {
 	ID           apijson.Field
 	AllowedModes apijson.Field
 	Description  apijson.Field
@@ -336,51 +343,52 @@ type wafManagedRulesRuleWAFManagedRulesTraditionalAllowRuleJSON struct {
 	ExtraFields  map[string]apijson.Field
 }
 
-func (r *WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRule) UnmarshalJSON(data []byte) (err error) {
+func (r *FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRule) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRule) implementsWAFManagedRulesRule() {}
+func (r FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRule) implementsFirewallWAFPackageRuleListResponse() {
+}
 
 // When set to `on`, the current rule will be used when evaluating the request.
 // Applies to traditional (allow) WAF rules.
-type WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRuleAllowedMode string
+type FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleAllowedMode string
 
 const (
-	WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRuleAllowedModeOn  WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRuleAllowedMode = "on"
-	WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRuleAllowedModeOff WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRuleAllowedMode = "off"
+	FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleAllowedModeOn  FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleAllowedMode = "on"
+	FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleAllowedModeOff FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleAllowedMode = "off"
 )
 
 // The rule group to which the current WAF rule belongs.
-type WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRuleGroup struct {
+type FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleGroup struct {
 	// The unique identifier of the rule group.
 	ID string `json:"id"`
 	// The name of the rule group.
-	Name string                                                          `json:"name"`
-	JSON wafManagedRulesRuleWAFManagedRulesTraditionalAllowRuleGroupJSON `json:"-"`
+	Name string                                                                         `json:"name"`
+	JSON firewallWAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleGroupJSON `json:"-"`
 }
 
-// wafManagedRulesRuleWAFManagedRulesTraditionalAllowRuleGroupJSON contains the
-// JSON metadata for the struct
-// [WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRuleGroup]
-type wafManagedRulesRuleWAFManagedRulesTraditionalAllowRuleGroupJSON struct {
+// firewallWAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleGroupJSON
+// contains the JSON metadata for the struct
+// [FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleGroup]
+type firewallWAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleGroupJSON struct {
 	ID          apijson.Field
 	Name        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRuleGroup) UnmarshalJSON(data []byte) (err error) {
+func (r *FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleGroup) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // When set to `on`, the current rule will be used when evaluating the request.
 // Applies to traditional (allow) WAF rules.
-type WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRuleMode string
+type FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleMode string
 
 const (
-	WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRuleModeOn  WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRuleMode = "on"
-	WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRuleModeOff WAFManagedRulesRuleWAFManagedRulesTraditionalAllowRuleMode = "off"
+	FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleModeOn  FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleMode = "on"
+	FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleModeOff FirewallWAFPackageRuleListResponseWAFManagedRulesTraditionalAllowRuleMode = "off"
 )
 
 // When triggered, anomaly detection WAF rules contribute to an overall threat

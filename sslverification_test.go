@@ -32,7 +32,7 @@ func TestSSLVerificationEdit(t *testing.T) {
 		"a77f8bd7-3b47-46b4-a6f1-75cf98109948",
 		cloudflare.SSLVerificationEditParams{
 			ZoneID:           cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			ValidationMethod: cloudflare.F(cloudflare.SSLVerificationEditParamsValidationMethodTxt),
+			ValidationMethod: cloudflare.F(cloudflare.SSLVerificationEditParamsValidationMethodTXT),
 		},
 	)
 	if err != nil {

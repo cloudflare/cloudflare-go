@@ -34,7 +34,7 @@ func NewZeroTrustGatewayAppTypeService(opts ...option.RequestOption) (r *ZeroTru
 }
 
 // Fetches all application and application type mappings.
-func (r *ZeroTrustGatewayAppTypeService) List(ctx context.Context, query ZeroTrustGatewayAppTypeListParams, opts ...option.RequestOption) (res *[]ZeroTrustGatewayAppTypes, err error) {
+func (r *ZeroTrustGatewayAppTypeService) List(ctx context.Context, query ZeroTrustGatewayAppTypeListParams, opts ...option.RequestOption) (res *[]ZeroTrustGatewayAppTypeListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustGatewayAppTypeListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/gateway/app_types", query.AccountID)
@@ -46,17 +46,18 @@ func (r *ZeroTrustGatewayAppTypeService) List(ctx context.Context, query ZeroTru
 	return
 }
 
-// Union satisfied by [ZeroTrustGatewayAppTypesZeroTrustGatewayApplication] or
-// [ZeroTrustGatewayAppTypesZeroTrustGatewayApplicationType].
-type ZeroTrustGatewayAppTypes interface {
-	implementsZeroTrustGatewayAppTypes()
+// Union satisfied by
+// [ZeroTrustGatewayAppTypeListResponseZeroTrustGatewayApplication] or
+// [ZeroTrustGatewayAppTypeListResponseZeroTrustGatewayApplicationType].
+type ZeroTrustGatewayAppTypeListResponse interface {
+	implementsZeroTrustGatewayAppTypeListResponse()
 }
 
 func init() {
-	apijson.RegisterUnion(reflect.TypeOf((*ZeroTrustGatewayAppTypes)(nil)).Elem(), "")
+	apijson.RegisterUnion(reflect.TypeOf((*ZeroTrustGatewayAppTypeListResponse)(nil)).Elem(), "")
 }
 
-type ZeroTrustGatewayAppTypesZeroTrustGatewayApplication struct {
+type ZeroTrustGatewayAppTypeListResponseZeroTrustGatewayApplication struct {
 	// The identifier for this application. There is only one application per ID.
 	ID int64 `json:"id"`
 	// The identifier for the type of this application. There can be many applications
@@ -64,13 +65,14 @@ type ZeroTrustGatewayAppTypesZeroTrustGatewayApplication struct {
 	ApplicationTypeID int64     `json:"application_type_id"`
 	CreatedAt         time.Time `json:"created_at" format:"date-time"`
 	// The name of the application or application type.
-	Name string                                                  `json:"name"`
-	JSON zeroTrustGatewayAppTypesZeroTrustGatewayApplicationJSON `json:"-"`
+	Name string                                                             `json:"name"`
+	JSON zeroTrustGatewayAppTypeListResponseZeroTrustGatewayApplicationJSON `json:"-"`
 }
 
-// zeroTrustGatewayAppTypesZeroTrustGatewayApplicationJSON contains the JSON
-// metadata for the struct [ZeroTrustGatewayAppTypesZeroTrustGatewayApplication]
-type zeroTrustGatewayAppTypesZeroTrustGatewayApplicationJSON struct {
+// zeroTrustGatewayAppTypeListResponseZeroTrustGatewayApplicationJSON contains the
+// JSON metadata for the struct
+// [ZeroTrustGatewayAppTypeListResponseZeroTrustGatewayApplication]
+type zeroTrustGatewayAppTypeListResponseZeroTrustGatewayApplicationJSON struct {
 	ID                apijson.Field
 	ApplicationTypeID apijson.Field
 	CreatedAt         apijson.Field
@@ -79,13 +81,14 @@ type zeroTrustGatewayAppTypesZeroTrustGatewayApplicationJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *ZeroTrustGatewayAppTypesZeroTrustGatewayApplication) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustGatewayAppTypeListResponseZeroTrustGatewayApplication) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ZeroTrustGatewayAppTypesZeroTrustGatewayApplication) implementsZeroTrustGatewayAppTypes() {}
+func (r ZeroTrustGatewayAppTypeListResponseZeroTrustGatewayApplication) implementsZeroTrustGatewayAppTypeListResponse() {
+}
 
-type ZeroTrustGatewayAppTypesZeroTrustGatewayApplicationType struct {
+type ZeroTrustGatewayAppTypeListResponseZeroTrustGatewayApplicationType struct {
 	// The identifier for the type of this application. There can be many applications
 	// with the same type. This refers to the `id` of a returned application type.
 	ID        int64     `json:"id"`
@@ -93,14 +96,14 @@ type ZeroTrustGatewayAppTypesZeroTrustGatewayApplicationType struct {
 	// A short summary of applications with this type.
 	Description string `json:"description"`
 	// The name of the application or application type.
-	Name string                                                      `json:"name"`
-	JSON zeroTrustGatewayAppTypesZeroTrustGatewayApplicationTypeJSON `json:"-"`
+	Name string                                                                 `json:"name"`
+	JSON zeroTrustGatewayAppTypeListResponseZeroTrustGatewayApplicationTypeJSON `json:"-"`
 }
 
-// zeroTrustGatewayAppTypesZeroTrustGatewayApplicationTypeJSON contains the JSON
-// metadata for the struct
-// [ZeroTrustGatewayAppTypesZeroTrustGatewayApplicationType]
-type zeroTrustGatewayAppTypesZeroTrustGatewayApplicationTypeJSON struct {
+// zeroTrustGatewayAppTypeListResponseZeroTrustGatewayApplicationTypeJSON contains
+// the JSON metadata for the struct
+// [ZeroTrustGatewayAppTypeListResponseZeroTrustGatewayApplicationType]
+type zeroTrustGatewayAppTypeListResponseZeroTrustGatewayApplicationTypeJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	Description apijson.Field
@@ -109,11 +112,11 @@ type zeroTrustGatewayAppTypesZeroTrustGatewayApplicationTypeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZeroTrustGatewayAppTypesZeroTrustGatewayApplicationType) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustGatewayAppTypeListResponseZeroTrustGatewayApplicationType) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ZeroTrustGatewayAppTypesZeroTrustGatewayApplicationType) implementsZeroTrustGatewayAppTypes() {
+func (r ZeroTrustGatewayAppTypeListResponseZeroTrustGatewayApplicationType) implementsZeroTrustGatewayAppTypeListResponse() {
 }
 
 type ZeroTrustGatewayAppTypeListParams struct {
@@ -124,7 +127,7 @@ type ZeroTrustGatewayAppTypeListParams struct {
 type ZeroTrustGatewayAppTypeListResponseEnvelope struct {
 	Errors   []ZeroTrustGatewayAppTypeListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustGatewayAppTypeListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []ZeroTrustGatewayAppTypes                            `json:"result,required,nullable"`
+	Result   []ZeroTrustGatewayAppTypeListResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    ZeroTrustGatewayAppTypeListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ZeroTrustGatewayAppTypeListResponseEnvelopeResultInfo `json:"result_info"`

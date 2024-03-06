@@ -33,7 +33,7 @@ func NewZeroTrustOrganizationService(opts ...option.RequestOption) (r *ZeroTrust
 }
 
 // Sets up a Zero Trust organization for your account or zone.
-func (r *ZeroTrustOrganizationService) New(ctx context.Context, params ZeroTrustOrganizationNewParams, opts ...option.RequestOption) (res *AccessOrganizations, err error) {
+func (r *ZeroTrustOrganizationService) New(ctx context.Context, params ZeroTrustOrganizationNewParams, opts ...option.RequestOption) (res *ZeroTrustOrganizationNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustOrganizationNewResponseEnvelope
 	var accountOrZone string
@@ -55,7 +55,7 @@ func (r *ZeroTrustOrganizationService) New(ctx context.Context, params ZeroTrust
 }
 
 // Updates the configuration for your Zero Trust organization.
-func (r *ZeroTrustOrganizationService) Update(ctx context.Context, params ZeroTrustOrganizationUpdateParams, opts ...option.RequestOption) (res *AccessOrganizations, err error) {
+func (r *ZeroTrustOrganizationService) Update(ctx context.Context, params ZeroTrustOrganizationUpdateParams, opts ...option.RequestOption) (res *ZeroTrustOrganizationUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustOrganizationUpdateResponseEnvelope
 	var accountOrZone string
@@ -77,7 +77,7 @@ func (r *ZeroTrustOrganizationService) Update(ctx context.Context, params ZeroTr
 }
 
 // Returns the configuration for your Zero Trust organization.
-func (r *ZeroTrustOrganizationService) List(ctx context.Context, query ZeroTrustOrganizationListParams, opts ...option.RequestOption) (res *AccessOrganizations, err error) {
+func (r *ZeroTrustOrganizationService) List(ctx context.Context, query ZeroTrustOrganizationListParams, opts ...option.RequestOption) (res *ZeroTrustOrganizationListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustOrganizationListResponseEnvelope
 	var accountOrZone string
@@ -120,7 +120,7 @@ func (r *ZeroTrustOrganizationService) RevokeUsers(ctx context.Context, params Z
 	return
 }
 
-type AccessOrganizations struct {
+type ZeroTrustOrganizationNewResponse struct {
 	// When set to true, users can authenticate via WARP for any application in your
 	// organization. Application settings will take precedence over this value.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
@@ -128,13 +128,13 @@ type AccessOrganizations struct {
 	AuthDomain string `json:"auth_domain"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login.
-	AutoRedirectToIdentity bool                           `json:"auto_redirect_to_identity"`
-	CreatedAt              time.Time                      `json:"created_at" format:"date-time"`
-	CustomPages            AccessOrganizationsCustomPages `json:"custom_pages"`
+	AutoRedirectToIdentity bool                                        `json:"auto_redirect_to_identity"`
+	CreatedAt              time.Time                                   `json:"created_at" format:"date-time"`
+	CustomPages            ZeroTrustOrganizationNewResponseCustomPages `json:"custom_pages"`
 	// Lock all settings as Read-Only in the Dashboard, regardless of user permission.
 	// Updates may only be made via the API or Terraform for this account when enabled.
-	IsUiReadOnly bool                           `json:"is_ui_read_only"`
-	LoginDesign  AccessOrganizationsLoginDesign `json:"login_design"`
+	IsUiReadOnly bool                                        `json:"is_ui_read_only"`
+	LoginDesign  ZeroTrustOrganizationNewResponseLoginDesign `json:"login_design"`
 	// The name of your Zero Trust organization.
 	Name string `json:"name"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
@@ -151,13 +151,13 @@ type AccessOrganizations struct {
 	UserSeatExpirationInactiveTime string `json:"user_seat_expiration_inactive_time"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
 	// the format `30m` or `2h45m`. Valid time units are: m, h.
-	WARPAuthSessionDuration string                  `json:"warp_auth_session_duration"`
-	JSON                    accessOrganizationsJSON `json:"-"`
+	WARPAuthSessionDuration string                               `json:"warp_auth_session_duration"`
+	JSON                    zeroTrustOrganizationNewResponseJSON `json:"-"`
 }
 
-// accessOrganizationsJSON contains the JSON metadata for the struct
-// [AccessOrganizations]
-type accessOrganizationsJSON struct {
+// zeroTrustOrganizationNewResponseJSON contains the JSON metadata for the struct
+// [ZeroTrustOrganizationNewResponse]
+type zeroTrustOrganizationNewResponseJSON struct {
 	AllowAuthenticateViaWARP       apijson.Field
 	AuthDomain                     apijson.Field
 	AutoRedirectToIdentity         apijson.Field
@@ -175,33 +175,33 @@ type accessOrganizationsJSON struct {
 	ExtraFields                    map[string]apijson.Field
 }
 
-func (r *AccessOrganizations) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustOrganizationNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessOrganizationsCustomPages struct {
+type ZeroTrustOrganizationNewResponseCustomPages struct {
 	// The uid of the custom page to use when a user is denied access after failing a
 	// non-identity rule.
 	Forbidden string `json:"forbidden"`
 	// The uid of the custom page to use when a user is denied access.
-	IdentityDenied string                             `json:"identity_denied"`
-	JSON           accessOrganizationsCustomPagesJSON `json:"-"`
+	IdentityDenied string                                          `json:"identity_denied"`
+	JSON           zeroTrustOrganizationNewResponseCustomPagesJSON `json:"-"`
 }
 
-// accessOrganizationsCustomPagesJSON contains the JSON metadata for the struct
-// [AccessOrganizationsCustomPages]
-type accessOrganizationsCustomPagesJSON struct {
+// zeroTrustOrganizationNewResponseCustomPagesJSON contains the JSON metadata for
+// the struct [ZeroTrustOrganizationNewResponseCustomPages]
+type zeroTrustOrganizationNewResponseCustomPagesJSON struct {
 	Forbidden      apijson.Field
 	IdentityDenied apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *AccessOrganizationsCustomPages) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustOrganizationNewResponseCustomPages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type AccessOrganizationsLoginDesign struct {
+type ZeroTrustOrganizationNewResponseLoginDesign struct {
 	// The background color on your login page.
 	BackgroundColor string `json:"background_color"`
 	// The text at the bottom of your login page.
@@ -211,13 +211,13 @@ type AccessOrganizationsLoginDesign struct {
 	// The URL of the logo on your login page.
 	LogoPath string `json:"logo_path"`
 	// The text color on your login page.
-	TextColor string                             `json:"text_color"`
-	JSON      accessOrganizationsLoginDesignJSON `json:"-"`
+	TextColor string                                          `json:"text_color"`
+	JSON      zeroTrustOrganizationNewResponseLoginDesignJSON `json:"-"`
 }
 
-// accessOrganizationsLoginDesignJSON contains the JSON metadata for the struct
-// [AccessOrganizationsLoginDesign]
-type accessOrganizationsLoginDesignJSON struct {
+// zeroTrustOrganizationNewResponseLoginDesignJSON contains the JSON metadata for
+// the struct [ZeroTrustOrganizationNewResponseLoginDesign]
+type zeroTrustOrganizationNewResponseLoginDesignJSON struct {
 	BackgroundColor apijson.Field
 	FooterText      apijson.Field
 	HeaderText      apijson.Field
@@ -227,7 +227,229 @@ type accessOrganizationsLoginDesignJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *AccessOrganizationsLoginDesign) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustOrganizationNewResponseLoginDesign) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZeroTrustOrganizationUpdateResponse struct {
+	// When set to true, users can authenticate via WARP for any application in your
+	// organization. Application settings will take precedence over this value.
+	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// The unique subdomain assigned to your Zero Trust organization.
+	AuthDomain string `json:"auth_domain"`
+	// When set to `true`, users skip the identity provider selection step during
+	// login.
+	AutoRedirectToIdentity bool                                           `json:"auto_redirect_to_identity"`
+	CreatedAt              time.Time                                      `json:"created_at" format:"date-time"`
+	CustomPages            ZeroTrustOrganizationUpdateResponseCustomPages `json:"custom_pages"`
+	// Lock all settings as Read-Only in the Dashboard, regardless of user permission.
+	// Updates may only be made via the API or Terraform for this account when enabled.
+	IsUiReadOnly bool                                           `json:"is_ui_read_only"`
+	LoginDesign  ZeroTrustOrganizationUpdateResponseLoginDesign `json:"login_design"`
+	// The name of your Zero Trust organization.
+	Name string `json:"name"`
+	// The amount of time that tokens issued for applications will be valid. Must be in
+	// the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m,
+	// h.
+	SessionDuration string `json:"session_duration"`
+	// A description of the reason why the UI read only field is being toggled.
+	UiReadOnlyToggleReason string    `json:"ui_read_only_toggle_reason"`
+	UpdatedAt              time.Time `json:"updated_at" format:"date-time"`
+	// The amount of time a user seat is inactive before it expires. When the user seat
+	// exceeds the set time of inactivity, the user is removed as an active seat and no
+	// longer counts against your Teams seat count. Must be in the format `300ms` or
+	// `2h45m`. Valid time units are: `ns`, `us` (or `µs`), `ms`, `s`, `m`, `h`.
+	UserSeatExpirationInactiveTime string `json:"user_seat_expiration_inactive_time"`
+	// The amount of time that tokens issued for applications will be valid. Must be in
+	// the format `30m` or `2h45m`. Valid time units are: m, h.
+	WARPAuthSessionDuration string                                  `json:"warp_auth_session_duration"`
+	JSON                    zeroTrustOrganizationUpdateResponseJSON `json:"-"`
+}
+
+// zeroTrustOrganizationUpdateResponseJSON contains the JSON metadata for the
+// struct [ZeroTrustOrganizationUpdateResponse]
+type zeroTrustOrganizationUpdateResponseJSON struct {
+	AllowAuthenticateViaWARP       apijson.Field
+	AuthDomain                     apijson.Field
+	AutoRedirectToIdentity         apijson.Field
+	CreatedAt                      apijson.Field
+	CustomPages                    apijson.Field
+	IsUiReadOnly                   apijson.Field
+	LoginDesign                    apijson.Field
+	Name                           apijson.Field
+	SessionDuration                apijson.Field
+	UiReadOnlyToggleReason         apijson.Field
+	UpdatedAt                      apijson.Field
+	UserSeatExpirationInactiveTime apijson.Field
+	WARPAuthSessionDuration        apijson.Field
+	raw                            string
+	ExtraFields                    map[string]apijson.Field
+}
+
+func (r *ZeroTrustOrganizationUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZeroTrustOrganizationUpdateResponseCustomPages struct {
+	// The uid of the custom page to use when a user is denied access after failing a
+	// non-identity rule.
+	Forbidden string `json:"forbidden"`
+	// The uid of the custom page to use when a user is denied access.
+	IdentityDenied string                                             `json:"identity_denied"`
+	JSON           zeroTrustOrganizationUpdateResponseCustomPagesJSON `json:"-"`
+}
+
+// zeroTrustOrganizationUpdateResponseCustomPagesJSON contains the JSON metadata
+// for the struct [ZeroTrustOrganizationUpdateResponseCustomPages]
+type zeroTrustOrganizationUpdateResponseCustomPagesJSON struct {
+	Forbidden      apijson.Field
+	IdentityDenied apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *ZeroTrustOrganizationUpdateResponseCustomPages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZeroTrustOrganizationUpdateResponseLoginDesign struct {
+	// The background color on your login page.
+	BackgroundColor string `json:"background_color"`
+	// The text at the bottom of your login page.
+	FooterText string `json:"footer_text"`
+	// The text at the top of your login page.
+	HeaderText string `json:"header_text"`
+	// The URL of the logo on your login page.
+	LogoPath string `json:"logo_path"`
+	// The text color on your login page.
+	TextColor string                                             `json:"text_color"`
+	JSON      zeroTrustOrganizationUpdateResponseLoginDesignJSON `json:"-"`
+}
+
+// zeroTrustOrganizationUpdateResponseLoginDesignJSON contains the JSON metadata
+// for the struct [ZeroTrustOrganizationUpdateResponseLoginDesign]
+type zeroTrustOrganizationUpdateResponseLoginDesignJSON struct {
+	BackgroundColor apijson.Field
+	FooterText      apijson.Field
+	HeaderText      apijson.Field
+	LogoPath        apijson.Field
+	TextColor       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *ZeroTrustOrganizationUpdateResponseLoginDesign) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZeroTrustOrganizationListResponse struct {
+	// When set to true, users can authenticate via WARP for any application in your
+	// organization. Application settings will take precedence over this value.
+	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
+	// The unique subdomain assigned to your Zero Trust organization.
+	AuthDomain string `json:"auth_domain"`
+	// When set to `true`, users skip the identity provider selection step during
+	// login.
+	AutoRedirectToIdentity bool                                         `json:"auto_redirect_to_identity"`
+	CreatedAt              time.Time                                    `json:"created_at" format:"date-time"`
+	CustomPages            ZeroTrustOrganizationListResponseCustomPages `json:"custom_pages"`
+	// Lock all settings as Read-Only in the Dashboard, regardless of user permission.
+	// Updates may only be made via the API or Terraform for this account when enabled.
+	IsUiReadOnly bool                                         `json:"is_ui_read_only"`
+	LoginDesign  ZeroTrustOrganizationListResponseLoginDesign `json:"login_design"`
+	// The name of your Zero Trust organization.
+	Name string `json:"name"`
+	// The amount of time that tokens issued for applications will be valid. Must be in
+	// the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m,
+	// h.
+	SessionDuration string `json:"session_duration"`
+	// A description of the reason why the UI read only field is being toggled.
+	UiReadOnlyToggleReason string    `json:"ui_read_only_toggle_reason"`
+	UpdatedAt              time.Time `json:"updated_at" format:"date-time"`
+	// The amount of time a user seat is inactive before it expires. When the user seat
+	// exceeds the set time of inactivity, the user is removed as an active seat and no
+	// longer counts against your Teams seat count. Must be in the format `300ms` or
+	// `2h45m`. Valid time units are: `ns`, `us` (or `µs`), `ms`, `s`, `m`, `h`.
+	UserSeatExpirationInactiveTime string `json:"user_seat_expiration_inactive_time"`
+	// The amount of time that tokens issued for applications will be valid. Must be in
+	// the format `30m` or `2h45m`. Valid time units are: m, h.
+	WARPAuthSessionDuration string                                `json:"warp_auth_session_duration"`
+	JSON                    zeroTrustOrganizationListResponseJSON `json:"-"`
+}
+
+// zeroTrustOrganizationListResponseJSON contains the JSON metadata for the struct
+// [ZeroTrustOrganizationListResponse]
+type zeroTrustOrganizationListResponseJSON struct {
+	AllowAuthenticateViaWARP       apijson.Field
+	AuthDomain                     apijson.Field
+	AutoRedirectToIdentity         apijson.Field
+	CreatedAt                      apijson.Field
+	CustomPages                    apijson.Field
+	IsUiReadOnly                   apijson.Field
+	LoginDesign                    apijson.Field
+	Name                           apijson.Field
+	SessionDuration                apijson.Field
+	UiReadOnlyToggleReason         apijson.Field
+	UpdatedAt                      apijson.Field
+	UserSeatExpirationInactiveTime apijson.Field
+	WARPAuthSessionDuration        apijson.Field
+	raw                            string
+	ExtraFields                    map[string]apijson.Field
+}
+
+func (r *ZeroTrustOrganizationListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZeroTrustOrganizationListResponseCustomPages struct {
+	// The uid of the custom page to use when a user is denied access after failing a
+	// non-identity rule.
+	Forbidden string `json:"forbidden"`
+	// The uid of the custom page to use when a user is denied access.
+	IdentityDenied string                                           `json:"identity_denied"`
+	JSON           zeroTrustOrganizationListResponseCustomPagesJSON `json:"-"`
+}
+
+// zeroTrustOrganizationListResponseCustomPagesJSON contains the JSON metadata for
+// the struct [ZeroTrustOrganizationListResponseCustomPages]
+type zeroTrustOrganizationListResponseCustomPagesJSON struct {
+	Forbidden      apijson.Field
+	IdentityDenied apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *ZeroTrustOrganizationListResponseCustomPages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZeroTrustOrganizationListResponseLoginDesign struct {
+	// The background color on your login page.
+	BackgroundColor string `json:"background_color"`
+	// The text at the bottom of your login page.
+	FooterText string `json:"footer_text"`
+	// The text at the top of your login page.
+	HeaderText string `json:"header_text"`
+	// The URL of the logo on your login page.
+	LogoPath string `json:"logo_path"`
+	// The text color on your login page.
+	TextColor string                                           `json:"text_color"`
+	JSON      zeroTrustOrganizationListResponseLoginDesignJSON `json:"-"`
+}
+
+// zeroTrustOrganizationListResponseLoginDesignJSON contains the JSON metadata for
+// the struct [ZeroTrustOrganizationListResponseLoginDesign]
+type zeroTrustOrganizationListResponseLoginDesignJSON struct {
+	BackgroundColor apijson.Field
+	FooterText      apijson.Field
+	HeaderText      apijson.Field
+	LogoPath        apijson.Field
+	TextColor       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *ZeroTrustOrganizationListResponseLoginDesign) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -297,7 +519,7 @@ func (r ZeroTrustOrganizationNewParamsLoginDesign) MarshalJSON() (data []byte, e
 type ZeroTrustOrganizationNewResponseEnvelope struct {
 	Errors   []ZeroTrustOrganizationNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustOrganizationNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessOrganizations                                `json:"result,required"`
+	Result   ZeroTrustOrganizationNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success ZeroTrustOrganizationNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustOrganizationNewResponseEnvelopeJSON    `json:"-"`
@@ -435,7 +657,7 @@ func (r ZeroTrustOrganizationUpdateParamsLoginDesign) MarshalJSON() (data []byte
 type ZeroTrustOrganizationUpdateResponseEnvelope struct {
 	Errors   []ZeroTrustOrganizationUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustOrganizationUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessOrganizations                                   `json:"result,required"`
+	Result   ZeroTrustOrganizationUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success ZeroTrustOrganizationUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustOrganizationUpdateResponseEnvelopeJSON    `json:"-"`
@@ -511,7 +733,7 @@ type ZeroTrustOrganizationListParams struct {
 type ZeroTrustOrganizationListResponseEnvelope struct {
 	Errors   []ZeroTrustOrganizationListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustOrganizationListResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessOrganizations                                 `json:"result,required"`
+	Result   ZeroTrustOrganizationListResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success ZeroTrustOrganizationListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustOrganizationListResponseEnvelopeJSON    `json:"-"`

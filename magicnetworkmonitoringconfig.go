@@ -33,7 +33,7 @@ func NewMagicNetworkMonitoringConfigService(opts ...option.RequestOption) (r *Ma
 }
 
 // Create a new network monitoring configuration.
-func (r *MagicNetworkMonitoringConfigService) New(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MagicVisibilityMNMConfig, err error) {
+func (r *MagicNetworkMonitoringConfigService) New(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MagicNetworkMonitoringConfigNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MagicNetworkMonitoringConfigNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/mnm/config", accountIdentifier)
@@ -47,7 +47,7 @@ func (r *MagicNetworkMonitoringConfigService) New(ctx context.Context, accountId
 
 // Update an existing network monitoring configuration, requires the entire
 // configuration to be updated at once.
-func (r *MagicNetworkMonitoringConfigService) Update(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MagicVisibilityMNMConfig, err error) {
+func (r *MagicNetworkMonitoringConfigService) Update(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MagicNetworkMonitoringConfigUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MagicNetworkMonitoringConfigUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/mnm/config", accountIdentifier)
@@ -60,7 +60,7 @@ func (r *MagicNetworkMonitoringConfigService) Update(ctx context.Context, accoun
 }
 
 // Delete an existing network monitoring configuration.
-func (r *MagicNetworkMonitoringConfigService) Delete(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MagicVisibilityMNMConfig, err error) {
+func (r *MagicNetworkMonitoringConfigService) Delete(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MagicNetworkMonitoringConfigDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MagicNetworkMonitoringConfigDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/mnm/config", accountIdentifier)
@@ -73,7 +73,7 @@ func (r *MagicNetworkMonitoringConfigService) Delete(ctx context.Context, accoun
 }
 
 // Update fields in an existing network monitoring configuration.
-func (r *MagicNetworkMonitoringConfigService) Edit(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MagicVisibilityMNMConfig, err error) {
+func (r *MagicNetworkMonitoringConfigService) Edit(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MagicNetworkMonitoringConfigEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MagicNetworkMonitoringConfigEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/mnm/config", accountIdentifier)
@@ -86,7 +86,7 @@ func (r *MagicNetworkMonitoringConfigService) Edit(ctx context.Context, accountI
 }
 
 // Lists default sampling and router IPs for account.
-func (r *MagicNetworkMonitoringConfigService) Get(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MagicVisibilityMNMConfig, err error) {
+func (r *MagicNetworkMonitoringConfigService) Get(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MagicNetworkMonitoringConfigGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env MagicNetworkMonitoringConfigGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/mnm/config", accountIdentifier)
@@ -98,19 +98,19 @@ func (r *MagicNetworkMonitoringConfigService) Get(ctx context.Context, accountId
 	return
 }
 
-type MagicVisibilityMNMConfig struct {
+type MagicNetworkMonitoringConfigNewResponse struct {
 	// Fallback sampling rate of flow messages being sent in packets per second. This
 	// should match the packet sampling rate configured on the router.
 	DefaultSampling float64 `json:"default_sampling,required"`
 	// The account name.
-	Name      string                       `json:"name,required"`
-	RouterIPs []string                     `json:"router_ips,required"`
-	JSON      magicVisibilityMNMConfigJSON `json:"-"`
+	Name      string                                      `json:"name,required"`
+	RouterIPs []string                                    `json:"router_ips,required"`
+	JSON      magicNetworkMonitoringConfigNewResponseJSON `json:"-"`
 }
 
-// magicVisibilityMNMConfigJSON contains the JSON metadata for the struct
-// [MagicVisibilityMNMConfig]
-type magicVisibilityMNMConfigJSON struct {
+// magicNetworkMonitoringConfigNewResponseJSON contains the JSON metadata for the
+// struct [MagicNetworkMonitoringConfigNewResponse]
+type magicNetworkMonitoringConfigNewResponseJSON struct {
 	DefaultSampling apijson.Field
 	Name            apijson.Field
 	RouterIPs       apijson.Field
@@ -118,14 +118,110 @@ type magicVisibilityMNMConfigJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *MagicVisibilityMNMConfig) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicNetworkMonitoringConfigNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MagicNetworkMonitoringConfigUpdateResponse struct {
+	// Fallback sampling rate of flow messages being sent in packets per second. This
+	// should match the packet sampling rate configured on the router.
+	DefaultSampling float64 `json:"default_sampling,required"`
+	// The account name.
+	Name      string                                         `json:"name,required"`
+	RouterIPs []string                                       `json:"router_ips,required"`
+	JSON      magicNetworkMonitoringConfigUpdateResponseJSON `json:"-"`
+}
+
+// magicNetworkMonitoringConfigUpdateResponseJSON contains the JSON metadata for
+// the struct [MagicNetworkMonitoringConfigUpdateResponse]
+type magicNetworkMonitoringConfigUpdateResponseJSON struct {
+	DefaultSampling apijson.Field
+	Name            apijson.Field
+	RouterIPs       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *MagicNetworkMonitoringConfigUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MagicNetworkMonitoringConfigDeleteResponse struct {
+	// Fallback sampling rate of flow messages being sent in packets per second. This
+	// should match the packet sampling rate configured on the router.
+	DefaultSampling float64 `json:"default_sampling,required"`
+	// The account name.
+	Name      string                                         `json:"name,required"`
+	RouterIPs []string                                       `json:"router_ips,required"`
+	JSON      magicNetworkMonitoringConfigDeleteResponseJSON `json:"-"`
+}
+
+// magicNetworkMonitoringConfigDeleteResponseJSON contains the JSON metadata for
+// the struct [MagicNetworkMonitoringConfigDeleteResponse]
+type magicNetworkMonitoringConfigDeleteResponseJSON struct {
+	DefaultSampling apijson.Field
+	Name            apijson.Field
+	RouterIPs       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *MagicNetworkMonitoringConfigDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MagicNetworkMonitoringConfigEditResponse struct {
+	// Fallback sampling rate of flow messages being sent in packets per second. This
+	// should match the packet sampling rate configured on the router.
+	DefaultSampling float64 `json:"default_sampling,required"`
+	// The account name.
+	Name      string                                       `json:"name,required"`
+	RouterIPs []string                                     `json:"router_ips,required"`
+	JSON      magicNetworkMonitoringConfigEditResponseJSON `json:"-"`
+}
+
+// magicNetworkMonitoringConfigEditResponseJSON contains the JSON metadata for the
+// struct [MagicNetworkMonitoringConfigEditResponse]
+type magicNetworkMonitoringConfigEditResponseJSON struct {
+	DefaultSampling apijson.Field
+	Name            apijson.Field
+	RouterIPs       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *MagicNetworkMonitoringConfigEditResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type MagicNetworkMonitoringConfigGetResponse struct {
+	// Fallback sampling rate of flow messages being sent in packets per second. This
+	// should match the packet sampling rate configured on the router.
+	DefaultSampling float64 `json:"default_sampling,required"`
+	// The account name.
+	Name      string                                      `json:"name,required"`
+	RouterIPs []string                                    `json:"router_ips,required"`
+	JSON      magicNetworkMonitoringConfigGetResponseJSON `json:"-"`
+}
+
+// magicNetworkMonitoringConfigGetResponseJSON contains the JSON metadata for the
+// struct [MagicNetworkMonitoringConfigGetResponse]
+type magicNetworkMonitoringConfigGetResponseJSON struct {
+	DefaultSampling apijson.Field
+	Name            apijson.Field
+	RouterIPs       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *MagicNetworkMonitoringConfigGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 type MagicNetworkMonitoringConfigNewResponseEnvelope struct {
 	Errors   []MagicNetworkMonitoringConfigNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []MagicNetworkMonitoringConfigNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   MagicVisibilityMNMConfig                                  `json:"result,required"`
+	Result   MagicNetworkMonitoringConfigNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success MagicNetworkMonitoringConfigNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    magicNetworkMonitoringConfigNewResponseEnvelopeJSON    `json:"-"`
@@ -195,7 +291,7 @@ const (
 type MagicNetworkMonitoringConfigUpdateResponseEnvelope struct {
 	Errors   []MagicNetworkMonitoringConfigUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []MagicNetworkMonitoringConfigUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   MagicVisibilityMNMConfig                                     `json:"result,required"`
+	Result   MagicNetworkMonitoringConfigUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success MagicNetworkMonitoringConfigUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    magicNetworkMonitoringConfigUpdateResponseEnvelopeJSON    `json:"-"`
@@ -266,7 +362,7 @@ const (
 type MagicNetworkMonitoringConfigDeleteResponseEnvelope struct {
 	Errors   []MagicNetworkMonitoringConfigDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []MagicNetworkMonitoringConfigDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   MagicVisibilityMNMConfig                                     `json:"result,required"`
+	Result   MagicNetworkMonitoringConfigDeleteResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success MagicNetworkMonitoringConfigDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    magicNetworkMonitoringConfigDeleteResponseEnvelopeJSON    `json:"-"`
@@ -337,7 +433,7 @@ const (
 type MagicNetworkMonitoringConfigEditResponseEnvelope struct {
 	Errors   []MagicNetworkMonitoringConfigEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []MagicNetworkMonitoringConfigEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   MagicVisibilityMNMConfig                                   `json:"result,required"`
+	Result   MagicNetworkMonitoringConfigEditResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success MagicNetworkMonitoringConfigEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    magicNetworkMonitoringConfigEditResponseEnvelopeJSON    `json:"-"`
@@ -407,7 +503,7 @@ const (
 type MagicNetworkMonitoringConfigGetResponseEnvelope struct {
 	Errors   []MagicNetworkMonitoringConfigGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []MagicNetworkMonitoringConfigGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   MagicVisibilityMNMConfig                                  `json:"result,required"`
+	Result   MagicNetworkMonitoringConfigGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success MagicNetworkMonitoringConfigGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    magicNetworkMonitoringConfigGetResponseEnvelopeJSON    `json:"-"`

@@ -33,18 +33,18 @@ func TestWeb3HostnameIPFSUniversalPathContentListUpdate(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		cloudflare.Web3HostnameIPFSUniversalPathContentListUpdateParams{
 			Action: cloudflare.F(cloudflare.Web3HostnameIPFSUniversalPathContentListUpdateParamsActionBlock),
-			Entries: cloudflare.F([]cloudflare.DwebConfigContentListEntryParam{{
+			Entries: cloudflare.F([]cloudflare.Web3HostnameIPFSUniversalPathContentListUpdateParamsEntry{{
 				Content:     cloudflare.F("QmPZ9gcCEpqKTo6aq61g2nXGUhM4iCL3ewB6LDXZCtioEB"),
 				Description: cloudflare.F("this is my content list entry"),
-				Type:        cloudflare.F(cloudflare.DwebConfigContentListEntryTypeCid),
+				Type:        cloudflare.F(cloudflare.Web3HostnameIPFSUniversalPathContentListUpdateParamsEntriesTypeCid),
 			}, {
 				Content:     cloudflare.F("QmPZ9gcCEpqKTo6aq61g2nXGUhM4iCL3ewB6LDXZCtioEB"),
 				Description: cloudflare.F("this is my content list entry"),
-				Type:        cloudflare.F(cloudflare.DwebConfigContentListEntryTypeCid),
+				Type:        cloudflare.F(cloudflare.Web3HostnameIPFSUniversalPathContentListUpdateParamsEntriesTypeCid),
 			}, {
 				Content:     cloudflare.F("QmPZ9gcCEpqKTo6aq61g2nXGUhM4iCL3ewB6LDXZCtioEB"),
 				Description: cloudflare.F("this is my content list entry"),
-				Type:        cloudflare.F(cloudflare.DwebConfigContentListEntryTypeCid),
+				Type:        cloudflare.F(cloudflare.Web3HostnameIPFSUniversalPathContentListUpdateParamsEntriesTypeCid),
 			}}),
 		},
 	)

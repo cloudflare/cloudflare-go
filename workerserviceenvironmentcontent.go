@@ -9,6 +9,7 @@ import (
 	"io"
 	"mime/multipart"
 	"net/http"
+	"time"
 
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apiform"
 	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
@@ -36,7 +37,7 @@ func NewWorkerServiceEnvironmentContentService(opts ...option.RequestOption) (r 
 }
 
 // Put script content from a worker with an environment
-func (r *WorkerServiceEnvironmentContentService) Update(ctx context.Context, serviceName string, environmentName string, params WorkerServiceEnvironmentContentUpdateParams, opts ...option.RequestOption) (res *WorkersScript, err error) {
+func (r *WorkerServiceEnvironmentContentService) Update(ctx context.Context, serviceName string, environmentName string, params WorkerServiceEnvironmentContentUpdateParams, opts ...option.RequestOption) (res *WorkerServiceEnvironmentContentUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerServiceEnvironmentContentUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/services/%s/environments/%s/content", params.AccountID, serviceName, environmentName)
@@ -55,6 +56,74 @@ func (r *WorkerServiceEnvironmentContentService) Get(ctx context.Context, servic
 	path := fmt.Sprintf("accounts/%s/workers/services/%s/environments/%s/content", query.AccountID, serviceName, environmentName)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
+}
+
+type WorkerServiceEnvironmentContentUpdateResponse struct {
+	// The id of the script in the Workers system. Usually the script name.
+	ID string `json:"id"`
+	// When the script was created.
+	CreatedOn time.Time `json:"created_on" format:"date-time"`
+	// Hashed script content, can be used in a If-None-Match header when updating.
+	Etag string `json:"etag"`
+	// Whether Logpush is turned on for the Worker.
+	Logpush bool `json:"logpush"`
+	// When the script was last modified.
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// Deprecated. Deployment metadata for internal usage.
+	PipelineHash string `json:"pipeline_hash"`
+	// Specifies the placement mode for the Worker (e.g. 'smart').
+	PlacementMode string `json:"placement_mode"`
+	// List of Workers that will consume logs from the attached Worker.
+	TailConsumers []WorkerServiceEnvironmentContentUpdateResponseTailConsumer `json:"tail_consumers"`
+	// Specifies the usage model for the Worker (e.g. 'bundled' or 'unbound').
+	UsageModel string                                            `json:"usage_model"`
+	JSON       workerServiceEnvironmentContentUpdateResponseJSON `json:"-"`
+}
+
+// workerServiceEnvironmentContentUpdateResponseJSON contains the JSON metadata for
+// the struct [WorkerServiceEnvironmentContentUpdateResponse]
+type workerServiceEnvironmentContentUpdateResponseJSON struct {
+	ID            apijson.Field
+	CreatedOn     apijson.Field
+	Etag          apijson.Field
+	Logpush       apijson.Field
+	ModifiedOn    apijson.Field
+	PipelineHash  apijson.Field
+	PlacementMode apijson.Field
+	TailConsumers apijson.Field
+	UsageModel    apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *WorkerServiceEnvironmentContentUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A reference to a script that will consume logs from the attached Worker.
+type WorkerServiceEnvironmentContentUpdateResponseTailConsumer struct {
+	// Name of Worker that is to be the consumer.
+	Service string `json:"service,required"`
+	// Optional environment if the Worker utilizes one.
+	Environment string `json:"environment"`
+	// Optional dispatch namespace the script belongs to.
+	Namespace string                                                        `json:"namespace"`
+	JSON      workerServiceEnvironmentContentUpdateResponseTailConsumerJSON `json:"-"`
+}
+
+// workerServiceEnvironmentContentUpdateResponseTailConsumerJSON contains the JSON
+// metadata for the struct
+// [WorkerServiceEnvironmentContentUpdateResponseTailConsumer]
+type workerServiceEnvironmentContentUpdateResponseTailConsumerJSON struct {
+	Service     apijson.Field
+	Environment apijson.Field
+	Namespace   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerServiceEnvironmentContentUpdateResponseTailConsumer) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type WorkerServiceEnvironmentContentUpdateParams struct {
@@ -105,7 +174,7 @@ func (r WorkerServiceEnvironmentContentUpdateParamsMetadata) MarshalJSON() (data
 type WorkerServiceEnvironmentContentUpdateResponseEnvelope struct {
 	Errors   []WorkerServiceEnvironmentContentUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []WorkerServiceEnvironmentContentUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   WorkersScript                                                   `json:"result,required"`
+	Result   WorkerServiceEnvironmentContentUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success WorkerServiceEnvironmentContentUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    workerServiceEnvironmentContentUpdateResponseEnvelopeJSON    `json:"-"`

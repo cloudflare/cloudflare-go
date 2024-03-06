@@ -205,7 +205,7 @@ const (
 type SSLCertificatePackEditResponseValidationMethod string
 
 const (
-	SSLCertificatePackEditResponseValidationMethodTxt   SSLCertificatePackEditResponseValidationMethod = "txt"
+	SSLCertificatePackEditResponseValidationMethodTXT   SSLCertificatePackEditResponseValidationMethod = "txt"
 	SSLCertificatePackEditResponseValidationMethodHTTP  SSLCertificatePackEditResponseValidationMethod = "http"
 	SSLCertificatePackEditResponseValidationMethodEmail SSLCertificatePackEditResponseValidationMethod = "email"
 )

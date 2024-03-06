@@ -35,7 +35,7 @@ func NewCertificateAuthorityHostnameAssociationService(opts ...option.RequestOpt
 }
 
 // Replace Hostname Associations
-func (r *CertificateAuthorityHostnameAssociationService) Update(ctx context.Context, params CertificateAuthorityHostnameAssociationUpdateParams, opts ...option.RequestOption) (res *TLSCertificatesAndHostnamesHostnameAssociation, err error) {
+func (r *CertificateAuthorityHostnameAssociationService) Update(ctx context.Context, params CertificateAuthorityHostnameAssociationUpdateParams, opts ...option.RequestOption) (res *CertificateAuthorityHostnameAssociationUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CertificateAuthorityHostnameAssociationUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/certificate_authorities/hostname_associations", params.ZoneID)
@@ -48,7 +48,7 @@ func (r *CertificateAuthorityHostnameAssociationService) Update(ctx context.Cont
 }
 
 // List Hostname Associations
-func (r *CertificateAuthorityHostnameAssociationService) Get(ctx context.Context, params CertificateAuthorityHostnameAssociationGetParams, opts ...option.RequestOption) (res *TLSCertificatesAndHostnamesHostnameAssociation, err error) {
+func (r *CertificateAuthorityHostnameAssociationService) Get(ctx context.Context, params CertificateAuthorityHostnameAssociationGetParams, opts ...option.RequestOption) (res *CertificateAuthorityHostnameAssociationGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CertificateAuthorityHostnameAssociationGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/certificate_authorities/hostname_associations", params.ZoneID)
@@ -60,25 +60,47 @@ func (r *CertificateAuthorityHostnameAssociationService) Get(ctx context.Context
 	return
 }
 
-type TLSCertificatesAndHostnamesHostnameAssociation struct {
+type CertificateAuthorityHostnameAssociationUpdateResponse struct {
 	Hostnames []string `json:"hostnames"`
 	// The UUID for a certificate that was uploaded to the mTLS Certificate Management
 	// endpoint. If no mtls_certificate_id is given, the hostnames will be associated
 	// to your active Cloudflare Managed CA.
-	MTLSCertificateID string                                             `json:"mtls_certificate_id"`
-	JSON              tlsCertificatesAndHostnamesHostnameAssociationJSON `json:"-"`
+	MTLSCertificateID string                                                    `json:"mtls_certificate_id"`
+	JSON              certificateAuthorityHostnameAssociationUpdateResponseJSON `json:"-"`
 }
 
-// tlsCertificatesAndHostnamesHostnameAssociationJSON contains the JSON metadata
-// for the struct [TLSCertificatesAndHostnamesHostnameAssociation]
-type tlsCertificatesAndHostnamesHostnameAssociationJSON struct {
+// certificateAuthorityHostnameAssociationUpdateResponseJSON contains the JSON
+// metadata for the struct [CertificateAuthorityHostnameAssociationUpdateResponse]
+type certificateAuthorityHostnameAssociationUpdateResponseJSON struct {
 	Hostnames         apijson.Field
 	MTLSCertificateID apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *TLSCertificatesAndHostnamesHostnameAssociation) UnmarshalJSON(data []byte) (err error) {
+func (r *CertificateAuthorityHostnameAssociationUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CertificateAuthorityHostnameAssociationGetResponse struct {
+	Hostnames []string `json:"hostnames"`
+	// The UUID for a certificate that was uploaded to the mTLS Certificate Management
+	// endpoint. If no mtls_certificate_id is given, the hostnames will be associated
+	// to your active Cloudflare Managed CA.
+	MTLSCertificateID string                                                 `json:"mtls_certificate_id"`
+	JSON              certificateAuthorityHostnameAssociationGetResponseJSON `json:"-"`
+}
+
+// certificateAuthorityHostnameAssociationGetResponseJSON contains the JSON
+// metadata for the struct [CertificateAuthorityHostnameAssociationGetResponse]
+type certificateAuthorityHostnameAssociationGetResponseJSON struct {
+	Hostnames         apijson.Field
+	MTLSCertificateID apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *CertificateAuthorityHostnameAssociationGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -99,7 +121,7 @@ func (r CertificateAuthorityHostnameAssociationUpdateParams) MarshalJSON() (data
 type CertificateAuthorityHostnameAssociationUpdateResponseEnvelope struct {
 	Errors   []CertificateAuthorityHostnameAssociationUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []CertificateAuthorityHostnameAssociationUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   TLSCertificatesAndHostnamesHostnameAssociation                          `json:"result,required"`
+	Result   CertificateAuthorityHostnameAssociationUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success CertificateAuthorityHostnameAssociationUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    certificateAuthorityHostnameAssociationUpdateResponseEnvelopeJSON    `json:"-"`
@@ -189,7 +211,7 @@ func (r CertificateAuthorityHostnameAssociationGetParams) URLQuery() (v url.Valu
 type CertificateAuthorityHostnameAssociationGetResponseEnvelope struct {
 	Errors   []CertificateAuthorityHostnameAssociationGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []CertificateAuthorityHostnameAssociationGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   TLSCertificatesAndHostnamesHostnameAssociation                       `json:"result,required"`
+	Result   CertificateAuthorityHostnameAssociationGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success CertificateAuthorityHostnameAssociationGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    certificateAuthorityHostnameAssociationGetResponseEnvelopeJSON    `json:"-"`

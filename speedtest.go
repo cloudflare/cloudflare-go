@@ -34,7 +34,7 @@ func NewSpeedTestService(opts ...option.RequestOption) (r *SpeedTestService) {
 }
 
 // Starts a test for a specific webpage, in a specific region.
-func (r *SpeedTestService) New(ctx context.Context, url string, params SpeedTestNewParams, opts ...option.RequestOption) (res *ObservatoryPageTest, err error) {
+func (r *SpeedTestService) New(ctx context.Context, url string, params SpeedTestNewParams, opts ...option.RequestOption) (res *SpeedTestNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SpeedTestNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/tests", params.ZoneID, url)
@@ -69,7 +69,7 @@ func (r *SpeedTestService) Delete(ctx context.Context, url string, params SpeedT
 }
 
 // Retrieves the result of a specific test.
-func (r *SpeedTestService) Get(ctx context.Context, url string, testID string, query SpeedTestGetParams, opts ...option.RequestOption) (res *ObservatoryPageTest, err error) {
+func (r *SpeedTestService) Get(ctx context.Context, url string, testID string, query SpeedTestGetParams, opts ...option.RequestOption) (res *SpeedTestGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SpeedTestGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/tests/%s", query.ZoneID, url, testID)
@@ -81,26 +81,26 @@ func (r *SpeedTestService) Get(ctx context.Context, url string, testID string, q
 	return
 }
 
-type ObservatoryPageTest struct {
+type SpeedTestNewResponse struct {
 	// UUID
 	ID   string    `json:"id"`
 	Date time.Time `json:"date" format:"date-time"`
 	// The Lighthouse report.
-	DesktopReport ObservatoryPageTestDesktopReport `json:"desktopReport"`
+	DesktopReport SpeedTestNewResponseDesktopReport `json:"desktopReport"`
 	// The Lighthouse report.
-	MobileReport ObservatoryPageTestMobileReport `json:"mobileReport"`
+	MobileReport SpeedTestNewResponseMobileReport `json:"mobileReport"`
 	// A test region with a label.
-	Region ObservatoryPageTestRegion `json:"region"`
+	Region SpeedTestNewResponseRegion `json:"region"`
 	// The frequency of the test.
-	ScheduleFrequency ObservatoryPageTestScheduleFrequency `json:"scheduleFrequency"`
+	ScheduleFrequency SpeedTestNewResponseScheduleFrequency `json:"scheduleFrequency"`
 	// A URL.
-	URL  string                  `json:"url"`
-	JSON observatoryPageTestJSON `json:"-"`
+	URL  string                   `json:"url"`
+	JSON speedTestNewResponseJSON `json:"-"`
 }
 
-// observatoryPageTestJSON contains the JSON metadata for the struct
-// [ObservatoryPageTest]
-type observatoryPageTestJSON struct {
+// speedTestNewResponseJSON contains the JSON metadata for the struct
+// [SpeedTestNewResponse]
+type speedTestNewResponseJSON struct {
 	ID                apijson.Field
 	Date              apijson.Field
 	DesktopReport     apijson.Field
@@ -112,17 +112,17 @@ type observatoryPageTestJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *ObservatoryPageTest) UnmarshalJSON(data []byte) (err error) {
+func (r *SpeedTestNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The Lighthouse report.
-type ObservatoryPageTestDesktopReport struct {
+type SpeedTestNewResponseDesktopReport struct {
 	// Cumulative Layout Shift.
 	Cls float64 `json:"cls"`
 	// The type of device.
-	DeviceType ObservatoryPageTestDesktopReportDeviceType `json:"deviceType"`
-	Error      ObservatoryPageTestDesktopReportError      `json:"error"`
+	DeviceType SpeedTestNewResponseDesktopReportDeviceType `json:"deviceType"`
+	Error      SpeedTestNewResponseDesktopReportError      `json:"error"`
 	// First Contentful Paint.
 	Fcp float64 `json:"fcp"`
 	// The URL to the full Lighthouse JSON report.
@@ -134,19 +134,122 @@ type ObservatoryPageTestDesktopReport struct {
 	// Speed Index.
 	Si float64 `json:"si"`
 	// The state of the Lighthouse report.
-	State ObservatoryPageTestDesktopReportState `json:"state"`
+	State SpeedTestNewResponseDesktopReportState `json:"state"`
+	// Total Blocking Time.
+	Tbt float64 `json:"tbt"`
+	// Time To First Byte.
+	Ttfb float64 `json:"ttfb"`
+	// Time To Interactive.
+	Tti  float64                               `json:"tti"`
+	JSON speedTestNewResponseDesktopReportJSON `json:"-"`
+}
+
+// speedTestNewResponseDesktopReportJSON contains the JSON metadata for the struct
+// [SpeedTestNewResponseDesktopReport]
+type speedTestNewResponseDesktopReportJSON struct {
+	Cls              apijson.Field
+	DeviceType       apijson.Field
+	Error            apijson.Field
+	Fcp              apijson.Field
+	JsonReportURL    apijson.Field
+	Lcp              apijson.Field
+	PerformanceScore apijson.Field
+	Si               apijson.Field
+	State            apijson.Field
+	Tbt              apijson.Field
+	Ttfb             apijson.Field
+	Tti              apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *SpeedTestNewResponseDesktopReport) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of device.
+type SpeedTestNewResponseDesktopReportDeviceType string
+
+const (
+	SpeedTestNewResponseDesktopReportDeviceTypeDesktop SpeedTestNewResponseDesktopReportDeviceType = "DESKTOP"
+	SpeedTestNewResponseDesktopReportDeviceTypeMobile  SpeedTestNewResponseDesktopReportDeviceType = "MOBILE"
+)
+
+type SpeedTestNewResponseDesktopReportError struct {
+	// The error code of the Lighthouse result.
+	Code SpeedTestNewResponseDesktopReportErrorCode `json:"code"`
+	// Detailed error message.
+	Detail string `json:"detail"`
+	// The final URL displayed to the user.
+	FinalDisplayedURL string                                     `json:"finalDisplayedUrl"`
+	JSON              speedTestNewResponseDesktopReportErrorJSON `json:"-"`
+}
+
+// speedTestNewResponseDesktopReportErrorJSON contains the JSON metadata for the
+// struct [SpeedTestNewResponseDesktopReportError]
+type speedTestNewResponseDesktopReportErrorJSON struct {
+	Code              apijson.Field
+	Detail            apijson.Field
+	FinalDisplayedURL apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *SpeedTestNewResponseDesktopReportError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The error code of the Lighthouse result.
+type SpeedTestNewResponseDesktopReportErrorCode string
+
+const (
+	SpeedTestNewResponseDesktopReportErrorCodeNotReachable      SpeedTestNewResponseDesktopReportErrorCode = "NOT_REACHABLE"
+	SpeedTestNewResponseDesktopReportErrorCodeDNSFailure        SpeedTestNewResponseDesktopReportErrorCode = "DNS_FAILURE"
+	SpeedTestNewResponseDesktopReportErrorCodeNotHTML           SpeedTestNewResponseDesktopReportErrorCode = "NOT_HTML"
+	SpeedTestNewResponseDesktopReportErrorCodeLighthouseTimeout SpeedTestNewResponseDesktopReportErrorCode = "LIGHTHOUSE_TIMEOUT"
+	SpeedTestNewResponseDesktopReportErrorCodeUnknown           SpeedTestNewResponseDesktopReportErrorCode = "UNKNOWN"
+)
+
+// The state of the Lighthouse report.
+type SpeedTestNewResponseDesktopReportState string
+
+const (
+	SpeedTestNewResponseDesktopReportStateRunning  SpeedTestNewResponseDesktopReportState = "RUNNING"
+	SpeedTestNewResponseDesktopReportStateComplete SpeedTestNewResponseDesktopReportState = "COMPLETE"
+	SpeedTestNewResponseDesktopReportStateFailed   SpeedTestNewResponseDesktopReportState = "FAILED"
+)
+
+// The Lighthouse report.
+type SpeedTestNewResponseMobileReport struct {
+	// Cumulative Layout Shift.
+	Cls float64 `json:"cls"`
+	// The type of device.
+	DeviceType SpeedTestNewResponseMobileReportDeviceType `json:"deviceType"`
+	Error      SpeedTestNewResponseMobileReportError      `json:"error"`
+	// First Contentful Paint.
+	Fcp float64 `json:"fcp"`
+	// The URL to the full Lighthouse JSON report.
+	JsonReportURL string `json:"jsonReportUrl"`
+	// Largest Contentful Paint.
+	Lcp float64 `json:"lcp"`
+	// The Lighthouse performance score.
+	PerformanceScore float64 `json:"performanceScore"`
+	// Speed Index.
+	Si float64 `json:"si"`
+	// The state of the Lighthouse report.
+	State SpeedTestNewResponseMobileReportState `json:"state"`
 	// Total Blocking Time.
 	Tbt float64 `json:"tbt"`
 	// Time To First Byte.
 	Ttfb float64 `json:"ttfb"`
 	// Time To Interactive.
 	Tti  float64                              `json:"tti"`
-	JSON observatoryPageTestDesktopReportJSON `json:"-"`
+	JSON speedTestNewResponseMobileReportJSON `json:"-"`
 }
 
-// observatoryPageTestDesktopReportJSON contains the JSON metadata for the struct
-// [ObservatoryPageTestDesktopReport]
-type observatoryPageTestDesktopReportJSON struct {
+// speedTestNewResponseMobileReportJSON contains the JSON metadata for the struct
+// [SpeedTestNewResponseMobileReport]
+type speedTestNewResponseMobileReportJSON struct {
 	Cls              apijson.Field
 	DeviceType       apijson.Field
 	Error            apijson.Field
@@ -163,31 +266,31 @@ type observatoryPageTestDesktopReportJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *ObservatoryPageTestDesktopReport) UnmarshalJSON(data []byte) (err error) {
+func (r *SpeedTestNewResponseMobileReport) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The type of device.
-type ObservatoryPageTestDesktopReportDeviceType string
+type SpeedTestNewResponseMobileReportDeviceType string
 
 const (
-	ObservatoryPageTestDesktopReportDeviceTypeDesktop ObservatoryPageTestDesktopReportDeviceType = "DESKTOP"
-	ObservatoryPageTestDesktopReportDeviceTypeMobile  ObservatoryPageTestDesktopReportDeviceType = "MOBILE"
+	SpeedTestNewResponseMobileReportDeviceTypeDesktop SpeedTestNewResponseMobileReportDeviceType = "DESKTOP"
+	SpeedTestNewResponseMobileReportDeviceTypeMobile  SpeedTestNewResponseMobileReportDeviceType = "MOBILE"
 )
 
-type ObservatoryPageTestDesktopReportError struct {
+type SpeedTestNewResponseMobileReportError struct {
 	// The error code of the Lighthouse result.
-	Code ObservatoryPageTestDesktopReportErrorCode `json:"code"`
+	Code SpeedTestNewResponseMobileReportErrorCode `json:"code"`
 	// Detailed error message.
 	Detail string `json:"detail"`
 	// The final URL displayed to the user.
 	FinalDisplayedURL string                                    `json:"finalDisplayedUrl"`
-	JSON              observatoryPageTestDesktopReportErrorJSON `json:"-"`
+	JSON              speedTestNewResponseMobileReportErrorJSON `json:"-"`
 }
 
-// observatoryPageTestDesktopReportErrorJSON contains the JSON metadata for the
-// struct [ObservatoryPageTestDesktopReportError]
-type observatoryPageTestDesktopReportErrorJSON struct {
+// speedTestNewResponseMobileReportErrorJSON contains the JSON metadata for the
+// struct [SpeedTestNewResponseMobileReportError]
+type speedTestNewResponseMobileReportErrorJSON struct {
 	Code              apijson.Field
 	Detail            apijson.Field
 	FinalDisplayedURL apijson.Field
@@ -195,187 +298,84 @@ type observatoryPageTestDesktopReportErrorJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *ObservatoryPageTestDesktopReportError) UnmarshalJSON(data []byte) (err error) {
+func (r *SpeedTestNewResponseMobileReportError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The error code of the Lighthouse result.
-type ObservatoryPageTestDesktopReportErrorCode string
+type SpeedTestNewResponseMobileReportErrorCode string
 
 const (
-	ObservatoryPageTestDesktopReportErrorCodeNotReachable      ObservatoryPageTestDesktopReportErrorCode = "NOT_REACHABLE"
-	ObservatoryPageTestDesktopReportErrorCodeDNSFailure        ObservatoryPageTestDesktopReportErrorCode = "DNS_FAILURE"
-	ObservatoryPageTestDesktopReportErrorCodeNotHTML           ObservatoryPageTestDesktopReportErrorCode = "NOT_HTML"
-	ObservatoryPageTestDesktopReportErrorCodeLighthouseTimeout ObservatoryPageTestDesktopReportErrorCode = "LIGHTHOUSE_TIMEOUT"
-	ObservatoryPageTestDesktopReportErrorCodeUnknown           ObservatoryPageTestDesktopReportErrorCode = "UNKNOWN"
+	SpeedTestNewResponseMobileReportErrorCodeNotReachable      SpeedTestNewResponseMobileReportErrorCode = "NOT_REACHABLE"
+	SpeedTestNewResponseMobileReportErrorCodeDNSFailure        SpeedTestNewResponseMobileReportErrorCode = "DNS_FAILURE"
+	SpeedTestNewResponseMobileReportErrorCodeNotHTML           SpeedTestNewResponseMobileReportErrorCode = "NOT_HTML"
+	SpeedTestNewResponseMobileReportErrorCodeLighthouseTimeout SpeedTestNewResponseMobileReportErrorCode = "LIGHTHOUSE_TIMEOUT"
+	SpeedTestNewResponseMobileReportErrorCodeUnknown           SpeedTestNewResponseMobileReportErrorCode = "UNKNOWN"
 )
 
 // The state of the Lighthouse report.
-type ObservatoryPageTestDesktopReportState string
+type SpeedTestNewResponseMobileReportState string
 
 const (
-	ObservatoryPageTestDesktopReportStateRunning  ObservatoryPageTestDesktopReportState = "RUNNING"
-	ObservatoryPageTestDesktopReportStateComplete ObservatoryPageTestDesktopReportState = "COMPLETE"
-	ObservatoryPageTestDesktopReportStateFailed   ObservatoryPageTestDesktopReportState = "FAILED"
-)
-
-// The Lighthouse report.
-type ObservatoryPageTestMobileReport struct {
-	// Cumulative Layout Shift.
-	Cls float64 `json:"cls"`
-	// The type of device.
-	DeviceType ObservatoryPageTestMobileReportDeviceType `json:"deviceType"`
-	Error      ObservatoryPageTestMobileReportError      `json:"error"`
-	// First Contentful Paint.
-	Fcp float64 `json:"fcp"`
-	// The URL to the full Lighthouse JSON report.
-	JsonReportURL string `json:"jsonReportUrl"`
-	// Largest Contentful Paint.
-	Lcp float64 `json:"lcp"`
-	// The Lighthouse performance score.
-	PerformanceScore float64 `json:"performanceScore"`
-	// Speed Index.
-	Si float64 `json:"si"`
-	// The state of the Lighthouse report.
-	State ObservatoryPageTestMobileReportState `json:"state"`
-	// Total Blocking Time.
-	Tbt float64 `json:"tbt"`
-	// Time To First Byte.
-	Ttfb float64 `json:"ttfb"`
-	// Time To Interactive.
-	Tti  float64                             `json:"tti"`
-	JSON observatoryPageTestMobileReportJSON `json:"-"`
-}
-
-// observatoryPageTestMobileReportJSON contains the JSON metadata for the struct
-// [ObservatoryPageTestMobileReport]
-type observatoryPageTestMobileReportJSON struct {
-	Cls              apijson.Field
-	DeviceType       apijson.Field
-	Error            apijson.Field
-	Fcp              apijson.Field
-	JsonReportURL    apijson.Field
-	Lcp              apijson.Field
-	PerformanceScore apijson.Field
-	Si               apijson.Field
-	State            apijson.Field
-	Tbt              apijson.Field
-	Ttfb             apijson.Field
-	Tti              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *ObservatoryPageTestMobileReport) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The type of device.
-type ObservatoryPageTestMobileReportDeviceType string
-
-const (
-	ObservatoryPageTestMobileReportDeviceTypeDesktop ObservatoryPageTestMobileReportDeviceType = "DESKTOP"
-	ObservatoryPageTestMobileReportDeviceTypeMobile  ObservatoryPageTestMobileReportDeviceType = "MOBILE"
-)
-
-type ObservatoryPageTestMobileReportError struct {
-	// The error code of the Lighthouse result.
-	Code ObservatoryPageTestMobileReportErrorCode `json:"code"`
-	// Detailed error message.
-	Detail string `json:"detail"`
-	// The final URL displayed to the user.
-	FinalDisplayedURL string                                   `json:"finalDisplayedUrl"`
-	JSON              observatoryPageTestMobileReportErrorJSON `json:"-"`
-}
-
-// observatoryPageTestMobileReportErrorJSON contains the JSON metadata for the
-// struct [ObservatoryPageTestMobileReportError]
-type observatoryPageTestMobileReportErrorJSON struct {
-	Code              apijson.Field
-	Detail            apijson.Field
-	FinalDisplayedURL apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *ObservatoryPageTestMobileReportError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The error code of the Lighthouse result.
-type ObservatoryPageTestMobileReportErrorCode string
-
-const (
-	ObservatoryPageTestMobileReportErrorCodeNotReachable      ObservatoryPageTestMobileReportErrorCode = "NOT_REACHABLE"
-	ObservatoryPageTestMobileReportErrorCodeDNSFailure        ObservatoryPageTestMobileReportErrorCode = "DNS_FAILURE"
-	ObservatoryPageTestMobileReportErrorCodeNotHTML           ObservatoryPageTestMobileReportErrorCode = "NOT_HTML"
-	ObservatoryPageTestMobileReportErrorCodeLighthouseTimeout ObservatoryPageTestMobileReportErrorCode = "LIGHTHOUSE_TIMEOUT"
-	ObservatoryPageTestMobileReportErrorCodeUnknown           ObservatoryPageTestMobileReportErrorCode = "UNKNOWN"
-)
-
-// The state of the Lighthouse report.
-type ObservatoryPageTestMobileReportState string
-
-const (
-	ObservatoryPageTestMobileReportStateRunning  ObservatoryPageTestMobileReportState = "RUNNING"
-	ObservatoryPageTestMobileReportStateComplete ObservatoryPageTestMobileReportState = "COMPLETE"
-	ObservatoryPageTestMobileReportStateFailed   ObservatoryPageTestMobileReportState = "FAILED"
+	SpeedTestNewResponseMobileReportStateRunning  SpeedTestNewResponseMobileReportState = "RUNNING"
+	SpeedTestNewResponseMobileReportStateComplete SpeedTestNewResponseMobileReportState = "COMPLETE"
+	SpeedTestNewResponseMobileReportStateFailed   SpeedTestNewResponseMobileReportState = "FAILED"
 )
 
 // A test region with a label.
-type ObservatoryPageTestRegion struct {
+type SpeedTestNewResponseRegion struct {
 	Label string `json:"label"`
 	// A test region.
-	Value ObservatoryPageTestRegionValue `json:"value"`
-	JSON  observatoryPageTestRegionJSON  `json:"-"`
+	Value SpeedTestNewResponseRegionValue `json:"value"`
+	JSON  speedTestNewResponseRegionJSON  `json:"-"`
 }
 
-// observatoryPageTestRegionJSON contains the JSON metadata for the struct
-// [ObservatoryPageTestRegion]
-type observatoryPageTestRegionJSON struct {
+// speedTestNewResponseRegionJSON contains the JSON metadata for the struct
+// [SpeedTestNewResponseRegion]
+type speedTestNewResponseRegionJSON struct {
 	Label       apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ObservatoryPageTestRegion) UnmarshalJSON(data []byte) (err error) {
+func (r *SpeedTestNewResponseRegion) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // A test region.
-type ObservatoryPageTestRegionValue string
+type SpeedTestNewResponseRegionValue string
 
 const (
-	ObservatoryPageTestRegionValueAsiaEast1           ObservatoryPageTestRegionValue = "asia-east1"
-	ObservatoryPageTestRegionValueAsiaNortheast1      ObservatoryPageTestRegionValue = "asia-northeast1"
-	ObservatoryPageTestRegionValueAsiaNortheast2      ObservatoryPageTestRegionValue = "asia-northeast2"
-	ObservatoryPageTestRegionValueAsiaSouth1          ObservatoryPageTestRegionValue = "asia-south1"
-	ObservatoryPageTestRegionValueAsiaSoutheast1      ObservatoryPageTestRegionValue = "asia-southeast1"
-	ObservatoryPageTestRegionValueAustraliaSoutheast1 ObservatoryPageTestRegionValue = "australia-southeast1"
-	ObservatoryPageTestRegionValueEuropeNorth1        ObservatoryPageTestRegionValue = "europe-north1"
-	ObservatoryPageTestRegionValueEuropeSouthwest1    ObservatoryPageTestRegionValue = "europe-southwest1"
-	ObservatoryPageTestRegionValueEuropeWest1         ObservatoryPageTestRegionValue = "europe-west1"
-	ObservatoryPageTestRegionValueEuropeWest2         ObservatoryPageTestRegionValue = "europe-west2"
-	ObservatoryPageTestRegionValueEuropeWest3         ObservatoryPageTestRegionValue = "europe-west3"
-	ObservatoryPageTestRegionValueEuropeWest4         ObservatoryPageTestRegionValue = "europe-west4"
-	ObservatoryPageTestRegionValueEuropeWest8         ObservatoryPageTestRegionValue = "europe-west8"
-	ObservatoryPageTestRegionValueEuropeWest9         ObservatoryPageTestRegionValue = "europe-west9"
-	ObservatoryPageTestRegionValueMeWest1             ObservatoryPageTestRegionValue = "me-west1"
-	ObservatoryPageTestRegionValueSouthamericaEast1   ObservatoryPageTestRegionValue = "southamerica-east1"
-	ObservatoryPageTestRegionValueUsCentral1          ObservatoryPageTestRegionValue = "us-central1"
-	ObservatoryPageTestRegionValueUsEast1             ObservatoryPageTestRegionValue = "us-east1"
-	ObservatoryPageTestRegionValueUsEast4             ObservatoryPageTestRegionValue = "us-east4"
-	ObservatoryPageTestRegionValueUsSouth1            ObservatoryPageTestRegionValue = "us-south1"
-	ObservatoryPageTestRegionValueUsWest1             ObservatoryPageTestRegionValue = "us-west1"
+	SpeedTestNewResponseRegionValueAsiaEast1           SpeedTestNewResponseRegionValue = "asia-east1"
+	SpeedTestNewResponseRegionValueAsiaNortheast1      SpeedTestNewResponseRegionValue = "asia-northeast1"
+	SpeedTestNewResponseRegionValueAsiaNortheast2      SpeedTestNewResponseRegionValue = "asia-northeast2"
+	SpeedTestNewResponseRegionValueAsiaSouth1          SpeedTestNewResponseRegionValue = "asia-south1"
+	SpeedTestNewResponseRegionValueAsiaSoutheast1      SpeedTestNewResponseRegionValue = "asia-southeast1"
+	SpeedTestNewResponseRegionValueAustraliaSoutheast1 SpeedTestNewResponseRegionValue = "australia-southeast1"
+	SpeedTestNewResponseRegionValueEuropeNorth1        SpeedTestNewResponseRegionValue = "europe-north1"
+	SpeedTestNewResponseRegionValueEuropeSouthwest1    SpeedTestNewResponseRegionValue = "europe-southwest1"
+	SpeedTestNewResponseRegionValueEuropeWest1         SpeedTestNewResponseRegionValue = "europe-west1"
+	SpeedTestNewResponseRegionValueEuropeWest2         SpeedTestNewResponseRegionValue = "europe-west2"
+	SpeedTestNewResponseRegionValueEuropeWest3         SpeedTestNewResponseRegionValue = "europe-west3"
+	SpeedTestNewResponseRegionValueEuropeWest4         SpeedTestNewResponseRegionValue = "europe-west4"
+	SpeedTestNewResponseRegionValueEuropeWest8         SpeedTestNewResponseRegionValue = "europe-west8"
+	SpeedTestNewResponseRegionValueEuropeWest9         SpeedTestNewResponseRegionValue = "europe-west9"
+	SpeedTestNewResponseRegionValueMeWest1             SpeedTestNewResponseRegionValue = "me-west1"
+	SpeedTestNewResponseRegionValueSouthamericaEast1   SpeedTestNewResponseRegionValue = "southamerica-east1"
+	SpeedTestNewResponseRegionValueUsCentral1          SpeedTestNewResponseRegionValue = "us-central1"
+	SpeedTestNewResponseRegionValueUsEast1             SpeedTestNewResponseRegionValue = "us-east1"
+	SpeedTestNewResponseRegionValueUsEast4             SpeedTestNewResponseRegionValue = "us-east4"
+	SpeedTestNewResponseRegionValueUsSouth1            SpeedTestNewResponseRegionValue = "us-south1"
+	SpeedTestNewResponseRegionValueUsWest1             SpeedTestNewResponseRegionValue = "us-west1"
 )
 
 // The frequency of the test.
-type ObservatoryPageTestScheduleFrequency string
+type SpeedTestNewResponseScheduleFrequency string
 
 const (
-	ObservatoryPageTestScheduleFrequencyDaily  ObservatoryPageTestScheduleFrequency = "DAILY"
-	ObservatoryPageTestScheduleFrequencyWeekly ObservatoryPageTestScheduleFrequency = "WEEKLY"
+	SpeedTestNewResponseScheduleFrequencyDaily  SpeedTestNewResponseScheduleFrequency = "DAILY"
+	SpeedTestNewResponseScheduleFrequencyWeekly SpeedTestNewResponseScheduleFrequency = "WEEKLY"
 )
 
 type SpeedTestListResponse struct {
@@ -481,6 +481,303 @@ func (r *SpeedTestDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type SpeedTestGetResponse struct {
+	// UUID
+	ID   string    `json:"id"`
+	Date time.Time `json:"date" format:"date-time"`
+	// The Lighthouse report.
+	DesktopReport SpeedTestGetResponseDesktopReport `json:"desktopReport"`
+	// The Lighthouse report.
+	MobileReport SpeedTestGetResponseMobileReport `json:"mobileReport"`
+	// A test region with a label.
+	Region SpeedTestGetResponseRegion `json:"region"`
+	// The frequency of the test.
+	ScheduleFrequency SpeedTestGetResponseScheduleFrequency `json:"scheduleFrequency"`
+	// A URL.
+	URL  string                   `json:"url"`
+	JSON speedTestGetResponseJSON `json:"-"`
+}
+
+// speedTestGetResponseJSON contains the JSON metadata for the struct
+// [SpeedTestGetResponse]
+type speedTestGetResponseJSON struct {
+	ID                apijson.Field
+	Date              apijson.Field
+	DesktopReport     apijson.Field
+	MobileReport      apijson.Field
+	Region            apijson.Field
+	ScheduleFrequency apijson.Field
+	URL               apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *SpeedTestGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The Lighthouse report.
+type SpeedTestGetResponseDesktopReport struct {
+	// Cumulative Layout Shift.
+	Cls float64 `json:"cls"`
+	// The type of device.
+	DeviceType SpeedTestGetResponseDesktopReportDeviceType `json:"deviceType"`
+	Error      SpeedTestGetResponseDesktopReportError      `json:"error"`
+	// First Contentful Paint.
+	Fcp float64 `json:"fcp"`
+	// The URL to the full Lighthouse JSON report.
+	JsonReportURL string `json:"jsonReportUrl"`
+	// Largest Contentful Paint.
+	Lcp float64 `json:"lcp"`
+	// The Lighthouse performance score.
+	PerformanceScore float64 `json:"performanceScore"`
+	// Speed Index.
+	Si float64 `json:"si"`
+	// The state of the Lighthouse report.
+	State SpeedTestGetResponseDesktopReportState `json:"state"`
+	// Total Blocking Time.
+	Tbt float64 `json:"tbt"`
+	// Time To First Byte.
+	Ttfb float64 `json:"ttfb"`
+	// Time To Interactive.
+	Tti  float64                               `json:"tti"`
+	JSON speedTestGetResponseDesktopReportJSON `json:"-"`
+}
+
+// speedTestGetResponseDesktopReportJSON contains the JSON metadata for the struct
+// [SpeedTestGetResponseDesktopReport]
+type speedTestGetResponseDesktopReportJSON struct {
+	Cls              apijson.Field
+	DeviceType       apijson.Field
+	Error            apijson.Field
+	Fcp              apijson.Field
+	JsonReportURL    apijson.Field
+	Lcp              apijson.Field
+	PerformanceScore apijson.Field
+	Si               apijson.Field
+	State            apijson.Field
+	Tbt              apijson.Field
+	Ttfb             apijson.Field
+	Tti              apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *SpeedTestGetResponseDesktopReport) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of device.
+type SpeedTestGetResponseDesktopReportDeviceType string
+
+const (
+	SpeedTestGetResponseDesktopReportDeviceTypeDesktop SpeedTestGetResponseDesktopReportDeviceType = "DESKTOP"
+	SpeedTestGetResponseDesktopReportDeviceTypeMobile  SpeedTestGetResponseDesktopReportDeviceType = "MOBILE"
+)
+
+type SpeedTestGetResponseDesktopReportError struct {
+	// The error code of the Lighthouse result.
+	Code SpeedTestGetResponseDesktopReportErrorCode `json:"code"`
+	// Detailed error message.
+	Detail string `json:"detail"`
+	// The final URL displayed to the user.
+	FinalDisplayedURL string                                     `json:"finalDisplayedUrl"`
+	JSON              speedTestGetResponseDesktopReportErrorJSON `json:"-"`
+}
+
+// speedTestGetResponseDesktopReportErrorJSON contains the JSON metadata for the
+// struct [SpeedTestGetResponseDesktopReportError]
+type speedTestGetResponseDesktopReportErrorJSON struct {
+	Code              apijson.Field
+	Detail            apijson.Field
+	FinalDisplayedURL apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *SpeedTestGetResponseDesktopReportError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The error code of the Lighthouse result.
+type SpeedTestGetResponseDesktopReportErrorCode string
+
+const (
+	SpeedTestGetResponseDesktopReportErrorCodeNotReachable      SpeedTestGetResponseDesktopReportErrorCode = "NOT_REACHABLE"
+	SpeedTestGetResponseDesktopReportErrorCodeDNSFailure        SpeedTestGetResponseDesktopReportErrorCode = "DNS_FAILURE"
+	SpeedTestGetResponseDesktopReportErrorCodeNotHTML           SpeedTestGetResponseDesktopReportErrorCode = "NOT_HTML"
+	SpeedTestGetResponseDesktopReportErrorCodeLighthouseTimeout SpeedTestGetResponseDesktopReportErrorCode = "LIGHTHOUSE_TIMEOUT"
+	SpeedTestGetResponseDesktopReportErrorCodeUnknown           SpeedTestGetResponseDesktopReportErrorCode = "UNKNOWN"
+)
+
+// The state of the Lighthouse report.
+type SpeedTestGetResponseDesktopReportState string
+
+const (
+	SpeedTestGetResponseDesktopReportStateRunning  SpeedTestGetResponseDesktopReportState = "RUNNING"
+	SpeedTestGetResponseDesktopReportStateComplete SpeedTestGetResponseDesktopReportState = "COMPLETE"
+	SpeedTestGetResponseDesktopReportStateFailed   SpeedTestGetResponseDesktopReportState = "FAILED"
+)
+
+// The Lighthouse report.
+type SpeedTestGetResponseMobileReport struct {
+	// Cumulative Layout Shift.
+	Cls float64 `json:"cls"`
+	// The type of device.
+	DeviceType SpeedTestGetResponseMobileReportDeviceType `json:"deviceType"`
+	Error      SpeedTestGetResponseMobileReportError      `json:"error"`
+	// First Contentful Paint.
+	Fcp float64 `json:"fcp"`
+	// The URL to the full Lighthouse JSON report.
+	JsonReportURL string `json:"jsonReportUrl"`
+	// Largest Contentful Paint.
+	Lcp float64 `json:"lcp"`
+	// The Lighthouse performance score.
+	PerformanceScore float64 `json:"performanceScore"`
+	// Speed Index.
+	Si float64 `json:"si"`
+	// The state of the Lighthouse report.
+	State SpeedTestGetResponseMobileReportState `json:"state"`
+	// Total Blocking Time.
+	Tbt float64 `json:"tbt"`
+	// Time To First Byte.
+	Ttfb float64 `json:"ttfb"`
+	// Time To Interactive.
+	Tti  float64                              `json:"tti"`
+	JSON speedTestGetResponseMobileReportJSON `json:"-"`
+}
+
+// speedTestGetResponseMobileReportJSON contains the JSON metadata for the struct
+// [SpeedTestGetResponseMobileReport]
+type speedTestGetResponseMobileReportJSON struct {
+	Cls              apijson.Field
+	DeviceType       apijson.Field
+	Error            apijson.Field
+	Fcp              apijson.Field
+	JsonReportURL    apijson.Field
+	Lcp              apijson.Field
+	PerformanceScore apijson.Field
+	Si               apijson.Field
+	State            apijson.Field
+	Tbt              apijson.Field
+	Ttfb             apijson.Field
+	Tti              apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *SpeedTestGetResponseMobileReport) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The type of device.
+type SpeedTestGetResponseMobileReportDeviceType string
+
+const (
+	SpeedTestGetResponseMobileReportDeviceTypeDesktop SpeedTestGetResponseMobileReportDeviceType = "DESKTOP"
+	SpeedTestGetResponseMobileReportDeviceTypeMobile  SpeedTestGetResponseMobileReportDeviceType = "MOBILE"
+)
+
+type SpeedTestGetResponseMobileReportError struct {
+	// The error code of the Lighthouse result.
+	Code SpeedTestGetResponseMobileReportErrorCode `json:"code"`
+	// Detailed error message.
+	Detail string `json:"detail"`
+	// The final URL displayed to the user.
+	FinalDisplayedURL string                                    `json:"finalDisplayedUrl"`
+	JSON              speedTestGetResponseMobileReportErrorJSON `json:"-"`
+}
+
+// speedTestGetResponseMobileReportErrorJSON contains the JSON metadata for the
+// struct [SpeedTestGetResponseMobileReportError]
+type speedTestGetResponseMobileReportErrorJSON struct {
+	Code              apijson.Field
+	Detail            apijson.Field
+	FinalDisplayedURL apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *SpeedTestGetResponseMobileReportError) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The error code of the Lighthouse result.
+type SpeedTestGetResponseMobileReportErrorCode string
+
+const (
+	SpeedTestGetResponseMobileReportErrorCodeNotReachable      SpeedTestGetResponseMobileReportErrorCode = "NOT_REACHABLE"
+	SpeedTestGetResponseMobileReportErrorCodeDNSFailure        SpeedTestGetResponseMobileReportErrorCode = "DNS_FAILURE"
+	SpeedTestGetResponseMobileReportErrorCodeNotHTML           SpeedTestGetResponseMobileReportErrorCode = "NOT_HTML"
+	SpeedTestGetResponseMobileReportErrorCodeLighthouseTimeout SpeedTestGetResponseMobileReportErrorCode = "LIGHTHOUSE_TIMEOUT"
+	SpeedTestGetResponseMobileReportErrorCodeUnknown           SpeedTestGetResponseMobileReportErrorCode = "UNKNOWN"
+)
+
+// The state of the Lighthouse report.
+type SpeedTestGetResponseMobileReportState string
+
+const (
+	SpeedTestGetResponseMobileReportStateRunning  SpeedTestGetResponseMobileReportState = "RUNNING"
+	SpeedTestGetResponseMobileReportStateComplete SpeedTestGetResponseMobileReportState = "COMPLETE"
+	SpeedTestGetResponseMobileReportStateFailed   SpeedTestGetResponseMobileReportState = "FAILED"
+)
+
+// A test region with a label.
+type SpeedTestGetResponseRegion struct {
+	Label string `json:"label"`
+	// A test region.
+	Value SpeedTestGetResponseRegionValue `json:"value"`
+	JSON  speedTestGetResponseRegionJSON  `json:"-"`
+}
+
+// speedTestGetResponseRegionJSON contains the JSON metadata for the struct
+// [SpeedTestGetResponseRegion]
+type speedTestGetResponseRegionJSON struct {
+	Label       apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpeedTestGetResponseRegion) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A test region.
+type SpeedTestGetResponseRegionValue string
+
+const (
+	SpeedTestGetResponseRegionValueAsiaEast1           SpeedTestGetResponseRegionValue = "asia-east1"
+	SpeedTestGetResponseRegionValueAsiaNortheast1      SpeedTestGetResponseRegionValue = "asia-northeast1"
+	SpeedTestGetResponseRegionValueAsiaNortheast2      SpeedTestGetResponseRegionValue = "asia-northeast2"
+	SpeedTestGetResponseRegionValueAsiaSouth1          SpeedTestGetResponseRegionValue = "asia-south1"
+	SpeedTestGetResponseRegionValueAsiaSoutheast1      SpeedTestGetResponseRegionValue = "asia-southeast1"
+	SpeedTestGetResponseRegionValueAustraliaSoutheast1 SpeedTestGetResponseRegionValue = "australia-southeast1"
+	SpeedTestGetResponseRegionValueEuropeNorth1        SpeedTestGetResponseRegionValue = "europe-north1"
+	SpeedTestGetResponseRegionValueEuropeSouthwest1    SpeedTestGetResponseRegionValue = "europe-southwest1"
+	SpeedTestGetResponseRegionValueEuropeWest1         SpeedTestGetResponseRegionValue = "europe-west1"
+	SpeedTestGetResponseRegionValueEuropeWest2         SpeedTestGetResponseRegionValue = "europe-west2"
+	SpeedTestGetResponseRegionValueEuropeWest3         SpeedTestGetResponseRegionValue = "europe-west3"
+	SpeedTestGetResponseRegionValueEuropeWest4         SpeedTestGetResponseRegionValue = "europe-west4"
+	SpeedTestGetResponseRegionValueEuropeWest8         SpeedTestGetResponseRegionValue = "europe-west8"
+	SpeedTestGetResponseRegionValueEuropeWest9         SpeedTestGetResponseRegionValue = "europe-west9"
+	SpeedTestGetResponseRegionValueMeWest1             SpeedTestGetResponseRegionValue = "me-west1"
+	SpeedTestGetResponseRegionValueSouthamericaEast1   SpeedTestGetResponseRegionValue = "southamerica-east1"
+	SpeedTestGetResponseRegionValueUsCentral1          SpeedTestGetResponseRegionValue = "us-central1"
+	SpeedTestGetResponseRegionValueUsEast1             SpeedTestGetResponseRegionValue = "us-east1"
+	SpeedTestGetResponseRegionValueUsEast4             SpeedTestGetResponseRegionValue = "us-east4"
+	SpeedTestGetResponseRegionValueUsSouth1            SpeedTestGetResponseRegionValue = "us-south1"
+	SpeedTestGetResponseRegionValueUsWest1             SpeedTestGetResponseRegionValue = "us-west1"
+)
+
+// The frequency of the test.
+type SpeedTestGetResponseScheduleFrequency string
+
+const (
+	SpeedTestGetResponseScheduleFrequencyDaily  SpeedTestGetResponseScheduleFrequency = "DAILY"
+	SpeedTestGetResponseScheduleFrequencyWeekly SpeedTestGetResponseScheduleFrequency = "WEEKLY"
+)
+
 type SpeedTestNewParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -520,7 +817,7 @@ const (
 )
 
 type SpeedTestNewResponseEnvelope struct {
-	Result ObservatoryPageTest              `json:"result"`
+	Result SpeedTestNewResponse             `json:"result"`
 	JSON   speedTestNewResponseEnvelopeJSON `json:"-"`
 }
 
@@ -645,7 +942,7 @@ type SpeedTestGetParams struct {
 }
 
 type SpeedTestGetResponseEnvelope struct {
-	Result ObservatoryPageTest              `json:"result"`
+	Result SpeedTestGetResponse             `json:"result"`
 	JSON   speedTestGetResponseEnvelopeJSON `json:"-"`
 }
 

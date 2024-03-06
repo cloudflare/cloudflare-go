@@ -32,7 +32,7 @@ func NewZeroTrustDevicePolicyIncludeService(opts ...option.RequestOption) (r *Ze
 }
 
 // Sets the list of routes included in the WARP client's tunnel.
-func (r *ZeroTrustDevicePolicyIncludeService) Update(ctx context.Context, params ZeroTrustDevicePolicyIncludeUpdateParams, opts ...option.RequestOption) (res *[]TeamsDevicesSplitTunnelInclude, err error) {
+func (r *ZeroTrustDevicePolicyIncludeService) Update(ctx context.Context, params ZeroTrustDevicePolicyIncludeUpdateParams, opts ...option.RequestOption) (res *[]ZeroTrustDevicePolicyIncludeUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustDevicePolicyIncludeUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/policy/include", params.AccountID)
@@ -45,7 +45,7 @@ func (r *ZeroTrustDevicePolicyIncludeService) Update(ctx context.Context, params
 }
 
 // Fetches the list of routes included in the WARP client's tunnel.
-func (r *ZeroTrustDevicePolicyIncludeService) List(ctx context.Context, query ZeroTrustDevicePolicyIncludeListParams, opts ...option.RequestOption) (res *[]TeamsDevicesSplitTunnelInclude, err error) {
+func (r *ZeroTrustDevicePolicyIncludeService) List(ctx context.Context, query ZeroTrustDevicePolicyIncludeListParams, opts ...option.RequestOption) (res *[]ZeroTrustDevicePolicyIncludeListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustDevicePolicyIncludeListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/policy/include", query.AccountID)
@@ -59,7 +59,7 @@ func (r *ZeroTrustDevicePolicyIncludeService) List(ctx context.Context, query Ze
 
 // Fetches the list of routes included in the WARP client's tunnel for a specific
 // device settings profile.
-func (r *ZeroTrustDevicePolicyIncludeService) Get(ctx context.Context, policyID string, query ZeroTrustDevicePolicyIncludeGetParams, opts ...option.RequestOption) (res *[]TeamsDevicesSplitTunnelInclude, err error) {
+func (r *ZeroTrustDevicePolicyIncludeService) Get(ctx context.Context, policyID string, query ZeroTrustDevicePolicyIncludeGetParams, opts ...option.RequestOption) (res *[]ZeroTrustDevicePolicyIncludeGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustDevicePolicyIncludeGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/policy/%s/include", query.AccountID, policyID)
@@ -71,7 +71,7 @@ func (r *ZeroTrustDevicePolicyIncludeService) Get(ctx context.Context, policyID 
 	return
 }
 
-type TeamsDevicesSplitTunnelInclude struct {
+type ZeroTrustDevicePolicyIncludeUpdateResponse struct {
 	// The address in CIDR format to include in the tunnel. If address is present, host
 	// must not be present.
 	Address string `json:"address,required"`
@@ -79,13 +79,13 @@ type TeamsDevicesSplitTunnelInclude struct {
 	Description string `json:"description,required"`
 	// The domain name to include in the tunnel. If host is present, address must not
 	// be present.
-	Host string                             `json:"host"`
-	JSON teamsDevicesSplitTunnelIncludeJSON `json:"-"`
+	Host string                                         `json:"host"`
+	JSON zeroTrustDevicePolicyIncludeUpdateResponseJSON `json:"-"`
 }
 
-// teamsDevicesSplitTunnelIncludeJSON contains the JSON metadata for the struct
-// [TeamsDevicesSplitTunnelInclude]
-type teamsDevicesSplitTunnelIncludeJSON struct {
+// zeroTrustDevicePolicyIncludeUpdateResponseJSON contains the JSON metadata for
+// the struct [ZeroTrustDevicePolicyIncludeUpdateResponse]
+type zeroTrustDevicePolicyIncludeUpdateResponseJSON struct {
 	Address     apijson.Field
 	Description apijson.Field
 	Host        apijson.Field
@@ -93,11 +93,72 @@ type teamsDevicesSplitTunnelIncludeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TeamsDevicesSplitTunnelInclude) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustDevicePolicyIncludeUpdateResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type TeamsDevicesSplitTunnelIncludeParam struct {
+type ZeroTrustDevicePolicyIncludeListResponse struct {
+	// The address in CIDR format to include in the tunnel. If address is present, host
+	// must not be present.
+	Address string `json:"address,required"`
+	// A description of the split tunnel item, displayed in the client UI.
+	Description string `json:"description,required"`
+	// The domain name to include in the tunnel. If host is present, address must not
+	// be present.
+	Host string                                       `json:"host"`
+	JSON zeroTrustDevicePolicyIncludeListResponseJSON `json:"-"`
+}
+
+// zeroTrustDevicePolicyIncludeListResponseJSON contains the JSON metadata for the
+// struct [ZeroTrustDevicePolicyIncludeListResponse]
+type zeroTrustDevicePolicyIncludeListResponseJSON struct {
+	Address     apijson.Field
+	Description apijson.Field
+	Host        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZeroTrustDevicePolicyIncludeListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZeroTrustDevicePolicyIncludeGetResponse struct {
+	// The address in CIDR format to include in the tunnel. If address is present, host
+	// must not be present.
+	Address string `json:"address,required"`
+	// A description of the split tunnel item, displayed in the client UI.
+	Description string `json:"description,required"`
+	// The domain name to include in the tunnel. If host is present, address must not
+	// be present.
+	Host string                                      `json:"host"`
+	JSON zeroTrustDevicePolicyIncludeGetResponseJSON `json:"-"`
+}
+
+// zeroTrustDevicePolicyIncludeGetResponseJSON contains the JSON metadata for the
+// struct [ZeroTrustDevicePolicyIncludeGetResponse]
+type zeroTrustDevicePolicyIncludeGetResponseJSON struct {
+	Address     apijson.Field
+	Description apijson.Field
+	Host        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZeroTrustDevicePolicyIncludeGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZeroTrustDevicePolicyIncludeUpdateParams struct {
+	AccountID param.Field[interface{}]                                    `path:"account_id,required"`
+	Body      param.Field[[]ZeroTrustDevicePolicyIncludeUpdateParamsBody] `json:"body,required"`
+}
+
+func (r ZeroTrustDevicePolicyIncludeUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
+}
+
+type ZeroTrustDevicePolicyIncludeUpdateParamsBody struct {
 	// The address in CIDR format to include in the tunnel. If address is present, host
 	// must not be present.
 	Address param.Field[string] `json:"address,required"`
@@ -108,23 +169,14 @@ type TeamsDevicesSplitTunnelIncludeParam struct {
 	Host param.Field[string] `json:"host"`
 }
 
-func (r TeamsDevicesSplitTunnelIncludeParam) MarshalJSON() (data []byte, err error) {
+func (r ZeroTrustDevicePolicyIncludeUpdateParamsBody) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-type ZeroTrustDevicePolicyIncludeUpdateParams struct {
-	AccountID param.Field[interface{}]                           `path:"account_id,required"`
-	Body      param.Field[[]TeamsDevicesSplitTunnelIncludeParam] `json:"body,required"`
-}
-
-func (r ZeroTrustDevicePolicyIncludeUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
 }
 
 type ZeroTrustDevicePolicyIncludeUpdateResponseEnvelope struct {
 	Errors   []ZeroTrustDevicePolicyIncludeUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustDevicePolicyIncludeUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   []TeamsDevicesSplitTunnelInclude                             `json:"result,required,nullable"`
+	Result   []ZeroTrustDevicePolicyIncludeUpdateResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    ZeroTrustDevicePolicyIncludeUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ZeroTrustDevicePolicyIncludeUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -229,7 +281,7 @@ type ZeroTrustDevicePolicyIncludeListParams struct {
 type ZeroTrustDevicePolicyIncludeListResponseEnvelope struct {
 	Errors   []ZeroTrustDevicePolicyIncludeListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustDevicePolicyIncludeListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []TeamsDevicesSplitTunnelInclude                           `json:"result,required,nullable"`
+	Result   []ZeroTrustDevicePolicyIncludeListResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    ZeroTrustDevicePolicyIncludeListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ZeroTrustDevicePolicyIncludeListResponseEnvelopeResultInfo `json:"result_info"`
@@ -333,7 +385,7 @@ type ZeroTrustDevicePolicyIncludeGetParams struct {
 type ZeroTrustDevicePolicyIncludeGetResponseEnvelope struct {
 	Errors   []ZeroTrustDevicePolicyIncludeGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustDevicePolicyIncludeGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []TeamsDevicesSplitTunnelInclude                          `json:"result,required,nullable"`
+	Result   []ZeroTrustDevicePolicyIncludeGetResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    ZeroTrustDevicePolicyIncludeGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ZeroTrustDevicePolicyIncludeGetResponseEnvelopeResultInfo `json:"result_info"`

@@ -32,7 +32,7 @@ func NewPCAPOwnershipService(opts ...option.RequestOption) (r *PCAPOwnershipServ
 }
 
 // Adds an AWS or GCP bucket to use with full packet captures.
-func (r *PCAPOwnershipService) New(ctx context.Context, params PCAPOwnershipNewParams, opts ...option.RequestOption) (res *MagicVisibilityPCAPsOwnership, err error) {
+func (r *PCAPOwnershipService) New(ctx context.Context, params PCAPOwnershipNewParams, opts ...option.RequestOption) (res *PCAPOwnershipNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PCAPOwnershipNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pcaps/ownership", params.AccountID)
@@ -54,7 +54,7 @@ func (r *PCAPOwnershipService) Delete(ctx context.Context, ownershipID string, b
 }
 
 // List all buckets configured for use with PCAPs API.
-func (r *PCAPOwnershipService) Get(ctx context.Context, query PCAPOwnershipGetParams, opts ...option.RequestOption) (res *[]MagicVisibilityPCAPsOwnership, err error) {
+func (r *PCAPOwnershipService) Get(ctx context.Context, query PCAPOwnershipGetParams, opts ...option.RequestOption) (res *[]PCAPOwnershipGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PCAPOwnershipGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pcaps/ownership", query.AccountID)
@@ -67,7 +67,7 @@ func (r *PCAPOwnershipService) Get(ctx context.Context, query PCAPOwnershipGetPa
 }
 
 // Validates buckets added to the packet captures API.
-func (r *PCAPOwnershipService) Validate(ctx context.Context, params PCAPOwnershipValidateParams, opts ...option.RequestOption) (res *MagicVisibilityPCAPsOwnership, err error) {
+func (r *PCAPOwnershipService) Validate(ctx context.Context, params PCAPOwnershipValidateParams, opts ...option.RequestOption) (res *PCAPOwnershipValidateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PCAPOwnershipValidateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pcaps/ownership/validate", params.AccountID)
@@ -79,7 +79,7 @@ func (r *PCAPOwnershipService) Validate(ctx context.Context, params PCAPOwnershi
 	return
 }
 
-type MagicVisibilityPCAPsOwnership struct {
+type PCAPOwnershipNewResponse struct {
 	// The bucket ID associated with the packet captures API.
 	ID string `json:"id,required"`
 	// The full URI for the bucket. This field only applies to `full` packet captures.
@@ -87,17 +87,17 @@ type MagicVisibilityPCAPsOwnership struct {
 	// The ownership challenge filename stored in the bucket.
 	Filename string `json:"filename,required"`
 	// The status of the ownership challenge. Can be pending, success or failed.
-	Status MagicVisibilityPCAPsOwnershipStatus `json:"status,required"`
+	Status PCAPOwnershipNewResponseStatus `json:"status,required"`
 	// The RFC 3339 timestamp when the bucket was added to packet captures API.
 	Submitted string `json:"submitted,required"`
 	// The RFC 3339 timestamp when the bucket was validated.
-	Validated string                            `json:"validated"`
-	JSON      magicVisibilityPCAPsOwnershipJSON `json:"-"`
+	Validated string                       `json:"validated"`
+	JSON      pcapOwnershipNewResponseJSON `json:"-"`
 }
 
-// magicVisibilityPCAPsOwnershipJSON contains the JSON metadata for the struct
-// [MagicVisibilityPCAPsOwnership]
-type magicVisibilityPCAPsOwnershipJSON struct {
+// pcapOwnershipNewResponseJSON contains the JSON metadata for the struct
+// [PCAPOwnershipNewResponse]
+type pcapOwnershipNewResponseJSON struct {
 	ID              apijson.Field
 	DestinationConf apijson.Field
 	Filename        apijson.Field
@@ -108,17 +108,101 @@ type magicVisibilityPCAPsOwnershipJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *MagicVisibilityPCAPsOwnership) UnmarshalJSON(data []byte) (err error) {
+func (r *PCAPOwnershipNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // The status of the ownership challenge. Can be pending, success or failed.
-type MagicVisibilityPCAPsOwnershipStatus string
+type PCAPOwnershipNewResponseStatus string
 
 const (
-	MagicVisibilityPCAPsOwnershipStatusPending MagicVisibilityPCAPsOwnershipStatus = "pending"
-	MagicVisibilityPCAPsOwnershipStatusSuccess MagicVisibilityPCAPsOwnershipStatus = "success"
-	MagicVisibilityPCAPsOwnershipStatusFailed  MagicVisibilityPCAPsOwnershipStatus = "failed"
+	PCAPOwnershipNewResponseStatusPending PCAPOwnershipNewResponseStatus = "pending"
+	PCAPOwnershipNewResponseStatusSuccess PCAPOwnershipNewResponseStatus = "success"
+	PCAPOwnershipNewResponseStatusFailed  PCAPOwnershipNewResponseStatus = "failed"
+)
+
+type PCAPOwnershipGetResponse struct {
+	// The bucket ID associated with the packet captures API.
+	ID string `json:"id,required"`
+	// The full URI for the bucket. This field only applies to `full` packet captures.
+	DestinationConf string `json:"destination_conf,required"`
+	// The ownership challenge filename stored in the bucket.
+	Filename string `json:"filename,required"`
+	// The status of the ownership challenge. Can be pending, success or failed.
+	Status PCAPOwnershipGetResponseStatus `json:"status,required"`
+	// The RFC 3339 timestamp when the bucket was added to packet captures API.
+	Submitted string `json:"submitted,required"`
+	// The RFC 3339 timestamp when the bucket was validated.
+	Validated string                       `json:"validated"`
+	JSON      pcapOwnershipGetResponseJSON `json:"-"`
+}
+
+// pcapOwnershipGetResponseJSON contains the JSON metadata for the struct
+// [PCAPOwnershipGetResponse]
+type pcapOwnershipGetResponseJSON struct {
+	ID              apijson.Field
+	DestinationConf apijson.Field
+	Filename        apijson.Field
+	Status          apijson.Field
+	Submitted       apijson.Field
+	Validated       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *PCAPOwnershipGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The status of the ownership challenge. Can be pending, success or failed.
+type PCAPOwnershipGetResponseStatus string
+
+const (
+	PCAPOwnershipGetResponseStatusPending PCAPOwnershipGetResponseStatus = "pending"
+	PCAPOwnershipGetResponseStatusSuccess PCAPOwnershipGetResponseStatus = "success"
+	PCAPOwnershipGetResponseStatusFailed  PCAPOwnershipGetResponseStatus = "failed"
+)
+
+type PCAPOwnershipValidateResponse struct {
+	// The bucket ID associated with the packet captures API.
+	ID string `json:"id,required"`
+	// The full URI for the bucket. This field only applies to `full` packet captures.
+	DestinationConf string `json:"destination_conf,required"`
+	// The ownership challenge filename stored in the bucket.
+	Filename string `json:"filename,required"`
+	// The status of the ownership challenge. Can be pending, success or failed.
+	Status PCAPOwnershipValidateResponseStatus `json:"status,required"`
+	// The RFC 3339 timestamp when the bucket was added to packet captures API.
+	Submitted string `json:"submitted,required"`
+	// The RFC 3339 timestamp when the bucket was validated.
+	Validated string                            `json:"validated"`
+	JSON      pcapOwnershipValidateResponseJSON `json:"-"`
+}
+
+// pcapOwnershipValidateResponseJSON contains the JSON metadata for the struct
+// [PCAPOwnershipValidateResponse]
+type pcapOwnershipValidateResponseJSON struct {
+	ID              apijson.Field
+	DestinationConf apijson.Field
+	Filename        apijson.Field
+	Status          apijson.Field
+	Submitted       apijson.Field
+	Validated       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *PCAPOwnershipValidateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The status of the ownership challenge. Can be pending, success or failed.
+type PCAPOwnershipValidateResponseStatus string
+
+const (
+	PCAPOwnershipValidateResponseStatusPending PCAPOwnershipValidateResponseStatus = "pending"
+	PCAPOwnershipValidateResponseStatusSuccess PCAPOwnershipValidateResponseStatus = "success"
+	PCAPOwnershipValidateResponseStatusFailed  PCAPOwnershipValidateResponseStatus = "failed"
 )
 
 type PCAPOwnershipNewParams struct {
@@ -135,7 +219,7 @@ func (r PCAPOwnershipNewParams) MarshalJSON() (data []byte, err error) {
 type PCAPOwnershipNewResponseEnvelope struct {
 	Errors   []PCAPOwnershipNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []PCAPOwnershipNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   MagicVisibilityPCAPsOwnership              `json:"result,required"`
+	Result   PCAPOwnershipNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success PCAPOwnershipNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    pcapOwnershipNewResponseEnvelopeJSON    `json:"-"`
@@ -214,7 +298,7 @@ type PCAPOwnershipGetParams struct {
 type PCAPOwnershipGetResponseEnvelope struct {
 	Errors   []PCAPOwnershipGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []PCAPOwnershipGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []MagicVisibilityPCAPsOwnership            `json:"result,required,nullable"`
+	Result   []PCAPOwnershipGetResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    PCAPOwnershipGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo PCAPOwnershipGetResponseEnvelopeResultInfo `json:"result_info"`
@@ -325,7 +409,7 @@ func (r PCAPOwnershipValidateParams) MarshalJSON() (data []byte, err error) {
 type PCAPOwnershipValidateResponseEnvelope struct {
 	Errors   []PCAPOwnershipValidateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []PCAPOwnershipValidateResponseEnvelopeMessages `json:"messages,required"`
-	Result   MagicVisibilityPCAPsOwnership                   `json:"result,required"`
+	Result   PCAPOwnershipValidateResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success PCAPOwnershipValidateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    pcapOwnershipValidateResponseEnvelopeJSON    `json:"-"`

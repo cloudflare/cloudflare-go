@@ -135,7 +135,7 @@ type AccountSettings struct {
 	// default.
 	//
 	// Deprecated in favor of `default_nameservers`.
-	UseAccountCustomNsByDefault bool                `json:"use_account_custom_ns_by_default"`
+	UseAccountCustomNSByDefault bool                `json:"use_account_custom_ns_by_default"`
 	JSON                        accountSettingsJSON `json:"-"`
 }
 
@@ -143,7 +143,7 @@ type AccountSettings struct {
 type accountSettingsJSON struct {
 	DefaultNameservers          apijson.Field
 	EnforceTwofactor            apijson.Field
-	UseAccountCustomNsByDefault apijson.Field
+	UseAccountCustomNSByDefault apijson.Field
 	raw                         string
 	ExtraFields                 map[string]apijson.Field
 }
@@ -236,7 +236,7 @@ type AccountUpdateParamsSettings struct {
 	// default.
 	//
 	// Deprecated in favor of `default_nameservers`.
-	UseAccountCustomNsByDefault param.Field[bool] `json:"use_account_custom_ns_by_default"`
+	UseAccountCustomNSByDefault param.Field[bool] `json:"use_account_custom_ns_by_default"`
 }
 
 func (r AccountUpdateParamsSettings) MarshalJSON() (data []byte, err error) {

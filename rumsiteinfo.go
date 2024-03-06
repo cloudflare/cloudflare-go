@@ -36,7 +36,7 @@ func NewRUMSiteInfoService(opts ...option.RequestOption) (r *RUMSiteInfoService)
 }
 
 // Creates a new Web Analytics site.
-func (r *RUMSiteInfoService) New(ctx context.Context, params RUMSiteInfoNewParams, opts ...option.RequestOption) (res *RUMSite, err error) {
+func (r *RUMSiteInfoService) New(ctx context.Context, params RUMSiteInfoNewParams, opts ...option.RequestOption) (res *RUMSiteInfoNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RUMSiteInfoNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/rum/site_info", params.AccountID)
@@ -49,7 +49,7 @@ func (r *RUMSiteInfoService) New(ctx context.Context, params RUMSiteInfoNewParam
 }
 
 // Updates an existing Web Analytics site.
-func (r *RUMSiteInfoService) Update(ctx context.Context, siteID string, params RUMSiteInfoUpdateParams, opts ...option.RequestOption) (res *RUMSite, err error) {
+func (r *RUMSiteInfoService) Update(ctx context.Context, siteID string, params RUMSiteInfoUpdateParams, opts ...option.RequestOption) (res *RUMSiteInfoUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RUMSiteInfoUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/rum/site_info/%s", params.AccountID, siteID)
@@ -62,7 +62,7 @@ func (r *RUMSiteInfoService) Update(ctx context.Context, siteID string, params R
 }
 
 // Lists all Web Analytics sites of an account.
-func (r *RUMSiteInfoService) List(ctx context.Context, params RUMSiteInfoListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[RUMSite], err error) {
+func (r *RUMSiteInfoService) List(ctx context.Context, params RUMSiteInfoListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[RUMSiteInfoListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -80,7 +80,7 @@ func (r *RUMSiteInfoService) List(ctx context.Context, params RUMSiteInfoListPar
 }
 
 // Lists all Web Analytics sites of an account.
-func (r *RUMSiteInfoService) ListAutoPaging(ctx context.Context, params RUMSiteInfoListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[RUMSite] {
+func (r *RUMSiteInfoService) ListAutoPaging(ctx context.Context, params RUMSiteInfoListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[RUMSiteInfoListResponse] {
 	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -98,7 +98,7 @@ func (r *RUMSiteInfoService) Delete(ctx context.Context, siteID string, body RUM
 }
 
 // Retrieves a Web Analytics site.
-func (r *RUMSiteInfoService) Get(ctx context.Context, siteID string, query RUMSiteInfoGetParams, opts ...option.RequestOption) (res *RUMSite, err error) {
+func (r *RUMSiteInfoService) Get(ctx context.Context, siteID string, query RUMSiteInfoGetParams, opts ...option.RequestOption) (res *RUMSiteInfoGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RUMSiteInfoGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/rum/site_info/%s", query.AccountID, siteID)
@@ -110,25 +110,26 @@ func (r *RUMSiteInfoService) Get(ctx context.Context, siteID string, query RUMSi
 	return
 }
 
-type RUMSite struct {
+type RUMSiteInfoNewResponse struct {
 	// If enabled, the JavaScript snippet is automatically injected for orange-clouded
 	// sites.
 	AutoInstall bool      `json:"auto_install"`
 	Created     time.Time `json:"created" format:"date-time"`
 	// A list of rules.
-	Rules   []RUMRule      `json:"rules"`
-	Ruleset RUMSiteRuleset `json:"ruleset"`
+	Rules   []RUMSiteInfoNewResponseRule  `json:"rules"`
+	Ruleset RUMSiteInfoNewResponseRuleset `json:"ruleset"`
 	// The Web Analytics site identifier.
 	SiteTag string `json:"site_tag"`
 	// The Web Analytics site token.
 	SiteToken string `json:"site_token"`
 	// Encoded JavaScript snippet.
-	Snippet string      `json:"snippet"`
-	JSON    rumSiteJSON `json:"-"`
+	Snippet string                     `json:"snippet"`
+	JSON    rumSiteInfoNewResponseJSON `json:"-"`
 }
 
-// rumSiteJSON contains the JSON metadata for the struct [RUMSite]
-type rumSiteJSON struct {
+// rumSiteInfoNewResponseJSON contains the JSON metadata for the struct
+// [RUMSiteInfoNewResponse]
+type rumSiteInfoNewResponseJSON struct {
 	AutoInstall apijson.Field
 	Created     apijson.Field
 	Rules       apijson.Field
@@ -140,23 +141,58 @@ type rumSiteJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RUMSite) UnmarshalJSON(data []byte) (err error) {
+func (r *RUMSiteInfoNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type RUMSiteRuleset struct {
+type RUMSiteInfoNewResponseRule struct {
+	// The Web Analytics rule identifier.
+	ID      string    `json:"id"`
+	Created time.Time `json:"created" format:"date-time"`
+	// The hostname the rule will be applied to.
+	Host string `json:"host"`
+	// Whether the rule includes or excludes traffic from being measured.
+	Inclusive bool `json:"inclusive"`
+	// Whether the rule is paused or not.
+	IsPaused bool `json:"is_paused"`
+	// The paths the rule will be applied to.
+	Paths    []string                       `json:"paths"`
+	Priority float64                        `json:"priority"`
+	JSON     rumSiteInfoNewResponseRuleJSON `json:"-"`
+}
+
+// rumSiteInfoNewResponseRuleJSON contains the JSON metadata for the struct
+// [RUMSiteInfoNewResponseRule]
+type rumSiteInfoNewResponseRuleJSON struct {
+	ID          apijson.Field
+	Created     apijson.Field
+	Host        apijson.Field
+	Inclusive   apijson.Field
+	IsPaused    apijson.Field
+	Paths       apijson.Field
+	Priority    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RUMSiteInfoNewResponseRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RUMSiteInfoNewResponseRuleset struct {
 	// The Web Analytics ruleset identifier.
 	ID string `json:"id"`
 	// Whether the ruleset is enabled.
 	Enabled  bool   `json:"enabled"`
 	ZoneName string `json:"zone_name"`
 	// The zone identifier.
-	ZoneTag string             `json:"zone_tag"`
-	JSON    rumSiteRulesetJSON `json:"-"`
+	ZoneTag string                            `json:"zone_tag"`
+	JSON    rumSiteInfoNewResponseRulesetJSON `json:"-"`
 }
 
-// rumSiteRulesetJSON contains the JSON metadata for the struct [RUMSiteRuleset]
-type rumSiteRulesetJSON struct {
+// rumSiteInfoNewResponseRulesetJSON contains the JSON metadata for the struct
+// [RUMSiteInfoNewResponseRuleset]
+type rumSiteInfoNewResponseRulesetJSON struct {
 	ID          apijson.Field
 	Enabled     apijson.Field
 	ZoneName    apijson.Field
@@ -165,7 +201,197 @@ type rumSiteRulesetJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RUMSiteRuleset) UnmarshalJSON(data []byte) (err error) {
+func (r *RUMSiteInfoNewResponseRuleset) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RUMSiteInfoUpdateResponse struct {
+	// If enabled, the JavaScript snippet is automatically injected for orange-clouded
+	// sites.
+	AutoInstall bool      `json:"auto_install"`
+	Created     time.Time `json:"created" format:"date-time"`
+	// A list of rules.
+	Rules   []RUMSiteInfoUpdateResponseRule  `json:"rules"`
+	Ruleset RUMSiteInfoUpdateResponseRuleset `json:"ruleset"`
+	// The Web Analytics site identifier.
+	SiteTag string `json:"site_tag"`
+	// The Web Analytics site token.
+	SiteToken string `json:"site_token"`
+	// Encoded JavaScript snippet.
+	Snippet string                        `json:"snippet"`
+	JSON    rumSiteInfoUpdateResponseJSON `json:"-"`
+}
+
+// rumSiteInfoUpdateResponseJSON contains the JSON metadata for the struct
+// [RUMSiteInfoUpdateResponse]
+type rumSiteInfoUpdateResponseJSON struct {
+	AutoInstall apijson.Field
+	Created     apijson.Field
+	Rules       apijson.Field
+	Ruleset     apijson.Field
+	SiteTag     apijson.Field
+	SiteToken   apijson.Field
+	Snippet     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RUMSiteInfoUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RUMSiteInfoUpdateResponseRule struct {
+	// The Web Analytics rule identifier.
+	ID      string    `json:"id"`
+	Created time.Time `json:"created" format:"date-time"`
+	// The hostname the rule will be applied to.
+	Host string `json:"host"`
+	// Whether the rule includes or excludes traffic from being measured.
+	Inclusive bool `json:"inclusive"`
+	// Whether the rule is paused or not.
+	IsPaused bool `json:"is_paused"`
+	// The paths the rule will be applied to.
+	Paths    []string                          `json:"paths"`
+	Priority float64                           `json:"priority"`
+	JSON     rumSiteInfoUpdateResponseRuleJSON `json:"-"`
+}
+
+// rumSiteInfoUpdateResponseRuleJSON contains the JSON metadata for the struct
+// [RUMSiteInfoUpdateResponseRule]
+type rumSiteInfoUpdateResponseRuleJSON struct {
+	ID          apijson.Field
+	Created     apijson.Field
+	Host        apijson.Field
+	Inclusive   apijson.Field
+	IsPaused    apijson.Field
+	Paths       apijson.Field
+	Priority    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RUMSiteInfoUpdateResponseRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RUMSiteInfoUpdateResponseRuleset struct {
+	// The Web Analytics ruleset identifier.
+	ID string `json:"id"`
+	// Whether the ruleset is enabled.
+	Enabled  bool   `json:"enabled"`
+	ZoneName string `json:"zone_name"`
+	// The zone identifier.
+	ZoneTag string                               `json:"zone_tag"`
+	JSON    rumSiteInfoUpdateResponseRulesetJSON `json:"-"`
+}
+
+// rumSiteInfoUpdateResponseRulesetJSON contains the JSON metadata for the struct
+// [RUMSiteInfoUpdateResponseRuleset]
+type rumSiteInfoUpdateResponseRulesetJSON struct {
+	ID          apijson.Field
+	Enabled     apijson.Field
+	ZoneName    apijson.Field
+	ZoneTag     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RUMSiteInfoUpdateResponseRuleset) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RUMSiteInfoListResponse struct {
+	// If enabled, the JavaScript snippet is automatically injected for orange-clouded
+	// sites.
+	AutoInstall bool      `json:"auto_install"`
+	Created     time.Time `json:"created" format:"date-time"`
+	// A list of rules.
+	Rules   []RUMSiteInfoListResponseRule  `json:"rules"`
+	Ruleset RUMSiteInfoListResponseRuleset `json:"ruleset"`
+	// The Web Analytics site identifier.
+	SiteTag string `json:"site_tag"`
+	// The Web Analytics site token.
+	SiteToken string `json:"site_token"`
+	// Encoded JavaScript snippet.
+	Snippet string                      `json:"snippet"`
+	JSON    rumSiteInfoListResponseJSON `json:"-"`
+}
+
+// rumSiteInfoListResponseJSON contains the JSON metadata for the struct
+// [RUMSiteInfoListResponse]
+type rumSiteInfoListResponseJSON struct {
+	AutoInstall apijson.Field
+	Created     apijson.Field
+	Rules       apijson.Field
+	Ruleset     apijson.Field
+	SiteTag     apijson.Field
+	SiteToken   apijson.Field
+	Snippet     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RUMSiteInfoListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RUMSiteInfoListResponseRule struct {
+	// The Web Analytics rule identifier.
+	ID      string    `json:"id"`
+	Created time.Time `json:"created" format:"date-time"`
+	// The hostname the rule will be applied to.
+	Host string `json:"host"`
+	// Whether the rule includes or excludes traffic from being measured.
+	Inclusive bool `json:"inclusive"`
+	// Whether the rule is paused or not.
+	IsPaused bool `json:"is_paused"`
+	// The paths the rule will be applied to.
+	Paths    []string                        `json:"paths"`
+	Priority float64                         `json:"priority"`
+	JSON     rumSiteInfoListResponseRuleJSON `json:"-"`
+}
+
+// rumSiteInfoListResponseRuleJSON contains the JSON metadata for the struct
+// [RUMSiteInfoListResponseRule]
+type rumSiteInfoListResponseRuleJSON struct {
+	ID          apijson.Field
+	Created     apijson.Field
+	Host        apijson.Field
+	Inclusive   apijson.Field
+	IsPaused    apijson.Field
+	Paths       apijson.Field
+	Priority    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RUMSiteInfoListResponseRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RUMSiteInfoListResponseRuleset struct {
+	// The Web Analytics ruleset identifier.
+	ID string `json:"id"`
+	// Whether the ruleset is enabled.
+	Enabled  bool   `json:"enabled"`
+	ZoneName string `json:"zone_name"`
+	// The zone identifier.
+	ZoneTag string                             `json:"zone_tag"`
+	JSON    rumSiteInfoListResponseRulesetJSON `json:"-"`
+}
+
+// rumSiteInfoListResponseRulesetJSON contains the JSON metadata for the struct
+// [RUMSiteInfoListResponseRuleset]
+type rumSiteInfoListResponseRulesetJSON struct {
+	ID          apijson.Field
+	Enabled     apijson.Field
+	ZoneName    apijson.Field
+	ZoneTag     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RUMSiteInfoListResponseRuleset) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -187,6 +413,101 @@ func (r *RUMSiteInfoDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type RUMSiteInfoGetResponse struct {
+	// If enabled, the JavaScript snippet is automatically injected for orange-clouded
+	// sites.
+	AutoInstall bool      `json:"auto_install"`
+	Created     time.Time `json:"created" format:"date-time"`
+	// A list of rules.
+	Rules   []RUMSiteInfoGetResponseRule  `json:"rules"`
+	Ruleset RUMSiteInfoGetResponseRuleset `json:"ruleset"`
+	// The Web Analytics site identifier.
+	SiteTag string `json:"site_tag"`
+	// The Web Analytics site token.
+	SiteToken string `json:"site_token"`
+	// Encoded JavaScript snippet.
+	Snippet string                     `json:"snippet"`
+	JSON    rumSiteInfoGetResponseJSON `json:"-"`
+}
+
+// rumSiteInfoGetResponseJSON contains the JSON metadata for the struct
+// [RUMSiteInfoGetResponse]
+type rumSiteInfoGetResponseJSON struct {
+	AutoInstall apijson.Field
+	Created     apijson.Field
+	Rules       apijson.Field
+	Ruleset     apijson.Field
+	SiteTag     apijson.Field
+	SiteToken   apijson.Field
+	Snippet     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RUMSiteInfoGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RUMSiteInfoGetResponseRule struct {
+	// The Web Analytics rule identifier.
+	ID      string    `json:"id"`
+	Created time.Time `json:"created" format:"date-time"`
+	// The hostname the rule will be applied to.
+	Host string `json:"host"`
+	// Whether the rule includes or excludes traffic from being measured.
+	Inclusive bool `json:"inclusive"`
+	// Whether the rule is paused or not.
+	IsPaused bool `json:"is_paused"`
+	// The paths the rule will be applied to.
+	Paths    []string                       `json:"paths"`
+	Priority float64                        `json:"priority"`
+	JSON     rumSiteInfoGetResponseRuleJSON `json:"-"`
+}
+
+// rumSiteInfoGetResponseRuleJSON contains the JSON metadata for the struct
+// [RUMSiteInfoGetResponseRule]
+type rumSiteInfoGetResponseRuleJSON struct {
+	ID          apijson.Field
+	Created     apijson.Field
+	Host        apijson.Field
+	Inclusive   apijson.Field
+	IsPaused    apijson.Field
+	Paths       apijson.Field
+	Priority    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RUMSiteInfoGetResponseRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type RUMSiteInfoGetResponseRuleset struct {
+	// The Web Analytics ruleset identifier.
+	ID string `json:"id"`
+	// Whether the ruleset is enabled.
+	Enabled  bool   `json:"enabled"`
+	ZoneName string `json:"zone_name"`
+	// The zone identifier.
+	ZoneTag string                            `json:"zone_tag"`
+	JSON    rumSiteInfoGetResponseRulesetJSON `json:"-"`
+}
+
+// rumSiteInfoGetResponseRulesetJSON contains the JSON metadata for the struct
+// [RUMSiteInfoGetResponseRuleset]
+type rumSiteInfoGetResponseRulesetJSON struct {
+	ID          apijson.Field
+	Enabled     apijson.Field
+	ZoneName    apijson.Field
+	ZoneTag     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *RUMSiteInfoGetResponseRuleset) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type RUMSiteInfoNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -204,7 +525,7 @@ func (r RUMSiteInfoNewParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RUMSiteInfoNewResponseEnvelope struct {
-	Result RUMSite                            `json:"result"`
+	Result RUMSiteInfoNewResponse             `json:"result"`
 	JSON   rumSiteInfoNewResponseEnvelopeJSON `json:"-"`
 }
 
@@ -237,7 +558,7 @@ func (r RUMSiteInfoUpdateParams) MarshalJSON() (data []byte, err error) {
 }
 
 type RUMSiteInfoUpdateResponseEnvelope struct {
-	Result RUMSite                               `json:"result"`
+	Result RUMSiteInfoUpdateResponse             `json:"result"`
 	JSON   rumSiteInfoUpdateResponseEnvelopeJSON `json:"-"`
 }
 
@@ -308,7 +629,7 @@ type RUMSiteInfoGetParams struct {
 }
 
 type RUMSiteInfoGetResponseEnvelope struct {
-	Result RUMSite                            `json:"result"`
+	Result RUMSiteInfoGetResponse             `json:"result"`
 	JSON   rumSiteInfoGetResponseEnvelopeJSON `json:"-"`
 }
 

@@ -29,9 +29,9 @@ func TestZoneSettingOrangeToOrangeEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Zones.Settings.OrangeToOrange.Edit(context.TODO(), cloudflare.ZoneSettingOrangeToOrangeEditParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Value: cloudflare.F(cloudflare.ZonesOrangeToOrangeParam{
-			ID:    cloudflare.F(cloudflare.ZonesOrangeToOrangeIDOrangeToOrange),
-			Value: cloudflare.F(cloudflare.ZonesOrangeToOrangeValueOn),
+		Value: cloudflare.F(cloudflare.ZoneSettingOrangeToOrangeEditParamsValue{
+			ID:    cloudflare.F(cloudflare.ZoneSettingOrangeToOrangeEditParamsValueIDOrangeToOrange),
+			Value: cloudflare.F(cloudflare.ZoneSettingOrangeToOrangeEditParamsValueValueOn),
 		}),
 	})
 	if err != nil {

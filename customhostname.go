@@ -243,7 +243,7 @@ type CustomHostnameNewResponseSSLMethod string
 
 const (
 	CustomHostnameNewResponseSSLMethodHTTP  CustomHostnameNewResponseSSLMethod = "http"
-	CustomHostnameNewResponseSSLMethodTxt   CustomHostnameNewResponseSSLMethod = "txt"
+	CustomHostnameNewResponseSSLMethodTXT   CustomHostnameNewResponseSSLMethod = "txt"
 	CustomHostnameNewResponseSSLMethodEmail CustomHostnameNewResponseSSLMethod = "email"
 )
 
@@ -378,10 +378,10 @@ type CustomHostnameNewResponseSSLValidationRecord struct {
 	HTTPURL string `json:"http_url"`
 	// The hostname that the certificate authority (CA) will check for a TXT record
 	// during domain validation .
-	TxtName string `json:"txt_name"`
+	TXTName string `json:"txt_name"`
 	// The TXT record that the certificate authority (CA) will check during domain
 	// validation.
-	TxtValue string                                           `json:"txt_value"`
+	TXTValue string                                           `json:"txt_value"`
 	JSON     customHostnameNewResponseSSLValidationRecordJSON `json:"-"`
 }
 
@@ -391,8 +391,8 @@ type customHostnameNewResponseSSLValidationRecordJSON struct {
 	Emails      apijson.Field
 	HTTPBody    apijson.Field
 	HTTPURL     apijson.Field
-	TxtName     apijson.Field
-	TxtValue    apijson.Field
+	TXTName     apijson.Field
+	TXTValue    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -528,7 +528,7 @@ type CustomHostnameListResponseSSLMethod string
 
 const (
 	CustomHostnameListResponseSSLMethodHTTP  CustomHostnameListResponseSSLMethod = "http"
-	CustomHostnameListResponseSSLMethodTxt   CustomHostnameListResponseSSLMethod = "txt"
+	CustomHostnameListResponseSSLMethodTXT   CustomHostnameListResponseSSLMethod = "txt"
 	CustomHostnameListResponseSSLMethodEmail CustomHostnameListResponseSSLMethod = "email"
 )
 
@@ -663,10 +663,10 @@ type CustomHostnameListResponseSSLValidationRecord struct {
 	HTTPURL string `json:"http_url"`
 	// The hostname that the certificate authority (CA) will check for a TXT record
 	// during domain validation .
-	TxtName string `json:"txt_name"`
+	TXTName string `json:"txt_name"`
 	// The TXT record that the certificate authority (CA) will check during domain
 	// validation.
-	TxtValue string                                            `json:"txt_value"`
+	TXTValue string                                            `json:"txt_value"`
 	JSON     customHostnameListResponseSSLValidationRecordJSON `json:"-"`
 }
 
@@ -676,8 +676,8 @@ type customHostnameListResponseSSLValidationRecordJSON struct {
 	Emails      apijson.Field
 	HTTPBody    apijson.Field
 	HTTPURL     apijson.Field
-	TxtName     apijson.Field
-	TxtValue    apijson.Field
+	TXTName     apijson.Field
+	TXTValue    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -831,7 +831,7 @@ type CustomHostnameEditResponseSSLMethod string
 
 const (
 	CustomHostnameEditResponseSSLMethodHTTP  CustomHostnameEditResponseSSLMethod = "http"
-	CustomHostnameEditResponseSSLMethodTxt   CustomHostnameEditResponseSSLMethod = "txt"
+	CustomHostnameEditResponseSSLMethodTXT   CustomHostnameEditResponseSSLMethod = "txt"
 	CustomHostnameEditResponseSSLMethodEmail CustomHostnameEditResponseSSLMethod = "email"
 )
 
@@ -966,10 +966,10 @@ type CustomHostnameEditResponseSSLValidationRecord struct {
 	HTTPURL string `json:"http_url"`
 	// The hostname that the certificate authority (CA) will check for a TXT record
 	// during domain validation .
-	TxtName string `json:"txt_name"`
+	TXTName string `json:"txt_name"`
 	// The TXT record that the certificate authority (CA) will check during domain
 	// validation.
-	TxtValue string                                            `json:"txt_value"`
+	TXTValue string                                            `json:"txt_value"`
 	JSON     customHostnameEditResponseSSLValidationRecordJSON `json:"-"`
 }
 
@@ -979,8 +979,8 @@ type customHostnameEditResponseSSLValidationRecordJSON struct {
 	Emails      apijson.Field
 	HTTPBody    apijson.Field
 	HTTPURL     apijson.Field
-	TxtName     apijson.Field
-	TxtValue    apijson.Field
+	TXTName     apijson.Field
+	TXTValue    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1116,7 +1116,7 @@ type CustomHostnameGetResponseSSLMethod string
 
 const (
 	CustomHostnameGetResponseSSLMethodHTTP  CustomHostnameGetResponseSSLMethod = "http"
-	CustomHostnameGetResponseSSLMethodTxt   CustomHostnameGetResponseSSLMethod = "txt"
+	CustomHostnameGetResponseSSLMethodTXT   CustomHostnameGetResponseSSLMethod = "txt"
 	CustomHostnameGetResponseSSLMethodEmail CustomHostnameGetResponseSSLMethod = "email"
 )
 
@@ -1251,10 +1251,10 @@ type CustomHostnameGetResponseSSLValidationRecord struct {
 	HTTPURL string `json:"http_url"`
 	// The hostname that the certificate authority (CA) will check for a TXT record
 	// during domain validation .
-	TxtName string `json:"txt_name"`
+	TXTName string `json:"txt_name"`
 	// The TXT record that the certificate authority (CA) will check during domain
 	// validation.
-	TxtValue string                                           `json:"txt_value"`
+	TXTValue string                                           `json:"txt_value"`
 	JSON     customHostnameGetResponseSSLValidationRecordJSON `json:"-"`
 }
 
@@ -1264,8 +1264,8 @@ type customHostnameGetResponseSSLValidationRecordJSON struct {
 	Emails      apijson.Field
 	HTTPBody    apijson.Field
 	HTTPURL     apijson.Field
-	TxtName     apijson.Field
-	TxtValue    apijson.Field
+	TXTName     apijson.Field
+	TXTValue    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -1343,7 +1343,7 @@ type CustomHostnameNewParamsSSLMethod string
 
 const (
 	CustomHostnameNewParamsSSLMethodHTTP  CustomHostnameNewParamsSSLMethod = "http"
-	CustomHostnameNewParamsSSLMethodTxt   CustomHostnameNewParamsSSLMethod = "txt"
+	CustomHostnameNewParamsSSLMethodTXT   CustomHostnameNewParamsSSLMethod = "txt"
 	CustomHostnameNewParamsSSLMethodEmail CustomHostnameNewParamsSSLMethod = "email"
 )
 
@@ -1633,7 +1633,7 @@ type CustomHostnameEditParamsSSLMethod string
 
 const (
 	CustomHostnameEditParamsSSLMethodHTTP  CustomHostnameEditParamsSSLMethod = "http"
-	CustomHostnameEditParamsSSLMethodTxt   CustomHostnameEditParamsSSLMethod = "txt"
+	CustomHostnameEditParamsSSLMethodTXT   CustomHostnameEditParamsSSLMethod = "txt"
 	CustomHostnameEditParamsSSLMethodEmail CustomHostnameEditParamsSSLMethod = "email"
 )
 

@@ -34,7 +34,7 @@ func TestSpectrumAppNewWithOptionalParams(t *testing.T) {
 		cloudflare.SpectrumAppNewParams{
 			DNS: cloudflare.F(cloudflare.SpectrumAppNewParamsDNS{
 				Name: cloudflare.F("ssh.example.com"),
-				Type: cloudflare.F(cloudflare.SpectrumAppNewParamsDNSTypeCname),
+				Type: cloudflare.F(cloudflare.SpectrumAppNewParamsDNSTypeCNAME),
 			}),
 			OriginDNS: cloudflare.F(cloudflare.SpectrumAppNewParamsOriginDNS{
 				Name: cloudflare.F("origin.example.com"),
@@ -84,7 +84,7 @@ func TestSpectrumAppUpdateWithOptionalParams(t *testing.T) {
 		cloudflare.SpectrumAppUpdateParams{
 			DNS: cloudflare.F(cloudflare.SpectrumAppUpdateParamsDNS{
 				Name: cloudflare.F("ssh.example.com"),
-				Type: cloudflare.F(cloudflare.SpectrumAppUpdateParamsDNSTypeCname),
+				Type: cloudflare.F(cloudflare.SpectrumAppUpdateParamsDNSTypeCNAME),
 			}),
 			OriginDNS: cloudflare.F(cloudflare.SpectrumAppUpdateParamsOriginDNS{
 				Name: cloudflare.F("origin.example.com"),

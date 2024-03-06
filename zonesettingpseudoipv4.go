@@ -33,7 +33,7 @@ func NewZoneSettingPseudoIPV4Service(opts ...option.RequestOption) (r *ZoneSetti
 }
 
 // Value of the Pseudo IPv4 setting.
-func (r *ZoneSettingPseudoIPV4Service) Edit(ctx context.Context, params ZoneSettingPseudoIPV4EditParams, opts ...option.RequestOption) (res *ZonesPseudoIPV4, err error) {
+func (r *ZoneSettingPseudoIPV4Service) Edit(ctx context.Context, params ZoneSettingPseudoIPV4EditParams, opts ...option.RequestOption) (res *ZoneSettingPseudoIPV4EditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingPseudoIPV4EditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/pseudo_ipv4", params.ZoneID)
@@ -46,7 +46,7 @@ func (r *ZoneSettingPseudoIPV4Service) Edit(ctx context.Context, params ZoneSett
 }
 
 // Value of the Pseudo IPv4 setting.
-func (r *ZoneSettingPseudoIPV4Service) Get(ctx context.Context, query ZoneSettingPseudoIPV4GetParams, opts ...option.RequestOption) (res *ZonesPseudoIPV4, err error) {
+func (r *ZoneSettingPseudoIPV4Service) Get(ctx context.Context, query ZoneSettingPseudoIPV4GetParams, opts ...option.RequestOption) (res *ZoneSettingPseudoIPV4GetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingPseudoIPV4GetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/pseudo_ipv4", query.ZoneID)
@@ -59,21 +59,22 @@ func (r *ZoneSettingPseudoIPV4Service) Get(ctx context.Context, query ZoneSettin
 }
 
 // The value set for the Pseudo IPv4 setting.
-type ZonesPseudoIPV4 struct {
+type ZoneSettingPseudoIPV4EditResponse struct {
 	// Value of the Pseudo IPv4 setting.
-	ID ZonesPseudoIPV4ID `json:"id,required"`
+	ID ZoneSettingPseudoIPV4EditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZonesPseudoIPV4Value `json:"value,required"`
+	Value ZoneSettingPseudoIPV4EditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZonesPseudoIPV4Editable `json:"editable"`
+	Editable ZoneSettingPseudoIPV4EditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time           `json:"modified_on,nullable" format:"date-time"`
-	JSON       zonesPseudoIPV4JSON `json:"-"`
+	ModifiedOn time.Time                             `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingPseudoIPV4EditResponseJSON `json:"-"`
 }
 
-// zonesPseudoIPV4JSON contains the JSON metadata for the struct [ZonesPseudoIPV4]
-type zonesPseudoIPV4JSON struct {
+// zoneSettingPseudoIPV4EditResponseJSON contains the JSON metadata for the struct
+// [ZoneSettingPseudoIPV4EditResponse]
+type zoneSettingPseudoIPV4EditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -82,52 +83,88 @@ type zonesPseudoIPV4JSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZonesPseudoIPV4) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingPseudoIPV4EditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ZonesPseudoIPV4) implementsZoneSettingEditResponse() {}
-
-func (r ZonesPseudoIPV4) implementsZoneSettingGetResponse() {}
-
 // Value of the Pseudo IPv4 setting.
-type ZonesPseudoIPV4ID string
+type ZoneSettingPseudoIPV4EditResponseID string
 
 const (
-	ZonesPseudoIPV4IDPseudoIPV4 ZonesPseudoIPV4ID = "pseudo_ipv4"
+	ZoneSettingPseudoIPV4EditResponseIDPseudoIPV4 ZoneSettingPseudoIPV4EditResponseID = "pseudo_ipv4"
 )
 
 // Current value of the zone setting.
-type ZonesPseudoIPV4Value string
+type ZoneSettingPseudoIPV4EditResponseValue string
 
 const (
-	ZonesPseudoIPV4ValueOff             ZonesPseudoIPV4Value = "off"
-	ZonesPseudoIPV4ValueAddHeader       ZonesPseudoIPV4Value = "add_header"
-	ZonesPseudoIPV4ValueOverwriteHeader ZonesPseudoIPV4Value = "overwrite_header"
+	ZoneSettingPseudoIPV4EditResponseValueOff             ZoneSettingPseudoIPV4EditResponseValue = "off"
+	ZoneSettingPseudoIPV4EditResponseValueAddHeader       ZoneSettingPseudoIPV4EditResponseValue = "add_header"
+	ZoneSettingPseudoIPV4EditResponseValueOverwriteHeader ZoneSettingPseudoIPV4EditResponseValue = "overwrite_header"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZonesPseudoIPV4Editable bool
+type ZoneSettingPseudoIPV4EditResponseEditable bool
 
 const (
-	ZonesPseudoIPV4EditableTrue  ZonesPseudoIPV4Editable = true
-	ZonesPseudoIPV4EditableFalse ZonesPseudoIPV4Editable = false
+	ZoneSettingPseudoIPV4EditResponseEditableTrue  ZoneSettingPseudoIPV4EditResponseEditable = true
+	ZoneSettingPseudoIPV4EditResponseEditableFalse ZoneSettingPseudoIPV4EditResponseEditable = false
 )
 
 // The value set for the Pseudo IPv4 setting.
-type ZonesPseudoIPV4Param struct {
+type ZoneSettingPseudoIPV4GetResponse struct {
 	// Value of the Pseudo IPv4 setting.
-	ID param.Field[ZonesPseudoIPV4ID] `json:"id,required"`
+	ID ZoneSettingPseudoIPV4GetResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value param.Field[ZonesPseudoIPV4Value] `json:"value,required"`
+	Value ZoneSettingPseudoIPV4GetResponseValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingPseudoIPV4GetResponseEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                            `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingPseudoIPV4GetResponseJSON `json:"-"`
 }
 
-func (r ZonesPseudoIPV4Param) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+// zoneSettingPseudoIPV4GetResponseJSON contains the JSON metadata for the struct
+// [ZoneSettingPseudoIPV4GetResponse]
+type zoneSettingPseudoIPV4GetResponseJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
-func (r ZonesPseudoIPV4Param) implementsZoneSettingEditParamsItem() {}
+func (r *ZoneSettingPseudoIPV4GetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Value of the Pseudo IPv4 setting.
+type ZoneSettingPseudoIPV4GetResponseID string
+
+const (
+	ZoneSettingPseudoIPV4GetResponseIDPseudoIPV4 ZoneSettingPseudoIPV4GetResponseID = "pseudo_ipv4"
+)
+
+// Current value of the zone setting.
+type ZoneSettingPseudoIPV4GetResponseValue string
+
+const (
+	ZoneSettingPseudoIPV4GetResponseValueOff             ZoneSettingPseudoIPV4GetResponseValue = "off"
+	ZoneSettingPseudoIPV4GetResponseValueAddHeader       ZoneSettingPseudoIPV4GetResponseValue = "add_header"
+	ZoneSettingPseudoIPV4GetResponseValueOverwriteHeader ZoneSettingPseudoIPV4GetResponseValue = "overwrite_header"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingPseudoIPV4GetResponseEditable bool
+
+const (
+	ZoneSettingPseudoIPV4GetResponseEditableTrue  ZoneSettingPseudoIPV4GetResponseEditable = true
+	ZoneSettingPseudoIPV4GetResponseEditableFalse ZoneSettingPseudoIPV4GetResponseEditable = false
+)
 
 type ZoneSettingPseudoIPV4EditParams struct {
 	// Identifier
@@ -155,7 +192,7 @@ type ZoneSettingPseudoIPV4EditResponseEnvelope struct {
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// The value set for the Pseudo IPv4 setting.
-	Result ZonesPseudoIPV4                               `json:"result"`
+	Result ZoneSettingPseudoIPV4EditResponse             `json:"result"`
 	JSON   zoneSettingPseudoIPV4EditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -223,7 +260,7 @@ type ZoneSettingPseudoIPV4GetResponseEnvelope struct {
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// The value set for the Pseudo IPv4 setting.
-	Result ZonesPseudoIPV4                              `json:"result"`
+	Result ZoneSettingPseudoIPV4GetResponse             `json:"result"`
 	JSON   zoneSettingPseudoIPV4GetResponseEnvelopeJSON `json:"-"`
 }
 

@@ -32,7 +32,7 @@ func NewZeroTrustDeviceSettingService(opts ...option.RequestOption) (r *ZeroTrus
 }
 
 // Updates the current device settings for a Zero Trust account.
-func (r *ZeroTrustDeviceSettingService) Update(ctx context.Context, params ZeroTrustDeviceSettingUpdateParams, opts ...option.RequestOption) (res *TeamsDevicesZeroTrustAccountDeviceSettings, err error) {
+func (r *ZeroTrustDeviceSettingService) Update(ctx context.Context, params ZeroTrustDeviceSettingUpdateParams, opts ...option.RequestOption) (res *ZeroTrustDeviceSettingUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustDeviceSettingUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/settings", params.AccountID)
@@ -45,7 +45,7 @@ func (r *ZeroTrustDeviceSettingService) Update(ctx context.Context, params ZeroT
 }
 
 // Describes the current device settings for a Zero Trust account.
-func (r *ZeroTrustDeviceSettingService) List(ctx context.Context, query ZeroTrustDeviceSettingListParams, opts ...option.RequestOption) (res *TeamsDevicesZeroTrustAccountDeviceSettings, err error) {
+func (r *ZeroTrustDeviceSettingService) List(ctx context.Context, query ZeroTrustDeviceSettingListParams, opts ...option.RequestOption) (res *ZeroTrustDeviceSettingListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustDeviceSettingListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/settings", query.AccountID)
@@ -57,7 +57,7 @@ func (r *ZeroTrustDeviceSettingService) List(ctx context.Context, query ZeroTrus
 	return
 }
 
-type TeamsDevicesZeroTrustAccountDeviceSettings struct {
+type ZeroTrustDeviceSettingUpdateResponse struct {
 	// Enable gateway proxy filtering on TCP.
 	GatewayProxyEnabled bool `json:"gateway_proxy_enabled"`
 	// Enable gateway proxy filtering on UDP.
@@ -65,13 +65,13 @@ type TeamsDevicesZeroTrustAccountDeviceSettings struct {
 	// Enable installation of cloudflare managed root certificate.
 	RootCertificateInstallationEnabled bool `json:"root_certificate_installation_enabled"`
 	// Enable using CGNAT virtual IPv4.
-	UseZtVirtualIP bool                                           `json:"use_zt_virtual_ip"`
-	JSON           teamsDevicesZeroTrustAccountDeviceSettingsJSON `json:"-"`
+	UseZtVirtualIP bool                                     `json:"use_zt_virtual_ip"`
+	JSON           zeroTrustDeviceSettingUpdateResponseJSON `json:"-"`
 }
 
-// teamsDevicesZeroTrustAccountDeviceSettingsJSON contains the JSON metadata for
-// the struct [TeamsDevicesZeroTrustAccountDeviceSettings]
-type teamsDevicesZeroTrustAccountDeviceSettingsJSON struct {
+// zeroTrustDeviceSettingUpdateResponseJSON contains the JSON metadata for the
+// struct [ZeroTrustDeviceSettingUpdateResponse]
+type zeroTrustDeviceSettingUpdateResponseJSON struct {
 	GatewayProxyEnabled                apijson.Field
 	GatewayUdpProxyEnabled             apijson.Field
 	RootCertificateInstallationEnabled apijson.Field
@@ -80,7 +80,34 @@ type teamsDevicesZeroTrustAccountDeviceSettingsJSON struct {
 	ExtraFields                        map[string]apijson.Field
 }
 
-func (r *TeamsDevicesZeroTrustAccountDeviceSettings) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustDeviceSettingUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZeroTrustDeviceSettingListResponse struct {
+	// Enable gateway proxy filtering on TCP.
+	GatewayProxyEnabled bool `json:"gateway_proxy_enabled"`
+	// Enable gateway proxy filtering on UDP.
+	GatewayUdpProxyEnabled bool `json:"gateway_udp_proxy_enabled"`
+	// Enable installation of cloudflare managed root certificate.
+	RootCertificateInstallationEnabled bool `json:"root_certificate_installation_enabled"`
+	// Enable using CGNAT virtual IPv4.
+	UseZtVirtualIP bool                                   `json:"use_zt_virtual_ip"`
+	JSON           zeroTrustDeviceSettingListResponseJSON `json:"-"`
+}
+
+// zeroTrustDeviceSettingListResponseJSON contains the JSON metadata for the struct
+// [ZeroTrustDeviceSettingListResponse]
+type zeroTrustDeviceSettingListResponseJSON struct {
+	GatewayProxyEnabled                apijson.Field
+	GatewayUdpProxyEnabled             apijson.Field
+	RootCertificateInstallationEnabled apijson.Field
+	UseZtVirtualIP                     apijson.Field
+	raw                                string
+	ExtraFields                        map[string]apijson.Field
+}
+
+func (r *ZeroTrustDeviceSettingListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -103,7 +130,7 @@ func (r ZeroTrustDeviceSettingUpdateParams) MarshalJSON() (data []byte, err erro
 type ZeroTrustDeviceSettingUpdateResponseEnvelope struct {
 	Errors   []ZeroTrustDeviceSettingUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustDeviceSettingUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   TeamsDevicesZeroTrustAccountDeviceSettings             `json:"result,required,nullable"`
+	Result   ZeroTrustDeviceSettingUpdateResponse                   `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success ZeroTrustDeviceSettingUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustDeviceSettingUpdateResponseEnvelopeJSON    `json:"-"`
@@ -176,7 +203,7 @@ type ZeroTrustDeviceSettingListParams struct {
 type ZeroTrustDeviceSettingListResponseEnvelope struct {
 	Errors   []ZeroTrustDeviceSettingListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustDeviceSettingListResponseEnvelopeMessages `json:"messages,required"`
-	Result   TeamsDevicesZeroTrustAccountDeviceSettings           `json:"result,required,nullable"`
+	Result   ZeroTrustDeviceSettingListResponse                   `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success ZeroTrustDeviceSettingListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustDeviceSettingListResponseEnvelopeJSON    `json:"-"`

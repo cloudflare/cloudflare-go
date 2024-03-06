@@ -36,7 +36,7 @@ func NewZeroTrustDLPProfileCustomService(opts ...option.RequestOption) (r *ZeroT
 }
 
 // Creates a set of DLP custom profiles.
-func (r *ZeroTrustDLPProfileCustomService) New(ctx context.Context, params ZeroTrustDLPProfileCustomNewParams, opts ...option.RequestOption) (res *[]DLPCustomProfile, err error) {
+func (r *ZeroTrustDLPProfileCustomService) New(ctx context.Context, params ZeroTrustDLPProfileCustomNewParams, opts ...option.RequestOption) (res *[]ZeroTrustDLPProfileCustomNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustDLPProfileCustomNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dlp/profiles/custom", params.AccountID)
@@ -49,7 +49,7 @@ func (r *ZeroTrustDLPProfileCustomService) New(ctx context.Context, params ZeroT
 }
 
 // Updates a DLP custom profile.
-func (r *ZeroTrustDLPProfileCustomService) Update(ctx context.Context, profileID string, params ZeroTrustDLPProfileCustomUpdateParams, opts ...option.RequestOption) (res *DLPCustomProfile, err error) {
+func (r *ZeroTrustDLPProfileCustomService) Update(ctx context.Context, profileID string, params ZeroTrustDLPProfileCustomUpdateParams, opts ...option.RequestOption) (res *ZeroTrustDLPProfileCustomUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/dlp/profiles/custom/%s", params.AccountID, profileID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
@@ -70,7 +70,7 @@ func (r *ZeroTrustDLPProfileCustomService) Delete(ctx context.Context, profileID
 }
 
 // Fetches a custom DLP profile.
-func (r *ZeroTrustDLPProfileCustomService) Get(ctx context.Context, profileID string, query ZeroTrustDLPProfileCustomGetParams, opts ...option.RequestOption) (res *DLPCustomProfile, err error) {
+func (r *ZeroTrustDLPProfileCustomService) Get(ctx context.Context, profileID string, query ZeroTrustDLPProfileCustomGetParams, opts ...option.RequestOption) (res *ZeroTrustDLPProfileCustomGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustDLPProfileCustomGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dlp/profiles/custom/%s", query.AccountID, profileID)
@@ -82,30 +82,30 @@ func (r *ZeroTrustDLPProfileCustomService) Get(ctx context.Context, profileID st
 	return
 }
 
-type DLPCustomProfile struct {
+type ZeroTrustDLPProfileCustomNewResponse struct {
 	// The ID for this profile
 	ID string `json:"id"`
 	// Related DLP policies will trigger when the match count exceeds the number set.
 	AllowedMatchCount float64 `json:"allowed_match_count"`
 	// Scan the context of predefined entries to only return matches surrounded by
 	// keywords.
-	ContextAwareness DLPCustomProfileContextAwareness `json:"context_awareness"`
-	CreatedAt        time.Time                        `json:"created_at" format:"date-time"`
+	ContextAwareness ZeroTrustDLPProfileCustomNewResponseContextAwareness `json:"context_awareness"`
+	CreatedAt        time.Time                                            `json:"created_at" format:"date-time"`
 	// The description of the profile.
 	Description string `json:"description"`
 	// The entries for this profile.
-	Entries []DLPCustomProfileEntry `json:"entries"`
+	Entries []ZeroTrustDLPProfileCustomNewResponseEntry `json:"entries"`
 	// The name of the profile.
 	Name string `json:"name"`
 	// The type of the profile.
-	Type      DLPCustomProfileType `json:"type"`
-	UpdatedAt time.Time            `json:"updated_at" format:"date-time"`
-	JSON      dlpCustomProfileJSON `json:"-"`
+	Type      ZeroTrustDLPProfileCustomNewResponseType `json:"type"`
+	UpdatedAt time.Time                                `json:"updated_at" format:"date-time"`
+	JSON      zeroTrustDLPProfileCustomNewResponseJSON `json:"-"`
 }
 
-// dlpCustomProfileJSON contains the JSON metadata for the struct
-// [DLPCustomProfile]
-type dlpCustomProfileJSON struct {
+// zeroTrustDLPProfileCustomNewResponseJSON contains the JSON metadata for the
+// struct [ZeroTrustDLPProfileCustomNewResponse]
+type zeroTrustDLPProfileCustomNewResponseJSON struct {
 	ID                apijson.Field
 	AllowedMatchCount apijson.Field
 	ContextAwareness  apijson.Field
@@ -119,59 +119,56 @@ type dlpCustomProfileJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *DLPCustomProfile) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustDLPProfileCustomNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r DLPCustomProfile) implementsDLPProfiles() {}
-
-func (r DLPCustomProfile) implementsZeroTrustDLPProfileGetResponse() {}
-
 // Scan the context of predefined entries to only return matches surrounded by
 // keywords.
-type DLPCustomProfileContextAwareness struct {
+type ZeroTrustDLPProfileCustomNewResponseContextAwareness struct {
 	// If true, scan the context of predefined entries to only return matches
 	// surrounded by keywords.
 	Enabled bool `json:"enabled,required"`
 	// Content types to exclude from context analysis and return all matches.
-	Skip DLPCustomProfileContextAwarenessSkip `json:"skip,required"`
-	JSON dlpCustomProfileContextAwarenessJSON `json:"-"`
+	Skip ZeroTrustDLPProfileCustomNewResponseContextAwarenessSkip `json:"skip,required"`
+	JSON zeroTrustDLPProfileCustomNewResponseContextAwarenessJSON `json:"-"`
 }
 
-// dlpCustomProfileContextAwarenessJSON contains the JSON metadata for the struct
-// [DLPCustomProfileContextAwareness]
-type dlpCustomProfileContextAwarenessJSON struct {
+// zeroTrustDLPProfileCustomNewResponseContextAwarenessJSON contains the JSON
+// metadata for the struct [ZeroTrustDLPProfileCustomNewResponseContextAwareness]
+type zeroTrustDLPProfileCustomNewResponseContextAwarenessJSON struct {
 	Enabled     apijson.Field
 	Skip        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DLPCustomProfileContextAwareness) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustDLPProfileCustomNewResponseContextAwareness) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Content types to exclude from context analysis and return all matches.
-type DLPCustomProfileContextAwarenessSkip struct {
+type ZeroTrustDLPProfileCustomNewResponseContextAwarenessSkip struct {
 	// If the content type is a file, skip context analysis and return all matches.
-	Files bool                                     `json:"files,required"`
-	JSON  dlpCustomProfileContextAwarenessSkipJSON `json:"-"`
+	Files bool                                                         `json:"files,required"`
+	JSON  zeroTrustDLPProfileCustomNewResponseContextAwarenessSkipJSON `json:"-"`
 }
 
-// dlpCustomProfileContextAwarenessSkipJSON contains the JSON metadata for the
-// struct [DLPCustomProfileContextAwarenessSkip]
-type dlpCustomProfileContextAwarenessSkipJSON struct {
+// zeroTrustDLPProfileCustomNewResponseContextAwarenessSkipJSON contains the JSON
+// metadata for the struct
+// [ZeroTrustDLPProfileCustomNewResponseContextAwarenessSkip]
+type zeroTrustDLPProfileCustomNewResponseContextAwarenessSkipJSON struct {
 	Files       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DLPCustomProfileContextAwarenessSkip) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustDLPProfileCustomNewResponseContextAwarenessSkip) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // A custom entry that matches a profile
-type DLPCustomProfileEntry struct {
+type ZeroTrustDLPProfileCustomNewResponseEntry struct {
 	// The ID for this entry
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
@@ -180,16 +177,16 @@ type DLPCustomProfileEntry struct {
 	// The name of the entry.
 	Name string `json:"name"`
 	// A pattern that matches an entry
-	Pattern DLPCustomProfileEntriesPattern `json:"pattern"`
+	Pattern ZeroTrustDLPProfileCustomNewResponseEntriesPattern `json:"pattern"`
 	// ID of the parent profile
-	ProfileID interface{}               `json:"profile_id"`
-	UpdatedAt time.Time                 `json:"updated_at" format:"date-time"`
-	JSON      dlpCustomProfileEntryJSON `json:"-"`
+	ProfileID interface{}                                   `json:"profile_id"`
+	UpdatedAt time.Time                                     `json:"updated_at" format:"date-time"`
+	JSON      zeroTrustDLPProfileCustomNewResponseEntryJSON `json:"-"`
 }
 
-// dlpCustomProfileEntryJSON contains the JSON metadata for the struct
-// [DLPCustomProfileEntry]
-type dlpCustomProfileEntryJSON struct {
+// zeroTrustDLPProfileCustomNewResponseEntryJSON contains the JSON metadata for the
+// struct [ZeroTrustDLPProfileCustomNewResponseEntry]
+type zeroTrustDLPProfileCustomNewResponseEntryJSON struct {
 	ID          apijson.Field
 	CreatedAt   apijson.Field
 	Enabled     apijson.Field
@@ -201,46 +198,205 @@ type dlpCustomProfileEntryJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DLPCustomProfileEntry) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustDLPProfileCustomNewResponseEntry) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // A pattern that matches an entry
-type DLPCustomProfileEntriesPattern struct {
+type ZeroTrustDLPProfileCustomNewResponseEntriesPattern struct {
 	// The regex pattern.
 	Regex string `json:"regex,required"`
 	// Validation algorithm for the pattern. This algorithm will get run on potential
 	// matches, and if it returns false, the entry will not be matched.
-	Validation DLPCustomProfileEntriesPatternValidation `json:"validation"`
-	JSON       dlpCustomProfileEntriesPatternJSON       `json:"-"`
+	Validation ZeroTrustDLPProfileCustomNewResponseEntriesPatternValidation `json:"validation"`
+	JSON       zeroTrustDLPProfileCustomNewResponseEntriesPatternJSON       `json:"-"`
 }
 
-// dlpCustomProfileEntriesPatternJSON contains the JSON metadata for the struct
-// [DLPCustomProfileEntriesPattern]
-type dlpCustomProfileEntriesPatternJSON struct {
+// zeroTrustDLPProfileCustomNewResponseEntriesPatternJSON contains the JSON
+// metadata for the struct [ZeroTrustDLPProfileCustomNewResponseEntriesPattern]
+type zeroTrustDLPProfileCustomNewResponseEntriesPatternJSON struct {
 	Regex       apijson.Field
 	Validation  apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DLPCustomProfileEntriesPattern) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustDLPProfileCustomNewResponseEntriesPattern) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Validation algorithm for the pattern. This algorithm will get run on potential
 // matches, and if it returns false, the entry will not be matched.
-type DLPCustomProfileEntriesPatternValidation string
+type ZeroTrustDLPProfileCustomNewResponseEntriesPatternValidation string
 
 const (
-	DLPCustomProfileEntriesPatternValidationLuhn DLPCustomProfileEntriesPatternValidation = "luhn"
+	ZeroTrustDLPProfileCustomNewResponseEntriesPatternValidationLuhn ZeroTrustDLPProfileCustomNewResponseEntriesPatternValidation = "luhn"
 )
 
 // The type of the profile.
-type DLPCustomProfileType string
+type ZeroTrustDLPProfileCustomNewResponseType string
 
 const (
-	DLPCustomProfileTypeCustom DLPCustomProfileType = "custom"
+	ZeroTrustDLPProfileCustomNewResponseTypeCustom ZeroTrustDLPProfileCustomNewResponseType = "custom"
+)
+
+type ZeroTrustDLPProfileCustomUpdateResponse struct {
+	// The ID for this profile
+	ID string `json:"id"`
+	// Related DLP policies will trigger when the match count exceeds the number set.
+	AllowedMatchCount float64 `json:"allowed_match_count"`
+	// Scan the context of predefined entries to only return matches surrounded by
+	// keywords.
+	ContextAwareness ZeroTrustDLPProfileCustomUpdateResponseContextAwareness `json:"context_awareness"`
+	CreatedAt        time.Time                                               `json:"created_at" format:"date-time"`
+	// The description of the profile.
+	Description string `json:"description"`
+	// The entries for this profile.
+	Entries []ZeroTrustDLPProfileCustomUpdateResponseEntry `json:"entries"`
+	// The name of the profile.
+	Name string `json:"name"`
+	// The type of the profile.
+	Type      ZeroTrustDLPProfileCustomUpdateResponseType `json:"type"`
+	UpdatedAt time.Time                                   `json:"updated_at" format:"date-time"`
+	JSON      zeroTrustDLPProfileCustomUpdateResponseJSON `json:"-"`
+}
+
+// zeroTrustDLPProfileCustomUpdateResponseJSON contains the JSON metadata for the
+// struct [ZeroTrustDLPProfileCustomUpdateResponse]
+type zeroTrustDLPProfileCustomUpdateResponseJSON struct {
+	ID                apijson.Field
+	AllowedMatchCount apijson.Field
+	ContextAwareness  apijson.Field
+	CreatedAt         apijson.Field
+	Description       apijson.Field
+	Entries           apijson.Field
+	Name              apijson.Field
+	Type              apijson.Field
+	UpdatedAt         apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *ZeroTrustDLPProfileCustomUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Scan the context of predefined entries to only return matches surrounded by
+// keywords.
+type ZeroTrustDLPProfileCustomUpdateResponseContextAwareness struct {
+	// If true, scan the context of predefined entries to only return matches
+	// surrounded by keywords.
+	Enabled bool `json:"enabled,required"`
+	// Content types to exclude from context analysis and return all matches.
+	Skip ZeroTrustDLPProfileCustomUpdateResponseContextAwarenessSkip `json:"skip,required"`
+	JSON zeroTrustDLPProfileCustomUpdateResponseContextAwarenessJSON `json:"-"`
+}
+
+// zeroTrustDLPProfileCustomUpdateResponseContextAwarenessJSON contains the JSON
+// metadata for the struct
+// [ZeroTrustDLPProfileCustomUpdateResponseContextAwareness]
+type zeroTrustDLPProfileCustomUpdateResponseContextAwarenessJSON struct {
+	Enabled     apijson.Field
+	Skip        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZeroTrustDLPProfileCustomUpdateResponseContextAwareness) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Content types to exclude from context analysis and return all matches.
+type ZeroTrustDLPProfileCustomUpdateResponseContextAwarenessSkip struct {
+	// If the content type is a file, skip context analysis and return all matches.
+	Files bool                                                            `json:"files,required"`
+	JSON  zeroTrustDLPProfileCustomUpdateResponseContextAwarenessSkipJSON `json:"-"`
+}
+
+// zeroTrustDLPProfileCustomUpdateResponseContextAwarenessSkipJSON contains the
+// JSON metadata for the struct
+// [ZeroTrustDLPProfileCustomUpdateResponseContextAwarenessSkip]
+type zeroTrustDLPProfileCustomUpdateResponseContextAwarenessSkipJSON struct {
+	Files       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZeroTrustDLPProfileCustomUpdateResponseContextAwarenessSkip) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A custom entry that matches a profile
+type ZeroTrustDLPProfileCustomUpdateResponseEntry struct {
+	// The ID for this entry
+	ID        string    `json:"id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Whether the entry is enabled or not.
+	Enabled bool `json:"enabled"`
+	// The name of the entry.
+	Name string `json:"name"`
+	// A pattern that matches an entry
+	Pattern ZeroTrustDLPProfileCustomUpdateResponseEntriesPattern `json:"pattern"`
+	// ID of the parent profile
+	ProfileID interface{}                                      `json:"profile_id"`
+	UpdatedAt time.Time                                        `json:"updated_at" format:"date-time"`
+	JSON      zeroTrustDLPProfileCustomUpdateResponseEntryJSON `json:"-"`
+}
+
+// zeroTrustDLPProfileCustomUpdateResponseEntryJSON contains the JSON metadata for
+// the struct [ZeroTrustDLPProfileCustomUpdateResponseEntry]
+type zeroTrustDLPProfileCustomUpdateResponseEntryJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Enabled     apijson.Field
+	Name        apijson.Field
+	Pattern     apijson.Field
+	ProfileID   apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZeroTrustDLPProfileCustomUpdateResponseEntry) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A pattern that matches an entry
+type ZeroTrustDLPProfileCustomUpdateResponseEntriesPattern struct {
+	// The regex pattern.
+	Regex string `json:"regex,required"`
+	// Validation algorithm for the pattern. This algorithm will get run on potential
+	// matches, and if it returns false, the entry will not be matched.
+	Validation ZeroTrustDLPProfileCustomUpdateResponseEntriesPatternValidation `json:"validation"`
+	JSON       zeroTrustDLPProfileCustomUpdateResponseEntriesPatternJSON       `json:"-"`
+}
+
+// zeroTrustDLPProfileCustomUpdateResponseEntriesPatternJSON contains the JSON
+// metadata for the struct [ZeroTrustDLPProfileCustomUpdateResponseEntriesPattern]
+type zeroTrustDLPProfileCustomUpdateResponseEntriesPatternJSON struct {
+	Regex       apijson.Field
+	Validation  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZeroTrustDLPProfileCustomUpdateResponseEntriesPattern) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Validation algorithm for the pattern. This algorithm will get run on potential
+// matches, and if it returns false, the entry will not be matched.
+type ZeroTrustDLPProfileCustomUpdateResponseEntriesPatternValidation string
+
+const (
+	ZeroTrustDLPProfileCustomUpdateResponseEntriesPatternValidationLuhn ZeroTrustDLPProfileCustomUpdateResponseEntriesPatternValidation = "luhn"
+)
+
+// The type of the profile.
+type ZeroTrustDLPProfileCustomUpdateResponseType string
+
+const (
+	ZeroTrustDLPProfileCustomUpdateResponseTypeCustom ZeroTrustDLPProfileCustomUpdateResponseType = "custom"
 )
 
 // Union satisfied by [ZeroTrustDLPProfileCustomDeleteResponseUnknown] or
@@ -259,6 +415,164 @@ func init() {
 		},
 	)
 }
+
+type ZeroTrustDLPProfileCustomGetResponse struct {
+	// The ID for this profile
+	ID string `json:"id"`
+	// Related DLP policies will trigger when the match count exceeds the number set.
+	AllowedMatchCount float64 `json:"allowed_match_count"`
+	// Scan the context of predefined entries to only return matches surrounded by
+	// keywords.
+	ContextAwareness ZeroTrustDLPProfileCustomGetResponseContextAwareness `json:"context_awareness"`
+	CreatedAt        time.Time                                            `json:"created_at" format:"date-time"`
+	// The description of the profile.
+	Description string `json:"description"`
+	// The entries for this profile.
+	Entries []ZeroTrustDLPProfileCustomGetResponseEntry `json:"entries"`
+	// The name of the profile.
+	Name string `json:"name"`
+	// The type of the profile.
+	Type      ZeroTrustDLPProfileCustomGetResponseType `json:"type"`
+	UpdatedAt time.Time                                `json:"updated_at" format:"date-time"`
+	JSON      zeroTrustDLPProfileCustomGetResponseJSON `json:"-"`
+}
+
+// zeroTrustDLPProfileCustomGetResponseJSON contains the JSON metadata for the
+// struct [ZeroTrustDLPProfileCustomGetResponse]
+type zeroTrustDLPProfileCustomGetResponseJSON struct {
+	ID                apijson.Field
+	AllowedMatchCount apijson.Field
+	ContextAwareness  apijson.Field
+	CreatedAt         apijson.Field
+	Description       apijson.Field
+	Entries           apijson.Field
+	Name              apijson.Field
+	Type              apijson.Field
+	UpdatedAt         apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
+}
+
+func (r *ZeroTrustDLPProfileCustomGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Scan the context of predefined entries to only return matches surrounded by
+// keywords.
+type ZeroTrustDLPProfileCustomGetResponseContextAwareness struct {
+	// If true, scan the context of predefined entries to only return matches
+	// surrounded by keywords.
+	Enabled bool `json:"enabled,required"`
+	// Content types to exclude from context analysis and return all matches.
+	Skip ZeroTrustDLPProfileCustomGetResponseContextAwarenessSkip `json:"skip,required"`
+	JSON zeroTrustDLPProfileCustomGetResponseContextAwarenessJSON `json:"-"`
+}
+
+// zeroTrustDLPProfileCustomGetResponseContextAwarenessJSON contains the JSON
+// metadata for the struct [ZeroTrustDLPProfileCustomGetResponseContextAwareness]
+type zeroTrustDLPProfileCustomGetResponseContextAwarenessJSON struct {
+	Enabled     apijson.Field
+	Skip        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZeroTrustDLPProfileCustomGetResponseContextAwareness) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Content types to exclude from context analysis and return all matches.
+type ZeroTrustDLPProfileCustomGetResponseContextAwarenessSkip struct {
+	// If the content type is a file, skip context analysis and return all matches.
+	Files bool                                                         `json:"files,required"`
+	JSON  zeroTrustDLPProfileCustomGetResponseContextAwarenessSkipJSON `json:"-"`
+}
+
+// zeroTrustDLPProfileCustomGetResponseContextAwarenessSkipJSON contains the JSON
+// metadata for the struct
+// [ZeroTrustDLPProfileCustomGetResponseContextAwarenessSkip]
+type zeroTrustDLPProfileCustomGetResponseContextAwarenessSkipJSON struct {
+	Files       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZeroTrustDLPProfileCustomGetResponseContextAwarenessSkip) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A custom entry that matches a profile
+type ZeroTrustDLPProfileCustomGetResponseEntry struct {
+	// The ID for this entry
+	ID        string    `json:"id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Whether the entry is enabled or not.
+	Enabled bool `json:"enabled"`
+	// The name of the entry.
+	Name string `json:"name"`
+	// A pattern that matches an entry
+	Pattern ZeroTrustDLPProfileCustomGetResponseEntriesPattern `json:"pattern"`
+	// ID of the parent profile
+	ProfileID interface{}                                   `json:"profile_id"`
+	UpdatedAt time.Time                                     `json:"updated_at" format:"date-time"`
+	JSON      zeroTrustDLPProfileCustomGetResponseEntryJSON `json:"-"`
+}
+
+// zeroTrustDLPProfileCustomGetResponseEntryJSON contains the JSON metadata for the
+// struct [ZeroTrustDLPProfileCustomGetResponseEntry]
+type zeroTrustDLPProfileCustomGetResponseEntryJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	Enabled     apijson.Field
+	Name        apijson.Field
+	Pattern     apijson.Field
+	ProfileID   apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZeroTrustDLPProfileCustomGetResponseEntry) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A pattern that matches an entry
+type ZeroTrustDLPProfileCustomGetResponseEntriesPattern struct {
+	// The regex pattern.
+	Regex string `json:"regex,required"`
+	// Validation algorithm for the pattern. This algorithm will get run on potential
+	// matches, and if it returns false, the entry will not be matched.
+	Validation ZeroTrustDLPProfileCustomGetResponseEntriesPatternValidation `json:"validation"`
+	JSON       zeroTrustDLPProfileCustomGetResponseEntriesPatternJSON       `json:"-"`
+}
+
+// zeroTrustDLPProfileCustomGetResponseEntriesPatternJSON contains the JSON
+// metadata for the struct [ZeroTrustDLPProfileCustomGetResponseEntriesPattern]
+type zeroTrustDLPProfileCustomGetResponseEntriesPatternJSON struct {
+	Regex       apijson.Field
+	Validation  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZeroTrustDLPProfileCustomGetResponseEntriesPattern) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Validation algorithm for the pattern. This algorithm will get run on potential
+// matches, and if it returns false, the entry will not be matched.
+type ZeroTrustDLPProfileCustomGetResponseEntriesPatternValidation string
+
+const (
+	ZeroTrustDLPProfileCustomGetResponseEntriesPatternValidationLuhn ZeroTrustDLPProfileCustomGetResponseEntriesPatternValidation = "luhn"
+)
+
+// The type of the profile.
+type ZeroTrustDLPProfileCustomGetResponseType string
+
+const (
+	ZeroTrustDLPProfileCustomGetResponseTypeCustom ZeroTrustDLPProfileCustomGetResponseType = "custom"
+)
 
 type ZeroTrustDLPProfileCustomNewParams struct {
 	// Identifier
@@ -350,7 +664,7 @@ const (
 type ZeroTrustDLPProfileCustomNewResponseEnvelope struct {
 	Errors   []ZeroTrustDLPProfileCustomNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustDLPProfileCustomNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DLPCustomProfile                                     `json:"result,required,nullable"`
+	Result   []ZeroTrustDLPProfileCustomNewResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    ZeroTrustDLPProfileCustomNewResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ZeroTrustDLPProfileCustomNewResponseEnvelopeResultInfo `json:"result_info"`
@@ -649,7 +963,7 @@ type ZeroTrustDLPProfileCustomGetParams struct {
 type ZeroTrustDLPProfileCustomGetResponseEnvelope struct {
 	Errors   []ZeroTrustDLPProfileCustomGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustDLPProfileCustomGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DLPCustomProfile                                       `json:"result,required"`
+	Result   ZeroTrustDLPProfileCustomGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success ZeroTrustDLPProfileCustomGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustDLPProfileCustomGetResponseEnvelopeJSON    `json:"-"`

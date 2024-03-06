@@ -55,7 +55,7 @@ func (r *AddressingAddressMapService) New(ctx context.Context, params Addressing
 }
 
 // List all address maps owned by the account.
-func (r *AddressingAddressMapService) List(ctx context.Context, query AddressingAddressMapListParams, opts ...option.RequestOption) (res *[]AddressingAddressMaps, err error) {
+func (r *AddressingAddressMapService) List(ctx context.Context, query AddressingAddressMapListParams, opts ...option.RequestOption) (res *[]AddressingAddressMapListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressingAddressMapListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps", query.AccountID)
@@ -82,7 +82,7 @@ func (r *AddressingAddressMapService) Delete(ctx context.Context, addressMapID s
 }
 
 // Modify properties of an address map owned by the account.
-func (r *AddressingAddressMapService) Edit(ctx context.Context, addressMapID string, params AddressingAddressMapEditParams, opts ...option.RequestOption) (res *AddressingAddressMaps, err error) {
+func (r *AddressingAddressMapService) Edit(ctx context.Context, addressMapID string, params AddressingAddressMapEditParams, opts ...option.RequestOption) (res *AddressingAddressMapEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AddressingAddressMapEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s", params.AccountID, addressMapID)
@@ -105,51 +105,6 @@ func (r *AddressingAddressMapService) Get(ctx context.Context, addressMapID stri
 	}
 	res = &env.Result
 	return
-}
-
-type AddressingAddressMaps struct {
-	// Identifier
-	ID string `json:"id"`
-	// If set to false, then the Address Map cannot be deleted via API. This is true
-	// for Cloudflare-managed maps.
-	CanDelete bool `json:"can_delete"`
-	// If set to false, then the IPs on the Address Map cannot be modified via the API.
-	// This is true for Cloudflare-managed maps.
-	CanModifyIPs bool      `json:"can_modify_ips"`
-	CreatedAt    time.Time `json:"created_at" format:"date-time"`
-	// If you have legacy TLS clients which do not send the TLS server name indicator,
-	// then you can specify one default SNI on the map. If Cloudflare receives a TLS
-	// handshake from a client without an SNI, it will respond with the default SNI on
-	// those IPs. The default SNI can be any valid zone or subdomain owned by the
-	// account.
-	DefaultSni string `json:"default_sni,nullable"`
-	// An optional description field which may be used to describe the types of IPs or
-	// zones on the map.
-	Description string `json:"description,nullable"`
-	// Whether the Address Map is enabled or not. Cloudflare's DNS will not respond
-	// with IP addresses on an Address Map until the map is enabled.
-	Enabled    bool                      `json:"enabled,nullable"`
-	ModifiedAt time.Time                 `json:"modified_at" format:"date-time"`
-	JSON       addressingAddressMapsJSON `json:"-"`
-}
-
-// addressingAddressMapsJSON contains the JSON metadata for the struct
-// [AddressingAddressMaps]
-type addressingAddressMapsJSON struct {
-	ID           apijson.Field
-	CanDelete    apijson.Field
-	CanModifyIPs apijson.Field
-	CreatedAt    apijson.Field
-	DefaultSni   apijson.Field
-	Description  apijson.Field
-	Enabled      apijson.Field
-	ModifiedAt   apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *AddressingAddressMaps) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
 }
 
 type AddressingAddressMapNewResponse struct {
@@ -258,6 +213,51 @@ const (
 	AddressingAddressMapNewResponseMembershipsKindAccount AddressingAddressMapNewResponseMembershipsKind = "account"
 )
 
+type AddressingAddressMapListResponse struct {
+	// Identifier
+	ID string `json:"id"`
+	// If set to false, then the Address Map cannot be deleted via API. This is true
+	// for Cloudflare-managed maps.
+	CanDelete bool `json:"can_delete"`
+	// If set to false, then the IPs on the Address Map cannot be modified via the API.
+	// This is true for Cloudflare-managed maps.
+	CanModifyIPs bool      `json:"can_modify_ips"`
+	CreatedAt    time.Time `json:"created_at" format:"date-time"`
+	// If you have legacy TLS clients which do not send the TLS server name indicator,
+	// then you can specify one default SNI on the map. If Cloudflare receives a TLS
+	// handshake from a client without an SNI, it will respond with the default SNI on
+	// those IPs. The default SNI can be any valid zone or subdomain owned by the
+	// account.
+	DefaultSni string `json:"default_sni,nullable"`
+	// An optional description field which may be used to describe the types of IPs or
+	// zones on the map.
+	Description string `json:"description,nullable"`
+	// Whether the Address Map is enabled or not. Cloudflare's DNS will not respond
+	// with IP addresses on an Address Map until the map is enabled.
+	Enabled    bool                                 `json:"enabled,nullable"`
+	ModifiedAt time.Time                            `json:"modified_at" format:"date-time"`
+	JSON       addressingAddressMapListResponseJSON `json:"-"`
+}
+
+// addressingAddressMapListResponseJSON contains the JSON metadata for the struct
+// [AddressingAddressMapListResponse]
+type addressingAddressMapListResponseJSON struct {
+	ID           apijson.Field
+	CanDelete    apijson.Field
+	CanModifyIPs apijson.Field
+	CreatedAt    apijson.Field
+	DefaultSni   apijson.Field
+	Description  apijson.Field
+	Enabled      apijson.Field
+	ModifiedAt   apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AddressingAddressMapListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 // Union satisfied by [AddressingAddressMapDeleteResponseUnknown],
 // [AddressingAddressMapDeleteResponseArray] or [shared.UnionString].
 type AddressingAddressMapDeleteResponse interface {
@@ -278,6 +278,51 @@ func init() {
 type AddressingAddressMapDeleteResponseArray []interface{}
 
 func (r AddressingAddressMapDeleteResponseArray) ImplementsAddressingAddressMapDeleteResponse() {}
+
+type AddressingAddressMapEditResponse struct {
+	// Identifier
+	ID string `json:"id"`
+	// If set to false, then the Address Map cannot be deleted via API. This is true
+	// for Cloudflare-managed maps.
+	CanDelete bool `json:"can_delete"`
+	// If set to false, then the IPs on the Address Map cannot be modified via the API.
+	// This is true for Cloudflare-managed maps.
+	CanModifyIPs bool      `json:"can_modify_ips"`
+	CreatedAt    time.Time `json:"created_at" format:"date-time"`
+	// If you have legacy TLS clients which do not send the TLS server name indicator,
+	// then you can specify one default SNI on the map. If Cloudflare receives a TLS
+	// handshake from a client without an SNI, it will respond with the default SNI on
+	// those IPs. The default SNI can be any valid zone or subdomain owned by the
+	// account.
+	DefaultSni string `json:"default_sni,nullable"`
+	// An optional description field which may be used to describe the types of IPs or
+	// zones on the map.
+	Description string `json:"description,nullable"`
+	// Whether the Address Map is enabled or not. Cloudflare's DNS will not respond
+	// with IP addresses on an Address Map until the map is enabled.
+	Enabled    bool                                 `json:"enabled,nullable"`
+	ModifiedAt time.Time                            `json:"modified_at" format:"date-time"`
+	JSON       addressingAddressMapEditResponseJSON `json:"-"`
+}
+
+// addressingAddressMapEditResponseJSON contains the JSON metadata for the struct
+// [AddressingAddressMapEditResponse]
+type addressingAddressMapEditResponseJSON struct {
+	ID           apijson.Field
+	CanDelete    apijson.Field
+	CanModifyIPs apijson.Field
+	CreatedAt    apijson.Field
+	DefaultSni   apijson.Field
+	Description  apijson.Field
+	Enabled      apijson.Field
+	ModifiedAt   apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *AddressingAddressMapEditResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type AddressingAddressMapGetResponse struct {
 	// Identifier
@@ -477,7 +522,7 @@ type AddressingAddressMapListParams struct {
 type AddressingAddressMapListResponseEnvelope struct {
 	Errors   []AddressingAddressMapListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AddressingAddressMapListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AddressingAddressMaps                            `json:"result,required,nullable"`
+	Result   []AddressingAddressMapListResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AddressingAddressMapListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AddressingAddressMapListResponseEnvelopeResultInfo `json:"result_info"`
@@ -699,7 +744,7 @@ func (r AddressingAddressMapEditParams) MarshalJSON() (data []byte, err error) {
 type AddressingAddressMapEditResponseEnvelope struct {
 	Errors   []AddressingAddressMapEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AddressingAddressMapEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   AddressingAddressMaps                              `json:"result,required"`
+	Result   AddressingAddressMapEditResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success AddressingAddressMapEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    addressingAddressMapEditResponseEnvelopeJSON    `json:"-"`

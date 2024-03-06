@@ -32,7 +32,7 @@ func TestZoneSettingMobileRedirectEditWithOptionalParams(t *testing.T) {
 		Value: cloudflare.F(cloudflare.ZoneSettingMobileRedirectEditParamsValue{
 			MobileSubdomain: cloudflare.F("m"),
 			Status:          cloudflare.F(cloudflare.ZoneSettingMobileRedirectEditParamsValueStatusOn),
-			StripUri:        cloudflare.F(false),
+			StripURI:        cloudflare.F(false),
 		}),
 	})
 	if err != nil {

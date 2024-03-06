@@ -32,7 +32,7 @@ func NewSecondaryDNSTSIGService(opts ...option.RequestOption) (r *SecondaryDNSTS
 }
 
 // Create TSIG.
-func (r *SecondaryDNSTSIGService) New(ctx context.Context, params SecondaryDNSTSIGNewParams, opts ...option.RequestOption) (res *SecondaryDNSTSIG, err error) {
+func (r *SecondaryDNSTSIGService) New(ctx context.Context, params SecondaryDNSTSIGNewParams, opts ...option.RequestOption) (res *SecondaryDnstsigNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SecondaryDnstsigNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/secondary_dns/tsigs", params.AccountID)
@@ -45,7 +45,7 @@ func (r *SecondaryDNSTSIGService) New(ctx context.Context, params SecondaryDNSTS
 }
 
 // Modify TSIG.
-func (r *SecondaryDNSTSIGService) Update(ctx context.Context, tsigID interface{}, params SecondaryDNSTSIGUpdateParams, opts ...option.RequestOption) (res *SecondaryDNSTSIG, err error) {
+func (r *SecondaryDNSTSIGService) Update(ctx context.Context, tsigID interface{}, params SecondaryDNSTSIGUpdateParams, opts ...option.RequestOption) (res *SecondaryDnstsigUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SecondaryDnstsigUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/secondary_dns/tsigs/%v", params.AccountID, tsigID)
@@ -58,7 +58,7 @@ func (r *SecondaryDNSTSIGService) Update(ctx context.Context, tsigID interface{}
 }
 
 // List TSIGs.
-func (r *SecondaryDNSTSIGService) List(ctx context.Context, query SecondaryDNSTSIGListParams, opts ...option.RequestOption) (res *[]SecondaryDNSTSIG, err error) {
+func (r *SecondaryDNSTSIGService) List(ctx context.Context, query SecondaryDNSTSIGListParams, opts ...option.RequestOption) (res *[]SecondaryDnstsigListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SecondaryDnstsigListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/secondary_dns/tsigs", query.AccountID)
@@ -84,7 +84,7 @@ func (r *SecondaryDNSTSIGService) Delete(ctx context.Context, tsigID interface{}
 }
 
 // Get TSIG.
-func (r *SecondaryDNSTSIGService) Get(ctx context.Context, tsigID interface{}, query SecondaryDNSTSIGGetParams, opts ...option.RequestOption) (res *SecondaryDNSTSIG, err error) {
+func (r *SecondaryDNSTSIGService) Get(ctx context.Context, tsigID interface{}, query SecondaryDNSTSIGGetParams, opts ...option.RequestOption) (res *SecondaryDnstsigGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SecondaryDnstsigGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/secondary_dns/tsigs/%v", query.AccountID, tsigID)
@@ -96,20 +96,20 @@ func (r *SecondaryDNSTSIGService) Get(ctx context.Context, tsigID interface{}, q
 	return
 }
 
-type SecondaryDNSTSIG struct {
+type SecondaryDnstsigNewResponse struct {
 	ID interface{} `json:"id,required"`
 	// TSIG algorithm.
 	Algo string `json:"algo,required"`
 	// TSIG key name.
 	Name string `json:"name,required"`
 	// TSIG secret.
-	Secret string               `json:"secret,required"`
-	JSON   secondaryDnstsigJSON `json:"-"`
+	Secret string                          `json:"secret,required"`
+	JSON   secondaryDnstsigNewResponseJSON `json:"-"`
 }
 
-// secondaryDnstsigJSON contains the JSON metadata for the struct
-// [SecondaryDNSTSIG]
-type secondaryDnstsigJSON struct {
+// secondaryDnstsigNewResponseJSON contains the JSON metadata for the struct
+// [SecondaryDnstsigNewResponse]
+type secondaryDnstsigNewResponseJSON struct {
 	ID          apijson.Field
 	Algo        apijson.Field
 	Name        apijson.Field
@@ -118,7 +118,59 @@ type secondaryDnstsigJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SecondaryDNSTSIG) UnmarshalJSON(data []byte) (err error) {
+func (r *SecondaryDnstsigNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SecondaryDnstsigUpdateResponse struct {
+	ID interface{} `json:"id,required"`
+	// TSIG algorithm.
+	Algo string `json:"algo,required"`
+	// TSIG key name.
+	Name string `json:"name,required"`
+	// TSIG secret.
+	Secret string                             `json:"secret,required"`
+	JSON   secondaryDnstsigUpdateResponseJSON `json:"-"`
+}
+
+// secondaryDnstsigUpdateResponseJSON contains the JSON metadata for the struct
+// [SecondaryDnstsigUpdateResponse]
+type secondaryDnstsigUpdateResponseJSON struct {
+	ID          apijson.Field
+	Algo        apijson.Field
+	Name        apijson.Field
+	Secret      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SecondaryDnstsigUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type SecondaryDnstsigListResponse struct {
+	ID interface{} `json:"id,required"`
+	// TSIG algorithm.
+	Algo string `json:"algo,required"`
+	// TSIG key name.
+	Name string `json:"name,required"`
+	// TSIG secret.
+	Secret string                           `json:"secret,required"`
+	JSON   secondaryDnstsigListResponseJSON `json:"-"`
+}
+
+// secondaryDnstsigListResponseJSON contains the JSON metadata for the struct
+// [SecondaryDnstsigListResponse]
+type secondaryDnstsigListResponseJSON struct {
+	ID          apijson.Field
+	Algo        apijson.Field
+	Name        apijson.Field
+	Secret      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SecondaryDnstsigListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -139,6 +191,32 @@ func (r *SecondaryDnstsigDeleteResponse) UnmarshalJSON(data []byte) (err error) 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type SecondaryDnstsigGetResponse struct {
+	ID interface{} `json:"id,required"`
+	// TSIG algorithm.
+	Algo string `json:"algo,required"`
+	// TSIG key name.
+	Name string `json:"name,required"`
+	// TSIG secret.
+	Secret string                          `json:"secret,required"`
+	JSON   secondaryDnstsigGetResponseJSON `json:"-"`
+}
+
+// secondaryDnstsigGetResponseJSON contains the JSON metadata for the struct
+// [SecondaryDnstsigGetResponse]
+type secondaryDnstsigGetResponseJSON struct {
+	ID          apijson.Field
+	Algo        apijson.Field
+	Name        apijson.Field
+	Secret      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SecondaryDnstsigGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type SecondaryDNSTSIGNewParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// TSIG algorithm.
@@ -156,7 +234,7 @@ func (r SecondaryDNSTSIGNewParams) MarshalJSON() (data []byte, err error) {
 type SecondaryDnstsigNewResponseEnvelope struct {
 	Errors   []SecondaryDnstsigNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SecondaryDnstsigNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   SecondaryDNSTSIG                              `json:"result,required"`
+	Result   SecondaryDnstsigNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success SecondaryDnstsigNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    secondaryDnstsigNewResponseEnvelopeJSON    `json:"-"`
@@ -239,7 +317,7 @@ func (r SecondaryDNSTSIGUpdateParams) MarshalJSON() (data []byte, err error) {
 type SecondaryDnstsigUpdateResponseEnvelope struct {
 	Errors   []SecondaryDnstsigUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SecondaryDnstsigUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   SecondaryDNSTSIG                                 `json:"result,required"`
+	Result   SecondaryDnstsigUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success SecondaryDnstsigUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    secondaryDnstsigUpdateResponseEnvelopeJSON    `json:"-"`
@@ -312,7 +390,7 @@ type SecondaryDNSTSIGListParams struct {
 type SecondaryDnstsigListResponseEnvelope struct {
 	Errors   []SecondaryDnstsigListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SecondaryDnstsigListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []SecondaryDNSTSIG                             `json:"result,required,nullable"`
+	Result   []SecondaryDnstsigListResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    SecondaryDnstsigListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo SecondaryDnstsigListResponseEnvelopeResultInfo `json:"result_info"`
@@ -487,7 +565,7 @@ type SecondaryDNSTSIGGetParams struct {
 type SecondaryDnstsigGetResponseEnvelope struct {
 	Errors   []SecondaryDnstsigGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []SecondaryDnstsigGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   SecondaryDNSTSIG                              `json:"result,required"`
+	Result   SecondaryDnstsigGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success SecondaryDnstsigGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    secondaryDnstsigGetResponseEnvelopeJSON    `json:"-"`

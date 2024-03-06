@@ -61,7 +61,7 @@ func (r *AlertingV3DestinationPagerdutyService) Delete(ctx context.Context, body
 }
 
 // Get a list of all configured PagerDuty services.
-func (r *AlertingV3DestinationPagerdutyService) Get(ctx context.Context, query AlertingV3DestinationPagerdutyGetParams, opts ...option.RequestOption) (res *[]AaaPagerduty, err error) {
+func (r *AlertingV3DestinationPagerdutyService) Get(ctx context.Context, query AlertingV3DestinationPagerdutyGetParams, opts ...option.RequestOption) (res *[]AlertingV3DestinationPagerdutyGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AlertingV3DestinationPagerdutyGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/pagerduty", query.AccountID)
@@ -84,26 +84,6 @@ func (r *AlertingV3DestinationPagerdutyService) Link(ctx context.Context, tokenI
 	}
 	res = &env.Result
 	return
-}
-
-type AaaPagerduty struct {
-	// UUID
-	ID string `json:"id"`
-	// The name of the pagerduty service.
-	Name string           `json:"name"`
-	JSON aaaPagerdutyJSON `json:"-"`
-}
-
-// aaaPagerdutyJSON contains the JSON metadata for the struct [AaaPagerduty]
-type aaaPagerdutyJSON struct {
-	ID          apijson.Field
-	Name        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AaaPagerduty) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
 }
 
 type AlertingV3DestinationPagerdutyNewResponse struct {
@@ -144,6 +124,27 @@ func init() {
 type AlertingV3DestinationPagerdutyDeleteResponseArray []interface{}
 
 func (r AlertingV3DestinationPagerdutyDeleteResponseArray) ImplementsAlertingV3DestinationPagerdutyDeleteResponse() {
+}
+
+type AlertingV3DestinationPagerdutyGetResponse struct {
+	// UUID
+	ID string `json:"id"`
+	// The name of the pagerduty service.
+	Name string                                        `json:"name"`
+	JSON alertingV3DestinationPagerdutyGetResponseJSON `json:"-"`
+}
+
+// alertingV3DestinationPagerdutyGetResponseJSON contains the JSON metadata for the
+// struct [AlertingV3DestinationPagerdutyGetResponse]
+type alertingV3DestinationPagerdutyGetResponseJSON struct {
+	ID          apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AlertingV3DestinationPagerdutyGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type AlertingV3DestinationPagerdutyLinkResponse struct {
@@ -354,7 +355,7 @@ type AlertingV3DestinationPagerdutyGetParams struct {
 type AlertingV3DestinationPagerdutyGetResponseEnvelope struct {
 	Errors   []AlertingV3DestinationPagerdutyGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AlertingV3DestinationPagerdutyGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AaaPagerduty                                              `json:"result,required,nullable"`
+	Result   []AlertingV3DestinationPagerdutyGetResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AlertingV3DestinationPagerdutyGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AlertingV3DestinationPagerdutyGetResponseEnvelopeResultInfo `json:"result_info"`

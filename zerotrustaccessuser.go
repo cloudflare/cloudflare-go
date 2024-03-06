@@ -38,7 +38,7 @@ func NewZeroTrustAccessUserService(opts ...option.RequestOption) (r *ZeroTrustAc
 }
 
 // Gets a list of users for an account.
-func (r *ZeroTrustAccessUserService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *[]AccessUsers, err error) {
+func (r *ZeroTrustAccessUserService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *[]ZeroTrustAccessUserListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustAccessUserListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/users", identifier)
@@ -50,7 +50,7 @@ func (r *ZeroTrustAccessUserService) List(ctx context.Context, identifier string
 	return
 }
 
-type AccessUsers struct {
+type ZeroTrustAccessUserListResponse struct {
 	// UUID
 	ID string `json:"id"`
 	// True if the user has authenticated with Cloudflare Access.
@@ -69,13 +69,14 @@ type AccessUsers struct {
 	// The unique API identifier for the Zero Trust seat.
 	SeatUid interface{} `json:"seat_uid"`
 	// The unique API identifier for the user.
-	Uid       interface{}     `json:"uid"`
-	UpdatedAt time.Time       `json:"updated_at" format:"date-time"`
-	JSON      accessUsersJSON `json:"-"`
+	Uid       interface{}                         `json:"uid"`
+	UpdatedAt time.Time                           `json:"updated_at" format:"date-time"`
+	JSON      zeroTrustAccessUserListResponseJSON `json:"-"`
 }
 
-// accessUsersJSON contains the JSON metadata for the struct [AccessUsers]
-type accessUsersJSON struct {
+// zeroTrustAccessUserListResponseJSON contains the JSON metadata for the struct
+// [ZeroTrustAccessUserListResponse]
+type zeroTrustAccessUserListResponseJSON struct {
 	ID                  apijson.Field
 	AccessSeat          apijson.Field
 	ActiveDeviceCount   apijson.Field
@@ -91,14 +92,14 @@ type accessUsersJSON struct {
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *AccessUsers) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustAccessUserListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 type ZeroTrustAccessUserListResponseEnvelope struct {
 	Errors   []ZeroTrustAccessUserListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustAccessUserListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AccessUsers                                     `json:"result,required,nullable"`
+	Result   []ZeroTrustAccessUserListResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    ZeroTrustAccessUserListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ZeroTrustAccessUserListResponseEnvelopeResultInfo `json:"result_info"`

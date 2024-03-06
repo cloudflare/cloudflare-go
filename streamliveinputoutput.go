@@ -34,7 +34,7 @@ func NewStreamLiveInputOutputService(opts ...option.RequestOption) (r *StreamLiv
 // Creates a new output that can be used to simulcast or restream live video to
 // other RTMP or SRT destinations. Outputs are always linked to a specific live
 // input — one live input can have many outputs.
-func (r *StreamLiveInputOutputService) New(ctx context.Context, liveInputIdentifier string, params StreamLiveInputOutputNewParams, opts ...option.RequestOption) (res *StreamOutput, err error) {
+func (r *StreamLiveInputOutputService) New(ctx context.Context, liveInputIdentifier string, params StreamLiveInputOutputNewParams, opts ...option.RequestOption) (res *StreamLiveInputOutputNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamLiveInputOutputNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s/outputs", params.AccountID, liveInputIdentifier)
@@ -47,7 +47,7 @@ func (r *StreamLiveInputOutputService) New(ctx context.Context, liveInputIdentif
 }
 
 // Updates the state of an output.
-func (r *StreamLiveInputOutputService) Update(ctx context.Context, liveInputIdentifier string, outputIdentifier string, params StreamLiveInputOutputUpdateParams, opts ...option.RequestOption) (res *StreamOutput, err error) {
+func (r *StreamLiveInputOutputService) Update(ctx context.Context, liveInputIdentifier string, outputIdentifier string, params StreamLiveInputOutputUpdateParams, opts ...option.RequestOption) (res *StreamLiveInputOutputUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamLiveInputOutputUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s/outputs/%s", params.AccountID, liveInputIdentifier, outputIdentifier)
@@ -60,7 +60,7 @@ func (r *StreamLiveInputOutputService) Update(ctx context.Context, liveInputIden
 }
 
 // Retrieves all outputs associated with a specified live input.
-func (r *StreamLiveInputOutputService) List(ctx context.Context, liveInputIdentifier string, query StreamLiveInputOutputListParams, opts ...option.RequestOption) (res *[]StreamOutput, err error) {
+func (r *StreamLiveInputOutputService) List(ctx context.Context, liveInputIdentifier string, query StreamLiveInputOutputListParams, opts ...option.RequestOption) (res *[]StreamLiveInputOutputListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamLiveInputOutputListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s/outputs", query.AccountID, liveInputIdentifier)
@@ -81,7 +81,7 @@ func (r *StreamLiveInputOutputService) Delete(ctx context.Context, liveInputIden
 	return
 }
 
-type StreamOutput struct {
+type StreamLiveInputOutputNewResponse struct {
 	// When enabled, live video streamed to the associated live input will be sent to
 	// the output URL. When disabled, live video will not be sent to the output URL,
 	// even when streaming to the associated live input. Use this to control precisely
@@ -93,12 +93,13 @@ type StreamOutput struct {
 	// A unique identifier for the output.
 	Uid string `json:"uid"`
 	// The URL an output uses to restream.
-	URL  string           `json:"url"`
-	JSON streamOutputJSON `json:"-"`
+	URL  string                               `json:"url"`
+	JSON streamLiveInputOutputNewResponseJSON `json:"-"`
 }
 
-// streamOutputJSON contains the JSON metadata for the struct [StreamOutput]
-type streamOutputJSON struct {
+// streamLiveInputOutputNewResponseJSON contains the JSON metadata for the struct
+// [StreamLiveInputOutputNewResponse]
+type streamLiveInputOutputNewResponseJSON struct {
 	Enabled     apijson.Field
 	StreamKey   apijson.Field
 	Uid         apijson.Field
@@ -107,7 +108,69 @@ type streamOutputJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StreamOutput) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamLiveInputOutputNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type StreamLiveInputOutputUpdateResponse struct {
+	// When enabled, live video streamed to the associated live input will be sent to
+	// the output URL. When disabled, live video will not be sent to the output URL,
+	// even when streaming to the associated live input. Use this to control precisely
+	// when you start and stop simulcasting to specific destinations like YouTube and
+	// Twitch.
+	Enabled bool `json:"enabled"`
+	// The streamKey used to authenticate against an output's target.
+	StreamKey string `json:"streamKey"`
+	// A unique identifier for the output.
+	Uid string `json:"uid"`
+	// The URL an output uses to restream.
+	URL  string                                  `json:"url"`
+	JSON streamLiveInputOutputUpdateResponseJSON `json:"-"`
+}
+
+// streamLiveInputOutputUpdateResponseJSON contains the JSON metadata for the
+// struct [StreamLiveInputOutputUpdateResponse]
+type streamLiveInputOutputUpdateResponseJSON struct {
+	Enabled     apijson.Field
+	StreamKey   apijson.Field
+	Uid         apijson.Field
+	URL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamLiveInputOutputUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type StreamLiveInputOutputListResponse struct {
+	// When enabled, live video streamed to the associated live input will be sent to
+	// the output URL. When disabled, live video will not be sent to the output URL,
+	// even when streaming to the associated live input. Use this to control precisely
+	// when you start and stop simulcasting to specific destinations like YouTube and
+	// Twitch.
+	Enabled bool `json:"enabled"`
+	// The streamKey used to authenticate against an output's target.
+	StreamKey string `json:"streamKey"`
+	// A unique identifier for the output.
+	Uid string `json:"uid"`
+	// The URL an output uses to restream.
+	URL  string                                `json:"url"`
+	JSON streamLiveInputOutputListResponseJSON `json:"-"`
+}
+
+// streamLiveInputOutputListResponseJSON contains the JSON metadata for the struct
+// [StreamLiveInputOutputListResponse]
+type streamLiveInputOutputListResponseJSON struct {
+	Enabled     apijson.Field
+	StreamKey   apijson.Field
+	Uid         apijson.Field
+	URL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamLiveInputOutputListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -133,7 +196,7 @@ func (r StreamLiveInputOutputNewParams) MarshalJSON() (data []byte, err error) {
 type StreamLiveInputOutputNewResponseEnvelope struct {
 	Errors   []StreamLiveInputOutputNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []StreamLiveInputOutputNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   StreamOutput                                       `json:"result,required"`
+	Result   StreamLiveInputOutputNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success StreamLiveInputOutputNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    streamLiveInputOutputNewResponseEnvelopeJSON    `json:"-"`
@@ -217,7 +280,7 @@ func (r StreamLiveInputOutputUpdateParams) MarshalJSON() (data []byte, err error
 type StreamLiveInputOutputUpdateResponseEnvelope struct {
 	Errors   []StreamLiveInputOutputUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []StreamLiveInputOutputUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   StreamOutput                                          `json:"result,required"`
+	Result   StreamLiveInputOutputUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success StreamLiveInputOutputUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    streamLiveInputOutputUpdateResponseEnvelopeJSON    `json:"-"`
@@ -291,7 +354,7 @@ type StreamLiveInputOutputListParams struct {
 type StreamLiveInputOutputListResponseEnvelope struct {
 	Errors   []StreamLiveInputOutputListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []StreamLiveInputOutputListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []StreamOutput                                      `json:"result,required"`
+	Result   []StreamLiveInputOutputListResponse                 `json:"result,required"`
 	// Whether the API call was successful
 	Success StreamLiveInputOutputListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    streamLiveInputOutputListResponseEnvelopeJSON    `json:"-"`

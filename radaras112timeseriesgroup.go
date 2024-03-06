@@ -285,10 +285,10 @@ func (r *RadarAS112TimeseriesGroupQueryTypeResponse) UnmarshalJSON(data []byte) 
 
 type RadarAS112TimeseriesGroupQueryTypeResponseSerie0 struct {
 	A    []string                                             `json:"A,required"`
-	Aaaa []string                                             `json:"AAAA,required"`
-	Ptr  []string                                             `json:"PTR,required"`
+	AAAA []string                                             `json:"AAAA,required"`
+	PTR  []string                                             `json:"PTR,required"`
 	Soa  []string                                             `json:"SOA,required"`
-	Srv  []string                                             `json:"SRV,required"`
+	SRV  []string                                             `json:"SRV,required"`
 	JSON radarAS112TimeseriesGroupQueryTypeResponseSerie0JSON `json:"-"`
 }
 
@@ -296,10 +296,10 @@ type RadarAS112TimeseriesGroupQueryTypeResponseSerie0 struct {
 // for the struct [RadarAS112TimeseriesGroupQueryTypeResponseSerie0]
 type radarAS112TimeseriesGroupQueryTypeResponseSerie0JSON struct {
 	A           apijson.Field
-	Aaaa        apijson.Field
-	Ptr         apijson.Field
+	AAAA        apijson.Field
+	PTR         apijson.Field
 	Soa         apijson.Field
-	Srv         apijson.Field
+	SRV         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }

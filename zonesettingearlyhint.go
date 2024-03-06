@@ -36,7 +36,7 @@ func NewZoneSettingEarlyHintService(opts ...option.RequestOption) (r *ZoneSettin
 // `103` responses with `Link` headers from the final response. Refer to
 // [Early Hints](https://developers.cloudflare.com/cache/about/early-hints) for
 // more information.
-func (r *ZoneSettingEarlyHintService) Edit(ctx context.Context, params ZoneSettingEarlyHintEditParams, opts ...option.RequestOption) (res *ZonesEarlyHints, err error) {
+func (r *ZoneSettingEarlyHintService) Edit(ctx context.Context, params ZoneSettingEarlyHintEditParams, opts ...option.RequestOption) (res *ZoneSettingEarlyHintEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingEarlyHintEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/early_hints", params.ZoneID)
@@ -52,7 +52,7 @@ func (r *ZoneSettingEarlyHintService) Edit(ctx context.Context, params ZoneSetti
 // `103` responses with `Link` headers from the final response. Refer to
 // [Early Hints](https://developers.cloudflare.com/cache/about/early-hints) for
 // more information.
-func (r *ZoneSettingEarlyHintService) Get(ctx context.Context, query ZoneSettingEarlyHintGetParams, opts ...option.RequestOption) (res *ZonesEarlyHints, err error) {
+func (r *ZoneSettingEarlyHintService) Get(ctx context.Context, query ZoneSettingEarlyHintGetParams, opts ...option.RequestOption) (res *ZoneSettingEarlyHintGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingEarlyHintGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/early_hints", query.ZoneID)
@@ -68,21 +68,22 @@ func (r *ZoneSettingEarlyHintService) Get(ctx context.Context, query ZoneSetting
 // `103` responses with `Link` headers from the final response. Refer to
 // [Early Hints](https://developers.cloudflare.com/cache/about/early-hints) for
 // more information.
-type ZonesEarlyHints struct {
+type ZoneSettingEarlyHintEditResponse struct {
 	// ID of the zone setting.
-	ID ZonesEarlyHintsID `json:"id,required"`
+	ID ZoneSettingEarlyHintEditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZonesEarlyHintsValue `json:"value,required"`
+	Value ZoneSettingEarlyHintEditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZonesEarlyHintsEditable `json:"editable"`
+	Editable ZoneSettingEarlyHintEditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time           `json:"modified_on,nullable" format:"date-time"`
-	JSON       zonesEarlyHintsJSON `json:"-"`
+	ModifiedOn time.Time                            `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingEarlyHintEditResponseJSON `json:"-"`
 }
 
-// zonesEarlyHintsJSON contains the JSON metadata for the struct [ZonesEarlyHints]
-type zonesEarlyHintsJSON struct {
+// zoneSettingEarlyHintEditResponseJSON contains the JSON metadata for the struct
+// [ZoneSettingEarlyHintEditResponse]
+type zoneSettingEarlyHintEditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -91,54 +92,89 @@ type zonesEarlyHintsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZonesEarlyHints) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingEarlyHintEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ZonesEarlyHints) implementsZoneSettingEditResponse() {}
-
-func (r ZonesEarlyHints) implementsZoneSettingGetResponse() {}
-
 // ID of the zone setting.
-type ZonesEarlyHintsID string
+type ZoneSettingEarlyHintEditResponseID string
 
 const (
-	ZonesEarlyHintsIDEarlyHints ZonesEarlyHintsID = "early_hints"
+	ZoneSettingEarlyHintEditResponseIDEarlyHints ZoneSettingEarlyHintEditResponseID = "early_hints"
 )
 
 // Current value of the zone setting.
-type ZonesEarlyHintsValue string
+type ZoneSettingEarlyHintEditResponseValue string
 
 const (
-	ZonesEarlyHintsValueOn  ZonesEarlyHintsValue = "on"
-	ZonesEarlyHintsValueOff ZonesEarlyHintsValue = "off"
+	ZoneSettingEarlyHintEditResponseValueOn  ZoneSettingEarlyHintEditResponseValue = "on"
+	ZoneSettingEarlyHintEditResponseValueOff ZoneSettingEarlyHintEditResponseValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZonesEarlyHintsEditable bool
+type ZoneSettingEarlyHintEditResponseEditable bool
 
 const (
-	ZonesEarlyHintsEditableTrue  ZonesEarlyHintsEditable = true
-	ZonesEarlyHintsEditableFalse ZonesEarlyHintsEditable = false
+	ZoneSettingEarlyHintEditResponseEditableTrue  ZoneSettingEarlyHintEditResponseEditable = true
+	ZoneSettingEarlyHintEditResponseEditableFalse ZoneSettingEarlyHintEditResponseEditable = false
 )
 
 // When enabled, Cloudflare will attempt to speed up overall page loads by serving
 // `103` responses with `Link` headers from the final response. Refer to
 // [Early Hints](https://developers.cloudflare.com/cache/about/early-hints) for
 // more information.
-type ZonesEarlyHintsParam struct {
+type ZoneSettingEarlyHintGetResponse struct {
 	// ID of the zone setting.
-	ID param.Field[ZonesEarlyHintsID] `json:"id,required"`
+	ID ZoneSettingEarlyHintGetResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value param.Field[ZonesEarlyHintsValue] `json:"value,required"`
+	Value ZoneSettingEarlyHintGetResponseValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingEarlyHintGetResponseEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                           `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingEarlyHintGetResponseJSON `json:"-"`
 }
 
-func (r ZonesEarlyHintsParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+// zoneSettingEarlyHintGetResponseJSON contains the JSON metadata for the struct
+// [ZoneSettingEarlyHintGetResponse]
+type zoneSettingEarlyHintGetResponseJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
-func (r ZonesEarlyHintsParam) implementsZoneSettingEditParamsItem() {}
+func (r *ZoneSettingEarlyHintGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// ID of the zone setting.
+type ZoneSettingEarlyHintGetResponseID string
+
+const (
+	ZoneSettingEarlyHintGetResponseIDEarlyHints ZoneSettingEarlyHintGetResponseID = "early_hints"
+)
+
+// Current value of the zone setting.
+type ZoneSettingEarlyHintGetResponseValue string
+
+const (
+	ZoneSettingEarlyHintGetResponseValueOn  ZoneSettingEarlyHintGetResponseValue = "on"
+	ZoneSettingEarlyHintGetResponseValueOff ZoneSettingEarlyHintGetResponseValue = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingEarlyHintGetResponseEditable bool
+
+const (
+	ZoneSettingEarlyHintGetResponseEditableTrue  ZoneSettingEarlyHintGetResponseEditable = true
+	ZoneSettingEarlyHintGetResponseEditableFalse ZoneSettingEarlyHintGetResponseEditable = false
+)
 
 type ZoneSettingEarlyHintEditParams struct {
 	// Identifier
@@ -168,7 +204,7 @@ type ZoneSettingEarlyHintEditResponseEnvelope struct {
 	// `103` responses with `Link` headers from the final response. Refer to
 	// [Early Hints](https://developers.cloudflare.com/cache/about/early-hints) for
 	// more information.
-	Result ZonesEarlyHints                              `json:"result"`
+	Result ZoneSettingEarlyHintEditResponse             `json:"result"`
 	JSON   zoneSettingEarlyHintEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -239,7 +275,7 @@ type ZoneSettingEarlyHintGetResponseEnvelope struct {
 	// `103` responses with `Link` headers from the final response. Refer to
 	// [Early Hints](https://developers.cloudflare.com/cache/about/early-hints) for
 	// more information.
-	Result ZonesEarlyHints                             `json:"result"`
+	Result ZoneSettingEarlyHintGetResponse             `json:"result"`
 	JSON   zoneSettingEarlyHintGetResponseEnvelopeJSON `json:"-"`
 }
 

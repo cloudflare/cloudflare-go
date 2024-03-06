@@ -33,7 +33,7 @@ func NewZeroTrustGatewayAuditSSHSettingService(opts ...option.RequestOption) (r 
 }
 
 // Updates Zero Trust Audit SSH settings.
-func (r *ZeroTrustGatewayAuditSSHSettingService) Update(ctx context.Context, params ZeroTrustGatewayAuditSSHSettingUpdateParams, opts ...option.RequestOption) (res *ZeroTrustGatewaySettings, err error) {
+func (r *ZeroTrustGatewayAuditSSHSettingService) Update(ctx context.Context, params ZeroTrustGatewayAuditSSHSettingUpdateParams, opts ...option.RequestOption) (res *ZeroTrustGatewayAuditSSHSettingUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustGatewayAuditSSHSettingUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/gateway/audit_ssh_settings", params.AccountID)
@@ -46,7 +46,7 @@ func (r *ZeroTrustGatewayAuditSSHSettingService) Update(ctx context.Context, par
 }
 
 // Get all Zero Trust Audit SSH settings for an account.
-func (r *ZeroTrustGatewayAuditSSHSettingService) Get(ctx context.Context, query ZeroTrustGatewayAuditSSHSettingGetParams, opts ...option.RequestOption) (res *ZeroTrustGatewaySettings, err error) {
+func (r *ZeroTrustGatewayAuditSSHSettingService) Get(ctx context.Context, query ZeroTrustGatewayAuditSSHSettingGetParams, opts ...option.RequestOption) (res *ZeroTrustGatewayAuditSSHSettingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustGatewayAuditSSHSettingGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/gateway/audit_ssh_settings", query.AccountID)
@@ -58,19 +58,19 @@ func (r *ZeroTrustGatewayAuditSSHSettingService) Get(ctx context.Context, query 
 	return
 }
 
-type ZeroTrustGatewaySettings struct {
+type ZeroTrustGatewayAuditSSHSettingUpdateResponse struct {
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// SSH encryption public key
 	PublicKey string `json:"public_key"`
 	// Seed ID
-	SeedID    string                       `json:"seed_id"`
-	UpdatedAt time.Time                    `json:"updated_at" format:"date-time"`
-	JSON      zeroTrustGatewaySettingsJSON `json:"-"`
+	SeedID    string                                            `json:"seed_id"`
+	UpdatedAt time.Time                                         `json:"updated_at" format:"date-time"`
+	JSON      zeroTrustGatewayAuditSSHSettingUpdateResponseJSON `json:"-"`
 }
 
-// zeroTrustGatewaySettingsJSON contains the JSON metadata for the struct
-// [ZeroTrustGatewaySettings]
-type zeroTrustGatewaySettingsJSON struct {
+// zeroTrustGatewayAuditSSHSettingUpdateResponseJSON contains the JSON metadata for
+// the struct [ZeroTrustGatewayAuditSSHSettingUpdateResponse]
+type zeroTrustGatewayAuditSSHSettingUpdateResponseJSON struct {
 	CreatedAt   apijson.Field
 	PublicKey   apijson.Field
 	SeedID      apijson.Field
@@ -79,7 +79,32 @@ type zeroTrustGatewaySettingsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZeroTrustGatewaySettings) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustGatewayAuditSSHSettingUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZeroTrustGatewayAuditSSHSettingGetResponse struct {
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// SSH encryption public key
+	PublicKey string `json:"public_key"`
+	// Seed ID
+	SeedID    string                                         `json:"seed_id"`
+	UpdatedAt time.Time                                      `json:"updated_at" format:"date-time"`
+	JSON      zeroTrustGatewayAuditSSHSettingGetResponseJSON `json:"-"`
+}
+
+// zeroTrustGatewayAuditSSHSettingGetResponseJSON contains the JSON metadata for
+// the struct [ZeroTrustGatewayAuditSSHSettingGetResponse]
+type zeroTrustGatewayAuditSSHSettingGetResponseJSON struct {
+	CreatedAt   apijson.Field
+	PublicKey   apijson.Field
+	SeedID      apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZeroTrustGatewayAuditSSHSettingGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -98,7 +123,7 @@ func (r ZeroTrustGatewayAuditSSHSettingUpdateParams) MarshalJSON() (data []byte,
 type ZeroTrustGatewayAuditSSHSettingUpdateResponseEnvelope struct {
 	Errors   []ZeroTrustGatewayAuditSSHSettingUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustGatewayAuditSSHSettingUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustGatewaySettings                                        `json:"result,required"`
+	Result   ZeroTrustGatewayAuditSSHSettingUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success ZeroTrustGatewayAuditSSHSettingUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustGatewayAuditSSHSettingUpdateResponseEnvelopeJSON    `json:"-"`
@@ -173,7 +198,7 @@ type ZeroTrustGatewayAuditSSHSettingGetParams struct {
 type ZeroTrustGatewayAuditSSHSettingGetResponseEnvelope struct {
 	Errors   []ZeroTrustGatewayAuditSSHSettingGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustGatewayAuditSSHSettingGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   ZeroTrustGatewaySettings                                     `json:"result,required"`
+	Result   ZeroTrustGatewayAuditSSHSettingGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success ZeroTrustGatewayAuditSSHSettingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustGatewayAuditSSHSettingGetResponseEnvelopeJSON    `json:"-"`

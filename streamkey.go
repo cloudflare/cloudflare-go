@@ -37,7 +37,7 @@ func NewStreamKeyService(opts ...option.RequestOption) (r *StreamKeyService) {
 // Creates an RSA private key in PEM and JWK formats. Key files are only displayed
 // once after creation. Keys are created, used, and deleted independently of
 // videos, and every key can sign any video.
-func (r *StreamKeyService) New(ctx context.Context, body StreamKeyNewParams, opts ...option.RequestOption) (res *StreamKeys, err error) {
+func (r *StreamKeyService) New(ctx context.Context, body StreamKeyNewParams, opts ...option.RequestOption) (res *StreamKeyNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamKeyNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/keys", body.AccountID)
@@ -75,7 +75,7 @@ func (r *StreamKeyService) Get(ctx context.Context, query StreamKeyGetParams, op
 	return
 }
 
-type StreamKeys struct {
+type StreamKeyNewResponse struct {
 	// Identifier
 	ID string `json:"id"`
 	// The date and time a signing key was created.
@@ -83,12 +83,13 @@ type StreamKeys struct {
 	// The signing key in JWK format.
 	Jwk string `json:"jwk"`
 	// The signing key in PEM format.
-	Pem  string         `json:"pem"`
-	JSON streamKeysJSON `json:"-"`
+	Pem  string                   `json:"pem"`
+	JSON streamKeyNewResponseJSON `json:"-"`
 }
 
-// streamKeysJSON contains the JSON metadata for the struct [StreamKeys]
-type streamKeysJSON struct {
+// streamKeyNewResponseJSON contains the JSON metadata for the struct
+// [StreamKeyNewResponse]
+type streamKeyNewResponseJSON struct {
 	ID          apijson.Field
 	Created     apijson.Field
 	Jwk         apijson.Field
@@ -97,7 +98,7 @@ type streamKeysJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StreamKeys) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamKeyNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -146,7 +147,7 @@ type StreamKeyNewParams struct {
 type StreamKeyNewResponseEnvelope struct {
 	Errors   []StreamKeyNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []StreamKeyNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   StreamKeys                             `json:"result,required"`
+	Result   StreamKeyNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success StreamKeyNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    streamKeyNewResponseEnvelopeJSON    `json:"-"`

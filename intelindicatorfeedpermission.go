@@ -32,7 +32,7 @@ func NewIntelIndicatorFeedPermissionService(opts ...option.RequestOption) (r *In
 }
 
 // Grant permission to indicator feed
-func (r *IntelIndicatorFeedPermissionService) New(ctx context.Context, params IntelIndicatorFeedPermissionNewParams, opts ...option.RequestOption) (res *IntelPermissionsUpdate, err error) {
+func (r *IntelIndicatorFeedPermissionService) New(ctx context.Context, params IntelIndicatorFeedPermissionNewParams, opts ...option.RequestOption) (res *IntelIndicatorFeedPermissionNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IntelIndicatorFeedPermissionNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/permissions/add", params.AccountID)
@@ -45,7 +45,7 @@ func (r *IntelIndicatorFeedPermissionService) New(ctx context.Context, params In
 }
 
 // List indicator feed permissions
-func (r *IntelIndicatorFeedPermissionService) List(ctx context.Context, query IntelIndicatorFeedPermissionListParams, opts ...option.RequestOption) (res *[]IntelPermissionListItem, err error) {
+func (r *IntelIndicatorFeedPermissionService) List(ctx context.Context, query IntelIndicatorFeedPermissionListParams, opts ...option.RequestOption) (res *[]IntelIndicatorFeedPermissionListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IntelIndicatorFeedPermissionListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/permissions/view", query.AccountID)
@@ -58,7 +58,7 @@ func (r *IntelIndicatorFeedPermissionService) List(ctx context.Context, query In
 }
 
 // Revoke permission to indicator feed
-func (r *IntelIndicatorFeedPermissionService) Delete(ctx context.Context, params IntelIndicatorFeedPermissionDeleteParams, opts ...option.RequestOption) (res *IntelPermissionsUpdate, err error) {
+func (r *IntelIndicatorFeedPermissionService) Delete(ctx context.Context, params IntelIndicatorFeedPermissionDeleteParams, opts ...option.RequestOption) (res *IntelIndicatorFeedPermissionDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IntelIndicatorFeedPermissionDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/permissions/remove", params.AccountID)
@@ -70,19 +70,37 @@ func (r *IntelIndicatorFeedPermissionService) Delete(ctx context.Context, params
 	return
 }
 
-type IntelPermissionListItem struct {
+type IntelIndicatorFeedPermissionNewResponse struct {
+	// Whether the update succeeded or not
+	Success bool                                        `json:"success"`
+	JSON    intelIndicatorFeedPermissionNewResponseJSON `json:"-"`
+}
+
+// intelIndicatorFeedPermissionNewResponseJSON contains the JSON metadata for the
+// struct [IntelIndicatorFeedPermissionNewResponse]
+type intelIndicatorFeedPermissionNewResponseJSON struct {
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IntelIndicatorFeedPermissionNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type IntelIndicatorFeedPermissionListResponse struct {
 	// The unique identifier for the indicator feed
 	ID int64 `json:"id"`
 	// The description of the example test
 	Description string `json:"description"`
 	// The name of the indicator feed
-	Name string                      `json:"name"`
-	JSON intelPermissionListItemJSON `json:"-"`
+	Name string                                       `json:"name"`
+	JSON intelIndicatorFeedPermissionListResponseJSON `json:"-"`
 }
 
-// intelPermissionListItemJSON contains the JSON metadata for the struct
-// [IntelPermissionListItem]
-type intelPermissionListItemJSON struct {
+// intelIndicatorFeedPermissionListResponseJSON contains the JSON metadata for the
+// struct [IntelIndicatorFeedPermissionListResponse]
+type intelIndicatorFeedPermissionListResponseJSON struct {
 	ID          apijson.Field
 	Description apijson.Field
 	Name        apijson.Field
@@ -90,25 +108,25 @@ type intelPermissionListItemJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelPermissionListItem) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelIndicatorFeedPermissionListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type IntelPermissionsUpdate struct {
+type IntelIndicatorFeedPermissionDeleteResponse struct {
 	// Whether the update succeeded or not
-	Success bool                       `json:"success"`
-	JSON    intelPermissionsUpdateJSON `json:"-"`
+	Success bool                                           `json:"success"`
+	JSON    intelIndicatorFeedPermissionDeleteResponseJSON `json:"-"`
 }
 
-// intelPermissionsUpdateJSON contains the JSON metadata for the struct
-// [IntelPermissionsUpdate]
-type intelPermissionsUpdateJSON struct {
+// intelIndicatorFeedPermissionDeleteResponseJSON contains the JSON metadata for
+// the struct [IntelIndicatorFeedPermissionDeleteResponse]
+type intelIndicatorFeedPermissionDeleteResponseJSON struct {
 	Success     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelPermissionsUpdate) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelIndicatorFeedPermissionDeleteResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -128,7 +146,7 @@ func (r IntelIndicatorFeedPermissionNewParams) MarshalJSON() (data []byte, err e
 type IntelIndicatorFeedPermissionNewResponseEnvelope struct {
 	Errors   []IntelIndicatorFeedPermissionNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []IntelIndicatorFeedPermissionNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   IntelPermissionsUpdate                                    `json:"result,required"`
+	Result   IntelIndicatorFeedPermissionNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success IntelIndicatorFeedPermissionNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    intelIndicatorFeedPermissionNewResponseEnvelopeJSON    `json:"-"`
@@ -203,7 +221,7 @@ type IntelIndicatorFeedPermissionListParams struct {
 type IntelIndicatorFeedPermissionListResponseEnvelope struct {
 	Errors   []IntelIndicatorFeedPermissionListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []IntelIndicatorFeedPermissionListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []IntelPermissionListItem                                  `json:"result,required"`
+	Result   []IntelIndicatorFeedPermissionListResponse                 `json:"result,required"`
 	// Whether the API call was successful
 	Success IntelIndicatorFeedPermissionListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    intelIndicatorFeedPermissionListResponseEnvelopeJSON    `json:"-"`
@@ -286,7 +304,7 @@ func (r IntelIndicatorFeedPermissionDeleteParams) MarshalJSON() (data []byte, er
 type IntelIndicatorFeedPermissionDeleteResponseEnvelope struct {
 	Errors   []IntelIndicatorFeedPermissionDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []IntelIndicatorFeedPermissionDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   IntelPermissionsUpdate                                       `json:"result,required"`
+	Result   IntelIndicatorFeedPermissionDeleteResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success IntelIndicatorFeedPermissionDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    intelIndicatorFeedPermissionDeleteResponseEnvelopeJSON    `json:"-"`

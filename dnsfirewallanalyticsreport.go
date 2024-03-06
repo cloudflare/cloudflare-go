@@ -41,7 +41,7 @@ func NewDNSFirewallAnalyticsReportService(opts ...option.RequestOption) (r *DNSF
 // See
 // [Analytics API properties](https://developers.cloudflare.com/dns/reference/analytics-api-properties/)
 // for detailed information about the available query parameters.
-func (r *DNSFirewallAnalyticsReportService) Get(ctx context.Context, accountIdentifier string, identifier string, query DNSFirewallAnalyticsReportGetParams, opts ...option.RequestOption) (res *DNSDNSAnalyticsAPIReport, err error) {
+func (r *DNSFirewallAnalyticsReportService) Get(ctx context.Context, accountIdentifier string, identifier string, query DNSFirewallAnalyticsReportGetParams, opts ...option.RequestOption) (res *DNSFirewallAnalyticsReportGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DNSFirewallAnalyticsReportGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dns_firewall/%s/dns_analytics/report", accountIdentifier, identifier)
@@ -51,6 +51,104 @@ func (r *DNSFirewallAnalyticsReportService) Get(ctx context.Context, accountIden
 	}
 	res = &env.Result
 	return
+}
+
+type DNSFirewallAnalyticsReportGetResponse struct {
+	// Array with one row per combination of dimension values.
+	Data []DNSFirewallAnalyticsReportGetResponseData `json:"data,required"`
+	// Number of seconds between current time and last processed event, in another
+	// words how many seconds of data could be missing.
+	DataLag float64 `json:"data_lag,required"`
+	// Maximum results for each metric (object mapping metric names to values).
+	// Currently always an empty object.
+	Max interface{} `json:"max,required"`
+	// Minimum results for each metric (object mapping metric names to values).
+	// Currently always an empty object.
+	Min   interface{}                                `json:"min,required"`
+	Query DNSFirewallAnalyticsReportGetResponseQuery `json:"query,required"`
+	// Total number of rows in the result.
+	Rows float64 `json:"rows,required"`
+	// Total results for metrics across all data (object mapping metric names to
+	// values).
+	Totals interface{}                               `json:"totals,required"`
+	JSON   dnsFirewallAnalyticsReportGetResponseJSON `json:"-"`
+}
+
+// dnsFirewallAnalyticsReportGetResponseJSON contains the JSON metadata for the
+// struct [DNSFirewallAnalyticsReportGetResponse]
+type dnsFirewallAnalyticsReportGetResponseJSON struct {
+	Data        apijson.Field
+	DataLag     apijson.Field
+	Max         apijson.Field
+	Min         apijson.Field
+	Query       apijson.Field
+	Rows        apijson.Field
+	Totals      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSFirewallAnalyticsReportGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DNSFirewallAnalyticsReportGetResponseData struct {
+	// Array of dimension values, representing the combination of dimension values
+	// corresponding to this row.
+	Dimensions []string `json:"dimensions,required"`
+	// Array with one item per requested metric. Each item is a single value.
+	Metrics []float64                                     `json:"metrics,required"`
+	JSON    dnsFirewallAnalyticsReportGetResponseDataJSON `json:"-"`
+}
+
+// dnsFirewallAnalyticsReportGetResponseDataJSON contains the JSON metadata for the
+// struct [DNSFirewallAnalyticsReportGetResponseData]
+type dnsFirewallAnalyticsReportGetResponseDataJSON struct {
+	Dimensions  apijson.Field
+	Metrics     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSFirewallAnalyticsReportGetResponseData) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type DNSFirewallAnalyticsReportGetResponseQuery struct {
+	// Array of dimension names.
+	Dimensions []string `json:"dimensions,required"`
+	// Limit number of returned metrics.
+	Limit int64 `json:"limit,required"`
+	// Array of metric names.
+	Metrics []string `json:"metrics,required"`
+	// Start date and time of requesting data period in ISO 8601 format.
+	Since time.Time `json:"since,required" format:"date-time"`
+	// End date and time of requesting data period in ISO 8601 format.
+	Until time.Time `json:"until,required" format:"date-time"`
+	// Segmentation filter in 'attribute operator value' format.
+	Filters string `json:"filters"`
+	// Array of dimensions to sort by, where each dimension may be prefixed by -
+	// (descending) or + (ascending).
+	Sort []string                                       `json:"sort"`
+	JSON dnsFirewallAnalyticsReportGetResponseQueryJSON `json:"-"`
+}
+
+// dnsFirewallAnalyticsReportGetResponseQueryJSON contains the JSON metadata for
+// the struct [DNSFirewallAnalyticsReportGetResponseQuery]
+type dnsFirewallAnalyticsReportGetResponseQueryJSON struct {
+	Dimensions  apijson.Field
+	Limit       apijson.Field
+	Metrics     apijson.Field
+	Since       apijson.Field
+	Until       apijson.Field
+	Filters     apijson.Field
+	Sort        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DNSFirewallAnalyticsReportGetResponseQuery) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type DNSFirewallAnalyticsReportGetParams struct {
@@ -83,7 +181,7 @@ func (r DNSFirewallAnalyticsReportGetParams) URLQuery() (v url.Values) {
 type DNSFirewallAnalyticsReportGetResponseEnvelope struct {
 	Errors   []DNSFirewallAnalyticsReportGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DNSFirewallAnalyticsReportGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DNSDNSAnalyticsAPIReport                                `json:"result,required"`
+	Result   DNSFirewallAnalyticsReportGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success DNSFirewallAnalyticsReportGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dnsFirewallAnalyticsReportGetResponseEnvelopeJSON    `json:"-"`

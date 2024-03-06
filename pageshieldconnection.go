@@ -34,7 +34,7 @@ func NewPageShieldConnectionService(opts ...option.RequestOption) (r *PageShield
 }
 
 // Lists all connections detected by Page Shield.
-func (r *PageShieldConnectionService) List(ctx context.Context, params PageShieldConnectionListParams, opts ...option.RequestOption) (res *[]PageShieldConnection, err error) {
+func (r *PageShieldConnectionService) List(ctx context.Context, params PageShieldConnectionListParams, opts ...option.RequestOption) (res *[]PageShieldConnectionListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageShieldConnectionListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/page_shield/connections", params.ZoneID)
@@ -47,30 +47,30 @@ func (r *PageShieldConnectionService) List(ctx context.Context, params PageShiel
 }
 
 // Fetches a connection detected by Page Shield by connection ID.
-func (r *PageShieldConnectionService) Get(ctx context.Context, connectionID string, query PageShieldConnectionGetParams, opts ...option.RequestOption) (res *PageShieldConnection, err error) {
+func (r *PageShieldConnectionService) Get(ctx context.Context, connectionID string, query PageShieldConnectionGetParams, opts ...option.RequestOption) (res *PageShieldConnectionGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/page_shield/connections/%s", query.ZoneID, connectionID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
-type PageShieldConnection struct {
-	ID                      interface{}              `json:"id"`
-	AddedAt                 interface{}              `json:"added_at"`
-	DomainReportedMalicious interface{}              `json:"domain_reported_malicious"`
-	FirstPageURL            interface{}              `json:"first_page_url"`
-	FirstSeenAt             interface{}              `json:"first_seen_at"`
-	Host                    interface{}              `json:"host"`
-	LastSeenAt              interface{}              `json:"last_seen_at"`
-	PageURLs                interface{}              `json:"page_urls"`
-	URL                     interface{}              `json:"url"`
-	URLContainsCdnCgiPath   interface{}              `json:"url_contains_cdn_cgi_path"`
-	JSON                    pageShieldConnectionJSON `json:"-"`
+type PageShieldConnectionListResponse struct {
+	ID                      interface{}                          `json:"id"`
+	AddedAt                 interface{}                          `json:"added_at"`
+	DomainReportedMalicious interface{}                          `json:"domain_reported_malicious"`
+	FirstPageURL            interface{}                          `json:"first_page_url"`
+	FirstSeenAt             interface{}                          `json:"first_seen_at"`
+	Host                    interface{}                          `json:"host"`
+	LastSeenAt              interface{}                          `json:"last_seen_at"`
+	PageURLs                interface{}                          `json:"page_urls"`
+	URL                     interface{}                          `json:"url"`
+	URLContainsCdnCgiPath   interface{}                          `json:"url_contains_cdn_cgi_path"`
+	JSON                    pageShieldConnectionListResponseJSON `json:"-"`
 }
 
-// pageShieldConnectionJSON contains the JSON metadata for the struct
-// [PageShieldConnection]
-type pageShieldConnectionJSON struct {
+// pageShieldConnectionListResponseJSON contains the JSON metadata for the struct
+// [PageShieldConnectionListResponse]
+type pageShieldConnectionListResponseJSON struct {
 	ID                      apijson.Field
 	AddedAt                 apijson.Field
 	DomainReportedMalicious apijson.Field
@@ -85,7 +85,42 @@ type pageShieldConnectionJSON struct {
 	ExtraFields             map[string]apijson.Field
 }
 
-func (r *PageShieldConnection) UnmarshalJSON(data []byte) (err error) {
+func (r *PageShieldConnectionListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type PageShieldConnectionGetResponse struct {
+	ID                      interface{}                         `json:"id"`
+	AddedAt                 interface{}                         `json:"added_at"`
+	DomainReportedMalicious interface{}                         `json:"domain_reported_malicious"`
+	FirstPageURL            interface{}                         `json:"first_page_url"`
+	FirstSeenAt             interface{}                         `json:"first_seen_at"`
+	Host                    interface{}                         `json:"host"`
+	LastSeenAt              interface{}                         `json:"last_seen_at"`
+	PageURLs                interface{}                         `json:"page_urls"`
+	URL                     interface{}                         `json:"url"`
+	URLContainsCdnCgiPath   interface{}                         `json:"url_contains_cdn_cgi_path"`
+	JSON                    pageShieldConnectionGetResponseJSON `json:"-"`
+}
+
+// pageShieldConnectionGetResponseJSON contains the JSON metadata for the struct
+// [PageShieldConnectionGetResponse]
+type pageShieldConnectionGetResponseJSON struct {
+	ID                      apijson.Field
+	AddedAt                 apijson.Field
+	DomainReportedMalicious apijson.Field
+	FirstPageURL            apijson.Field
+	FirstSeenAt             apijson.Field
+	Host                    apijson.Field
+	LastSeenAt              apijson.Field
+	PageURLs                apijson.Field
+	URL                     apijson.Field
+	URLContainsCdnCgiPath   apijson.Field
+	raw                     string
+	ExtraFields             map[string]apijson.Field
+}
+
+func (r *PageShieldConnectionGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -176,7 +211,7 @@ const (
 type PageShieldConnectionListResponseEnvelope struct {
 	Errors   []PageShieldConnectionListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []PageShieldConnectionListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []PageShieldConnection                             `json:"result,required,nullable"`
+	Result   []PageShieldConnectionListResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    PageShieldConnectionListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo PageShieldConnectionListResponseEnvelopeResultInfo `json:"result_info"`

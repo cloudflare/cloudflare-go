@@ -36,7 +36,7 @@ func NewIntelDomainService(opts ...option.RequestOption) (r *IntelDomainService)
 }
 
 // Get Domain Details
-func (r *IntelDomainService) Get(ctx context.Context, params IntelDomainGetParams, opts ...option.RequestOption) (res *IntelDomain, err error) {
+func (r *IntelDomainService) Get(ctx context.Context, params IntelDomainGetParams, opts ...option.RequestOption) (res *IntelDomainGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env IntelDomainGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/domain", params.AccountID)
@@ -48,34 +48,35 @@ func (r *IntelDomainService) Get(ctx context.Context, params IntelDomainGetParam
 	return
 }
 
-type IntelDomain struct {
+type IntelDomainGetResponse struct {
 	// Additional information related to the host name.
-	AdditionalInformation IntelDomainAdditionalInformation `json:"additional_information"`
+	AdditionalInformation IntelDomainGetResponseAdditionalInformation `json:"additional_information"`
 	// Application that the hostname belongs to.
-	Application IntelDomainApplication `json:"application"`
+	Application IntelDomainGetResponseApplication `json:"application"`
 	// Current content categories.
-	ContentCategories          interface{}                           `json:"content_categories"`
-	Domain                     string                                `json:"domain"`
-	InheritedContentCategories []IntelDomainInheritedContentCategory `json:"inherited_content_categories"`
+	ContentCategories          interface{}                                      `json:"content_categories"`
+	Domain                     string                                           `json:"domain"`
+	InheritedContentCategories []IntelDomainGetResponseInheritedContentCategory `json:"inherited_content_categories"`
 	// Domain from which `inherited_content_categories` and `inherited_risk_types` are
 	// inherited, if applicable.
-	InheritedFrom      string                         `json:"inherited_from"`
-	InheritedRiskTypes []IntelDomainInheritedRiskType `json:"inherited_risk_types"`
+	InheritedFrom      string                                    `json:"inherited_from"`
+	InheritedRiskTypes []IntelDomainGetResponseInheritedRiskType `json:"inherited_risk_types"`
 	// Global Cloudflare 100k ranking for the last 30 days, if available for the
 	// hostname. The top ranked domain is 1, the lowest ranked domain is 100,000.
 	PopularityRank int64 `json:"popularity_rank"`
 	// Specifies a list of references to one or more IP addresses or domain names that
 	// the domain name currently resolves to.
-	ResolvesToRefs []IntelDomainResolvesToRef `json:"resolves_to_refs"`
+	ResolvesToRefs []IntelDomainGetResponseResolvesToRef `json:"resolves_to_refs"`
 	// Hostname risk score, which is a value between 0 (lowest risk) to 1 (highest
 	// risk).
-	RiskScore float64         `json:"risk_score"`
-	RiskTypes interface{}     `json:"risk_types"`
-	JSON      intelDomainJSON `json:"-"`
+	RiskScore float64                    `json:"risk_score"`
+	RiskTypes interface{}                `json:"risk_types"`
+	JSON      intelDomainGetResponseJSON `json:"-"`
 }
 
-// intelDomainJSON contains the JSON metadata for the struct [IntelDomain]
-type intelDomainJSON struct {
+// intelDomainGetResponseJSON contains the JSON metadata for the struct
+// [IntelDomainGetResponse]
+type intelDomainGetResponseJSON struct {
 	AdditionalInformation      apijson.Field
 	Application                apijson.Field
 	ContentCategories          apijson.Field
@@ -91,59 +92,59 @@ type intelDomainJSON struct {
 	ExtraFields                map[string]apijson.Field
 }
 
-func (r *IntelDomain) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelDomainGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Additional information related to the host name.
-type IntelDomainAdditionalInformation struct {
+type IntelDomainGetResponseAdditionalInformation struct {
 	// Suspected DGA malware family.
-	SuspectedMalwareFamily string                               `json:"suspected_malware_family"`
-	JSON                   intelDomainAdditionalInformationJSON `json:"-"`
+	SuspectedMalwareFamily string                                          `json:"suspected_malware_family"`
+	JSON                   intelDomainGetResponseAdditionalInformationJSON `json:"-"`
 }
 
-// intelDomainAdditionalInformationJSON contains the JSON metadata for the struct
-// [IntelDomainAdditionalInformation]
-type intelDomainAdditionalInformationJSON struct {
+// intelDomainGetResponseAdditionalInformationJSON contains the JSON metadata for
+// the struct [IntelDomainGetResponseAdditionalInformation]
+type intelDomainGetResponseAdditionalInformationJSON struct {
 	SuspectedMalwareFamily apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field
 }
 
-func (r *IntelDomainAdditionalInformation) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelDomainGetResponseAdditionalInformation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Application that the hostname belongs to.
-type IntelDomainApplication struct {
-	ID   int64                      `json:"id"`
-	Name string                     `json:"name"`
-	JSON intelDomainApplicationJSON `json:"-"`
+type IntelDomainGetResponseApplication struct {
+	ID   int64                                 `json:"id"`
+	Name string                                `json:"name"`
+	JSON intelDomainGetResponseApplicationJSON `json:"-"`
 }
 
-// intelDomainApplicationJSON contains the JSON metadata for the struct
-// [IntelDomainApplication]
-type intelDomainApplicationJSON struct {
+// intelDomainGetResponseApplicationJSON contains the JSON metadata for the struct
+// [IntelDomainGetResponseApplication]
+type intelDomainGetResponseApplicationJSON struct {
 	ID          apijson.Field
 	Name        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelDomainApplication) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelDomainGetResponseApplication) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type IntelDomainInheritedContentCategory struct {
-	ID              int64                                   `json:"id"`
-	Name            string                                  `json:"name"`
-	SuperCategoryID int64                                   `json:"super_category_id"`
-	JSON            intelDomainInheritedContentCategoryJSON `json:"-"`
+type IntelDomainGetResponseInheritedContentCategory struct {
+	ID              int64                                              `json:"id"`
+	Name            string                                             `json:"name"`
+	SuperCategoryID int64                                              `json:"super_category_id"`
+	JSON            intelDomainGetResponseInheritedContentCategoryJSON `json:"-"`
 }
 
-// intelDomainInheritedContentCategoryJSON contains the JSON metadata for the
-// struct [IntelDomainInheritedContentCategory]
-type intelDomainInheritedContentCategoryJSON struct {
+// intelDomainGetResponseInheritedContentCategoryJSON contains the JSON metadata
+// for the struct [IntelDomainGetResponseInheritedContentCategory]
+type intelDomainGetResponseInheritedContentCategoryJSON struct {
 	ID              apijson.Field
 	Name            apijson.Field
 	SuperCategoryID apijson.Field
@@ -151,20 +152,20 @@ type intelDomainInheritedContentCategoryJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *IntelDomainInheritedContentCategory) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelDomainGetResponseInheritedContentCategory) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type IntelDomainInheritedRiskType struct {
-	ID              int64                            `json:"id"`
-	Name            string                           `json:"name"`
-	SuperCategoryID int64                            `json:"super_category_id"`
-	JSON            intelDomainInheritedRiskTypeJSON `json:"-"`
+type IntelDomainGetResponseInheritedRiskType struct {
+	ID              int64                                       `json:"id"`
+	Name            string                                      `json:"name"`
+	SuperCategoryID int64                                       `json:"super_category_id"`
+	JSON            intelDomainGetResponseInheritedRiskTypeJSON `json:"-"`
 }
 
-// intelDomainInheritedRiskTypeJSON contains the JSON metadata for the struct
-// [IntelDomainInheritedRiskType]
-type intelDomainInheritedRiskTypeJSON struct {
+// intelDomainGetResponseInheritedRiskTypeJSON contains the JSON metadata for the
+// struct [IntelDomainGetResponseInheritedRiskType]
+type intelDomainGetResponseInheritedRiskTypeJSON struct {
 	ID              apijson.Field
 	Name            apijson.Field
 	SuperCategoryID apijson.Field
@@ -172,29 +173,29 @@ type intelDomainInheritedRiskTypeJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *IntelDomainInheritedRiskType) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelDomainGetResponseInheritedRiskType) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type IntelDomainResolvesToRef struct {
+type IntelDomainGetResponseResolvesToRef struct {
 	// STIX 2.1 identifier:
 	// https://docs.oasis-open.org/cti/stix/v2.1/cs02/stix-v2.1-cs02.html#_64yvzeku5a5c
 	ID string `json:"id"`
 	// IP address or domain name.
-	Value string                       `json:"value"`
-	JSON  intelDomainResolvesToRefJSON `json:"-"`
+	Value string                                  `json:"value"`
+	JSON  intelDomainGetResponseResolvesToRefJSON `json:"-"`
 }
 
-// intelDomainResolvesToRefJSON contains the JSON metadata for the struct
-// [IntelDomainResolvesToRef]
-type intelDomainResolvesToRefJSON struct {
+// intelDomainGetResponseResolvesToRefJSON contains the JSON metadata for the
+// struct [IntelDomainGetResponseResolvesToRef]
+type intelDomainGetResponseResolvesToRefJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IntelDomainResolvesToRef) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelDomainGetResponseResolvesToRef) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -215,7 +216,7 @@ func (r IntelDomainGetParams) URLQuery() (v url.Values) {
 type IntelDomainGetResponseEnvelope struct {
 	Errors   []IntelDomainGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []IntelDomainGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   IntelDomain                              `json:"result,required"`
+	Result   IntelDomainGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success IntelDomainGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    intelDomainGetResponseEnvelopeJSON    `json:"-"`

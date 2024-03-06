@@ -54,7 +54,7 @@ func (r *SpeedService) Delete(ctx context.Context, url string, params SpeedDelet
 }
 
 // Retrieves the test schedule for a page in a specific region.
-func (r *SpeedService) ScheduleGet(ctx context.Context, url string, params SpeedScheduleGetParams, opts ...option.RequestOption) (res *ObservatorySchedule, err error) {
+func (r *SpeedService) ScheduleGet(ctx context.Context, url string, params SpeedScheduleGetParams, opts ...option.RequestOption) (res *SpeedScheduleGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SpeedScheduleGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/speed_api/schedule/%s", params.ZoneID, url)
@@ -67,7 +67,7 @@ func (r *SpeedService) ScheduleGet(ctx context.Context, url string, params Speed
 }
 
 // Lists the core web vital metrics trend over time for a specific page.
-func (r *SpeedService) TrendsList(ctx context.Context, url string, params SpeedTrendsListParams, opts ...option.RequestOption) (res *ObservatoryTrend, err error) {
+func (r *SpeedService) TrendsList(ctx context.Context, url string, params SpeedTrendsListParams, opts ...option.RequestOption) (res *SpeedTrendsListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SpeedTrendsListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/trend", params.ZoneID, url)
@@ -77,105 +77,6 @@ func (r *SpeedService) TrendsList(ctx context.Context, url string, params SpeedT
 	}
 	res = &env.Result
 	return
-}
-
-// The test schedule.
-type ObservatorySchedule struct {
-	// The frequency of the test.
-	Frequency ObservatoryScheduleFrequency `json:"frequency"`
-	// A test region.
-	Region ObservatoryScheduleRegion `json:"region"`
-	// A URL.
-	URL  string                  `json:"url"`
-	JSON observatoryScheduleJSON `json:"-"`
-}
-
-// observatoryScheduleJSON contains the JSON metadata for the struct
-// [ObservatorySchedule]
-type observatoryScheduleJSON struct {
-	Frequency   apijson.Field
-	Region      apijson.Field
-	URL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ObservatorySchedule) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// The frequency of the test.
-type ObservatoryScheduleFrequency string
-
-const (
-	ObservatoryScheduleFrequencyDaily  ObservatoryScheduleFrequency = "DAILY"
-	ObservatoryScheduleFrequencyWeekly ObservatoryScheduleFrequency = "WEEKLY"
-)
-
-// A test region.
-type ObservatoryScheduleRegion string
-
-const (
-	ObservatoryScheduleRegionAsiaEast1           ObservatoryScheduleRegion = "asia-east1"
-	ObservatoryScheduleRegionAsiaNortheast1      ObservatoryScheduleRegion = "asia-northeast1"
-	ObservatoryScheduleRegionAsiaNortheast2      ObservatoryScheduleRegion = "asia-northeast2"
-	ObservatoryScheduleRegionAsiaSouth1          ObservatoryScheduleRegion = "asia-south1"
-	ObservatoryScheduleRegionAsiaSoutheast1      ObservatoryScheduleRegion = "asia-southeast1"
-	ObservatoryScheduleRegionAustraliaSoutheast1 ObservatoryScheduleRegion = "australia-southeast1"
-	ObservatoryScheduleRegionEuropeNorth1        ObservatoryScheduleRegion = "europe-north1"
-	ObservatoryScheduleRegionEuropeSouthwest1    ObservatoryScheduleRegion = "europe-southwest1"
-	ObservatoryScheduleRegionEuropeWest1         ObservatoryScheduleRegion = "europe-west1"
-	ObservatoryScheduleRegionEuropeWest2         ObservatoryScheduleRegion = "europe-west2"
-	ObservatoryScheduleRegionEuropeWest3         ObservatoryScheduleRegion = "europe-west3"
-	ObservatoryScheduleRegionEuropeWest4         ObservatoryScheduleRegion = "europe-west4"
-	ObservatoryScheduleRegionEuropeWest8         ObservatoryScheduleRegion = "europe-west8"
-	ObservatoryScheduleRegionEuropeWest9         ObservatoryScheduleRegion = "europe-west9"
-	ObservatoryScheduleRegionMeWest1             ObservatoryScheduleRegion = "me-west1"
-	ObservatoryScheduleRegionSouthamericaEast1   ObservatoryScheduleRegion = "southamerica-east1"
-	ObservatoryScheduleRegionUsCentral1          ObservatoryScheduleRegion = "us-central1"
-	ObservatoryScheduleRegionUsEast1             ObservatoryScheduleRegion = "us-east1"
-	ObservatoryScheduleRegionUsEast4             ObservatoryScheduleRegion = "us-east4"
-	ObservatoryScheduleRegionUsSouth1            ObservatoryScheduleRegion = "us-south1"
-	ObservatoryScheduleRegionUsWest1             ObservatoryScheduleRegion = "us-west1"
-)
-
-type ObservatoryTrend struct {
-	// Cumulative Layout Shift trend.
-	Cls []float64 `json:"cls"`
-	// First Contentful Paint trend.
-	Fcp []float64 `json:"fcp"`
-	// Largest Contentful Paint trend.
-	Lcp []float64 `json:"lcp"`
-	// The Lighthouse score trend.
-	PerformanceScore []float64 `json:"performanceScore"`
-	// Speed Index trend.
-	Si []float64 `json:"si"`
-	// Total Blocking Time trend.
-	Tbt []float64 `json:"tbt"`
-	// Time To First Byte trend.
-	Ttfb []float64 `json:"ttfb"`
-	// Time To Interactive trend.
-	Tti  []float64            `json:"tti"`
-	JSON observatoryTrendJSON `json:"-"`
-}
-
-// observatoryTrendJSON contains the JSON metadata for the struct
-// [ObservatoryTrend]
-type observatoryTrendJSON struct {
-	Cls              apijson.Field
-	Fcp              apijson.Field
-	Lcp              apijson.Field
-	PerformanceScore apijson.Field
-	Si               apijson.Field
-	Tbt              apijson.Field
-	Ttfb             apijson.Field
-	Tti              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *ObservatoryTrend) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
 }
 
 type SpeedDeleteResponse struct {
@@ -193,6 +94,105 @@ type speedDeleteResponseJSON struct {
 }
 
 func (r *SpeedDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The test schedule.
+type SpeedScheduleGetResponse struct {
+	// The frequency of the test.
+	Frequency SpeedScheduleGetResponseFrequency `json:"frequency"`
+	// A test region.
+	Region SpeedScheduleGetResponseRegion `json:"region"`
+	// A URL.
+	URL  string                       `json:"url"`
+	JSON speedScheduleGetResponseJSON `json:"-"`
+}
+
+// speedScheduleGetResponseJSON contains the JSON metadata for the struct
+// [SpeedScheduleGetResponse]
+type speedScheduleGetResponseJSON struct {
+	Frequency   apijson.Field
+	Region      apijson.Field
+	URL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SpeedScheduleGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The frequency of the test.
+type SpeedScheduleGetResponseFrequency string
+
+const (
+	SpeedScheduleGetResponseFrequencyDaily  SpeedScheduleGetResponseFrequency = "DAILY"
+	SpeedScheduleGetResponseFrequencyWeekly SpeedScheduleGetResponseFrequency = "WEEKLY"
+)
+
+// A test region.
+type SpeedScheduleGetResponseRegion string
+
+const (
+	SpeedScheduleGetResponseRegionAsiaEast1           SpeedScheduleGetResponseRegion = "asia-east1"
+	SpeedScheduleGetResponseRegionAsiaNortheast1      SpeedScheduleGetResponseRegion = "asia-northeast1"
+	SpeedScheduleGetResponseRegionAsiaNortheast2      SpeedScheduleGetResponseRegion = "asia-northeast2"
+	SpeedScheduleGetResponseRegionAsiaSouth1          SpeedScheduleGetResponseRegion = "asia-south1"
+	SpeedScheduleGetResponseRegionAsiaSoutheast1      SpeedScheduleGetResponseRegion = "asia-southeast1"
+	SpeedScheduleGetResponseRegionAustraliaSoutheast1 SpeedScheduleGetResponseRegion = "australia-southeast1"
+	SpeedScheduleGetResponseRegionEuropeNorth1        SpeedScheduleGetResponseRegion = "europe-north1"
+	SpeedScheduleGetResponseRegionEuropeSouthwest1    SpeedScheduleGetResponseRegion = "europe-southwest1"
+	SpeedScheduleGetResponseRegionEuropeWest1         SpeedScheduleGetResponseRegion = "europe-west1"
+	SpeedScheduleGetResponseRegionEuropeWest2         SpeedScheduleGetResponseRegion = "europe-west2"
+	SpeedScheduleGetResponseRegionEuropeWest3         SpeedScheduleGetResponseRegion = "europe-west3"
+	SpeedScheduleGetResponseRegionEuropeWest4         SpeedScheduleGetResponseRegion = "europe-west4"
+	SpeedScheduleGetResponseRegionEuropeWest8         SpeedScheduleGetResponseRegion = "europe-west8"
+	SpeedScheduleGetResponseRegionEuropeWest9         SpeedScheduleGetResponseRegion = "europe-west9"
+	SpeedScheduleGetResponseRegionMeWest1             SpeedScheduleGetResponseRegion = "me-west1"
+	SpeedScheduleGetResponseRegionSouthamericaEast1   SpeedScheduleGetResponseRegion = "southamerica-east1"
+	SpeedScheduleGetResponseRegionUsCentral1          SpeedScheduleGetResponseRegion = "us-central1"
+	SpeedScheduleGetResponseRegionUsEast1             SpeedScheduleGetResponseRegion = "us-east1"
+	SpeedScheduleGetResponseRegionUsEast4             SpeedScheduleGetResponseRegion = "us-east4"
+	SpeedScheduleGetResponseRegionUsSouth1            SpeedScheduleGetResponseRegion = "us-south1"
+	SpeedScheduleGetResponseRegionUsWest1             SpeedScheduleGetResponseRegion = "us-west1"
+)
+
+type SpeedTrendsListResponse struct {
+	// Cumulative Layout Shift trend.
+	Cls []float64 `json:"cls"`
+	// First Contentful Paint trend.
+	Fcp []float64 `json:"fcp"`
+	// Largest Contentful Paint trend.
+	Lcp []float64 `json:"lcp"`
+	// The Lighthouse score trend.
+	PerformanceScore []float64 `json:"performanceScore"`
+	// Speed Index trend.
+	Si []float64 `json:"si"`
+	// Total Blocking Time trend.
+	Tbt []float64 `json:"tbt"`
+	// Time To First Byte trend.
+	Ttfb []float64 `json:"ttfb"`
+	// Time To Interactive trend.
+	Tti  []float64                   `json:"tti"`
+	JSON speedTrendsListResponseJSON `json:"-"`
+}
+
+// speedTrendsListResponseJSON contains the JSON metadata for the struct
+// [SpeedTrendsListResponse]
+type speedTrendsListResponseJSON struct {
+	Cls              apijson.Field
+	Fcp              apijson.Field
+	Lcp              apijson.Field
+	PerformanceScore apijson.Field
+	Si               apijson.Field
+	Tbt              apijson.Field
+	Ttfb             apijson.Field
+	Tti              apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
+}
+
+func (r *SpeedTrendsListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -299,7 +299,7 @@ const (
 
 type SpeedScheduleGetResponseEnvelope struct {
 	// The test schedule.
-	Result ObservatorySchedule                  `json:"result"`
+	Result SpeedScheduleGetResponse             `json:"result"`
 	JSON   speedScheduleGetResponseEnvelopeJSON `json:"-"`
 }
 
@@ -372,7 +372,7 @@ const (
 )
 
 type SpeedTrendsListResponseEnvelope struct {
-	Result ObservatoryTrend                    `json:"result"`
+	Result SpeedTrendsListResponse             `json:"result"`
 	JSON   speedTrendsListResponseEnvelopeJSON `json:"-"`
 }
 

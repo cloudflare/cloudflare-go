@@ -37,7 +37,7 @@ func NewUserOrganizationService(opts ...option.RequestOption) (r *UserOrganizati
 }
 
 // Lists organizations the user is associated with.
-func (r *UserOrganizationService) List(ctx context.Context, query UserOrganizationListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[IamOrganization], err error) {
+func (r *UserOrganizationService) List(ctx context.Context, query UserOrganizationListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[UserOrganizationListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -55,7 +55,7 @@ func (r *UserOrganizationService) List(ctx context.Context, query UserOrganizati
 }
 
 // Lists organizations the user is associated with.
-func (r *UserOrganizationService) ListAutoPaging(ctx context.Context, query UserOrganizationListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[IamOrganization] {
+func (r *UserOrganizationService) ListAutoPaging(ctx context.Context, query UserOrganizationListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[UserOrganizationListResponse] {
 	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, query, opts...))
 }
 
@@ -80,7 +80,7 @@ func (r *UserOrganizationService) Get(ctx context.Context, organizationID string
 	return
 }
 
-type IamOrganization struct {
+type UserOrganizationListResponse struct {
 	// Identifier
 	ID string `json:"id"`
 	// Organization name.
@@ -90,12 +90,13 @@ type IamOrganization struct {
 	// List of roles that a user has within an organization.
 	Roles []string `json:"roles"`
 	// Whether the user is a member of the organization or has an inivitation pending.
-	Status IamOrganizationStatus `json:"status"`
-	JSON   iamOrganizationJSON   `json:"-"`
+	Status UserOrganizationListResponseStatus `json:"status"`
+	JSON   userOrganizationListResponseJSON   `json:"-"`
 }
 
-// iamOrganizationJSON contains the JSON metadata for the struct [IamOrganization]
-type iamOrganizationJSON struct {
+// userOrganizationListResponseJSON contains the JSON metadata for the struct
+// [UserOrganizationListResponse]
+type userOrganizationListResponseJSON struct {
 	ID          apijson.Field
 	Name        apijson.Field
 	Permissions apijson.Field
@@ -105,16 +106,16 @@ type iamOrganizationJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *IamOrganization) UnmarshalJSON(data []byte) (err error) {
+func (r *UserOrganizationListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Whether the user is a member of the organization or has an inivitation pending.
-type IamOrganizationStatus string
+type UserOrganizationListResponseStatus string
 
 const (
-	IamOrganizationStatusMember  IamOrganizationStatus = "member"
-	IamOrganizationStatusInvited IamOrganizationStatus = "invited"
+	UserOrganizationListResponseStatusMember  UserOrganizationListResponseStatus = "member"
+	UserOrganizationListResponseStatusInvited UserOrganizationListResponseStatus = "invited"
 )
 
 type UserOrganizationDeleteResponse struct {

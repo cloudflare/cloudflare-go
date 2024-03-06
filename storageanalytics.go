@@ -35,7 +35,7 @@ func NewStorageAnalyticsService(opts ...option.RequestOption) (r *StorageAnalyti
 }
 
 // Retrieves Workers KV request metrics for the given account.
-func (r *StorageAnalyticsService) List(ctx context.Context, params StorageAnalyticsListParams, opts ...option.RequestOption) (res *WorkersKVSchemasResult, err error) {
+func (r *StorageAnalyticsService) List(ctx context.Context, params StorageAnalyticsListParams, opts ...option.RequestOption) (res *StorageAnalyticsListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StorageAnalyticsListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/storage/analytics", params.AccountID)
@@ -48,7 +48,7 @@ func (r *StorageAnalyticsService) List(ctx context.Context, params StorageAnalyt
 }
 
 // Retrieves Workers KV stored data metrics for the given account.
-func (r *StorageAnalyticsService) Stored(ctx context.Context, params StorageAnalyticsStoredParams, opts ...option.RequestOption) (res *WorkersKVComponentsSchemasResult, err error) {
+func (r *StorageAnalyticsService) Stored(ctx context.Context, params StorageAnalyticsStoredParams, opts ...option.RequestOption) (res *StorageAnalyticsStoredResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StorageAnalyticsStoredResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/storage/analytics/stored", params.AccountID)
@@ -61,8 +61,8 @@ func (r *StorageAnalyticsService) Stored(ctx context.Context, params StorageAnal
 }
 
 // Metrics on Workers KV requests.
-type WorkersKVComponentsSchemasResult struct {
-	Data []WorkersKVComponentsSchemasResultData `json:"data,required,nullable"`
+type StorageAnalyticsListResponse struct {
+	Data []StorageAnalyticsListResponseData `json:"data,required,nullable"`
 	// Number of seconds between current time and last processed event, i.e. how many
 	// seconds of data could be missing.
 	DataLag float64 `json:"data_lag,required"`
@@ -71,17 +71,17 @@ type WorkersKVComponentsSchemasResult struct {
 	// Minimum results for each metric.
 	Min interface{} `json:"min,required"`
 	// For specifying result metrics.
-	Query WorkersKVComponentsSchemasResultQuery `json:"query,required"`
+	Query StorageAnalyticsListResponseQuery `json:"query,required"`
 	// Total number of rows in the result.
 	Rows float64 `json:"rows,required"`
 	// Total results for metrics across all data.
-	Totals interface{}                          `json:"totals,required"`
-	JSON   workersKVComponentsSchemasResultJSON `json:"-"`
+	Totals interface{}                      `json:"totals,required"`
+	JSON   storageAnalyticsListResponseJSON `json:"-"`
 }
 
-// workersKVComponentsSchemasResultJSON contains the JSON metadata for the struct
-// [WorkersKVComponentsSchemasResult]
-type workersKVComponentsSchemasResultJSON struct {
+// storageAnalyticsListResponseJSON contains the JSON metadata for the struct
+// [StorageAnalyticsListResponse]
+type storageAnalyticsListResponseJSON struct {
 	Data        apijson.Field
 	DataLag     apijson.Field
 	Max         apijson.Field
@@ -93,30 +93,30 @@ type workersKVComponentsSchemasResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkersKVComponentsSchemasResult) UnmarshalJSON(data []byte) (err error) {
+func (r *StorageAnalyticsListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkersKVComponentsSchemasResultData struct {
+type StorageAnalyticsListResponseData struct {
 	// List of metrics returned by the query.
-	Metrics []interface{}                            `json:"metrics,required"`
-	JSON    workersKVComponentsSchemasResultDataJSON `json:"-"`
+	Metrics []interface{}                        `json:"metrics,required"`
+	JSON    storageAnalyticsListResponseDataJSON `json:"-"`
 }
 
-// workersKVComponentsSchemasResultDataJSON contains the JSON metadata for the
-// struct [WorkersKVComponentsSchemasResultData]
-type workersKVComponentsSchemasResultDataJSON struct {
+// storageAnalyticsListResponseDataJSON contains the JSON metadata for the struct
+// [StorageAnalyticsListResponseData]
+type storageAnalyticsListResponseDataJSON struct {
 	Metrics     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkersKVComponentsSchemasResultData) UnmarshalJSON(data []byte) (err error) {
+func (r *StorageAnalyticsListResponseData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // For specifying result metrics.
-type WorkersKVComponentsSchemasResultQuery struct {
+type StorageAnalyticsListResponseQuery struct {
 	// Can be used to break down the data by given attributes.
 	Dimensions []string `json:"dimensions"`
 	// Used to filter rows by one or more dimensions. Filters can be combined using OR
@@ -145,13 +145,13 @@ type WorkersKVComponentsSchemasResultQuery struct {
 	// by - (descending) or + (ascending).
 	Sort []interface{} `json:"sort"`
 	// End of time interval to query, defaults to current time.
-	Until time.Time                                 `json:"until" format:"date-time"`
-	JSON  workersKVComponentsSchemasResultQueryJSON `json:"-"`
+	Until time.Time                             `json:"until" format:"date-time"`
+	JSON  storageAnalyticsListResponseQueryJSON `json:"-"`
 }
 
-// workersKVComponentsSchemasResultQueryJSON contains the JSON metadata for the
-// struct [WorkersKVComponentsSchemasResultQuery]
-type workersKVComponentsSchemasResultQueryJSON struct {
+// storageAnalyticsListResponseQueryJSON contains the JSON metadata for the struct
+// [StorageAnalyticsListResponseQuery]
+type storageAnalyticsListResponseQueryJSON struct {
 	Dimensions  apijson.Field
 	Filters     apijson.Field
 	Limit       apijson.Field
@@ -163,13 +163,13 @@ type workersKVComponentsSchemasResultQueryJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkersKVComponentsSchemasResultQuery) UnmarshalJSON(data []byte) (err error) {
+func (r *StorageAnalyticsListResponseQuery) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Metrics on Workers KV requests.
-type WorkersKVSchemasResult struct {
-	Data []WorkersKVSchemasResultData `json:"data,required,nullable"`
+type StorageAnalyticsStoredResponse struct {
+	Data []StorageAnalyticsStoredResponseData `json:"data,required,nullable"`
 	// Number of seconds between current time and last processed event, i.e. how many
 	// seconds of data could be missing.
 	DataLag float64 `json:"data_lag,required"`
@@ -178,17 +178,17 @@ type WorkersKVSchemasResult struct {
 	// Minimum results for each metric.
 	Min interface{} `json:"min,required"`
 	// For specifying result metrics.
-	Query WorkersKVSchemasResultQuery `json:"query,required"`
+	Query StorageAnalyticsStoredResponseQuery `json:"query,required"`
 	// Total number of rows in the result.
 	Rows float64 `json:"rows,required"`
 	// Total results for metrics across all data.
-	Totals interface{}                `json:"totals,required"`
-	JSON   workersKVSchemasResultJSON `json:"-"`
+	Totals interface{}                        `json:"totals,required"`
+	JSON   storageAnalyticsStoredResponseJSON `json:"-"`
 }
 
-// workersKVSchemasResultJSON contains the JSON metadata for the struct
-// [WorkersKVSchemasResult]
-type workersKVSchemasResultJSON struct {
+// storageAnalyticsStoredResponseJSON contains the JSON metadata for the struct
+// [StorageAnalyticsStoredResponse]
+type storageAnalyticsStoredResponseJSON struct {
 	Data        apijson.Field
 	DataLag     apijson.Field
 	Max         apijson.Field
@@ -200,30 +200,30 @@ type workersKVSchemasResultJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkersKVSchemasResult) UnmarshalJSON(data []byte) (err error) {
+func (r *StorageAnalyticsStoredResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type WorkersKVSchemasResultData struct {
+type StorageAnalyticsStoredResponseData struct {
 	// List of metrics returned by the query.
-	Metrics []interface{}                  `json:"metrics,required"`
-	JSON    workersKVSchemasResultDataJSON `json:"-"`
+	Metrics []interface{}                          `json:"metrics,required"`
+	JSON    storageAnalyticsStoredResponseDataJSON `json:"-"`
 }
 
-// workersKVSchemasResultDataJSON contains the JSON metadata for the struct
-// [WorkersKVSchemasResultData]
-type workersKVSchemasResultDataJSON struct {
+// storageAnalyticsStoredResponseDataJSON contains the JSON metadata for the struct
+// [StorageAnalyticsStoredResponseData]
+type storageAnalyticsStoredResponseDataJSON struct {
 	Metrics     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkersKVSchemasResultData) UnmarshalJSON(data []byte) (err error) {
+func (r *StorageAnalyticsStoredResponseData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // For specifying result metrics.
-type WorkersKVSchemasResultQuery struct {
+type StorageAnalyticsStoredResponseQuery struct {
 	// Can be used to break down the data by given attributes.
 	Dimensions []string `json:"dimensions"`
 	// Used to filter rows by one or more dimensions. Filters can be combined using OR
@@ -252,13 +252,13 @@ type WorkersKVSchemasResultQuery struct {
 	// by - (descending) or + (ascending).
 	Sort []interface{} `json:"sort"`
 	// End of time interval to query, defaults to current time.
-	Until time.Time                       `json:"until" format:"date-time"`
-	JSON  workersKVSchemasResultQueryJSON `json:"-"`
+	Until time.Time                               `json:"until" format:"date-time"`
+	JSON  storageAnalyticsStoredResponseQueryJSON `json:"-"`
 }
 
-// workersKVSchemasResultQueryJSON contains the JSON metadata for the struct
-// [WorkersKVSchemasResultQuery]
-type workersKVSchemasResultQueryJSON struct {
+// storageAnalyticsStoredResponseQueryJSON contains the JSON metadata for the
+// struct [StorageAnalyticsStoredResponseQuery]
+type storageAnalyticsStoredResponseQueryJSON struct {
 	Dimensions  apijson.Field
 	Filters     apijson.Field
 	Limit       apijson.Field
@@ -270,7 +270,7 @@ type workersKVSchemasResultQueryJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkersKVSchemasResultQuery) UnmarshalJSON(data []byte) (err error) {
+func (r *StorageAnalyticsStoredResponseQuery) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -354,7 +354,7 @@ type StorageAnalyticsListResponseEnvelope struct {
 	Errors   []StorageAnalyticsListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []StorageAnalyticsListResponseEnvelopeMessages `json:"messages,required"`
 	// Metrics on Workers KV requests.
-	Result WorkersKVSchemasResult `json:"result,required"`
+	Result StorageAnalyticsListResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success StorageAnalyticsListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    storageAnalyticsListResponseEnvelopeJSON    `json:"-"`
@@ -497,7 +497,7 @@ type StorageAnalyticsStoredResponseEnvelope struct {
 	Errors   []StorageAnalyticsStoredResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []StorageAnalyticsStoredResponseEnvelopeMessages `json:"messages,required"`
 	// Metrics on Workers KV requests.
-	Result WorkersKVComponentsSchemasResult `json:"result,required"`
+	Result StorageAnalyticsStoredResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success StorageAnalyticsStoredResponseEnvelopeSuccess `json:"success,required"`
 	JSON    storageAnalyticsStoredResponseEnvelopeJSON    `json:"-"`

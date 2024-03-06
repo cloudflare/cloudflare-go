@@ -31,7 +31,7 @@ func TestDNSRecordNewWithOptionalParams(t *testing.T) {
 	_, err := client.DNS.Records.New(context.TODO(), cloudflare.DNSRecordNewParams{
 		ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Name:    cloudflare.F("example.com"),
-		Type:    cloudflare.F(cloudflare.DNSRecordNewParamsTypeUri),
+		Type:    cloudflare.F(cloudflare.DNSRecordNewParamsTypeURI),
 		Comment: cloudflare.F("Domain verification record"),
 		Data: cloudflare.F(cloudflare.DNSRecordNewParamsData{
 			Flags:         cloudflare.F("string"),
@@ -112,7 +112,7 @@ func TestDNSRecordUpdateWithOptionalParams(t *testing.T) {
 		cloudflare.DNSRecordUpdateParams{
 			ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Name:    cloudflare.F("example.com"),
-			Type:    cloudflare.F(cloudflare.DNSRecordUpdateParamsTypeUri),
+			Type:    cloudflare.F(cloudflare.DNSRecordUpdateParamsTypeURI),
 			Comment: cloudflare.F("Domain verification record"),
 			Data: cloudflare.F(cloudflare.DNSRecordUpdateParamsData{
 				Flags:         cloudflare.F("string"),
@@ -277,7 +277,7 @@ func TestDNSRecordEditWithOptionalParams(t *testing.T) {
 		cloudflare.DNSRecordEditParams{
 			ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			Name:    cloudflare.F("example.com"),
-			Type:    cloudflare.F(cloudflare.DNSRecordEditParamsTypeUri),
+			Type:    cloudflare.F(cloudflare.DNSRecordEditParamsTypeURI),
 			Comment: cloudflare.F("Domain verification record"),
 			Data: cloudflare.F(cloudflare.DNSRecordEditParamsData{
 				Flags:         cloudflare.F("string"),

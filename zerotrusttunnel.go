@@ -47,7 +47,7 @@ func NewZeroTrustTunnelService(opts ...option.RequestOption) (r *ZeroTrustTunnel
 }
 
 // Creates a new Argo Tunnel in an account.
-func (r *ZeroTrustTunnelService) New(ctx context.Context, params ZeroTrustTunnelNewParams, opts ...option.RequestOption) (res *TunnelArgoTunnel, err error) {
+func (r *ZeroTrustTunnelService) New(ctx context.Context, params ZeroTrustTunnelNewParams, opts ...option.RequestOption) (res *ZeroTrustTunnelNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustTunnelNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/tunnels", params.AccountID)
@@ -83,7 +83,7 @@ func (r *ZeroTrustTunnelService) ListAutoPaging(ctx context.Context, params Zero
 }
 
 // Deletes an Argo Tunnel from an account.
-func (r *ZeroTrustTunnelService) Delete(ctx context.Context, tunnelID string, params ZeroTrustTunnelDeleteParams, opts ...option.RequestOption) (res *TunnelArgoTunnel, err error) {
+func (r *ZeroTrustTunnelService) Delete(ctx context.Context, tunnelID string, params ZeroTrustTunnelDeleteParams, opts ...option.RequestOption) (res *ZeroTrustTunnelDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustTunnelDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/tunnels/%s", params.AccountID, tunnelID)
@@ -109,7 +109,7 @@ func (r *ZeroTrustTunnelService) Edit(ctx context.Context, tunnelID string, para
 }
 
 // Fetches a single Argo Tunnel.
-func (r *ZeroTrustTunnelService) Get(ctx context.Context, tunnelID string, query ZeroTrustTunnelGetParams, opts ...option.RequestOption) (res *TunnelArgoTunnel, err error) {
+func (r *ZeroTrustTunnelService) Get(ctx context.Context, tunnelID string, query ZeroTrustTunnelGetParams, opts ...option.RequestOption) (res *ZeroTrustTunnelGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustTunnelGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/tunnels/%s", query.AccountID, tunnelID)
@@ -121,24 +121,24 @@ func (r *ZeroTrustTunnelService) Get(ctx context.Context, tunnelID string, query
 	return
 }
 
-type TunnelArgoTunnel struct {
+type ZeroTrustTunnelNewResponse struct {
 	// UUID of the tunnel.
 	ID string `json:"id,required"`
 	// The tunnel connections between your origin and Cloudflare's edge.
-	Connections []TunnelArgoTunnelConnection `json:"connections,required"`
+	Connections []ZeroTrustTunnelNewResponseConnection `json:"connections,required"`
 	// Timestamp of when the tunnel was created.
 	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
 	// A user-friendly name for the tunnel.
 	Name string `json:"name,required"`
 	// Timestamp of when the tunnel was deleted. If `null`, the tunnel has not been
 	// deleted.
-	DeletedAt time.Time            `json:"deleted_at,nullable" format:"date-time"`
-	JSON      tunnelArgoTunnelJSON `json:"-"`
+	DeletedAt time.Time                      `json:"deleted_at,nullable" format:"date-time"`
+	JSON      zeroTrustTunnelNewResponseJSON `json:"-"`
 }
 
-// tunnelArgoTunnelJSON contains the JSON metadata for the struct
-// [TunnelArgoTunnel]
-type tunnelArgoTunnelJSON struct {
+// zeroTrustTunnelNewResponseJSON contains the JSON metadata for the struct
+// [ZeroTrustTunnelNewResponse]
+type zeroTrustTunnelNewResponseJSON struct {
 	ID          apijson.Field
 	Connections apijson.Field
 	CreatedAt   apijson.Field
@@ -148,11 +148,11 @@ type tunnelArgoTunnelJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TunnelArgoTunnel) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustTunnelNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type TunnelArgoTunnelConnection struct {
+type ZeroTrustTunnelNewResponseConnection struct {
 	// The Cloudflare data center used for this connection.
 	ColoName string `json:"colo_name"`
 	// Cloudflare continues to track connections for several minutes after they
@@ -161,13 +161,13 @@ type TunnelArgoTunnelConnection struct {
 	// tracked. If `false`, the connection is actively serving traffic.
 	IsPendingReconnect bool `json:"is_pending_reconnect"`
 	// UUID of the Cloudflare Tunnel connection.
-	UUID string                         `json:"uuid"`
-	JSON tunnelArgoTunnelConnectionJSON `json:"-"`
+	UUID string                                   `json:"uuid"`
+	JSON zeroTrustTunnelNewResponseConnectionJSON `json:"-"`
 }
 
-// tunnelArgoTunnelConnectionJSON contains the JSON metadata for the struct
-// [TunnelArgoTunnelConnection]
-type tunnelArgoTunnelConnectionJSON struct {
+// zeroTrustTunnelNewResponseConnectionJSON contains the JSON metadata for the
+// struct [ZeroTrustTunnelNewResponseConnection]
+type zeroTrustTunnelNewResponseConnectionJSON struct {
 	ColoName           apijson.Field
 	IsPendingReconnect apijson.Field
 	UUID               apijson.Field
@@ -175,7 +175,7 @@ type tunnelArgoTunnelConnectionJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *TunnelArgoTunnelConnection) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustTunnelNewResponseConnection) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -417,6 +417,64 @@ const (
 	ZeroTrustTunnelListResponseTunnelWARPConnectorTunnelTunTypeCni           ZeroTrustTunnelListResponseTunnelWARPConnectorTunnelTunType = "cni"
 )
 
+type ZeroTrustTunnelDeleteResponse struct {
+	// UUID of the tunnel.
+	ID string `json:"id,required"`
+	// The tunnel connections between your origin and Cloudflare's edge.
+	Connections []ZeroTrustTunnelDeleteResponseConnection `json:"connections,required"`
+	// Timestamp of when the tunnel was created.
+	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	// A user-friendly name for the tunnel.
+	Name string `json:"name,required"`
+	// Timestamp of when the tunnel was deleted. If `null`, the tunnel has not been
+	// deleted.
+	DeletedAt time.Time                         `json:"deleted_at,nullable" format:"date-time"`
+	JSON      zeroTrustTunnelDeleteResponseJSON `json:"-"`
+}
+
+// zeroTrustTunnelDeleteResponseJSON contains the JSON metadata for the struct
+// [ZeroTrustTunnelDeleteResponse]
+type zeroTrustTunnelDeleteResponseJSON struct {
+	ID          apijson.Field
+	Connections apijson.Field
+	CreatedAt   apijson.Field
+	Name        apijson.Field
+	DeletedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZeroTrustTunnelDeleteResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZeroTrustTunnelDeleteResponseConnection struct {
+	// The Cloudflare data center used for this connection.
+	ColoName string `json:"colo_name"`
+	// Cloudflare continues to track connections for several minutes after they
+	// disconnect. This is an optimization to improve latency and reliability of
+	// reconnecting. If `true`, the connection has disconnected but is still being
+	// tracked. If `false`, the connection is actively serving traffic.
+	IsPendingReconnect bool `json:"is_pending_reconnect"`
+	// UUID of the Cloudflare Tunnel connection.
+	UUID string                                      `json:"uuid"`
+	JSON zeroTrustTunnelDeleteResponseConnectionJSON `json:"-"`
+}
+
+// zeroTrustTunnelDeleteResponseConnectionJSON contains the JSON metadata for the
+// struct [ZeroTrustTunnelDeleteResponseConnection]
+type zeroTrustTunnelDeleteResponseConnectionJSON struct {
+	ColoName           apijson.Field
+	IsPendingReconnect apijson.Field
+	UUID               apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *ZeroTrustTunnelDeleteResponseConnection) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 // A Cloudflare Tunnel that connects your origin to Cloudflare's edge.
 //
 // Union satisfied by [ZeroTrustTunnelEditResponseTunnelCfdTunnel] or
@@ -655,6 +713,64 @@ const (
 	ZeroTrustTunnelEditResponseTunnelWARPConnectorTunnelTunTypeCni           ZeroTrustTunnelEditResponseTunnelWARPConnectorTunnelTunType = "cni"
 )
 
+type ZeroTrustTunnelGetResponse struct {
+	// UUID of the tunnel.
+	ID string `json:"id,required"`
+	// The tunnel connections between your origin and Cloudflare's edge.
+	Connections []ZeroTrustTunnelGetResponseConnection `json:"connections,required"`
+	// Timestamp of when the tunnel was created.
+	CreatedAt time.Time `json:"created_at,required" format:"date-time"`
+	// A user-friendly name for the tunnel.
+	Name string `json:"name,required"`
+	// Timestamp of when the tunnel was deleted. If `null`, the tunnel has not been
+	// deleted.
+	DeletedAt time.Time                      `json:"deleted_at,nullable" format:"date-time"`
+	JSON      zeroTrustTunnelGetResponseJSON `json:"-"`
+}
+
+// zeroTrustTunnelGetResponseJSON contains the JSON metadata for the struct
+// [ZeroTrustTunnelGetResponse]
+type zeroTrustTunnelGetResponseJSON struct {
+	ID          apijson.Field
+	Connections apijson.Field
+	CreatedAt   apijson.Field
+	Name        apijson.Field
+	DeletedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZeroTrustTunnelGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type ZeroTrustTunnelGetResponseConnection struct {
+	// The Cloudflare data center used for this connection.
+	ColoName string `json:"colo_name"`
+	// Cloudflare continues to track connections for several minutes after they
+	// disconnect. This is an optimization to improve latency and reliability of
+	// reconnecting. If `true`, the connection has disconnected but is still being
+	// tracked. If `false`, the connection is actively serving traffic.
+	IsPendingReconnect bool `json:"is_pending_reconnect"`
+	// UUID of the Cloudflare Tunnel connection.
+	UUID string                                   `json:"uuid"`
+	JSON zeroTrustTunnelGetResponseConnectionJSON `json:"-"`
+}
+
+// zeroTrustTunnelGetResponseConnectionJSON contains the JSON metadata for the
+// struct [ZeroTrustTunnelGetResponseConnection]
+type zeroTrustTunnelGetResponseConnectionJSON struct {
+	ColoName           apijson.Field
+	IsPendingReconnect apijson.Field
+	UUID               apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *ZeroTrustTunnelGetResponseConnection) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type ZeroTrustTunnelNewParams struct {
 	// Cloudflare account ID
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -672,7 +788,7 @@ func (r ZeroTrustTunnelNewParams) MarshalJSON() (data []byte, err error) {
 type ZeroTrustTunnelNewResponseEnvelope struct {
 	Errors   []ZeroTrustTunnelNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustTunnelNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   TunnelArgoTunnel                             `json:"result,required"`
+	Result   ZeroTrustTunnelNewResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success ZeroTrustTunnelNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustTunnelNewResponseEnvelopeJSON    `json:"-"`
@@ -783,7 +899,7 @@ func (r ZeroTrustTunnelDeleteParams) MarshalJSON() (data []byte, err error) {
 type ZeroTrustTunnelDeleteResponseEnvelope struct {
 	Errors   []ZeroTrustTunnelDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustTunnelDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   TunnelArgoTunnel                                `json:"result,required"`
+	Result   ZeroTrustTunnelDeleteResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success ZeroTrustTunnelDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustTunnelDeleteResponseEnvelopeJSON    `json:"-"`
@@ -941,7 +1057,7 @@ type ZeroTrustTunnelGetParams struct {
 type ZeroTrustTunnelGetResponseEnvelope struct {
 	Errors   []ZeroTrustTunnelGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustTunnelGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   TunnelArgoTunnel                             `json:"result,required"`
+	Result   ZeroTrustTunnelGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success ZeroTrustTunnelGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    zeroTrustTunnelGetResponseEnvelopeJSON    `json:"-"`

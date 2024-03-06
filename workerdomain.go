@@ -34,7 +34,7 @@ func NewWorkerDomainService(opts ...option.RequestOption) (r *WorkerDomainServic
 }
 
 // Attaches a Worker to a zone and hostname.
-func (r *WorkerDomainService) Update(ctx context.Context, params WorkerDomainUpdateParams, opts ...option.RequestOption) (res *WorkersDomain, err error) {
+func (r *WorkerDomainService) Update(ctx context.Context, params WorkerDomainUpdateParams, opts ...option.RequestOption) (res *WorkerDomainUpdateResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerDomainUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/workers/domains", params.AccountID)
@@ -47,7 +47,7 @@ func (r *WorkerDomainService) Update(ctx context.Context, params WorkerDomainUpd
 }
 
 // Lists all Worker Domains for an account.
-func (r *WorkerDomainService) List(ctx context.Context, params WorkerDomainListParams, opts ...option.RequestOption) (res *[]WorkersDomain, err error) {
+func (r *WorkerDomainService) List(ctx context.Context, params WorkerDomainListParams, opts ...option.RequestOption) (res *[]WorkerDomainListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerDomainListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/workers/domains", params.AccountID)
@@ -69,7 +69,7 @@ func (r *WorkerDomainService) Delete(ctx context.Context, domainID interface{}, 
 }
 
 // Gets a Worker domain.
-func (r *WorkerDomainService) Get(ctx context.Context, domainID interface{}, query WorkerDomainGetParams, opts ...option.RequestOption) (res *WorkersDomain, err error) {
+func (r *WorkerDomainService) Get(ctx context.Context, domainID interface{}, query WorkerDomainGetParams, opts ...option.RequestOption) (res *WorkerDomainGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WorkerDomainGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/workers/domains/%v", query.AccountID, domainID)
@@ -81,7 +81,7 @@ func (r *WorkerDomainService) Get(ctx context.Context, domainID interface{}, que
 	return
 }
 
-type WorkersDomain struct {
+type WorkerDomainUpdateResponse struct {
 	// Identifer of the Worker Domain.
 	ID interface{} `json:"id"`
 	// Worker environment associated with the zone and hostname.
@@ -93,12 +93,13 @@ type WorkersDomain struct {
 	// Identifier of the zone.
 	ZoneID interface{} `json:"zone_id"`
 	// Name of the zone.
-	ZoneName string            `json:"zone_name"`
-	JSON     workersDomainJSON `json:"-"`
+	ZoneName string                         `json:"zone_name"`
+	JSON     workerDomainUpdateResponseJSON `json:"-"`
 }
 
-// workersDomainJSON contains the JSON metadata for the struct [WorkersDomain]
-type workersDomainJSON struct {
+// workerDomainUpdateResponseJSON contains the JSON metadata for the struct
+// [WorkerDomainUpdateResponse]
+type workerDomainUpdateResponseJSON struct {
 	ID          apijson.Field
 	Environment apijson.Field
 	Hostname    apijson.Field
@@ -109,7 +110,73 @@ type workersDomainJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *WorkersDomain) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkerDomainUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WorkerDomainListResponse struct {
+	// Identifer of the Worker Domain.
+	ID interface{} `json:"id"`
+	// Worker environment associated with the zone and hostname.
+	Environment string `json:"environment"`
+	// Hostname of the Worker Domain.
+	Hostname string `json:"hostname"`
+	// Worker service associated with the zone and hostname.
+	Service string `json:"service"`
+	// Identifier of the zone.
+	ZoneID interface{} `json:"zone_id"`
+	// Name of the zone.
+	ZoneName string                       `json:"zone_name"`
+	JSON     workerDomainListResponseJSON `json:"-"`
+}
+
+// workerDomainListResponseJSON contains the JSON metadata for the struct
+// [WorkerDomainListResponse]
+type workerDomainListResponseJSON struct {
+	ID          apijson.Field
+	Environment apijson.Field
+	Hostname    apijson.Field
+	Service     apijson.Field
+	ZoneID      apijson.Field
+	ZoneName    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerDomainListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type WorkerDomainGetResponse struct {
+	// Identifer of the Worker Domain.
+	ID interface{} `json:"id"`
+	// Worker environment associated with the zone and hostname.
+	Environment string `json:"environment"`
+	// Hostname of the Worker Domain.
+	Hostname string `json:"hostname"`
+	// Worker service associated with the zone and hostname.
+	Service string `json:"service"`
+	// Identifier of the zone.
+	ZoneID interface{} `json:"zone_id"`
+	// Name of the zone.
+	ZoneName string                      `json:"zone_name"`
+	JSON     workerDomainGetResponseJSON `json:"-"`
+}
+
+// workerDomainGetResponseJSON contains the JSON metadata for the struct
+// [WorkerDomainGetResponse]
+type workerDomainGetResponseJSON struct {
+	ID          apijson.Field
+	Environment apijson.Field
+	Hostname    apijson.Field
+	Service     apijson.Field
+	ZoneID      apijson.Field
+	ZoneName    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkerDomainGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -132,7 +199,7 @@ func (r WorkerDomainUpdateParams) MarshalJSON() (data []byte, err error) {
 type WorkerDomainUpdateResponseEnvelope struct {
 	Errors   []WorkerDomainUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []WorkerDomainUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   WorkersDomain                                `json:"result,required"`
+	Result   WorkerDomainUpdateResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success WorkerDomainUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    workerDomainUpdateResponseEnvelopeJSON    `json:"-"`
@@ -223,7 +290,7 @@ func (r WorkerDomainListParams) URLQuery() (v url.Values) {
 type WorkerDomainListResponseEnvelope struct {
 	Errors   []WorkerDomainListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []WorkerDomainListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []WorkersDomain                            `json:"result,required"`
+	Result   []WorkerDomainListResponse                 `json:"result,required"`
 	// Whether the API call was successful
 	Success WorkerDomainListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    workerDomainListResponseEnvelopeJSON    `json:"-"`
@@ -300,7 +367,7 @@ type WorkerDomainGetParams struct {
 type WorkerDomainGetResponseEnvelope struct {
 	Errors   []WorkerDomainGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []WorkerDomainGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   WorkersDomain                             `json:"result,required"`
+	Result   WorkerDomainGetResponse                   `json:"result,required"`
 	// Whether the API call was successful
 	Success WorkerDomainGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    workerDomainGetResponseEnvelopeJSON    `json:"-"`

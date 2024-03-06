@@ -35,7 +35,7 @@ func NewCustomNameserverService(opts ...option.RequestOption) (r *CustomNameserv
 }
 
 // Add Account Custom Nameserver
-func (r *CustomNameserverService) New(ctx context.Context, params CustomNameserverNewParams, opts ...option.RequestOption) (res *DNSCustomNameserversCustomNs, err error) {
+func (r *CustomNameserverService) New(ctx context.Context, params CustomNameserverNewParams, opts ...option.RequestOption) (res *CustomNameserverNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomNameserverNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/custom_ns", params.AccountID)
@@ -48,10 +48,10 @@ func (r *CustomNameserverService) New(ctx context.Context, params CustomNameserv
 }
 
 // Delete Account Custom Nameserver
-func (r *CustomNameserverService) Delete(ctx context.Context, customNsID string, body CustomNameserverDeleteParams, opts ...option.RequestOption) (res *CustomNameserverDeleteResponse, err error) {
+func (r *CustomNameserverService) Delete(ctx context.Context, customNSID string, body CustomNameserverDeleteParams, opts ...option.RequestOption) (res *CustomNameserverDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomNameserverDeleteResponseEnvelope
-	path := fmt.Sprintf("accounts/%s/custom_ns/%s", body.AccountID, customNsID)
+	path := fmt.Sprintf("accounts/%s/custom_ns/%s", body.AccountID, customNSID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
 	if err != nil {
 		return
@@ -74,7 +74,7 @@ func (r *CustomNameserverService) Availabilty(ctx context.Context, query CustomN
 }
 
 // List an account's custom nameservers.
-func (r *CustomNameserverService) Get(ctx context.Context, query CustomNameserverGetParams, opts ...option.RequestOption) (res *[]DNSCustomNameserversCustomNs, err error) {
+func (r *CustomNameserverService) Get(ctx context.Context, query CustomNameserverGetParams, opts ...option.RequestOption) (res *[]CustomNameserverGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomNameserverGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/custom_ns", query.AccountID)
@@ -87,7 +87,7 @@ func (r *CustomNameserverService) Get(ctx context.Context, query CustomNameserve
 }
 
 // Verify Account Custom Nameserver Glue Records
-func (r *CustomNameserverService) Verify(ctx context.Context, body CustomNameserverVerifyParams, opts ...option.RequestOption) (res *[]DNSCustomNameserversCustomNs, err error) {
+func (r *CustomNameserverService) Verify(ctx context.Context, body CustomNameserverVerifyParams, opts ...option.RequestOption) (res *[]CustomNameserverVerifyResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CustomNameserverVerifyResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/custom_ns/verify", body.AccountID)
@@ -100,72 +100,72 @@ func (r *CustomNameserverService) Verify(ctx context.Context, body CustomNameser
 }
 
 // A single account custom nameserver.
-type DNSCustomNameserversCustomNs struct {
+type CustomNameserverNewResponse struct {
 	// A and AAAA records associated with the nameserver.
-	DNSRecords []DNSCustomNameserversCustomNsDNSRecord `json:"dns_records,required"`
+	DNSRecords []CustomNameserverNewResponseDNSRecord `json:"dns_records,required"`
 	// The FQDN of the name server.
-	NsName string `json:"ns_name,required" format:"hostname"`
+	NSName string `json:"ns_name,required" format:"hostname"`
 	// Verification status of the nameserver.
-	Status DNSCustomNameserversCustomNsStatus `json:"status,required"`
+	Status CustomNameserverNewResponseStatus `json:"status,required"`
 	// Identifier
 	ZoneTag string `json:"zone_tag,required"`
 	// The number of the set that this name server belongs to.
-	NsSet float64                          `json:"ns_set"`
-	JSON  dnsCustomNameserversCustomNsJSON `json:"-"`
+	NSSet float64                         `json:"ns_set"`
+	JSON  customNameserverNewResponseJSON `json:"-"`
 }
 
-// dnsCustomNameserversCustomNsJSON contains the JSON metadata for the struct
-// [DNSCustomNameserversCustomNs]
-type dnsCustomNameserversCustomNsJSON struct {
+// customNameserverNewResponseJSON contains the JSON metadata for the struct
+// [CustomNameserverNewResponse]
+type customNameserverNewResponseJSON struct {
 	DNSRecords  apijson.Field
-	NsName      apijson.Field
+	NSName      apijson.Field
 	Status      apijson.Field
 	ZoneTag     apijson.Field
-	NsSet       apijson.Field
+	NSSet       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSCustomNameserversCustomNs) UnmarshalJSON(data []byte) (err error) {
+func (r *CustomNameserverNewResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type DNSCustomNameserversCustomNsDNSRecord struct {
+type CustomNameserverNewResponseDNSRecord struct {
 	// DNS record type.
-	Type DNSCustomNameserversCustomNsDNSRecordsType `json:"type"`
+	Type CustomNameserverNewResponseDNSRecordsType `json:"type"`
 	// DNS record contents (an IPv4 or IPv6 address).
-	Value string                                    `json:"value"`
-	JSON  dnsCustomNameserversCustomNsDNSRecordJSON `json:"-"`
+	Value string                                   `json:"value"`
+	JSON  customNameserverNewResponseDNSRecordJSON `json:"-"`
 }
 
-// dnsCustomNameserversCustomNsDNSRecordJSON contains the JSON metadata for the
-// struct [DNSCustomNameserversCustomNsDNSRecord]
-type dnsCustomNameserversCustomNsDNSRecordJSON struct {
+// customNameserverNewResponseDNSRecordJSON contains the JSON metadata for the
+// struct [CustomNameserverNewResponseDNSRecord]
+type customNameserverNewResponseDNSRecordJSON struct {
 	Type        apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSCustomNameserversCustomNsDNSRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *CustomNameserverNewResponseDNSRecord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // DNS record type.
-type DNSCustomNameserversCustomNsDNSRecordsType string
+type CustomNameserverNewResponseDNSRecordsType string
 
 const (
-	DNSCustomNameserversCustomNsDNSRecordsTypeA    DNSCustomNameserversCustomNsDNSRecordsType = "A"
-	DNSCustomNameserversCustomNsDNSRecordsTypeAaaa DNSCustomNameserversCustomNsDNSRecordsType = "AAAA"
+	CustomNameserverNewResponseDNSRecordsTypeA    CustomNameserverNewResponseDNSRecordsType = "A"
+	CustomNameserverNewResponseDNSRecordsTypeAAAA CustomNameserverNewResponseDNSRecordsType = "AAAA"
 )
 
 // Verification status of the nameserver.
-type DNSCustomNameserversCustomNsStatus string
+type CustomNameserverNewResponseStatus string
 
 const (
-	DNSCustomNameserversCustomNsStatusMoved    DNSCustomNameserversCustomNsStatus = "moved"
-	DNSCustomNameserversCustomNsStatusPending  DNSCustomNameserversCustomNsStatus = "pending"
-	DNSCustomNameserversCustomNsStatusVerified DNSCustomNameserversCustomNsStatus = "verified"
+	CustomNameserverNewResponseStatusMoved    CustomNameserverNewResponseStatus = "moved"
+	CustomNameserverNewResponseStatusPending  CustomNameserverNewResponseStatus = "pending"
+	CustomNameserverNewResponseStatusVerified CustomNameserverNewResponseStatus = "verified"
 )
 
 // Union satisfied by [CustomNameserverDeleteResponseUnknown],
@@ -189,13 +189,151 @@ type CustomNameserverDeleteResponseArray []interface{}
 
 func (r CustomNameserverDeleteResponseArray) ImplementsCustomNameserverDeleteResponse() {}
 
+// A single account custom nameserver.
+type CustomNameserverGetResponse struct {
+	// A and AAAA records associated with the nameserver.
+	DNSRecords []CustomNameserverGetResponseDNSRecord `json:"dns_records,required"`
+	// The FQDN of the name server.
+	NSName string `json:"ns_name,required" format:"hostname"`
+	// Verification status of the nameserver.
+	Status CustomNameserverGetResponseStatus `json:"status,required"`
+	// Identifier
+	ZoneTag string `json:"zone_tag,required"`
+	// The number of the set that this name server belongs to.
+	NSSet float64                         `json:"ns_set"`
+	JSON  customNameserverGetResponseJSON `json:"-"`
+}
+
+// customNameserverGetResponseJSON contains the JSON metadata for the struct
+// [CustomNameserverGetResponse]
+type customNameserverGetResponseJSON struct {
+	DNSRecords  apijson.Field
+	NSName      apijson.Field
+	Status      apijson.Field
+	ZoneTag     apijson.Field
+	NSSet       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CustomNameserverGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CustomNameserverGetResponseDNSRecord struct {
+	// DNS record type.
+	Type CustomNameserverGetResponseDNSRecordsType `json:"type"`
+	// DNS record contents (an IPv4 or IPv6 address).
+	Value string                                   `json:"value"`
+	JSON  customNameserverGetResponseDNSRecordJSON `json:"-"`
+}
+
+// customNameserverGetResponseDNSRecordJSON contains the JSON metadata for the
+// struct [CustomNameserverGetResponseDNSRecord]
+type customNameserverGetResponseDNSRecordJSON struct {
+	Type        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CustomNameserverGetResponseDNSRecord) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// DNS record type.
+type CustomNameserverGetResponseDNSRecordsType string
+
+const (
+	CustomNameserverGetResponseDNSRecordsTypeA    CustomNameserverGetResponseDNSRecordsType = "A"
+	CustomNameserverGetResponseDNSRecordsTypeAAAA CustomNameserverGetResponseDNSRecordsType = "AAAA"
+)
+
+// Verification status of the nameserver.
+type CustomNameserverGetResponseStatus string
+
+const (
+	CustomNameserverGetResponseStatusMoved    CustomNameserverGetResponseStatus = "moved"
+	CustomNameserverGetResponseStatusPending  CustomNameserverGetResponseStatus = "pending"
+	CustomNameserverGetResponseStatusVerified CustomNameserverGetResponseStatus = "verified"
+)
+
+// A single account custom nameserver.
+type CustomNameserverVerifyResponse struct {
+	// A and AAAA records associated with the nameserver.
+	DNSRecords []CustomNameserverVerifyResponseDNSRecord `json:"dns_records,required"`
+	// The FQDN of the name server.
+	NSName string `json:"ns_name,required" format:"hostname"`
+	// Verification status of the nameserver.
+	Status CustomNameserverVerifyResponseStatus `json:"status,required"`
+	// Identifier
+	ZoneTag string `json:"zone_tag,required"`
+	// The number of the set that this name server belongs to.
+	NSSet float64                            `json:"ns_set"`
+	JSON  customNameserverVerifyResponseJSON `json:"-"`
+}
+
+// customNameserverVerifyResponseJSON contains the JSON metadata for the struct
+// [CustomNameserverVerifyResponse]
+type customNameserverVerifyResponseJSON struct {
+	DNSRecords  apijson.Field
+	NSName      apijson.Field
+	Status      apijson.Field
+	ZoneTag     apijson.Field
+	NSSet       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CustomNameserverVerifyResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type CustomNameserverVerifyResponseDNSRecord struct {
+	// DNS record type.
+	Type CustomNameserverVerifyResponseDNSRecordsType `json:"type"`
+	// DNS record contents (an IPv4 or IPv6 address).
+	Value string                                      `json:"value"`
+	JSON  customNameserverVerifyResponseDNSRecordJSON `json:"-"`
+}
+
+// customNameserverVerifyResponseDNSRecordJSON contains the JSON metadata for the
+// struct [CustomNameserverVerifyResponseDNSRecord]
+type customNameserverVerifyResponseDNSRecordJSON struct {
+	Type        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CustomNameserverVerifyResponseDNSRecord) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// DNS record type.
+type CustomNameserverVerifyResponseDNSRecordsType string
+
+const (
+	CustomNameserverVerifyResponseDNSRecordsTypeA    CustomNameserverVerifyResponseDNSRecordsType = "A"
+	CustomNameserverVerifyResponseDNSRecordsTypeAAAA CustomNameserverVerifyResponseDNSRecordsType = "AAAA"
+)
+
+// Verification status of the nameserver.
+type CustomNameserverVerifyResponseStatus string
+
+const (
+	CustomNameserverVerifyResponseStatusMoved    CustomNameserverVerifyResponseStatus = "moved"
+	CustomNameserverVerifyResponseStatusPending  CustomNameserverVerifyResponseStatus = "pending"
+	CustomNameserverVerifyResponseStatusVerified CustomNameserverVerifyResponseStatus = "verified"
+)
+
 type CustomNameserverNewParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
 	// The FQDN of the name server.
-	NsName param.Field[string] `json:"ns_name,required" format:"hostname"`
+	NSName param.Field[string] `json:"ns_name,required" format:"hostname"`
 	// The number of the set that this name server belongs to.
-	NsSet param.Field[float64] `json:"ns_set"`
+	NSSet param.Field[float64] `json:"ns_set"`
 }
 
 func (r CustomNameserverNewParams) MarshalJSON() (data []byte, err error) {
@@ -206,7 +344,7 @@ type CustomNameserverNewResponseEnvelope struct {
 	Errors   []CustomNameserverNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []CustomNameserverNewResponseEnvelopeMessages `json:"messages,required"`
 	// A single account custom nameserver.
-	Result DNSCustomNameserversCustomNs `json:"result,required"`
+	Result CustomNameserverNewResponse `json:"result,required"`
 	// Whether the API call was successful
 	Success CustomNameserverNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    customNameserverNewResponseEnvelopeJSON    `json:"-"`
@@ -486,7 +624,7 @@ type CustomNameserverGetParams struct {
 type CustomNameserverGetResponseEnvelope struct {
 	Errors   []CustomNameserverGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []CustomNameserverGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DNSCustomNameserversCustomNs                `json:"result,required,nullable"`
+	Result   []CustomNameserverGetResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    CustomNameserverGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo CustomNameserverGetResponseEnvelopeResultInfo `json:"result_info"`
@@ -589,7 +727,7 @@ type CustomNameserverVerifyParams struct {
 type CustomNameserverVerifyResponseEnvelope struct {
 	Errors   []CustomNameserverVerifyResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []CustomNameserverVerifyResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DNSCustomNameserversCustomNs                   `json:"result,required,nullable"`
+	Result   []CustomNameserverVerifyResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    CustomNameserverVerifyResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo CustomNameserverVerifyResponseEnvelopeResultInfo `json:"result_info"`

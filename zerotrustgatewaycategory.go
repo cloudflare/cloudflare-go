@@ -32,7 +32,7 @@ func NewZeroTrustGatewayCategoryService(opts ...option.RequestOption) (r *ZeroTr
 }
 
 // Fetches a list of all categories.
-func (r *ZeroTrustGatewayCategoryService) List(ctx context.Context, query ZeroTrustGatewayCategoryListParams, opts ...option.RequestOption) (res *[]ZeroTrustGatewayCategories, err error) {
+func (r *ZeroTrustGatewayCategoryService) List(ctx context.Context, query ZeroTrustGatewayCategoryListParams, opts ...option.RequestOption) (res *[]ZeroTrustGatewayCategoryListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZeroTrustGatewayCategoryListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/gateway/categories", query.AccountID)
@@ -44,7 +44,7 @@ func (r *ZeroTrustGatewayCategoryService) List(ctx context.Context, query ZeroTr
 	return
 }
 
-type ZeroTrustGatewayCategories struct {
+type ZeroTrustGatewayCategoryListResponse struct {
 	// The identifier for this category. There is only one category per ID.
 	ID int64 `json:"id"`
 	// True if the category is in beta and subject to change.
@@ -53,19 +53,19 @@ type ZeroTrustGatewayCategories struct {
 	// `blocked` categories are blocked unconditionally for all accounts.
 	// `removalPending` categories can be removed from policies but not added.
 	// `noBlock` categories cannot be blocked.
-	Class ZeroTrustGatewayCategoriesClass `json:"class"`
+	Class ZeroTrustGatewayCategoryListResponseClass `json:"class"`
 	// A short summary of domains in the category.
 	Description string `json:"description"`
 	// The name of the category.
 	Name string `json:"name"`
 	// All subcategories for this category.
-	Subcategories []ZeroTrustGatewayCategoriesSubcategory `json:"subcategories"`
-	JSON          zeroTrustGatewayCategoriesJSON          `json:"-"`
+	Subcategories []ZeroTrustGatewayCategoryListResponseSubcategory `json:"subcategories"`
+	JSON          zeroTrustGatewayCategoryListResponseJSON          `json:"-"`
 }
 
-// zeroTrustGatewayCategoriesJSON contains the JSON metadata for the struct
-// [ZeroTrustGatewayCategories]
-type zeroTrustGatewayCategoriesJSON struct {
+// zeroTrustGatewayCategoryListResponseJSON contains the JSON metadata for the
+// struct [ZeroTrustGatewayCategoryListResponse]
+type zeroTrustGatewayCategoryListResponseJSON struct {
 	ID            apijson.Field
 	Beta          apijson.Field
 	Class         apijson.Field
@@ -76,7 +76,7 @@ type zeroTrustGatewayCategoriesJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *ZeroTrustGatewayCategories) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustGatewayCategoryListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -84,17 +84,17 @@ func (r *ZeroTrustGatewayCategories) UnmarshalJSON(data []byte) (err error) {
 // `blocked` categories are blocked unconditionally for all accounts.
 // `removalPending` categories can be removed from policies but not added.
 // `noBlock` categories cannot be blocked.
-type ZeroTrustGatewayCategoriesClass string
+type ZeroTrustGatewayCategoryListResponseClass string
 
 const (
-	ZeroTrustGatewayCategoriesClassFree           ZeroTrustGatewayCategoriesClass = "free"
-	ZeroTrustGatewayCategoriesClassPremium        ZeroTrustGatewayCategoriesClass = "premium"
-	ZeroTrustGatewayCategoriesClassBlocked        ZeroTrustGatewayCategoriesClass = "blocked"
-	ZeroTrustGatewayCategoriesClassRemovalPending ZeroTrustGatewayCategoriesClass = "removalPending"
-	ZeroTrustGatewayCategoriesClassNoBlock        ZeroTrustGatewayCategoriesClass = "noBlock"
+	ZeroTrustGatewayCategoryListResponseClassFree           ZeroTrustGatewayCategoryListResponseClass = "free"
+	ZeroTrustGatewayCategoryListResponseClassPremium        ZeroTrustGatewayCategoryListResponseClass = "premium"
+	ZeroTrustGatewayCategoryListResponseClassBlocked        ZeroTrustGatewayCategoryListResponseClass = "blocked"
+	ZeroTrustGatewayCategoryListResponseClassRemovalPending ZeroTrustGatewayCategoryListResponseClass = "removalPending"
+	ZeroTrustGatewayCategoryListResponseClassNoBlock        ZeroTrustGatewayCategoryListResponseClass = "noBlock"
 )
 
-type ZeroTrustGatewayCategoriesSubcategory struct {
+type ZeroTrustGatewayCategoryListResponseSubcategory struct {
 	// The identifier for this category. There is only one category per ID.
 	ID int64 `json:"id"`
 	// True if the category is in beta and subject to change.
@@ -103,17 +103,17 @@ type ZeroTrustGatewayCategoriesSubcategory struct {
 	// `blocked` categories are blocked unconditionally for all accounts.
 	// `removalPending` categories can be removed from policies but not added.
 	// `noBlock` categories cannot be blocked.
-	Class ZeroTrustGatewayCategoriesSubcategoriesClass `json:"class"`
+	Class ZeroTrustGatewayCategoryListResponseSubcategoriesClass `json:"class"`
 	// A short summary of domains in the category.
 	Description string `json:"description"`
 	// The name of the category.
-	Name string                                    `json:"name"`
-	JSON zeroTrustGatewayCategoriesSubcategoryJSON `json:"-"`
+	Name string                                              `json:"name"`
+	JSON zeroTrustGatewayCategoryListResponseSubcategoryJSON `json:"-"`
 }
 
-// zeroTrustGatewayCategoriesSubcategoryJSON contains the JSON metadata for the
-// struct [ZeroTrustGatewayCategoriesSubcategory]
-type zeroTrustGatewayCategoriesSubcategoryJSON struct {
+// zeroTrustGatewayCategoryListResponseSubcategoryJSON contains the JSON metadata
+// for the struct [ZeroTrustGatewayCategoryListResponseSubcategory]
+type zeroTrustGatewayCategoryListResponseSubcategoryJSON struct {
 	ID          apijson.Field
 	Beta        apijson.Field
 	Class       apijson.Field
@@ -123,7 +123,7 @@ type zeroTrustGatewayCategoriesSubcategoryJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZeroTrustGatewayCategoriesSubcategory) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustGatewayCategoryListResponseSubcategory) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -131,14 +131,14 @@ func (r *ZeroTrustGatewayCategoriesSubcategory) UnmarshalJSON(data []byte) (err 
 // `blocked` categories are blocked unconditionally for all accounts.
 // `removalPending` categories can be removed from policies but not added.
 // `noBlock` categories cannot be blocked.
-type ZeroTrustGatewayCategoriesSubcategoriesClass string
+type ZeroTrustGatewayCategoryListResponseSubcategoriesClass string
 
 const (
-	ZeroTrustGatewayCategoriesSubcategoriesClassFree           ZeroTrustGatewayCategoriesSubcategoriesClass = "free"
-	ZeroTrustGatewayCategoriesSubcategoriesClassPremium        ZeroTrustGatewayCategoriesSubcategoriesClass = "premium"
-	ZeroTrustGatewayCategoriesSubcategoriesClassBlocked        ZeroTrustGatewayCategoriesSubcategoriesClass = "blocked"
-	ZeroTrustGatewayCategoriesSubcategoriesClassRemovalPending ZeroTrustGatewayCategoriesSubcategoriesClass = "removalPending"
-	ZeroTrustGatewayCategoriesSubcategoriesClassNoBlock        ZeroTrustGatewayCategoriesSubcategoriesClass = "noBlock"
+	ZeroTrustGatewayCategoryListResponseSubcategoriesClassFree           ZeroTrustGatewayCategoryListResponseSubcategoriesClass = "free"
+	ZeroTrustGatewayCategoryListResponseSubcategoriesClassPremium        ZeroTrustGatewayCategoryListResponseSubcategoriesClass = "premium"
+	ZeroTrustGatewayCategoryListResponseSubcategoriesClassBlocked        ZeroTrustGatewayCategoryListResponseSubcategoriesClass = "blocked"
+	ZeroTrustGatewayCategoryListResponseSubcategoriesClassRemovalPending ZeroTrustGatewayCategoryListResponseSubcategoriesClass = "removalPending"
+	ZeroTrustGatewayCategoryListResponseSubcategoriesClassNoBlock        ZeroTrustGatewayCategoryListResponseSubcategoriesClass = "noBlock"
 )
 
 type ZeroTrustGatewayCategoryListParams struct {
@@ -149,7 +149,7 @@ type ZeroTrustGatewayCategoryListParams struct {
 type ZeroTrustGatewayCategoryListResponseEnvelope struct {
 	Errors   []ZeroTrustGatewayCategoryListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ZeroTrustGatewayCategoryListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []ZeroTrustGatewayCategories                           `json:"result,required,nullable"`
+	Result   []ZeroTrustGatewayCategoryListResponse                 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    ZeroTrustGatewayCategoryListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ZeroTrustGatewayCategoryListResponseEnvelopeResultInfo `json:"result_info"`

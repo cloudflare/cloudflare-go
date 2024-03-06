@@ -29,8 +29,8 @@ func TestCustomNameserverNewWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.CustomNameservers.New(context.TODO(), cloudflare.CustomNameserverNewParams{
 		AccountID: cloudflare.F("372e67954025e0ba6aaa6d586b9e0b59"),
-		NsName:    cloudflare.F("ns1.example.com"),
-		NsSet:     cloudflare.F(1.000000),
+		NSName:    cloudflare.F("ns1.example.com"),
+		NSSet:     cloudflare.F(1.000000),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

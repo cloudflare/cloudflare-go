@@ -39,7 +39,7 @@ func NewZoneSettingHotlinkProtectionService(opts ...option.RequestOption) (r *Zo
 // view images from your page, but other sites won't be able to steal them for use
 // on their own pages.
 // (https://support.cloudflare.com/hc/en-us/articles/200170026).
-func (r *ZoneSettingHotlinkProtectionService) Edit(ctx context.Context, params ZoneSettingHotlinkProtectionEditParams, opts ...option.RequestOption) (res *ZonesHotlinkProtection, err error) {
+func (r *ZoneSettingHotlinkProtectionService) Edit(ctx context.Context, params ZoneSettingHotlinkProtectionEditParams, opts ...option.RequestOption) (res *ZoneSettingHotlinkProtectionEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingHotlinkProtectionEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/hotlink_protection", params.ZoneID)
@@ -58,7 +58,7 @@ func (r *ZoneSettingHotlinkProtectionService) Edit(ctx context.Context, params Z
 // view images from your page, but other sites won't be able to steal them for use
 // on their own pages.
 // (https://support.cloudflare.com/hc/en-us/articles/200170026).
-func (r *ZoneSettingHotlinkProtectionService) Get(ctx context.Context, query ZoneSettingHotlinkProtectionGetParams, opts ...option.RequestOption) (res *ZonesHotlinkProtection, err error) {
+func (r *ZoneSettingHotlinkProtectionService) Get(ctx context.Context, query ZoneSettingHotlinkProtectionGetParams, opts ...option.RequestOption) (res *ZoneSettingHotlinkProtectionGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingHotlinkProtectionGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/hotlink_protection", query.ZoneID)
@@ -77,22 +77,22 @@ func (r *ZoneSettingHotlinkProtectionService) Get(ctx context.Context, query Zon
 // view images from your page, but other sites won't be able to steal them for use
 // on their own pages.
 // (https://support.cloudflare.com/hc/en-us/articles/200170026).
-type ZonesHotlinkProtection struct {
+type ZoneSettingHotlinkProtectionEditResponse struct {
 	// ID of the zone setting.
-	ID ZonesHotlinkProtectionID `json:"id,required"`
+	ID ZoneSettingHotlinkProtectionEditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZonesHotlinkProtectionValue `json:"value,required"`
+	Value ZoneSettingHotlinkProtectionEditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZonesHotlinkProtectionEditable `json:"editable"`
+	Editable ZoneSettingHotlinkProtectionEditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                  `json:"modified_on,nullable" format:"date-time"`
-	JSON       zonesHotlinkProtectionJSON `json:"-"`
+	ModifiedOn time.Time                                    `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingHotlinkProtectionEditResponseJSON `json:"-"`
 }
 
-// zonesHotlinkProtectionJSON contains the JSON metadata for the struct
-// [ZonesHotlinkProtection]
-type zonesHotlinkProtectionJSON struct {
+// zoneSettingHotlinkProtectionEditResponseJSON contains the JSON metadata for the
+// struct [ZoneSettingHotlinkProtectionEditResponse]
+type zoneSettingHotlinkProtectionEditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -101,36 +101,32 @@ type zonesHotlinkProtectionJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZonesHotlinkProtection) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingHotlinkProtectionEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ZonesHotlinkProtection) implementsZoneSettingEditResponse() {}
-
-func (r ZonesHotlinkProtection) implementsZoneSettingGetResponse() {}
-
 // ID of the zone setting.
-type ZonesHotlinkProtectionID string
+type ZoneSettingHotlinkProtectionEditResponseID string
 
 const (
-	ZonesHotlinkProtectionIDHotlinkProtection ZonesHotlinkProtectionID = "hotlink_protection"
+	ZoneSettingHotlinkProtectionEditResponseIDHotlinkProtection ZoneSettingHotlinkProtectionEditResponseID = "hotlink_protection"
 )
 
 // Current value of the zone setting.
-type ZonesHotlinkProtectionValue string
+type ZoneSettingHotlinkProtectionEditResponseValue string
 
 const (
-	ZonesHotlinkProtectionValueOn  ZonesHotlinkProtectionValue = "on"
-	ZonesHotlinkProtectionValueOff ZonesHotlinkProtectionValue = "off"
+	ZoneSettingHotlinkProtectionEditResponseValueOn  ZoneSettingHotlinkProtectionEditResponseValue = "on"
+	ZoneSettingHotlinkProtectionEditResponseValueOff ZoneSettingHotlinkProtectionEditResponseValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZonesHotlinkProtectionEditable bool
+type ZoneSettingHotlinkProtectionEditResponseEditable bool
 
 const (
-	ZonesHotlinkProtectionEditableTrue  ZonesHotlinkProtectionEditable = true
-	ZonesHotlinkProtectionEditableFalse ZonesHotlinkProtectionEditable = false
+	ZoneSettingHotlinkProtectionEditResponseEditableTrue  ZoneSettingHotlinkProtectionEditResponseEditable = true
+	ZoneSettingHotlinkProtectionEditResponseEditableFalse ZoneSettingHotlinkProtectionEditResponseEditable = false
 )
 
 // When enabled, the Hotlink Protection option ensures that other sites cannot suck
@@ -140,18 +136,57 @@ const (
 // view images from your page, but other sites won't be able to steal them for use
 // on their own pages.
 // (https://support.cloudflare.com/hc/en-us/articles/200170026).
-type ZonesHotlinkProtectionParam struct {
+type ZoneSettingHotlinkProtectionGetResponse struct {
 	// ID of the zone setting.
-	ID param.Field[ZonesHotlinkProtectionID] `json:"id,required"`
+	ID ZoneSettingHotlinkProtectionGetResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value param.Field[ZonesHotlinkProtectionValue] `json:"value,required"`
+	Value ZoneSettingHotlinkProtectionGetResponseValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingHotlinkProtectionGetResponseEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                                   `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingHotlinkProtectionGetResponseJSON `json:"-"`
 }
 
-func (r ZonesHotlinkProtectionParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+// zoneSettingHotlinkProtectionGetResponseJSON contains the JSON metadata for the
+// struct [ZoneSettingHotlinkProtectionGetResponse]
+type zoneSettingHotlinkProtectionGetResponseJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
-func (r ZonesHotlinkProtectionParam) implementsZoneSettingEditParamsItem() {}
+func (r *ZoneSettingHotlinkProtectionGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// ID of the zone setting.
+type ZoneSettingHotlinkProtectionGetResponseID string
+
+const (
+	ZoneSettingHotlinkProtectionGetResponseIDHotlinkProtection ZoneSettingHotlinkProtectionGetResponseID = "hotlink_protection"
+)
+
+// Current value of the zone setting.
+type ZoneSettingHotlinkProtectionGetResponseValue string
+
+const (
+	ZoneSettingHotlinkProtectionGetResponseValueOn  ZoneSettingHotlinkProtectionGetResponseValue = "on"
+	ZoneSettingHotlinkProtectionGetResponseValueOff ZoneSettingHotlinkProtectionGetResponseValue = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingHotlinkProtectionGetResponseEditable bool
+
+const (
+	ZoneSettingHotlinkProtectionGetResponseEditableTrue  ZoneSettingHotlinkProtectionGetResponseEditable = true
+	ZoneSettingHotlinkProtectionGetResponseEditableFalse ZoneSettingHotlinkProtectionGetResponseEditable = false
+)
 
 type ZoneSettingHotlinkProtectionEditParams struct {
 	// Identifier
@@ -184,7 +219,7 @@ type ZoneSettingHotlinkProtectionEditResponseEnvelope struct {
 	// view images from your page, but other sites won't be able to steal them for use
 	// on their own pages.
 	// (https://support.cloudflare.com/hc/en-us/articles/200170026).
-	Result ZonesHotlinkProtection                               `json:"result"`
+	Result ZoneSettingHotlinkProtectionEditResponse             `json:"result"`
 	JSON   zoneSettingHotlinkProtectionEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -259,7 +294,7 @@ type ZoneSettingHotlinkProtectionGetResponseEnvelope struct {
 	// view images from your page, but other sites won't be able to steal them for use
 	// on their own pages.
 	// (https://support.cloudflare.com/hc/en-us/articles/200170026).
-	Result ZonesHotlinkProtection                              `json:"result"`
+	Result ZoneSettingHotlinkProtectionGetResponse             `json:"result"`
 	JSON   zoneSettingHotlinkProtectionGetResponseEnvelopeJSON `json:"-"`
 }
 

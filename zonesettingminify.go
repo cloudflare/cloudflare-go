@@ -35,7 +35,7 @@ func NewZoneSettingMinifyService(opts ...option.RequestOption) (r *ZoneSettingMi
 // Automatically minify certain assets for your website. Refer to
 // [Using Cloudflare Auto Minify](https://support.cloudflare.com/hc/en-us/articles/200168196)
 // for more information.
-func (r *ZoneSettingMinifyService) Edit(ctx context.Context, params ZoneSettingMinifyEditParams, opts ...option.RequestOption) (res *ZonesMinify, err error) {
+func (r *ZoneSettingMinifyService) Edit(ctx context.Context, params ZoneSettingMinifyEditParams, opts ...option.RequestOption) (res *ZoneSettingMinifyEditResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingMinifyEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/minify", params.ZoneID)
@@ -50,7 +50,7 @@ func (r *ZoneSettingMinifyService) Edit(ctx context.Context, params ZoneSettingM
 // Automatically minify certain assets for your website. Refer to
 // [Using Cloudflare Auto Minify](https://support.cloudflare.com/hc/en-us/articles/200168196)
 // for more information.
-func (r *ZoneSettingMinifyService) Get(ctx context.Context, query ZoneSettingMinifyGetParams, opts ...option.RequestOption) (res *ZonesMinify, err error) {
+func (r *ZoneSettingMinifyService) Get(ctx context.Context, query ZoneSettingMinifyGetParams, opts ...option.RequestOption) (res *ZoneSettingMinifyGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ZoneSettingMinifyGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/minify", query.ZoneID)
@@ -65,21 +65,22 @@ func (r *ZoneSettingMinifyService) Get(ctx context.Context, query ZoneSettingMin
 // Automatically minify certain assets for your website. Refer to
 // [Using Cloudflare Auto Minify](https://support.cloudflare.com/hc/en-us/articles/200168196)
 // for more information.
-type ZonesMinify struct {
+type ZoneSettingMinifyEditResponse struct {
 	// Zone setting identifier.
-	ID ZonesMinifyID `json:"id,required"`
+	ID ZoneSettingMinifyEditResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value ZonesMinifyValue `json:"value,required"`
+	Value ZoneSettingMinifyEditResponseValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable ZonesMinifyEditable `json:"editable"`
+	Editable ZoneSettingMinifyEditResponseEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time       `json:"modified_on,nullable" format:"date-time"`
-	JSON       zonesMinifyJSON `json:"-"`
+	ModifiedOn time.Time                         `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingMinifyEditResponseJSON `json:"-"`
 }
 
-// zonesMinifyJSON contains the JSON metadata for the struct [ZonesMinify]
-type zonesMinifyJSON struct {
+// zoneSettingMinifyEditResponseJSON contains the JSON metadata for the struct
+// [ZoneSettingMinifyEditResponse]
+type zoneSettingMinifyEditResponseJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -88,35 +89,31 @@ type zonesMinifyJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZonesMinify) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingMinifyEditResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ZonesMinify) implementsZoneSettingEditResponse() {}
-
-func (r ZonesMinify) implementsZoneSettingGetResponse() {}
-
 // Zone setting identifier.
-type ZonesMinifyID string
+type ZoneSettingMinifyEditResponseID string
 
 const (
-	ZonesMinifyIDMinify ZonesMinifyID = "minify"
+	ZoneSettingMinifyEditResponseIDMinify ZoneSettingMinifyEditResponseID = "minify"
 )
 
 // Current value of the zone setting.
-type ZonesMinifyValue struct {
+type ZoneSettingMinifyEditResponseValue struct {
 	// Automatically minify all CSS files for your website.
-	Css ZonesMinifyValueCss `json:"css"`
+	Css ZoneSettingMinifyEditResponseValueCss `json:"css"`
 	// Automatically minify all HTML files for your website.
-	HTML ZonesMinifyValueHTML `json:"html"`
+	HTML ZoneSettingMinifyEditResponseValueHTML `json:"html"`
 	// Automatically minify all JavaScript files for your website.
-	Js   ZonesMinifyValueJs   `json:"js"`
-	JSON zonesMinifyValueJSON `json:"-"`
+	Js   ZoneSettingMinifyEditResponseValueJs   `json:"js"`
+	JSON zoneSettingMinifyEditResponseValueJSON `json:"-"`
 }
 
-// zonesMinifyValueJSON contains the JSON metadata for the struct
-// [ZonesMinifyValue]
-type zonesMinifyValueJSON struct {
+// zoneSettingMinifyEditResponseValueJSON contains the JSON metadata for the struct
+// [ZoneSettingMinifyEditResponseValue]
+type zoneSettingMinifyEditResponseValueJSON struct {
 	Css         apijson.Field
 	HTML        apijson.Field
 	Js          apijson.Field
@@ -124,72 +121,138 @@ type zonesMinifyValueJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ZonesMinifyValue) UnmarshalJSON(data []byte) (err error) {
+func (r *ZoneSettingMinifyEditResponseValue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Automatically minify all CSS files for your website.
-type ZonesMinifyValueCss string
+type ZoneSettingMinifyEditResponseValueCss string
 
 const (
-	ZonesMinifyValueCssOn  ZonesMinifyValueCss = "on"
-	ZonesMinifyValueCssOff ZonesMinifyValueCss = "off"
+	ZoneSettingMinifyEditResponseValueCssOn  ZoneSettingMinifyEditResponseValueCss = "on"
+	ZoneSettingMinifyEditResponseValueCssOff ZoneSettingMinifyEditResponseValueCss = "off"
 )
 
 // Automatically minify all HTML files for your website.
-type ZonesMinifyValueHTML string
+type ZoneSettingMinifyEditResponseValueHTML string
 
 const (
-	ZonesMinifyValueHTMLOn  ZonesMinifyValueHTML = "on"
-	ZonesMinifyValueHTMLOff ZonesMinifyValueHTML = "off"
+	ZoneSettingMinifyEditResponseValueHTMLOn  ZoneSettingMinifyEditResponseValueHTML = "on"
+	ZoneSettingMinifyEditResponseValueHTMLOff ZoneSettingMinifyEditResponseValueHTML = "off"
 )
 
 // Automatically minify all JavaScript files for your website.
-type ZonesMinifyValueJs string
+type ZoneSettingMinifyEditResponseValueJs string
 
 const (
-	ZonesMinifyValueJsOn  ZonesMinifyValueJs = "on"
-	ZonesMinifyValueJsOff ZonesMinifyValueJs = "off"
+	ZoneSettingMinifyEditResponseValueJsOn  ZoneSettingMinifyEditResponseValueJs = "on"
+	ZoneSettingMinifyEditResponseValueJsOff ZoneSettingMinifyEditResponseValueJs = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type ZonesMinifyEditable bool
+type ZoneSettingMinifyEditResponseEditable bool
 
 const (
-	ZonesMinifyEditableTrue  ZonesMinifyEditable = true
-	ZonesMinifyEditableFalse ZonesMinifyEditable = false
+	ZoneSettingMinifyEditResponseEditableTrue  ZoneSettingMinifyEditResponseEditable = true
+	ZoneSettingMinifyEditResponseEditableFalse ZoneSettingMinifyEditResponseEditable = false
 )
 
 // Automatically minify certain assets for your website. Refer to
 // [Using Cloudflare Auto Minify](https://support.cloudflare.com/hc/en-us/articles/200168196)
 // for more information.
-type ZonesMinifyParam struct {
+type ZoneSettingMinifyGetResponse struct {
 	// Zone setting identifier.
-	ID param.Field[ZonesMinifyID] `json:"id,required"`
+	ID ZoneSettingMinifyGetResponseID `json:"id,required"`
 	// Current value of the zone setting.
-	Value param.Field[ZonesMinifyValueParam] `json:"value,required"`
+	Value ZoneSettingMinifyGetResponseValue `json:"value,required"`
+	// Whether or not this setting can be modified for this zone (based on your
+	// Cloudflare plan level).
+	Editable ZoneSettingMinifyGetResponseEditable `json:"editable"`
+	// last time this setting was modified.
+	ModifiedOn time.Time                        `json:"modified_on,nullable" format:"date-time"`
+	JSON       zoneSettingMinifyGetResponseJSON `json:"-"`
 }
 
-func (r ZonesMinifyParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+// zoneSettingMinifyGetResponseJSON contains the JSON metadata for the struct
+// [ZoneSettingMinifyGetResponse]
+type zoneSettingMinifyGetResponseJSON struct {
+	ID          apijson.Field
+	Value       apijson.Field
+	Editable    apijson.Field
+	ModifiedOn  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
-func (r ZonesMinifyParam) implementsZoneSettingEditParamsItem() {}
+func (r *ZoneSettingMinifyGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Zone setting identifier.
+type ZoneSettingMinifyGetResponseID string
+
+const (
+	ZoneSettingMinifyGetResponseIDMinify ZoneSettingMinifyGetResponseID = "minify"
+)
 
 // Current value of the zone setting.
-type ZonesMinifyValueParam struct {
+type ZoneSettingMinifyGetResponseValue struct {
 	// Automatically minify all CSS files for your website.
-	Css param.Field[ZonesMinifyValueCss] `json:"css"`
+	Css ZoneSettingMinifyGetResponseValueCss `json:"css"`
 	// Automatically minify all HTML files for your website.
-	HTML param.Field[ZonesMinifyValueHTML] `json:"html"`
+	HTML ZoneSettingMinifyGetResponseValueHTML `json:"html"`
 	// Automatically minify all JavaScript files for your website.
-	Js param.Field[ZonesMinifyValueJs] `json:"js"`
+	Js   ZoneSettingMinifyGetResponseValueJs   `json:"js"`
+	JSON zoneSettingMinifyGetResponseValueJSON `json:"-"`
 }
 
-func (r ZonesMinifyValueParam) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+// zoneSettingMinifyGetResponseValueJSON contains the JSON metadata for the struct
+// [ZoneSettingMinifyGetResponseValue]
+type zoneSettingMinifyGetResponseValueJSON struct {
+	Css         apijson.Field
+	HTML        apijson.Field
+	Js          apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
+
+func (r *ZoneSettingMinifyGetResponseValue) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Automatically minify all CSS files for your website.
+type ZoneSettingMinifyGetResponseValueCss string
+
+const (
+	ZoneSettingMinifyGetResponseValueCssOn  ZoneSettingMinifyGetResponseValueCss = "on"
+	ZoneSettingMinifyGetResponseValueCssOff ZoneSettingMinifyGetResponseValueCss = "off"
+)
+
+// Automatically minify all HTML files for your website.
+type ZoneSettingMinifyGetResponseValueHTML string
+
+const (
+	ZoneSettingMinifyGetResponseValueHTMLOn  ZoneSettingMinifyGetResponseValueHTML = "on"
+	ZoneSettingMinifyGetResponseValueHTMLOff ZoneSettingMinifyGetResponseValueHTML = "off"
+)
+
+// Automatically minify all JavaScript files for your website.
+type ZoneSettingMinifyGetResponseValueJs string
+
+const (
+	ZoneSettingMinifyGetResponseValueJsOn  ZoneSettingMinifyGetResponseValueJs = "on"
+	ZoneSettingMinifyGetResponseValueJsOff ZoneSettingMinifyGetResponseValueJs = "off"
+)
+
+// Whether or not this setting can be modified for this zone (based on your
+// Cloudflare plan level).
+type ZoneSettingMinifyGetResponseEditable bool
+
+const (
+	ZoneSettingMinifyGetResponseEditableTrue  ZoneSettingMinifyGetResponseEditable = true
+	ZoneSettingMinifyGetResponseEditableFalse ZoneSettingMinifyGetResponseEditable = false
+)
 
 type ZoneSettingMinifyEditParams struct {
 	// Identifier
@@ -248,7 +311,7 @@ type ZoneSettingMinifyEditResponseEnvelope struct {
 	// Automatically minify certain assets for your website. Refer to
 	// [Using Cloudflare Auto Minify](https://support.cloudflare.com/hc/en-us/articles/200168196)
 	// for more information.
-	Result ZonesMinify                               `json:"result"`
+	Result ZoneSettingMinifyEditResponse             `json:"result"`
 	JSON   zoneSettingMinifyEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -318,7 +381,7 @@ type ZoneSettingMinifyGetResponseEnvelope struct {
 	// Automatically minify certain assets for your website. Refer to
 	// [Using Cloudflare Auto Minify](https://support.cloudflare.com/hc/en-us/articles/200168196)
 	// for more information.
-	Result ZonesMinify                              `json:"result"`
+	Result ZoneSettingMinifyGetResponse             `json:"result"`
 	JSON   zoneSettingMinifyGetResponseEnvelopeJSON `json:"-"`
 }
 

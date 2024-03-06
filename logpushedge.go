@@ -32,7 +32,7 @@ func NewLogpushEdgeService(opts ...option.RequestOption) (r *LogpushEdgeService)
 }
 
 // Creates a new Instant Logs job for a zone.
-func (r *LogpushEdgeService) New(ctx context.Context, params LogpushEdgeNewParams, opts ...option.RequestOption) (res *LogpushInstantLogsJob, err error) {
+func (r *LogpushEdgeService) New(ctx context.Context, params LogpushEdgeNewParams, opts ...option.RequestOption) (res *LogpushEdgeNewResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LogpushEdgeNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/logpush/edge", params.ZoneID)
@@ -45,7 +45,7 @@ func (r *LogpushEdgeService) New(ctx context.Context, params LogpushEdgeNewParam
 }
 
 // Lists Instant Logs jobs for a zone.
-func (r *LogpushEdgeService) Get(ctx context.Context, query LogpushEdgeGetParams, opts ...option.RequestOption) (res *[]LogpushInstantLogsJob, err error) {
+func (r *LogpushEdgeService) Get(ctx context.Context, query LogpushEdgeGetParams, opts ...option.RequestOption) (res *[]LogpushEdgeGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LogpushEdgeGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/logpush/edge", query.ZoneID)
@@ -57,7 +57,7 @@ func (r *LogpushEdgeService) Get(ctx context.Context, query LogpushEdgeGetParams
 	return
 }
 
-type LogpushInstantLogsJob struct {
+type LogpushEdgeNewResponse struct {
 	// Unique WebSocket address that will receive messages from Cloudflare’s edge.
 	DestinationConf string `json:"destination_conf" format:"uri"`
 	// Comma-separated list of fields.
@@ -68,13 +68,13 @@ type LogpushInstantLogsJob struct {
 	// "sample": 1 is 100% of records "sample": 10 is 10% and so on.
 	Sample int64 `json:"sample"`
 	// Unique session id of the job.
-	SessionID string                    `json:"session_id"`
-	JSON      logpushInstantLogsJobJSON `json:"-"`
+	SessionID string                     `json:"session_id"`
+	JSON      logpushEdgeNewResponseJSON `json:"-"`
 }
 
-// logpushInstantLogsJobJSON contains the JSON metadata for the struct
-// [LogpushInstantLogsJob]
-type logpushInstantLogsJobJSON struct {
+// logpushEdgeNewResponseJSON contains the JSON metadata for the struct
+// [LogpushEdgeNewResponse]
+type logpushEdgeNewResponseJSON struct {
 	DestinationConf apijson.Field
 	Fields          apijson.Field
 	Filter          apijson.Field
@@ -84,7 +84,38 @@ type logpushInstantLogsJobJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *LogpushInstantLogsJob) UnmarshalJSON(data []byte) (err error) {
+func (r *LogpushEdgeNewResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type LogpushEdgeGetResponse struct {
+	// Unique WebSocket address that will receive messages from Cloudflare’s edge.
+	DestinationConf string `json:"destination_conf" format:"uri"`
+	// Comma-separated list of fields.
+	Fields string `json:"fields"`
+	// Filters to drill down into specific events.
+	Filter string `json:"filter"`
+	// The sample parameter is the sample rate of the records set by the client:
+	// "sample": 1 is 100% of records "sample": 10 is 10% and so on.
+	Sample int64 `json:"sample"`
+	// Unique session id of the job.
+	SessionID string                     `json:"session_id"`
+	JSON      logpushEdgeGetResponseJSON `json:"-"`
+}
+
+// logpushEdgeGetResponseJSON contains the JSON metadata for the struct
+// [LogpushEdgeGetResponse]
+type logpushEdgeGetResponseJSON struct {
+	DestinationConf apijson.Field
+	Fields          apijson.Field
+	Filter          apijson.Field
+	Sample          apijson.Field
+	SessionID       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *LogpushEdgeGetResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -107,7 +138,7 @@ func (r LogpushEdgeNewParams) MarshalJSON() (data []byte, err error) {
 type LogpushEdgeNewResponseEnvelope struct {
 	Errors   []LogpushEdgeNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []LogpushEdgeNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   LogpushInstantLogsJob                    `json:"result,required,nullable"`
+	Result   LogpushEdgeNewResponse                   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success LogpushEdgeNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    logpushEdgeNewResponseEnvelopeJSON    `json:"-"`
@@ -181,7 +212,7 @@ type LogpushEdgeGetParams struct {
 type LogpushEdgeGetResponseEnvelope struct {
 	Errors   []LogpushEdgeGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []LogpushEdgeGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []LogpushInstantLogsJob                  `json:"result,required"`
+	Result   []LogpushEdgeGetResponse                 `json:"result,required"`
 	// Whether the API call was successful
 	Success LogpushEdgeGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    logpushEdgeGetResponseEnvelopeJSON    `json:"-"`
