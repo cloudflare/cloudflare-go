@@ -229,24 +229,22 @@ func (r *URLScannerScanGetResponseScanMeta) UnmarshalJSON(data []byte) (err erro
 }
 
 type URLScannerScanGetResponseScanMetaProcessors struct {
-	Categories         URLScannerScanGetResponseScanMetaProcessorsCategories `json:"categories,required"`
-	GoogleSafeBrowsing []string                                              `json:"google_safe_browsing,required"`
-	Phishing           []string                                              `json:"phishing,required"`
-	Rank               URLScannerScanGetResponseScanMetaProcessorsRank       `json:"rank,required"`
-	Tech               []URLScannerScanGetResponseScanMetaProcessorsTech     `json:"tech,required"`
-	JSON               urlScannerScanGetResponseScanMetaProcessorsJSON       `json:"-"`
+	Categories URLScannerScanGetResponseScanMetaProcessorsCategories `json:"categories,required"`
+	Phishing   []string                                              `json:"phishing,required"`
+	Rank       URLScannerScanGetResponseScanMetaProcessorsRank       `json:"rank,required"`
+	Tech       []URLScannerScanGetResponseScanMetaProcessorsTech     `json:"tech,required"`
+	JSON       urlScannerScanGetResponseScanMetaProcessorsJSON       `json:"-"`
 }
 
 // urlScannerScanGetResponseScanMetaProcessorsJSON contains the JSON metadata for
 // the struct [URLScannerScanGetResponseScanMetaProcessors]
 type urlScannerScanGetResponseScanMetaProcessorsJSON struct {
-	Categories         apijson.Field
-	GoogleSafeBrowsing apijson.Field
-	Phishing           apijson.Field
-	Rank               apijson.Field
-	Tech               apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
+	Categories  apijson.Field
+	Phishing    apijson.Field
+	Rank        apijson.Field
+	Tech        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *URLScannerScanGetResponseScanMetaProcessors) UnmarshalJSON(data []byte) (err error) {
@@ -836,8 +834,6 @@ func (r *URLScannerScanGetResponseScanVerdicts) UnmarshalJSON(data []byte) (err 
 
 type URLScannerScanGetResponseScanVerdictsOverall struct {
 	Categories []URLScannerScanGetResponseScanVerdictsOverallCategory `json:"categories,required"`
-	// Please visit https://safebrowsing.google.com/ for more information.
-	GsbThreatTypes []string `json:"gsb_threat_types,required"`
 	// At least one of our subsystems marked the site as potentially malicious at the
 	// time of the scan.
 	Malicious bool                                             `json:"malicious,required"`
@@ -848,12 +844,11 @@ type URLScannerScanGetResponseScanVerdictsOverall struct {
 // urlScannerScanGetResponseScanVerdictsOverallJSON contains the JSON metadata for
 // the struct [URLScannerScanGetResponseScanVerdictsOverall]
 type urlScannerScanGetResponseScanVerdictsOverallJSON struct {
-	Categories     apijson.Field
-	GsbThreatTypes apijson.Field
-	Malicious      apijson.Field
-	Phishing       apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
+	Categories  apijson.Field
+	Malicious   apijson.Field
+	Phishing    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
 func (r *URLScannerScanGetResponseScanVerdictsOverall) UnmarshalJSON(data []byte) (err error) {
