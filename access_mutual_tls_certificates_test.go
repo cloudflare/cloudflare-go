@@ -277,7 +277,7 @@ func TestDeleteAccessMutualTLSCertificate(t *testing.T) {
 	assert.NoError(t, err)
 }
 
-func TestListAccessMutualTLSHostnameSettings(t *testing.T) {
+func TestGetAccessMutualTLSHostnameSettings(t *testing.T) {
 	setup()
 	defer teardown()
 
@@ -318,7 +318,7 @@ func TestListAccessMutualTLSHostnameSettings(t *testing.T) {
 
 	mux.HandleFunc("/accounts/"+testAccountID+"/access/certificates/settings", handler)
 
-	actual, err := client.ListAccessMutualTLSHostnameSettings(context.Background(), testAccountRC)
+	actual, err := client.GetAccessMutualTLSHostnameSettings(context.Background(), testAccountRC)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)
@@ -326,7 +326,7 @@ func TestListAccessMutualTLSHostnameSettings(t *testing.T) {
 
 	mux.HandleFunc("/zones/"+testZoneID+"/access/certificates/settings", handler)
 
-	actual, err = client.ListAccessMutualTLSHostnameSettings(context.Background(), testZoneRC)
+	actual, err = client.GetAccessMutualTLSHostnameSettings(context.Background(), testZoneRC)
 
 	if assert.NoError(t, err) {
 		assert.Equal(t, want, actual)

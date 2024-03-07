@@ -64,7 +64,7 @@ type AccessMutualTLSHostnameSettings struct {
 	Hostname                    string `json:"hostname,omitempty"`
 }
 
-type ListAccessMutualTLSHostnameSettingsResponse struct {
+type GetAccessMutualTLSHostnameSettingsResponse struct {
 	Response
 	Result []AccessMutualTLSHostnameSettings `json:"result"`
 }
@@ -228,11 +228,11 @@ func (api *API) DeleteAccessMutualTLSCertificate(ctx context.Context, rc *Resour
 	return nil
 }
 
-// ListAccessMutualTLSHostnameSettings returns all Access mTLS hostname settings.
+// GetAccessMutualTLSHostnameSettings returns all Access mTLS hostname settings.
 //
 // Account API Reference: https://developers.cloudflare.com/api/operations/access-mtls-authentication-update-an-mtls-certificate-settings
 // Zone API Reference: https://developers.cloudflare.com/api/operations/zone-level-access-mtls-authentication-list-mtls-certificates-hostname-settings
-func (api *API) ListAccessMutualTLSHostnameSettings(ctx context.Context, rc *ResourceContainer) ([]AccessMutualTLSHostnameSettings, error) {
+func (api *API) GetAccessMutualTLSHostnameSettings(ctx context.Context, rc *ResourceContainer) ([]AccessMutualTLSHostnameSettings, error) {
 	uri := fmt.Sprintf(
 		"/%s/%s/access/certificates/settings",
 		rc.Level,
@@ -244,7 +244,7 @@ func (api *API) ListAccessMutualTLSHostnameSettings(ctx context.Context, rc *Res
 		return []AccessMutualTLSHostnameSettings{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}
 
-	var accessMutualTLSHostnameSettingsResponse ListAccessMutualTLSHostnameSettingsResponse
+	var accessMutualTLSHostnameSettingsResponse GetAccessMutualTLSHostnameSettingsResponse
 	err = json.Unmarshal(res, &accessMutualTLSHostnameSettingsResponse)
 	if err != nil {
 		return []AccessMutualTLSHostnameSettings{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
@@ -269,7 +269,7 @@ func (api *API) UpdateAccessMutualTLSHostnameSettings(ctx context.Context, rc *R
 		return []AccessMutualTLSHostnameSettings{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
 	}
 
-	var accessMutualTLSHostnameSettingsResponse ListAccessMutualTLSHostnameSettingsResponse
+	var accessMutualTLSHostnameSettingsResponse GetAccessMutualTLSHostnameSettingsResponse
 	err = json.Unmarshal(res, &accessMutualTLSHostnameSettingsResponse)
 	if err != nil {
 		return []AccessMutualTLSHostnameSettings{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
