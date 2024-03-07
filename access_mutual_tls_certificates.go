@@ -58,6 +58,21 @@ type UpdateAccessMutualTLSCertificateParams struct {
 	AssociatedHostnames []string  `json:"associated_hostnames,omitempty"`
 }
 
+type AccessMutualTLSHostnameSettings struct {
+	ChinaNetwork                *bool  `json:"china_network,omitempty"`
+	ClientCertificateForwarding *bool  `json:"client_certificate_forwarding,omitempty"`
+	Hostname                    string `json:"hostname,omitempty"`
+}
+
+type GetAccessMutualTLSHostnameSettingsResponse struct {
+	Response
+	Result []AccessMutualTLSHostnameSettings `json:"result"`
+}
+
+type UpdateAccessMutualTLSHostnameSettingsParams struct {
+	Settings []AccessMutualTLSHostnameSettings `json:"settings,omitempty"`
+}
+
 // ListAccessMutualTLSCertificates returns all Access TLS certificates
 //
 // Account API Reference: https://developers.cloudflare.com/api/operations/access-mtls-authentication-list-mtls-certificates
@@ -211,4 +226,54 @@ func (api *API) DeleteAccessMutualTLSCertificate(ctx context.Context, rc *Resour
 	}
 
 	return nil
+}
+
+// GetAccessMutualTLSHostnameSettings returns all Access mTLS hostname settings.
+//
+// Account API Reference: https://developers.cloudflare.com/api/operations/access-mtls-authentication-update-an-mtls-certificate-settings
+// Zone API Reference: https://developers.cloudflare.com/api/operations/zone-level-access-mtls-authentication-list-mtls-certificates-hostname-settings
+func (api *API) GetAccessMutualTLSHostnameSettings(ctx context.Context, rc *ResourceContainer) ([]AccessMutualTLSHostnameSettings, error) {
+	uri := fmt.Sprintf(
+		"/%s/%s/access/certificates/settings",
+		rc.Level,
+		rc.Identifier,
+	)
+
+	res, err := api.makeRequestContext(ctx, http.MethodGet, uri, nil)
+	if err != nil {
+		return []AccessMutualTLSHostnameSettings{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
+	}
+
+	var accessMutualTLSHostnameSettingsResponse GetAccessMutualTLSHostnameSettingsResponse
+	err = json.Unmarshal(res, &accessMutualTLSHostnameSettingsResponse)
+	if err != nil {
+		return []AccessMutualTLSHostnameSettings{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+
+	return accessMutualTLSHostnameSettingsResponse.Result, nil
+}
+
+// UpdateAccessMutualTLSHostnameSettings updates Access mTLS certificate hostname settings.
+//
+// Account API Reference: https://developers.cloudflare.com/api/operations/access-mtls-authentication-update-an-mtls-certificate-settings
+// Zone API Reference: https://developers.cloudflare.com/api/operations/zone-level-access-mtls-authentication-update-an-mtls-certificate-settings
+func (api *API) UpdateAccessMutualTLSHostnameSettings(ctx context.Context, rc *ResourceContainer, params UpdateAccessMutualTLSHostnameSettingsParams) ([]AccessMutualTLSHostnameSettings, error) {
+	uri := fmt.Sprintf(
+		"/%s/%s/access/certificates/settings",
+		rc.Level,
+		rc.Identifier,
+	)
+
+	res, err := api.makeRequestContext(ctx, http.MethodPut, uri, params)
+	if err != nil {
+		return []AccessMutualTLSHostnameSettings{}, fmt.Errorf("%s: %w", errMakeRequestError, err)
+	}
+
+	var accessMutualTLSHostnameSettingsResponse GetAccessMutualTLSHostnameSettingsResponse
+	err = json.Unmarshal(res, &accessMutualTLSHostnameSettingsResponse)
+	if err != nil {
+		return []AccessMutualTLSHostnameSettings{}, fmt.Errorf("%s: %w", errUnmarshalError, err)
+	}
+
+	return accessMutualTLSHostnameSettingsResponse.Result, nil
 }
