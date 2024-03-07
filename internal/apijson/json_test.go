@@ -104,6 +104,29 @@ type InlineJSON struct {
 	raw         string
 }
 
+type UnionInteger int64
+
+func (UnionInteger) union() {}
+
+type UnionStructA struct {
+	Type string `json:"type"`
+	A    string `json:"a"`
+	B    string `json:"b"`
+}
+
+func (UnionStructA) union() {}
+
+type UnionStructB struct {
+	Type string `json:"type"`
+	A    string `json:"a"`
+}
+
+func (UnionStructB) union() {}
+
+type UnionTime time.Time
+
+func (UnionTime) union() {}
+
 func init() {
 	RegisterUnion(reflect.TypeOf((*Union)(nil)).Elem(), "type",
 		UnionVariant{
@@ -127,28 +150,84 @@ func init() {
 	)
 }
 
-type UnionInteger int64
-
-func (UnionInteger) union() {}
-
-type UnionStructA struct {
-	Type string `json:"type"`
-	A    string `json:"a"`
-	B    string `json:"b"`
+type ComplexUnionStruct struct {
+	Union ComplexUnion `json:"union"`
 }
 
-func (UnionStructA) union() {}
-
-type UnionStructB struct {
-	Type string `json:"type"`
-	A    string `json:"a"`
+type ComplexUnion interface {
+	complexUnion()
 }
 
-func (UnionStructB) union() {}
+type ComplexUnionA struct {
+	Boo string `json:"boo"`
+	Foo bool   `json:"foo"`
+}
 
-type UnionTime time.Time
+func (ComplexUnionA) complexUnion() {}
 
-func (UnionTime) union() {}
+type ComplexUnionB struct {
+	Boo bool   `json:"boo"`
+	Foo string `json:"foo"`
+}
+
+func (ComplexUnionB) complexUnion() {}
+
+type ComplexUnionC struct {
+	Boo int64 `json:"boo"`
+}
+
+func (ComplexUnionC) complexUnion() {}
+
+type ComplexUnionTypeA struct {
+	Baz  int64 `json:"baz"`
+	Type TypeA `json:"type"`
+}
+
+func (ComplexUnionTypeA) complexUnion() {}
+
+type TypeA string
+
+func (t TypeA) IsKnown() bool {
+	return t == "a"
+}
+
+type ComplexUnionTypeB struct {
+	Baz  int64 `json:"baz"`
+	Type TypeB `json:"type"`
+}
+
+type TypeB string
+
+func (t TypeB) IsKnown() bool {
+	return t == "b"
+}
+
+func (ComplexUnionTypeB) complexUnion() {}
+
+func init() {
+	RegisterUnion(reflect.TypeOf((*ComplexUnion)(nil)).Elem(), "",
+		UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ComplexUnionA{}),
+		},
+		UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ComplexUnionB{}),
+		},
+		UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ComplexUnionC{}),
+		},
+		UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ComplexUnionTypeA{}),
+		},
+		UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(ComplexUnionTypeB{}),
+		},
+	)
+}
 
 var tests = map[string]struct {
 	buf string
@@ -325,6 +404,31 @@ var tests = map[string]struct {
 		UnionStruct{
 			Union: UnionTime(time.Date(2010, 05, 23, 0, 0, 0, 0, time.UTC)),
 		},
+	},
+
+	"complex_union_a": {
+		`{"union":{"boo":"12","foo":true}}`,
+		ComplexUnionStruct{Union: ComplexUnionA{Boo: "12", Foo: true}},
+	},
+
+	"complex_union_b": {
+		`{"union":{"boo":true,"foo":"12"}}`,
+		ComplexUnionStruct{Union: ComplexUnionB{Boo: true, Foo: "12"}},
+	},
+
+	"complex_union_c": {
+		`{"union":{"boo":12}}`,
+		ComplexUnionStruct{Union: ComplexUnionC{Boo: 12}},
+	},
+
+	"complex_union_type_a": {
+		`{"union":{"baz":12,"type":"a"}}`,
+		ComplexUnionStruct{Union: ComplexUnionTypeA{Baz: 12, Type: TypeA("a")}},
+	},
+
+	"complex_union_type_b": {
+		`{"union":{"baz":12,"type":"b"}}`,
+		ComplexUnionStruct{Union: ComplexUnionTypeB{Baz: 12, Type: TypeB("b")}},
 	},
 
 	"inline_coerce": {
