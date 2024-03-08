@@ -10,6 +10,7 @@ import (
 	"github.com/cloudflare/cloudflare-go"
 	"github.com/cloudflare/cloudflare-go/internal/testutil"
 	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-go/zones"
 )
 
 func TestUsage(t *testing.T) {
@@ -25,12 +26,12 @@ func TestUsage(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	zoneNewResponse, err := client.Zones.New(context.TODO(), cloudflare.ZoneNewParams{
-		Account: cloudflare.F(cloudflare.ZoneNewParamsAccount{
+	zoneNewResponse, err := client.Zones.New(context.TODO(), zones.ZoneNewParams{
+		Account: cloudflare.F(zones.ZoneNewParamsAccount{
 			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		}),
 		Name: cloudflare.F("example.com"),
-		Type: cloudflare.F(cloudflare.ZoneNewParamsTypeFull),
+		Type: cloudflare.F(zones.ZoneNewParamsTypeFull),
 	})
 	if err != nil {
 		t.Error(err)

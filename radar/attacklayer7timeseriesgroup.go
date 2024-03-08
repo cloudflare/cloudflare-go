@@ -1,0 +1,2062 @@
+// File generated from our OpenAPI spec by Stainless.
+
+package radar
+
+import (
+	"context"
+	"net/http"
+	"net/url"
+	"time"
+
+	"github.com/cloudflare/cloudflare-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/internal/param"
+	"github.com/cloudflare/cloudflare-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/option"
+)
+
+// AttackLayer7TimeseriesGroupService contains methods and other services that help
+// with interacting with the cloudflare API. Note, unlike clients, this service
+// does not read variables from the environment automatically. You should not
+// instantiate this service directly, and instead use the
+// [NewAttackLayer7TimeseriesGroupService] method instead.
+type AttackLayer7TimeseriesGroupService struct {
+	Options []option.RequestOption
+}
+
+// NewAttackLayer7TimeseriesGroupService generates a new service that applies the
+// given options to each request. These options are applied after the parent
+// client's options (if there is one), and before any request-specific options.
+func NewAttackLayer7TimeseriesGroupService(opts ...option.RequestOption) (r *AttackLayer7TimeseriesGroupService) {
+	r = &AttackLayer7TimeseriesGroupService{}
+	r.Options = opts
+	return
+}
+
+// Get a time series of the percentual distribution of mitigation techniques, over
+// time.
+func (r *AttackLayer7TimeseriesGroupService) Get(ctx context.Context, query AttackLayer7TimeseriesGroupGetParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesGroupGetResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env AttackLayer7TimeseriesGroupGetResponseEnvelope
+	path := "radar/attacks/layer7/timeseries_groups"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Percentage distribution of attacks by http method used over time.
+func (r *AttackLayer7TimeseriesGroupService) HTTPMethod(ctx context.Context, query AttackLayer7TimeseriesGroupHTTPMethodParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesGroupHTTPMethodResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env AttackLayer7TimeseriesGroupHTTPMethodResponseEnvelope
+	path := "radar/attacks/layer7/timeseries_groups/http_method"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Percentage distribution of attacks by http version used over time.
+func (r *AttackLayer7TimeseriesGroupService) HTTPVersion(ctx context.Context, query AttackLayer7TimeseriesGroupHTTPVersionParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesGroupHTTPVersionResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env AttackLayer7TimeseriesGroupHTTPVersionResponseEnvelope
+	path := "radar/attacks/layer7/timeseries_groups/http_version"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Percentage distribution of attacks by industry used over time.
+func (r *AttackLayer7TimeseriesGroupService) Industry(ctx context.Context, query AttackLayer7TimeseriesGroupIndustryParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesGroupIndustryResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env AttackLayer7TimeseriesGroupIndustryResponseEnvelope
+	path := "radar/attacks/layer7/timeseries_groups/industry"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Percentage distribution of attacks by ip version used over time.
+func (r *AttackLayer7TimeseriesGroupService) IPVersion(ctx context.Context, query AttackLayer7TimeseriesGroupIPVersionParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesGroupIPVersionResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env AttackLayer7TimeseriesGroupIPVersionResponseEnvelope
+	path := "radar/attacks/layer7/timeseries_groups/ip_version"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Percentage distribution of attacks by managed rules used over time.
+func (r *AttackLayer7TimeseriesGroupService) ManagedRules(ctx context.Context, query AttackLayer7TimeseriesGroupManagedRulesParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesGroupManagedRulesResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env AttackLayer7TimeseriesGroupManagedRulesResponseEnvelope
+	path := "radar/attacks/layer7/timeseries_groups/managed_rules"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Percentage distribution of attacks by mitigation product used over time.
+func (r *AttackLayer7TimeseriesGroupService) MitigationProduct(ctx context.Context, query AttackLayer7TimeseriesGroupMitigationProductParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesGroupMitigationProductResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env AttackLayer7TimeseriesGroupMitigationProductResponseEnvelope
+	path := "radar/attacks/layer7/timeseries_groups/mitigation_product"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Percentage distribution of attacks by vertical used over time.
+func (r *AttackLayer7TimeseriesGroupService) Vertical(ctx context.Context, query AttackLayer7TimeseriesGroupVerticalParams, opts ...option.RequestOption) (res *AttackLayer7TimeseriesGroupVerticalResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env AttackLayer7TimeseriesGroupVerticalResponseEnvelope
+	path := "radar/attacks/layer7/timeseries_groups/vertical"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+type AttackLayer7TimeseriesGroupGetResponse struct {
+	Meta   AttackLayer7TimeseriesGroupGetResponseMeta   `json:"meta,required"`
+	Serie0 AttackLayer7TimeseriesGroupGetResponseSerie0 `json:"serie_0,required"`
+	JSON   attackLayer7TimeseriesGroupGetResponseJSON   `json:"-"`
+}
+
+// attackLayer7TimeseriesGroupGetResponseJSON contains the JSON metadata for the
+// struct [AttackLayer7TimeseriesGroupGetResponse]
+type attackLayer7TimeseriesGroupGetResponseJSON struct {
+	Meta        apijson.Field
+	Serie0      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesGroupGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesGroupGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7TimeseriesGroupGetResponseMeta struct {
+	AggInterval    string                                                   `json:"aggInterval,required"`
+	DateRange      []AttackLayer7TimeseriesGroupGetResponseMetaDateRange    `json:"dateRange,required"`
+	LastUpdated    time.Time                                                `json:"lastUpdated,required" format:"date-time"`
+	ConfidenceInfo AttackLayer7TimeseriesGroupGetResponseMetaConfidenceInfo `json:"confidenceInfo"`
+	JSON           attackLayer7TimeseriesGroupGetResponseMetaJSON           `json:"-"`
+}
+
+// attackLayer7TimeseriesGroupGetResponseMetaJSON contains the JSON metadata for
+// the struct [AttackLayer7TimeseriesGroupGetResponseMeta]
+type attackLayer7TimeseriesGroupGetResponseMetaJSON struct {
+	AggInterval    apijson.Field
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	ConfidenceInfo apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesGroupGetResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesGroupGetResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7TimeseriesGroupGetResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                               `json:"startTime,required" format:"date-time"`
+	JSON      attackLayer7TimeseriesGroupGetResponseMetaDateRangeJSON `json:"-"`
+}
+
+// attackLayer7TimeseriesGroupGetResponseMetaDateRangeJSON contains the JSON
+// metadata for the struct [AttackLayer7TimeseriesGroupGetResponseMetaDateRange]
+type attackLayer7TimeseriesGroupGetResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesGroupGetResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesGroupGetResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7TimeseriesGroupGetResponseMetaConfidenceInfo struct {
+	Annotations []AttackLayer7TimeseriesGroupGetResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                                `json:"level"`
+	JSON        attackLayer7TimeseriesGroupGetResponseMetaConfidenceInfoJSON         `json:"-"`
+}
+
+// attackLayer7TimeseriesGroupGetResponseMetaConfidenceInfoJSON contains the JSON
+// metadata for the struct
+// [AttackLayer7TimeseriesGroupGetResponseMetaConfidenceInfo]
+type attackLayer7TimeseriesGroupGetResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesGroupGetResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesGroupGetResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7TimeseriesGroupGetResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                                 `json:"dataSource,required"`
+	Description     string                                                                 `json:"description,required"`
+	EventType       string                                                                 `json:"eventType,required"`
+	IsInstantaneous interface{}                                                            `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                              `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                                 `json:"linkedUrl"`
+	StartTime       time.Time                                                              `json:"startTime" format:"date-time"`
+	JSON            attackLayer7TimeseriesGroupGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// attackLayer7TimeseriesGroupGetResponseMetaConfidenceInfoAnnotationJSON contains
+// the JSON metadata for the struct
+// [AttackLayer7TimeseriesGroupGetResponseMetaConfidenceInfoAnnotation]
+type attackLayer7TimeseriesGroupGetResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesGroupGetResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesGroupGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7TimeseriesGroupGetResponseSerie0 struct {
+	AccessRules        []string                                         `json:"ACCESS_RULES,required"`
+	APIShield          []string                                         `json:"API_SHIELD,required"`
+	BotManagement      []string                                         `json:"BOT_MANAGEMENT,required"`
+	DataLossPrevention []string                                         `json:"DATA_LOSS_PREVENTION,required"`
+	DDOS               []string                                         `json:"DDOS,required"`
+	IPReputation       []string                                         `json:"IP_REPUTATION,required"`
+	Timestamps         []time.Time                                      `json:"timestamps,required" format:"date-time"`
+	WAF                []string                                         `json:"WAF,required"`
+	JSON               attackLayer7TimeseriesGroupGetResponseSerie0JSON `json:"-"`
+}
+
+// attackLayer7TimeseriesGroupGetResponseSerie0JSON contains the JSON metadata for
+// the struct [AttackLayer7TimeseriesGroupGetResponseSerie0]
+type attackLayer7TimeseriesGroupGetResponseSerie0JSON struct {
+	AccessRules        apijson.Field
+	APIShield          apijson.Field
+	BotManagement      apijson.Field
+	DataLossPrevention apijson.Field
+	DDOS               apijson.Field
+	IPReputation       apijson.Field
+	Timestamps         apijson.Field
+	WAF                apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesGroupGetResponseSerie0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesGroupGetResponseSerie0JSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7TimeseriesGroupHTTPMethodResponse struct {
+	Meta   interface{}                                         `json:"meta,required"`
+	Serie0 AttackLayer7TimeseriesGroupHTTPMethodResponseSerie0 `json:"serie_0,required"`
+	JSON   attackLayer7TimeseriesGroupHTTPMethodResponseJSON   `json:"-"`
+}
+
+// attackLayer7TimeseriesGroupHTTPMethodResponseJSON contains the JSON metadata for
+// the struct [AttackLayer7TimeseriesGroupHTTPMethodResponse]
+type attackLayer7TimeseriesGroupHTTPMethodResponseJSON struct {
+	Meta        apijson.Field
+	Serie0      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesGroupHTTPMethodResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesGroupHTTPMethodResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7TimeseriesGroupHTTPMethodResponseSerie0 struct {
+	Get        []string                                                `json:"GET,required"`
+	Timestamps []string                                                `json:"timestamps,required"`
+	JSON       attackLayer7TimeseriesGroupHTTPMethodResponseSerie0JSON `json:"-"`
+}
+
+// attackLayer7TimeseriesGroupHTTPMethodResponseSerie0JSON contains the JSON
+// metadata for the struct [AttackLayer7TimeseriesGroupHTTPMethodResponseSerie0]
+type attackLayer7TimeseriesGroupHTTPMethodResponseSerie0JSON struct {
+	Get         apijson.Field
+	Timestamps  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesGroupHTTPMethodResponseSerie0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesGroupHTTPMethodResponseSerie0JSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7TimeseriesGroupHTTPVersionResponse struct {
+	Meta   interface{}                                          `json:"meta,required"`
+	Serie0 AttackLayer7TimeseriesGroupHTTPVersionResponseSerie0 `json:"serie_0,required"`
+	JSON   attackLayer7TimeseriesGroupHTTPVersionResponseJSON   `json:"-"`
+}
+
+// attackLayer7TimeseriesGroupHTTPVersionResponseJSON contains the JSON metadata
+// for the struct [AttackLayer7TimeseriesGroupHTTPVersionResponse]
+type attackLayer7TimeseriesGroupHTTPVersionResponseJSON struct {
+	Meta        apijson.Field
+	Serie0      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesGroupHTTPVersionResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesGroupHTTPVersionResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7TimeseriesGroupHTTPVersionResponseSerie0 struct {
+	HTTP1X     []string                                                 `json:"HTTP/1.x,required"`
+	Timestamps []string                                                 `json:"timestamps,required"`
+	JSON       attackLayer7TimeseriesGroupHTTPVersionResponseSerie0JSON `json:"-"`
+}
+
+// attackLayer7TimeseriesGroupHTTPVersionResponseSerie0JSON contains the JSON
+// metadata for the struct [AttackLayer7TimeseriesGroupHTTPVersionResponseSerie0]
+type attackLayer7TimeseriesGroupHTTPVersionResponseSerie0JSON struct {
+	HTTP1X      apijson.Field
+	Timestamps  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesGroupHTTPVersionResponseSerie0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesGroupHTTPVersionResponseSerie0JSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7TimeseriesGroupIndustryResponse struct {
+	Meta   interface{}                                       `json:"meta,required"`
+	Serie0 AttackLayer7TimeseriesGroupIndustryResponseSerie0 `json:"serie_0,required"`
+	JSON   attackLayer7TimeseriesGroupIndustryResponseJSON   `json:"-"`
+}
+
+// attackLayer7TimeseriesGroupIndustryResponseJSON contains the JSON metadata for
+// the struct [AttackLayer7TimeseriesGroupIndustryResponse]
+type attackLayer7TimeseriesGroupIndustryResponseJSON struct {
+	Meta        apijson.Field
+	Serie0      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesGroupIndustryResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesGroupIndustryResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7TimeseriesGroupIndustryResponseSerie0 struct {
+	Timestamps  []string                                              `json:"timestamps,required"`
+	ExtraFields map[string][]string                                   `json:"-,extras"`
+	JSON        attackLayer7TimeseriesGroupIndustryResponseSerie0JSON `json:"-"`
+}
+
+// attackLayer7TimeseriesGroupIndustryResponseSerie0JSON contains the JSON metadata
+// for the struct [AttackLayer7TimeseriesGroupIndustryResponseSerie0]
+type attackLayer7TimeseriesGroupIndustryResponseSerie0JSON struct {
+	Timestamps  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesGroupIndustryResponseSerie0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesGroupIndustryResponseSerie0JSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7TimeseriesGroupIPVersionResponse struct {
+	Meta   interface{}                                        `json:"meta,required"`
+	Serie0 AttackLayer7TimeseriesGroupIPVersionResponseSerie0 `json:"serie_0,required"`
+	JSON   attackLayer7TimeseriesGroupIPVersionResponseJSON   `json:"-"`
+}
+
+// attackLayer7TimeseriesGroupIPVersionResponseJSON contains the JSON metadata for
+// the struct [AttackLayer7TimeseriesGroupIPVersionResponse]
+type attackLayer7TimeseriesGroupIPVersionResponseJSON struct {
+	Meta        apijson.Field
+	Serie0      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesGroupIPVersionResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesGroupIPVersionResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7TimeseriesGroupIPVersionResponseSerie0 struct {
+	IPv4       []string                                               `json:"IPv4,required"`
+	IPv6       []string                                               `json:"IPv6,required"`
+	Timestamps []string                                               `json:"timestamps,required"`
+	JSON       attackLayer7TimeseriesGroupIPVersionResponseSerie0JSON `json:"-"`
+}
+
+// attackLayer7TimeseriesGroupIPVersionResponseSerie0JSON contains the JSON
+// metadata for the struct [AttackLayer7TimeseriesGroupIPVersionResponseSerie0]
+type attackLayer7TimeseriesGroupIPVersionResponseSerie0JSON struct {
+	IPv4        apijson.Field
+	IPv6        apijson.Field
+	Timestamps  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesGroupIPVersionResponseSerie0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesGroupIPVersionResponseSerie0JSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7TimeseriesGroupManagedRulesResponse struct {
+	Meta   interface{}                                           `json:"meta,required"`
+	Serie0 AttackLayer7TimeseriesGroupManagedRulesResponseSerie0 `json:"serie_0,required"`
+	JSON   attackLayer7TimeseriesGroupManagedRulesResponseJSON   `json:"-"`
+}
+
+// attackLayer7TimeseriesGroupManagedRulesResponseJSON contains the JSON metadata
+// for the struct [AttackLayer7TimeseriesGroupManagedRulesResponse]
+type attackLayer7TimeseriesGroupManagedRulesResponseJSON struct {
+	Meta        apijson.Field
+	Serie0      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesGroupManagedRulesResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesGroupManagedRulesResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7TimeseriesGroupManagedRulesResponseSerie0 struct {
+	Bot        []string                                                  `json:"Bot,required"`
+	Timestamps []string                                                  `json:"timestamps,required"`
+	JSON       attackLayer7TimeseriesGroupManagedRulesResponseSerie0JSON `json:"-"`
+}
+
+// attackLayer7TimeseriesGroupManagedRulesResponseSerie0JSON contains the JSON
+// metadata for the struct [AttackLayer7TimeseriesGroupManagedRulesResponseSerie0]
+type attackLayer7TimeseriesGroupManagedRulesResponseSerie0JSON struct {
+	Bot         apijson.Field
+	Timestamps  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesGroupManagedRulesResponseSerie0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesGroupManagedRulesResponseSerie0JSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7TimeseriesGroupMitigationProductResponse struct {
+	Meta   interface{}                                                `json:"meta,required"`
+	Serie0 AttackLayer7TimeseriesGroupMitigationProductResponseSerie0 `json:"serie_0,required"`
+	JSON   attackLayer7TimeseriesGroupMitigationProductResponseJSON   `json:"-"`
+}
+
+// attackLayer7TimeseriesGroupMitigationProductResponseJSON contains the JSON
+// metadata for the struct [AttackLayer7TimeseriesGroupMitigationProductResponse]
+type attackLayer7TimeseriesGroupMitigationProductResponseJSON struct {
+	Meta        apijson.Field
+	Serie0      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesGroupMitigationProductResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesGroupMitigationProductResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7TimeseriesGroupMitigationProductResponseSerie0 struct {
+	DDOS       []string                                                       `json:"DDOS,required"`
+	Timestamps []string                                                       `json:"timestamps,required"`
+	JSON       attackLayer7TimeseriesGroupMitigationProductResponseSerie0JSON `json:"-"`
+}
+
+// attackLayer7TimeseriesGroupMitigationProductResponseSerie0JSON contains the JSON
+// metadata for the struct
+// [AttackLayer7TimeseriesGroupMitigationProductResponseSerie0]
+type attackLayer7TimeseriesGroupMitigationProductResponseSerie0JSON struct {
+	DDOS        apijson.Field
+	Timestamps  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesGroupMitigationProductResponseSerie0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesGroupMitigationProductResponseSerie0JSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7TimeseriesGroupVerticalResponse struct {
+	Meta   interface{}                                       `json:"meta,required"`
+	Serie0 AttackLayer7TimeseriesGroupVerticalResponseSerie0 `json:"serie_0,required"`
+	JSON   attackLayer7TimeseriesGroupVerticalResponseJSON   `json:"-"`
+}
+
+// attackLayer7TimeseriesGroupVerticalResponseJSON contains the JSON metadata for
+// the struct [AttackLayer7TimeseriesGroupVerticalResponse]
+type attackLayer7TimeseriesGroupVerticalResponseJSON struct {
+	Meta        apijson.Field
+	Serie0      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesGroupVerticalResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesGroupVerticalResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7TimeseriesGroupVerticalResponseSerie0 struct {
+	Timestamps  []string                                              `json:"timestamps,required"`
+	ExtraFields map[string][]string                                   `json:"-,extras"`
+	JSON        attackLayer7TimeseriesGroupVerticalResponseSerie0JSON `json:"-"`
+}
+
+// attackLayer7TimeseriesGroupVerticalResponseSerie0JSON contains the JSON metadata
+// for the struct [AttackLayer7TimeseriesGroupVerticalResponseSerie0]
+type attackLayer7TimeseriesGroupVerticalResponseSerie0JSON struct {
+	Timestamps  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesGroupVerticalResponseSerie0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesGroupVerticalResponseSerie0JSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7TimeseriesGroupGetParams struct {
+	// Aggregation interval results should be returned in (for example, in 15 minutes
+	// or 1 hour intervals). Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval param.Field[AttackLayer7TimeseriesGroupGetParamsAggInterval] `query:"aggInterval"`
+	// Array of comma separated list of ASNs, start with `-` to exclude from results.
+	// For example, `-174, 3356` excludes results from AS174, but includes results from
+	// AS3356.
+	ASN param.Field[[]string] `query:"asn"`
+	// Array of comma separated list of continents (alpha-2 continent codes). Start
+	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
+	// Europe, but includes results from North America.
+	Continent param.Field[[]string] `query:"continent"`
+	// End of the date range (inclusive).
+	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
+	// For example, use `7d` and `7dControl` to compare this week with the previous
+	// week. Use this parameter or set specific start and end dates (`dateStart` and
+	// `dateEnd` parameters).
+	DateRange param.Field[[]AttackLayer7TimeseriesGroupGetParamsDateRange] `query:"dateRange"`
+	// Array of datetimes to filter the start of a series.
+	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
+	// Format results are returned in.
+	Format param.Field[AttackLayer7TimeseriesGroupGetParamsFormat] `query:"format"`
+	// Array of comma separated list of locations (alpha-2 country codes). Start with
+	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
+	// but includes results from PT.
+	Location param.Field[[]string] `query:"location"`
+	// Array of names that will be used to name the series in responses.
+	Name param.Field[[]string] `query:"name"`
+}
+
+// URLQuery serializes [AttackLayer7TimeseriesGroupGetParams]'s query parameters as
+// `url.Values`.
+func (r AttackLayer7TimeseriesGroupGetParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+// Aggregation interval results should be returned in (for example, in 15 minutes
+// or 1 hour intervals). Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type AttackLayer7TimeseriesGroupGetParamsAggInterval string
+
+const (
+	AttackLayer7TimeseriesGroupGetParamsAggInterval15m AttackLayer7TimeseriesGroupGetParamsAggInterval = "15m"
+	AttackLayer7TimeseriesGroupGetParamsAggInterval1h  AttackLayer7TimeseriesGroupGetParamsAggInterval = "1h"
+	AttackLayer7TimeseriesGroupGetParamsAggInterval1d  AttackLayer7TimeseriesGroupGetParamsAggInterval = "1d"
+	AttackLayer7TimeseriesGroupGetParamsAggInterval1w  AttackLayer7TimeseriesGroupGetParamsAggInterval = "1w"
+)
+
+type AttackLayer7TimeseriesGroupGetParamsDateRange string
+
+const (
+	AttackLayer7TimeseriesGroupGetParamsDateRange1d         AttackLayer7TimeseriesGroupGetParamsDateRange = "1d"
+	AttackLayer7TimeseriesGroupGetParamsDateRange2d         AttackLayer7TimeseriesGroupGetParamsDateRange = "2d"
+	AttackLayer7TimeseriesGroupGetParamsDateRange7d         AttackLayer7TimeseriesGroupGetParamsDateRange = "7d"
+	AttackLayer7TimeseriesGroupGetParamsDateRange14d        AttackLayer7TimeseriesGroupGetParamsDateRange = "14d"
+	AttackLayer7TimeseriesGroupGetParamsDateRange28d        AttackLayer7TimeseriesGroupGetParamsDateRange = "28d"
+	AttackLayer7TimeseriesGroupGetParamsDateRange12w        AttackLayer7TimeseriesGroupGetParamsDateRange = "12w"
+	AttackLayer7TimeseriesGroupGetParamsDateRange24w        AttackLayer7TimeseriesGroupGetParamsDateRange = "24w"
+	AttackLayer7TimeseriesGroupGetParamsDateRange52w        AttackLayer7TimeseriesGroupGetParamsDateRange = "52w"
+	AttackLayer7TimeseriesGroupGetParamsDateRange1dControl  AttackLayer7TimeseriesGroupGetParamsDateRange = "1dControl"
+	AttackLayer7TimeseriesGroupGetParamsDateRange2dControl  AttackLayer7TimeseriesGroupGetParamsDateRange = "2dControl"
+	AttackLayer7TimeseriesGroupGetParamsDateRange7dControl  AttackLayer7TimeseriesGroupGetParamsDateRange = "7dControl"
+	AttackLayer7TimeseriesGroupGetParamsDateRange14dControl AttackLayer7TimeseriesGroupGetParamsDateRange = "14dControl"
+	AttackLayer7TimeseriesGroupGetParamsDateRange28dControl AttackLayer7TimeseriesGroupGetParamsDateRange = "28dControl"
+	AttackLayer7TimeseriesGroupGetParamsDateRange12wControl AttackLayer7TimeseriesGroupGetParamsDateRange = "12wControl"
+	AttackLayer7TimeseriesGroupGetParamsDateRange24wControl AttackLayer7TimeseriesGroupGetParamsDateRange = "24wControl"
+)
+
+// Format results are returned in.
+type AttackLayer7TimeseriesGroupGetParamsFormat string
+
+const (
+	AttackLayer7TimeseriesGroupGetParamsFormatJson AttackLayer7TimeseriesGroupGetParamsFormat = "JSON"
+	AttackLayer7TimeseriesGroupGetParamsFormatCsv  AttackLayer7TimeseriesGroupGetParamsFormat = "CSV"
+)
+
+type AttackLayer7TimeseriesGroupGetResponseEnvelope struct {
+	Result  AttackLayer7TimeseriesGroupGetResponse             `json:"result,required"`
+	Success bool                                               `json:"success,required"`
+	JSON    attackLayer7TimeseriesGroupGetResponseEnvelopeJSON `json:"-"`
+}
+
+// attackLayer7TimeseriesGroupGetResponseEnvelopeJSON contains the JSON metadata
+// for the struct [AttackLayer7TimeseriesGroupGetResponseEnvelope]
+type attackLayer7TimeseriesGroupGetResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesGroupGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesGroupGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7TimeseriesGroupHTTPMethodParams struct {
+	// Aggregation interval results should be returned in (for example, in 15 minutes
+	// or 1 hour intervals). Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval param.Field[AttackLayer7TimeseriesGroupHTTPMethodParamsAggInterval] `query:"aggInterval"`
+	// Array of comma separated list of ASNs, start with `-` to exclude from results.
+	// For example, `-174, 3356` excludes results from AS174, but includes results from
+	// AS3356.
+	ASN param.Field[[]string] `query:"asn"`
+	// Array of comma separated list of continents (alpha-2 continent codes). Start
+	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
+	// Europe, but includes results from North America.
+	Continent param.Field[[]string] `query:"continent"`
+	// End of the date range (inclusive).
+	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
+	// For example, use `7d` and `7dControl` to compare this week with the previous
+	// week. Use this parameter or set specific start and end dates (`dateStart` and
+	// `dateEnd` parameters).
+	DateRange param.Field[[]AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange] `query:"dateRange"`
+	// Array of datetimes to filter the start of a series.
+	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
+	// Format results are returned in.
+	Format param.Field[AttackLayer7TimeseriesGroupHTTPMethodParamsFormat] `query:"format"`
+	// Filter for http version.
+	HTTPVersion param.Field[[]AttackLayer7TimeseriesGroupHTTPMethodParamsHTTPVersion] `query:"httpVersion"`
+	// Filter for ip version.
+	IPVersion param.Field[[]AttackLayer7TimeseriesGroupHTTPMethodParamsIPVersion] `query:"ipVersion"`
+	// Array of comma separated list of locations (alpha-2 country codes). Start with
+	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
+	// but includes results from PT.
+	Location param.Field[[]string] `query:"location"`
+	// Array of L7 mitigation products.
+	MitigationProduct param.Field[[]AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProduct] `query:"mitigationProduct"`
+	// Array of names that will be used to name the series in responses.
+	Name param.Field[[]string] `query:"name"`
+	// Normalization method applied. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization param.Field[AttackLayer7TimeseriesGroupHTTPMethodParamsNormalization] `query:"normalization"`
+}
+
+// URLQuery serializes [AttackLayer7TimeseriesGroupHTTPMethodParams]'s query
+// parameters as `url.Values`.
+func (r AttackLayer7TimeseriesGroupHTTPMethodParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+// Aggregation interval results should be returned in (for example, in 15 minutes
+// or 1 hour intervals). Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type AttackLayer7TimeseriesGroupHTTPMethodParamsAggInterval string
+
+const (
+	AttackLayer7TimeseriesGroupHTTPMethodParamsAggInterval15m AttackLayer7TimeseriesGroupHTTPMethodParamsAggInterval = "15m"
+	AttackLayer7TimeseriesGroupHTTPMethodParamsAggInterval1h  AttackLayer7TimeseriesGroupHTTPMethodParamsAggInterval = "1h"
+	AttackLayer7TimeseriesGroupHTTPMethodParamsAggInterval1d  AttackLayer7TimeseriesGroupHTTPMethodParamsAggInterval = "1d"
+	AttackLayer7TimeseriesGroupHTTPMethodParamsAggInterval1w  AttackLayer7TimeseriesGroupHTTPMethodParamsAggInterval = "1w"
+)
+
+type AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange string
+
+const (
+	AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange1d         AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange = "1d"
+	AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange2d         AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange = "2d"
+	AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange7d         AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange = "7d"
+	AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange14d        AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange = "14d"
+	AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange28d        AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange = "28d"
+	AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange12w        AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange = "12w"
+	AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange24w        AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange = "24w"
+	AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange52w        AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange = "52w"
+	AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange1dControl  AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange = "1dControl"
+	AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange2dControl  AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange = "2dControl"
+	AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange7dControl  AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange = "7dControl"
+	AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange14dControl AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange = "14dControl"
+	AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange28dControl AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange = "28dControl"
+	AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange12wControl AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange = "12wControl"
+	AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange24wControl AttackLayer7TimeseriesGroupHTTPMethodParamsDateRange = "24wControl"
+)
+
+// Format results are returned in.
+type AttackLayer7TimeseriesGroupHTTPMethodParamsFormat string
+
+const (
+	AttackLayer7TimeseriesGroupHTTPMethodParamsFormatJson AttackLayer7TimeseriesGroupHTTPMethodParamsFormat = "JSON"
+	AttackLayer7TimeseriesGroupHTTPMethodParamsFormatCsv  AttackLayer7TimeseriesGroupHTTPMethodParamsFormat = "CSV"
+)
+
+type AttackLayer7TimeseriesGroupHTTPMethodParamsHTTPVersion string
+
+const (
+	AttackLayer7TimeseriesGroupHTTPMethodParamsHTTPVersionHttPv1 AttackLayer7TimeseriesGroupHTTPMethodParamsHTTPVersion = "HTTPv1"
+	AttackLayer7TimeseriesGroupHTTPMethodParamsHTTPVersionHttPv2 AttackLayer7TimeseriesGroupHTTPMethodParamsHTTPVersion = "HTTPv2"
+	AttackLayer7TimeseriesGroupHTTPMethodParamsHTTPVersionHttPv3 AttackLayer7TimeseriesGroupHTTPMethodParamsHTTPVersion = "HTTPv3"
+)
+
+type AttackLayer7TimeseriesGroupHTTPMethodParamsIPVersion string
+
+const (
+	AttackLayer7TimeseriesGroupHTTPMethodParamsIPVersionIPv4 AttackLayer7TimeseriesGroupHTTPMethodParamsIPVersion = "IPv4"
+	AttackLayer7TimeseriesGroupHTTPMethodParamsIPVersionIPv6 AttackLayer7TimeseriesGroupHTTPMethodParamsIPVersion = "IPv6"
+)
+
+type AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProduct string
+
+const (
+	AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductDDOS               AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProduct = "DDOS"
+	AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductWAF                AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProduct = "WAF"
+	AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductBotManagement      AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProduct = "BOT_MANAGEMENT"
+	AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductAccessRules        AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProduct = "ACCESS_RULES"
+	AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductIPReputation       AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProduct = "IP_REPUTATION"
+	AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductAPIShield          AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProduct = "API_SHIELD"
+	AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProductDataLossPrevention AttackLayer7TimeseriesGroupHTTPMethodParamsMitigationProduct = "DATA_LOSS_PREVENTION"
+)
+
+// Normalization method applied. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type AttackLayer7TimeseriesGroupHTTPMethodParamsNormalization string
+
+const (
+	AttackLayer7TimeseriesGroupHTTPMethodParamsNormalizationPercentage AttackLayer7TimeseriesGroupHTTPMethodParamsNormalization = "PERCENTAGE"
+	AttackLayer7TimeseriesGroupHTTPMethodParamsNormalizationMin0Max    AttackLayer7TimeseriesGroupHTTPMethodParamsNormalization = "MIN0_MAX"
+)
+
+type AttackLayer7TimeseriesGroupHTTPMethodResponseEnvelope struct {
+	Result  AttackLayer7TimeseriesGroupHTTPMethodResponse             `json:"result,required"`
+	Success bool                                                      `json:"success,required"`
+	JSON    attackLayer7TimeseriesGroupHTTPMethodResponseEnvelopeJSON `json:"-"`
+}
+
+// attackLayer7TimeseriesGroupHTTPMethodResponseEnvelopeJSON contains the JSON
+// metadata for the struct [AttackLayer7TimeseriesGroupHTTPMethodResponseEnvelope]
+type attackLayer7TimeseriesGroupHTTPMethodResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesGroupHTTPMethodResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesGroupHTTPMethodResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7TimeseriesGroupHTTPVersionParams struct {
+	// Aggregation interval results should be returned in (for example, in 15 minutes
+	// or 1 hour intervals). Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval param.Field[AttackLayer7TimeseriesGroupHTTPVersionParamsAggInterval] `query:"aggInterval"`
+	// Array of comma separated list of ASNs, start with `-` to exclude from results.
+	// For example, `-174, 3356` excludes results from AS174, but includes results from
+	// AS3356.
+	ASN param.Field[[]string] `query:"asn"`
+	// Array of comma separated list of continents (alpha-2 continent codes). Start
+	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
+	// Europe, but includes results from North America.
+	Continent param.Field[[]string] `query:"continent"`
+	// End of the date range (inclusive).
+	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
+	// For example, use `7d` and `7dControl` to compare this week with the previous
+	// week. Use this parameter or set specific start and end dates (`dateStart` and
+	// `dateEnd` parameters).
+	DateRange param.Field[[]AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange] `query:"dateRange"`
+	// Array of datetimes to filter the start of a series.
+	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
+	// Format results are returned in.
+	Format param.Field[AttackLayer7TimeseriesGroupHTTPVersionParamsFormat] `query:"format"`
+	// Filter for http method.
+	HTTPMethod param.Field[[]AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod] `query:"httpMethod"`
+	// Filter for ip version.
+	IPVersion param.Field[[]AttackLayer7TimeseriesGroupHTTPVersionParamsIPVersion] `query:"ipVersion"`
+	// Array of comma separated list of locations (alpha-2 country codes). Start with
+	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
+	// but includes results from PT.
+	Location param.Field[[]string] `query:"location"`
+	// Array of L7 mitigation products.
+	MitigationProduct param.Field[[]AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProduct] `query:"mitigationProduct"`
+	// Array of names that will be used to name the series in responses.
+	Name param.Field[[]string] `query:"name"`
+	// Normalization method applied. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization param.Field[AttackLayer7TimeseriesGroupHTTPVersionParamsNormalization] `query:"normalization"`
+}
+
+// URLQuery serializes [AttackLayer7TimeseriesGroupHTTPVersionParams]'s query
+// parameters as `url.Values`.
+func (r AttackLayer7TimeseriesGroupHTTPVersionParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+// Aggregation interval results should be returned in (for example, in 15 minutes
+// or 1 hour intervals). Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type AttackLayer7TimeseriesGroupHTTPVersionParamsAggInterval string
+
+const (
+	AttackLayer7TimeseriesGroupHTTPVersionParamsAggInterval15m AttackLayer7TimeseriesGroupHTTPVersionParamsAggInterval = "15m"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsAggInterval1h  AttackLayer7TimeseriesGroupHTTPVersionParamsAggInterval = "1h"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsAggInterval1d  AttackLayer7TimeseriesGroupHTTPVersionParamsAggInterval = "1d"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsAggInterval1w  AttackLayer7TimeseriesGroupHTTPVersionParamsAggInterval = "1w"
+)
+
+type AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange string
+
+const (
+	AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange1d         AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange = "1d"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange2d         AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange = "2d"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange7d         AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange = "7d"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange14d        AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange = "14d"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange28d        AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange = "28d"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange12w        AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange = "12w"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange24w        AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange = "24w"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange52w        AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange = "52w"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange1dControl  AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange = "1dControl"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange2dControl  AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange = "2dControl"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange7dControl  AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange = "7dControl"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange14dControl AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange = "14dControl"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange28dControl AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange = "28dControl"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange12wControl AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange = "12wControl"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange24wControl AttackLayer7TimeseriesGroupHTTPVersionParamsDateRange = "24wControl"
+)
+
+// Format results are returned in.
+type AttackLayer7TimeseriesGroupHTTPVersionParamsFormat string
+
+const (
+	AttackLayer7TimeseriesGroupHTTPVersionParamsFormatJson AttackLayer7TimeseriesGroupHTTPVersionParamsFormat = "JSON"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsFormatCsv  AttackLayer7TimeseriesGroupHTTPVersionParamsFormat = "CSV"
+)
+
+type AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod string
+
+const (
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodGet             AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "GET"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodPost            AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "POST"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodDelete          AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "DELETE"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodPut             AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "PUT"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodHead            AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "HEAD"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodPurge           AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "PURGE"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodOptions         AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "OPTIONS"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodPropfind        AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "PROPFIND"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodMkcol           AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "MKCOL"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodPatch           AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "PATCH"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodACL             AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "ACL"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodBcopy           AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "BCOPY"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodBdelete         AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "BDELETE"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodBmove           AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "BMOVE"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodBpropfind       AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "BPROPFIND"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodBproppatch      AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "BPROPPATCH"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodCheckin         AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "CHECKIN"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodCheckout        AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "CHECKOUT"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodConnect         AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "CONNECT"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodCopy            AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "COPY"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodLabel           AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "LABEL"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodLock            AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "LOCK"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodMerge           AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "MERGE"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodMkactivity      AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "MKACTIVITY"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodMkworkspace     AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "MKWORKSPACE"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodMove            AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "MOVE"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodNotify          AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "NOTIFY"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodOrderpatch      AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "ORDERPATCH"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodPoll            AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "POLL"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodProppatch       AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "PROPPATCH"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodReport          AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "REPORT"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodSearch          AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "SEARCH"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodSubscribe       AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "SUBSCRIBE"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodTrace           AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "TRACE"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodUncheckout      AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "UNCHECKOUT"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodUnlock          AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "UNLOCK"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodUnsubscribe     AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "UNSUBSCRIBE"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodUpdate          AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "UPDATE"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodVersioncontrol  AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "VERSIONCONTROL"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodBaselinecontrol AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "BASELINECONTROL"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodXmsenumatts     AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "XMSENUMATTS"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodRpcOutData      AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "RPC_OUT_DATA"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodRpcInData       AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "RPC_IN_DATA"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodJson            AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "JSON"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodCook            AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "COOK"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethodTrack           AttackLayer7TimeseriesGroupHTTPVersionParamsHTTPMethod = "TRACK"
+)
+
+type AttackLayer7TimeseriesGroupHTTPVersionParamsIPVersion string
+
+const (
+	AttackLayer7TimeseriesGroupHTTPVersionParamsIPVersionIPv4 AttackLayer7TimeseriesGroupHTTPVersionParamsIPVersion = "IPv4"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsIPVersionIPv6 AttackLayer7TimeseriesGroupHTTPVersionParamsIPVersion = "IPv6"
+)
+
+type AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProduct string
+
+const (
+	AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductDDOS               AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProduct = "DDOS"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductWAF                AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProduct = "WAF"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductBotManagement      AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProduct = "BOT_MANAGEMENT"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductAccessRules        AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProduct = "ACCESS_RULES"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductIPReputation       AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProduct = "IP_REPUTATION"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductAPIShield          AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProduct = "API_SHIELD"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProductDataLossPrevention AttackLayer7TimeseriesGroupHTTPVersionParamsMitigationProduct = "DATA_LOSS_PREVENTION"
+)
+
+// Normalization method applied. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type AttackLayer7TimeseriesGroupHTTPVersionParamsNormalization string
+
+const (
+	AttackLayer7TimeseriesGroupHTTPVersionParamsNormalizationPercentage AttackLayer7TimeseriesGroupHTTPVersionParamsNormalization = "PERCENTAGE"
+	AttackLayer7TimeseriesGroupHTTPVersionParamsNormalizationMin0Max    AttackLayer7TimeseriesGroupHTTPVersionParamsNormalization = "MIN0_MAX"
+)
+
+type AttackLayer7TimeseriesGroupHTTPVersionResponseEnvelope struct {
+	Result  AttackLayer7TimeseriesGroupHTTPVersionResponse             `json:"result,required"`
+	Success bool                                                       `json:"success,required"`
+	JSON    attackLayer7TimeseriesGroupHTTPVersionResponseEnvelopeJSON `json:"-"`
+}
+
+// attackLayer7TimeseriesGroupHTTPVersionResponseEnvelopeJSON contains the JSON
+// metadata for the struct [AttackLayer7TimeseriesGroupHTTPVersionResponseEnvelope]
+type attackLayer7TimeseriesGroupHTTPVersionResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesGroupHTTPVersionResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesGroupHTTPVersionResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7TimeseriesGroupIndustryParams struct {
+	// Aggregation interval results should be returned in (for example, in 15 minutes
+	// or 1 hour intervals). Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval param.Field[AttackLayer7TimeseriesGroupIndustryParamsAggInterval] `query:"aggInterval"`
+	// Array of comma separated list of ASNs, start with `-` to exclude from results.
+	// For example, `-174, 3356` excludes results from AS174, but includes results from
+	// AS3356.
+	ASN param.Field[[]string] `query:"asn"`
+	// Array of comma separated list of continents (alpha-2 continent codes). Start
+	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
+	// Europe, but includes results from North America.
+	Continent param.Field[[]string] `query:"continent"`
+	// End of the date range (inclusive).
+	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
+	// For example, use `7d` and `7dControl` to compare this week with the previous
+	// week. Use this parameter or set specific start and end dates (`dateStart` and
+	// `dateEnd` parameters).
+	DateRange param.Field[[]AttackLayer7TimeseriesGroupIndustryParamsDateRange] `query:"dateRange"`
+	// Array of datetimes to filter the start of a series.
+	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
+	// Format results are returned in.
+	Format param.Field[AttackLayer7TimeseriesGroupIndustryParamsFormat] `query:"format"`
+	// Filter for http method.
+	HTTPMethod param.Field[[]AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod] `query:"httpMethod"`
+	// Filter for http version.
+	HTTPVersion param.Field[[]AttackLayer7TimeseriesGroupIndustryParamsHTTPVersion] `query:"httpVersion"`
+	// Filter for ip version.
+	IPVersion param.Field[[]AttackLayer7TimeseriesGroupIndustryParamsIPVersion] `query:"ipVersion"`
+	// Limit the number of objects (eg browsers, verticals, etc) to the top items over
+	// the time range.
+	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
+	// Array of comma separated list of locations (alpha-2 country codes). Start with
+	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
+	// but includes results from PT.
+	Location param.Field[[]string] `query:"location"`
+	// Array of L7 mitigation products.
+	MitigationProduct param.Field[[]AttackLayer7TimeseriesGroupIndustryParamsMitigationProduct] `query:"mitigationProduct"`
+	// Array of names that will be used to name the series in responses.
+	Name param.Field[[]string] `query:"name"`
+	// Normalization method applied. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization param.Field[AttackLayer7TimeseriesGroupIndustryParamsNormalization] `query:"normalization"`
+}
+
+// URLQuery serializes [AttackLayer7TimeseriesGroupIndustryParams]'s query
+// parameters as `url.Values`.
+func (r AttackLayer7TimeseriesGroupIndustryParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+// Aggregation interval results should be returned in (for example, in 15 minutes
+// or 1 hour intervals). Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type AttackLayer7TimeseriesGroupIndustryParamsAggInterval string
+
+const (
+	AttackLayer7TimeseriesGroupIndustryParamsAggInterval15m AttackLayer7TimeseriesGroupIndustryParamsAggInterval = "15m"
+	AttackLayer7TimeseriesGroupIndustryParamsAggInterval1h  AttackLayer7TimeseriesGroupIndustryParamsAggInterval = "1h"
+	AttackLayer7TimeseriesGroupIndustryParamsAggInterval1d  AttackLayer7TimeseriesGroupIndustryParamsAggInterval = "1d"
+	AttackLayer7TimeseriesGroupIndustryParamsAggInterval1w  AttackLayer7TimeseriesGroupIndustryParamsAggInterval = "1w"
+)
+
+type AttackLayer7TimeseriesGroupIndustryParamsDateRange string
+
+const (
+	AttackLayer7TimeseriesGroupIndustryParamsDateRange1d         AttackLayer7TimeseriesGroupIndustryParamsDateRange = "1d"
+	AttackLayer7TimeseriesGroupIndustryParamsDateRange2d         AttackLayer7TimeseriesGroupIndustryParamsDateRange = "2d"
+	AttackLayer7TimeseriesGroupIndustryParamsDateRange7d         AttackLayer7TimeseriesGroupIndustryParamsDateRange = "7d"
+	AttackLayer7TimeseriesGroupIndustryParamsDateRange14d        AttackLayer7TimeseriesGroupIndustryParamsDateRange = "14d"
+	AttackLayer7TimeseriesGroupIndustryParamsDateRange28d        AttackLayer7TimeseriesGroupIndustryParamsDateRange = "28d"
+	AttackLayer7TimeseriesGroupIndustryParamsDateRange12w        AttackLayer7TimeseriesGroupIndustryParamsDateRange = "12w"
+	AttackLayer7TimeseriesGroupIndustryParamsDateRange24w        AttackLayer7TimeseriesGroupIndustryParamsDateRange = "24w"
+	AttackLayer7TimeseriesGroupIndustryParamsDateRange52w        AttackLayer7TimeseriesGroupIndustryParamsDateRange = "52w"
+	AttackLayer7TimeseriesGroupIndustryParamsDateRange1dControl  AttackLayer7TimeseriesGroupIndustryParamsDateRange = "1dControl"
+	AttackLayer7TimeseriesGroupIndustryParamsDateRange2dControl  AttackLayer7TimeseriesGroupIndustryParamsDateRange = "2dControl"
+	AttackLayer7TimeseriesGroupIndustryParamsDateRange7dControl  AttackLayer7TimeseriesGroupIndustryParamsDateRange = "7dControl"
+	AttackLayer7TimeseriesGroupIndustryParamsDateRange14dControl AttackLayer7TimeseriesGroupIndustryParamsDateRange = "14dControl"
+	AttackLayer7TimeseriesGroupIndustryParamsDateRange28dControl AttackLayer7TimeseriesGroupIndustryParamsDateRange = "28dControl"
+	AttackLayer7TimeseriesGroupIndustryParamsDateRange12wControl AttackLayer7TimeseriesGroupIndustryParamsDateRange = "12wControl"
+	AttackLayer7TimeseriesGroupIndustryParamsDateRange24wControl AttackLayer7TimeseriesGroupIndustryParamsDateRange = "24wControl"
+)
+
+// Format results are returned in.
+type AttackLayer7TimeseriesGroupIndustryParamsFormat string
+
+const (
+	AttackLayer7TimeseriesGroupIndustryParamsFormatJson AttackLayer7TimeseriesGroupIndustryParamsFormat = "JSON"
+	AttackLayer7TimeseriesGroupIndustryParamsFormatCsv  AttackLayer7TimeseriesGroupIndustryParamsFormat = "CSV"
+)
+
+type AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod string
+
+const (
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodGet             AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "GET"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodPost            AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "POST"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodDelete          AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "DELETE"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodPut             AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "PUT"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodHead            AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "HEAD"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodPurge           AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "PURGE"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodOptions         AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "OPTIONS"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodPropfind        AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "PROPFIND"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodMkcol           AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "MKCOL"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodPatch           AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "PATCH"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodACL             AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "ACL"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodBcopy           AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "BCOPY"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodBdelete         AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "BDELETE"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodBmove           AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "BMOVE"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodBpropfind       AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "BPROPFIND"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodBproppatch      AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "BPROPPATCH"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodCheckin         AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "CHECKIN"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodCheckout        AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "CHECKOUT"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodConnect         AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "CONNECT"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodCopy            AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "COPY"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodLabel           AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "LABEL"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodLock            AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "LOCK"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodMerge           AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "MERGE"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodMkactivity      AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "MKACTIVITY"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodMkworkspace     AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "MKWORKSPACE"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodMove            AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "MOVE"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodNotify          AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "NOTIFY"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodOrderpatch      AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "ORDERPATCH"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodPoll            AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "POLL"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodProppatch       AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "PROPPATCH"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodReport          AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "REPORT"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodSearch          AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "SEARCH"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodSubscribe       AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "SUBSCRIBE"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodTrace           AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "TRACE"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodUncheckout      AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "UNCHECKOUT"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodUnlock          AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "UNLOCK"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodUnsubscribe     AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "UNSUBSCRIBE"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodUpdate          AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "UPDATE"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodVersioncontrol  AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "VERSIONCONTROL"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodBaselinecontrol AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "BASELINECONTROL"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodXmsenumatts     AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "XMSENUMATTS"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodRpcOutData      AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "RPC_OUT_DATA"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodRpcInData       AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "RPC_IN_DATA"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodJson            AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "JSON"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodCook            AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "COOK"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPMethodTrack           AttackLayer7TimeseriesGroupIndustryParamsHTTPMethod = "TRACK"
+)
+
+type AttackLayer7TimeseriesGroupIndustryParamsHTTPVersion string
+
+const (
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPVersionHttPv1 AttackLayer7TimeseriesGroupIndustryParamsHTTPVersion = "HTTPv1"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPVersionHttPv2 AttackLayer7TimeseriesGroupIndustryParamsHTTPVersion = "HTTPv2"
+	AttackLayer7TimeseriesGroupIndustryParamsHTTPVersionHttPv3 AttackLayer7TimeseriesGroupIndustryParamsHTTPVersion = "HTTPv3"
+)
+
+type AttackLayer7TimeseriesGroupIndustryParamsIPVersion string
+
+const (
+	AttackLayer7TimeseriesGroupIndustryParamsIPVersionIPv4 AttackLayer7TimeseriesGroupIndustryParamsIPVersion = "IPv4"
+	AttackLayer7TimeseriesGroupIndustryParamsIPVersionIPv6 AttackLayer7TimeseriesGroupIndustryParamsIPVersion = "IPv6"
+)
+
+type AttackLayer7TimeseriesGroupIndustryParamsMitigationProduct string
+
+const (
+	AttackLayer7TimeseriesGroupIndustryParamsMitigationProductDDOS               AttackLayer7TimeseriesGroupIndustryParamsMitigationProduct = "DDOS"
+	AttackLayer7TimeseriesGroupIndustryParamsMitigationProductWAF                AttackLayer7TimeseriesGroupIndustryParamsMitigationProduct = "WAF"
+	AttackLayer7TimeseriesGroupIndustryParamsMitigationProductBotManagement      AttackLayer7TimeseriesGroupIndustryParamsMitigationProduct = "BOT_MANAGEMENT"
+	AttackLayer7TimeseriesGroupIndustryParamsMitigationProductAccessRules        AttackLayer7TimeseriesGroupIndustryParamsMitigationProduct = "ACCESS_RULES"
+	AttackLayer7TimeseriesGroupIndustryParamsMitigationProductIPReputation       AttackLayer7TimeseriesGroupIndustryParamsMitigationProduct = "IP_REPUTATION"
+	AttackLayer7TimeseriesGroupIndustryParamsMitigationProductAPIShield          AttackLayer7TimeseriesGroupIndustryParamsMitigationProduct = "API_SHIELD"
+	AttackLayer7TimeseriesGroupIndustryParamsMitigationProductDataLossPrevention AttackLayer7TimeseriesGroupIndustryParamsMitigationProduct = "DATA_LOSS_PREVENTION"
+)
+
+// Normalization method applied. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type AttackLayer7TimeseriesGroupIndustryParamsNormalization string
+
+const (
+	AttackLayer7TimeseriesGroupIndustryParamsNormalizationPercentage AttackLayer7TimeseriesGroupIndustryParamsNormalization = "PERCENTAGE"
+	AttackLayer7TimeseriesGroupIndustryParamsNormalizationMin0Max    AttackLayer7TimeseriesGroupIndustryParamsNormalization = "MIN0_MAX"
+)
+
+type AttackLayer7TimeseriesGroupIndustryResponseEnvelope struct {
+	Result  AttackLayer7TimeseriesGroupIndustryResponse             `json:"result,required"`
+	Success bool                                                    `json:"success,required"`
+	JSON    attackLayer7TimeseriesGroupIndustryResponseEnvelopeJSON `json:"-"`
+}
+
+// attackLayer7TimeseriesGroupIndustryResponseEnvelopeJSON contains the JSON
+// metadata for the struct [AttackLayer7TimeseriesGroupIndustryResponseEnvelope]
+type attackLayer7TimeseriesGroupIndustryResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesGroupIndustryResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesGroupIndustryResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7TimeseriesGroupIPVersionParams struct {
+	// Aggregation interval results should be returned in (for example, in 15 minutes
+	// or 1 hour intervals). Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval param.Field[AttackLayer7TimeseriesGroupIPVersionParamsAggInterval] `query:"aggInterval"`
+	// Array of comma separated list of ASNs, start with `-` to exclude from results.
+	// For example, `-174, 3356` excludes results from AS174, but includes results from
+	// AS3356.
+	ASN param.Field[[]string] `query:"asn"`
+	// Array of comma separated list of continents (alpha-2 continent codes). Start
+	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
+	// Europe, but includes results from North America.
+	Continent param.Field[[]string] `query:"continent"`
+	// End of the date range (inclusive).
+	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
+	// For example, use `7d` and `7dControl` to compare this week with the previous
+	// week. Use this parameter or set specific start and end dates (`dateStart` and
+	// `dateEnd` parameters).
+	DateRange param.Field[[]AttackLayer7TimeseriesGroupIPVersionParamsDateRange] `query:"dateRange"`
+	// Array of datetimes to filter the start of a series.
+	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
+	// Format results are returned in.
+	Format param.Field[AttackLayer7TimeseriesGroupIPVersionParamsFormat] `query:"format"`
+	// Filter for http method.
+	HTTPMethod param.Field[[]AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod] `query:"httpMethod"`
+	// Filter for http version.
+	HTTPVersion param.Field[[]AttackLayer7TimeseriesGroupIPVersionParamsHTTPVersion] `query:"httpVersion"`
+	// Array of comma separated list of locations (alpha-2 country codes). Start with
+	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
+	// but includes results from PT.
+	Location param.Field[[]string] `query:"location"`
+	// Array of L7 mitigation products.
+	MitigationProduct param.Field[[]AttackLayer7TimeseriesGroupIPVersionParamsMitigationProduct] `query:"mitigationProduct"`
+	// Array of names that will be used to name the series in responses.
+	Name param.Field[[]string] `query:"name"`
+	// Normalization method applied. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization param.Field[AttackLayer7TimeseriesGroupIPVersionParamsNormalization] `query:"normalization"`
+}
+
+// URLQuery serializes [AttackLayer7TimeseriesGroupIPVersionParams]'s query
+// parameters as `url.Values`.
+func (r AttackLayer7TimeseriesGroupIPVersionParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+// Aggregation interval results should be returned in (for example, in 15 minutes
+// or 1 hour intervals). Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type AttackLayer7TimeseriesGroupIPVersionParamsAggInterval string
+
+const (
+	AttackLayer7TimeseriesGroupIPVersionParamsAggInterval15m AttackLayer7TimeseriesGroupIPVersionParamsAggInterval = "15m"
+	AttackLayer7TimeseriesGroupIPVersionParamsAggInterval1h  AttackLayer7TimeseriesGroupIPVersionParamsAggInterval = "1h"
+	AttackLayer7TimeseriesGroupIPVersionParamsAggInterval1d  AttackLayer7TimeseriesGroupIPVersionParamsAggInterval = "1d"
+	AttackLayer7TimeseriesGroupIPVersionParamsAggInterval1w  AttackLayer7TimeseriesGroupIPVersionParamsAggInterval = "1w"
+)
+
+type AttackLayer7TimeseriesGroupIPVersionParamsDateRange string
+
+const (
+	AttackLayer7TimeseriesGroupIPVersionParamsDateRange1d         AttackLayer7TimeseriesGroupIPVersionParamsDateRange = "1d"
+	AttackLayer7TimeseriesGroupIPVersionParamsDateRange2d         AttackLayer7TimeseriesGroupIPVersionParamsDateRange = "2d"
+	AttackLayer7TimeseriesGroupIPVersionParamsDateRange7d         AttackLayer7TimeseriesGroupIPVersionParamsDateRange = "7d"
+	AttackLayer7TimeseriesGroupIPVersionParamsDateRange14d        AttackLayer7TimeseriesGroupIPVersionParamsDateRange = "14d"
+	AttackLayer7TimeseriesGroupIPVersionParamsDateRange28d        AttackLayer7TimeseriesGroupIPVersionParamsDateRange = "28d"
+	AttackLayer7TimeseriesGroupIPVersionParamsDateRange12w        AttackLayer7TimeseriesGroupIPVersionParamsDateRange = "12w"
+	AttackLayer7TimeseriesGroupIPVersionParamsDateRange24w        AttackLayer7TimeseriesGroupIPVersionParamsDateRange = "24w"
+	AttackLayer7TimeseriesGroupIPVersionParamsDateRange52w        AttackLayer7TimeseriesGroupIPVersionParamsDateRange = "52w"
+	AttackLayer7TimeseriesGroupIPVersionParamsDateRange1dControl  AttackLayer7TimeseriesGroupIPVersionParamsDateRange = "1dControl"
+	AttackLayer7TimeseriesGroupIPVersionParamsDateRange2dControl  AttackLayer7TimeseriesGroupIPVersionParamsDateRange = "2dControl"
+	AttackLayer7TimeseriesGroupIPVersionParamsDateRange7dControl  AttackLayer7TimeseriesGroupIPVersionParamsDateRange = "7dControl"
+	AttackLayer7TimeseriesGroupIPVersionParamsDateRange14dControl AttackLayer7TimeseriesGroupIPVersionParamsDateRange = "14dControl"
+	AttackLayer7TimeseriesGroupIPVersionParamsDateRange28dControl AttackLayer7TimeseriesGroupIPVersionParamsDateRange = "28dControl"
+	AttackLayer7TimeseriesGroupIPVersionParamsDateRange12wControl AttackLayer7TimeseriesGroupIPVersionParamsDateRange = "12wControl"
+	AttackLayer7TimeseriesGroupIPVersionParamsDateRange24wControl AttackLayer7TimeseriesGroupIPVersionParamsDateRange = "24wControl"
+)
+
+// Format results are returned in.
+type AttackLayer7TimeseriesGroupIPVersionParamsFormat string
+
+const (
+	AttackLayer7TimeseriesGroupIPVersionParamsFormatJson AttackLayer7TimeseriesGroupIPVersionParamsFormat = "JSON"
+	AttackLayer7TimeseriesGroupIPVersionParamsFormatCsv  AttackLayer7TimeseriesGroupIPVersionParamsFormat = "CSV"
+)
+
+type AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod string
+
+const (
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodGet             AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "GET"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodPost            AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "POST"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodDelete          AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "DELETE"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodPut             AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "PUT"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodHead            AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "HEAD"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodPurge           AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "PURGE"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodOptions         AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "OPTIONS"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodPropfind        AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "PROPFIND"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodMkcol           AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "MKCOL"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodPatch           AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "PATCH"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodACL             AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "ACL"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodBcopy           AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "BCOPY"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodBdelete         AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "BDELETE"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodBmove           AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "BMOVE"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodBpropfind       AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "BPROPFIND"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodBproppatch      AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "BPROPPATCH"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodCheckin         AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "CHECKIN"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodCheckout        AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "CHECKOUT"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodConnect         AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "CONNECT"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodCopy            AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "COPY"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodLabel           AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "LABEL"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodLock            AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "LOCK"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodMerge           AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "MERGE"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodMkactivity      AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "MKACTIVITY"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodMkworkspace     AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "MKWORKSPACE"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodMove            AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "MOVE"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodNotify          AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "NOTIFY"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodOrderpatch      AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "ORDERPATCH"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodPoll            AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "POLL"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodProppatch       AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "PROPPATCH"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodReport          AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "REPORT"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodSearch          AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "SEARCH"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodSubscribe       AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "SUBSCRIBE"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodTrace           AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "TRACE"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodUncheckout      AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "UNCHECKOUT"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodUnlock          AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "UNLOCK"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodUnsubscribe     AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "UNSUBSCRIBE"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodUpdate          AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "UPDATE"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodVersioncontrol  AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "VERSIONCONTROL"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodBaselinecontrol AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "BASELINECONTROL"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodXmsenumatts     AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "XMSENUMATTS"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodRpcOutData      AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "RPC_OUT_DATA"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodRpcInData       AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "RPC_IN_DATA"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodJson            AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "JSON"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodCook            AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "COOK"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethodTrack           AttackLayer7TimeseriesGroupIPVersionParamsHTTPMethod = "TRACK"
+)
+
+type AttackLayer7TimeseriesGroupIPVersionParamsHTTPVersion string
+
+const (
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPVersionHttPv1 AttackLayer7TimeseriesGroupIPVersionParamsHTTPVersion = "HTTPv1"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPVersionHttPv2 AttackLayer7TimeseriesGroupIPVersionParamsHTTPVersion = "HTTPv2"
+	AttackLayer7TimeseriesGroupIPVersionParamsHTTPVersionHttPv3 AttackLayer7TimeseriesGroupIPVersionParamsHTTPVersion = "HTTPv3"
+)
+
+type AttackLayer7TimeseriesGroupIPVersionParamsMitigationProduct string
+
+const (
+	AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductDDOS               AttackLayer7TimeseriesGroupIPVersionParamsMitigationProduct = "DDOS"
+	AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductWAF                AttackLayer7TimeseriesGroupIPVersionParamsMitigationProduct = "WAF"
+	AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductBotManagement      AttackLayer7TimeseriesGroupIPVersionParamsMitigationProduct = "BOT_MANAGEMENT"
+	AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductAccessRules        AttackLayer7TimeseriesGroupIPVersionParamsMitigationProduct = "ACCESS_RULES"
+	AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductIPReputation       AttackLayer7TimeseriesGroupIPVersionParamsMitigationProduct = "IP_REPUTATION"
+	AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductAPIShield          AttackLayer7TimeseriesGroupIPVersionParamsMitigationProduct = "API_SHIELD"
+	AttackLayer7TimeseriesGroupIPVersionParamsMitigationProductDataLossPrevention AttackLayer7TimeseriesGroupIPVersionParamsMitigationProduct = "DATA_LOSS_PREVENTION"
+)
+
+// Normalization method applied. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type AttackLayer7TimeseriesGroupIPVersionParamsNormalization string
+
+const (
+	AttackLayer7TimeseriesGroupIPVersionParamsNormalizationPercentage AttackLayer7TimeseriesGroupIPVersionParamsNormalization = "PERCENTAGE"
+	AttackLayer7TimeseriesGroupIPVersionParamsNormalizationMin0Max    AttackLayer7TimeseriesGroupIPVersionParamsNormalization = "MIN0_MAX"
+)
+
+type AttackLayer7TimeseriesGroupIPVersionResponseEnvelope struct {
+	Result  AttackLayer7TimeseriesGroupIPVersionResponse             `json:"result,required"`
+	Success bool                                                     `json:"success,required"`
+	JSON    attackLayer7TimeseriesGroupIPVersionResponseEnvelopeJSON `json:"-"`
+}
+
+// attackLayer7TimeseriesGroupIPVersionResponseEnvelopeJSON contains the JSON
+// metadata for the struct [AttackLayer7TimeseriesGroupIPVersionResponseEnvelope]
+type attackLayer7TimeseriesGroupIPVersionResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesGroupIPVersionResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesGroupIPVersionResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7TimeseriesGroupManagedRulesParams struct {
+	// Aggregation interval results should be returned in (for example, in 15 minutes
+	// or 1 hour intervals). Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval param.Field[AttackLayer7TimeseriesGroupManagedRulesParamsAggInterval] `query:"aggInterval"`
+	// Array of comma separated list of ASNs, start with `-` to exclude from results.
+	// For example, `-174, 3356` excludes results from AS174, but includes results from
+	// AS3356.
+	ASN param.Field[[]string] `query:"asn"`
+	// Array of comma separated list of continents (alpha-2 continent codes). Start
+	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
+	// Europe, but includes results from North America.
+	Continent param.Field[[]string] `query:"continent"`
+	// End of the date range (inclusive).
+	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
+	// For example, use `7d` and `7dControl` to compare this week with the previous
+	// week. Use this parameter or set specific start and end dates (`dateStart` and
+	// `dateEnd` parameters).
+	DateRange param.Field[[]AttackLayer7TimeseriesGroupManagedRulesParamsDateRange] `query:"dateRange"`
+	// Array of datetimes to filter the start of a series.
+	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
+	// Format results are returned in.
+	Format param.Field[AttackLayer7TimeseriesGroupManagedRulesParamsFormat] `query:"format"`
+	// Filter for http method.
+	HTTPMethod param.Field[[]AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod] `query:"httpMethod"`
+	// Filter for http version.
+	HTTPVersion param.Field[[]AttackLayer7TimeseriesGroupManagedRulesParamsHTTPVersion] `query:"httpVersion"`
+	// Filter for ip version.
+	IPVersion param.Field[[]AttackLayer7TimeseriesGroupManagedRulesParamsIPVersion] `query:"ipVersion"`
+	// Array of comma separated list of locations (alpha-2 country codes). Start with
+	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
+	// but includes results from PT.
+	Location param.Field[[]string] `query:"location"`
+	// Array of L7 mitigation products.
+	MitigationProduct param.Field[[]AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProduct] `query:"mitigationProduct"`
+	// Array of names that will be used to name the series in responses.
+	Name param.Field[[]string] `query:"name"`
+	// Normalization method applied. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization param.Field[AttackLayer7TimeseriesGroupManagedRulesParamsNormalization] `query:"normalization"`
+}
+
+// URLQuery serializes [AttackLayer7TimeseriesGroupManagedRulesParams]'s query
+// parameters as `url.Values`.
+func (r AttackLayer7TimeseriesGroupManagedRulesParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+// Aggregation interval results should be returned in (for example, in 15 minutes
+// or 1 hour intervals). Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type AttackLayer7TimeseriesGroupManagedRulesParamsAggInterval string
+
+const (
+	AttackLayer7TimeseriesGroupManagedRulesParamsAggInterval15m AttackLayer7TimeseriesGroupManagedRulesParamsAggInterval = "15m"
+	AttackLayer7TimeseriesGroupManagedRulesParamsAggInterval1h  AttackLayer7TimeseriesGroupManagedRulesParamsAggInterval = "1h"
+	AttackLayer7TimeseriesGroupManagedRulesParamsAggInterval1d  AttackLayer7TimeseriesGroupManagedRulesParamsAggInterval = "1d"
+	AttackLayer7TimeseriesGroupManagedRulesParamsAggInterval1w  AttackLayer7TimeseriesGroupManagedRulesParamsAggInterval = "1w"
+)
+
+type AttackLayer7TimeseriesGroupManagedRulesParamsDateRange string
+
+const (
+	AttackLayer7TimeseriesGroupManagedRulesParamsDateRange1d         AttackLayer7TimeseriesGroupManagedRulesParamsDateRange = "1d"
+	AttackLayer7TimeseriesGroupManagedRulesParamsDateRange2d         AttackLayer7TimeseriesGroupManagedRulesParamsDateRange = "2d"
+	AttackLayer7TimeseriesGroupManagedRulesParamsDateRange7d         AttackLayer7TimeseriesGroupManagedRulesParamsDateRange = "7d"
+	AttackLayer7TimeseriesGroupManagedRulesParamsDateRange14d        AttackLayer7TimeseriesGroupManagedRulesParamsDateRange = "14d"
+	AttackLayer7TimeseriesGroupManagedRulesParamsDateRange28d        AttackLayer7TimeseriesGroupManagedRulesParamsDateRange = "28d"
+	AttackLayer7TimeseriesGroupManagedRulesParamsDateRange12w        AttackLayer7TimeseriesGroupManagedRulesParamsDateRange = "12w"
+	AttackLayer7TimeseriesGroupManagedRulesParamsDateRange24w        AttackLayer7TimeseriesGroupManagedRulesParamsDateRange = "24w"
+	AttackLayer7TimeseriesGroupManagedRulesParamsDateRange52w        AttackLayer7TimeseriesGroupManagedRulesParamsDateRange = "52w"
+	AttackLayer7TimeseriesGroupManagedRulesParamsDateRange1dControl  AttackLayer7TimeseriesGroupManagedRulesParamsDateRange = "1dControl"
+	AttackLayer7TimeseriesGroupManagedRulesParamsDateRange2dControl  AttackLayer7TimeseriesGroupManagedRulesParamsDateRange = "2dControl"
+	AttackLayer7TimeseriesGroupManagedRulesParamsDateRange7dControl  AttackLayer7TimeseriesGroupManagedRulesParamsDateRange = "7dControl"
+	AttackLayer7TimeseriesGroupManagedRulesParamsDateRange14dControl AttackLayer7TimeseriesGroupManagedRulesParamsDateRange = "14dControl"
+	AttackLayer7TimeseriesGroupManagedRulesParamsDateRange28dControl AttackLayer7TimeseriesGroupManagedRulesParamsDateRange = "28dControl"
+	AttackLayer7TimeseriesGroupManagedRulesParamsDateRange12wControl AttackLayer7TimeseriesGroupManagedRulesParamsDateRange = "12wControl"
+	AttackLayer7TimeseriesGroupManagedRulesParamsDateRange24wControl AttackLayer7TimeseriesGroupManagedRulesParamsDateRange = "24wControl"
+)
+
+// Format results are returned in.
+type AttackLayer7TimeseriesGroupManagedRulesParamsFormat string
+
+const (
+	AttackLayer7TimeseriesGroupManagedRulesParamsFormatJson AttackLayer7TimeseriesGroupManagedRulesParamsFormat = "JSON"
+	AttackLayer7TimeseriesGroupManagedRulesParamsFormatCsv  AttackLayer7TimeseriesGroupManagedRulesParamsFormat = "CSV"
+)
+
+type AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod string
+
+const (
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodGet             AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "GET"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodPost            AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "POST"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodDelete          AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "DELETE"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodPut             AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "PUT"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodHead            AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "HEAD"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodPurge           AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "PURGE"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodOptions         AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "OPTIONS"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodPropfind        AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "PROPFIND"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodMkcol           AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "MKCOL"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodPatch           AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "PATCH"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodACL             AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "ACL"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodBcopy           AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "BCOPY"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodBdelete         AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "BDELETE"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodBmove           AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "BMOVE"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodBpropfind       AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "BPROPFIND"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodBproppatch      AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "BPROPPATCH"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodCheckin         AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "CHECKIN"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodCheckout        AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "CHECKOUT"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodConnect         AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "CONNECT"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodCopy            AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "COPY"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodLabel           AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "LABEL"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodLock            AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "LOCK"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodMerge           AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "MERGE"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodMkactivity      AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "MKACTIVITY"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodMkworkspace     AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "MKWORKSPACE"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodMove            AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "MOVE"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodNotify          AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "NOTIFY"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodOrderpatch      AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "ORDERPATCH"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodPoll            AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "POLL"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodProppatch       AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "PROPPATCH"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodReport          AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "REPORT"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodSearch          AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "SEARCH"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodSubscribe       AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "SUBSCRIBE"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodTrace           AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "TRACE"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodUncheckout      AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "UNCHECKOUT"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodUnlock          AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "UNLOCK"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodUnsubscribe     AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "UNSUBSCRIBE"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodUpdate          AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "UPDATE"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodVersioncontrol  AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "VERSIONCONTROL"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodBaselinecontrol AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "BASELINECONTROL"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodXmsenumatts     AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "XMSENUMATTS"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodRpcOutData      AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "RPC_OUT_DATA"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodRpcInData       AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "RPC_IN_DATA"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodJson            AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "JSON"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodCook            AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "COOK"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethodTrack           AttackLayer7TimeseriesGroupManagedRulesParamsHTTPMethod = "TRACK"
+)
+
+type AttackLayer7TimeseriesGroupManagedRulesParamsHTTPVersion string
+
+const (
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPVersionHttPv1 AttackLayer7TimeseriesGroupManagedRulesParamsHTTPVersion = "HTTPv1"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPVersionHttPv2 AttackLayer7TimeseriesGroupManagedRulesParamsHTTPVersion = "HTTPv2"
+	AttackLayer7TimeseriesGroupManagedRulesParamsHTTPVersionHttPv3 AttackLayer7TimeseriesGroupManagedRulesParamsHTTPVersion = "HTTPv3"
+)
+
+type AttackLayer7TimeseriesGroupManagedRulesParamsIPVersion string
+
+const (
+	AttackLayer7TimeseriesGroupManagedRulesParamsIPVersionIPv4 AttackLayer7TimeseriesGroupManagedRulesParamsIPVersion = "IPv4"
+	AttackLayer7TimeseriesGroupManagedRulesParamsIPVersionIPv6 AttackLayer7TimeseriesGroupManagedRulesParamsIPVersion = "IPv6"
+)
+
+type AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProduct string
+
+const (
+	AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductDDOS               AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProduct = "DDOS"
+	AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductWAF                AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProduct = "WAF"
+	AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductBotManagement      AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProduct = "BOT_MANAGEMENT"
+	AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductAccessRules        AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProduct = "ACCESS_RULES"
+	AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductIPReputation       AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProduct = "IP_REPUTATION"
+	AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductAPIShield          AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProduct = "API_SHIELD"
+	AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProductDataLossPrevention AttackLayer7TimeseriesGroupManagedRulesParamsMitigationProduct = "DATA_LOSS_PREVENTION"
+)
+
+// Normalization method applied. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type AttackLayer7TimeseriesGroupManagedRulesParamsNormalization string
+
+const (
+	AttackLayer7TimeseriesGroupManagedRulesParamsNormalizationPercentage AttackLayer7TimeseriesGroupManagedRulesParamsNormalization = "PERCENTAGE"
+	AttackLayer7TimeseriesGroupManagedRulesParamsNormalizationMin0Max    AttackLayer7TimeseriesGroupManagedRulesParamsNormalization = "MIN0_MAX"
+)
+
+type AttackLayer7TimeseriesGroupManagedRulesResponseEnvelope struct {
+	Result  AttackLayer7TimeseriesGroupManagedRulesResponse             `json:"result,required"`
+	Success bool                                                        `json:"success,required"`
+	JSON    attackLayer7TimeseriesGroupManagedRulesResponseEnvelopeJSON `json:"-"`
+}
+
+// attackLayer7TimeseriesGroupManagedRulesResponseEnvelopeJSON contains the JSON
+// metadata for the struct
+// [AttackLayer7TimeseriesGroupManagedRulesResponseEnvelope]
+type attackLayer7TimeseriesGroupManagedRulesResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesGroupManagedRulesResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesGroupManagedRulesResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7TimeseriesGroupMitigationProductParams struct {
+	// Aggregation interval results should be returned in (for example, in 15 minutes
+	// or 1 hour intervals). Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval param.Field[AttackLayer7TimeseriesGroupMitigationProductParamsAggInterval] `query:"aggInterval"`
+	// Array of comma separated list of ASNs, start with `-` to exclude from results.
+	// For example, `-174, 3356` excludes results from AS174, but includes results from
+	// AS3356.
+	ASN param.Field[[]string] `query:"asn"`
+	// Array of comma separated list of continents (alpha-2 continent codes). Start
+	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
+	// Europe, but includes results from North America.
+	Continent param.Field[[]string] `query:"continent"`
+	// End of the date range (inclusive).
+	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
+	// For example, use `7d` and `7dControl` to compare this week with the previous
+	// week. Use this parameter or set specific start and end dates (`dateStart` and
+	// `dateEnd` parameters).
+	DateRange param.Field[[]AttackLayer7TimeseriesGroupMitigationProductParamsDateRange] `query:"dateRange"`
+	// Array of datetimes to filter the start of a series.
+	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
+	// Format results are returned in.
+	Format param.Field[AttackLayer7TimeseriesGroupMitigationProductParamsFormat] `query:"format"`
+	// Filter for http method.
+	HTTPMethod param.Field[[]AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod] `query:"httpMethod"`
+	// Filter for http version.
+	HTTPVersion param.Field[[]AttackLayer7TimeseriesGroupMitigationProductParamsHTTPVersion] `query:"httpVersion"`
+	// Filter for ip version.
+	IPVersion param.Field[[]AttackLayer7TimeseriesGroupMitigationProductParamsIPVersion] `query:"ipVersion"`
+	// Array of comma separated list of locations (alpha-2 country codes). Start with
+	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
+	// but includes results from PT.
+	Location param.Field[[]string] `query:"location"`
+	// Array of names that will be used to name the series in responses.
+	Name param.Field[[]string] `query:"name"`
+	// Normalization method applied. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization param.Field[AttackLayer7TimeseriesGroupMitigationProductParamsNormalization] `query:"normalization"`
+}
+
+// URLQuery serializes [AttackLayer7TimeseriesGroupMitigationProductParams]'s query
+// parameters as `url.Values`.
+func (r AttackLayer7TimeseriesGroupMitigationProductParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+// Aggregation interval results should be returned in (for example, in 15 minutes
+// or 1 hour intervals). Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type AttackLayer7TimeseriesGroupMitigationProductParamsAggInterval string
+
+const (
+	AttackLayer7TimeseriesGroupMitigationProductParamsAggInterval15m AttackLayer7TimeseriesGroupMitigationProductParamsAggInterval = "15m"
+	AttackLayer7TimeseriesGroupMitigationProductParamsAggInterval1h  AttackLayer7TimeseriesGroupMitigationProductParamsAggInterval = "1h"
+	AttackLayer7TimeseriesGroupMitigationProductParamsAggInterval1d  AttackLayer7TimeseriesGroupMitigationProductParamsAggInterval = "1d"
+	AttackLayer7TimeseriesGroupMitigationProductParamsAggInterval1w  AttackLayer7TimeseriesGroupMitigationProductParamsAggInterval = "1w"
+)
+
+type AttackLayer7TimeseriesGroupMitigationProductParamsDateRange string
+
+const (
+	AttackLayer7TimeseriesGroupMitigationProductParamsDateRange1d         AttackLayer7TimeseriesGroupMitigationProductParamsDateRange = "1d"
+	AttackLayer7TimeseriesGroupMitigationProductParamsDateRange2d         AttackLayer7TimeseriesGroupMitigationProductParamsDateRange = "2d"
+	AttackLayer7TimeseriesGroupMitigationProductParamsDateRange7d         AttackLayer7TimeseriesGroupMitigationProductParamsDateRange = "7d"
+	AttackLayer7TimeseriesGroupMitigationProductParamsDateRange14d        AttackLayer7TimeseriesGroupMitigationProductParamsDateRange = "14d"
+	AttackLayer7TimeseriesGroupMitigationProductParamsDateRange28d        AttackLayer7TimeseriesGroupMitigationProductParamsDateRange = "28d"
+	AttackLayer7TimeseriesGroupMitigationProductParamsDateRange12w        AttackLayer7TimeseriesGroupMitigationProductParamsDateRange = "12w"
+	AttackLayer7TimeseriesGroupMitigationProductParamsDateRange24w        AttackLayer7TimeseriesGroupMitigationProductParamsDateRange = "24w"
+	AttackLayer7TimeseriesGroupMitigationProductParamsDateRange52w        AttackLayer7TimeseriesGroupMitigationProductParamsDateRange = "52w"
+	AttackLayer7TimeseriesGroupMitigationProductParamsDateRange1dControl  AttackLayer7TimeseriesGroupMitigationProductParamsDateRange = "1dControl"
+	AttackLayer7TimeseriesGroupMitigationProductParamsDateRange2dControl  AttackLayer7TimeseriesGroupMitigationProductParamsDateRange = "2dControl"
+	AttackLayer7TimeseriesGroupMitigationProductParamsDateRange7dControl  AttackLayer7TimeseriesGroupMitigationProductParamsDateRange = "7dControl"
+	AttackLayer7TimeseriesGroupMitigationProductParamsDateRange14dControl AttackLayer7TimeseriesGroupMitigationProductParamsDateRange = "14dControl"
+	AttackLayer7TimeseriesGroupMitigationProductParamsDateRange28dControl AttackLayer7TimeseriesGroupMitigationProductParamsDateRange = "28dControl"
+	AttackLayer7TimeseriesGroupMitigationProductParamsDateRange12wControl AttackLayer7TimeseriesGroupMitigationProductParamsDateRange = "12wControl"
+	AttackLayer7TimeseriesGroupMitigationProductParamsDateRange24wControl AttackLayer7TimeseriesGroupMitigationProductParamsDateRange = "24wControl"
+)
+
+// Format results are returned in.
+type AttackLayer7TimeseriesGroupMitigationProductParamsFormat string
+
+const (
+	AttackLayer7TimeseriesGroupMitigationProductParamsFormatJson AttackLayer7TimeseriesGroupMitigationProductParamsFormat = "JSON"
+	AttackLayer7TimeseriesGroupMitigationProductParamsFormatCsv  AttackLayer7TimeseriesGroupMitigationProductParamsFormat = "CSV"
+)
+
+type AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod string
+
+const (
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodGet             AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "GET"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodPost            AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "POST"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodDelete          AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "DELETE"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodPut             AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "PUT"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodHead            AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "HEAD"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodPurge           AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "PURGE"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodOptions         AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "OPTIONS"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodPropfind        AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "PROPFIND"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodMkcol           AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "MKCOL"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodPatch           AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "PATCH"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodACL             AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "ACL"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodBcopy           AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "BCOPY"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodBdelete         AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "BDELETE"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodBmove           AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "BMOVE"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodBpropfind       AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "BPROPFIND"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodBproppatch      AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "BPROPPATCH"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodCheckin         AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "CHECKIN"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodCheckout        AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "CHECKOUT"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodConnect         AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "CONNECT"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodCopy            AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "COPY"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodLabel           AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "LABEL"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodLock            AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "LOCK"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodMerge           AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "MERGE"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodMkactivity      AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "MKACTIVITY"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodMkworkspace     AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "MKWORKSPACE"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodMove            AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "MOVE"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodNotify          AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "NOTIFY"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodOrderpatch      AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "ORDERPATCH"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodPoll            AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "POLL"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodProppatch       AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "PROPPATCH"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodReport          AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "REPORT"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodSearch          AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "SEARCH"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodSubscribe       AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "SUBSCRIBE"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodTrace           AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "TRACE"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodUncheckout      AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "UNCHECKOUT"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodUnlock          AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "UNLOCK"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodUnsubscribe     AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "UNSUBSCRIBE"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodUpdate          AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "UPDATE"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodVersioncontrol  AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "VERSIONCONTROL"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodBaselinecontrol AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "BASELINECONTROL"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodXmsenumatts     AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "XMSENUMATTS"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodRpcOutData      AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "RPC_OUT_DATA"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodRpcInData       AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "RPC_IN_DATA"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodJson            AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "JSON"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodCook            AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "COOK"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethodTrack           AttackLayer7TimeseriesGroupMitigationProductParamsHTTPMethod = "TRACK"
+)
+
+type AttackLayer7TimeseriesGroupMitigationProductParamsHTTPVersion string
+
+const (
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPVersionHttPv1 AttackLayer7TimeseriesGroupMitigationProductParamsHTTPVersion = "HTTPv1"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPVersionHttPv2 AttackLayer7TimeseriesGroupMitigationProductParamsHTTPVersion = "HTTPv2"
+	AttackLayer7TimeseriesGroupMitigationProductParamsHTTPVersionHttPv3 AttackLayer7TimeseriesGroupMitigationProductParamsHTTPVersion = "HTTPv3"
+)
+
+type AttackLayer7TimeseriesGroupMitigationProductParamsIPVersion string
+
+const (
+	AttackLayer7TimeseriesGroupMitigationProductParamsIPVersionIPv4 AttackLayer7TimeseriesGroupMitigationProductParamsIPVersion = "IPv4"
+	AttackLayer7TimeseriesGroupMitigationProductParamsIPVersionIPv6 AttackLayer7TimeseriesGroupMitigationProductParamsIPVersion = "IPv6"
+)
+
+// Normalization method applied. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type AttackLayer7TimeseriesGroupMitigationProductParamsNormalization string
+
+const (
+	AttackLayer7TimeseriesGroupMitigationProductParamsNormalizationPercentage AttackLayer7TimeseriesGroupMitigationProductParamsNormalization = "PERCENTAGE"
+	AttackLayer7TimeseriesGroupMitigationProductParamsNormalizationMin0Max    AttackLayer7TimeseriesGroupMitigationProductParamsNormalization = "MIN0_MAX"
+)
+
+type AttackLayer7TimeseriesGroupMitigationProductResponseEnvelope struct {
+	Result  AttackLayer7TimeseriesGroupMitigationProductResponse             `json:"result,required"`
+	Success bool                                                             `json:"success,required"`
+	JSON    attackLayer7TimeseriesGroupMitigationProductResponseEnvelopeJSON `json:"-"`
+}
+
+// attackLayer7TimeseriesGroupMitigationProductResponseEnvelopeJSON contains the
+// JSON metadata for the struct
+// [AttackLayer7TimeseriesGroupMitigationProductResponseEnvelope]
+type attackLayer7TimeseriesGroupMitigationProductResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesGroupMitigationProductResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesGroupMitigationProductResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type AttackLayer7TimeseriesGroupVerticalParams struct {
+	// Aggregation interval results should be returned in (for example, in 15 minutes
+	// or 1 hour intervals). Refer to
+	// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+	AggInterval param.Field[AttackLayer7TimeseriesGroupVerticalParamsAggInterval] `query:"aggInterval"`
+	// Array of comma separated list of ASNs, start with `-` to exclude from results.
+	// For example, `-174, 3356` excludes results from AS174, but includes results from
+	// AS3356.
+	ASN param.Field[[]string] `query:"asn"`
+	// Array of comma separated list of continents (alpha-2 continent codes). Start
+	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
+	// Europe, but includes results from North America.
+	Continent param.Field[[]string] `query:"continent"`
+	// End of the date range (inclusive).
+	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
+	// For example, use `7d` and `7dControl` to compare this week with the previous
+	// week. Use this parameter or set specific start and end dates (`dateStart` and
+	// `dateEnd` parameters).
+	DateRange param.Field[[]AttackLayer7TimeseriesGroupVerticalParamsDateRange] `query:"dateRange"`
+	// Array of datetimes to filter the start of a series.
+	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
+	// Format results are returned in.
+	Format param.Field[AttackLayer7TimeseriesGroupVerticalParamsFormat] `query:"format"`
+	// Filter for http method.
+	HTTPMethod param.Field[[]AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod] `query:"httpMethod"`
+	// Filter for http version.
+	HTTPVersion param.Field[[]AttackLayer7TimeseriesGroupVerticalParamsHTTPVersion] `query:"httpVersion"`
+	// Filter for ip version.
+	IPVersion param.Field[[]AttackLayer7TimeseriesGroupVerticalParamsIPVersion] `query:"ipVersion"`
+	// Limit the number of objects (eg browsers, verticals, etc) to the top items over
+	// the time range.
+	LimitPerGroup param.Field[int64] `query:"limitPerGroup"`
+	// Array of comma separated list of locations (alpha-2 country codes). Start with
+	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
+	// but includes results from PT.
+	Location param.Field[[]string] `query:"location"`
+	// Array of L7 mitigation products.
+	MitigationProduct param.Field[[]AttackLayer7TimeseriesGroupVerticalParamsMitigationProduct] `query:"mitigationProduct"`
+	// Array of names that will be used to name the series in responses.
+	Name param.Field[[]string] `query:"name"`
+	// Normalization method applied. Refer to
+	// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+	Normalization param.Field[AttackLayer7TimeseriesGroupVerticalParamsNormalization] `query:"normalization"`
+}
+
+// URLQuery serializes [AttackLayer7TimeseriesGroupVerticalParams]'s query
+// parameters as `url.Values`.
+func (r AttackLayer7TimeseriesGroupVerticalParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+// Aggregation interval results should be returned in (for example, in 15 minutes
+// or 1 hour intervals). Refer to
+// [Aggregation intervals](https://developers.cloudflare.com/radar/concepts/aggregation-intervals/).
+type AttackLayer7TimeseriesGroupVerticalParamsAggInterval string
+
+const (
+	AttackLayer7TimeseriesGroupVerticalParamsAggInterval15m AttackLayer7TimeseriesGroupVerticalParamsAggInterval = "15m"
+	AttackLayer7TimeseriesGroupVerticalParamsAggInterval1h  AttackLayer7TimeseriesGroupVerticalParamsAggInterval = "1h"
+	AttackLayer7TimeseriesGroupVerticalParamsAggInterval1d  AttackLayer7TimeseriesGroupVerticalParamsAggInterval = "1d"
+	AttackLayer7TimeseriesGroupVerticalParamsAggInterval1w  AttackLayer7TimeseriesGroupVerticalParamsAggInterval = "1w"
+)
+
+type AttackLayer7TimeseriesGroupVerticalParamsDateRange string
+
+const (
+	AttackLayer7TimeseriesGroupVerticalParamsDateRange1d         AttackLayer7TimeseriesGroupVerticalParamsDateRange = "1d"
+	AttackLayer7TimeseriesGroupVerticalParamsDateRange2d         AttackLayer7TimeseriesGroupVerticalParamsDateRange = "2d"
+	AttackLayer7TimeseriesGroupVerticalParamsDateRange7d         AttackLayer7TimeseriesGroupVerticalParamsDateRange = "7d"
+	AttackLayer7TimeseriesGroupVerticalParamsDateRange14d        AttackLayer7TimeseriesGroupVerticalParamsDateRange = "14d"
+	AttackLayer7TimeseriesGroupVerticalParamsDateRange28d        AttackLayer7TimeseriesGroupVerticalParamsDateRange = "28d"
+	AttackLayer7TimeseriesGroupVerticalParamsDateRange12w        AttackLayer7TimeseriesGroupVerticalParamsDateRange = "12w"
+	AttackLayer7TimeseriesGroupVerticalParamsDateRange24w        AttackLayer7TimeseriesGroupVerticalParamsDateRange = "24w"
+	AttackLayer7TimeseriesGroupVerticalParamsDateRange52w        AttackLayer7TimeseriesGroupVerticalParamsDateRange = "52w"
+	AttackLayer7TimeseriesGroupVerticalParamsDateRange1dControl  AttackLayer7TimeseriesGroupVerticalParamsDateRange = "1dControl"
+	AttackLayer7TimeseriesGroupVerticalParamsDateRange2dControl  AttackLayer7TimeseriesGroupVerticalParamsDateRange = "2dControl"
+	AttackLayer7TimeseriesGroupVerticalParamsDateRange7dControl  AttackLayer7TimeseriesGroupVerticalParamsDateRange = "7dControl"
+	AttackLayer7TimeseriesGroupVerticalParamsDateRange14dControl AttackLayer7TimeseriesGroupVerticalParamsDateRange = "14dControl"
+	AttackLayer7TimeseriesGroupVerticalParamsDateRange28dControl AttackLayer7TimeseriesGroupVerticalParamsDateRange = "28dControl"
+	AttackLayer7TimeseriesGroupVerticalParamsDateRange12wControl AttackLayer7TimeseriesGroupVerticalParamsDateRange = "12wControl"
+	AttackLayer7TimeseriesGroupVerticalParamsDateRange24wControl AttackLayer7TimeseriesGroupVerticalParamsDateRange = "24wControl"
+)
+
+// Format results are returned in.
+type AttackLayer7TimeseriesGroupVerticalParamsFormat string
+
+const (
+	AttackLayer7TimeseriesGroupVerticalParamsFormatJson AttackLayer7TimeseriesGroupVerticalParamsFormat = "JSON"
+	AttackLayer7TimeseriesGroupVerticalParamsFormatCsv  AttackLayer7TimeseriesGroupVerticalParamsFormat = "CSV"
+)
+
+type AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod string
+
+const (
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodGet             AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "GET"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodPost            AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "POST"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodDelete          AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "DELETE"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodPut             AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "PUT"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodHead            AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "HEAD"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodPurge           AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "PURGE"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodOptions         AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "OPTIONS"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodPropfind        AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "PROPFIND"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodMkcol           AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "MKCOL"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodPatch           AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "PATCH"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodACL             AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "ACL"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodBcopy           AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "BCOPY"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodBdelete         AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "BDELETE"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodBmove           AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "BMOVE"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodBpropfind       AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "BPROPFIND"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodBproppatch      AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "BPROPPATCH"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodCheckin         AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "CHECKIN"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodCheckout        AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "CHECKOUT"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodConnect         AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "CONNECT"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodCopy            AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "COPY"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodLabel           AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "LABEL"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodLock            AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "LOCK"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodMerge           AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "MERGE"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodMkactivity      AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "MKACTIVITY"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodMkworkspace     AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "MKWORKSPACE"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodMove            AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "MOVE"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodNotify          AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "NOTIFY"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodOrderpatch      AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "ORDERPATCH"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodPoll            AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "POLL"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodProppatch       AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "PROPPATCH"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodReport          AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "REPORT"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodSearch          AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "SEARCH"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodSubscribe       AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "SUBSCRIBE"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodTrace           AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "TRACE"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodUncheckout      AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "UNCHECKOUT"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodUnlock          AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "UNLOCK"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodUnsubscribe     AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "UNSUBSCRIBE"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodUpdate          AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "UPDATE"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodVersioncontrol  AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "VERSIONCONTROL"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodBaselinecontrol AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "BASELINECONTROL"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodXmsenumatts     AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "XMSENUMATTS"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodRpcOutData      AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "RPC_OUT_DATA"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodRpcInData       AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "RPC_IN_DATA"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodJson            AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "JSON"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodCook            AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "COOK"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPMethodTrack           AttackLayer7TimeseriesGroupVerticalParamsHTTPMethod = "TRACK"
+)
+
+type AttackLayer7TimeseriesGroupVerticalParamsHTTPVersion string
+
+const (
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPVersionHttPv1 AttackLayer7TimeseriesGroupVerticalParamsHTTPVersion = "HTTPv1"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPVersionHttPv2 AttackLayer7TimeseriesGroupVerticalParamsHTTPVersion = "HTTPv2"
+	AttackLayer7TimeseriesGroupVerticalParamsHTTPVersionHttPv3 AttackLayer7TimeseriesGroupVerticalParamsHTTPVersion = "HTTPv3"
+)
+
+type AttackLayer7TimeseriesGroupVerticalParamsIPVersion string
+
+const (
+	AttackLayer7TimeseriesGroupVerticalParamsIPVersionIPv4 AttackLayer7TimeseriesGroupVerticalParamsIPVersion = "IPv4"
+	AttackLayer7TimeseriesGroupVerticalParamsIPVersionIPv6 AttackLayer7TimeseriesGroupVerticalParamsIPVersion = "IPv6"
+)
+
+type AttackLayer7TimeseriesGroupVerticalParamsMitigationProduct string
+
+const (
+	AttackLayer7TimeseriesGroupVerticalParamsMitigationProductDDOS               AttackLayer7TimeseriesGroupVerticalParamsMitigationProduct = "DDOS"
+	AttackLayer7TimeseriesGroupVerticalParamsMitigationProductWAF                AttackLayer7TimeseriesGroupVerticalParamsMitigationProduct = "WAF"
+	AttackLayer7TimeseriesGroupVerticalParamsMitigationProductBotManagement      AttackLayer7TimeseriesGroupVerticalParamsMitigationProduct = "BOT_MANAGEMENT"
+	AttackLayer7TimeseriesGroupVerticalParamsMitigationProductAccessRules        AttackLayer7TimeseriesGroupVerticalParamsMitigationProduct = "ACCESS_RULES"
+	AttackLayer7TimeseriesGroupVerticalParamsMitigationProductIPReputation       AttackLayer7TimeseriesGroupVerticalParamsMitigationProduct = "IP_REPUTATION"
+	AttackLayer7TimeseriesGroupVerticalParamsMitigationProductAPIShield          AttackLayer7TimeseriesGroupVerticalParamsMitigationProduct = "API_SHIELD"
+	AttackLayer7TimeseriesGroupVerticalParamsMitigationProductDataLossPrevention AttackLayer7TimeseriesGroupVerticalParamsMitigationProduct = "DATA_LOSS_PREVENTION"
+)
+
+// Normalization method applied. Refer to
+// [Normalization methods](https://developers.cloudflare.com/radar/concepts/normalization/).
+type AttackLayer7TimeseriesGroupVerticalParamsNormalization string
+
+const (
+	AttackLayer7TimeseriesGroupVerticalParamsNormalizationPercentage AttackLayer7TimeseriesGroupVerticalParamsNormalization = "PERCENTAGE"
+	AttackLayer7TimeseriesGroupVerticalParamsNormalizationMin0Max    AttackLayer7TimeseriesGroupVerticalParamsNormalization = "MIN0_MAX"
+)
+
+type AttackLayer7TimeseriesGroupVerticalResponseEnvelope struct {
+	Result  AttackLayer7TimeseriesGroupVerticalResponse             `json:"result,required"`
+	Success bool                                                    `json:"success,required"`
+	JSON    attackLayer7TimeseriesGroupVerticalResponseEnvelopeJSON `json:"-"`
+}
+
+// attackLayer7TimeseriesGroupVerticalResponseEnvelopeJSON contains the JSON
+// metadata for the struct [AttackLayer7TimeseriesGroupVerticalResponseEnvelope]
+type attackLayer7TimeseriesGroupVerticalResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AttackLayer7TimeseriesGroupVerticalResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r attackLayer7TimeseriesGroupVerticalResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}

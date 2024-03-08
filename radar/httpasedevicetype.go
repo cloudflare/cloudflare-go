@@ -1,0 +1,366 @@
+// File generated from our OpenAPI spec by Stainless.
+
+package radar
+
+import (
+	"context"
+	"fmt"
+	"net/http"
+	"net/url"
+	"time"
+
+	"github.com/cloudflare/cloudflare-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/internal/param"
+	"github.com/cloudflare/cloudflare-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/option"
+)
+
+// HTTPAseDeviceTypeService contains methods and other services that help with
+// interacting with the cloudflare API. Note, unlike clients, this service does not
+// read variables from the environment automatically. You should not instantiate
+// this service directly, and instead use the [NewHTTPAseDeviceTypeService] method
+// instead.
+type HTTPAseDeviceTypeService struct {
+	Options []option.RequestOption
+}
+
+// NewHTTPAseDeviceTypeService generates a new service that applies the given
+// options to each request. These options are applied after the parent client's
+// options (if there is one), and before any request-specific options.
+func NewHTTPAseDeviceTypeService(opts ...option.RequestOption) (r *HTTPAseDeviceTypeService) {
+	r = &HTTPAseDeviceTypeService{}
+	r.Options = opts
+	return
+}
+
+// Get the top autonomous systems (AS), by HTTP traffic, of the requested device
+// type. Values are a percentage out of the total traffic.
+func (r *HTTPAseDeviceTypeService) Get(ctx context.Context, deviceType HTTPAseDeviceTypeGetParamsDeviceType, query HTTPAseDeviceTypeGetParams, opts ...option.RequestOption) (res *HTTPAseDeviceTypeGetResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env HTTPAseDeviceTypeGetResponseEnvelope
+	path := fmt.Sprintf("radar/http/top/ases/device_type/%v", deviceType)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+type HTTPAseDeviceTypeGetResponse struct {
+	Meta HTTPAseDeviceTypeGetResponseMeta   `json:"meta,required"`
+	Top0 []HTTPAseDeviceTypeGetResponseTop0 `json:"top_0,required"`
+	JSON httpAseDeviceTypeGetResponseJSON   `json:"-"`
+}
+
+// httpAseDeviceTypeGetResponseJSON contains the JSON metadata for the struct
+// [HTTPAseDeviceTypeGetResponse]
+type httpAseDeviceTypeGetResponseJSON struct {
+	Meta        apijson.Field
+	Top0        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPAseDeviceTypeGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpAseDeviceTypeGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPAseDeviceTypeGetResponseMeta struct {
+	DateRange      []HTTPAseDeviceTypeGetResponseMetaDateRange    `json:"dateRange,required"`
+	LastUpdated    string                                         `json:"lastUpdated,required"`
+	ConfidenceInfo HTTPAseDeviceTypeGetResponseMetaConfidenceInfo `json:"confidenceInfo"`
+	JSON           httpAseDeviceTypeGetResponseMetaJSON           `json:"-"`
+}
+
+// httpAseDeviceTypeGetResponseMetaJSON contains the JSON metadata for the struct
+// [HTTPAseDeviceTypeGetResponseMeta]
+type httpAseDeviceTypeGetResponseMetaJSON struct {
+	DateRange      apijson.Field
+	LastUpdated    apijson.Field
+	ConfidenceInfo apijson.Field
+	raw            string
+	ExtraFields    map[string]apijson.Field
+}
+
+func (r *HTTPAseDeviceTypeGetResponseMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpAseDeviceTypeGetResponseMetaJSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPAseDeviceTypeGetResponseMetaDateRange struct {
+	// Adjusted end of date range.
+	EndTime time.Time `json:"endTime,required" format:"date-time"`
+	// Adjusted start of date range.
+	StartTime time.Time                                     `json:"startTime,required" format:"date-time"`
+	JSON      httpAseDeviceTypeGetResponseMetaDateRangeJSON `json:"-"`
+}
+
+// httpAseDeviceTypeGetResponseMetaDateRangeJSON contains the JSON metadata for the
+// struct [HTTPAseDeviceTypeGetResponseMetaDateRange]
+type httpAseDeviceTypeGetResponseMetaDateRangeJSON struct {
+	EndTime     apijson.Field
+	StartTime   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPAseDeviceTypeGetResponseMetaDateRange) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpAseDeviceTypeGetResponseMetaDateRangeJSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPAseDeviceTypeGetResponseMetaConfidenceInfo struct {
+	Annotations []HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotation `json:"annotations"`
+	Level       int64                                                      `json:"level"`
+	JSON        httpAseDeviceTypeGetResponseMetaConfidenceInfoJSON         `json:"-"`
+}
+
+// httpAseDeviceTypeGetResponseMetaConfidenceInfoJSON contains the JSON metadata
+// for the struct [HTTPAseDeviceTypeGetResponseMetaConfidenceInfo]
+type httpAseDeviceTypeGetResponseMetaConfidenceInfoJSON struct {
+	Annotations apijson.Field
+	Level       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPAseDeviceTypeGetResponseMetaConfidenceInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpAseDeviceTypeGetResponseMetaConfidenceInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotation struct {
+	DataSource      string                                                       `json:"dataSource,required"`
+	Description     string                                                       `json:"description,required"`
+	EventType       string                                                       `json:"eventType,required"`
+	IsInstantaneous interface{}                                                  `json:"isInstantaneous,required"`
+	EndTime         time.Time                                                    `json:"endTime" format:"date-time"`
+	LinkedURL       string                                                       `json:"linkedUrl"`
+	StartTime       time.Time                                                    `json:"startTime" format:"date-time"`
+	JSON            httpAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationJSON `json:"-"`
+}
+
+// httpAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationJSON contains the JSON
+// metadata for the struct
+// [HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotation]
+type httpAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationJSON struct {
+	DataSource      apijson.Field
+	Description     apijson.Field
+	EventType       apijson.Field
+	IsInstantaneous apijson.Field
+	EndTime         apijson.Field
+	LinkedURL       apijson.Field
+	StartTime       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *HTTPAseDeviceTypeGetResponseMetaConfidenceInfoAnnotation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpAseDeviceTypeGetResponseMetaConfidenceInfoAnnotationJSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPAseDeviceTypeGetResponseTop0 struct {
+	ClientASN    int64                                `json:"clientASN,required"`
+	ClientAsName string                               `json:"clientASName,required"`
+	Value        string                               `json:"value,required"`
+	JSON         httpAseDeviceTypeGetResponseTop0JSON `json:"-"`
+}
+
+// httpAseDeviceTypeGetResponseTop0JSON contains the JSON metadata for the struct
+// [HTTPAseDeviceTypeGetResponseTop0]
+type httpAseDeviceTypeGetResponseTop0JSON struct {
+	ClientASN    apijson.Field
+	ClientAsName apijson.Field
+	Value        apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *HTTPAseDeviceTypeGetResponseTop0) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpAseDeviceTypeGetResponseTop0JSON) RawJSON() string {
+	return r.raw
+}
+
+type HTTPAseDeviceTypeGetParams struct {
+	// Array of comma separated list of ASNs, start with `-` to exclude from results.
+	// For example, `-174, 3356` excludes results from AS174, but includes results from
+	// AS3356.
+	ASN param.Field[[]string] `query:"asn"`
+	// Filter for bot class. Refer to
+	// [Bot classes](https://developers.cloudflare.com/radar/concepts/bot-classes/).
+	BotClass param.Field[[]HTTPAseDeviceTypeGetParamsBotClass] `query:"botClass"`
+	// Array of comma separated list of continents (alpha-2 continent codes). Start
+	// with `-` to exclude from results. For example, `-EU,NA` excludes results from
+	// Europe, but includes results from North America.
+	Continent param.Field[[]string] `query:"continent"`
+	// End of the date range (inclusive).
+	DateEnd param.Field[[]time.Time] `query:"dateEnd" format:"date-time"`
+	// For example, use `7d` and `7dControl` to compare this week with the previous
+	// week. Use this parameter or set specific start and end dates (`dateStart` and
+	// `dateEnd` parameters).
+	DateRange param.Field[[]HTTPAseDeviceTypeGetParamsDateRange] `query:"dateRange"`
+	// Array of datetimes to filter the start of a series.
+	DateStart param.Field[[]time.Time] `query:"dateStart" format:"date-time"`
+	// Format results are returned in.
+	Format param.Field[HTTPAseDeviceTypeGetParamsFormat] `query:"format"`
+	// Filter for http protocol.
+	HTTPProtocol param.Field[[]HTTPAseDeviceTypeGetParamsHTTPProtocol] `query:"httpProtocol"`
+	// Filter for http version.
+	HTTPVersion param.Field[[]HTTPAseDeviceTypeGetParamsHTTPVersion] `query:"httpVersion"`
+	// Filter for ip version.
+	IPVersion param.Field[[]HTTPAseDeviceTypeGetParamsIPVersion] `query:"ipVersion"`
+	// Limit the number of objects in the response.
+	Limit param.Field[int64] `query:"limit"`
+	// Array of comma separated list of locations (alpha-2 country codes). Start with
+	// `-` to exclude from results. For example, `-US,PT` excludes results from the US,
+	// but includes results from PT.
+	Location param.Field[[]string] `query:"location"`
+	// Array of names that will be used to name the series in responses.
+	Name param.Field[[]string] `query:"name"`
+	// Filter for os name.
+	OS param.Field[[]HTTPAseDeviceTypeGetParamsOS] `query:"os"`
+	// Filter for tls version.
+	TLSVersion param.Field[[]HTTPAseDeviceTypeGetParamsTLSVersion] `query:"tlsVersion"`
+}
+
+// URLQuery serializes [HTTPAseDeviceTypeGetParams]'s query parameters as
+// `url.Values`.
+func (r HTTPAseDeviceTypeGetParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+// Device type.
+type HTTPAseDeviceTypeGetParamsDeviceType string
+
+const (
+	HTTPAseDeviceTypeGetParamsDeviceTypeDesktop HTTPAseDeviceTypeGetParamsDeviceType = "DESKTOP"
+	HTTPAseDeviceTypeGetParamsDeviceTypeMobile  HTTPAseDeviceTypeGetParamsDeviceType = "MOBILE"
+	HTTPAseDeviceTypeGetParamsDeviceTypeOther   HTTPAseDeviceTypeGetParamsDeviceType = "OTHER"
+)
+
+type HTTPAseDeviceTypeGetParamsBotClass string
+
+const (
+	HTTPAseDeviceTypeGetParamsBotClassLikelyAutomated HTTPAseDeviceTypeGetParamsBotClass = "LIKELY_AUTOMATED"
+	HTTPAseDeviceTypeGetParamsBotClassLikelyHuman     HTTPAseDeviceTypeGetParamsBotClass = "LIKELY_HUMAN"
+)
+
+type HTTPAseDeviceTypeGetParamsDateRange string
+
+const (
+	HTTPAseDeviceTypeGetParamsDateRange1d         HTTPAseDeviceTypeGetParamsDateRange = "1d"
+	HTTPAseDeviceTypeGetParamsDateRange2d         HTTPAseDeviceTypeGetParamsDateRange = "2d"
+	HTTPAseDeviceTypeGetParamsDateRange7d         HTTPAseDeviceTypeGetParamsDateRange = "7d"
+	HTTPAseDeviceTypeGetParamsDateRange14d        HTTPAseDeviceTypeGetParamsDateRange = "14d"
+	HTTPAseDeviceTypeGetParamsDateRange28d        HTTPAseDeviceTypeGetParamsDateRange = "28d"
+	HTTPAseDeviceTypeGetParamsDateRange12w        HTTPAseDeviceTypeGetParamsDateRange = "12w"
+	HTTPAseDeviceTypeGetParamsDateRange24w        HTTPAseDeviceTypeGetParamsDateRange = "24w"
+	HTTPAseDeviceTypeGetParamsDateRange52w        HTTPAseDeviceTypeGetParamsDateRange = "52w"
+	HTTPAseDeviceTypeGetParamsDateRange1dControl  HTTPAseDeviceTypeGetParamsDateRange = "1dControl"
+	HTTPAseDeviceTypeGetParamsDateRange2dControl  HTTPAseDeviceTypeGetParamsDateRange = "2dControl"
+	HTTPAseDeviceTypeGetParamsDateRange7dControl  HTTPAseDeviceTypeGetParamsDateRange = "7dControl"
+	HTTPAseDeviceTypeGetParamsDateRange14dControl HTTPAseDeviceTypeGetParamsDateRange = "14dControl"
+	HTTPAseDeviceTypeGetParamsDateRange28dControl HTTPAseDeviceTypeGetParamsDateRange = "28dControl"
+	HTTPAseDeviceTypeGetParamsDateRange12wControl HTTPAseDeviceTypeGetParamsDateRange = "12wControl"
+	HTTPAseDeviceTypeGetParamsDateRange24wControl HTTPAseDeviceTypeGetParamsDateRange = "24wControl"
+)
+
+// Format results are returned in.
+type HTTPAseDeviceTypeGetParamsFormat string
+
+const (
+	HTTPAseDeviceTypeGetParamsFormatJson HTTPAseDeviceTypeGetParamsFormat = "JSON"
+	HTTPAseDeviceTypeGetParamsFormatCsv  HTTPAseDeviceTypeGetParamsFormat = "CSV"
+)
+
+type HTTPAseDeviceTypeGetParamsHTTPProtocol string
+
+const (
+	HTTPAseDeviceTypeGetParamsHTTPProtocolHTTP  HTTPAseDeviceTypeGetParamsHTTPProtocol = "HTTP"
+	HTTPAseDeviceTypeGetParamsHTTPProtocolHTTPS HTTPAseDeviceTypeGetParamsHTTPProtocol = "HTTPS"
+)
+
+type HTTPAseDeviceTypeGetParamsHTTPVersion string
+
+const (
+	HTTPAseDeviceTypeGetParamsHTTPVersionHttPv1 HTTPAseDeviceTypeGetParamsHTTPVersion = "HTTPv1"
+	HTTPAseDeviceTypeGetParamsHTTPVersionHttPv2 HTTPAseDeviceTypeGetParamsHTTPVersion = "HTTPv2"
+	HTTPAseDeviceTypeGetParamsHTTPVersionHttPv3 HTTPAseDeviceTypeGetParamsHTTPVersion = "HTTPv3"
+)
+
+type HTTPAseDeviceTypeGetParamsIPVersion string
+
+const (
+	HTTPAseDeviceTypeGetParamsIPVersionIPv4 HTTPAseDeviceTypeGetParamsIPVersion = "IPv4"
+	HTTPAseDeviceTypeGetParamsIPVersionIPv6 HTTPAseDeviceTypeGetParamsIPVersion = "IPv6"
+)
+
+type HTTPAseDeviceTypeGetParamsOS string
+
+const (
+	HTTPAseDeviceTypeGetParamsOSWindows  HTTPAseDeviceTypeGetParamsOS = "WINDOWS"
+	HTTPAseDeviceTypeGetParamsOSMacosx   HTTPAseDeviceTypeGetParamsOS = "MACOSX"
+	HTTPAseDeviceTypeGetParamsOSIos      HTTPAseDeviceTypeGetParamsOS = "IOS"
+	HTTPAseDeviceTypeGetParamsOSAndroid  HTTPAseDeviceTypeGetParamsOS = "ANDROID"
+	HTTPAseDeviceTypeGetParamsOSChromeos HTTPAseDeviceTypeGetParamsOS = "CHROMEOS"
+	HTTPAseDeviceTypeGetParamsOSLinux    HTTPAseDeviceTypeGetParamsOS = "LINUX"
+	HTTPAseDeviceTypeGetParamsOSSmartTv  HTTPAseDeviceTypeGetParamsOS = "SMART_TV"
+)
+
+type HTTPAseDeviceTypeGetParamsTLSVersion string
+
+const (
+	HTTPAseDeviceTypeGetParamsTLSVersionTlSv1_0  HTTPAseDeviceTypeGetParamsTLSVersion = "TLSv1_0"
+	HTTPAseDeviceTypeGetParamsTLSVersionTlSv1_1  HTTPAseDeviceTypeGetParamsTLSVersion = "TLSv1_1"
+	HTTPAseDeviceTypeGetParamsTLSVersionTlSv1_2  HTTPAseDeviceTypeGetParamsTLSVersion = "TLSv1_2"
+	HTTPAseDeviceTypeGetParamsTLSVersionTlSv1_3  HTTPAseDeviceTypeGetParamsTLSVersion = "TLSv1_3"
+	HTTPAseDeviceTypeGetParamsTLSVersionTlSvQuic HTTPAseDeviceTypeGetParamsTLSVersion = "TLSvQUIC"
+)
+
+type HTTPAseDeviceTypeGetResponseEnvelope struct {
+	Result  HTTPAseDeviceTypeGetResponse             `json:"result,required"`
+	Success bool                                     `json:"success,required"`
+	JSON    httpAseDeviceTypeGetResponseEnvelopeJSON `json:"-"`
+}
+
+// httpAseDeviceTypeGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [HTTPAseDeviceTypeGetResponseEnvelope]
+type httpAseDeviceTypeGetResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *HTTPAseDeviceTypeGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r httpAseDeviceTypeGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}

@@ -22,7 +22,7 @@ Or to pin the version:
 <!-- x-release-please-start-version -->
 
 ```sh
-go get -u 'github.com/cloudflare/cloudflare-go@v0.1.0'
+go get -u 'github.com/cloudflare/cloudflare-go@v2.0.0-beta.1'
 ```
 
 <!-- x-release-please-end -->
@@ -44,6 +44,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go"
 	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-go/zones"
 )
 
 func main() {
@@ -51,12 +52,12 @@ func main() {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"), // defaults to os.LookupEnv("CLOUDFLARE_API_KEY")
 		option.WithAPIEmail("user@example.com"),               // defaults to os.LookupEnv("CLOUDFLARE_EMAIL")
 	)
-	zoneNewResponse, err := client.Zones.New(context.TODO(), cloudflare.ZoneNewParams{
-		Account: cloudflare.F(cloudflare.ZoneNewParamsAccount{
+	zoneNewResponse, err := client.Zones.New(context.TODO(), zones.ZoneNewParams{
+		Account: cloudflare.F(zones.ZoneNewParamsAccount{
 			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		}),
 		Name: cloudflare.F("example.com"),
-		Type: cloudflare.F(cloudflare.ZoneNewParamsTypeFull),
+		Type: cloudflare.F(zones.ZoneNewParamsTypeFull),
 	})
 	if err != nil {
 		panic(err.Error())
@@ -187,7 +188,7 @@ When the API returns a non-success status code, we return an error with type
 To handle errors, we recommend that you use the `errors.As` pattern:
 
 ```go
-_, err := client.Zones.Get(context.TODO(), cloudflare.ZoneGetParams{
+_, err := client.Zones.Get(context.TODO(), zones.ZoneGetParams{
 	ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 })
 if err != nil {
@@ -216,7 +217,7 @@ ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 defer cancel()
 client.Zones.Edit(
 	ctx,
-	cloudflare.ZoneEditParams{
+	zones.ZoneEditParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	},
 	// This sets the per-retry timeout
@@ -241,7 +242,7 @@ client := cloudflare.NewClient(
 // Override per-request:
 client.Zones.Get(
 	context.TODO(),
-	cloudflare.ZoneGetParams{
+	zones.ZoneGetParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	},
 	option.WithMaxRetries(5),

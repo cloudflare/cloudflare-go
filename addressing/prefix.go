@@ -1,0 +1,701 @@
+// File generated from our OpenAPI spec by Stainless.
+
+package addressing
+
+import (
+	"context"
+	"fmt"
+	"net/http"
+	"reflect"
+	"time"
+
+	"github.com/cloudflare/cloudflare-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/internal/param"
+	"github.com/cloudflare/cloudflare-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/internal/shared"
+	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/tidwall/gjson"
+)
+
+// PrefixService contains methods and other services that help with interacting
+// with the cloudflare API. Note, unlike clients, this service does not read
+// variables from the environment automatically. You should not instantiate this
+// service directly, and instead use the [NewPrefixService] method instead.
+type PrefixService struct {
+	Options     []option.RequestOption
+	BGP         *PrefixBGPService
+	Delegations *PrefixDelegationService
+}
+
+// NewPrefixService generates a new service that applies the given options to each
+// request. These options are applied after the parent client's options (if there
+// is one), and before any request-specific options.
+func NewPrefixService(opts ...option.RequestOption) (r *PrefixService) {
+	r = &PrefixService{}
+	r.Options = opts
+	r.BGP = NewPrefixBGPService(opts...)
+	r.Delegations = NewPrefixDelegationService(opts...)
+	return
+}
+
+// Add a new prefix under the account.
+func (r *PrefixService) New(ctx context.Context, params PrefixNewParams, opts ...option.RequestOption) (res *AddressingIpamPrefixes, err error) {
+	opts = append(r.Options[:], opts...)
+	var env PrefixNewResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/addressing/prefixes", params.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// List all prefixes owned by the account.
+func (r *PrefixService) List(ctx context.Context, query PrefixListParams, opts ...option.RequestOption) (res *[]AddressingIpamPrefixes, err error) {
+	opts = append(r.Options[:], opts...)
+	var env PrefixListResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/addressing/prefixes", query.AccountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Delete an unapproved prefix owned by the account.
+func (r *PrefixService) Delete(ctx context.Context, prefixID string, body PrefixDeleteParams, opts ...option.RequestOption) (res *PrefixDeleteResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env PrefixDeleteResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s", body.AccountID, prefixID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Modify the description for a prefix owned by the account.
+func (r *PrefixService) Edit(ctx context.Context, prefixID string, params PrefixEditParams, opts ...option.RequestOption) (res *AddressingIpamPrefixes, err error) {
+	opts = append(r.Options[:], opts...)
+	var env PrefixEditResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s", params.AccountID, prefixID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, params, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// List a particular prefix owned by the account.
+func (r *PrefixService) Get(ctx context.Context, prefixID string, query PrefixGetParams, opts ...option.RequestOption) (res *AddressingIpamPrefixes, err error) {
+	opts = append(r.Options[:], opts...)
+	var env PrefixGetResponseEnvelope
+	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s", query.AccountID, prefixID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+type AddressingIpamPrefixes struct {
+	// Identifier
+	ID string `json:"id"`
+	// Identifier
+	AccountID string `json:"account_id"`
+	// Prefix advertisement status to the Internet. This field is only not 'null' if on
+	// demand is enabled.
+	Advertised bool `json:"advertised,nullable"`
+	// Last time the advertisement status was changed. This field is only not 'null' if
+	// on demand is enabled.
+	AdvertisedModifiedAt time.Time `json:"advertised_modified_at,nullable" format:"date-time"`
+	// Approval state of the prefix (P = pending, V = active).
+	Approved string `json:"approved"`
+	// Autonomous System Number (ASN) the prefix will be advertised under.
+	ASN int64 `json:"asn,nullable"`
+	// IP Prefix in Classless Inter-Domain Routing format.
+	Cidr      string    `json:"cidr"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Description of the prefix.
+	Description string `json:"description"`
+	// Identifier for the uploaded LOA document.
+	LOADocumentID string    `json:"loa_document_id,nullable"`
+	ModifiedAt    time.Time `json:"modified_at" format:"date-time"`
+	// Whether advertisement of the prefix to the Internet may be dynamically enabled
+	// or disabled.
+	OnDemandEnabled bool `json:"on_demand_enabled"`
+	// Whether advertisement status of the prefix is locked, meaning it cannot be
+	// changed.
+	OnDemandLocked bool                       `json:"on_demand_locked"`
+	JSON           addressingIpamPrefixesJSON `json:"-"`
+}
+
+// addressingIpamPrefixesJSON contains the JSON metadata for the struct
+// [AddressingIpamPrefixes]
+type addressingIpamPrefixesJSON struct {
+	ID                   apijson.Field
+	AccountID            apijson.Field
+	Advertised           apijson.Field
+	AdvertisedModifiedAt apijson.Field
+	Approved             apijson.Field
+	ASN                  apijson.Field
+	Cidr                 apijson.Field
+	CreatedAt            apijson.Field
+	Description          apijson.Field
+	LOADocumentID        apijson.Field
+	ModifiedAt           apijson.Field
+	OnDemandEnabled      apijson.Field
+	OnDemandLocked       apijson.Field
+	raw                  string
+	ExtraFields          map[string]apijson.Field
+}
+
+func (r *AddressingIpamPrefixes) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r addressingIpamPrefixesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Union satisfied by [addressing.PrefixDeleteResponseUnknown],
+// [addressing.PrefixDeleteResponseArray] or [shared.UnionString].
+type PrefixDeleteResponse interface {
+	ImplementsAddressingPrefixDeleteResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*PrefixDeleteResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.JSON,
+			Type:       reflect.TypeOf(PrefixDeleteResponseArray{}),
+		},
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
+}
+
+type PrefixDeleteResponseArray []interface{}
+
+func (r PrefixDeleteResponseArray) ImplementsAddressingPrefixDeleteResponse() {}
+
+type PrefixNewParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+	// Autonomous System Number (ASN) the prefix will be advertised under.
+	ASN param.Field[int64] `json:"asn,required"`
+	// IP Prefix in Classless Inter-Domain Routing format.
+	Cidr param.Field[string] `json:"cidr,required"`
+	// Identifier for the uploaded LOA document.
+	LOADocumentID param.Field[string] `json:"loa_document_id,required"`
+}
+
+func (r PrefixNewParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type PrefixNewResponseEnvelope struct {
+	Errors   []PrefixNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PrefixNewResponseEnvelopeMessages `json:"messages,required"`
+	Result   AddressingIpamPrefixes              `json:"result,required"`
+	// Whether the API call was successful
+	Success PrefixNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    prefixNewResponseEnvelopeJSON    `json:"-"`
+}
+
+// prefixNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [PrefixNewResponseEnvelope]
+type prefixNewResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixNewResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixNewResponseEnvelopeErrors struct {
+	Code    int64                               `json:"code,required"`
+	Message string                              `json:"message,required"`
+	JSON    prefixNewResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// prefixNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [PrefixNewResponseEnvelopeErrors]
+type prefixNewResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixNewResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixNewResponseEnvelopeMessages struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    prefixNewResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// prefixNewResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [PrefixNewResponseEnvelopeMessages]
+type prefixNewResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixNewResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type PrefixNewResponseEnvelopeSuccess bool
+
+const (
+	PrefixNewResponseEnvelopeSuccessTrue PrefixNewResponseEnvelopeSuccess = true
+)
+
+type PrefixListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type PrefixListResponseEnvelope struct {
+	Errors   []PrefixListResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PrefixListResponseEnvelopeMessages `json:"messages,required"`
+	Result   []AddressingIpamPrefixes             `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success    PrefixListResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo PrefixListResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       prefixListResponseEnvelopeJSON       `json:"-"`
+}
+
+// prefixListResponseEnvelopeJSON contains the JSON metadata for the struct
+// [PrefixListResponseEnvelope]
+type prefixListResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixListResponseEnvelopeErrors struct {
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    prefixListResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// prefixListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [PrefixListResponseEnvelopeErrors]
+type prefixListResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixListResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixListResponseEnvelopeMessages struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    prefixListResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// prefixListResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [PrefixListResponseEnvelopeMessages]
+type prefixListResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixListResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type PrefixListResponseEnvelopeSuccess bool
+
+const (
+	PrefixListResponseEnvelopeSuccessTrue PrefixListResponseEnvelopeSuccess = true
+)
+
+type PrefixListResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                  `json:"total_count"`
+	JSON       prefixListResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// prefixListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
+// struct [PrefixListResponseEnvelopeResultInfo]
+type prefixListResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixListResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixDeleteParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type PrefixDeleteResponseEnvelope struct {
+	Errors   []PrefixDeleteResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PrefixDeleteResponseEnvelopeMessages `json:"messages,required"`
+	Result   PrefixDeleteResponse                   `json:"result,required,nullable"`
+	// Whether the API call was successful
+	Success    PrefixDeleteResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo PrefixDeleteResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       prefixDeleteResponseEnvelopeJSON       `json:"-"`
+}
+
+// prefixDeleteResponseEnvelopeJSON contains the JSON metadata for the struct
+// [PrefixDeleteResponseEnvelope]
+type prefixDeleteResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixDeleteResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixDeleteResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixDeleteResponseEnvelopeErrors struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    prefixDeleteResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// prefixDeleteResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [PrefixDeleteResponseEnvelopeErrors]
+type prefixDeleteResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixDeleteResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixDeleteResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixDeleteResponseEnvelopeMessages struct {
+	Code    int64                                    `json:"code,required"`
+	Message string                                   `json:"message,required"`
+	JSON    prefixDeleteResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// prefixDeleteResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [PrefixDeleteResponseEnvelopeMessages]
+type prefixDeleteResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixDeleteResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixDeleteResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type PrefixDeleteResponseEnvelopeSuccess bool
+
+const (
+	PrefixDeleteResponseEnvelopeSuccessTrue PrefixDeleteResponseEnvelopeSuccess = true
+)
+
+type PrefixDeleteResponseEnvelopeResultInfo struct {
+	// Total number of results for the requested service
+	Count float64 `json:"count"`
+	// Current page within paginated list of results
+	Page float64 `json:"page"`
+	// Number of results per page of results
+	PerPage float64 `json:"per_page"`
+	// Total results available without any search parameters
+	TotalCount float64                                    `json:"total_count"`
+	JSON       prefixDeleteResponseEnvelopeResultInfoJSON `json:"-"`
+}
+
+// prefixDeleteResponseEnvelopeResultInfoJSON contains the JSON metadata for the
+// struct [PrefixDeleteResponseEnvelopeResultInfo]
+type prefixDeleteResponseEnvelopeResultInfoJSON struct {
+	Count       apijson.Field
+	Page        apijson.Field
+	PerPage     apijson.Field
+	TotalCount  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixDeleteResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixDeleteResponseEnvelopeResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixEditParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+	// Description of the prefix.
+	Description param.Field[string] `json:"description,required"`
+}
+
+func (r PrefixEditParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type PrefixEditResponseEnvelope struct {
+	Errors   []PrefixEditResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PrefixEditResponseEnvelopeMessages `json:"messages,required"`
+	Result   AddressingIpamPrefixes               `json:"result,required"`
+	// Whether the API call was successful
+	Success PrefixEditResponseEnvelopeSuccess `json:"success,required"`
+	JSON    prefixEditResponseEnvelopeJSON    `json:"-"`
+}
+
+// prefixEditResponseEnvelopeJSON contains the JSON metadata for the struct
+// [PrefixEditResponseEnvelope]
+type prefixEditResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixEditResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixEditResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixEditResponseEnvelopeErrors struct {
+	Code    int64                                `json:"code,required"`
+	Message string                               `json:"message,required"`
+	JSON    prefixEditResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// prefixEditResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [PrefixEditResponseEnvelopeErrors]
+type prefixEditResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixEditResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixEditResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixEditResponseEnvelopeMessages struct {
+	Code    int64                                  `json:"code,required"`
+	Message string                                 `json:"message,required"`
+	JSON    prefixEditResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// prefixEditResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [PrefixEditResponseEnvelopeMessages]
+type prefixEditResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixEditResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixEditResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type PrefixEditResponseEnvelopeSuccess bool
+
+const (
+	PrefixEditResponseEnvelopeSuccessTrue PrefixEditResponseEnvelopeSuccess = true
+)
+
+type PrefixGetParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
+}
+
+type PrefixGetResponseEnvelope struct {
+	Errors   []PrefixGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []PrefixGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   AddressingIpamPrefixes              `json:"result,required"`
+	// Whether the API call was successful
+	Success PrefixGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    prefixGetResponseEnvelopeJSON    `json:"-"`
+}
+
+// prefixGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [PrefixGetResponseEnvelope]
+type prefixGetResponseEnvelopeJSON struct {
+	Errors      apijson.Field
+	Messages    apijson.Field
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixGetResponseEnvelopeErrors struct {
+	Code    int64                               `json:"code,required"`
+	Message string                              `json:"message,required"`
+	JSON    prefixGetResponseEnvelopeErrorsJSON `json:"-"`
+}
+
+// prefixGetResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [PrefixGetResponseEnvelopeErrors]
+type prefixGetResponseEnvelopeErrorsJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixGetResponseEnvelopeErrorsJSON) RawJSON() string {
+	return r.raw
+}
+
+type PrefixGetResponseEnvelopeMessages struct {
+	Code    int64                                 `json:"code,required"`
+	Message string                                `json:"message,required"`
+	JSON    prefixGetResponseEnvelopeMessagesJSON `json:"-"`
+}
+
+// prefixGetResponseEnvelopeMessagesJSON contains the JSON metadata for the struct
+// [PrefixGetResponseEnvelopeMessages]
+type prefixGetResponseEnvelopeMessagesJSON struct {
+	Code        apijson.Field
+	Message     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *PrefixGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r prefixGetResponseEnvelopeMessagesJSON) RawJSON() string {
+	return r.raw
+}
+
+// Whether the API call was successful
+type PrefixGetResponseEnvelopeSuccess bool
+
+const (
+	PrefixGetResponseEnvelopeSuccessTrue PrefixGetResponseEnvelopeSuccess = true
+)
