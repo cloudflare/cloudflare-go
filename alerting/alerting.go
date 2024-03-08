@@ -3,7 +3,7 @@
 package alerting
 
 import (
-	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // AlertingService contains methods and other services that help with interacting

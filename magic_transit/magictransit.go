@@ -3,7 +3,7 @@
 package magic_transit
 
 import (
-	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // MagicTransitService contains methods and other services that help with

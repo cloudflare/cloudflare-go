@@ -3,7 +3,7 @@
 package dns
 
 import (
-	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // FirewallAnalyticsService contains methods and other services that help with

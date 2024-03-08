@@ -3,7 +3,7 @@
 package dcv_delegation
 
 import (
-	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // DCVDelegationService contains methods and other services that help with
