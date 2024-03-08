@@ -8,11 +8,11 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go"
-	"github.com/cloudflare/cloudflare-go/alerting"
-	"github.com/cloudflare/cloudflare-go/internal/shared"
-	"github.com/cloudflare/cloudflare-go/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-go/v2"
+	"github.com/cloudflare/cloudflare-go/v2/alerting"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
+	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 func TestV3PolicyNewWithOptionalParams(t *testing.T) {

@@ -11,7 +11,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/internal/param"
+	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 )
 
 var encoders sync.Map // map[encoderEntry]encoderFunc

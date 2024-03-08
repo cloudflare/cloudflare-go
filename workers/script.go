@@ -12,12 +12,12 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/internal/apiform"
-	"github.com/cloudflare/cloudflare-go/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/internal/param"
-	"github.com/cloudflare/cloudflare-go/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-go/v2/internal/apiform"
+	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/param"
+	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // ScriptService contains methods and other services that help with interacting
