@@ -1,0 +1,260 @@
+// File generated from our OpenAPI spec by Stainless.
+
+package radar
+
+import (
+	"context"
+	"fmt"
+	"net/http"
+	"net/url"
+
+	"github.com/cloudflare/cloudflare-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/internal/param"
+	"github.com/cloudflare/cloudflare-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/option"
+)
+
+// EntityLocationService contains methods and other services that help with
+// interacting with the cloudflare API. Note, unlike clients, this service does not
+// read variables from the environment automatically. You should not instantiate
+// this service directly, and instead use the [NewEntityLocationService] method
+// instead.
+type EntityLocationService struct {
+	Options []option.RequestOption
+}
+
+// NewEntityLocationService generates a new service that applies the given options
+// to each request. These options are applied after the parent client's options (if
+// there is one), and before any request-specific options.
+func NewEntityLocationService(opts ...option.RequestOption) (r *EntityLocationService) {
+	r = &EntityLocationService{}
+	r.Options = opts
+	return
+}
+
+// Get a list of locations.
+func (r *EntityLocationService) List(ctx context.Context, query EntityLocationListParams, opts ...option.RequestOption) (res *EntityLocationListResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env EntityLocationListResponseEnvelope
+	path := "radar/entities/locations"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+// Get the requested location information. A confidence level below `5` indicates a
+// low level of confidence in the traffic data - normally this happens because
+// Cloudflare has a small amount of traffic from/to this location).
+func (r *EntityLocationService) Get(ctx context.Context, location string, query EntityLocationGetParams, opts ...option.RequestOption) (res *EntityLocationGetResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	var env EntityLocationGetResponseEnvelope
+	path := fmt.Sprintf("radar/entities/locations/%s", location)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	if err != nil {
+		return
+	}
+	res = &env.Result
+	return
+}
+
+type EntityLocationListResponse struct {
+	Locations []EntityLocationListResponseLocation `json:"locations,required"`
+	JSON      entityLocationListResponseJSON       `json:"-"`
+}
+
+// entityLocationListResponseJSON contains the JSON metadata for the struct
+// [EntityLocationListResponse]
+type entityLocationListResponseJSON struct {
+	Locations   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EntityLocationListResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r entityLocationListResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type EntityLocationListResponseLocation struct {
+	Alpha2    string                                 `json:"alpha2,required"`
+	Latitude  string                                 `json:"latitude,required"`
+	Longitude string                                 `json:"longitude,required"`
+	Name      string                                 `json:"name,required"`
+	JSON      entityLocationListResponseLocationJSON `json:"-"`
+}
+
+// entityLocationListResponseLocationJSON contains the JSON metadata for the struct
+// [EntityLocationListResponseLocation]
+type entityLocationListResponseLocationJSON struct {
+	Alpha2      apijson.Field
+	Latitude    apijson.Field
+	Longitude   apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EntityLocationListResponseLocation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r entityLocationListResponseLocationJSON) RawJSON() string {
+	return r.raw
+}
+
+type EntityLocationGetResponse struct {
+	Location EntityLocationGetResponseLocation `json:"location,required"`
+	JSON     entityLocationGetResponseJSON     `json:"-"`
+}
+
+// entityLocationGetResponseJSON contains the JSON metadata for the struct
+// [EntityLocationGetResponse]
+type entityLocationGetResponseJSON struct {
+	Location    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EntityLocationGetResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r entityLocationGetResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type EntityLocationGetResponseLocation struct {
+	Alpha2          string                                `json:"alpha2,required"`
+	ConfidenceLevel int64                                 `json:"confidenceLevel,required"`
+	Latitude        string                                `json:"latitude,required"`
+	Longitude       string                                `json:"longitude,required"`
+	Name            string                                `json:"name,required"`
+	Region          string                                `json:"region,required"`
+	Subregion       string                                `json:"subregion,required"`
+	JSON            entityLocationGetResponseLocationJSON `json:"-"`
+}
+
+// entityLocationGetResponseLocationJSON contains the JSON metadata for the struct
+// [EntityLocationGetResponseLocation]
+type entityLocationGetResponseLocationJSON struct {
+	Alpha2          apijson.Field
+	ConfidenceLevel apijson.Field
+	Latitude        apijson.Field
+	Longitude       apijson.Field
+	Name            apijson.Field
+	Region          apijson.Field
+	Subregion       apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
+}
+
+func (r *EntityLocationGetResponseLocation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r entityLocationGetResponseLocationJSON) RawJSON() string {
+	return r.raw
+}
+
+type EntityLocationListParams struct {
+	// Format results are returned in.
+	Format param.Field[EntityLocationListParamsFormat] `query:"format"`
+	// Limit the number of objects in the response.
+	Limit param.Field[int64] `query:"limit"`
+	// Comma separated list of locations.
+	Location param.Field[string] `query:"location"`
+	// Number of objects to skip before grabbing results.
+	Offset param.Field[int64] `query:"offset"`
+}
+
+// URLQuery serializes [EntityLocationListParams]'s query parameters as
+// `url.Values`.
+func (r EntityLocationListParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+// Format results are returned in.
+type EntityLocationListParamsFormat string
+
+const (
+	EntityLocationListParamsFormatJson EntityLocationListParamsFormat = "JSON"
+	EntityLocationListParamsFormatCsv  EntityLocationListParamsFormat = "CSV"
+)
+
+type EntityLocationListResponseEnvelope struct {
+	Result  EntityLocationListResponse             `json:"result,required"`
+	Success bool                                   `json:"success,required"`
+	JSON    entityLocationListResponseEnvelopeJSON `json:"-"`
+}
+
+// entityLocationListResponseEnvelopeJSON contains the JSON metadata for the struct
+// [EntityLocationListResponseEnvelope]
+type entityLocationListResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EntityLocationListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r entityLocationListResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
+
+type EntityLocationGetParams struct {
+	// Format results are returned in.
+	Format param.Field[EntityLocationGetParamsFormat] `query:"format"`
+}
+
+// URLQuery serializes [EntityLocationGetParams]'s query parameters as
+// `url.Values`.
+func (r EntityLocationGetParams) URLQuery() (v url.Values) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+// Format results are returned in.
+type EntityLocationGetParamsFormat string
+
+const (
+	EntityLocationGetParamsFormatJson EntityLocationGetParamsFormat = "JSON"
+	EntityLocationGetParamsFormatCsv  EntityLocationGetParamsFormat = "CSV"
+)
+
+type EntityLocationGetResponseEnvelope struct {
+	Result  EntityLocationGetResponse             `json:"result,required"`
+	Success bool                                  `json:"success,required"`
+	JSON    entityLocationGetResponseEnvelopeJSON `json:"-"`
+}
+
+// entityLocationGetResponseEnvelopeJSON contains the JSON metadata for the struct
+// [EntityLocationGetResponseEnvelope]
+type entityLocationGetResponseEnvelopeJSON struct {
+	Result      apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *EntityLocationGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r entityLocationGetResponseEnvelopeJSON) RawJSON() string {
+	return r.raw
+}
