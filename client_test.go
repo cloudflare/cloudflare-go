@@ -10,6 +10,7 @@ import (
 
 	"github.com/cloudflare/cloudflare-go"
 	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-go/zones"
 )
 
 type closureTransport struct {
@@ -37,12 +38,12 @@ func TestRetryAfter(t *testing.T) {
 			},
 		}),
 	)
-	res, err := client.Zones.New(context.Background(), cloudflare.ZoneNewParams{
-		Account: cloudflare.F(cloudflare.ZoneNewParamsAccount{
+	res, err := client.Zones.New(context.Background(), zones.ZoneNewParams{
+		Account: cloudflare.F(zones.ZoneNewParamsAccount{
 			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		}),
 		Name: cloudflare.F("example.com"),
-		Type: cloudflare.F(cloudflare.ZoneNewParamsTypeFull),
+		Type: cloudflare.F(zones.ZoneNewParamsTypeFull),
 	})
 	if err == nil || res != nil {
 		t.Error("Expected there to be a cancel error and for the response to be nil")
@@ -69,12 +70,12 @@ func TestRetryAfterMs(t *testing.T) {
 			},
 		}),
 	)
-	res, err := client.Zones.New(context.Background(), cloudflare.ZoneNewParams{
-		Account: cloudflare.F(cloudflare.ZoneNewParamsAccount{
+	res, err := client.Zones.New(context.Background(), zones.ZoneNewParams{
+		Account: cloudflare.F(zones.ZoneNewParamsAccount{
 			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		}),
 		Name: cloudflare.F("example.com"),
-		Type: cloudflare.F(cloudflare.ZoneNewParamsTypeFull),
+		Type: cloudflare.F(zones.ZoneNewParamsTypeFull),
 	})
 	if err == nil || res != nil {
 		t.Error("Expected there to be a cancel error and for the response to be nil")
@@ -97,12 +98,12 @@ func TestContextCancel(t *testing.T) {
 	)
 	cancelCtx, cancel := context.WithCancel(context.Background())
 	cancel()
-	res, err := client.Zones.New(cancelCtx, cloudflare.ZoneNewParams{
-		Account: cloudflare.F(cloudflare.ZoneNewParamsAccount{
+	res, err := client.Zones.New(cancelCtx, zones.ZoneNewParams{
+		Account: cloudflare.F(zones.ZoneNewParamsAccount{
 			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		}),
 		Name: cloudflare.F("example.com"),
-		Type: cloudflare.F(cloudflare.ZoneNewParamsTypeFull),
+		Type: cloudflare.F(zones.ZoneNewParamsTypeFull),
 	})
 	if err == nil || res != nil {
 		t.Error("Expected there to be a cancel error and for the response to be nil")
@@ -122,12 +123,12 @@ func TestContextCancelDelay(t *testing.T) {
 	)
 	cancelCtx, cancel := context.WithTimeout(context.Background(), 2*time.Millisecond)
 	defer cancel()
-	res, err := client.Zones.New(cancelCtx, cloudflare.ZoneNewParams{
-		Account: cloudflare.F(cloudflare.ZoneNewParamsAccount{
+	res, err := client.Zones.New(cancelCtx, zones.ZoneNewParams{
+		Account: cloudflare.F(zones.ZoneNewParamsAccount{
 			ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		}),
 		Name: cloudflare.F("example.com"),
-		Type: cloudflare.F(cloudflare.ZoneNewParamsTypeFull),
+		Type: cloudflare.F(zones.ZoneNewParamsTypeFull),
 	})
 	if err == nil || res != nil {
 		t.Error("expected there to be a cancel error and for the response to be nil")
@@ -153,12 +154,12 @@ func TestContextDeadline(t *testing.T) {
 				},
 			}),
 		)
-		res, err := client.Zones.New(deadlineCtx, cloudflare.ZoneNewParams{
-			Account: cloudflare.F(cloudflare.ZoneNewParamsAccount{
+		res, err := client.Zones.New(deadlineCtx, zones.ZoneNewParams{
+			Account: cloudflare.F(zones.ZoneNewParamsAccount{
 				ID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 			}),
 			Name: cloudflare.F("example.com"),
-			Type: cloudflare.F(cloudflare.ZoneNewParamsTypeFull),
+			Type: cloudflare.F(zones.ZoneNewParamsTypeFull),
 		})
 		if err == nil || res != nil {
 			t.Error("expected there to be a deadline error and for the response to be nil")
