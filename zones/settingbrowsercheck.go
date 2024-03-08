@@ -37,7 +37,7 @@ func NewSettingBrowserCheckService(opts ...option.RequestOption) (r *SettingBrow
 // also challenge visitors that do not have a user agent or a non standard user
 // agent (also commonly used by abuse bots, crawlers or visitors).
 // (https://support.cloudflare.com/hc/en-us/articles/200170086).
-func (r *SettingBrowserCheckService) Edit(ctx context.Context, params SettingBrowserCheckEditParams, opts ...option.RequestOption) (res *SettingBrowserCheckEditResponse, err error) {
+func (r *SettingBrowserCheckService) Edit(ctx context.Context, params SettingBrowserCheckEditParams, opts ...option.RequestOption) (res *ZonesBrowserCheck, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingBrowserCheckEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/browser_check", params.ZoneID)
@@ -54,7 +54,7 @@ func (r *SettingBrowserCheckService) Edit(ctx context.Context, params SettingBro
 // also challenge visitors that do not have a user agent or a non standard user
 // agent (also commonly used by abuse bots, crawlers or visitors).
 // (https://support.cloudflare.com/hc/en-us/articles/200170086).
-func (r *SettingBrowserCheckService) Get(ctx context.Context, query SettingBrowserCheckGetParams, opts ...option.RequestOption) (res *SettingBrowserCheckGetResponse, err error) {
+func (r *SettingBrowserCheckService) Get(ctx context.Context, query SettingBrowserCheckGetParams, opts ...option.RequestOption) (res *ZonesBrowserCheck, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingBrowserCheckGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/browser_check", query.ZoneID)
@@ -71,22 +71,22 @@ func (r *SettingBrowserCheckService) Get(ctx context.Context, query SettingBrows
 // also challenge visitors that do not have a user agent or a non standard user
 // agent (also commonly used by abuse bots, crawlers or visitors).
 // (https://support.cloudflare.com/hc/en-us/articles/200170086).
-type SettingBrowserCheckEditResponse struct {
+type ZonesBrowserCheck struct {
 	// ID of the zone setting.
-	ID SettingBrowserCheckEditResponseID `json:"id,required"`
+	ID ZonesBrowserCheckID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingBrowserCheckEditResponseValue `json:"value,required"`
+	Value ZonesBrowserCheckValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingBrowserCheckEditResponseEditable `json:"editable"`
+	Editable ZonesBrowserCheckEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                           `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingBrowserCheckEditResponseJSON `json:"-"`
+	ModifiedOn time.Time             `json:"modified_on,nullable" format:"date-time"`
+	JSON       zonesBrowserCheckJSON `json:"-"`
 }
 
-// settingBrowserCheckEditResponseJSON contains the JSON metadata for the struct
-// [SettingBrowserCheckEditResponse]
-type settingBrowserCheckEditResponseJSON struct {
+// zonesBrowserCheckJSON contains the JSON metadata for the struct
+// [ZonesBrowserCheck]
+type zonesBrowserCheckJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -95,36 +95,40 @@ type settingBrowserCheckEditResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingBrowserCheckEditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonesBrowserCheck) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r settingBrowserCheckEditResponseJSON) RawJSON() string {
+func (r zonesBrowserCheckJSON) RawJSON() string {
 	return r.raw
 }
 
+func (r ZonesBrowserCheck) implementsZonesSettingEditResponse() {}
+
+func (r ZonesBrowserCheck) implementsZonesSettingGetResponse() {}
+
 // ID of the zone setting.
-type SettingBrowserCheckEditResponseID string
+type ZonesBrowserCheckID string
 
 const (
-	SettingBrowserCheckEditResponseIDBrowserCheck SettingBrowserCheckEditResponseID = "browser_check"
+	ZonesBrowserCheckIDBrowserCheck ZonesBrowserCheckID = "browser_check"
 )
 
 // Current value of the zone setting.
-type SettingBrowserCheckEditResponseValue string
+type ZonesBrowserCheckValue string
 
 const (
-	SettingBrowserCheckEditResponseValueOn  SettingBrowserCheckEditResponseValue = "on"
-	SettingBrowserCheckEditResponseValueOff SettingBrowserCheckEditResponseValue = "off"
+	ZonesBrowserCheckValueOn  ZonesBrowserCheckValue = "on"
+	ZonesBrowserCheckValueOff ZonesBrowserCheckValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingBrowserCheckEditResponseEditable bool
+type ZonesBrowserCheckEditable bool
 
 const (
-	SettingBrowserCheckEditResponseEditableTrue  SettingBrowserCheckEditResponseEditable = true
-	SettingBrowserCheckEditResponseEditableFalse SettingBrowserCheckEditResponseEditable = false
+	ZonesBrowserCheckEditableTrue  ZonesBrowserCheckEditable = true
+	ZonesBrowserCheckEditableFalse ZonesBrowserCheckEditable = false
 )
 
 // Browser Integrity Check is similar to Bad Behavior and looks for common HTTP
@@ -132,61 +136,18 @@ const (
 // also challenge visitors that do not have a user agent or a non standard user
 // agent (also commonly used by abuse bots, crawlers or visitors).
 // (https://support.cloudflare.com/hc/en-us/articles/200170086).
-type SettingBrowserCheckGetResponse struct {
+type ZonesBrowserCheckParam struct {
 	// ID of the zone setting.
-	ID SettingBrowserCheckGetResponseID `json:"id,required"`
+	ID param.Field[ZonesBrowserCheckID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingBrowserCheckGetResponseValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable SettingBrowserCheckGetResponseEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                          `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingBrowserCheckGetResponseJSON `json:"-"`
+	Value param.Field[ZonesBrowserCheckValue] `json:"value,required"`
 }
 
-// settingBrowserCheckGetResponseJSON contains the JSON metadata for the struct
-// [SettingBrowserCheckGetResponse]
-type settingBrowserCheckGetResponseJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+func (r ZonesBrowserCheckParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *SettingBrowserCheckGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingBrowserCheckGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// ID of the zone setting.
-type SettingBrowserCheckGetResponseID string
-
-const (
-	SettingBrowserCheckGetResponseIDBrowserCheck SettingBrowserCheckGetResponseID = "browser_check"
-)
-
-// Current value of the zone setting.
-type SettingBrowserCheckGetResponseValue string
-
-const (
-	SettingBrowserCheckGetResponseValueOn  SettingBrowserCheckGetResponseValue = "on"
-	SettingBrowserCheckGetResponseValueOff SettingBrowserCheckGetResponseValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type SettingBrowserCheckGetResponseEditable bool
-
-const (
-	SettingBrowserCheckGetResponseEditableTrue  SettingBrowserCheckGetResponseEditable = true
-	SettingBrowserCheckGetResponseEditableFalse SettingBrowserCheckGetResponseEditable = false
-)
+func (r ZonesBrowserCheckParam) implementsZonesSettingEditParamsItem() {}
 
 type SettingBrowserCheckEditParams struct {
 	// Identifier
@@ -217,7 +178,7 @@ type SettingBrowserCheckEditResponseEnvelope struct {
 	// also challenge visitors that do not have a user agent or a non standard user
 	// agent (also commonly used by abuse bots, crawlers or visitors).
 	// (https://support.cloudflare.com/hc/en-us/articles/200170086).
-	Result SettingBrowserCheckEditResponse             `json:"result"`
+	Result ZonesBrowserCheck                           `json:"result"`
 	JSON   settingBrowserCheckEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -301,7 +262,7 @@ type SettingBrowserCheckGetResponseEnvelope struct {
 	// also challenge visitors that do not have a user agent or a non standard user
 	// agent (also commonly used by abuse bots, crawlers or visitors).
 	// (https://support.cloudflare.com/hc/en-us/articles/200170086).
-	Result SettingBrowserCheckGetResponse             `json:"result"`
+	Result ZonesBrowserCheck                          `json:"result"`
 	JSON   settingBrowserCheckGetResponseEnvelopeJSON `json:"-"`
 }
 

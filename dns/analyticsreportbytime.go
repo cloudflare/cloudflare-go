@@ -39,7 +39,7 @@ func NewAnalyticsReportBytimeService(opts ...option.RequestOption) (r *Analytics
 // See
 // [Analytics API properties](https://developers.cloudflare.com/dns/reference/analytics-api-properties/)
 // for detailed information about the available query parameters.
-func (r *AnalyticsReportBytimeService) Get(ctx context.Context, identifier string, query AnalyticsReportBytimeGetParams, opts ...option.RequestOption) (res *AnalyticsReportBytimeGetResponse, err error) {
+func (r *AnalyticsReportBytimeService) Get(ctx context.Context, identifier string, query AnalyticsReportBytimeGetParams, opts ...option.RequestOption) (res *DNSDNSAnalyticsAPIReportBytime, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AnalyticsReportBytimeGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/dns_analytics/report/bytime", identifier)
@@ -51,9 +51,9 @@ func (r *AnalyticsReportBytimeService) Get(ctx context.Context, identifier strin
 	return
 }
 
-type AnalyticsReportBytimeGetResponse struct {
+type DNSDNSAnalyticsAPIReportBytime struct {
 	// Array with one row per combination of dimension values.
-	Data []AnalyticsReportBytimeGetResponseData `json:"data,required"`
+	Data []DNSDNSAnalyticsAPIReportBytimeData `json:"data,required"`
 	// Number of seconds between current time and last processed event, in another
 	// words how many seconds of data could be missing.
 	DataLag float64 `json:"data_lag,required"`
@@ -62,8 +62,8 @@ type AnalyticsReportBytimeGetResponse struct {
 	Max interface{} `json:"max,required"`
 	// Minimum results for each metric (object mapping metric names to values).
 	// Currently always an empty object.
-	Min   interface{}                           `json:"min,required"`
-	Query AnalyticsReportBytimeGetResponseQuery `json:"query,required"`
+	Min   interface{}                         `json:"min,required"`
+	Query DNSDNSAnalyticsAPIReportBytimeQuery `json:"query,required"`
 	// Total number of rows in the result.
 	Rows float64 `json:"rows,required"`
 	// Array of time intervals in the response data. Each interval is represented as an
@@ -71,13 +71,13 @@ type AnalyticsReportBytimeGetResponse struct {
 	TimeIntervals [][]time.Time `json:"time_intervals,required" format:"date-time"`
 	// Total results for metrics across all data (object mapping metric names to
 	// values).
-	Totals interface{}                          `json:"totals,required"`
-	JSON   analyticsReportBytimeGetResponseJSON `json:"-"`
+	Totals interface{}                        `json:"totals,required"`
+	JSON   dnsdnsAnalyticsAPIReportBytimeJSON `json:"-"`
 }
 
-// analyticsReportBytimeGetResponseJSON contains the JSON metadata for the struct
-// [AnalyticsReportBytimeGetResponse]
-type analyticsReportBytimeGetResponseJSON struct {
+// dnsdnsAnalyticsAPIReportBytimeJSON contains the JSON metadata for the struct
+// [DNSDNSAnalyticsAPIReportBytime]
+type dnsdnsAnalyticsAPIReportBytimeJSON struct {
 	Data          apijson.Field
 	DataLag       apijson.Field
 	Max           apijson.Field
@@ -90,42 +90,42 @@ type analyticsReportBytimeGetResponseJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *AnalyticsReportBytimeGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSDNSAnalyticsAPIReportBytime) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r analyticsReportBytimeGetResponseJSON) RawJSON() string {
+func (r dnsdnsAnalyticsAPIReportBytimeJSON) RawJSON() string {
 	return r.raw
 }
 
-type AnalyticsReportBytimeGetResponseData struct {
+type DNSDNSAnalyticsAPIReportBytimeData struct {
 	// Array of dimension values, representing the combination of dimension values
 	// corresponding to this row.
 	Dimensions []string `json:"dimensions,required"`
 	// Array with one item per requested metric. Each item is an array of values,
 	// broken down by time interval.
-	Metrics [][]interface{}                          `json:"metrics,required"`
-	JSON    analyticsReportBytimeGetResponseDataJSON `json:"-"`
+	Metrics [][]interface{}                        `json:"metrics,required"`
+	JSON    dnsdnsAnalyticsAPIReportBytimeDataJSON `json:"-"`
 }
 
-// analyticsReportBytimeGetResponseDataJSON contains the JSON metadata for the
-// struct [AnalyticsReportBytimeGetResponseData]
-type analyticsReportBytimeGetResponseDataJSON struct {
+// dnsdnsAnalyticsAPIReportBytimeDataJSON contains the JSON metadata for the struct
+// [DNSDNSAnalyticsAPIReportBytimeData]
+type dnsdnsAnalyticsAPIReportBytimeDataJSON struct {
 	Dimensions  apijson.Field
 	Metrics     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AnalyticsReportBytimeGetResponseData) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSDNSAnalyticsAPIReportBytimeData) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r analyticsReportBytimeGetResponseDataJSON) RawJSON() string {
+func (r dnsdnsAnalyticsAPIReportBytimeDataJSON) RawJSON() string {
 	return r.raw
 }
 
-type AnalyticsReportBytimeGetResponseQuery struct {
+type DNSDNSAnalyticsAPIReportBytimeQuery struct {
 	// Array of dimension names.
 	Dimensions []string `json:"dimensions,required"`
 	// Limit number of returned metrics.
@@ -135,20 +135,20 @@ type AnalyticsReportBytimeGetResponseQuery struct {
 	// Start date and time of requesting data period in ISO 8601 format.
 	Since time.Time `json:"since,required" format:"date-time"`
 	// Unit of time to group data by.
-	TimeDelta AnalyticsReportBytimeGetResponseQueryTimeDelta `json:"time_delta,required"`
+	TimeDelta DNSDNSAnalyticsAPIReportBytimeQueryTimeDelta `json:"time_delta,required"`
 	// End date and time of requesting data period in ISO 8601 format.
 	Until time.Time `json:"until,required" format:"date-time"`
 	// Segmentation filter in 'attribute operator value' format.
 	Filters string `json:"filters"`
 	// Array of dimensions to sort by, where each dimension may be prefixed by -
 	// (descending) or + (ascending).
-	Sort []string                                  `json:"sort"`
-	JSON analyticsReportBytimeGetResponseQueryJSON `json:"-"`
+	Sort []string                                `json:"sort"`
+	JSON dnsdnsAnalyticsAPIReportBytimeQueryJSON `json:"-"`
 }
 
-// analyticsReportBytimeGetResponseQueryJSON contains the JSON metadata for the
-// struct [AnalyticsReportBytimeGetResponseQuery]
-type analyticsReportBytimeGetResponseQueryJSON struct {
+// dnsdnsAnalyticsAPIReportBytimeQueryJSON contains the JSON metadata for the
+// struct [DNSDNSAnalyticsAPIReportBytimeQuery]
+type dnsdnsAnalyticsAPIReportBytimeQueryJSON struct {
 	Dimensions  apijson.Field
 	Limit       apijson.Field
 	Metrics     apijson.Field
@@ -161,28 +161,28 @@ type analyticsReportBytimeGetResponseQueryJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AnalyticsReportBytimeGetResponseQuery) UnmarshalJSON(data []byte) (err error) {
+func (r *DNSDNSAnalyticsAPIReportBytimeQuery) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r analyticsReportBytimeGetResponseQueryJSON) RawJSON() string {
+func (r dnsdnsAnalyticsAPIReportBytimeQueryJSON) RawJSON() string {
 	return r.raw
 }
 
 // Unit of time to group data by.
-type AnalyticsReportBytimeGetResponseQueryTimeDelta string
+type DNSDNSAnalyticsAPIReportBytimeQueryTimeDelta string
 
 const (
-	AnalyticsReportBytimeGetResponseQueryTimeDeltaAll        AnalyticsReportBytimeGetResponseQueryTimeDelta = "all"
-	AnalyticsReportBytimeGetResponseQueryTimeDeltaAuto       AnalyticsReportBytimeGetResponseQueryTimeDelta = "auto"
-	AnalyticsReportBytimeGetResponseQueryTimeDeltaYear       AnalyticsReportBytimeGetResponseQueryTimeDelta = "year"
-	AnalyticsReportBytimeGetResponseQueryTimeDeltaQuarter    AnalyticsReportBytimeGetResponseQueryTimeDelta = "quarter"
-	AnalyticsReportBytimeGetResponseQueryTimeDeltaMonth      AnalyticsReportBytimeGetResponseQueryTimeDelta = "month"
-	AnalyticsReportBytimeGetResponseQueryTimeDeltaWeek       AnalyticsReportBytimeGetResponseQueryTimeDelta = "week"
-	AnalyticsReportBytimeGetResponseQueryTimeDeltaDay        AnalyticsReportBytimeGetResponseQueryTimeDelta = "day"
-	AnalyticsReportBytimeGetResponseQueryTimeDeltaHour       AnalyticsReportBytimeGetResponseQueryTimeDelta = "hour"
-	AnalyticsReportBytimeGetResponseQueryTimeDeltaDekaminute AnalyticsReportBytimeGetResponseQueryTimeDelta = "dekaminute"
-	AnalyticsReportBytimeGetResponseQueryTimeDeltaMinute     AnalyticsReportBytimeGetResponseQueryTimeDelta = "minute"
+	DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaAll        DNSDNSAnalyticsAPIReportBytimeQueryTimeDelta = "all"
+	DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaAuto       DNSDNSAnalyticsAPIReportBytimeQueryTimeDelta = "auto"
+	DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaYear       DNSDNSAnalyticsAPIReportBytimeQueryTimeDelta = "year"
+	DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaQuarter    DNSDNSAnalyticsAPIReportBytimeQueryTimeDelta = "quarter"
+	DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaMonth      DNSDNSAnalyticsAPIReportBytimeQueryTimeDelta = "month"
+	DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaWeek       DNSDNSAnalyticsAPIReportBytimeQueryTimeDelta = "week"
+	DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaDay        DNSDNSAnalyticsAPIReportBytimeQueryTimeDelta = "day"
+	DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaHour       DNSDNSAnalyticsAPIReportBytimeQueryTimeDelta = "hour"
+	DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaDekaminute DNSDNSAnalyticsAPIReportBytimeQueryTimeDelta = "dekaminute"
+	DNSDNSAnalyticsAPIReportBytimeQueryTimeDeltaMinute     DNSDNSAnalyticsAPIReportBytimeQueryTimeDelta = "minute"
 )
 
 type AnalyticsReportBytimeGetParams struct {
@@ -233,7 +233,7 @@ const (
 type AnalyticsReportBytimeGetResponseEnvelope struct {
 	Errors   []AnalyticsReportBytimeGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AnalyticsReportBytimeGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   AnalyticsReportBytimeGetResponse                   `json:"result,required"`
+	Result   DNSDNSAnalyticsAPIReportBytime                     `json:"result,required"`
 	// Whether the API call was successful
 	Success AnalyticsReportBytimeGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    analyticsReportBytimeGetResponseEnvelopeJSON    `json:"-"`

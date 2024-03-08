@@ -35,7 +35,7 @@ func NewDEXTracerouteTestService(opts ...option.RequestOption) (r *DEXTraceroute
 
 // Get test details and aggregate performance metrics for an traceroute test for a
 // given time period between 1 hour and 7 days.
-func (r *DEXTracerouteTestService) Get(ctx context.Context, testID string, params DEXTracerouteTestGetParams, opts ...option.RequestOption) (res *DEXTracerouteTestGetResponse, err error) {
+func (r *DEXTracerouteTestService) Get(ctx context.Context, testID string, params DEXTracerouteTestGetParams, opts ...option.RequestOption) (res *DigitalExperienceMonitoringTracerouteDetails, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DEXTracerouteTestGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dex/traceroute-tests/%s", params.AccountID, testID)
@@ -48,7 +48,7 @@ func (r *DEXTracerouteTestService) Get(ctx context.Context, testID string, param
 }
 
 // Get a breakdown of metrics by hop for individual traceroute test runs
-func (r *DEXTracerouteTestService) NetworkPath(ctx context.Context, testID string, params DEXTracerouteTestNetworkPathParams, opts ...option.RequestOption) (res *DEXTracerouteTestNetworkPathResponse, err error) {
+func (r *DEXTracerouteTestService) NetworkPath(ctx context.Context, testID string, params DEXTracerouteTestNetworkPathParams, opts ...option.RequestOption) (res *DigitalExperienceMonitoringTracerouteTestNetworkPath, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DEXTracerouteTestNetworkPathResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dex/traceroute-tests/%s/network-path", params.AccountID, testID)
@@ -62,7 +62,7 @@ func (r *DEXTracerouteTestService) NetworkPath(ctx context.Context, testID strin
 
 // Get percentiles for a traceroute test for a given time period between 1 hour and
 // 7 days.
-func (r *DEXTracerouteTestService) Percentiles(ctx context.Context, testID string, params DEXTracerouteTestPercentilesParams, opts ...option.RequestOption) (res *DEXTracerouteTestPercentilesResponse, err error) {
+func (r *DEXTracerouteTestService) Percentiles(ctx context.Context, testID string, params DEXTracerouteTestPercentilesParams, opts ...option.RequestOption) (res *DigitalExperienceMonitoringTracerouteDetailsPercentiles, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DEXTracerouteTestPercentilesResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dex/traceroute-tests/%s/percentiles", params.AccountID, testID)
@@ -74,22 +74,22 @@ func (r *DEXTracerouteTestService) Percentiles(ctx context.Context, testID strin
 	return
 }
 
-type DEXTracerouteTestGetResponse struct {
+type DigitalExperienceMonitoringTracerouteDetails struct {
 	// The host of the Traceroute synthetic application test
 	Host string `json:"host,required"`
 	// The interval at which the Traceroute synthetic application test is set to run.
-	Interval string                           `json:"interval,required"`
-	Kind     DEXTracerouteTestGetResponseKind `json:"kind,required"`
+	Interval string                                           `json:"interval,required"`
+	Kind     DigitalExperienceMonitoringTracerouteDetailsKind `json:"kind,required"`
 	// The name of the Traceroute synthetic application test
-	Name                  string                                              `json:"name,required"`
-	TracerouteStats       DEXTracerouteTestGetResponseTracerouteStats         `json:"tracerouteStats,nullable"`
-	TracerouteStatsByColo []DEXTracerouteTestGetResponseTracerouteStatsByColo `json:"tracerouteStatsByColo"`
-	JSON                  dexTracerouteTestGetResponseJSON                    `json:"-"`
+	Name                  string                                                              `json:"name,required"`
+	TracerouteStats       DigitalExperienceMonitoringTracerouteDetailsTracerouteStats         `json:"tracerouteStats,nullable"`
+	TracerouteStatsByColo []DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColo `json:"tracerouteStatsByColo"`
+	JSON                  digitalExperienceMonitoringTracerouteDetailsJSON                    `json:"-"`
 }
 
-// dexTracerouteTestGetResponseJSON contains the JSON metadata for the struct
-// [DEXTracerouteTestGetResponse]
-type dexTracerouteTestGetResponseJSON struct {
+// digitalExperienceMonitoringTracerouteDetailsJSON contains the JSON metadata for
+// the struct [DigitalExperienceMonitoringTracerouteDetails]
+type digitalExperienceMonitoringTracerouteDetailsJSON struct {
 	Host                  apijson.Field
 	Interval              apijson.Field
 	Kind                  apijson.Field
@@ -100,33 +100,34 @@ type dexTracerouteTestGetResponseJSON struct {
 	ExtraFields           map[string]apijson.Field
 }
 
-func (r *DEXTracerouteTestGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DigitalExperienceMonitoringTracerouteDetails) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dexTracerouteTestGetResponseJSON) RawJSON() string {
+func (r digitalExperienceMonitoringTracerouteDetailsJSON) RawJSON() string {
 	return r.raw
 }
 
-type DEXTracerouteTestGetResponseKind string
+type DigitalExperienceMonitoringTracerouteDetailsKind string
 
 const (
-	DEXTracerouteTestGetResponseKindTraceroute DEXTracerouteTestGetResponseKind = "traceroute"
+	DigitalExperienceMonitoringTracerouteDetailsKindTraceroute DigitalExperienceMonitoringTracerouteDetailsKind = "traceroute"
 )
 
-type DEXTracerouteTestGetResponseTracerouteStats struct {
-	AvailabilityPct DEXTracerouteTestGetResponseTracerouteStatsAvailabilityPct `json:"availabilityPct,required"`
-	HopsCount       DEXTracerouteTestGetResponseTracerouteStatsHopsCount       `json:"hopsCount,required"`
-	PacketLossPct   DEXTracerouteTestGetResponseTracerouteStatsPacketLossPct   `json:"packetLossPct,required"`
-	RoundTripTimeMs DEXTracerouteTestGetResponseTracerouteStatsRoundTripTimeMs `json:"roundTripTimeMs,required"`
+type DigitalExperienceMonitoringTracerouteDetailsTracerouteStats struct {
+	AvailabilityPct DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsAvailabilityPct `json:"availabilityPct,required"`
+	HopsCount       DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsHopsCount       `json:"hopsCount,required"`
+	PacketLossPct   DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsPacketLossPct   `json:"packetLossPct,required"`
+	RoundTripTimeMs DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsRoundTripTimeMs `json:"roundTripTimeMs,required"`
 	// Count of unique devices that have run this test in the given time period
-	UniqueDevicesTotal int64                                           `json:"uniqueDevicesTotal,required"`
-	JSON               dexTracerouteTestGetResponseTracerouteStatsJSON `json:"-"`
+	UniqueDevicesTotal int64                                                           `json:"uniqueDevicesTotal,required"`
+	JSON               digitalExperienceMonitoringTracerouteDetailsTracerouteStatsJSON `json:"-"`
 }
 
-// dexTracerouteTestGetResponseTracerouteStatsJSON contains the JSON metadata for
-// the struct [DEXTracerouteTestGetResponseTracerouteStats]
-type dexTracerouteTestGetResponseTracerouteStatsJSON struct {
+// digitalExperienceMonitoringTracerouteDetailsTracerouteStatsJSON contains the
+// JSON metadata for the struct
+// [DigitalExperienceMonitoringTracerouteDetailsTracerouteStats]
+type digitalExperienceMonitoringTracerouteDetailsTracerouteStatsJSON struct {
 	AvailabilityPct    apijson.Field
 	HopsCount          apijson.Field
 	PacketLossPct      apijson.Field
@@ -136,29 +137,29 @@ type dexTracerouteTestGetResponseTracerouteStatsJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *DEXTracerouteTestGetResponseTracerouteStats) UnmarshalJSON(data []byte) (err error) {
+func (r *DigitalExperienceMonitoringTracerouteDetailsTracerouteStats) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dexTracerouteTestGetResponseTracerouteStatsJSON) RawJSON() string {
+func (r digitalExperienceMonitoringTracerouteDetailsTracerouteStatsJSON) RawJSON() string {
 	return r.raw
 }
 
-type DEXTracerouteTestGetResponseTracerouteStatsAvailabilityPct struct {
-	Slots []DEXTracerouteTestGetResponseTracerouteStatsAvailabilityPctSlot `json:"slots,required"`
+type DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsAvailabilityPct struct {
+	Slots []DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsAvailabilityPctSlot `json:"slots,required"`
 	// average observed in the time period
 	Avg float64 `json:"avg,nullable"`
 	// highest observed in the time period
 	Max float64 `json:"max,nullable"`
 	// lowest observed in the time period
-	Min  float64                                                        `json:"min,nullable"`
-	JSON dexTracerouteTestGetResponseTracerouteStatsAvailabilityPctJSON `json:"-"`
+	Min  float64                                                                        `json:"min,nullable"`
+	JSON digitalExperienceMonitoringTracerouteDetailsTracerouteStatsAvailabilityPctJSON `json:"-"`
 }
 
-// dexTracerouteTestGetResponseTracerouteStatsAvailabilityPctJSON contains the JSON
-// metadata for the struct
-// [DEXTracerouteTestGetResponseTracerouteStatsAvailabilityPct]
-type dexTracerouteTestGetResponseTracerouteStatsAvailabilityPctJSON struct {
+// digitalExperienceMonitoringTracerouteDetailsTracerouteStatsAvailabilityPctJSON
+// contains the JSON metadata for the struct
+// [DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsAvailabilityPct]
+type digitalExperienceMonitoringTracerouteDetailsTracerouteStatsAvailabilityPctJSON struct {
 	Slots       apijson.Field
 	Avg         apijson.Field
 	Max         apijson.Field
@@ -167,52 +168,53 @@ type dexTracerouteTestGetResponseTracerouteStatsAvailabilityPctJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DEXTracerouteTestGetResponseTracerouteStatsAvailabilityPct) UnmarshalJSON(data []byte) (err error) {
+func (r *DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsAvailabilityPct) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dexTracerouteTestGetResponseTracerouteStatsAvailabilityPctJSON) RawJSON() string {
+func (r digitalExperienceMonitoringTracerouteDetailsTracerouteStatsAvailabilityPctJSON) RawJSON() string {
 	return r.raw
 }
 
-type DEXTracerouteTestGetResponseTracerouteStatsAvailabilityPctSlot struct {
-	Timestamp string                                                             `json:"timestamp,required"`
-	Value     float64                                                            `json:"value,required"`
-	JSON      dexTracerouteTestGetResponseTracerouteStatsAvailabilityPctSlotJSON `json:"-"`
+type DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsAvailabilityPctSlot struct {
+	Timestamp string                                                                             `json:"timestamp,required"`
+	Value     float64                                                                            `json:"value,required"`
+	JSON      digitalExperienceMonitoringTracerouteDetailsTracerouteStatsAvailabilityPctSlotJSON `json:"-"`
 }
 
-// dexTracerouteTestGetResponseTracerouteStatsAvailabilityPctSlotJSON contains the
-// JSON metadata for the struct
-// [DEXTracerouteTestGetResponseTracerouteStatsAvailabilityPctSlot]
-type dexTracerouteTestGetResponseTracerouteStatsAvailabilityPctSlotJSON struct {
+// digitalExperienceMonitoringTracerouteDetailsTracerouteStatsAvailabilityPctSlotJSON
+// contains the JSON metadata for the struct
+// [DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsAvailabilityPctSlot]
+type digitalExperienceMonitoringTracerouteDetailsTracerouteStatsAvailabilityPctSlotJSON struct {
 	Timestamp   apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DEXTracerouteTestGetResponseTracerouteStatsAvailabilityPctSlot) UnmarshalJSON(data []byte) (err error) {
+func (r *DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsAvailabilityPctSlot) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dexTracerouteTestGetResponseTracerouteStatsAvailabilityPctSlotJSON) RawJSON() string {
+func (r digitalExperienceMonitoringTracerouteDetailsTracerouteStatsAvailabilityPctSlotJSON) RawJSON() string {
 	return r.raw
 }
 
-type DEXTracerouteTestGetResponseTracerouteStatsHopsCount struct {
-	Slots []DEXTracerouteTestGetResponseTracerouteStatsHopsCountSlot `json:"slots,required"`
+type DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsHopsCount struct {
+	Slots []DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsHopsCountSlot `json:"slots,required"`
 	// average observed in the time period
 	Avg int64 `json:"avg,nullable"`
 	// highest observed in the time period
 	Max int64 `json:"max,nullable"`
 	// lowest observed in the time period
-	Min  int64                                                    `json:"min,nullable"`
-	JSON dexTracerouteTestGetResponseTracerouteStatsHopsCountJSON `json:"-"`
+	Min  int64                                                                    `json:"min,nullable"`
+	JSON digitalExperienceMonitoringTracerouteDetailsTracerouteStatsHopsCountJSON `json:"-"`
 }
 
-// dexTracerouteTestGetResponseTracerouteStatsHopsCountJSON contains the JSON
-// metadata for the struct [DEXTracerouteTestGetResponseTracerouteStatsHopsCount]
-type dexTracerouteTestGetResponseTracerouteStatsHopsCountJSON struct {
+// digitalExperienceMonitoringTracerouteDetailsTracerouteStatsHopsCountJSON
+// contains the JSON metadata for the struct
+// [DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsHopsCount]
+type digitalExperienceMonitoringTracerouteDetailsTracerouteStatsHopsCountJSON struct {
 	Slots       apijson.Field
 	Avg         apijson.Field
 	Max         apijson.Field
@@ -221,53 +223,53 @@ type dexTracerouteTestGetResponseTracerouteStatsHopsCountJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DEXTracerouteTestGetResponseTracerouteStatsHopsCount) UnmarshalJSON(data []byte) (err error) {
+func (r *DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsHopsCount) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dexTracerouteTestGetResponseTracerouteStatsHopsCountJSON) RawJSON() string {
+func (r digitalExperienceMonitoringTracerouteDetailsTracerouteStatsHopsCountJSON) RawJSON() string {
 	return r.raw
 }
 
-type DEXTracerouteTestGetResponseTracerouteStatsHopsCountSlot struct {
-	Timestamp string                                                       `json:"timestamp,required"`
-	Value     int64                                                        `json:"value,required"`
-	JSON      dexTracerouteTestGetResponseTracerouteStatsHopsCountSlotJSON `json:"-"`
+type DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsHopsCountSlot struct {
+	Timestamp string                                                                       `json:"timestamp,required"`
+	Value     int64                                                                        `json:"value,required"`
+	JSON      digitalExperienceMonitoringTracerouteDetailsTracerouteStatsHopsCountSlotJSON `json:"-"`
 }
 
-// dexTracerouteTestGetResponseTracerouteStatsHopsCountSlotJSON contains the JSON
-// metadata for the struct
-// [DEXTracerouteTestGetResponseTracerouteStatsHopsCountSlot]
-type dexTracerouteTestGetResponseTracerouteStatsHopsCountSlotJSON struct {
+// digitalExperienceMonitoringTracerouteDetailsTracerouteStatsHopsCountSlotJSON
+// contains the JSON metadata for the struct
+// [DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsHopsCountSlot]
+type digitalExperienceMonitoringTracerouteDetailsTracerouteStatsHopsCountSlotJSON struct {
 	Timestamp   apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DEXTracerouteTestGetResponseTracerouteStatsHopsCountSlot) UnmarshalJSON(data []byte) (err error) {
+func (r *DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsHopsCountSlot) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dexTracerouteTestGetResponseTracerouteStatsHopsCountSlotJSON) RawJSON() string {
+func (r digitalExperienceMonitoringTracerouteDetailsTracerouteStatsHopsCountSlotJSON) RawJSON() string {
 	return r.raw
 }
 
-type DEXTracerouteTestGetResponseTracerouteStatsPacketLossPct struct {
-	Slots []DEXTracerouteTestGetResponseTracerouteStatsPacketLossPctSlot `json:"slots,required"`
+type DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsPacketLossPct struct {
+	Slots []DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsPacketLossPctSlot `json:"slots,required"`
 	// average observed in the time period
 	Avg float64 `json:"avg,nullable"`
 	// highest observed in the time period
 	Max float64 `json:"max,nullable"`
 	// lowest observed in the time period
-	Min  float64                                                      `json:"min,nullable"`
-	JSON dexTracerouteTestGetResponseTracerouteStatsPacketLossPctJSON `json:"-"`
+	Min  float64                                                                      `json:"min,nullable"`
+	JSON digitalExperienceMonitoringTracerouteDetailsTracerouteStatsPacketLossPctJSON `json:"-"`
 }
 
-// dexTracerouteTestGetResponseTracerouteStatsPacketLossPctJSON contains the JSON
-// metadata for the struct
-// [DEXTracerouteTestGetResponseTracerouteStatsPacketLossPct]
-type dexTracerouteTestGetResponseTracerouteStatsPacketLossPctJSON struct {
+// digitalExperienceMonitoringTracerouteDetailsTracerouteStatsPacketLossPctJSON
+// contains the JSON metadata for the struct
+// [DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsPacketLossPct]
+type digitalExperienceMonitoringTracerouteDetailsTracerouteStatsPacketLossPctJSON struct {
 	Slots       apijson.Field
 	Avg         apijson.Field
 	Max         apijson.Field
@@ -276,53 +278,53 @@ type dexTracerouteTestGetResponseTracerouteStatsPacketLossPctJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DEXTracerouteTestGetResponseTracerouteStatsPacketLossPct) UnmarshalJSON(data []byte) (err error) {
+func (r *DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsPacketLossPct) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dexTracerouteTestGetResponseTracerouteStatsPacketLossPctJSON) RawJSON() string {
+func (r digitalExperienceMonitoringTracerouteDetailsTracerouteStatsPacketLossPctJSON) RawJSON() string {
 	return r.raw
 }
 
-type DEXTracerouteTestGetResponseTracerouteStatsPacketLossPctSlot struct {
-	Timestamp string                                                           `json:"timestamp,required"`
-	Value     float64                                                          `json:"value,required"`
-	JSON      dexTracerouteTestGetResponseTracerouteStatsPacketLossPctSlotJSON `json:"-"`
+type DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsPacketLossPctSlot struct {
+	Timestamp string                                                                           `json:"timestamp,required"`
+	Value     float64                                                                          `json:"value,required"`
+	JSON      digitalExperienceMonitoringTracerouteDetailsTracerouteStatsPacketLossPctSlotJSON `json:"-"`
 }
 
-// dexTracerouteTestGetResponseTracerouteStatsPacketLossPctSlotJSON contains the
-// JSON metadata for the struct
-// [DEXTracerouteTestGetResponseTracerouteStatsPacketLossPctSlot]
-type dexTracerouteTestGetResponseTracerouteStatsPacketLossPctSlotJSON struct {
+// digitalExperienceMonitoringTracerouteDetailsTracerouteStatsPacketLossPctSlotJSON
+// contains the JSON metadata for the struct
+// [DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsPacketLossPctSlot]
+type digitalExperienceMonitoringTracerouteDetailsTracerouteStatsPacketLossPctSlotJSON struct {
 	Timestamp   apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DEXTracerouteTestGetResponseTracerouteStatsPacketLossPctSlot) UnmarshalJSON(data []byte) (err error) {
+func (r *DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsPacketLossPctSlot) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dexTracerouteTestGetResponseTracerouteStatsPacketLossPctSlotJSON) RawJSON() string {
+func (r digitalExperienceMonitoringTracerouteDetailsTracerouteStatsPacketLossPctSlotJSON) RawJSON() string {
 	return r.raw
 }
 
-type DEXTracerouteTestGetResponseTracerouteStatsRoundTripTimeMs struct {
-	Slots []DEXTracerouteTestGetResponseTracerouteStatsRoundTripTimeMsSlot `json:"slots,required"`
+type DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsRoundTripTimeMs struct {
+	Slots []DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsRoundTripTimeMsSlot `json:"slots,required"`
 	// average observed in the time period
 	Avg int64 `json:"avg,nullable"`
 	// highest observed in the time period
 	Max int64 `json:"max,nullable"`
 	// lowest observed in the time period
-	Min  int64                                                          `json:"min,nullable"`
-	JSON dexTracerouteTestGetResponseTracerouteStatsRoundTripTimeMsJSON `json:"-"`
+	Min  int64                                                                          `json:"min,nullable"`
+	JSON digitalExperienceMonitoringTracerouteDetailsTracerouteStatsRoundTripTimeMsJSON `json:"-"`
 }
 
-// dexTracerouteTestGetResponseTracerouteStatsRoundTripTimeMsJSON contains the JSON
-// metadata for the struct
-// [DEXTracerouteTestGetResponseTracerouteStatsRoundTripTimeMs]
-type dexTracerouteTestGetResponseTracerouteStatsRoundTripTimeMsJSON struct {
+// digitalExperienceMonitoringTracerouteDetailsTracerouteStatsRoundTripTimeMsJSON
+// contains the JSON metadata for the struct
+// [DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsRoundTripTimeMs]
+type digitalExperienceMonitoringTracerouteDetailsTracerouteStatsRoundTripTimeMsJSON struct {
 	Slots       apijson.Field
 	Avg         apijson.Field
 	Max         apijson.Field
@@ -331,52 +333,53 @@ type dexTracerouteTestGetResponseTracerouteStatsRoundTripTimeMsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DEXTracerouteTestGetResponseTracerouteStatsRoundTripTimeMs) UnmarshalJSON(data []byte) (err error) {
+func (r *DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsRoundTripTimeMs) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dexTracerouteTestGetResponseTracerouteStatsRoundTripTimeMsJSON) RawJSON() string {
+func (r digitalExperienceMonitoringTracerouteDetailsTracerouteStatsRoundTripTimeMsJSON) RawJSON() string {
 	return r.raw
 }
 
-type DEXTracerouteTestGetResponseTracerouteStatsRoundTripTimeMsSlot struct {
-	Timestamp string                                                             `json:"timestamp,required"`
-	Value     int64                                                              `json:"value,required"`
-	JSON      dexTracerouteTestGetResponseTracerouteStatsRoundTripTimeMsSlotJSON `json:"-"`
+type DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsRoundTripTimeMsSlot struct {
+	Timestamp string                                                                             `json:"timestamp,required"`
+	Value     int64                                                                              `json:"value,required"`
+	JSON      digitalExperienceMonitoringTracerouteDetailsTracerouteStatsRoundTripTimeMsSlotJSON `json:"-"`
 }
 
-// dexTracerouteTestGetResponseTracerouteStatsRoundTripTimeMsSlotJSON contains the
-// JSON metadata for the struct
-// [DEXTracerouteTestGetResponseTracerouteStatsRoundTripTimeMsSlot]
-type dexTracerouteTestGetResponseTracerouteStatsRoundTripTimeMsSlotJSON struct {
+// digitalExperienceMonitoringTracerouteDetailsTracerouteStatsRoundTripTimeMsSlotJSON
+// contains the JSON metadata for the struct
+// [DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsRoundTripTimeMsSlot]
+type digitalExperienceMonitoringTracerouteDetailsTracerouteStatsRoundTripTimeMsSlotJSON struct {
 	Timestamp   apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DEXTracerouteTestGetResponseTracerouteStatsRoundTripTimeMsSlot) UnmarshalJSON(data []byte) (err error) {
+func (r *DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsRoundTripTimeMsSlot) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dexTracerouteTestGetResponseTracerouteStatsRoundTripTimeMsSlotJSON) RawJSON() string {
+func (r digitalExperienceMonitoringTracerouteDetailsTracerouteStatsRoundTripTimeMsSlotJSON) RawJSON() string {
 	return r.raw
 }
 
-type DEXTracerouteTestGetResponseTracerouteStatsByColo struct {
-	AvailabilityPct DEXTracerouteTestGetResponseTracerouteStatsByColoAvailabilityPct `json:"availabilityPct,required"`
-	Colo            string                                                           `json:"colo,required"`
-	HopsCount       DEXTracerouteTestGetResponseTracerouteStatsByColoHopsCount       `json:"hopsCount,required"`
-	PacketLossPct   DEXTracerouteTestGetResponseTracerouteStatsByColoPacketLossPct   `json:"packetLossPct,required"`
-	RoundTripTimeMs DEXTracerouteTestGetResponseTracerouteStatsByColoRoundTripTimeMs `json:"roundTripTimeMs,required"`
+type DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColo struct {
+	AvailabilityPct DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoAvailabilityPct `json:"availabilityPct,required"`
+	Colo            string                                                                           `json:"colo,required"`
+	HopsCount       DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoHopsCount       `json:"hopsCount,required"`
+	PacketLossPct   DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoPacketLossPct   `json:"packetLossPct,required"`
+	RoundTripTimeMs DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoRoundTripTimeMs `json:"roundTripTimeMs,required"`
 	// Count of unique devices that have run this test in the given time period
-	UniqueDevicesTotal int64                                                 `json:"uniqueDevicesTotal,required"`
-	JSON               dexTracerouteTestGetResponseTracerouteStatsByColoJSON `json:"-"`
+	UniqueDevicesTotal int64                                                                 `json:"uniqueDevicesTotal,required"`
+	JSON               digitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoJSON `json:"-"`
 }
 
-// dexTracerouteTestGetResponseTracerouteStatsByColoJSON contains the JSON metadata
-// for the struct [DEXTracerouteTestGetResponseTracerouteStatsByColo]
-type dexTracerouteTestGetResponseTracerouteStatsByColoJSON struct {
+// digitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoJSON contains
+// the JSON metadata for the struct
+// [DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColo]
+type digitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoJSON struct {
 	AvailabilityPct    apijson.Field
 	Colo               apijson.Field
 	HopsCount          apijson.Field
@@ -387,29 +390,29 @@ type dexTracerouteTestGetResponseTracerouteStatsByColoJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *DEXTracerouteTestGetResponseTracerouteStatsByColo) UnmarshalJSON(data []byte) (err error) {
+func (r *DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dexTracerouteTestGetResponseTracerouteStatsByColoJSON) RawJSON() string {
+func (r digitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoJSON) RawJSON() string {
 	return r.raw
 }
 
-type DEXTracerouteTestGetResponseTracerouteStatsByColoAvailabilityPct struct {
-	Slots []DEXTracerouteTestGetResponseTracerouteStatsByColoAvailabilityPctSlot `json:"slots,required"`
+type DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoAvailabilityPct struct {
+	Slots []DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoAvailabilityPctSlot `json:"slots,required"`
 	// average observed in the time period
 	Avg float64 `json:"avg,nullable"`
 	// highest observed in the time period
 	Max float64 `json:"max,nullable"`
 	// lowest observed in the time period
-	Min  float64                                                              `json:"min,nullable"`
-	JSON dexTracerouteTestGetResponseTracerouteStatsByColoAvailabilityPctJSON `json:"-"`
+	Min  float64                                                                              `json:"min,nullable"`
+	JSON digitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoAvailabilityPctJSON `json:"-"`
 }
 
-// dexTracerouteTestGetResponseTracerouteStatsByColoAvailabilityPctJSON contains
-// the JSON metadata for the struct
-// [DEXTracerouteTestGetResponseTracerouteStatsByColoAvailabilityPct]
-type dexTracerouteTestGetResponseTracerouteStatsByColoAvailabilityPctJSON struct {
+// digitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoAvailabilityPctJSON
+// contains the JSON metadata for the struct
+// [DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoAvailabilityPct]
+type digitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoAvailabilityPctJSON struct {
 	Slots       apijson.Field
 	Avg         apijson.Field
 	Max         apijson.Field
@@ -418,220 +421,342 @@ type dexTracerouteTestGetResponseTracerouteStatsByColoAvailabilityPctJSON struct
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DEXTracerouteTestGetResponseTracerouteStatsByColoAvailabilityPct) UnmarshalJSON(data []byte) (err error) {
+func (r *DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoAvailabilityPct) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dexTracerouteTestGetResponseTracerouteStatsByColoAvailabilityPctJSON) RawJSON() string {
+func (r digitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoAvailabilityPctJSON) RawJSON() string {
 	return r.raw
 }
 
-type DEXTracerouteTestGetResponseTracerouteStatsByColoAvailabilityPctSlot struct {
-	Timestamp string                                                                   `json:"timestamp,required"`
-	Value     float64                                                                  `json:"value,required"`
-	JSON      dexTracerouteTestGetResponseTracerouteStatsByColoAvailabilityPctSlotJSON `json:"-"`
+type DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoAvailabilityPctSlot struct {
+	Timestamp string                                                                                   `json:"timestamp,required"`
+	Value     float64                                                                                  `json:"value,required"`
+	JSON      digitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoAvailabilityPctSlotJSON `json:"-"`
 }
 
-// dexTracerouteTestGetResponseTracerouteStatsByColoAvailabilityPctSlotJSON
+// digitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoAvailabilityPctSlotJSON
 // contains the JSON metadata for the struct
-// [DEXTracerouteTestGetResponseTracerouteStatsByColoAvailabilityPctSlot]
-type dexTracerouteTestGetResponseTracerouteStatsByColoAvailabilityPctSlotJSON struct {
+// [DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoAvailabilityPctSlot]
+type digitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoAvailabilityPctSlotJSON struct {
 	Timestamp   apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DEXTracerouteTestGetResponseTracerouteStatsByColoAvailabilityPctSlot) UnmarshalJSON(data []byte) (err error) {
+func (r *DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoAvailabilityPctSlot) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dexTracerouteTestGetResponseTracerouteStatsByColoAvailabilityPctSlotJSON) RawJSON() string {
+func (r digitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoAvailabilityPctSlotJSON) RawJSON() string {
 	return r.raw
 }
 
-type DEXTracerouteTestGetResponseTracerouteStatsByColoHopsCount struct {
-	Slots []DEXTracerouteTestGetResponseTracerouteStatsByColoHopsCountSlot `json:"slots,required"`
+type DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoHopsCount struct {
+	Slots []DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoHopsCountSlot `json:"slots,required"`
 	// average observed in the time period
 	Avg int64 `json:"avg,nullable"`
 	// highest observed in the time period
 	Max int64 `json:"max,nullable"`
 	// lowest observed in the time period
-	Min  int64                                                          `json:"min,nullable"`
-	JSON dexTracerouteTestGetResponseTracerouteStatsByColoHopsCountJSON `json:"-"`
+	Min  int64                                                                          `json:"min,nullable"`
+	JSON digitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoHopsCountJSON `json:"-"`
 }
 
-// dexTracerouteTestGetResponseTracerouteStatsByColoHopsCountJSON contains the JSON
+// digitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoHopsCountJSON
+// contains the JSON metadata for the struct
+// [DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoHopsCount]
+type digitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoHopsCountJSON struct {
+	Slots       apijson.Field
+	Avg         apijson.Field
+	Max         apijson.Field
+	Min         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoHopsCount) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r digitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoHopsCountJSON) RawJSON() string {
+	return r.raw
+}
+
+type DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoHopsCountSlot struct {
+	Timestamp string                                                                             `json:"timestamp,required"`
+	Value     int64                                                                              `json:"value,required"`
+	JSON      digitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoHopsCountSlotJSON `json:"-"`
+}
+
+// digitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoHopsCountSlotJSON
+// contains the JSON metadata for the struct
+// [DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoHopsCountSlot]
+type digitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoHopsCountSlotJSON struct {
+	Timestamp   apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoHopsCountSlot) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r digitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoHopsCountSlotJSON) RawJSON() string {
+	return r.raw
+}
+
+type DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoPacketLossPct struct {
+	Slots []DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoPacketLossPctSlot `json:"slots,required"`
+	// average observed in the time period
+	Avg float64 `json:"avg,nullable"`
+	// highest observed in the time period
+	Max float64 `json:"max,nullable"`
+	// lowest observed in the time period
+	Min  float64                                                                            `json:"min,nullable"`
+	JSON digitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoPacketLossPctJSON `json:"-"`
+}
+
+// digitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoPacketLossPctJSON
+// contains the JSON metadata for the struct
+// [DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoPacketLossPct]
+type digitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoPacketLossPctJSON struct {
+	Slots       apijson.Field
+	Avg         apijson.Field
+	Max         apijson.Field
+	Min         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoPacketLossPct) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r digitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoPacketLossPctJSON) RawJSON() string {
+	return r.raw
+}
+
+type DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoPacketLossPctSlot struct {
+	Timestamp string                                                                                 `json:"timestamp,required"`
+	Value     float64                                                                                `json:"value,required"`
+	JSON      digitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoPacketLossPctSlotJSON `json:"-"`
+}
+
+// digitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoPacketLossPctSlotJSON
+// contains the JSON metadata for the struct
+// [DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoPacketLossPctSlot]
+type digitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoPacketLossPctSlotJSON struct {
+	Timestamp   apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoPacketLossPctSlot) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r digitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoPacketLossPctSlotJSON) RawJSON() string {
+	return r.raw
+}
+
+type DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoRoundTripTimeMs struct {
+	Slots []DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoRoundTripTimeMsSlot `json:"slots,required"`
+	// average observed in the time period
+	Avg int64 `json:"avg,nullable"`
+	// highest observed in the time period
+	Max int64 `json:"max,nullable"`
+	// lowest observed in the time period
+	Min  int64                                                                                `json:"min,nullable"`
+	JSON digitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoRoundTripTimeMsJSON `json:"-"`
+}
+
+// digitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoRoundTripTimeMsJSON
+// contains the JSON metadata for the struct
+// [DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoRoundTripTimeMs]
+type digitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoRoundTripTimeMsJSON struct {
+	Slots       apijson.Field
+	Avg         apijson.Field
+	Max         apijson.Field
+	Min         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoRoundTripTimeMs) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r digitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoRoundTripTimeMsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoRoundTripTimeMsSlot struct {
+	Timestamp string                                                                                   `json:"timestamp,required"`
+	Value     int64                                                                                    `json:"value,required"`
+	JSON      digitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoRoundTripTimeMsSlotJSON `json:"-"`
+}
+
+// digitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoRoundTripTimeMsSlotJSON
+// contains the JSON metadata for the struct
+// [DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoRoundTripTimeMsSlot]
+type digitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoRoundTripTimeMsSlotJSON struct {
+	Timestamp   apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DigitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoRoundTripTimeMsSlot) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r digitalExperienceMonitoringTracerouteDetailsTracerouteStatsByColoRoundTripTimeMsSlotJSON) RawJSON() string {
+	return r.raw
+}
+
+type DigitalExperienceMonitoringTracerouteDetailsPercentiles struct {
+	HopsCount       DigitalExperienceMonitoringTracerouteDetailsPercentilesHopsCount       `json:"hopsCount"`
+	PacketLossPct   DigitalExperienceMonitoringTracerouteDetailsPercentilesPacketLossPct   `json:"packetLossPct"`
+	RoundTripTimeMs DigitalExperienceMonitoringTracerouteDetailsPercentilesRoundTripTimeMs `json:"roundTripTimeMs"`
+	JSON            digitalExperienceMonitoringTracerouteDetailsPercentilesJSON            `json:"-"`
+}
+
+// digitalExperienceMonitoringTracerouteDetailsPercentilesJSON contains the JSON
 // metadata for the struct
-// [DEXTracerouteTestGetResponseTracerouteStatsByColoHopsCount]
-type dexTracerouteTestGetResponseTracerouteStatsByColoHopsCountJSON struct {
-	Slots       apijson.Field
-	Avg         apijson.Field
-	Max         apijson.Field
-	Min         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+// [DigitalExperienceMonitoringTracerouteDetailsPercentiles]
+type digitalExperienceMonitoringTracerouteDetailsPercentilesJSON struct {
+	HopsCount       apijson.Field
+	PacketLossPct   apijson.Field
+	RoundTripTimeMs apijson.Field
+	raw             string
+	ExtraFields     map[string]apijson.Field
 }
 
-func (r *DEXTracerouteTestGetResponseTracerouteStatsByColoHopsCount) UnmarshalJSON(data []byte) (err error) {
+func (r *DigitalExperienceMonitoringTracerouteDetailsPercentiles) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dexTracerouteTestGetResponseTracerouteStatsByColoHopsCountJSON) RawJSON() string {
+func (r digitalExperienceMonitoringTracerouteDetailsPercentilesJSON) RawJSON() string {
 	return r.raw
 }
 
-type DEXTracerouteTestGetResponseTracerouteStatsByColoHopsCountSlot struct {
-	Timestamp string                                                             `json:"timestamp,required"`
-	Value     int64                                                              `json:"value,required"`
-	JSON      dexTracerouteTestGetResponseTracerouteStatsByColoHopsCountSlotJSON `json:"-"`
+type DigitalExperienceMonitoringTracerouteDetailsPercentilesHopsCount struct {
+	// p50 observed in the time period
+	P50 float64 `json:"p50,nullable"`
+	// p90 observed in the time period
+	P90 float64 `json:"p90,nullable"`
+	// p95 observed in the time period
+	P95 float64 `json:"p95,nullable"`
+	// p99 observed in the time period
+	P99  float64                                                              `json:"p99,nullable"`
+	JSON digitalExperienceMonitoringTracerouteDetailsPercentilesHopsCountJSON `json:"-"`
 }
 
-// dexTracerouteTestGetResponseTracerouteStatsByColoHopsCountSlotJSON contains the
-// JSON metadata for the struct
-// [DEXTracerouteTestGetResponseTracerouteStatsByColoHopsCountSlot]
-type dexTracerouteTestGetResponseTracerouteStatsByColoHopsCountSlotJSON struct {
-	Timestamp   apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DEXTracerouteTestGetResponseTracerouteStatsByColoHopsCountSlot) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dexTracerouteTestGetResponseTracerouteStatsByColoHopsCountSlotJSON) RawJSON() string {
-	return r.raw
-}
-
-type DEXTracerouteTestGetResponseTracerouteStatsByColoPacketLossPct struct {
-	Slots []DEXTracerouteTestGetResponseTracerouteStatsByColoPacketLossPctSlot `json:"slots,required"`
-	// average observed in the time period
-	Avg float64 `json:"avg,nullable"`
-	// highest observed in the time period
-	Max float64 `json:"max,nullable"`
-	// lowest observed in the time period
-	Min  float64                                                            `json:"min,nullable"`
-	JSON dexTracerouteTestGetResponseTracerouteStatsByColoPacketLossPctJSON `json:"-"`
-}
-
-// dexTracerouteTestGetResponseTracerouteStatsByColoPacketLossPctJSON contains the
-// JSON metadata for the struct
-// [DEXTracerouteTestGetResponseTracerouteStatsByColoPacketLossPct]
-type dexTracerouteTestGetResponseTracerouteStatsByColoPacketLossPctJSON struct {
-	Slots       apijson.Field
-	Avg         apijson.Field
-	Max         apijson.Field
-	Min         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DEXTracerouteTestGetResponseTracerouteStatsByColoPacketLossPct) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dexTracerouteTestGetResponseTracerouteStatsByColoPacketLossPctJSON) RawJSON() string {
-	return r.raw
-}
-
-type DEXTracerouteTestGetResponseTracerouteStatsByColoPacketLossPctSlot struct {
-	Timestamp string                                                                 `json:"timestamp,required"`
-	Value     float64                                                                `json:"value,required"`
-	JSON      dexTracerouteTestGetResponseTracerouteStatsByColoPacketLossPctSlotJSON `json:"-"`
-}
-
-// dexTracerouteTestGetResponseTracerouteStatsByColoPacketLossPctSlotJSON contains
+// digitalExperienceMonitoringTracerouteDetailsPercentilesHopsCountJSON contains
 // the JSON metadata for the struct
-// [DEXTracerouteTestGetResponseTracerouteStatsByColoPacketLossPctSlot]
-type dexTracerouteTestGetResponseTracerouteStatsByColoPacketLossPctSlotJSON struct {
-	Timestamp   apijson.Field
-	Value       apijson.Field
+// [DigitalExperienceMonitoringTracerouteDetailsPercentilesHopsCount]
+type digitalExperienceMonitoringTracerouteDetailsPercentilesHopsCountJSON struct {
+	P50         apijson.Field
+	P90         apijson.Field
+	P95         apijson.Field
+	P99         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DEXTracerouteTestGetResponseTracerouteStatsByColoPacketLossPctSlot) UnmarshalJSON(data []byte) (err error) {
+func (r *DigitalExperienceMonitoringTracerouteDetailsPercentilesHopsCount) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dexTracerouteTestGetResponseTracerouteStatsByColoPacketLossPctSlotJSON) RawJSON() string {
+func (r digitalExperienceMonitoringTracerouteDetailsPercentilesHopsCountJSON) RawJSON() string {
 	return r.raw
 }
 
-type DEXTracerouteTestGetResponseTracerouteStatsByColoRoundTripTimeMs struct {
-	Slots []DEXTracerouteTestGetResponseTracerouteStatsByColoRoundTripTimeMsSlot `json:"slots,required"`
-	// average observed in the time period
-	Avg int64 `json:"avg,nullable"`
-	// highest observed in the time period
-	Max int64 `json:"max,nullable"`
-	// lowest observed in the time period
-	Min  int64                                                                `json:"min,nullable"`
-	JSON dexTracerouteTestGetResponseTracerouteStatsByColoRoundTripTimeMsJSON `json:"-"`
+type DigitalExperienceMonitoringTracerouteDetailsPercentilesPacketLossPct struct {
+	// p50 observed in the time period
+	P50 float64 `json:"p50,nullable"`
+	// p90 observed in the time period
+	P90 float64 `json:"p90,nullable"`
+	// p95 observed in the time period
+	P95 float64 `json:"p95,nullable"`
+	// p99 observed in the time period
+	P99  float64                                                                  `json:"p99,nullable"`
+	JSON digitalExperienceMonitoringTracerouteDetailsPercentilesPacketLossPctJSON `json:"-"`
 }
 
-// dexTracerouteTestGetResponseTracerouteStatsByColoRoundTripTimeMsJSON contains
-// the JSON metadata for the struct
-// [DEXTracerouteTestGetResponseTracerouteStatsByColoRoundTripTimeMs]
-type dexTracerouteTestGetResponseTracerouteStatsByColoRoundTripTimeMsJSON struct {
-	Slots       apijson.Field
-	Avg         apijson.Field
-	Max         apijson.Field
-	Min         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DEXTracerouteTestGetResponseTracerouteStatsByColoRoundTripTimeMs) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dexTracerouteTestGetResponseTracerouteStatsByColoRoundTripTimeMsJSON) RawJSON() string {
-	return r.raw
-}
-
-type DEXTracerouteTestGetResponseTracerouteStatsByColoRoundTripTimeMsSlot struct {
-	Timestamp string                                                                   `json:"timestamp,required"`
-	Value     int64                                                                    `json:"value,required"`
-	JSON      dexTracerouteTestGetResponseTracerouteStatsByColoRoundTripTimeMsSlotJSON `json:"-"`
-}
-
-// dexTracerouteTestGetResponseTracerouteStatsByColoRoundTripTimeMsSlotJSON
+// digitalExperienceMonitoringTracerouteDetailsPercentilesPacketLossPctJSON
 // contains the JSON metadata for the struct
-// [DEXTracerouteTestGetResponseTracerouteStatsByColoRoundTripTimeMsSlot]
-type dexTracerouteTestGetResponseTracerouteStatsByColoRoundTripTimeMsSlotJSON struct {
-	Timestamp   apijson.Field
-	Value       apijson.Field
+// [DigitalExperienceMonitoringTracerouteDetailsPercentilesPacketLossPct]
+type digitalExperienceMonitoringTracerouteDetailsPercentilesPacketLossPctJSON struct {
+	P50         apijson.Field
+	P90         apijson.Field
+	P95         apijson.Field
+	P99         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DEXTracerouteTestGetResponseTracerouteStatsByColoRoundTripTimeMsSlot) UnmarshalJSON(data []byte) (err error) {
+func (r *DigitalExperienceMonitoringTracerouteDetailsPercentilesPacketLossPct) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dexTracerouteTestGetResponseTracerouteStatsByColoRoundTripTimeMsSlotJSON) RawJSON() string {
+func (r digitalExperienceMonitoringTracerouteDetailsPercentilesPacketLossPctJSON) RawJSON() string {
 	return r.raw
 }
 
-type DEXTracerouteTestNetworkPathResponse struct {
+type DigitalExperienceMonitoringTracerouteDetailsPercentilesRoundTripTimeMs struct {
+	// p50 observed in the time period
+	P50 float64 `json:"p50,nullable"`
+	// p90 observed in the time period
+	P90 float64 `json:"p90,nullable"`
+	// p95 observed in the time period
+	P95 float64 `json:"p95,nullable"`
+	// p99 observed in the time period
+	P99  float64                                                                    `json:"p99,nullable"`
+	JSON digitalExperienceMonitoringTracerouteDetailsPercentilesRoundTripTimeMsJSON `json:"-"`
+}
+
+// digitalExperienceMonitoringTracerouteDetailsPercentilesRoundTripTimeMsJSON
+// contains the JSON metadata for the struct
+// [DigitalExperienceMonitoringTracerouteDetailsPercentilesRoundTripTimeMs]
+type digitalExperienceMonitoringTracerouteDetailsPercentilesRoundTripTimeMsJSON struct {
+	P50         apijson.Field
+	P90         apijson.Field
+	P95         apijson.Field
+	P99         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *DigitalExperienceMonitoringTracerouteDetailsPercentilesRoundTripTimeMs) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r digitalExperienceMonitoringTracerouteDetailsPercentilesRoundTripTimeMsJSON) RawJSON() string {
+	return r.raw
+}
+
+type DigitalExperienceMonitoringTracerouteTestNetworkPath struct {
 	// API Resource UUID tag.
 	ID         string `json:"id,required"`
 	DeviceName string `json:"deviceName"`
 	// The interval at which the Traceroute synthetic application test is set to run.
-	Interval    string                                          `json:"interval"`
-	Kind        DEXTracerouteTestNetworkPathResponseKind        `json:"kind"`
-	Name        string                                          `json:"name"`
-	NetworkPath DEXTracerouteTestNetworkPathResponseNetworkPath `json:"networkPath,nullable"`
+	Interval    string                                                          `json:"interval"`
+	Kind        DigitalExperienceMonitoringTracerouteTestNetworkPathKind        `json:"kind"`
+	Name        string                                                          `json:"name"`
+	NetworkPath DigitalExperienceMonitoringTracerouteTestNetworkPathNetworkPath `json:"networkPath,nullable"`
 	// The host of the Traceroute synthetic application test
-	URL  string                                   `json:"url"`
-	JSON dexTracerouteTestNetworkPathResponseJSON `json:"-"`
+	URL  string                                                   `json:"url"`
+	JSON digitalExperienceMonitoringTracerouteTestNetworkPathJSON `json:"-"`
 }
 
-// dexTracerouteTestNetworkPathResponseJSON contains the JSON metadata for the
-// struct [DEXTracerouteTestNetworkPathResponse]
-type dexTracerouteTestNetworkPathResponseJSON struct {
+// digitalExperienceMonitoringTracerouteTestNetworkPathJSON contains the JSON
+// metadata for the struct [DigitalExperienceMonitoringTracerouteTestNetworkPath]
+type digitalExperienceMonitoringTracerouteTestNetworkPathJSON struct {
 	ID          apijson.Field
 	DeviceName  apijson.Field
 	Interval    apijson.Field
@@ -643,47 +768,48 @@ type dexTracerouteTestNetworkPathResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DEXTracerouteTestNetworkPathResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DigitalExperienceMonitoringTracerouteTestNetworkPath) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dexTracerouteTestNetworkPathResponseJSON) RawJSON() string {
+func (r digitalExperienceMonitoringTracerouteTestNetworkPathJSON) RawJSON() string {
 	return r.raw
 }
 
-type DEXTracerouteTestNetworkPathResponseKind string
+type DigitalExperienceMonitoringTracerouteTestNetworkPathKind string
 
 const (
-	DEXTracerouteTestNetworkPathResponseKindTraceroute DEXTracerouteTestNetworkPathResponseKind = "traceroute"
+	DigitalExperienceMonitoringTracerouteTestNetworkPathKindTraceroute DigitalExperienceMonitoringTracerouteTestNetworkPathKind = "traceroute"
 )
 
-type DEXTracerouteTestNetworkPathResponseNetworkPath struct {
-	Slots []DEXTracerouteTestNetworkPathResponseNetworkPathSlot `json:"slots,required"`
+type DigitalExperienceMonitoringTracerouteTestNetworkPathNetworkPath struct {
+	Slots []DigitalExperienceMonitoringTracerouteTestNetworkPathNetworkPathSlot `json:"slots,required"`
 	// Specifies the sampling applied, if any, to the slots response. When sampled,
 	// results shown represent the first test run to the start of each sampling
 	// interval.
-	Sampling DEXTracerouteTestNetworkPathResponseNetworkPathSampling `json:"sampling,nullable"`
-	JSON     dexTracerouteTestNetworkPathResponseNetworkPathJSON     `json:"-"`
+	Sampling DigitalExperienceMonitoringTracerouteTestNetworkPathNetworkPathSampling `json:"sampling,nullable"`
+	JSON     digitalExperienceMonitoringTracerouteTestNetworkPathNetworkPathJSON     `json:"-"`
 }
 
-// dexTracerouteTestNetworkPathResponseNetworkPathJSON contains the JSON metadata
-// for the struct [DEXTracerouteTestNetworkPathResponseNetworkPath]
-type dexTracerouteTestNetworkPathResponseNetworkPathJSON struct {
+// digitalExperienceMonitoringTracerouteTestNetworkPathNetworkPathJSON contains the
+// JSON metadata for the struct
+// [DigitalExperienceMonitoringTracerouteTestNetworkPathNetworkPath]
+type digitalExperienceMonitoringTracerouteTestNetworkPathNetworkPathJSON struct {
 	Slots       apijson.Field
 	Sampling    apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DEXTracerouteTestNetworkPathResponseNetworkPath) UnmarshalJSON(data []byte) (err error) {
+func (r *DigitalExperienceMonitoringTracerouteTestNetworkPathNetworkPath) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dexTracerouteTestNetworkPathResponseNetworkPathJSON) RawJSON() string {
+func (r digitalExperienceMonitoringTracerouteTestNetworkPathNetworkPathJSON) RawJSON() string {
 	return r.raw
 }
 
-type DEXTracerouteTestNetworkPathResponseNetworkPathSlot struct {
+type DigitalExperienceMonitoringTracerouteTestNetworkPathNetworkPathSlot struct {
 	// API Resource UUID tag.
 	ID string `json:"id,required"`
 	// Round trip time in ms of the client to app mile
@@ -694,13 +820,14 @@ type DEXTracerouteTestNetworkPathResponseNetworkPathSlot struct {
 	ClientToCfIngressRTTMs int64  `json:"clientToCfIngressRttMs,required,nullable"`
 	Timestamp              string `json:"timestamp,required"`
 	// Round trip time in ms of the client to ISP mile
-	ClientToIspRTTMs int64                                                   `json:"clientToIspRttMs,nullable"`
-	JSON             dexTracerouteTestNetworkPathResponseNetworkPathSlotJSON `json:"-"`
+	ClientToIspRTTMs int64                                                                   `json:"clientToIspRttMs,nullable"`
+	JSON             digitalExperienceMonitoringTracerouteTestNetworkPathNetworkPathSlotJSON `json:"-"`
 }
 
-// dexTracerouteTestNetworkPathResponseNetworkPathSlotJSON contains the JSON
-// metadata for the struct [DEXTracerouteTestNetworkPathResponseNetworkPathSlot]
-type dexTracerouteTestNetworkPathResponseNetworkPathSlotJSON struct {
+// digitalExperienceMonitoringTracerouteTestNetworkPathNetworkPathSlotJSON contains
+// the JSON metadata for the struct
+// [DigitalExperienceMonitoringTracerouteTestNetworkPathNetworkPathSlot]
+type digitalExperienceMonitoringTracerouteTestNetworkPathNetworkPathSlotJSON struct {
 	ID                     apijson.Field
 	ClientToAppRTTMs       apijson.Field
 	ClientToCfEgressRTTMs  apijson.Field
@@ -711,164 +838,46 @@ type dexTracerouteTestNetworkPathResponseNetworkPathSlotJSON struct {
 	ExtraFields            map[string]apijson.Field
 }
 
-func (r *DEXTracerouteTestNetworkPathResponseNetworkPathSlot) UnmarshalJSON(data []byte) (err error) {
+func (r *DigitalExperienceMonitoringTracerouteTestNetworkPathNetworkPathSlot) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dexTracerouteTestNetworkPathResponseNetworkPathSlotJSON) RawJSON() string {
+func (r digitalExperienceMonitoringTracerouteTestNetworkPathNetworkPathSlotJSON) RawJSON() string {
 	return r.raw
 }
 
 // Specifies the sampling applied, if any, to the slots response. When sampled,
 // results shown represent the first test run to the start of each sampling
 // interval.
-type DEXTracerouteTestNetworkPathResponseNetworkPathSampling struct {
-	Unit  DEXTracerouteTestNetworkPathResponseNetworkPathSamplingUnit `json:"unit,required"`
-	Value int64                                                       `json:"value,required"`
-	JSON  dexTracerouteTestNetworkPathResponseNetworkPathSamplingJSON `json:"-"`
+type DigitalExperienceMonitoringTracerouteTestNetworkPathNetworkPathSampling struct {
+	Unit  DigitalExperienceMonitoringTracerouteTestNetworkPathNetworkPathSamplingUnit `json:"unit,required"`
+	Value int64                                                                       `json:"value,required"`
+	JSON  digitalExperienceMonitoringTracerouteTestNetworkPathNetworkPathSamplingJSON `json:"-"`
 }
 
-// dexTracerouteTestNetworkPathResponseNetworkPathSamplingJSON contains the JSON
-// metadata for the struct
-// [DEXTracerouteTestNetworkPathResponseNetworkPathSampling]
-type dexTracerouteTestNetworkPathResponseNetworkPathSamplingJSON struct {
+// digitalExperienceMonitoringTracerouteTestNetworkPathNetworkPathSamplingJSON
+// contains the JSON metadata for the struct
+// [DigitalExperienceMonitoringTracerouteTestNetworkPathNetworkPathSampling]
+type digitalExperienceMonitoringTracerouteTestNetworkPathNetworkPathSamplingJSON struct {
 	Unit        apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DEXTracerouteTestNetworkPathResponseNetworkPathSampling) UnmarshalJSON(data []byte) (err error) {
+func (r *DigitalExperienceMonitoringTracerouteTestNetworkPathNetworkPathSampling) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dexTracerouteTestNetworkPathResponseNetworkPathSamplingJSON) RawJSON() string {
+func (r digitalExperienceMonitoringTracerouteTestNetworkPathNetworkPathSamplingJSON) RawJSON() string {
 	return r.raw
 }
 
-type DEXTracerouteTestNetworkPathResponseNetworkPathSamplingUnit string
+type DigitalExperienceMonitoringTracerouteTestNetworkPathNetworkPathSamplingUnit string
 
 const (
-	DEXTracerouteTestNetworkPathResponseNetworkPathSamplingUnitHours DEXTracerouteTestNetworkPathResponseNetworkPathSamplingUnit = "hours"
+	DigitalExperienceMonitoringTracerouteTestNetworkPathNetworkPathSamplingUnitHours DigitalExperienceMonitoringTracerouteTestNetworkPathNetworkPathSamplingUnit = "hours"
 )
-
-type DEXTracerouteTestPercentilesResponse struct {
-	HopsCount       DEXTracerouteTestPercentilesResponseHopsCount       `json:"hopsCount"`
-	PacketLossPct   DEXTracerouteTestPercentilesResponsePacketLossPct   `json:"packetLossPct"`
-	RoundTripTimeMs DEXTracerouteTestPercentilesResponseRoundTripTimeMs `json:"roundTripTimeMs"`
-	JSON            dexTracerouteTestPercentilesResponseJSON            `json:"-"`
-}
-
-// dexTracerouteTestPercentilesResponseJSON contains the JSON metadata for the
-// struct [DEXTracerouteTestPercentilesResponse]
-type dexTracerouteTestPercentilesResponseJSON struct {
-	HopsCount       apijson.Field
-	PacketLossPct   apijson.Field
-	RoundTripTimeMs apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *DEXTracerouteTestPercentilesResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dexTracerouteTestPercentilesResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type DEXTracerouteTestPercentilesResponseHopsCount struct {
-	// p50 observed in the time period
-	P50 float64 `json:"p50,nullable"`
-	// p90 observed in the time period
-	P90 float64 `json:"p90,nullable"`
-	// p95 observed in the time period
-	P95 float64 `json:"p95,nullable"`
-	// p99 observed in the time period
-	P99  float64                                           `json:"p99,nullable"`
-	JSON dexTracerouteTestPercentilesResponseHopsCountJSON `json:"-"`
-}
-
-// dexTracerouteTestPercentilesResponseHopsCountJSON contains the JSON metadata for
-// the struct [DEXTracerouteTestPercentilesResponseHopsCount]
-type dexTracerouteTestPercentilesResponseHopsCountJSON struct {
-	P50         apijson.Field
-	P90         apijson.Field
-	P95         apijson.Field
-	P99         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DEXTracerouteTestPercentilesResponseHopsCount) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dexTracerouteTestPercentilesResponseHopsCountJSON) RawJSON() string {
-	return r.raw
-}
-
-type DEXTracerouteTestPercentilesResponsePacketLossPct struct {
-	// p50 observed in the time period
-	P50 float64 `json:"p50,nullable"`
-	// p90 observed in the time period
-	P90 float64 `json:"p90,nullable"`
-	// p95 observed in the time period
-	P95 float64 `json:"p95,nullable"`
-	// p99 observed in the time period
-	P99  float64                                               `json:"p99,nullable"`
-	JSON dexTracerouteTestPercentilesResponsePacketLossPctJSON `json:"-"`
-}
-
-// dexTracerouteTestPercentilesResponsePacketLossPctJSON contains the JSON metadata
-// for the struct [DEXTracerouteTestPercentilesResponsePacketLossPct]
-type dexTracerouteTestPercentilesResponsePacketLossPctJSON struct {
-	P50         apijson.Field
-	P90         apijson.Field
-	P95         apijson.Field
-	P99         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DEXTracerouteTestPercentilesResponsePacketLossPct) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dexTracerouteTestPercentilesResponsePacketLossPctJSON) RawJSON() string {
-	return r.raw
-}
-
-type DEXTracerouteTestPercentilesResponseRoundTripTimeMs struct {
-	// p50 observed in the time period
-	P50 float64 `json:"p50,nullable"`
-	// p90 observed in the time period
-	P90 float64 `json:"p90,nullable"`
-	// p95 observed in the time period
-	P95 float64 `json:"p95,nullable"`
-	// p99 observed in the time period
-	P99  float64                                                 `json:"p99,nullable"`
-	JSON dexTracerouteTestPercentilesResponseRoundTripTimeMsJSON `json:"-"`
-}
-
-// dexTracerouteTestPercentilesResponseRoundTripTimeMsJSON contains the JSON
-// metadata for the struct [DEXTracerouteTestPercentilesResponseRoundTripTimeMs]
-type dexTracerouteTestPercentilesResponseRoundTripTimeMsJSON struct {
-	P50         apijson.Field
-	P90         apijson.Field
-	P95         apijson.Field
-	P99         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DEXTracerouteTestPercentilesResponseRoundTripTimeMs) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dexTracerouteTestPercentilesResponseRoundTripTimeMsJSON) RawJSON() string {
-	return r.raw
-}
 
 type DEXTracerouteTestGetParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -906,7 +915,7 @@ const (
 type DEXTracerouteTestGetResponseEnvelope struct {
 	Errors   []DEXTracerouteTestGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DEXTracerouteTestGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DEXTracerouteTestGetResponse                   `json:"result,required"`
+	Result   DigitalExperienceMonitoringTracerouteDetails   `json:"result,required"`
 	// Whether the API call was successful
 	Success DEXTracerouteTestGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dexTracerouteTestGetResponseEnvelopeJSON    `json:"-"`
@@ -1016,7 +1025,7 @@ const (
 type DEXTracerouteTestNetworkPathResponseEnvelope struct {
 	Errors   []DEXTracerouteTestNetworkPathResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DEXTracerouteTestNetworkPathResponseEnvelopeMessages `json:"messages,required"`
-	Result   DEXTracerouteTestNetworkPathResponse                   `json:"result,required"`
+	Result   DigitalExperienceMonitoringTracerouteTestNetworkPath   `json:"result,required"`
 	// Whether the API call was successful
 	Success DEXTracerouteTestNetworkPathResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dexTracerouteTestNetworkPathResponseEnvelopeJSON    `json:"-"`
@@ -1118,9 +1127,9 @@ func (r DEXTracerouteTestPercentilesParams) URLQuery() (v url.Values) {
 }
 
 type DEXTracerouteTestPercentilesResponseEnvelope struct {
-	Errors   []DEXTracerouteTestPercentilesResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DEXTracerouteTestPercentilesResponseEnvelopeMessages `json:"messages,required"`
-	Result   DEXTracerouteTestPercentilesResponse                   `json:"result,required"`
+	Errors   []DEXTracerouteTestPercentilesResponseEnvelopeErrors    `json:"errors,required"`
+	Messages []DEXTracerouteTestPercentilesResponseEnvelopeMessages  `json:"messages,required"`
+	Result   DigitalExperienceMonitoringTracerouteDetailsPercentiles `json:"result,required"`
 	// Whether the API call was successful
 	Success DEXTracerouteTestPercentilesResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dexTracerouteTestPercentilesResponseEnvelopeJSON    `json:"-"`

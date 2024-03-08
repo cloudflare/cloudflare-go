@@ -66,7 +66,7 @@ func (r *PageruleService) Update(ctx context.Context, pageruleID string, params 
 }
 
 // Fetches Page Rules in a zone.
-func (r *PageruleService) List(ctx context.Context, params PageruleListParams, opts ...option.RequestOption) (res *[]PageruleListResponse, err error) {
+func (r *PageruleService) List(ctx context.Context, params PageruleListParams, opts ...option.RequestOption) (res *[]ZonesPageRule, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PageruleListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/pagerules", params.ZoneID)
@@ -117,6 +117,197 @@ func (r *PageruleService) Get(ctx context.Context, pageruleID string, query Page
 	return
 }
 
+type ZonesPageRule struct {
+	// Identifier
+	ID string `json:"id,required"`
+	// The set of actions to perform if the targets of this rule match the request.
+	// Actions can redirect to another URL or override settings, but not both.
+	Actions []ZonesPageRuleAction `json:"actions,required"`
+	// The timestamp of when the Page Rule was created.
+	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
+	// The timestamp of when the Page Rule was last modified.
+	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
+	// The priority of the rule, used to define which Page Rule is processed over
+	// another. A higher number indicates a higher priority. For example, if you have a
+	// catch-all Page Rule (rule A: `/images/*`) but want a more specific Page Rule to
+	// take precedence (rule B: `/images/special/*`), specify a higher priority for
+	// rule B so it overrides rule A.
+	Priority int64 `json:"priority,required"`
+	// The status of the Page Rule.
+	Status ZonesPageRuleStatus `json:"status,required"`
+	// The rule targets to evaluate on each request.
+	Targets []ZonesPageRuleTarget `json:"targets,required"`
+	JSON    zonesPageRuleJSON     `json:"-"`
+}
+
+// zonesPageRuleJSON contains the JSON metadata for the struct [ZonesPageRule]
+type zonesPageRuleJSON struct {
+	ID          apijson.Field
+	Actions     apijson.Field
+	CreatedOn   apijson.Field
+	ModifiedOn  apijson.Field
+	Priority    apijson.Field
+	Status      apijson.Field
+	Targets     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZonesPageRule) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zonesPageRuleJSON) RawJSON() string {
+	return r.raw
+}
+
+type ZonesPageRuleAction struct {
+	// The timestamp of when the override was last modified.
+	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
+	// The type of route.
+	Name  ZonesPageRuleActionsName  `json:"name"`
+	Value ZonesPageRuleActionsValue `json:"value"`
+	JSON  zonesPageRuleActionJSON   `json:"-"`
+}
+
+// zonesPageRuleActionJSON contains the JSON metadata for the struct
+// [ZonesPageRuleAction]
+type zonesPageRuleActionJSON struct {
+	ModifiedOn  apijson.Field
+	Name        apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZonesPageRuleAction) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zonesPageRuleActionJSON) RawJSON() string {
+	return r.raw
+}
+
+// The type of route.
+type ZonesPageRuleActionsName string
+
+const (
+	ZonesPageRuleActionsNameForwardURL ZonesPageRuleActionsName = "forward_url"
+)
+
+type ZonesPageRuleActionsValue struct {
+	// The response type for the URL redirect.
+	Type ZonesPageRuleActionsValueType `json:"type"`
+	// The URL to redirect the request to. Notes: ${num} refers to the position of '\*'
+	// in the constraint value.
+	URL  string                        `json:"url"`
+	JSON zonesPageRuleActionsValueJSON `json:"-"`
+}
+
+// zonesPageRuleActionsValueJSON contains the JSON metadata for the struct
+// [ZonesPageRuleActionsValue]
+type zonesPageRuleActionsValueJSON struct {
+	Type        apijson.Field
+	URL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZonesPageRuleActionsValue) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zonesPageRuleActionsValueJSON) RawJSON() string {
+	return r.raw
+}
+
+// The response type for the URL redirect.
+type ZonesPageRuleActionsValueType string
+
+const (
+	ZonesPageRuleActionsValueTypeTemporary ZonesPageRuleActionsValueType = "temporary"
+	ZonesPageRuleActionsValueTypePermanent ZonesPageRuleActionsValueType = "permanent"
+)
+
+// The status of the Page Rule.
+type ZonesPageRuleStatus string
+
+const (
+	ZonesPageRuleStatusActive   ZonesPageRuleStatus = "active"
+	ZonesPageRuleStatusDisabled ZonesPageRuleStatus = "disabled"
+)
+
+// A request condition target.
+type ZonesPageRuleTarget struct {
+	// String constraint.
+	Constraint ZonesPageRuleTargetsConstraint `json:"constraint,required"`
+	// A target based on the URL of the request.
+	Target ZonesPageRuleTargetsTarget `json:"target,required"`
+	JSON   zonesPageRuleTargetJSON    `json:"-"`
+}
+
+// zonesPageRuleTargetJSON contains the JSON metadata for the struct
+// [ZonesPageRuleTarget]
+type zonesPageRuleTargetJSON struct {
+	Constraint  apijson.Field
+	Target      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZonesPageRuleTarget) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zonesPageRuleTargetJSON) RawJSON() string {
+	return r.raw
+}
+
+// String constraint.
+type ZonesPageRuleTargetsConstraint struct {
+	// The matches operator can use asterisks and pipes as wildcard and 'or' operators.
+	Operator ZonesPageRuleTargetsConstraintOperator `json:"operator,required"`
+	// The URL pattern to match against the current request. The pattern may contain up
+	// to four asterisks ('\*') as placeholders.
+	Value string                             `json:"value,required"`
+	JSON  zonesPageRuleTargetsConstraintJSON `json:"-"`
+}
+
+// zonesPageRuleTargetsConstraintJSON contains the JSON metadata for the struct
+// [ZonesPageRuleTargetsConstraint]
+type zonesPageRuleTargetsConstraintJSON struct {
+	Operator    apijson.Field
+	Value       apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *ZonesPageRuleTargetsConstraint) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r zonesPageRuleTargetsConstraintJSON) RawJSON() string {
+	return r.raw
+}
+
+// The matches operator can use asterisks and pipes as wildcard and 'or' operators.
+type ZonesPageRuleTargetsConstraintOperator string
+
+const (
+	ZonesPageRuleTargetsConstraintOperatorMatches    ZonesPageRuleTargetsConstraintOperator = "matches"
+	ZonesPageRuleTargetsConstraintOperatorContains   ZonesPageRuleTargetsConstraintOperator = "contains"
+	ZonesPageRuleTargetsConstraintOperatorEquals     ZonesPageRuleTargetsConstraintOperator = "equals"
+	ZonesPageRuleTargetsConstraintOperatorNotEqual   ZonesPageRuleTargetsConstraintOperator = "not_equal"
+	ZonesPageRuleTargetsConstraintOperatorNotContain ZonesPageRuleTargetsConstraintOperator = "not_contain"
+)
+
+// A target based on the URL of the request.
+type ZonesPageRuleTargetsTarget string
+
+const (
+	ZonesPageRuleTargetsTargetURL ZonesPageRuleTargetsTarget = "url"
+)
+
 // Union satisfied by [pagerules.PageruleNewResponseUnknown] or
 // [shared.UnionString].
 type PageruleNewResponse interface {
@@ -150,198 +341,6 @@ func init() {
 		},
 	)
 }
-
-type PageruleListResponse struct {
-	// Identifier
-	ID string `json:"id,required"`
-	// The set of actions to perform if the targets of this rule match the request.
-	// Actions can redirect to another URL or override settings, but not both.
-	Actions []PageruleListResponseAction `json:"actions,required"`
-	// The timestamp of when the Page Rule was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	// The timestamp of when the Page Rule was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// The priority of the rule, used to define which Page Rule is processed over
-	// another. A higher number indicates a higher priority. For example, if you have a
-	// catch-all Page Rule (rule A: `/images/*`) but want a more specific Page Rule to
-	// take precedence (rule B: `/images/special/*`), specify a higher priority for
-	// rule B so it overrides rule A.
-	Priority int64 `json:"priority,required"`
-	// The status of the Page Rule.
-	Status PageruleListResponseStatus `json:"status,required"`
-	// The rule targets to evaluate on each request.
-	Targets []PageruleListResponseTarget `json:"targets,required"`
-	JSON    pageruleListResponseJSON     `json:"-"`
-}
-
-// pageruleListResponseJSON contains the JSON metadata for the struct
-// [PageruleListResponse]
-type pageruleListResponseJSON struct {
-	ID          apijson.Field
-	Actions     apijson.Field
-	CreatedOn   apijson.Field
-	ModifiedOn  apijson.Field
-	Priority    apijson.Field
-	Status      apijson.Field
-	Targets     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageruleListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pageruleListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type PageruleListResponseAction struct {
-	// The timestamp of when the override was last modified.
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// The type of route.
-	Name  PageruleListResponseActionsName  `json:"name"`
-	Value PageruleListResponseActionsValue `json:"value"`
-	JSON  pageruleListResponseActionJSON   `json:"-"`
-}
-
-// pageruleListResponseActionJSON contains the JSON metadata for the struct
-// [PageruleListResponseAction]
-type pageruleListResponseActionJSON struct {
-	ModifiedOn  apijson.Field
-	Name        apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageruleListResponseAction) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pageruleListResponseActionJSON) RawJSON() string {
-	return r.raw
-}
-
-// The type of route.
-type PageruleListResponseActionsName string
-
-const (
-	PageruleListResponseActionsNameForwardURL PageruleListResponseActionsName = "forward_url"
-)
-
-type PageruleListResponseActionsValue struct {
-	// The response type for the URL redirect.
-	Type PageruleListResponseActionsValueType `json:"type"`
-	// The URL to redirect the request to. Notes: ${num} refers to the position of '\*'
-	// in the constraint value.
-	URL  string                               `json:"url"`
-	JSON pageruleListResponseActionsValueJSON `json:"-"`
-}
-
-// pageruleListResponseActionsValueJSON contains the JSON metadata for the struct
-// [PageruleListResponseActionsValue]
-type pageruleListResponseActionsValueJSON struct {
-	Type        apijson.Field
-	URL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageruleListResponseActionsValue) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pageruleListResponseActionsValueJSON) RawJSON() string {
-	return r.raw
-}
-
-// The response type for the URL redirect.
-type PageruleListResponseActionsValueType string
-
-const (
-	PageruleListResponseActionsValueTypeTemporary PageruleListResponseActionsValueType = "temporary"
-	PageruleListResponseActionsValueTypePermanent PageruleListResponseActionsValueType = "permanent"
-)
-
-// The status of the Page Rule.
-type PageruleListResponseStatus string
-
-const (
-	PageruleListResponseStatusActive   PageruleListResponseStatus = "active"
-	PageruleListResponseStatusDisabled PageruleListResponseStatus = "disabled"
-)
-
-// A request condition target.
-type PageruleListResponseTarget struct {
-	// String constraint.
-	Constraint PageruleListResponseTargetsConstraint `json:"constraint,required"`
-	// A target based on the URL of the request.
-	Target PageruleListResponseTargetsTarget `json:"target,required"`
-	JSON   pageruleListResponseTargetJSON    `json:"-"`
-}
-
-// pageruleListResponseTargetJSON contains the JSON metadata for the struct
-// [PageruleListResponseTarget]
-type pageruleListResponseTargetJSON struct {
-	Constraint  apijson.Field
-	Target      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageruleListResponseTarget) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pageruleListResponseTargetJSON) RawJSON() string {
-	return r.raw
-}
-
-// String constraint.
-type PageruleListResponseTargetsConstraint struct {
-	// The matches operator can use asterisks and pipes as wildcard and 'or' operators.
-	Operator PageruleListResponseTargetsConstraintOperator `json:"operator,required"`
-	// The URL pattern to match against the current request. The pattern may contain up
-	// to four asterisks ('\*') as placeholders.
-	Value string                                    `json:"value,required"`
-	JSON  pageruleListResponseTargetsConstraintJSON `json:"-"`
-}
-
-// pageruleListResponseTargetsConstraintJSON contains the JSON metadata for the
-// struct [PageruleListResponseTargetsConstraint]
-type pageruleListResponseTargetsConstraintJSON struct {
-	Operator    apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PageruleListResponseTargetsConstraint) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r pageruleListResponseTargetsConstraintJSON) RawJSON() string {
-	return r.raw
-}
-
-// The matches operator can use asterisks and pipes as wildcard and 'or' operators.
-type PageruleListResponseTargetsConstraintOperator string
-
-const (
-	PageruleListResponseTargetsConstraintOperatorMatches    PageruleListResponseTargetsConstraintOperator = "matches"
-	PageruleListResponseTargetsConstraintOperatorContains   PageruleListResponseTargetsConstraintOperator = "contains"
-	PageruleListResponseTargetsConstraintOperatorEquals     PageruleListResponseTargetsConstraintOperator = "equals"
-	PageruleListResponseTargetsConstraintOperatorNotEqual   PageruleListResponseTargetsConstraintOperator = "not_equal"
-	PageruleListResponseTargetsConstraintOperatorNotContain PageruleListResponseTargetsConstraintOperator = "not_contain"
-)
-
-// A target based on the URL of the request.
-type PageruleListResponseTargetsTarget string
-
-const (
-	PageruleListResponseTargetsTargetURL PageruleListResponseTargetsTarget = "url"
-)
 
 type PageruleDeleteResponse struct {
 	// Identifier
@@ -839,7 +838,7 @@ const (
 type PageruleListResponseEnvelope struct {
 	Errors   []PageruleListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []PageruleListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []PageruleListResponse                 `json:"result,required"`
+	Result   []ZonesPageRule                        `json:"result,required"`
 	// Whether the API call was successful
 	Success PageruleListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    pageruleListResponseEnvelopeJSON    `json:"-"`

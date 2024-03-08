@@ -57,7 +57,7 @@ func (r *AccessServiceTokenService) New(ctx context.Context, params AccessServic
 }
 
 // Updates a configured service token.
-func (r *AccessServiceTokenService) Update(ctx context.Context, uuid string, params AccessServiceTokenUpdateParams, opts ...option.RequestOption) (res *AccessServiceTokenUpdateResponse, err error) {
+func (r *AccessServiceTokenService) Update(ctx context.Context, uuid string, params AccessServiceTokenUpdateParams, opts ...option.RequestOption) (res *AccessServiceTokens, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessServiceTokenUpdateResponseEnvelope
 	var accountOrZone string
@@ -79,7 +79,7 @@ func (r *AccessServiceTokenService) Update(ctx context.Context, uuid string, par
 }
 
 // Lists all service tokens.
-func (r *AccessServiceTokenService) List(ctx context.Context, query AccessServiceTokenListParams, opts ...option.RequestOption) (res *[]AccessServiceTokenListResponse, err error) {
+func (r *AccessServiceTokenService) List(ctx context.Context, query AccessServiceTokenListParams, opts ...option.RequestOption) (res *[]AccessServiceTokens, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessServiceTokenListResponseEnvelope
 	var accountOrZone string
@@ -101,7 +101,7 @@ func (r *AccessServiceTokenService) List(ctx context.Context, query AccessServic
 }
 
 // Deletes a service token.
-func (r *AccessServiceTokenService) Delete(ctx context.Context, uuid string, body AccessServiceTokenDeleteParams, opts ...option.RequestOption) (res *AccessServiceTokenDeleteResponse, err error) {
+func (r *AccessServiceTokenService) Delete(ctx context.Context, uuid string, body AccessServiceTokenDeleteParams, opts ...option.RequestOption) (res *AccessServiceTokens, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessServiceTokenDeleteResponseEnvelope
 	var accountOrZone string
@@ -123,7 +123,7 @@ func (r *AccessServiceTokenService) Delete(ctx context.Context, uuid string, bod
 }
 
 // Refreshes the expiration of a service token.
-func (r *AccessServiceTokenService) Refresh(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *AccessServiceTokenRefreshResponse, err error) {
+func (r *AccessServiceTokenService) Refresh(ctx context.Context, identifier string, uuid string, opts ...option.RequestOption) (res *AccessServiceTokens, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessServiceTokenRefreshResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/service_tokens/%s/refresh", identifier, uuid)
@@ -146,6 +146,44 @@ func (r *AccessServiceTokenService) Rotate(ctx context.Context, identifier strin
 	}
 	res = &env.Result
 	return
+}
+
+type AccessServiceTokens struct {
+	// The ID of the service token.
+	ID interface{} `json:"id"`
+	// The Client ID for the service token. Access will check for this value in the
+	// `CF-Access-Client-ID` request header.
+	ClientID  string    `json:"client_id"`
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// The duration for how long the service token will be valid. Must be in the format
+	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
+	// default is 1 year in hours (8760h).
+	Duration string `json:"duration"`
+	// The name of the service token.
+	Name      string                  `json:"name"`
+	UpdatedAt time.Time               `json:"updated_at" format:"date-time"`
+	JSON      accessServiceTokensJSON `json:"-"`
+}
+
+// accessServiceTokensJSON contains the JSON metadata for the struct
+// [AccessServiceTokens]
+type accessServiceTokensJSON struct {
+	ID          apijson.Field
+	ClientID    apijson.Field
+	CreatedAt   apijson.Field
+	Duration    apijson.Field
+	Name        apijson.Field
+	UpdatedAt   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessServiceTokens) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessServiceTokensJSON) RawJSON() string {
+	return r.raw
 }
 
 type AccessServiceTokenNewResponse struct {
@@ -187,158 +225,6 @@ func (r *AccessServiceTokenNewResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r accessServiceTokenNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessServiceTokenUpdateResponse struct {
-	// The ID of the service token.
-	ID interface{} `json:"id"`
-	// The Client ID for the service token. Access will check for this value in the
-	// `CF-Access-Client-ID` request header.
-	ClientID  string    `json:"client_id"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The duration for how long the service token will be valid. Must be in the format
-	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
-	// default is 1 year in hours (8760h).
-	Duration string `json:"duration"`
-	// The name of the service token.
-	Name      string                               `json:"name"`
-	UpdatedAt time.Time                            `json:"updated_at" format:"date-time"`
-	JSON      accessServiceTokenUpdateResponseJSON `json:"-"`
-}
-
-// accessServiceTokenUpdateResponseJSON contains the JSON metadata for the struct
-// [AccessServiceTokenUpdateResponse]
-type accessServiceTokenUpdateResponseJSON struct {
-	ID          apijson.Field
-	ClientID    apijson.Field
-	CreatedAt   apijson.Field
-	Duration    apijson.Field
-	Name        apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessServiceTokenUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessServiceTokenUpdateResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessServiceTokenListResponse struct {
-	// The ID of the service token.
-	ID interface{} `json:"id"`
-	// The Client ID for the service token. Access will check for this value in the
-	// `CF-Access-Client-ID` request header.
-	ClientID  string    `json:"client_id"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The duration for how long the service token will be valid. Must be in the format
-	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
-	// default is 1 year in hours (8760h).
-	Duration string `json:"duration"`
-	// The name of the service token.
-	Name      string                             `json:"name"`
-	UpdatedAt time.Time                          `json:"updated_at" format:"date-time"`
-	JSON      accessServiceTokenListResponseJSON `json:"-"`
-}
-
-// accessServiceTokenListResponseJSON contains the JSON metadata for the struct
-// [AccessServiceTokenListResponse]
-type accessServiceTokenListResponseJSON struct {
-	ID          apijson.Field
-	ClientID    apijson.Field
-	CreatedAt   apijson.Field
-	Duration    apijson.Field
-	Name        apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessServiceTokenListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessServiceTokenListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessServiceTokenDeleteResponse struct {
-	// The ID of the service token.
-	ID interface{} `json:"id"`
-	// The Client ID for the service token. Access will check for this value in the
-	// `CF-Access-Client-ID` request header.
-	ClientID  string    `json:"client_id"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The duration for how long the service token will be valid. Must be in the format
-	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
-	// default is 1 year in hours (8760h).
-	Duration string `json:"duration"`
-	// The name of the service token.
-	Name      string                               `json:"name"`
-	UpdatedAt time.Time                            `json:"updated_at" format:"date-time"`
-	JSON      accessServiceTokenDeleteResponseJSON `json:"-"`
-}
-
-// accessServiceTokenDeleteResponseJSON contains the JSON metadata for the struct
-// [AccessServiceTokenDeleteResponse]
-type accessServiceTokenDeleteResponseJSON struct {
-	ID          apijson.Field
-	ClientID    apijson.Field
-	CreatedAt   apijson.Field
-	Duration    apijson.Field
-	Name        apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessServiceTokenDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessServiceTokenDeleteResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessServiceTokenRefreshResponse struct {
-	// The ID of the service token.
-	ID interface{} `json:"id"`
-	// The Client ID for the service token. Access will check for this value in the
-	// `CF-Access-Client-ID` request header.
-	ClientID  string    `json:"client_id"`
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// The duration for how long the service token will be valid. Must be in the format
-	// `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m, h. The
-	// default is 1 year in hours (8760h).
-	Duration string `json:"duration"`
-	// The name of the service token.
-	Name      string                                `json:"name"`
-	UpdatedAt time.Time                             `json:"updated_at" format:"date-time"`
-	JSON      accessServiceTokenRefreshResponseJSON `json:"-"`
-}
-
-// accessServiceTokenRefreshResponseJSON contains the JSON metadata for the struct
-// [AccessServiceTokenRefreshResponse]
-type accessServiceTokenRefreshResponseJSON struct {
-	ID          apijson.Field
-	ClientID    apijson.Field
-	CreatedAt   apijson.Field
-	Duration    apijson.Field
-	Name        apijson.Field
-	UpdatedAt   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessServiceTokenRefreshResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessServiceTokenRefreshResponseJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -502,7 +388,7 @@ func (r AccessServiceTokenUpdateParams) MarshalJSON() (data []byte, err error) {
 type AccessServiceTokenUpdateResponseEnvelope struct {
 	Errors   []AccessServiceTokenUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessServiceTokenUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessServiceTokenUpdateResponse                   `json:"result,required"`
+	Result   AccessServiceTokens                                `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessServiceTokenUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessServiceTokenUpdateResponseEnvelopeJSON    `json:"-"`
@@ -590,7 +476,7 @@ type AccessServiceTokenListParams struct {
 type AccessServiceTokenListResponseEnvelope struct {
 	Errors   []AccessServiceTokenListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessServiceTokenListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AccessServiceTokenListResponse                 `json:"result,required,nullable"`
+	Result   []AccessServiceTokens                            `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AccessServiceTokenListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AccessServiceTokenListResponseEnvelopeResultInfo `json:"result_info"`
@@ -711,7 +597,7 @@ type AccessServiceTokenDeleteParams struct {
 type AccessServiceTokenDeleteResponseEnvelope struct {
 	Errors   []AccessServiceTokenDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessServiceTokenDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessServiceTokenDeleteResponse                   `json:"result,required"`
+	Result   AccessServiceTokens                                `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessServiceTokenDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessServiceTokenDeleteResponseEnvelopeJSON    `json:"-"`
@@ -792,7 +678,7 @@ const (
 type AccessServiceTokenRefreshResponseEnvelope struct {
 	Errors   []AccessServiceTokenRefreshResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessServiceTokenRefreshResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessServiceTokenRefreshResponse                   `json:"result,required"`
+	Result   AccessServiceTokens                                 `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessServiceTokenRefreshResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessServiceTokenRefreshResponseEnvelopeJSON    `json:"-"`

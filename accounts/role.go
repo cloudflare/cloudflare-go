@@ -34,7 +34,7 @@ func NewRoleService(opts ...option.RequestOption) (r *RoleService) {
 }
 
 // Get all available roles for an account.
-func (r *RoleService) List(ctx context.Context, query RoleListParams, opts ...option.RequestOption) (res *[]RoleListResponse, err error) {
+func (r *RoleService) List(ctx context.Context, query RoleListParams, opts ...option.RequestOption) (res *[]IamSchemasRole, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RoleListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/roles", query.AccountID)
@@ -59,7 +59,7 @@ func (r *RoleService) Get(ctx context.Context, roleID interface{}, query RoleGet
 	return
 }
 
-type RoleListResponse struct {
+type IamSchemasRole struct {
 	// Role identifier tag.
 	ID string `json:"id,required"`
 	// Description of role's permissions.
@@ -67,13 +67,12 @@ type RoleListResponse struct {
 	// Role Name.
 	Name string `json:"name,required"`
 	// Access permissions for this User.
-	Permissions []string             `json:"permissions,required"`
-	JSON        roleListResponseJSON `json:"-"`
+	Permissions []string           `json:"permissions,required"`
+	JSON        iamSchemasRoleJSON `json:"-"`
 }
 
-// roleListResponseJSON contains the JSON metadata for the struct
-// [RoleListResponse]
-type roleListResponseJSON struct {
+// iamSchemasRoleJSON contains the JSON metadata for the struct [IamSchemasRole]
+type iamSchemasRoleJSON struct {
 	ID          apijson.Field
 	Description apijson.Field
 	Name        apijson.Field
@@ -82,11 +81,11 @@ type roleListResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RoleListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *IamSchemasRole) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r roleListResponseJSON) RawJSON() string {
+func (r iamSchemasRoleJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -113,7 +112,7 @@ type RoleListParams struct {
 type RoleListResponseEnvelope struct {
 	Errors   []RoleListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RoleListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []RoleListResponse                 `json:"result,required,nullable"`
+	Result   []IamSchemasRole                   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RoleListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo RoleListResponseEnvelopeResultInfo `json:"result_info"`

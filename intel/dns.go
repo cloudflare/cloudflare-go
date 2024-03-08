@@ -34,7 +34,7 @@ func NewDNSService(opts ...option.RequestOption) (r *DNSService) {
 }
 
 // Get Passive DNS by IP
-func (r *DNSService) Get(ctx context.Context, params DNSGetParams, opts ...option.RequestOption) (res *DNSGetResponse, err error) {
+func (r *DNSService) Get(ctx context.Context, params DNSGetParams, opts ...option.RequestOption) (res *IntelPassiveDNSByIP, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DNSGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/dns", params.AccountID)
@@ -46,7 +46,7 @@ func (r *DNSService) Get(ctx context.Context, params DNSGetParams, opts ...optio
 	return
 }
 
-type DNSGetResponse struct {
+type IntelPassiveDNSByIP struct {
 	// Total results returned based on your search parameters.
 	Count float64 `json:"count"`
 	// Current page within paginated list of results.
@@ -54,12 +54,13 @@ type DNSGetResponse struct {
 	// Number of results per page of results.
 	PerPage float64 `json:"per_page"`
 	// Reverse DNS look-ups observed during the time period.
-	ReverseRecords []DNSGetResponseReverseRecord `json:"reverse_records"`
-	JSON           dnsGetResponseJSON            `json:"-"`
+	ReverseRecords []IntelPassiveDNSByIPReverseRecord `json:"reverse_records"`
+	JSON           intelPassiveDNSByIPJSON            `json:"-"`
 }
 
-// dnsGetResponseJSON contains the JSON metadata for the struct [DNSGetResponse]
-type dnsGetResponseJSON struct {
+// intelPassiveDNSByIPJSON contains the JSON metadata for the struct
+// [IntelPassiveDNSByIP]
+type intelPassiveDNSByIPJSON struct {
 	Count          apijson.Field
 	Page           apijson.Field
 	PerPage        apijson.Field
@@ -68,27 +69,27 @@ type dnsGetResponseJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *DNSGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelPassiveDNSByIP) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dnsGetResponseJSON) RawJSON() string {
+func (r intelPassiveDNSByIPJSON) RawJSON() string {
 	return r.raw
 }
 
-type DNSGetResponseReverseRecord struct {
+type IntelPassiveDNSByIPReverseRecord struct {
 	// First seen date of the DNS record during the time period.
 	FirstSeen time.Time `json:"first_seen" format:"date"`
 	// Hostname that the IP was observed resolving to.
 	Hostname interface{} `json:"hostname"`
 	// Last seen date of the DNS record during the time period.
-	LastSeen time.Time                       `json:"last_seen" format:"date"`
-	JSON     dnsGetResponseReverseRecordJSON `json:"-"`
+	LastSeen time.Time                            `json:"last_seen" format:"date"`
+	JSON     intelPassiveDNSByIPReverseRecordJSON `json:"-"`
 }
 
-// dnsGetResponseReverseRecordJSON contains the JSON metadata for the struct
-// [DNSGetResponseReverseRecord]
-type dnsGetResponseReverseRecordJSON struct {
+// intelPassiveDNSByIPReverseRecordJSON contains the JSON metadata for the struct
+// [IntelPassiveDNSByIPReverseRecord]
+type intelPassiveDNSByIPReverseRecordJSON struct {
 	FirstSeen   apijson.Field
 	Hostname    apijson.Field
 	LastSeen    apijson.Field
@@ -96,11 +97,11 @@ type dnsGetResponseReverseRecordJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DNSGetResponseReverseRecord) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelPassiveDNSByIPReverseRecord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dnsGetResponseReverseRecordJSON) RawJSON() string {
+func (r intelPassiveDNSByIPReverseRecordJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -142,7 +143,7 @@ func (r DNSGetParamsStartEndParams) URLQuery() (v url.Values) {
 type DNSGetResponseEnvelope struct {
 	Errors   []DNSGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DNSGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DNSGetResponse                   `json:"result,required"`
+	Result   IntelPassiveDNSByIP              `json:"result,required"`
 	// Whether the API call was successful
 	Success DNSGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dnsGetResponseEnvelopeJSON    `json:"-"`

@@ -54,9 +54,9 @@ type DirectUploadNewResponse struct {
 	Uid string `json:"uid"`
 	// The URL an unauthenticated upload can use for a single
 	// `HTTP POST multipart/form-data` request.
-	UploadURL string                           `json:"uploadURL"`
-	Watermark DirectUploadNewResponseWatermark `json:"watermark"`
-	JSON      directUploadNewResponseJSON      `json:"-"`
+	UploadURL string                      `json:"uploadURL"`
+	Watermark StreamWatermarks            `json:"watermark"`
+	JSON      directUploadNewResponseJSON `json:"-"`
 }
 
 // directUploadNewResponseJSON contains the JSON metadata for the struct
@@ -75,68 +75,6 @@ func (r *DirectUploadNewResponse) UnmarshalJSON(data []byte) (err error) {
 }
 
 func (r directUploadNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type DirectUploadNewResponseWatermark struct {
-	// The date and a time a watermark profile was created.
-	Created time.Time `json:"created" format:"date-time"`
-	// The source URL for a downloaded image. If the watermark profile was created via
-	// direct upload, this field is null.
-	DownloadedFrom string `json:"downloadedFrom"`
-	// The height of the image in pixels.
-	Height int64 `json:"height"`
-	// A short description of the watermark profile.
-	Name string `json:"name"`
-	// The translucency of the image. A value of `0.0` makes the image completely
-	// transparent, and `1.0` makes the image completely opaque. Note that if the image
-	// is already semi-transparent, setting this to `1.0` will not make the image
-	// completely opaque.
-	Opacity float64 `json:"opacity"`
-	// The whitespace between the adjacent edges (determined by position) of the video
-	// and the image. `0.0` indicates no padding, and `1.0` indicates a fully padded
-	// video width or length, as determined by the algorithm.
-	Padding float64 `json:"padding"`
-	// The location of the image. Valid positions are: `upperRight`, `upperLeft`,
-	// `lowerLeft`, `lowerRight`, and `center`. Note that `center` ignores the
-	// `padding` parameter.
-	Position string `json:"position"`
-	// The size of the image relative to the overall size of the video. This parameter
-	// will adapt to horizontal and vertical videos automatically. `0.0` indicates no
-	// scaling (use the size of the image as-is), and `1.0 `fills the entire video.
-	Scale float64 `json:"scale"`
-	// The size of the image in bytes.
-	Size float64 `json:"size"`
-	// The unique identifier for a watermark profile.
-	Uid string `json:"uid"`
-	// The width of the image in pixels.
-	Width int64                                `json:"width"`
-	JSON  directUploadNewResponseWatermarkJSON `json:"-"`
-}
-
-// directUploadNewResponseWatermarkJSON contains the JSON metadata for the struct
-// [DirectUploadNewResponseWatermark]
-type directUploadNewResponseWatermarkJSON struct {
-	Created        apijson.Field
-	DownloadedFrom apijson.Field
-	Height         apijson.Field
-	Name           apijson.Field
-	Opacity        apijson.Field
-	Padding        apijson.Field
-	Position       apijson.Field
-	Scale          apijson.Field
-	Size           apijson.Field
-	Uid            apijson.Field
-	Width          apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *DirectUploadNewResponseWatermark) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r directUploadNewResponseWatermarkJSON) RawJSON() string {
 	return r.raw
 }
 

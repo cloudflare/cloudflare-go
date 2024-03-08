@@ -32,7 +32,7 @@ func NewGatewayLoggingService(opts ...option.RequestOption) (r *GatewayLoggingSe
 }
 
 // Updates logging settings for the current Zero Trust account.
-func (r *GatewayLoggingService) Update(ctx context.Context, params GatewayLoggingUpdateParams, opts ...option.RequestOption) (res *GatewayLoggingUpdateResponse, err error) {
+func (r *GatewayLoggingService) Update(ctx context.Context, params GatewayLoggingUpdateParams, opts ...option.RequestOption) (res *ZeroTrustGatewayGatewayAccountLoggingSettings, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayLoggingUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/gateway/logging", params.AccountID)
@@ -45,7 +45,7 @@ func (r *GatewayLoggingService) Update(ctx context.Context, params GatewayLoggin
 }
 
 // Fetches the current logging settings for Zero Trust account.
-func (r *GatewayLoggingService) Get(ctx context.Context, query GatewayLoggingGetParams, opts ...option.RequestOption) (res *GatewayLoggingGetResponse, err error) {
+func (r *GatewayLoggingService) Get(ctx context.Context, query GatewayLoggingGetParams, opts ...option.RequestOption) (res *ZeroTrustGatewayGatewayAccountLoggingSettings, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayLoggingGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/gateway/logging", query.AccountID)
@@ -57,46 +57,47 @@ func (r *GatewayLoggingService) Get(ctx context.Context, query GatewayLoggingGet
 	return
 }
 
-type GatewayLoggingUpdateResponse struct {
+type ZeroTrustGatewayGatewayAccountLoggingSettings struct {
 	// Redact personally identifiable information from activity logging (PII fields
 	// are: source IP, user email, user ID, device ID, URL, referrer, user agent).
 	RedactPii bool `json:"redact_pii"`
 	// Logging settings by rule type.
-	SettingsByRuleType GatewayLoggingUpdateResponseSettingsByRuleType `json:"settings_by_rule_type"`
-	JSON               gatewayLoggingUpdateResponseJSON               `json:"-"`
+	SettingsByRuleType ZeroTrustGatewayGatewayAccountLoggingSettingsSettingsByRuleType `json:"settings_by_rule_type"`
+	JSON               zeroTrustGatewayGatewayAccountLoggingSettingsJSON               `json:"-"`
 }
 
-// gatewayLoggingUpdateResponseJSON contains the JSON metadata for the struct
-// [GatewayLoggingUpdateResponse]
-type gatewayLoggingUpdateResponseJSON struct {
+// zeroTrustGatewayGatewayAccountLoggingSettingsJSON contains the JSON metadata for
+// the struct [ZeroTrustGatewayGatewayAccountLoggingSettings]
+type zeroTrustGatewayGatewayAccountLoggingSettingsJSON struct {
 	RedactPii          apijson.Field
 	SettingsByRuleType apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *GatewayLoggingUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustGatewayGatewayAccountLoggingSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r gatewayLoggingUpdateResponseJSON) RawJSON() string {
+func (r zeroTrustGatewayGatewayAccountLoggingSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
 // Logging settings by rule type.
-type GatewayLoggingUpdateResponseSettingsByRuleType struct {
+type ZeroTrustGatewayGatewayAccountLoggingSettingsSettingsByRuleType struct {
 	// Logging settings for DNS firewall.
 	DNS interface{} `json:"dns"`
 	// Logging settings for HTTP/HTTPS firewall.
 	HTTP interface{} `json:"http"`
 	// Logging settings for Network firewall.
-	L4   interface{}                                        `json:"l4"`
-	JSON gatewayLoggingUpdateResponseSettingsByRuleTypeJSON `json:"-"`
+	L4   interface{}                                                         `json:"l4"`
+	JSON zeroTrustGatewayGatewayAccountLoggingSettingsSettingsByRuleTypeJSON `json:"-"`
 }
 
-// gatewayLoggingUpdateResponseSettingsByRuleTypeJSON contains the JSON metadata
-// for the struct [GatewayLoggingUpdateResponseSettingsByRuleType]
-type gatewayLoggingUpdateResponseSettingsByRuleTypeJSON struct {
+// zeroTrustGatewayGatewayAccountLoggingSettingsSettingsByRuleTypeJSON contains the
+// JSON metadata for the struct
+// [ZeroTrustGatewayGatewayAccountLoggingSettingsSettingsByRuleType]
+type zeroTrustGatewayGatewayAccountLoggingSettingsSettingsByRuleTypeJSON struct {
 	DNS         apijson.Field
 	HTTP        apijson.Field
 	L4          apijson.Field
@@ -104,66 +105,11 @@ type gatewayLoggingUpdateResponseSettingsByRuleTypeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayLoggingUpdateResponseSettingsByRuleType) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustGatewayGatewayAccountLoggingSettingsSettingsByRuleType) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r gatewayLoggingUpdateResponseSettingsByRuleTypeJSON) RawJSON() string {
-	return r.raw
-}
-
-type GatewayLoggingGetResponse struct {
-	// Redact personally identifiable information from activity logging (PII fields
-	// are: source IP, user email, user ID, device ID, URL, referrer, user agent).
-	RedactPii bool `json:"redact_pii"`
-	// Logging settings by rule type.
-	SettingsByRuleType GatewayLoggingGetResponseSettingsByRuleType `json:"settings_by_rule_type"`
-	JSON               gatewayLoggingGetResponseJSON               `json:"-"`
-}
-
-// gatewayLoggingGetResponseJSON contains the JSON metadata for the struct
-// [GatewayLoggingGetResponse]
-type gatewayLoggingGetResponseJSON struct {
-	RedactPii          apijson.Field
-	SettingsByRuleType apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *GatewayLoggingGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r gatewayLoggingGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// Logging settings by rule type.
-type GatewayLoggingGetResponseSettingsByRuleType struct {
-	// Logging settings for DNS firewall.
-	DNS interface{} `json:"dns"`
-	// Logging settings for HTTP/HTTPS firewall.
-	HTTP interface{} `json:"http"`
-	// Logging settings for Network firewall.
-	L4   interface{}                                     `json:"l4"`
-	JSON gatewayLoggingGetResponseSettingsByRuleTypeJSON `json:"-"`
-}
-
-// gatewayLoggingGetResponseSettingsByRuleTypeJSON contains the JSON metadata for
-// the struct [GatewayLoggingGetResponseSettingsByRuleType]
-type gatewayLoggingGetResponseSettingsByRuleTypeJSON struct {
-	DNS         apijson.Field
-	HTTP        apijson.Field
-	L4          apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *GatewayLoggingGetResponseSettingsByRuleType) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r gatewayLoggingGetResponseSettingsByRuleTypeJSON) RawJSON() string {
+func (r zeroTrustGatewayGatewayAccountLoggingSettingsSettingsByRuleTypeJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -197,7 +143,7 @@ func (r GatewayLoggingUpdateParamsSettingsByRuleType) MarshalJSON() (data []byte
 type GatewayLoggingUpdateResponseEnvelope struct {
 	Errors   []GatewayLoggingUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []GatewayLoggingUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   GatewayLoggingUpdateResponse                   `json:"result,required"`
+	Result   ZeroTrustGatewayGatewayAccountLoggingSettings  `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayLoggingUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayLoggingUpdateResponseEnvelopeJSON    `json:"-"`
@@ -280,9 +226,9 @@ type GatewayLoggingGetParams struct {
 }
 
 type GatewayLoggingGetResponseEnvelope struct {
-	Errors   []GatewayLoggingGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []GatewayLoggingGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   GatewayLoggingGetResponse                   `json:"result,required"`
+	Errors   []GatewayLoggingGetResponseEnvelopeErrors     `json:"errors,required"`
+	Messages []GatewayLoggingGetResponseEnvelopeMessages   `json:"messages,required"`
+	Result   ZeroTrustGatewayGatewayAccountLoggingSettings `json:"result,required"`
 	// Whether the API call was successful
 	Success GatewayLoggingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    gatewayLoggingGetResponseEnvelopeJSON    `json:"-"`

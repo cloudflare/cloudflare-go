@@ -32,7 +32,7 @@ func NewClipService(opts ...option.RequestOption) (r *ClipService) {
 }
 
 // Clips a video based on the specified start and end times provided in seconds.
-func (r *ClipService) New(ctx context.Context, params ClipNewParams, opts ...option.RequestOption) (res *ClipNewResponse, err error) {
+func (r *ClipService) New(ctx context.Context, params ClipNewParams, opts ...option.RequestOption) (res *StreamClipping, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ClipNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/clip", params.AccountID)
@@ -44,7 +44,7 @@ func (r *ClipService) New(ctx context.Context, params ClipNewParams, opts ...opt
 	return
 }
 
-type ClipNewResponse struct {
+type StreamClipping struct {
 	// Lists the origins allowed to display the video. Enter allowed origin domains in
 	// an array and use `*` for wildcard subdomains. Empty arrays allow the video to be
 	// viewed on any origin.
@@ -66,8 +66,8 @@ type ClipNewResponse struct {
 	// managing videos.
 	Meta interface{} `json:"meta"`
 	// The date and time the live input was last modified.
-	Modified time.Time               `json:"modified" format:"date-time"`
-	Playback ClipNewResponsePlayback `json:"playback"`
+	Modified time.Time              `json:"modified" format:"date-time"`
+	Playback StreamClippingPlayback `json:"playback"`
 	// The video's preview page URI. This field is omitted until encoding is complete.
 	Preview string `json:"preview" format:"uri"`
 	// Indicates whether the video can be a accessed using the UID. When set to `true`,
@@ -76,18 +76,18 @@ type ClipNewResponse struct {
 	// Specifies the start time for the video clip in seconds.
 	StartTimeSeconds int64 `json:"startTimeSeconds"`
 	// Specifies the processing status for all quality levels for a video.
-	Status ClipNewResponseStatus `json:"status"`
+	Status StreamClippingStatus `json:"status"`
 	// The timestamp for a thumbnail image calculated as a percentage value of the
 	// video's duration. To convert from a second-wise timestamp to a percentage,
 	// divide the desired timestamp by the total duration of the video. If this value
 	// is not set, the default thumbnail image is taken from 0s of the video.
-	ThumbnailTimestampPct float64                  `json:"thumbnailTimestampPct"`
-	Watermark             ClipNewResponseWatermark `json:"watermark"`
-	JSON                  clipNewResponseJSON      `json:"-"`
+	ThumbnailTimestampPct float64                 `json:"thumbnailTimestampPct"`
+	Watermark             StreamClippingWatermark `json:"watermark"`
+	JSON                  streamClippingJSON      `json:"-"`
 }
 
-// clipNewResponseJSON contains the JSON metadata for the struct [ClipNewResponse]
-type clipNewResponseJSON struct {
+// streamClippingJSON contains the JSON metadata for the struct [StreamClipping]
+type streamClippingJSON struct {
 	AllowedOrigins        apijson.Field
 	ClippedFromVideoUid   apijson.Field
 	Created               apijson.Field
@@ -107,70 +107,70 @@ type clipNewResponseJSON struct {
 	ExtraFields           map[string]apijson.Field
 }
 
-func (r *ClipNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamClipping) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r clipNewResponseJSON) RawJSON() string {
+func (r streamClippingJSON) RawJSON() string {
 	return r.raw
 }
 
-type ClipNewResponsePlayback struct {
+type StreamClippingPlayback struct {
 	// DASH Media Presentation Description for the video.
 	Dash string `json:"dash"`
 	// The HLS manifest for the video.
-	Hls  string                      `json:"hls"`
-	JSON clipNewResponsePlaybackJSON `json:"-"`
+	Hls  string                     `json:"hls"`
+	JSON streamClippingPlaybackJSON `json:"-"`
 }
 
-// clipNewResponsePlaybackJSON contains the JSON metadata for the struct
-// [ClipNewResponsePlayback]
-type clipNewResponsePlaybackJSON struct {
+// streamClippingPlaybackJSON contains the JSON metadata for the struct
+// [StreamClippingPlayback]
+type streamClippingPlaybackJSON struct {
 	Dash        apijson.Field
 	Hls         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ClipNewResponsePlayback) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamClippingPlayback) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r clipNewResponsePlaybackJSON) RawJSON() string {
+func (r streamClippingPlaybackJSON) RawJSON() string {
 	return r.raw
 }
 
 // Specifies the processing status for all quality levels for a video.
-type ClipNewResponseStatus string
+type StreamClippingStatus string
 
 const (
-	ClipNewResponseStatusPendingupload ClipNewResponseStatus = "pendingupload"
-	ClipNewResponseStatusDownloading   ClipNewResponseStatus = "downloading"
-	ClipNewResponseStatusQueued        ClipNewResponseStatus = "queued"
-	ClipNewResponseStatusInprogress    ClipNewResponseStatus = "inprogress"
-	ClipNewResponseStatusReady         ClipNewResponseStatus = "ready"
-	ClipNewResponseStatusError         ClipNewResponseStatus = "error"
+	StreamClippingStatusPendingupload StreamClippingStatus = "pendingupload"
+	StreamClippingStatusDownloading   StreamClippingStatus = "downloading"
+	StreamClippingStatusQueued        StreamClippingStatus = "queued"
+	StreamClippingStatusInprogress    StreamClippingStatus = "inprogress"
+	StreamClippingStatusReady         StreamClippingStatus = "ready"
+	StreamClippingStatusError         StreamClippingStatus = "error"
 )
 
-type ClipNewResponseWatermark struct {
+type StreamClippingWatermark struct {
 	// The unique identifier for the watermark profile.
-	Uid  string                       `json:"uid"`
-	JSON clipNewResponseWatermarkJSON `json:"-"`
+	Uid  string                      `json:"uid"`
+	JSON streamClippingWatermarkJSON `json:"-"`
 }
 
-// clipNewResponseWatermarkJSON contains the JSON metadata for the struct
-// [ClipNewResponseWatermark]
-type clipNewResponseWatermarkJSON struct {
+// streamClippingWatermarkJSON contains the JSON metadata for the struct
+// [StreamClippingWatermark]
+type streamClippingWatermarkJSON struct {
 	Uid         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ClipNewResponseWatermark) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamClippingWatermark) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r clipNewResponseWatermarkJSON) RawJSON() string {
+func (r streamClippingWatermarkJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -221,7 +221,7 @@ func (r ClipNewParamsWatermark) MarshalJSON() (data []byte, err error) {
 type ClipNewResponseEnvelope struct {
 	Errors   []ClipNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ClipNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   ClipNewResponse                   `json:"result,required"`
+	Result   StreamClipping                    `json:"result,required"`
 	// Whether the API call was successful
 	Success ClipNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    clipNewResponseEnvelopeJSON    `json:"-"`

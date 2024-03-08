@@ -40,7 +40,7 @@ func NewNetworkRouteService(opts ...option.RequestOption) (r *NetworkRouteServic
 }
 
 // Routes a private network through a Cloudflare Tunnel.
-func (r *NetworkRouteService) New(ctx context.Context, params NetworkRouteNewParams, opts ...option.RequestOption) (res *NetworkRouteNewResponse, err error) {
+func (r *NetworkRouteService) New(ctx context.Context, params NetworkRouteNewParams, opts ...option.RequestOption) (res *TunnelRoute, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NetworkRouteNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/teamnet/routes", params.AccountID)
@@ -53,7 +53,7 @@ func (r *NetworkRouteService) New(ctx context.Context, params NetworkRouteNewPar
 }
 
 // Lists and filters private network routes in an account.
-func (r *NetworkRouteService) List(ctx context.Context, params NetworkRouteListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[NetworkRouteListResponse], err error) {
+func (r *NetworkRouteService) List(ctx context.Context, params NetworkRouteListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[TunnelTeamnet], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -71,12 +71,12 @@ func (r *NetworkRouteService) List(ctx context.Context, params NetworkRouteListP
 }
 
 // Lists and filters private network routes in an account.
-func (r *NetworkRouteService) ListAutoPaging(ctx context.Context, params NetworkRouteListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[NetworkRouteListResponse] {
+func (r *NetworkRouteService) ListAutoPaging(ctx context.Context, params NetworkRouteListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[TunnelTeamnet] {
 	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes a private network route from an account.
-func (r *NetworkRouteService) Delete(ctx context.Context, routeID string, body NetworkRouteDeleteParams, opts ...option.RequestOption) (res *NetworkRouteDeleteResponse, err error) {
+func (r *NetworkRouteService) Delete(ctx context.Context, routeID string, body NetworkRouteDeleteParams, opts ...option.RequestOption) (res *TunnelRoute, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NetworkRouteDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/teamnet/routes/%s", body.AccountID, routeID)
@@ -90,7 +90,7 @@ func (r *NetworkRouteService) Delete(ctx context.Context, routeID string, body N
 
 // Updates an existing private network route in an account. The fields that are
 // meant to be updated should be provided in the body of the request.
-func (r *NetworkRouteService) Edit(ctx context.Context, routeID string, params NetworkRouteEditParams, opts ...option.RequestOption) (res *NetworkRouteEditResponse, err error) {
+func (r *NetworkRouteService) Edit(ctx context.Context, routeID string, params NetworkRouteEditParams, opts ...option.RequestOption) (res *TunnelRoute, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NetworkRouteEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/teamnet/routes/%s", params.AccountID, routeID)
@@ -102,7 +102,7 @@ func (r *NetworkRouteService) Edit(ctx context.Context, routeID string, params N
 	return
 }
 
-type NetworkRouteNewResponse struct {
+type TunnelRoute struct {
 	// UUID of the route.
 	ID string `json:"id"`
 	// Optional remark describing the route.
@@ -119,13 +119,12 @@ type NetworkRouteNewResponse struct {
 	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks
 	// are configured, the route is assigned to the default virtual network of the
 	// account.
-	VirtualNetworkID interface{}                 `json:"virtual_network_id"`
-	JSON             networkRouteNewResponseJSON `json:"-"`
+	VirtualNetworkID interface{}     `json:"virtual_network_id"`
+	JSON             tunnelRouteJSON `json:"-"`
 }
 
-// networkRouteNewResponseJSON contains the JSON metadata for the struct
-// [NetworkRouteNewResponse]
-type networkRouteNewResponseJSON struct {
+// tunnelRouteJSON contains the JSON metadata for the struct [TunnelRoute]
+type tunnelRouteJSON struct {
 	ID               apijson.Field
 	Comment          apijson.Field
 	CreatedAt        apijson.Field
@@ -137,15 +136,15 @@ type networkRouteNewResponseJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *NetworkRouteNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *TunnelRoute) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r networkRouteNewResponseJSON) RawJSON() string {
+func (r tunnelRouteJSON) RawJSON() string {
 	return r.raw
 }
 
-type NetworkRouteListResponse struct {
+type TunnelTeamnet struct {
 	// UUID of the route.
 	ID string `json:"id"`
 	// Optional remark describing the route.
@@ -158,7 +157,7 @@ type NetworkRouteListResponse struct {
 	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
 	Network string `json:"network"`
 	// The type of tunnel.
-	TunType NetworkRouteListResponseTunType `json:"tun_type"`
+	TunType TunnelTeamnetTunType `json:"tun_type"`
 	// UUID of the Cloudflare Tunnel serving the route.
 	TunnelID interface{} `json:"tunnel_id"`
 	// The user-friendly name of the Cloudflare Tunnel serving the route.
@@ -168,13 +167,12 @@ type NetworkRouteListResponse struct {
 	// account.
 	VirtualNetworkID interface{} `json:"virtual_network_id"`
 	// A user-friendly name for the virtual network.
-	VirtualNetworkName string                       `json:"virtual_network_name"`
-	JSON               networkRouteListResponseJSON `json:"-"`
+	VirtualNetworkName string            `json:"virtual_network_name"`
+	JSON               tunnelTeamnetJSON `json:"-"`
 }
 
-// networkRouteListResponseJSON contains the JSON metadata for the struct
-// [NetworkRouteListResponse]
-type networkRouteListResponseJSON struct {
+// tunnelTeamnetJSON contains the JSON metadata for the struct [TunnelTeamnet]
+type tunnelTeamnetJSON struct {
 	ID                 apijson.Field
 	Comment            apijson.Field
 	CreatedAt          apijson.Field
@@ -189,110 +187,24 @@ type networkRouteListResponseJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *NetworkRouteListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *TunnelTeamnet) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r networkRouteListResponseJSON) RawJSON() string {
+func (r tunnelTeamnetJSON) RawJSON() string {
 	return r.raw
 }
 
 // The type of tunnel.
-type NetworkRouteListResponseTunType string
+type TunnelTeamnetTunType string
 
 const (
-	NetworkRouteListResponseTunTypeCfdTunnel     NetworkRouteListResponseTunType = "cfd_tunnel"
-	NetworkRouteListResponseTunTypeWARPConnector NetworkRouteListResponseTunType = "warp_connector"
-	NetworkRouteListResponseTunTypeIPSec         NetworkRouteListResponseTunType = "ip_sec"
-	NetworkRouteListResponseTunTypeGRE           NetworkRouteListResponseTunType = "gre"
-	NetworkRouteListResponseTunTypeCni           NetworkRouteListResponseTunType = "cni"
+	TunnelTeamnetTunTypeCfdTunnel     TunnelTeamnetTunType = "cfd_tunnel"
+	TunnelTeamnetTunTypeWARPConnector TunnelTeamnetTunType = "warp_connector"
+	TunnelTeamnetTunTypeIPSec         TunnelTeamnetTunType = "ip_sec"
+	TunnelTeamnetTunTypeGRE           TunnelTeamnetTunType = "gre"
+	TunnelTeamnetTunTypeCni           TunnelTeamnetTunType = "cni"
 )
-
-type NetworkRouteDeleteResponse struct {
-	// UUID of the route.
-	ID string `json:"id"`
-	// Optional remark describing the route.
-	Comment string `json:"comment"`
-	// Timestamp of when the route was created.
-	CreatedAt interface{} `json:"created_at"`
-	// Timestamp of when the route was deleted. If `null`, the route has not been
-	// deleted.
-	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
-	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
-	Network string `json:"network"`
-	// UUID of the Cloudflare Tunnel serving the route.
-	TunnelID interface{} `json:"tunnel_id"`
-	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks
-	// are configured, the route is assigned to the default virtual network of the
-	// account.
-	VirtualNetworkID interface{}                    `json:"virtual_network_id"`
-	JSON             networkRouteDeleteResponseJSON `json:"-"`
-}
-
-// networkRouteDeleteResponseJSON contains the JSON metadata for the struct
-// [NetworkRouteDeleteResponse]
-type networkRouteDeleteResponseJSON struct {
-	ID               apijson.Field
-	Comment          apijson.Field
-	CreatedAt        apijson.Field
-	DeletedAt        apijson.Field
-	Network          apijson.Field
-	TunnelID         apijson.Field
-	VirtualNetworkID apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *NetworkRouteDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r networkRouteDeleteResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type NetworkRouteEditResponse struct {
-	// UUID of the route.
-	ID string `json:"id"`
-	// Optional remark describing the route.
-	Comment string `json:"comment"`
-	// Timestamp of when the route was created.
-	CreatedAt interface{} `json:"created_at"`
-	// Timestamp of when the route was deleted. If `null`, the route has not been
-	// deleted.
-	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
-	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
-	Network string `json:"network"`
-	// UUID of the Cloudflare Tunnel serving the route.
-	TunnelID interface{} `json:"tunnel_id"`
-	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks
-	// are configured, the route is assigned to the default virtual network of the
-	// account.
-	VirtualNetworkID interface{}                  `json:"virtual_network_id"`
-	JSON             networkRouteEditResponseJSON `json:"-"`
-}
-
-// networkRouteEditResponseJSON contains the JSON metadata for the struct
-// [NetworkRouteEditResponse]
-type networkRouteEditResponseJSON struct {
-	ID               apijson.Field
-	Comment          apijson.Field
-	CreatedAt        apijson.Field
-	DeletedAt        apijson.Field
-	Network          apijson.Field
-	TunnelID         apijson.Field
-	VirtualNetworkID apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *NetworkRouteEditResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r networkRouteEditResponseJSON) RawJSON() string {
-	return r.raw
-}
 
 type NetworkRouteNewParams struct {
 	// Cloudflare account ID
@@ -314,7 +226,7 @@ func (r NetworkRouteNewParams) MarshalJSON() (data []byte, err error) {
 type NetworkRouteNewResponseEnvelope struct {
 	Errors   []NetworkRouteNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []NetworkRouteNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   NetworkRouteNewResponse                   `json:"result,required"`
+	Result   TunnelRoute                               `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkRouteNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkRouteNewResponseEnvelopeJSON    `json:"-"`
@@ -437,7 +349,7 @@ type NetworkRouteDeleteParams struct {
 type NetworkRouteDeleteResponseEnvelope struct {
 	Errors   []NetworkRouteDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []NetworkRouteDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   NetworkRouteDeleteResponse                   `json:"result,required"`
+	Result   TunnelRoute                                  `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkRouteDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkRouteDeleteResponseEnvelopeJSON    `json:"-"`
@@ -550,7 +462,7 @@ const (
 type NetworkRouteEditResponseEnvelope struct {
 	Errors   []NetworkRouteEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []NetworkRouteEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   NetworkRouteEditResponse                   `json:"result,required"`
+	Result   TunnelRoute                                `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkRouteEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkRouteEditResponseEnvelopeJSON    `json:"-"`

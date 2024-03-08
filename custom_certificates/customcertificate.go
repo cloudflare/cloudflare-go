@@ -15,6 +15,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/internal/param"
 	"github.com/cloudflare/cloudflare-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/internal/shared"
+	"github.com/cloudflare/cloudflare-go/keyless_certificates"
 	"github.com/cloudflare/cloudflare-go/option"
 	"github.com/tidwall/gjson"
 )
@@ -55,7 +56,7 @@ func (r *CustomCertificateService) New(ctx context.Context, params CustomCertifi
 // List, search, and filter all of your custom SSL certificates. The higher
 // priority will break ties across overlapping 'legacy_custom' certificates, but
 // 'legacy_custom' certificates will always supercede 'sni_custom' certificates.
-func (r *CustomCertificateService) List(ctx context.Context, params CustomCertificateListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[CustomCertificateListResponse], err error) {
+func (r *CustomCertificateService) List(ctx context.Context, params CustomCertificateListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[TLSCertificatesAndHostnamesCustomCertificate], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -75,7 +76,7 @@ func (r *CustomCertificateService) List(ctx context.Context, params CustomCertif
 // List, search, and filter all of your custom SSL certificates. The higher
 // priority will break ties across overlapping 'legacy_custom' certificates, but
 // 'legacy_custom' certificates will always supercede 'sni_custom' certificates.
-func (r *CustomCertificateService) ListAutoPaging(ctx context.Context, params CustomCertificateListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[CustomCertificateListResponse] {
+func (r *CustomCertificateService) ListAutoPaging(ctx context.Context, params CustomCertificateListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[TLSCertificatesAndHostnamesCustomCertificate] {
 	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -120,31 +121,14 @@ func (r *CustomCertificateService) Get(ctx context.Context, customCertificateID 
 	return
 }
 
-// Union satisfied by [custom_certificates.CustomCertificateNewResponseUnknown] or
-// [shared.UnionString].
-type CustomCertificateNewResponse interface {
-	ImplementsCustomCertificatesCustomCertificateNewResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*CustomCertificateNewResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type CustomCertificateListResponse struct {
+type TLSCertificatesAndHostnamesCustomCertificate struct {
 	// Identifier
 	ID string `json:"id,required"`
 	// A ubiquitous bundle has the highest probability of being verified everywhere,
 	// even by clients using outdated or unusual trust stores. An optimal bundle uses
 	// the shortest chain and newest intermediates. And the force bundle verifies the
 	// chain, but does not otherwise modify it.
-	BundleMethod CustomCertificateListResponseBundleMethod `json:"bundle_method,required"`
+	BundleMethod TLSCertificatesAndHostnamesCustomCertificateBundleMethod `json:"bundle_method,required"`
 	// When the certificate from the authority expires.
 	ExpiresOn time.Time `json:"expires_on,required" format:"date-time"`
 	Hosts     []string  `json:"hosts,required"`
@@ -160,7 +144,7 @@ type CustomCertificateListResponse struct {
 	// The type of hash used for the certificate.
 	Signature string `json:"signature,required"`
 	// Status of the zone's custom SSL.
-	Status CustomCertificateListResponseStatus `json:"status,required"`
+	Status TLSCertificatesAndHostnamesCustomCertificateStatus `json:"status,required"`
 	// When the certificate was uploaded to Cloudflare.
 	UploadedOn time.Time `json:"uploaded_on,required" format:"date-time"`
 	// Identifier
@@ -172,8 +156,8 @@ type CustomCertificateListResponse struct {
 	// only to U.S. data centers, only to E.U. data centers, or only to highest
 	// security data centers. Default distribution is to all Cloudflare datacenters,
 	// for optimal performance.
-	GeoRestrictions CustomCertificateListResponseGeoRestrictions `json:"geo_restrictions"`
-	KeylessServer   CustomCertificateListResponseKeylessServer   `json:"keyless_server"`
+	GeoRestrictions TLSCertificatesAndHostnamesCustomCertificateGeoRestrictions `json:"geo_restrictions"`
+	KeylessServer   keyless_certificates.TLSCertificatesAndHostnamesBase        `json:"keyless_server"`
 	// Specify the policy that determines the region where your private key will be
 	// held locally. HTTPS connections to any excluded data center will still be fully
 	// encrypted, but will incur some latency while Keyless SSL is used to complete the
@@ -183,13 +167,13 @@ type CustomCertificateListResponse struct {
 	// can be chosen, such as 'country: IN', as well as 'region: EU' which refers to
 	// the EU region. If there are too few data centers satisfying the policy, it will
 	// be rejected.
-	Policy string                            `json:"policy"`
-	JSON   customCertificateListResponseJSON `json:"-"`
+	Policy string                                           `json:"policy"`
+	JSON   tlsCertificatesAndHostnamesCustomCertificateJSON `json:"-"`
 }
 
-// customCertificateListResponseJSON contains the JSON metadata for the struct
-// [CustomCertificateListResponse]
-type customCertificateListResponseJSON struct {
+// tlsCertificatesAndHostnamesCustomCertificateJSON contains the JSON metadata for
+// the struct [TLSCertificatesAndHostnamesCustomCertificate]
+type tlsCertificatesAndHostnamesCustomCertificateJSON struct {
 	ID              apijson.Field
 	BundleMethod    apijson.Field
 	ExpiresOn       apijson.Field
@@ -208,11 +192,11 @@ type customCertificateListResponseJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *CustomCertificateListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *TLSCertificatesAndHostnamesCustomCertificate) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r customCertificateListResponseJSON) RawJSON() string {
+func (r tlsCertificatesAndHostnamesCustomCertificateJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -220,23 +204,23 @@ func (r customCertificateListResponseJSON) RawJSON() string {
 // even by clients using outdated or unusual trust stores. An optimal bundle uses
 // the shortest chain and newest intermediates. And the force bundle verifies the
 // chain, but does not otherwise modify it.
-type CustomCertificateListResponseBundleMethod string
+type TLSCertificatesAndHostnamesCustomCertificateBundleMethod string
 
 const (
-	CustomCertificateListResponseBundleMethodUbiquitous CustomCertificateListResponseBundleMethod = "ubiquitous"
-	CustomCertificateListResponseBundleMethodOptimal    CustomCertificateListResponseBundleMethod = "optimal"
-	CustomCertificateListResponseBundleMethodForce      CustomCertificateListResponseBundleMethod = "force"
+	TLSCertificatesAndHostnamesCustomCertificateBundleMethodUbiquitous TLSCertificatesAndHostnamesCustomCertificateBundleMethod = "ubiquitous"
+	TLSCertificatesAndHostnamesCustomCertificateBundleMethodOptimal    TLSCertificatesAndHostnamesCustomCertificateBundleMethod = "optimal"
+	TLSCertificatesAndHostnamesCustomCertificateBundleMethodForce      TLSCertificatesAndHostnamesCustomCertificateBundleMethod = "force"
 )
 
 // Status of the zone's custom SSL.
-type CustomCertificateListResponseStatus string
+type TLSCertificatesAndHostnamesCustomCertificateStatus string
 
 const (
-	CustomCertificateListResponseStatusActive       CustomCertificateListResponseStatus = "active"
-	CustomCertificateListResponseStatusExpired      CustomCertificateListResponseStatus = "expired"
-	CustomCertificateListResponseStatusDeleted      CustomCertificateListResponseStatus = "deleted"
-	CustomCertificateListResponseStatusPending      CustomCertificateListResponseStatus = "pending"
-	CustomCertificateListResponseStatusInitializing CustomCertificateListResponseStatus = "initializing"
+	TLSCertificatesAndHostnamesCustomCertificateStatusActive       TLSCertificatesAndHostnamesCustomCertificateStatus = "active"
+	TLSCertificatesAndHostnamesCustomCertificateStatusExpired      TLSCertificatesAndHostnamesCustomCertificateStatus = "expired"
+	TLSCertificatesAndHostnamesCustomCertificateStatusDeleted      TLSCertificatesAndHostnamesCustomCertificateStatus = "deleted"
+	TLSCertificatesAndHostnamesCustomCertificateStatusPending      TLSCertificatesAndHostnamesCustomCertificateStatus = "pending"
+	TLSCertificatesAndHostnamesCustomCertificateStatusInitializing TLSCertificatesAndHostnamesCustomCertificateStatus = "initializing"
 )
 
 // Specify the region where your private key can be held locally for optimal TLS
@@ -246,118 +230,51 @@ const (
 // only to U.S. data centers, only to E.U. data centers, or only to highest
 // security data centers. Default distribution is to all Cloudflare datacenters,
 // for optimal performance.
-type CustomCertificateListResponseGeoRestrictions struct {
-	Label CustomCertificateListResponseGeoRestrictionsLabel `json:"label"`
-	JSON  customCertificateListResponseGeoRestrictionsJSON  `json:"-"`
+type TLSCertificatesAndHostnamesCustomCertificateGeoRestrictions struct {
+	Label TLSCertificatesAndHostnamesCustomCertificateGeoRestrictionsLabel `json:"label"`
+	JSON  tlsCertificatesAndHostnamesCustomCertificateGeoRestrictionsJSON  `json:"-"`
 }
 
-// customCertificateListResponseGeoRestrictionsJSON contains the JSON metadata for
-// the struct [CustomCertificateListResponseGeoRestrictions]
-type customCertificateListResponseGeoRestrictionsJSON struct {
+// tlsCertificatesAndHostnamesCustomCertificateGeoRestrictionsJSON contains the
+// JSON metadata for the struct
+// [TLSCertificatesAndHostnamesCustomCertificateGeoRestrictions]
+type tlsCertificatesAndHostnamesCustomCertificateGeoRestrictionsJSON struct {
 	Label       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CustomCertificateListResponseGeoRestrictions) UnmarshalJSON(data []byte) (err error) {
+func (r *TLSCertificatesAndHostnamesCustomCertificateGeoRestrictions) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r customCertificateListResponseGeoRestrictionsJSON) RawJSON() string {
+func (r tlsCertificatesAndHostnamesCustomCertificateGeoRestrictionsJSON) RawJSON() string {
 	return r.raw
 }
 
-type CustomCertificateListResponseGeoRestrictionsLabel string
+type TLSCertificatesAndHostnamesCustomCertificateGeoRestrictionsLabel string
 
 const (
-	CustomCertificateListResponseGeoRestrictionsLabelUs              CustomCertificateListResponseGeoRestrictionsLabel = "us"
-	CustomCertificateListResponseGeoRestrictionsLabelEu              CustomCertificateListResponseGeoRestrictionsLabel = "eu"
-	CustomCertificateListResponseGeoRestrictionsLabelHighestSecurity CustomCertificateListResponseGeoRestrictionsLabel = "highest_security"
+	TLSCertificatesAndHostnamesCustomCertificateGeoRestrictionsLabelUs              TLSCertificatesAndHostnamesCustomCertificateGeoRestrictionsLabel = "us"
+	TLSCertificatesAndHostnamesCustomCertificateGeoRestrictionsLabelEu              TLSCertificatesAndHostnamesCustomCertificateGeoRestrictionsLabel = "eu"
+	TLSCertificatesAndHostnamesCustomCertificateGeoRestrictionsLabelHighestSecurity TLSCertificatesAndHostnamesCustomCertificateGeoRestrictionsLabel = "highest_security"
 )
 
-type CustomCertificateListResponseKeylessServer struct {
-	// Keyless certificate identifier tag.
-	ID string `json:"id,required"`
-	// When the Keyless SSL was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	// Whether or not the Keyless SSL is on or off.
-	Enabled bool `json:"enabled,required"`
-	// The keyless SSL name.
-	Host string `json:"host,required" format:"hostname"`
-	// When the Keyless SSL was last modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// The keyless SSL name.
-	Name string `json:"name,required"`
-	// Available permissions for the Keyless SSL for the current user requesting the
-	// item.
-	Permissions []interface{} `json:"permissions,required"`
-	// The keyless SSL port used to communicate between Cloudflare and the client's
-	// Keyless SSL server.
-	Port float64 `json:"port,required"`
-	// Status of the Keyless SSL.
-	Status CustomCertificateListResponseKeylessServerStatus `json:"status,required"`
-	// Configuration for using Keyless SSL through a Cloudflare Tunnel
-	Tunnel CustomCertificateListResponseKeylessServerTunnel `json:"tunnel"`
-	JSON   customCertificateListResponseKeylessServerJSON   `json:"-"`
+// Union satisfied by [custom_certificates.CustomCertificateNewResponseUnknown] or
+// [shared.UnionString].
+type CustomCertificateNewResponse interface {
+	ImplementsCustomCertificatesCustomCertificateNewResponse()
 }
 
-// customCertificateListResponseKeylessServerJSON contains the JSON metadata for
-// the struct [CustomCertificateListResponseKeylessServer]
-type customCertificateListResponseKeylessServerJSON struct {
-	ID          apijson.Field
-	CreatedOn   apijson.Field
-	Enabled     apijson.Field
-	Host        apijson.Field
-	ModifiedOn  apijson.Field
-	Name        apijson.Field
-	Permissions apijson.Field
-	Port        apijson.Field
-	Status      apijson.Field
-	Tunnel      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomCertificateListResponseKeylessServer) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customCertificateListResponseKeylessServerJSON) RawJSON() string {
-	return r.raw
-}
-
-// Status of the Keyless SSL.
-type CustomCertificateListResponseKeylessServerStatus string
-
-const (
-	CustomCertificateListResponseKeylessServerStatusActive  CustomCertificateListResponseKeylessServerStatus = "active"
-	CustomCertificateListResponseKeylessServerStatusDeleted CustomCertificateListResponseKeylessServerStatus = "deleted"
-)
-
-// Configuration for using Keyless SSL through a Cloudflare Tunnel
-type CustomCertificateListResponseKeylessServerTunnel struct {
-	// Private IP of the Key Server Host
-	PrivateIP string `json:"private_ip,required"`
-	// Cloudflare Tunnel Virtual Network ID
-	VnetID string                                               `json:"vnet_id,required"`
-	JSON   customCertificateListResponseKeylessServerTunnelJSON `json:"-"`
-}
-
-// customCertificateListResponseKeylessServerTunnelJSON contains the JSON metadata
-// for the struct [CustomCertificateListResponseKeylessServerTunnel]
-type customCertificateListResponseKeylessServerTunnelJSON struct {
-	PrivateIP   apijson.Field
-	VnetID      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CustomCertificateListResponseKeylessServerTunnel) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r customCertificateListResponseKeylessServerTunnelJSON) RawJSON() string {
-	return r.raw
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*CustomCertificateNewResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
 
 type CustomCertificateDeleteResponse struct {

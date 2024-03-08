@@ -31,7 +31,7 @@ func NewRuleAdvertisementService(opts ...option.RequestOption) (r *RuleAdvertise
 }
 
 // Update advertisement for rule.
-func (r *RuleAdvertisementService) Edit(ctx context.Context, accountIdentifier interface{}, ruleIdentifier interface{}, opts ...option.RequestOption) (res *RuleAdvertisementEditResponse, err error) {
+func (r *RuleAdvertisementService) Edit(ctx context.Context, accountIdentifier interface{}, ruleIdentifier interface{}, opts ...option.RequestOption) (res *MagicVisibilityMNMRuleAdvertisable, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleAdvertisementEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/mnm/rules/%v/advertisement", accountIdentifier, ruleIdentifier)
@@ -43,34 +43,34 @@ func (r *RuleAdvertisementService) Edit(ctx context.Context, accountIdentifier i
 	return
 }
 
-type RuleAdvertisementEditResponse struct {
+type MagicVisibilityMNMRuleAdvertisable struct {
 	// Toggle on if you would like Cloudflare to automatically advertise the IP
 	// Prefixes within the rule via Magic Transit when the rule is triggered. Only
 	// available for users of Magic Transit.
-	AutomaticAdvertisement bool                              `json:"automatic_advertisement,required,nullable"`
-	JSON                   ruleAdvertisementEditResponseJSON `json:"-"`
+	AutomaticAdvertisement bool                                   `json:"automatic_advertisement,required,nullable"`
+	JSON                   magicVisibilityMNMRuleAdvertisableJSON `json:"-"`
 }
 
-// ruleAdvertisementEditResponseJSON contains the JSON metadata for the struct
-// [RuleAdvertisementEditResponse]
-type ruleAdvertisementEditResponseJSON struct {
+// magicVisibilityMNMRuleAdvertisableJSON contains the JSON metadata for the struct
+// [MagicVisibilityMNMRuleAdvertisable]
+type magicVisibilityMNMRuleAdvertisableJSON struct {
 	AutomaticAdvertisement apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field
 }
 
-func (r *RuleAdvertisementEditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicVisibilityMNMRuleAdvertisable) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ruleAdvertisementEditResponseJSON) RawJSON() string {
+func (r magicVisibilityMNMRuleAdvertisableJSON) RawJSON() string {
 	return r.raw
 }
 
 type RuleAdvertisementEditResponseEnvelope struct {
 	Errors   []RuleAdvertisementEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RuleAdvertisementEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   RuleAdvertisementEditResponse                   `json:"result,required,nullable"`
+	Result   MagicVisibilityMNMRuleAdvertisable              `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success RuleAdvertisementEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ruleAdvertisementEditResponseEnvelopeJSON    `json:"-"`

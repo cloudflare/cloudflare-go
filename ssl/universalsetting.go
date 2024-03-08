@@ -32,7 +32,7 @@ func NewUniversalSettingService(opts ...option.RequestOption) (r *UniversalSetti
 }
 
 // Patch Universal SSL Settings for a Zone.
-func (r *UniversalSettingService) Edit(ctx context.Context, params UniversalSettingEditParams, opts ...option.RequestOption) (res *UniversalSettingEditResponse, err error) {
+func (r *UniversalSettingService) Edit(ctx context.Context, params UniversalSettingEditParams, opts ...option.RequestOption) (res *TLSCertificatesAndHostnamesUniversal, err error) {
 	opts = append(r.Options[:], opts...)
 	var env UniversalSettingEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/ssl/universal/settings", params.ZoneID)
@@ -45,7 +45,7 @@ func (r *UniversalSettingService) Edit(ctx context.Context, params UniversalSett
 }
 
 // Get Universal SSL Settings for a Zone.
-func (r *UniversalSettingService) Get(ctx context.Context, query UniversalSettingGetParams, opts ...option.RequestOption) (res *UniversalSettingGetResponse, err error) {
+func (r *UniversalSettingService) Get(ctx context.Context, query UniversalSettingGetParams, opts ...option.RequestOption) (res *TLSCertificatesAndHostnamesUniversal, err error) {
 	opts = append(r.Options[:], opts...)
 	var env UniversalSettingGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/ssl/universal/settings", query.ZoneID)
@@ -57,7 +57,7 @@ func (r *UniversalSettingService) Get(ctx context.Context, query UniversalSettin
 	return
 }
 
-type UniversalSettingEditResponse struct {
+type TLSCertificatesAndHostnamesUniversal struct {
 	// Disabling Universal SSL removes any currently active Universal SSL certificates
 	// for your zone from the edge and prevents any future Universal SSL certificates
 	// from being ordered. If there are no advanced certificates or custom certificates
@@ -83,69 +83,23 @@ type UniversalSettingEditResponse struct {
 	// and are unsure if any of the above Cloudflare settings are enabled, or if any
 	// HTTP redirects exist at your origin, we advise leaving Universal SSL enabled for
 	// your domain.
-	Enabled bool                             `json:"enabled"`
-	JSON    universalSettingEditResponseJSON `json:"-"`
+	Enabled bool                                     `json:"enabled"`
+	JSON    tlsCertificatesAndHostnamesUniversalJSON `json:"-"`
 }
 
-// universalSettingEditResponseJSON contains the JSON metadata for the struct
-// [UniversalSettingEditResponse]
-type universalSettingEditResponseJSON struct {
+// tlsCertificatesAndHostnamesUniversalJSON contains the JSON metadata for the
+// struct [TLSCertificatesAndHostnamesUniversal]
+type tlsCertificatesAndHostnamesUniversalJSON struct {
 	Enabled     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *UniversalSettingEditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *TLSCertificatesAndHostnamesUniversal) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r universalSettingEditResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type UniversalSettingGetResponse struct {
-	// Disabling Universal SSL removes any currently active Universal SSL certificates
-	// for your zone from the edge and prevents any future Universal SSL certificates
-	// from being ordered. If there are no advanced certificates or custom certificates
-	// uploaded for the domain, visitors will be unable to access the domain over
-	// HTTPS.
-	//
-	// By disabling Universal SSL, you understand that the following Cloudflare
-	// settings and preferences will result in visitors being unable to visit your
-	// domain unless you have uploaded a custom certificate or purchased an advanced
-	// certificate.
-	//
-	// - HSTS
-	// - Always Use HTTPS
-	// - Opportunistic Encryption
-	// - Onion Routing
-	// - Any Page Rules redirecting traffic to HTTPS
-	//
-	// Similarly, any HTTP redirect to HTTPS at the origin while the Cloudflare proxy
-	// is enabled will result in users being unable to visit your site without a valid
-	// certificate at Cloudflare's edge.
-	//
-	// If you do not have a valid custom or advanced certificate at Cloudflare's edge
-	// and are unsure if any of the above Cloudflare settings are enabled, or if any
-	// HTTP redirects exist at your origin, we advise leaving Universal SSL enabled for
-	// your domain.
-	Enabled bool                            `json:"enabled"`
-	JSON    universalSettingGetResponseJSON `json:"-"`
-}
-
-// universalSettingGetResponseJSON contains the JSON metadata for the struct
-// [UniversalSettingGetResponse]
-type universalSettingGetResponseJSON struct {
-	Enabled     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UniversalSettingGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r universalSettingGetResponseJSON) RawJSON() string {
+func (r tlsCertificatesAndHostnamesUniversalJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -187,7 +141,7 @@ func (r UniversalSettingEditParams) MarshalJSON() (data []byte, err error) {
 type UniversalSettingEditResponseEnvelope struct {
 	Errors   []UniversalSettingEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []UniversalSettingEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   UniversalSettingEditResponse                   `json:"result,required"`
+	Result   TLSCertificatesAndHostnamesUniversal           `json:"result,required"`
 	// Whether the API call was successful
 	Success UniversalSettingEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    universalSettingEditResponseEnvelopeJSON    `json:"-"`
@@ -273,7 +227,7 @@ type UniversalSettingGetParams struct {
 type UniversalSettingGetResponseEnvelope struct {
 	Errors   []UniversalSettingGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []UniversalSettingGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   UniversalSettingGetResponse                   `json:"result,required"`
+	Result   TLSCertificatesAndHostnamesUniversal          `json:"result,required"`
 	// Whether the API call was successful
 	Success UniversalSettingGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    universalSettingGetResponseEnvelopeJSON    `json:"-"`

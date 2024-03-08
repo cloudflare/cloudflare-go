@@ -34,7 +34,7 @@ func NewDEXTracerouteTestResultNetworkPathService(opts ...option.RequestOption) 
 
 // Get a breakdown of hops and performance metrics for a specific traceroute test
 // run
-func (r *DEXTracerouteTestResultNetworkPathService) List(ctx context.Context, testResultID string, query DEXTracerouteTestResultNetworkPathListParams, opts ...option.RequestOption) (res *DEXTracerouteTestResultNetworkPathListResponse, err error) {
+func (r *DEXTracerouteTestResultNetworkPathService) List(ctx context.Context, testResultID string, query DEXTracerouteTestResultNetworkPathListParams, opts ...option.RequestOption) (res *DigitalExperienceMonitoringTracerouteTestResultNetworkPath, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DEXTracerouteTestResultNetworkPathListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dex/traceroute-test-results/%s/network-path", query.AccountID, testResultID)
@@ -46,9 +46,9 @@ func (r *DEXTracerouteTestResultNetworkPathService) List(ctx context.Context, te
 	return
 }
 
-type DEXTracerouteTestResultNetworkPathListResponse struct {
+type DigitalExperienceMonitoringTracerouteTestResultNetworkPath struct {
 	// an array of the hops taken by the device to reach the end destination
-	Hops []DEXTracerouteTestResultNetworkPathListResponseHop `json:"hops,required"`
+	Hops []DigitalExperienceMonitoringTracerouteTestResultNetworkPathHop `json:"hops,required"`
 	// API Resource UUID tag.
 	ResultID string `json:"resultId,required"`
 	// date time of this traceroute test
@@ -58,13 +58,14 @@ type DEXTracerouteTestResultNetworkPathListResponse struct {
 	// API Resource UUID tag.
 	TestID string `json:"testId"`
 	// name of the tracroute test
-	TestName string                                             `json:"testName"`
-	JSON     dexTracerouteTestResultNetworkPathListResponseJSON `json:"-"`
+	TestName string                                                         `json:"testName"`
+	JSON     digitalExperienceMonitoringTracerouteTestResultNetworkPathJSON `json:"-"`
 }
 
-// dexTracerouteTestResultNetworkPathListResponseJSON contains the JSON metadata
-// for the struct [DEXTracerouteTestResultNetworkPathListResponse]
-type dexTracerouteTestResultNetworkPathListResponseJSON struct {
+// digitalExperienceMonitoringTracerouteTestResultNetworkPathJSON contains the JSON
+// metadata for the struct
+// [DigitalExperienceMonitoringTracerouteTestResultNetworkPath]
+type digitalExperienceMonitoringTracerouteTestResultNetworkPathJSON struct {
 	Hops        apijson.Field
 	ResultID    apijson.Field
 	TimeStart   apijson.Field
@@ -75,30 +76,31 @@ type dexTracerouteTestResultNetworkPathListResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DEXTracerouteTestResultNetworkPathListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DigitalExperienceMonitoringTracerouteTestResultNetworkPath) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dexTracerouteTestResultNetworkPathListResponseJSON) RawJSON() string {
+func (r digitalExperienceMonitoringTracerouteTestResultNetworkPathJSON) RawJSON() string {
 	return r.raw
 }
 
-type DEXTracerouteTestResultNetworkPathListResponseHop struct {
-	TTL           int64                                                      `json:"ttl,required"`
-	ASN           int64                                                      `json:"asn,nullable"`
-	Aso           string                                                     `json:"aso,nullable"`
-	IPAddress     string                                                     `json:"ipAddress,nullable"`
-	Location      DEXTracerouteTestResultNetworkPathListResponseHopsLocation `json:"location,nullable"`
-	Mile          DEXTracerouteTestResultNetworkPathListResponseHopsMile     `json:"mile,nullable"`
-	Name          string                                                     `json:"name,nullable"`
-	PacketLossPct float64                                                    `json:"packetLossPct,nullable"`
-	RTTMs         int64                                                      `json:"rttMs,nullable"`
-	JSON          dexTracerouteTestResultNetworkPathListResponseHopJSON      `json:"-"`
+type DigitalExperienceMonitoringTracerouteTestResultNetworkPathHop struct {
+	TTL           int64                                                                  `json:"ttl,required"`
+	ASN           int64                                                                  `json:"asn,nullable"`
+	Aso           string                                                                 `json:"aso,nullable"`
+	IPAddress     string                                                                 `json:"ipAddress,nullable"`
+	Location      DigitalExperienceMonitoringTracerouteTestResultNetworkPathHopsLocation `json:"location,nullable"`
+	Mile          DigitalExperienceMonitoringTracerouteTestResultNetworkPathHopsMile     `json:"mile,nullable"`
+	Name          string                                                                 `json:"name,nullable"`
+	PacketLossPct float64                                                                `json:"packetLossPct,nullable"`
+	RTTMs         int64                                                                  `json:"rttMs,nullable"`
+	JSON          digitalExperienceMonitoringTracerouteTestResultNetworkPathHopJSON      `json:"-"`
 }
 
-// dexTracerouteTestResultNetworkPathListResponseHopJSON contains the JSON metadata
-// for the struct [DEXTracerouteTestResultNetworkPathListResponseHop]
-type dexTracerouteTestResultNetworkPathListResponseHopJSON struct {
+// digitalExperienceMonitoringTracerouteTestResultNetworkPathHopJSON contains the
+// JSON metadata for the struct
+// [DigitalExperienceMonitoringTracerouteTestResultNetworkPathHop]
+type digitalExperienceMonitoringTracerouteTestResultNetworkPathHopJSON struct {
 	TTL           apijson.Field
 	ASN           apijson.Field
 	Aso           apijson.Field
@@ -112,25 +114,25 @@ type dexTracerouteTestResultNetworkPathListResponseHopJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *DEXTracerouteTestResultNetworkPathListResponseHop) UnmarshalJSON(data []byte) (err error) {
+func (r *DigitalExperienceMonitoringTracerouteTestResultNetworkPathHop) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dexTracerouteTestResultNetworkPathListResponseHopJSON) RawJSON() string {
+func (r digitalExperienceMonitoringTracerouteTestResultNetworkPathHopJSON) RawJSON() string {
 	return r.raw
 }
 
-type DEXTracerouteTestResultNetworkPathListResponseHopsLocation struct {
-	City  string                                                         `json:"city,nullable"`
-	State string                                                         `json:"state,nullable"`
-	Zip   string                                                         `json:"zip,nullable"`
-	JSON  dexTracerouteTestResultNetworkPathListResponseHopsLocationJSON `json:"-"`
+type DigitalExperienceMonitoringTracerouteTestResultNetworkPathHopsLocation struct {
+	City  string                                                                     `json:"city,nullable"`
+	State string                                                                     `json:"state,nullable"`
+	Zip   string                                                                     `json:"zip,nullable"`
+	JSON  digitalExperienceMonitoringTracerouteTestResultNetworkPathHopsLocationJSON `json:"-"`
 }
 
-// dexTracerouteTestResultNetworkPathListResponseHopsLocationJSON contains the JSON
-// metadata for the struct
-// [DEXTracerouteTestResultNetworkPathListResponseHopsLocation]
-type dexTracerouteTestResultNetworkPathListResponseHopsLocationJSON struct {
+// digitalExperienceMonitoringTracerouteTestResultNetworkPathHopsLocationJSON
+// contains the JSON metadata for the struct
+// [DigitalExperienceMonitoringTracerouteTestResultNetworkPathHopsLocation]
+type digitalExperienceMonitoringTracerouteTestResultNetworkPathHopsLocationJSON struct {
 	City        apijson.Field
 	State       apijson.Field
 	Zip         apijson.Field
@@ -138,21 +140,21 @@ type dexTracerouteTestResultNetworkPathListResponseHopsLocationJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DEXTracerouteTestResultNetworkPathListResponseHopsLocation) UnmarshalJSON(data []byte) (err error) {
+func (r *DigitalExperienceMonitoringTracerouteTestResultNetworkPathHopsLocation) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dexTracerouteTestResultNetworkPathListResponseHopsLocationJSON) RawJSON() string {
+func (r digitalExperienceMonitoringTracerouteTestResultNetworkPathHopsLocationJSON) RawJSON() string {
 	return r.raw
 }
 
-type DEXTracerouteTestResultNetworkPathListResponseHopsMile string
+type DigitalExperienceMonitoringTracerouteTestResultNetworkPathHopsMile string
 
 const (
-	DEXTracerouteTestResultNetworkPathListResponseHopsMileClientToApp       DEXTracerouteTestResultNetworkPathListResponseHopsMile = "client-to-app"
-	DEXTracerouteTestResultNetworkPathListResponseHopsMileClientToCfEgress  DEXTracerouteTestResultNetworkPathListResponseHopsMile = "client-to-cf-egress"
-	DEXTracerouteTestResultNetworkPathListResponseHopsMileClientToCfIngress DEXTracerouteTestResultNetworkPathListResponseHopsMile = "client-to-cf-ingress"
-	DEXTracerouteTestResultNetworkPathListResponseHopsMileClientToIsp       DEXTracerouteTestResultNetworkPathListResponseHopsMile = "client-to-isp"
+	DigitalExperienceMonitoringTracerouteTestResultNetworkPathHopsMileClientToApp       DigitalExperienceMonitoringTracerouteTestResultNetworkPathHopsMile = "client-to-app"
+	DigitalExperienceMonitoringTracerouteTestResultNetworkPathHopsMileClientToCfEgress  DigitalExperienceMonitoringTracerouteTestResultNetworkPathHopsMile = "client-to-cf-egress"
+	DigitalExperienceMonitoringTracerouteTestResultNetworkPathHopsMileClientToCfIngress DigitalExperienceMonitoringTracerouteTestResultNetworkPathHopsMile = "client-to-cf-ingress"
+	DigitalExperienceMonitoringTracerouteTestResultNetworkPathHopsMileClientToIsp       DigitalExperienceMonitoringTracerouteTestResultNetworkPathHopsMile = "client-to-isp"
 )
 
 type DEXTracerouteTestResultNetworkPathListParams struct {
@@ -162,7 +164,7 @@ type DEXTracerouteTestResultNetworkPathListParams struct {
 type DEXTracerouteTestResultNetworkPathListResponseEnvelope struct {
 	Errors   []DEXTracerouteTestResultNetworkPathListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DEXTracerouteTestResultNetworkPathListResponseEnvelopeMessages `json:"messages,required"`
-	Result   DEXTracerouteTestResultNetworkPathListResponse                   `json:"result,required"`
+	Result   DigitalExperienceMonitoringTracerouteTestResultNetworkPath       `json:"result,required"`
 	// Whether the API call was successful
 	Success DEXTracerouteTestResultNetworkPathListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dexTracerouteTestResultNetworkPathListResponseEnvelopeJSON    `json:"-"`

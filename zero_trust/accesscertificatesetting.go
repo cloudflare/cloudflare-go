@@ -32,7 +32,7 @@ func NewAccessCertificateSettingService(opts ...option.RequestOption) (r *Access
 }
 
 // Updates an mTLS certificate's hostname settings.
-func (r *AccessCertificateSettingService) Update(ctx context.Context, params AccessCertificateSettingUpdateParams, opts ...option.RequestOption) (res *[]AccessCertificateSettingUpdateResponse, err error) {
+func (r *AccessCertificateSettingService) Update(ctx context.Context, params AccessCertificateSettingUpdateParams, opts ...option.RequestOption) (res *[]AccessSettings, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessCertificateSettingUpdateResponseEnvelope
 	var accountOrZone string
@@ -54,7 +54,7 @@ func (r *AccessCertificateSettingService) Update(ctx context.Context, params Acc
 }
 
 // List all mTLS hostname settings for this account or zone.
-func (r *AccessCertificateSettingService) List(ctx context.Context, query AccessCertificateSettingListParams, opts ...option.RequestOption) (res *[]AccessCertificateSettingListResponse, err error) {
+func (r *AccessCertificateSettingService) List(ctx context.Context, query AccessCertificateSettingListParams, opts ...option.RequestOption) (res *[]AccessSettings, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessCertificateSettingListResponseEnvelope
 	var accountOrZone string
@@ -75,7 +75,7 @@ func (r *AccessCertificateSettingService) List(ctx context.Context, query Access
 	return
 }
 
-type AccessCertificateSettingUpdateResponse struct {
+type AccessSettings struct {
 	// Request client certificates for this hostname in China. Can only be set to true
 	// if this zone is china network enabled.
 	ChinaNetwork bool `json:"china_network,required"`
@@ -84,13 +84,12 @@ type AccessCertificateSettingUpdateResponse struct {
 	// allow logging on the origin.
 	ClientCertificateForwarding bool `json:"client_certificate_forwarding,required"`
 	// The hostname that these settings apply to.
-	Hostname string                                     `json:"hostname,required"`
-	JSON     accessCertificateSettingUpdateResponseJSON `json:"-"`
+	Hostname string             `json:"hostname,required"`
+	JSON     accessSettingsJSON `json:"-"`
 }
 
-// accessCertificateSettingUpdateResponseJSON contains the JSON metadata for the
-// struct [AccessCertificateSettingUpdateResponse]
-type accessCertificateSettingUpdateResponseJSON struct {
+// accessSettingsJSON contains the JSON metadata for the struct [AccessSettings]
+type accessSettingsJSON struct {
 	ChinaNetwork                apijson.Field
 	ClientCertificateForwarding apijson.Field
 	Hostname                    apijson.Field
@@ -98,58 +97,15 @@ type accessCertificateSettingUpdateResponseJSON struct {
 	ExtraFields                 map[string]apijson.Field
 }
 
-func (r *AccessCertificateSettingUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessSettings) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessCertificateSettingUpdateResponseJSON) RawJSON() string {
+func (r accessSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
-type AccessCertificateSettingListResponse struct {
-	// Request client certificates for this hostname in China. Can only be set to true
-	// if this zone is china network enabled.
-	ChinaNetwork bool `json:"china_network,required"`
-	// Client Certificate Forwarding is a feature that takes the client cert provided
-	// by the eyeball to the edge, and forwards it to the origin as a HTTP header to
-	// allow logging on the origin.
-	ClientCertificateForwarding bool `json:"client_certificate_forwarding,required"`
-	// The hostname that these settings apply to.
-	Hostname string                                   `json:"hostname,required"`
-	JSON     accessCertificateSettingListResponseJSON `json:"-"`
-}
-
-// accessCertificateSettingListResponseJSON contains the JSON metadata for the
-// struct [AccessCertificateSettingListResponse]
-type accessCertificateSettingListResponseJSON struct {
-	ChinaNetwork                apijson.Field
-	ClientCertificateForwarding apijson.Field
-	Hostname                    apijson.Field
-	raw                         string
-	ExtraFields                 map[string]apijson.Field
-}
-
-func (r *AccessCertificateSettingListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessCertificateSettingListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessCertificateSettingUpdateParams struct {
-	Settings param.Field[[]AccessCertificateSettingUpdateParamsSetting] `json:"settings,required"`
-	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
-	AccountID param.Field[string] `path:"account_id"`
-	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
-	ZoneID param.Field[string] `path:"zone_id"`
-}
-
-func (r AccessCertificateSettingUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-type AccessCertificateSettingUpdateParamsSetting struct {
+type AccessSettingsParam struct {
 	// Request client certificates for this hostname in China. Can only be set to true
 	// if this zone is china network enabled.
 	ChinaNetwork param.Field[bool] `json:"china_network,required"`
@@ -161,14 +117,26 @@ type AccessCertificateSettingUpdateParamsSetting struct {
 	Hostname param.Field[string] `json:"hostname,required"`
 }
 
-func (r AccessCertificateSettingUpdateParamsSetting) MarshalJSON() (data []byte, err error) {
+func (r AccessSettingsParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AccessCertificateSettingUpdateParams struct {
+	Settings param.Field[[]AccessSettingsParam] `json:"settings,required"`
+	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
+	AccountID param.Field[string] `path:"account_id"`
+	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
+	ZoneID param.Field[string] `path:"zone_id"`
+}
+
+func (r AccessCertificateSettingUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
 type AccessCertificateSettingUpdateResponseEnvelope struct {
 	Errors   []AccessCertificateSettingUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessCertificateSettingUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AccessCertificateSettingUpdateResponse                 `json:"result,required,nullable"`
+	Result   []AccessSettings                                         `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AccessCertificateSettingUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AccessCertificateSettingUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -290,7 +258,7 @@ type AccessCertificateSettingListParams struct {
 type AccessCertificateSettingListResponseEnvelope struct {
 	Errors   []AccessCertificateSettingListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessCertificateSettingListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AccessCertificateSettingListResponse                 `json:"result,required,nullable"`
+	Result   []AccessSettings                                       `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AccessCertificateSettingListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AccessCertificateSettingListResponseEnvelopeResultInfo `json:"result_info"`

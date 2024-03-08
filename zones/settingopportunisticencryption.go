@@ -33,7 +33,7 @@ func NewSettingOpportunisticEncryptionService(opts ...option.RequestOption) (r *
 }
 
 // Changes Opportunistic Encryption setting.
-func (r *SettingOpportunisticEncryptionService) Edit(ctx context.Context, params SettingOpportunisticEncryptionEditParams, opts ...option.RequestOption) (res *SettingOpportunisticEncryptionEditResponse, err error) {
+func (r *SettingOpportunisticEncryptionService) Edit(ctx context.Context, params SettingOpportunisticEncryptionEditParams, opts ...option.RequestOption) (res *ZonesOpportunisticEncryption, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingOpportunisticEncryptionEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/opportunistic_encryption", params.ZoneID)
@@ -46,7 +46,7 @@ func (r *SettingOpportunisticEncryptionService) Edit(ctx context.Context, params
 }
 
 // Gets Opportunistic Encryption setting.
-func (r *SettingOpportunisticEncryptionService) Get(ctx context.Context, query SettingOpportunisticEncryptionGetParams, opts ...option.RequestOption) (res *SettingOpportunisticEncryptionGetResponse, err error) {
+func (r *SettingOpportunisticEncryptionService) Get(ctx context.Context, query SettingOpportunisticEncryptionGetParams, opts ...option.RequestOption) (res *ZonesOpportunisticEncryption, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingOpportunisticEncryptionGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/opportunistic_encryption", query.ZoneID)
@@ -59,22 +59,22 @@ func (r *SettingOpportunisticEncryptionService) Get(ctx context.Context, query S
 }
 
 // Enables the Opportunistic Encryption feature for a zone.
-type SettingOpportunisticEncryptionEditResponse struct {
+type ZonesOpportunisticEncryption struct {
 	// ID of the zone setting.
-	ID SettingOpportunisticEncryptionEditResponseID `json:"id,required"`
+	ID ZonesOpportunisticEncryptionID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingOpportunisticEncryptionEditResponseValue `json:"value,required"`
+	Value ZonesOpportunisticEncryptionValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingOpportunisticEncryptionEditResponseEditable `json:"editable"`
+	Editable ZonesOpportunisticEncryptionEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                      `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingOpportunisticEncryptionEditResponseJSON `json:"-"`
+	ModifiedOn time.Time                        `json:"modified_on,nullable" format:"date-time"`
+	JSON       zonesOpportunisticEncryptionJSON `json:"-"`
 }
 
-// settingOpportunisticEncryptionEditResponseJSON contains the JSON metadata for
-// the struct [SettingOpportunisticEncryptionEditResponse]
-type settingOpportunisticEncryptionEditResponseJSON struct {
+// zonesOpportunisticEncryptionJSON contains the JSON metadata for the struct
+// [ZonesOpportunisticEncryption]
+type zonesOpportunisticEncryptionJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -83,94 +83,55 @@ type settingOpportunisticEncryptionEditResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingOpportunisticEncryptionEditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonesOpportunisticEncryption) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r settingOpportunisticEncryptionEditResponseJSON) RawJSON() string {
+func (r zonesOpportunisticEncryptionJSON) RawJSON() string {
 	return r.raw
 }
 
+func (r ZonesOpportunisticEncryption) implementsZonesSettingEditResponse() {}
+
+func (r ZonesOpportunisticEncryption) implementsZonesSettingGetResponse() {}
+
 // ID of the zone setting.
-type SettingOpportunisticEncryptionEditResponseID string
+type ZonesOpportunisticEncryptionID string
 
 const (
-	SettingOpportunisticEncryptionEditResponseIDOpportunisticEncryption SettingOpportunisticEncryptionEditResponseID = "opportunistic_encryption"
+	ZonesOpportunisticEncryptionIDOpportunisticEncryption ZonesOpportunisticEncryptionID = "opportunistic_encryption"
 )
 
 // Current value of the zone setting.
-type SettingOpportunisticEncryptionEditResponseValue string
+type ZonesOpportunisticEncryptionValue string
 
 const (
-	SettingOpportunisticEncryptionEditResponseValueOn  SettingOpportunisticEncryptionEditResponseValue = "on"
-	SettingOpportunisticEncryptionEditResponseValueOff SettingOpportunisticEncryptionEditResponseValue = "off"
+	ZonesOpportunisticEncryptionValueOn  ZonesOpportunisticEncryptionValue = "on"
+	ZonesOpportunisticEncryptionValueOff ZonesOpportunisticEncryptionValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingOpportunisticEncryptionEditResponseEditable bool
+type ZonesOpportunisticEncryptionEditable bool
 
 const (
-	SettingOpportunisticEncryptionEditResponseEditableTrue  SettingOpportunisticEncryptionEditResponseEditable = true
-	SettingOpportunisticEncryptionEditResponseEditableFalse SettingOpportunisticEncryptionEditResponseEditable = false
+	ZonesOpportunisticEncryptionEditableTrue  ZonesOpportunisticEncryptionEditable = true
+	ZonesOpportunisticEncryptionEditableFalse ZonesOpportunisticEncryptionEditable = false
 )
 
 // Enables the Opportunistic Encryption feature for a zone.
-type SettingOpportunisticEncryptionGetResponse struct {
+type ZonesOpportunisticEncryptionParam struct {
 	// ID of the zone setting.
-	ID SettingOpportunisticEncryptionGetResponseID `json:"id,required"`
+	ID param.Field[ZonesOpportunisticEncryptionID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingOpportunisticEncryptionGetResponseValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable SettingOpportunisticEncryptionGetResponseEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                     `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingOpportunisticEncryptionGetResponseJSON `json:"-"`
+	Value param.Field[ZonesOpportunisticEncryptionValue] `json:"value,required"`
 }
 
-// settingOpportunisticEncryptionGetResponseJSON contains the JSON metadata for the
-// struct [SettingOpportunisticEncryptionGetResponse]
-type settingOpportunisticEncryptionGetResponseJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+func (r ZonesOpportunisticEncryptionParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *SettingOpportunisticEncryptionGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingOpportunisticEncryptionGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// ID of the zone setting.
-type SettingOpportunisticEncryptionGetResponseID string
-
-const (
-	SettingOpportunisticEncryptionGetResponseIDOpportunisticEncryption SettingOpportunisticEncryptionGetResponseID = "opportunistic_encryption"
-)
-
-// Current value of the zone setting.
-type SettingOpportunisticEncryptionGetResponseValue string
-
-const (
-	SettingOpportunisticEncryptionGetResponseValueOn  SettingOpportunisticEncryptionGetResponseValue = "on"
-	SettingOpportunisticEncryptionGetResponseValueOff SettingOpportunisticEncryptionGetResponseValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type SettingOpportunisticEncryptionGetResponseEditable bool
-
-const (
-	SettingOpportunisticEncryptionGetResponseEditableTrue  SettingOpportunisticEncryptionGetResponseEditable = true
-	SettingOpportunisticEncryptionGetResponseEditableFalse SettingOpportunisticEncryptionGetResponseEditable = false
-)
+func (r ZonesOpportunisticEncryptionParam) implementsZonesSettingEditParamsItem() {}
 
 type SettingOpportunisticEncryptionEditParams struct {
 	// Identifier
@@ -199,7 +160,7 @@ type SettingOpportunisticEncryptionEditResponseEnvelope struct {
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Enables the Opportunistic Encryption feature for a zone.
-	Result SettingOpportunisticEncryptionEditResponse             `json:"result"`
+	Result ZonesOpportunisticEncryption                           `json:"result"`
 	JSON   settingOpportunisticEncryptionEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -281,7 +242,7 @@ type SettingOpportunisticEncryptionGetResponseEnvelope struct {
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// Enables the Opportunistic Encryption feature for a zone.
-	Result SettingOpportunisticEncryptionGetResponse             `json:"result"`
+	Result ZonesOpportunisticEncryption                          `json:"result"`
 	JSON   settingOpportunisticEncryptionGetResponseEnvelopeJSON `json:"-"`
 }
 

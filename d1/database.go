@@ -36,7 +36,7 @@ func NewDatabaseService(opts ...option.RequestOption) (r *DatabaseService) {
 }
 
 // Returns the created D1 database.
-func (r *DatabaseService) New(ctx context.Context, params DatabaseNewParams, opts ...option.RequestOption) (res *DatabaseNewResponse, err error) {
+func (r *DatabaseService) New(ctx context.Context, params DatabaseNewParams, opts ...option.RequestOption) (res *D1CreateDatabase, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DatabaseNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/d1/database", params.AccountID)
@@ -49,7 +49,7 @@ func (r *DatabaseService) New(ctx context.Context, params DatabaseNewParams, opt
 }
 
 // Returns a list of D1 databases.
-func (r *DatabaseService) List(ctx context.Context, params DatabaseListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[DatabaseListResponse], err error) {
+func (r *DatabaseService) List(ctx context.Context, params DatabaseListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[D1CreateDatabase], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -67,7 +67,7 @@ func (r *DatabaseService) List(ctx context.Context, params DatabaseListParams, o
 }
 
 // Returns a list of D1 databases.
-func (r *DatabaseService) ListAutoPaging(ctx context.Context, params DatabaseListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[DatabaseListResponse] {
+func (r *DatabaseService) ListAutoPaging(ctx context.Context, params DatabaseListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[D1CreateDatabase] {
 	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -85,7 +85,7 @@ func (r *DatabaseService) Delete(ctx context.Context, accountIdentifier string, 
 }
 
 // Returns the specified D1 database.
-func (r *DatabaseService) Get(ctx context.Context, accountIdentifier string, databaseIdentifier string, opts ...option.RequestOption) (res *DatabaseGetResponse, err error) {
+func (r *DatabaseService) Get(ctx context.Context, accountIdentifier string, databaseIdentifier string, opts ...option.RequestOption) (res *D1DatabaseDetails, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DatabaseGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/d1/database/%s", accountIdentifier, databaseIdentifier)
@@ -98,7 +98,7 @@ func (r *DatabaseService) Get(ctx context.Context, accountIdentifier string, dat
 }
 
 // Returns the query result.
-func (r *DatabaseService) Query(ctx context.Context, accountIdentifier string, databaseIdentifier string, body DatabaseQueryParams, opts ...option.RequestOption) (res *[]DatabaseQueryResponse, err error) {
+func (r *DatabaseService) Query(ctx context.Context, accountIdentifier string, databaseIdentifier string, body DatabaseQueryParams, opts ...option.RequestOption) (res *[]D1QueryResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DatabaseQueryResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/d1/database/%s/query", accountIdentifier, databaseIdentifier)
@@ -110,18 +110,18 @@ func (r *DatabaseService) Query(ctx context.Context, accountIdentifier string, d
 	return
 }
 
-type DatabaseNewResponse struct {
+type D1CreateDatabase struct {
 	// Specifies the timestamp the resource was created as an ISO8601 string.
-	CreatedAt interface{}             `json:"created_at"`
-	Name      string                  `json:"name"`
-	UUID      string                  `json:"uuid"`
-	Version   string                  `json:"version"`
-	JSON      databaseNewResponseJSON `json:"-"`
+	CreatedAt interface{}          `json:"created_at"`
+	Name      string               `json:"name"`
+	UUID      string               `json:"uuid"`
+	Version   string               `json:"version"`
+	JSON      d1CreateDatabaseJSON `json:"-"`
 }
 
-// databaseNewResponseJSON contains the JSON metadata for the struct
-// [DatabaseNewResponse]
-type databaseNewResponseJSON struct {
+// d1CreateDatabaseJSON contains the JSON metadata for the struct
+// [D1CreateDatabase]
+type d1CreateDatabaseJSON struct {
 	CreatedAt   apijson.Field
 	Name        apijson.Field
 	UUID        apijson.Field
@@ -130,39 +130,101 @@ type databaseNewResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DatabaseNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *D1CreateDatabase) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r databaseNewResponseJSON) RawJSON() string {
+func (r d1CreateDatabaseJSON) RawJSON() string {
 	return r.raw
 }
 
-type DatabaseListResponse struct {
+type D1DatabaseDetails struct {
 	// Specifies the timestamp the resource was created as an ISO8601 string.
-	CreatedAt interface{}              `json:"created_at"`
-	Name      string                   `json:"name"`
-	UUID      string                   `json:"uuid"`
-	Version   string                   `json:"version"`
-	JSON      databaseListResponseJSON `json:"-"`
+	CreatedAt interface{} `json:"created_at"`
+	// The D1 database's size, in bytes.
+	FileSize  float64               `json:"file_size"`
+	Name      string                `json:"name"`
+	NumTables float64               `json:"num_tables"`
+	UUID      string                `json:"uuid"`
+	Version   string                `json:"version"`
+	JSON      d1DatabaseDetailsJSON `json:"-"`
 }
 
-// databaseListResponseJSON contains the JSON metadata for the struct
-// [DatabaseListResponse]
-type databaseListResponseJSON struct {
+// d1DatabaseDetailsJSON contains the JSON metadata for the struct
+// [D1DatabaseDetails]
+type d1DatabaseDetailsJSON struct {
 	CreatedAt   apijson.Field
+	FileSize    apijson.Field
 	Name        apijson.Field
+	NumTables   apijson.Field
 	UUID        apijson.Field
 	Version     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DatabaseListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *D1DatabaseDetails) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r databaseListResponseJSON) RawJSON() string {
+func (r d1DatabaseDetailsJSON) RawJSON() string {
+	return r.raw
+}
+
+type D1QueryResult struct {
+	Meta    D1QueryResultMeta `json:"meta"`
+	Results []interface{}     `json:"results"`
+	Success bool              `json:"success"`
+	JSON    d1QueryResultJSON `json:"-"`
+}
+
+// d1QueryResultJSON contains the JSON metadata for the struct [D1QueryResult]
+type d1QueryResultJSON struct {
+	Meta        apijson.Field
+	Results     apijson.Field
+	Success     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *D1QueryResult) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r d1QueryResultJSON) RawJSON() string {
+	return r.raw
+}
+
+type D1QueryResultMeta struct {
+	ChangedDB   bool                  `json:"changed_db"`
+	Changes     float64               `json:"changes"`
+	Duration    float64               `json:"duration"`
+	LastRowID   float64               `json:"last_row_id"`
+	RowsRead    float64               `json:"rows_read"`
+	RowsWritten float64               `json:"rows_written"`
+	SizeAfter   float64               `json:"size_after"`
+	JSON        d1QueryResultMetaJSON `json:"-"`
+}
+
+// d1QueryResultMetaJSON contains the JSON metadata for the struct
+// [D1QueryResultMeta]
+type d1QueryResultMetaJSON struct {
+	ChangedDB   apijson.Field
+	Changes     apijson.Field
+	Duration    apijson.Field
+	LastRowID   apijson.Field
+	RowsRead    apijson.Field
+	RowsWritten apijson.Field
+	SizeAfter   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *D1QueryResultMeta) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r d1QueryResultMetaJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -182,97 +244,6 @@ func init() {
 	)
 }
 
-type DatabaseGetResponse struct {
-	// Specifies the timestamp the resource was created as an ISO8601 string.
-	CreatedAt interface{} `json:"created_at"`
-	// The D1 database's size, in bytes.
-	FileSize  float64                 `json:"file_size"`
-	Name      string                  `json:"name"`
-	NumTables float64                 `json:"num_tables"`
-	UUID      string                  `json:"uuid"`
-	Version   string                  `json:"version"`
-	JSON      databaseGetResponseJSON `json:"-"`
-}
-
-// databaseGetResponseJSON contains the JSON metadata for the struct
-// [DatabaseGetResponse]
-type databaseGetResponseJSON struct {
-	CreatedAt   apijson.Field
-	FileSize    apijson.Field
-	Name        apijson.Field
-	NumTables   apijson.Field
-	UUID        apijson.Field
-	Version     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DatabaseGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r databaseGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type DatabaseQueryResponse struct {
-	Meta    DatabaseQueryResponseMeta `json:"meta"`
-	Results []interface{}             `json:"results"`
-	Success bool                      `json:"success"`
-	JSON    databaseQueryResponseJSON `json:"-"`
-}
-
-// databaseQueryResponseJSON contains the JSON metadata for the struct
-// [DatabaseQueryResponse]
-type databaseQueryResponseJSON struct {
-	Meta        apijson.Field
-	Results     apijson.Field
-	Success     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DatabaseQueryResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r databaseQueryResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type DatabaseQueryResponseMeta struct {
-	ChangedDB   bool                          `json:"changed_db"`
-	Changes     float64                       `json:"changes"`
-	Duration    float64                       `json:"duration"`
-	LastRowID   float64                       `json:"last_row_id"`
-	RowsRead    float64                       `json:"rows_read"`
-	RowsWritten float64                       `json:"rows_written"`
-	SizeAfter   float64                       `json:"size_after"`
-	JSON        databaseQueryResponseMetaJSON `json:"-"`
-}
-
-// databaseQueryResponseMetaJSON contains the JSON metadata for the struct
-// [DatabaseQueryResponseMeta]
-type databaseQueryResponseMetaJSON struct {
-	ChangedDB   apijson.Field
-	Changes     apijson.Field
-	Duration    apijson.Field
-	LastRowID   apijson.Field
-	RowsRead    apijson.Field
-	RowsWritten apijson.Field
-	SizeAfter   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DatabaseQueryResponseMeta) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r databaseQueryResponseMetaJSON) RawJSON() string {
-	return r.raw
-}
-
 type DatabaseNewParams struct {
 	// Account identifier tag.
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -286,7 +257,7 @@ func (r DatabaseNewParams) MarshalJSON() (data []byte, err error) {
 type DatabaseNewResponseEnvelope struct {
 	Errors   []DatabaseNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DatabaseNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   DatabaseNewResponse                   `json:"result,required"`
+	Result   D1CreateDatabase                      `json:"result,required"`
 	// Whether the API call was successful
 	Success DatabaseNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    databaseNewResponseEnvelopeJSON    `json:"-"`
@@ -467,7 +438,7 @@ const (
 type DatabaseGetResponseEnvelope struct {
 	Errors   []DatabaseGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DatabaseGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DatabaseGetResponse                   `json:"result,required"`
+	Result   D1DatabaseDetails                     `json:"result,required"`
 	// Whether the API call was successful
 	Success DatabaseGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    databaseGetResponseEnvelopeJSON    `json:"-"`
@@ -557,7 +528,7 @@ func (r DatabaseQueryParams) MarshalJSON() (data []byte, err error) {
 type DatabaseQueryResponseEnvelope struct {
 	Errors   []DatabaseQueryResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DatabaseQueryResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DatabaseQueryResponse                 `json:"result,required"`
+	Result   []D1QueryResult                         `json:"result,required"`
 	// Whether the API call was successful
 	Success DatabaseQueryResponseEnvelopeSuccess `json:"success,required"`
 	JSON    databaseQueryResponseEnvelopeJSON    `json:"-"`

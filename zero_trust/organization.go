@@ -33,7 +33,7 @@ func NewOrganizationService(opts ...option.RequestOption) (r *OrganizationServic
 }
 
 // Sets up a Zero Trust organization for your account or zone.
-func (r *OrganizationService) New(ctx context.Context, params OrganizationNewParams, opts ...option.RequestOption) (res *OrganizationNewResponse, err error) {
+func (r *OrganizationService) New(ctx context.Context, params OrganizationNewParams, opts ...option.RequestOption) (res *AccessOrganizations, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OrganizationNewResponseEnvelope
 	var accountOrZone string
@@ -55,7 +55,7 @@ func (r *OrganizationService) New(ctx context.Context, params OrganizationNewPar
 }
 
 // Updates the configuration for your Zero Trust organization.
-func (r *OrganizationService) Update(ctx context.Context, params OrganizationUpdateParams, opts ...option.RequestOption) (res *OrganizationUpdateResponse, err error) {
+func (r *OrganizationService) Update(ctx context.Context, params OrganizationUpdateParams, opts ...option.RequestOption) (res *AccessOrganizations, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OrganizationUpdateResponseEnvelope
 	var accountOrZone string
@@ -77,7 +77,7 @@ func (r *OrganizationService) Update(ctx context.Context, params OrganizationUpd
 }
 
 // Returns the configuration for your Zero Trust organization.
-func (r *OrganizationService) List(ctx context.Context, query OrganizationListParams, opts ...option.RequestOption) (res *OrganizationListResponse, err error) {
+func (r *OrganizationService) List(ctx context.Context, query OrganizationListParams, opts ...option.RequestOption) (res *AccessOrganizations, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OrganizationListResponseEnvelope
 	var accountOrZone string
@@ -120,7 +120,7 @@ func (r *OrganizationService) RevokeUsers(ctx context.Context, params Organizati
 	return
 }
 
-type OrganizationNewResponse struct {
+type AccessOrganizations struct {
 	// When set to true, users can authenticate via WARP for any application in your
 	// organization. Application settings will take precedence over this value.
 	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
@@ -128,13 +128,13 @@ type OrganizationNewResponse struct {
 	AuthDomain string `json:"auth_domain"`
 	// When set to `true`, users skip the identity provider selection step during
 	// login.
-	AutoRedirectToIdentity bool                               `json:"auto_redirect_to_identity"`
-	CreatedAt              time.Time                          `json:"created_at" format:"date-time"`
-	CustomPages            OrganizationNewResponseCustomPages `json:"custom_pages"`
+	AutoRedirectToIdentity bool                           `json:"auto_redirect_to_identity"`
+	CreatedAt              time.Time                      `json:"created_at" format:"date-time"`
+	CustomPages            AccessOrganizationsCustomPages `json:"custom_pages"`
 	// Lock all settings as Read-Only in the Dashboard, regardless of user permission.
 	// Updates may only be made via the API or Terraform for this account when enabled.
-	IsUiReadOnly bool                               `json:"is_ui_read_only"`
-	LoginDesign  OrganizationNewResponseLoginDesign `json:"login_design"`
+	IsUiReadOnly bool                           `json:"is_ui_read_only"`
+	LoginDesign  AccessOrganizationsLoginDesign `json:"login_design"`
 	// The name of your Zero Trust organization.
 	Name string `json:"name"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
@@ -151,13 +151,13 @@ type OrganizationNewResponse struct {
 	UserSeatExpirationInactiveTime string `json:"user_seat_expiration_inactive_time"`
 	// The amount of time that tokens issued for applications will be valid. Must be in
 	// the format `30m` or `2h45m`. Valid time units are: m, h.
-	WARPAuthSessionDuration string                      `json:"warp_auth_session_duration"`
-	JSON                    organizationNewResponseJSON `json:"-"`
+	WARPAuthSessionDuration string                  `json:"warp_auth_session_duration"`
+	JSON                    accessOrganizationsJSON `json:"-"`
 }
 
-// organizationNewResponseJSON contains the JSON metadata for the struct
-// [OrganizationNewResponse]
-type organizationNewResponseJSON struct {
+// accessOrganizationsJSON contains the JSON metadata for the struct
+// [AccessOrganizations]
+type accessOrganizationsJSON struct {
 	AllowAuthenticateViaWARP       apijson.Field
 	AuthDomain                     apijson.Field
 	AutoRedirectToIdentity         apijson.Field
@@ -175,41 +175,41 @@ type organizationNewResponseJSON struct {
 	ExtraFields                    map[string]apijson.Field
 }
 
-func (r *OrganizationNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessOrganizations) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r organizationNewResponseJSON) RawJSON() string {
+func (r accessOrganizationsJSON) RawJSON() string {
 	return r.raw
 }
 
-type OrganizationNewResponseCustomPages struct {
+type AccessOrganizationsCustomPages struct {
 	// The uid of the custom page to use when a user is denied access after failing a
 	// non-identity rule.
 	Forbidden string `json:"forbidden"`
 	// The uid of the custom page to use when a user is denied access.
-	IdentityDenied string                                 `json:"identity_denied"`
-	JSON           organizationNewResponseCustomPagesJSON `json:"-"`
+	IdentityDenied string                             `json:"identity_denied"`
+	JSON           accessOrganizationsCustomPagesJSON `json:"-"`
 }
 
-// organizationNewResponseCustomPagesJSON contains the JSON metadata for the struct
-// [OrganizationNewResponseCustomPages]
-type organizationNewResponseCustomPagesJSON struct {
+// accessOrganizationsCustomPagesJSON contains the JSON metadata for the struct
+// [AccessOrganizationsCustomPages]
+type accessOrganizationsCustomPagesJSON struct {
 	Forbidden      apijson.Field
 	IdentityDenied apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *OrganizationNewResponseCustomPages) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessOrganizationsCustomPages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r organizationNewResponseCustomPagesJSON) RawJSON() string {
+func (r accessOrganizationsCustomPagesJSON) RawJSON() string {
 	return r.raw
 }
 
-type OrganizationNewResponseLoginDesign struct {
+type AccessOrganizationsLoginDesign struct {
 	// The background color on your login page.
 	BackgroundColor string `json:"background_color"`
 	// The text at the bottom of your login page.
@@ -219,13 +219,13 @@ type OrganizationNewResponseLoginDesign struct {
 	// The URL of the logo on your login page.
 	LogoPath string `json:"logo_path"`
 	// The text color on your login page.
-	TextColor string                                 `json:"text_color"`
-	JSON      organizationNewResponseLoginDesignJSON `json:"-"`
+	TextColor string                             `json:"text_color"`
+	JSON      accessOrganizationsLoginDesignJSON `json:"-"`
 }
 
-// organizationNewResponseLoginDesignJSON contains the JSON metadata for the struct
-// [OrganizationNewResponseLoginDesign]
-type organizationNewResponseLoginDesignJSON struct {
+// accessOrganizationsLoginDesignJSON contains the JSON metadata for the struct
+// [AccessOrganizationsLoginDesign]
+type accessOrganizationsLoginDesignJSON struct {
 	BackgroundColor apijson.Field
 	FooterText      apijson.Field
 	HeaderText      apijson.Field
@@ -235,257 +235,11 @@ type organizationNewResponseLoginDesignJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *OrganizationNewResponseLoginDesign) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessOrganizationsLoginDesign) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r organizationNewResponseLoginDesignJSON) RawJSON() string {
-	return r.raw
-}
-
-type OrganizationUpdateResponse struct {
-	// When set to true, users can authenticate via WARP for any application in your
-	// organization. Application settings will take precedence over this value.
-	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
-	// The unique subdomain assigned to your Zero Trust organization.
-	AuthDomain string `json:"auth_domain"`
-	// When set to `true`, users skip the identity provider selection step during
-	// login.
-	AutoRedirectToIdentity bool                                  `json:"auto_redirect_to_identity"`
-	CreatedAt              time.Time                             `json:"created_at" format:"date-time"`
-	CustomPages            OrganizationUpdateResponseCustomPages `json:"custom_pages"`
-	// Lock all settings as Read-Only in the Dashboard, regardless of user permission.
-	// Updates may only be made via the API or Terraform for this account when enabled.
-	IsUiReadOnly bool                                  `json:"is_ui_read_only"`
-	LoginDesign  OrganizationUpdateResponseLoginDesign `json:"login_design"`
-	// The name of your Zero Trust organization.
-	Name string `json:"name"`
-	// The amount of time that tokens issued for applications will be valid. Must be in
-	// the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m,
-	// h.
-	SessionDuration string `json:"session_duration"`
-	// A description of the reason why the UI read only field is being toggled.
-	UiReadOnlyToggleReason string    `json:"ui_read_only_toggle_reason"`
-	UpdatedAt              time.Time `json:"updated_at" format:"date-time"`
-	// The amount of time a user seat is inactive before it expires. When the user seat
-	// exceeds the set time of inactivity, the user is removed as an active seat and no
-	// longer counts against your Teams seat count. Must be in the format `300ms` or
-	// `2h45m`. Valid time units are: `ns`, `us` (or `µs`), `ms`, `s`, `m`, `h`.
-	UserSeatExpirationInactiveTime string `json:"user_seat_expiration_inactive_time"`
-	// The amount of time that tokens issued for applications will be valid. Must be in
-	// the format `30m` or `2h45m`. Valid time units are: m, h.
-	WARPAuthSessionDuration string                         `json:"warp_auth_session_duration"`
-	JSON                    organizationUpdateResponseJSON `json:"-"`
-}
-
-// organizationUpdateResponseJSON contains the JSON metadata for the struct
-// [OrganizationUpdateResponse]
-type organizationUpdateResponseJSON struct {
-	AllowAuthenticateViaWARP       apijson.Field
-	AuthDomain                     apijson.Field
-	AutoRedirectToIdentity         apijson.Field
-	CreatedAt                      apijson.Field
-	CustomPages                    apijson.Field
-	IsUiReadOnly                   apijson.Field
-	LoginDesign                    apijson.Field
-	Name                           apijson.Field
-	SessionDuration                apijson.Field
-	UiReadOnlyToggleReason         apijson.Field
-	UpdatedAt                      apijson.Field
-	UserSeatExpirationInactiveTime apijson.Field
-	WARPAuthSessionDuration        apijson.Field
-	raw                            string
-	ExtraFields                    map[string]apijson.Field
-}
-
-func (r *OrganizationUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r organizationUpdateResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type OrganizationUpdateResponseCustomPages struct {
-	// The uid of the custom page to use when a user is denied access after failing a
-	// non-identity rule.
-	Forbidden string `json:"forbidden"`
-	// The uid of the custom page to use when a user is denied access.
-	IdentityDenied string                                    `json:"identity_denied"`
-	JSON           organizationUpdateResponseCustomPagesJSON `json:"-"`
-}
-
-// organizationUpdateResponseCustomPagesJSON contains the JSON metadata for the
-// struct [OrganizationUpdateResponseCustomPages]
-type organizationUpdateResponseCustomPagesJSON struct {
-	Forbidden      apijson.Field
-	IdentityDenied apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *OrganizationUpdateResponseCustomPages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r organizationUpdateResponseCustomPagesJSON) RawJSON() string {
-	return r.raw
-}
-
-type OrganizationUpdateResponseLoginDesign struct {
-	// The background color on your login page.
-	BackgroundColor string `json:"background_color"`
-	// The text at the bottom of your login page.
-	FooterText string `json:"footer_text"`
-	// The text at the top of your login page.
-	HeaderText string `json:"header_text"`
-	// The URL of the logo on your login page.
-	LogoPath string `json:"logo_path"`
-	// The text color on your login page.
-	TextColor string                                    `json:"text_color"`
-	JSON      organizationUpdateResponseLoginDesignJSON `json:"-"`
-}
-
-// organizationUpdateResponseLoginDesignJSON contains the JSON metadata for the
-// struct [OrganizationUpdateResponseLoginDesign]
-type organizationUpdateResponseLoginDesignJSON struct {
-	BackgroundColor apijson.Field
-	FooterText      apijson.Field
-	HeaderText      apijson.Field
-	LogoPath        apijson.Field
-	TextColor       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *OrganizationUpdateResponseLoginDesign) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r organizationUpdateResponseLoginDesignJSON) RawJSON() string {
-	return r.raw
-}
-
-type OrganizationListResponse struct {
-	// When set to true, users can authenticate via WARP for any application in your
-	// organization. Application settings will take precedence over this value.
-	AllowAuthenticateViaWARP bool `json:"allow_authenticate_via_warp"`
-	// The unique subdomain assigned to your Zero Trust organization.
-	AuthDomain string `json:"auth_domain"`
-	// When set to `true`, users skip the identity provider selection step during
-	// login.
-	AutoRedirectToIdentity bool                                `json:"auto_redirect_to_identity"`
-	CreatedAt              time.Time                           `json:"created_at" format:"date-time"`
-	CustomPages            OrganizationListResponseCustomPages `json:"custom_pages"`
-	// Lock all settings as Read-Only in the Dashboard, regardless of user permission.
-	// Updates may only be made via the API or Terraform for this account when enabled.
-	IsUiReadOnly bool                                `json:"is_ui_read_only"`
-	LoginDesign  OrganizationListResponseLoginDesign `json:"login_design"`
-	// The name of your Zero Trust organization.
-	Name string `json:"name"`
-	// The amount of time that tokens issued for applications will be valid. Must be in
-	// the format `300ms` or `2h45m`. Valid time units are: ns, us (or µs), ms, s, m,
-	// h.
-	SessionDuration string `json:"session_duration"`
-	// A description of the reason why the UI read only field is being toggled.
-	UiReadOnlyToggleReason string    `json:"ui_read_only_toggle_reason"`
-	UpdatedAt              time.Time `json:"updated_at" format:"date-time"`
-	// The amount of time a user seat is inactive before it expires. When the user seat
-	// exceeds the set time of inactivity, the user is removed as an active seat and no
-	// longer counts against your Teams seat count. Must be in the format `300ms` or
-	// `2h45m`. Valid time units are: `ns`, `us` (or `µs`), `ms`, `s`, `m`, `h`.
-	UserSeatExpirationInactiveTime string `json:"user_seat_expiration_inactive_time"`
-	// The amount of time that tokens issued for applications will be valid. Must be in
-	// the format `30m` or `2h45m`. Valid time units are: m, h.
-	WARPAuthSessionDuration string                       `json:"warp_auth_session_duration"`
-	JSON                    organizationListResponseJSON `json:"-"`
-}
-
-// organizationListResponseJSON contains the JSON metadata for the struct
-// [OrganizationListResponse]
-type organizationListResponseJSON struct {
-	AllowAuthenticateViaWARP       apijson.Field
-	AuthDomain                     apijson.Field
-	AutoRedirectToIdentity         apijson.Field
-	CreatedAt                      apijson.Field
-	CustomPages                    apijson.Field
-	IsUiReadOnly                   apijson.Field
-	LoginDesign                    apijson.Field
-	Name                           apijson.Field
-	SessionDuration                apijson.Field
-	UiReadOnlyToggleReason         apijson.Field
-	UpdatedAt                      apijson.Field
-	UserSeatExpirationInactiveTime apijson.Field
-	WARPAuthSessionDuration        apijson.Field
-	raw                            string
-	ExtraFields                    map[string]apijson.Field
-}
-
-func (r *OrganizationListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r organizationListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type OrganizationListResponseCustomPages struct {
-	// The uid of the custom page to use when a user is denied access after failing a
-	// non-identity rule.
-	Forbidden string `json:"forbidden"`
-	// The uid of the custom page to use when a user is denied access.
-	IdentityDenied string                                  `json:"identity_denied"`
-	JSON           organizationListResponseCustomPagesJSON `json:"-"`
-}
-
-// organizationListResponseCustomPagesJSON contains the JSON metadata for the
-// struct [OrganizationListResponseCustomPages]
-type organizationListResponseCustomPagesJSON struct {
-	Forbidden      apijson.Field
-	IdentityDenied apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *OrganizationListResponseCustomPages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r organizationListResponseCustomPagesJSON) RawJSON() string {
-	return r.raw
-}
-
-type OrganizationListResponseLoginDesign struct {
-	// The background color on your login page.
-	BackgroundColor string `json:"background_color"`
-	// The text at the bottom of your login page.
-	FooterText string `json:"footer_text"`
-	// The text at the top of your login page.
-	HeaderText string `json:"header_text"`
-	// The URL of the logo on your login page.
-	LogoPath string `json:"logo_path"`
-	// The text color on your login page.
-	TextColor string                                  `json:"text_color"`
-	JSON      organizationListResponseLoginDesignJSON `json:"-"`
-}
-
-// organizationListResponseLoginDesignJSON contains the JSON metadata for the
-// struct [OrganizationListResponseLoginDesign]
-type organizationListResponseLoginDesignJSON struct {
-	BackgroundColor apijson.Field
-	FooterText      apijson.Field
-	HeaderText      apijson.Field
-	LogoPath        apijson.Field
-	TextColor       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *OrganizationListResponseLoginDesign) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r organizationListResponseLoginDesignJSON) RawJSON() string {
+func (r accessOrganizationsLoginDesignJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -555,7 +309,7 @@ func (r OrganizationNewParamsLoginDesign) MarshalJSON() (data []byte, err error)
 type OrganizationNewResponseEnvelope struct {
 	Errors   []OrganizationNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []OrganizationNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   OrganizationNewResponse                   `json:"result,required"`
+	Result   AccessOrganizations                       `json:"result,required"`
 	// Whether the API call was successful
 	Success OrganizationNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    organizationNewResponseEnvelopeJSON    `json:"-"`
@@ -705,7 +459,7 @@ func (r OrganizationUpdateParamsLoginDesign) MarshalJSON() (data []byte, err err
 type OrganizationUpdateResponseEnvelope struct {
 	Errors   []OrganizationUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []OrganizationUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   OrganizationUpdateResponse                   `json:"result,required"`
+	Result   AccessOrganizations                          `json:"result,required"`
 	// Whether the API call was successful
 	Success OrganizationUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    organizationUpdateResponseEnvelopeJSON    `json:"-"`
@@ -793,7 +547,7 @@ type OrganizationListParams struct {
 type OrganizationListResponseEnvelope struct {
 	Errors   []OrganizationListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []OrganizationListResponseEnvelopeMessages `json:"messages,required"`
-	Result   OrganizationListResponse                   `json:"result,required"`
+	Result   AccessOrganizations                        `json:"result,required"`
 	// Whether the API call was successful
 	Success OrganizationListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    organizationListResponseEnvelopeJSON    `json:"-"`

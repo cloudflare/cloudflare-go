@@ -33,7 +33,7 @@ func NewRuleService(opts ...option.RequestOption) (r *RuleService) {
 
 // Only available for the Waiting Room Advanced subscription. Creates a rule for a
 // waiting room.
-func (r *RuleService) New(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, body RuleNewParams, opts ...option.RequestOption) (res *[]RuleNewResponse, err error) {
+func (r *RuleService) New(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, body RuleNewParams, opts ...option.RequestOption) (res *[]WaitingroomRuleResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%v/rules", zoneIdentifier, waitingRoomID)
@@ -47,7 +47,7 @@ func (r *RuleService) New(ctx context.Context, zoneIdentifier string, waitingRoo
 
 // Only available for the Waiting Room Advanced subscription. Replaces all rules
 // for a waiting room.
-func (r *RuleService) Update(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, body RuleUpdateParams, opts ...option.RequestOption) (res *[]RuleUpdateResponse, err error) {
+func (r *RuleService) Update(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, body RuleUpdateParams, opts ...option.RequestOption) (res *[]WaitingroomRuleResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%v/rules", zoneIdentifier, waitingRoomID)
@@ -60,7 +60,7 @@ func (r *RuleService) Update(ctx context.Context, zoneIdentifier string, waiting
 }
 
 // Lists rules for a waiting room.
-func (r *RuleService) List(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, opts ...option.RequestOption) (res *[]RuleListResponse, err error) {
+func (r *RuleService) List(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, opts ...option.RequestOption) (res *[]WaitingroomRuleResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%v/rules", zoneIdentifier, waitingRoomID)
@@ -73,7 +73,7 @@ func (r *RuleService) List(ctx context.Context, zoneIdentifier string, waitingRo
 }
 
 // Deletes a rule for a waiting room.
-func (r *RuleService) Delete(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, ruleID string, opts ...option.RequestOption) (res *[]RuleDeleteResponse, err error) {
+func (r *RuleService) Delete(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, ruleID string, opts ...option.RequestOption) (res *[]WaitingroomRuleResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%v/rules/%s", zoneIdentifier, waitingRoomID, ruleID)
@@ -86,7 +86,7 @@ func (r *RuleService) Delete(ctx context.Context, zoneIdentifier string, waiting
 }
 
 // Patches a rule for a waiting room.
-func (r *RuleService) Edit(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, ruleID string, body RuleEditParams, opts ...option.RequestOption) (res *[]RuleEditResponse, err error) {
+func (r *RuleService) Edit(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, ruleID string, body RuleEditParams, opts ...option.RequestOption) (res *[]WaitingroomRuleResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RuleEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%v/rules/%s", zoneIdentifier, waitingRoomID, ruleID)
@@ -98,11 +98,11 @@ func (r *RuleService) Edit(ctx context.Context, zoneIdentifier string, waitingRo
 	return
 }
 
-type RuleNewResponse struct {
+type WaitingroomRuleResult struct {
 	// The ID of the rule.
 	ID string `json:"id"`
 	// The action to take when the expression matches.
-	Action RuleNewResponseAction `json:"action"`
+	Action WaitingroomRuleResultAction `json:"action"`
 	// The description of the rule.
 	Description string `json:"description"`
 	// When set to true, the rule is enabled.
@@ -111,12 +111,13 @@ type RuleNewResponse struct {
 	Expression  string    `json:"expression"`
 	LastUpdated time.Time `json:"last_updated" format:"date-time"`
 	// The version of the rule.
-	Version string              `json:"version"`
-	JSON    ruleNewResponseJSON `json:"-"`
+	Version string                    `json:"version"`
+	JSON    waitingroomRuleResultJSON `json:"-"`
 }
 
-// ruleNewResponseJSON contains the JSON metadata for the struct [RuleNewResponse]
-type ruleNewResponseJSON struct {
+// waitingroomRuleResultJSON contains the JSON metadata for the struct
+// [WaitingroomRuleResult]
+type waitingroomRuleResultJSON struct {
 	ID          apijson.Field
 	Action      apijson.Field
 	Description apijson.Field
@@ -128,203 +129,19 @@ type ruleNewResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RuleNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *WaitingroomRuleResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ruleNewResponseJSON) RawJSON() string {
+func (r waitingroomRuleResultJSON) RawJSON() string {
 	return r.raw
 }
 
 // The action to take when the expression matches.
-type RuleNewResponseAction string
+type WaitingroomRuleResultAction string
 
 const (
-	RuleNewResponseActionBypassWaitingRoom RuleNewResponseAction = "bypass_waiting_room"
-)
-
-type RuleUpdateResponse struct {
-	// The ID of the rule.
-	ID string `json:"id"`
-	// The action to take when the expression matches.
-	Action RuleUpdateResponseAction `json:"action"`
-	// The description of the rule.
-	Description string `json:"description"`
-	// When set to true, the rule is enabled.
-	Enabled bool `json:"enabled"`
-	// Criteria defining when there is a match for the current rule.
-	Expression  string    `json:"expression"`
-	LastUpdated time.Time `json:"last_updated" format:"date-time"`
-	// The version of the rule.
-	Version string                 `json:"version"`
-	JSON    ruleUpdateResponseJSON `json:"-"`
-}
-
-// ruleUpdateResponseJSON contains the JSON metadata for the struct
-// [RuleUpdateResponse]
-type ruleUpdateResponseJSON struct {
-	ID          apijson.Field
-	Action      apijson.Field
-	Description apijson.Field
-	Enabled     apijson.Field
-	Expression  apijson.Field
-	LastUpdated apijson.Field
-	Version     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleUpdateResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// The action to take when the expression matches.
-type RuleUpdateResponseAction string
-
-const (
-	RuleUpdateResponseActionBypassWaitingRoom RuleUpdateResponseAction = "bypass_waiting_room"
-)
-
-type RuleListResponse struct {
-	// The ID of the rule.
-	ID string `json:"id"`
-	// The action to take when the expression matches.
-	Action RuleListResponseAction `json:"action"`
-	// The description of the rule.
-	Description string `json:"description"`
-	// When set to true, the rule is enabled.
-	Enabled bool `json:"enabled"`
-	// Criteria defining when there is a match for the current rule.
-	Expression  string    `json:"expression"`
-	LastUpdated time.Time `json:"last_updated" format:"date-time"`
-	// The version of the rule.
-	Version string               `json:"version"`
-	JSON    ruleListResponseJSON `json:"-"`
-}
-
-// ruleListResponseJSON contains the JSON metadata for the struct
-// [RuleListResponse]
-type ruleListResponseJSON struct {
-	ID          apijson.Field
-	Action      apijson.Field
-	Description apijson.Field
-	Enabled     apijson.Field
-	Expression  apijson.Field
-	LastUpdated apijson.Field
-	Version     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// The action to take when the expression matches.
-type RuleListResponseAction string
-
-const (
-	RuleListResponseActionBypassWaitingRoom RuleListResponseAction = "bypass_waiting_room"
-)
-
-type RuleDeleteResponse struct {
-	// The ID of the rule.
-	ID string `json:"id"`
-	// The action to take when the expression matches.
-	Action RuleDeleteResponseAction `json:"action"`
-	// The description of the rule.
-	Description string `json:"description"`
-	// When set to true, the rule is enabled.
-	Enabled bool `json:"enabled"`
-	// Criteria defining when there is a match for the current rule.
-	Expression  string    `json:"expression"`
-	LastUpdated time.Time `json:"last_updated" format:"date-time"`
-	// The version of the rule.
-	Version string                 `json:"version"`
-	JSON    ruleDeleteResponseJSON `json:"-"`
-}
-
-// ruleDeleteResponseJSON contains the JSON metadata for the struct
-// [RuleDeleteResponse]
-type ruleDeleteResponseJSON struct {
-	ID          apijson.Field
-	Action      apijson.Field
-	Description apijson.Field
-	Enabled     apijson.Field
-	Expression  apijson.Field
-	LastUpdated apijson.Field
-	Version     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleDeleteResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// The action to take when the expression matches.
-type RuleDeleteResponseAction string
-
-const (
-	RuleDeleteResponseActionBypassWaitingRoom RuleDeleteResponseAction = "bypass_waiting_room"
-)
-
-type RuleEditResponse struct {
-	// The ID of the rule.
-	ID string `json:"id"`
-	// The action to take when the expression matches.
-	Action RuleEditResponseAction `json:"action"`
-	// The description of the rule.
-	Description string `json:"description"`
-	// When set to true, the rule is enabled.
-	Enabled bool `json:"enabled"`
-	// Criteria defining when there is a match for the current rule.
-	Expression  string    `json:"expression"`
-	LastUpdated time.Time `json:"last_updated" format:"date-time"`
-	// The version of the rule.
-	Version string               `json:"version"`
-	JSON    ruleEditResponseJSON `json:"-"`
-}
-
-// ruleEditResponseJSON contains the JSON metadata for the struct
-// [RuleEditResponse]
-type ruleEditResponseJSON struct {
-	ID          apijson.Field
-	Action      apijson.Field
-	Description apijson.Field
-	Enabled     apijson.Field
-	Expression  apijson.Field
-	LastUpdated apijson.Field
-	Version     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RuleEditResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ruleEditResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// The action to take when the expression matches.
-type RuleEditResponseAction string
-
-const (
-	RuleEditResponseActionBypassWaitingRoom RuleEditResponseAction = "bypass_waiting_room"
+	WaitingroomRuleResultActionBypassWaitingRoom WaitingroomRuleResultAction = "bypass_waiting_room"
 )
 
 type RuleNewParams struct {
@@ -352,7 +169,7 @@ const (
 type RuleNewResponseEnvelope struct {
 	Errors   []RuleNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RuleNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   []RuleNewResponse                 `json:"result,required,nullable"`
+	Result   []WaitingroomRuleResult           `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RuleNewResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo RuleNewResponseEnvelopeResultInfo `json:"result_info"`
@@ -496,7 +313,7 @@ const (
 type RuleUpdateResponseEnvelope struct {
 	Errors   []RuleUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RuleUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   []RuleUpdateResponse                 `json:"result,required,nullable"`
+	Result   []WaitingroomRuleResult              `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RuleUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo RuleUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -610,7 +427,7 @@ func (r ruleUpdateResponseEnvelopeResultInfoJSON) RawJSON() string {
 type RuleListResponseEnvelope struct {
 	Errors   []RuleListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RuleListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []RuleListResponse                 `json:"result,required,nullable"`
+	Result   []WaitingroomRuleResult            `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RuleListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo RuleListResponseEnvelopeResultInfo `json:"result_info"`
@@ -724,7 +541,7 @@ func (r ruleListResponseEnvelopeResultInfoJSON) RawJSON() string {
 type RuleDeleteResponseEnvelope struct {
 	Errors   []RuleDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RuleDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   []RuleDeleteResponse                 `json:"result,required,nullable"`
+	Result   []WaitingroomRuleResult              `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RuleDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo RuleDeleteResponseEnvelopeResultInfo `json:"result_info"`
@@ -885,7 +702,7 @@ func (r RuleEditParamsPositionObject) implementsWaitingRoomsRuleEditParamsPositi
 type RuleEditResponseEnvelope struct {
 	Errors   []RuleEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RuleEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   []RuleEditResponse                 `json:"result,required,nullable"`
+	Result   []WaitingroomRuleResult            `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RuleEditResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo RuleEditResponseEnvelopeResultInfo `json:"result_info"`

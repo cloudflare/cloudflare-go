@@ -34,7 +34,7 @@ func NewSettingPrefetchPreloadService(opts ...option.RequestOption) (r *SettingP
 
 // Cloudflare will prefetch any URLs that are included in the response headers.
 // This is limited to Enterprise Zones.
-func (r *SettingPrefetchPreloadService) Edit(ctx context.Context, params SettingPrefetchPreloadEditParams, opts ...option.RequestOption) (res *SettingPrefetchPreloadEditResponse, err error) {
+func (r *SettingPrefetchPreloadService) Edit(ctx context.Context, params SettingPrefetchPreloadEditParams, opts ...option.RequestOption) (res *ZonesPrefetchPreload, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingPrefetchPreloadEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/prefetch_preload", params.ZoneID)
@@ -48,7 +48,7 @@ func (r *SettingPrefetchPreloadService) Edit(ctx context.Context, params Setting
 
 // Cloudflare will prefetch any URLs that are included in the response headers.
 // This is limited to Enterprise Zones.
-func (r *SettingPrefetchPreloadService) Get(ctx context.Context, query SettingPrefetchPreloadGetParams, opts ...option.RequestOption) (res *SettingPrefetchPreloadGetResponse, err error) {
+func (r *SettingPrefetchPreloadService) Get(ctx context.Context, query SettingPrefetchPreloadGetParams, opts ...option.RequestOption) (res *ZonesPrefetchPreload, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingPrefetchPreloadGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/prefetch_preload", query.ZoneID)
@@ -62,22 +62,22 @@ func (r *SettingPrefetchPreloadService) Get(ctx context.Context, query SettingPr
 
 // Cloudflare will prefetch any URLs that are included in the response headers.
 // This is limited to Enterprise Zones.
-type SettingPrefetchPreloadEditResponse struct {
+type ZonesPrefetchPreload struct {
 	// ID of the zone setting.
-	ID SettingPrefetchPreloadEditResponseID `json:"id,required"`
+	ID ZonesPrefetchPreloadID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingPrefetchPreloadEditResponseValue `json:"value,required"`
+	Value ZonesPrefetchPreloadValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingPrefetchPreloadEditResponseEditable `json:"editable"`
+	Editable ZonesPrefetchPreloadEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                              `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingPrefetchPreloadEditResponseJSON `json:"-"`
+	ModifiedOn time.Time                `json:"modified_on,nullable" format:"date-time"`
+	JSON       zonesPrefetchPreloadJSON `json:"-"`
 }
 
-// settingPrefetchPreloadEditResponseJSON contains the JSON metadata for the struct
-// [SettingPrefetchPreloadEditResponse]
-type settingPrefetchPreloadEditResponseJSON struct {
+// zonesPrefetchPreloadJSON contains the JSON metadata for the struct
+// [ZonesPrefetchPreload]
+type zonesPrefetchPreloadJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -86,95 +86,56 @@ type settingPrefetchPreloadEditResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingPrefetchPreloadEditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonesPrefetchPreload) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r settingPrefetchPreloadEditResponseJSON) RawJSON() string {
+func (r zonesPrefetchPreloadJSON) RawJSON() string {
 	return r.raw
 }
 
+func (r ZonesPrefetchPreload) implementsZonesSettingEditResponse() {}
+
+func (r ZonesPrefetchPreload) implementsZonesSettingGetResponse() {}
+
 // ID of the zone setting.
-type SettingPrefetchPreloadEditResponseID string
+type ZonesPrefetchPreloadID string
 
 const (
-	SettingPrefetchPreloadEditResponseIDPrefetchPreload SettingPrefetchPreloadEditResponseID = "prefetch_preload"
+	ZonesPrefetchPreloadIDPrefetchPreload ZonesPrefetchPreloadID = "prefetch_preload"
 )
 
 // Current value of the zone setting.
-type SettingPrefetchPreloadEditResponseValue string
+type ZonesPrefetchPreloadValue string
 
 const (
-	SettingPrefetchPreloadEditResponseValueOn  SettingPrefetchPreloadEditResponseValue = "on"
-	SettingPrefetchPreloadEditResponseValueOff SettingPrefetchPreloadEditResponseValue = "off"
+	ZonesPrefetchPreloadValueOn  ZonesPrefetchPreloadValue = "on"
+	ZonesPrefetchPreloadValueOff ZonesPrefetchPreloadValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingPrefetchPreloadEditResponseEditable bool
+type ZonesPrefetchPreloadEditable bool
 
 const (
-	SettingPrefetchPreloadEditResponseEditableTrue  SettingPrefetchPreloadEditResponseEditable = true
-	SettingPrefetchPreloadEditResponseEditableFalse SettingPrefetchPreloadEditResponseEditable = false
+	ZonesPrefetchPreloadEditableTrue  ZonesPrefetchPreloadEditable = true
+	ZonesPrefetchPreloadEditableFalse ZonesPrefetchPreloadEditable = false
 )
 
 // Cloudflare will prefetch any URLs that are included in the response headers.
 // This is limited to Enterprise Zones.
-type SettingPrefetchPreloadGetResponse struct {
+type ZonesPrefetchPreloadParam struct {
 	// ID of the zone setting.
-	ID SettingPrefetchPreloadGetResponseID `json:"id,required"`
+	ID param.Field[ZonesPrefetchPreloadID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingPrefetchPreloadGetResponseValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable SettingPrefetchPreloadGetResponseEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                             `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingPrefetchPreloadGetResponseJSON `json:"-"`
+	Value param.Field[ZonesPrefetchPreloadValue] `json:"value,required"`
 }
 
-// settingPrefetchPreloadGetResponseJSON contains the JSON metadata for the struct
-// [SettingPrefetchPreloadGetResponse]
-type settingPrefetchPreloadGetResponseJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+func (r ZonesPrefetchPreloadParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *SettingPrefetchPreloadGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingPrefetchPreloadGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// ID of the zone setting.
-type SettingPrefetchPreloadGetResponseID string
-
-const (
-	SettingPrefetchPreloadGetResponseIDPrefetchPreload SettingPrefetchPreloadGetResponseID = "prefetch_preload"
-)
-
-// Current value of the zone setting.
-type SettingPrefetchPreloadGetResponseValue string
-
-const (
-	SettingPrefetchPreloadGetResponseValueOn  SettingPrefetchPreloadGetResponseValue = "on"
-	SettingPrefetchPreloadGetResponseValueOff SettingPrefetchPreloadGetResponseValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type SettingPrefetchPreloadGetResponseEditable bool
-
-const (
-	SettingPrefetchPreloadGetResponseEditableTrue  SettingPrefetchPreloadGetResponseEditable = true
-	SettingPrefetchPreloadGetResponseEditableFalse SettingPrefetchPreloadGetResponseEditable = false
-)
+func (r ZonesPrefetchPreloadParam) implementsZonesSettingEditParamsItem() {}
 
 type SettingPrefetchPreloadEditParams struct {
 	// Identifier
@@ -202,7 +163,7 @@ type SettingPrefetchPreloadEditResponseEnvelope struct {
 	Success bool `json:"success,required"`
 	// Cloudflare will prefetch any URLs that are included in the response headers.
 	// This is limited to Enterprise Zones.
-	Result SettingPrefetchPreloadEditResponse             `json:"result"`
+	Result ZonesPrefetchPreload                           `json:"result"`
 	JSON   settingPrefetchPreloadEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -283,7 +244,7 @@ type SettingPrefetchPreloadGetResponseEnvelope struct {
 	Success bool `json:"success,required"`
 	// Cloudflare will prefetch any URLs that are included in the response headers.
 	// This is limited to Enterprise Zones.
-	Result SettingPrefetchPreloadGetResponse             `json:"result"`
+	Result ZonesPrefetchPreload                          `json:"result"`
 	JSON   settingPrefetchPreloadGetResponseEnvelopeJSON `json:"-"`
 }
 

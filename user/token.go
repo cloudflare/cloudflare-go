@@ -130,7 +130,7 @@ func (r *TokenService) Verify(ctx context.Context, opts ...option.RequestOption)
 
 type TokenNewResponse struct {
 	// The token value.
-	Value string               `json:"value"`
+	Value IamValue             `json:"value"`
 	JSON  tokenNewResponseJSON `json:"-"`
 }
 

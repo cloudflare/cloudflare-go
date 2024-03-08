@@ -33,7 +33,7 @@ func NewConnectionService(opts ...option.RequestOption) (r *ConnectionService) {
 }
 
 // Lists all connections detected by Page Shield.
-func (r *ConnectionService) List(ctx context.Context, params ConnectionListParams, opts ...option.RequestOption) (res *[]ConnectionListResponse, err error) {
+func (r *ConnectionService) List(ctx context.Context, params ConnectionListParams, opts ...option.RequestOption) (res *[]PageShieldConnection, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConnectionListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/page_shield/connections", params.ZoneID)
@@ -46,30 +46,30 @@ func (r *ConnectionService) List(ctx context.Context, params ConnectionListParam
 }
 
 // Fetches a connection detected by Page Shield by connection ID.
-func (r *ConnectionService) Get(ctx context.Context, connectionID string, query ConnectionGetParams, opts ...option.RequestOption) (res *ConnectionGetResponse, err error) {
+func (r *ConnectionService) Get(ctx context.Context, connectionID string, query ConnectionGetParams, opts ...option.RequestOption) (res *PageShieldConnection, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/page_shield/connections/%s", query.ZoneID, connectionID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
-type ConnectionListResponse struct {
-	ID                      interface{}                `json:"id"`
-	AddedAt                 interface{}                `json:"added_at"`
-	DomainReportedMalicious interface{}                `json:"domain_reported_malicious"`
-	FirstPageURL            interface{}                `json:"first_page_url"`
-	FirstSeenAt             interface{}                `json:"first_seen_at"`
-	Host                    interface{}                `json:"host"`
-	LastSeenAt              interface{}                `json:"last_seen_at"`
-	PageURLs                interface{}                `json:"page_urls"`
-	URL                     interface{}                `json:"url"`
-	URLContainsCdnCgiPath   interface{}                `json:"url_contains_cdn_cgi_path"`
-	JSON                    connectionListResponseJSON `json:"-"`
+type PageShieldConnection struct {
+	ID                      interface{}              `json:"id"`
+	AddedAt                 interface{}              `json:"added_at"`
+	DomainReportedMalicious interface{}              `json:"domain_reported_malicious"`
+	FirstPageURL            interface{}              `json:"first_page_url"`
+	FirstSeenAt             interface{}              `json:"first_seen_at"`
+	Host                    interface{}              `json:"host"`
+	LastSeenAt              interface{}              `json:"last_seen_at"`
+	PageURLs                interface{}              `json:"page_urls"`
+	URL                     interface{}              `json:"url"`
+	URLContainsCdnCgiPath   interface{}              `json:"url_contains_cdn_cgi_path"`
+	JSON                    pageShieldConnectionJSON `json:"-"`
 }
 
-// connectionListResponseJSON contains the JSON metadata for the struct
-// [ConnectionListResponse]
-type connectionListResponseJSON struct {
+// pageShieldConnectionJSON contains the JSON metadata for the struct
+// [PageShieldConnection]
+type pageShieldConnectionJSON struct {
 	ID                      apijson.Field
 	AddedAt                 apijson.Field
 	DomainReportedMalicious apijson.Field
@@ -84,50 +84,11 @@ type connectionListResponseJSON struct {
 	ExtraFields             map[string]apijson.Field
 }
 
-func (r *ConnectionListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *PageShieldConnection) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r connectionListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type ConnectionGetResponse struct {
-	ID                      interface{}               `json:"id"`
-	AddedAt                 interface{}               `json:"added_at"`
-	DomainReportedMalicious interface{}               `json:"domain_reported_malicious"`
-	FirstPageURL            interface{}               `json:"first_page_url"`
-	FirstSeenAt             interface{}               `json:"first_seen_at"`
-	Host                    interface{}               `json:"host"`
-	LastSeenAt              interface{}               `json:"last_seen_at"`
-	PageURLs                interface{}               `json:"page_urls"`
-	URL                     interface{}               `json:"url"`
-	URLContainsCdnCgiPath   interface{}               `json:"url_contains_cdn_cgi_path"`
-	JSON                    connectionGetResponseJSON `json:"-"`
-}
-
-// connectionGetResponseJSON contains the JSON metadata for the struct
-// [ConnectionGetResponse]
-type connectionGetResponseJSON struct {
-	ID                      apijson.Field
-	AddedAt                 apijson.Field
-	DomainReportedMalicious apijson.Field
-	FirstPageURL            apijson.Field
-	FirstSeenAt             apijson.Field
-	Host                    apijson.Field
-	LastSeenAt              apijson.Field
-	PageURLs                apijson.Field
-	URL                     apijson.Field
-	URLContainsCdnCgiPath   apijson.Field
-	raw                     string
-	ExtraFields             map[string]apijson.Field
-}
-
-func (r *ConnectionGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r connectionGetResponseJSON) RawJSON() string {
+func (r pageShieldConnectionJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -217,7 +178,7 @@ const (
 type ConnectionListResponseEnvelope struct {
 	Errors   []ConnectionListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ConnectionListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []ConnectionListResponse                 `json:"result,required,nullable"`
+	Result   []PageShieldConnection                   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    ConnectionListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo ConnectionListResponseEnvelopeResultInfo `json:"result_info"`

@@ -34,7 +34,7 @@ func NewWhoisService(opts ...option.RequestOption) (r *WhoisService) {
 }
 
 // Get WHOIS Record
-func (r *WhoisService) Get(ctx context.Context, params WhoisGetParams, opts ...option.RequestOption) (res *WhoisGetResponse, err error) {
+func (r *WhoisService) Get(ctx context.Context, params WhoisGetParams, opts ...option.RequestOption) (res *IntelWhois, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WhoisGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/whois", params.AccountID)
@@ -46,22 +46,21 @@ func (r *WhoisService) Get(ctx context.Context, params WhoisGetParams, opts ...o
 	return
 }
 
-type WhoisGetResponse struct {
-	CreatedDate       time.Time            `json:"created_date" format:"date"`
-	Domain            string               `json:"domain"`
-	Nameservers       []string             `json:"nameservers"`
-	Registrant        string               `json:"registrant"`
-	RegistrantCountry string               `json:"registrant_country"`
-	RegistrantEmail   string               `json:"registrant_email"`
-	RegistrantOrg     string               `json:"registrant_org"`
-	Registrar         string               `json:"registrar"`
-	UpdatedDate       time.Time            `json:"updated_date" format:"date"`
-	JSON              whoisGetResponseJSON `json:"-"`
+type IntelWhois struct {
+	CreatedDate       time.Time      `json:"created_date" format:"date"`
+	Domain            string         `json:"domain"`
+	Nameservers       []string       `json:"nameservers"`
+	Registrant        string         `json:"registrant"`
+	RegistrantCountry string         `json:"registrant_country"`
+	RegistrantEmail   string         `json:"registrant_email"`
+	RegistrantOrg     string         `json:"registrant_org"`
+	Registrar         string         `json:"registrar"`
+	UpdatedDate       time.Time      `json:"updated_date" format:"date"`
+	JSON              intelWhoisJSON `json:"-"`
 }
 
-// whoisGetResponseJSON contains the JSON metadata for the struct
-// [WhoisGetResponse]
-type whoisGetResponseJSON struct {
+// intelWhoisJSON contains the JSON metadata for the struct [IntelWhois]
+type intelWhoisJSON struct {
 	CreatedDate       apijson.Field
 	Domain            apijson.Field
 	Nameservers       apijson.Field
@@ -75,11 +74,11 @@ type whoisGetResponseJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *WhoisGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *IntelWhois) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r whoisGetResponseJSON) RawJSON() string {
+func (r intelWhoisJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -100,7 +99,7 @@ func (r WhoisGetParams) URLQuery() (v url.Values) {
 type WhoisGetResponseEnvelope struct {
 	Errors   []WhoisGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []WhoisGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   WhoisGetResponse                   `json:"result,required"`
+	Result   IntelWhois                         `json:"result,required"`
 	// Whether the API call was successful
 	Success WhoisGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    whoisGetResponseEnvelopeJSON    `json:"-"`

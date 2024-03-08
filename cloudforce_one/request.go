@@ -41,7 +41,7 @@ func NewRequestService(opts ...option.RequestOption) (r *RequestService) {
 // Creating a request adds the request into the Cloudforce One queue for analysis.
 // In addition to the content, a short title, type, priority, and releasability
 // should be provided. If one is not provided a default will be assigned.
-func (r *RequestService) New(ctx context.Context, accountIdentifier string, body RequestNewParams, opts ...option.RequestOption) (res *RequestNewResponse, err error) {
+func (r *RequestService) New(ctx context.Context, accountIdentifier string, body RequestNewParams, opts ...option.RequestOption) (res *CloudforceOneRequestItem, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/new", accountIdentifier)
@@ -56,7 +56,7 @@ func (r *RequestService) New(ctx context.Context, accountIdentifier string, body
 // Updating a request alters the request in the Cloudforce One queue. This API may
 // be used to update any attributes of the request after the initial submission.
 // Only fields that you choose to update need to be add to the request body
-func (r *RequestService) Update(ctx context.Context, accountIdentifier string, requestIdentifier string, body RequestUpdateParams, opts ...option.RequestOption) (res *RequestUpdateResponse, err error) {
+func (r *RequestService) Update(ctx context.Context, accountIdentifier string, requestIdentifier string, body RequestUpdateParams, opts ...option.RequestOption) (res *CloudforceOneRequestItem, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s", accountIdentifier, requestIdentifier)
@@ -69,7 +69,7 @@ func (r *RequestService) Update(ctx context.Context, accountIdentifier string, r
 }
 
 // List Requests
-func (r *RequestService) List(ctx context.Context, accountIdentifier string, body RequestListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[RequestListResponse], err error) {
+func (r *RequestService) List(ctx context.Context, accountIdentifier string, body RequestListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[CloudforceOneRequestListItem], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -87,7 +87,7 @@ func (r *RequestService) List(ctx context.Context, accountIdentifier string, bod
 }
 
 // List Requests
-func (r *RequestService) ListAutoPaging(ctx context.Context, accountIdentifier string, body RequestListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[RequestListResponse] {
+func (r *RequestService) ListAutoPaging(ctx context.Context, accountIdentifier string, body RequestListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[CloudforceOneRequestListItem] {
 	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, accountIdentifier, body, opts...))
 }
 
@@ -105,7 +105,7 @@ func (r *RequestService) Delete(ctx context.Context, accountIdentifier string, r
 }
 
 // Get Request Priority, Status, and TLP constants
-func (r *RequestService) Constants(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *RequestConstantsResponse, err error) {
+func (r *RequestService) Constants(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *CloudforceOneRequestConstants, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestConstantsResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/constants", accountIdentifier)
@@ -118,7 +118,7 @@ func (r *RequestService) Constants(ctx context.Context, accountIdentifier string
 }
 
 // Get a Request
-func (r *RequestService) Get(ctx context.Context, accountIdentifier string, requestIdentifier string, opts ...option.RequestOption) (res *RequestGetResponse, err error) {
+func (r *RequestService) Get(ctx context.Context, accountIdentifier string, requestIdentifier string, opts ...option.RequestOption) (res *CloudforceOneRequestItem, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s", accountIdentifier, requestIdentifier)
@@ -131,7 +131,7 @@ func (r *RequestService) Get(ctx context.Context, accountIdentifier string, requ
 }
 
 // Get Request Quota
-func (r *RequestService) Quota(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *RequestQuotaResponse, err error) {
+func (r *RequestService) Quota(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *CloudforceOneQuota, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestQuotaResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/quota", accountIdentifier)
@@ -144,7 +144,7 @@ func (r *RequestService) Quota(ctx context.Context, accountIdentifier string, op
 }
 
 // Get Request Types
-func (r *RequestService) Types(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *[]string, err error) {
+func (r *RequestService) Types(ctx context.Context, accountIdentifier string, opts ...option.RequestOption) (res *CloudforceOneRequestTypes, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestTypesResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/types", accountIdentifier)
@@ -156,7 +156,94 @@ func (r *RequestService) Types(ctx context.Context, accountIdentifier string, op
 	return
 }
 
-type RequestNewResponse struct {
+type CloudforceOneQuota struct {
+	// Anniversary date is when annual quota limit is refresh
+	AnniversaryDate time.Time `json:"anniversary_date" format:"date-time"`
+	// Quater anniversary date is when quota limit is refreshed each quarter
+	QuarterAnniversaryDate time.Time `json:"quarter_anniversary_date" format:"date-time"`
+	// Tokens for the quarter
+	Quota int64 `json:"quota"`
+	// Tokens remaining for the quarter
+	Remaining int64                  `json:"remaining"`
+	JSON      cloudforceOneQuotaJSON `json:"-"`
+}
+
+// cloudforceOneQuotaJSON contains the JSON metadata for the struct
+// [CloudforceOneQuota]
+type cloudforceOneQuotaJSON struct {
+	AnniversaryDate        apijson.Field
+	QuarterAnniversaryDate apijson.Field
+	Quota                  apijson.Field
+	Remaining              apijson.Field
+	raw                    string
+	ExtraFields            map[string]apijson.Field
+}
+
+func (r *CloudforceOneQuota) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cloudforceOneQuotaJSON) RawJSON() string {
+	return r.raw
+}
+
+type CloudforceOneRequestConstants struct {
+	Priority []CloudforceOneRequestConstantsPriority `json:"priority"`
+	Status   []CloudforceOneRequestConstantsStatus   `json:"status"`
+	Tlp      []CloudforceOneRequestConstantsTlp      `json:"tlp"`
+	JSON     cloudforceOneRequestConstantsJSON       `json:"-"`
+}
+
+// cloudforceOneRequestConstantsJSON contains the JSON metadata for the struct
+// [CloudforceOneRequestConstants]
+type cloudforceOneRequestConstantsJSON struct {
+	Priority    apijson.Field
+	Status      apijson.Field
+	Tlp         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CloudforceOneRequestConstants) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cloudforceOneRequestConstantsJSON) RawJSON() string {
+	return r.raw
+}
+
+type CloudforceOneRequestConstantsPriority string
+
+const (
+	CloudforceOneRequestConstantsPriorityRoutine CloudforceOneRequestConstantsPriority = "routine"
+	CloudforceOneRequestConstantsPriorityHigh    CloudforceOneRequestConstantsPriority = "high"
+	CloudforceOneRequestConstantsPriorityUrgent  CloudforceOneRequestConstantsPriority = "urgent"
+)
+
+// Request Status
+type CloudforceOneRequestConstantsStatus string
+
+const (
+	CloudforceOneRequestConstantsStatusOpen      CloudforceOneRequestConstantsStatus = "open"
+	CloudforceOneRequestConstantsStatusAccepted  CloudforceOneRequestConstantsStatus = "accepted"
+	CloudforceOneRequestConstantsStatusReported  CloudforceOneRequestConstantsStatus = "reported"
+	CloudforceOneRequestConstantsStatusApproved  CloudforceOneRequestConstantsStatus = "approved"
+	CloudforceOneRequestConstantsStatusCompleted CloudforceOneRequestConstantsStatus = "completed"
+	CloudforceOneRequestConstantsStatusDeclined  CloudforceOneRequestConstantsStatus = "declined"
+)
+
+// The CISA defined Traffic Light Protocol (TLP)
+type CloudforceOneRequestConstantsTlp string
+
+const (
+	CloudforceOneRequestConstantsTlpClear       CloudforceOneRequestConstantsTlp = "clear"
+	CloudforceOneRequestConstantsTlpAmber       CloudforceOneRequestConstantsTlp = "amber"
+	CloudforceOneRequestConstantsTlpAmberStrict CloudforceOneRequestConstantsTlp = "amber-strict"
+	CloudforceOneRequestConstantsTlpGreen       CloudforceOneRequestConstantsTlp = "green"
+	CloudforceOneRequestConstantsTlpRed         CloudforceOneRequestConstantsTlp = "red"
+)
+
+type CloudforceOneRequestItem struct {
 	// UUID
 	ID string `json:"id,required"`
 	// Request content
@@ -168,23 +255,23 @@ type RequestNewResponse struct {
 	// Brief description of the request
 	Summary string `json:"summary,required"`
 	// The CISA defined Traffic Light Protocol (TLP)
-	Tlp       RequestNewResponseTlp `json:"tlp,required"`
-	Updated   time.Time             `json:"updated,required" format:"date-time"`
-	Completed time.Time             `json:"completed" format:"date-time"`
+	Tlp       CloudforceOneRequestItemTlp `json:"tlp,required"`
+	Updated   time.Time                   `json:"updated,required" format:"date-time"`
+	Completed time.Time                   `json:"completed" format:"date-time"`
 	// Tokens for the request messages
 	MessageTokens int64 `json:"message_tokens"`
 	// Readable Request ID
 	ReadableID string `json:"readable_id"`
 	// Request Status
-	Status RequestNewResponseStatus `json:"status"`
+	Status CloudforceOneRequestItemStatus `json:"status"`
 	// Tokens for the request
-	Tokens int64                  `json:"tokens"`
-	JSON   requestNewResponseJSON `json:"-"`
+	Tokens int64                        `json:"tokens"`
+	JSON   cloudforceOneRequestItemJSON `json:"-"`
 }
 
-// requestNewResponseJSON contains the JSON metadata for the struct
-// [RequestNewResponse]
-type requestNewResponseJSON struct {
+// cloudforceOneRequestItemJSON contains the JSON metadata for the struct
+// [CloudforceOneRequestItem]
+type cloudforceOneRequestItemJSON struct {
 	ID            apijson.Field
 	Content       apijson.Field
 	Created       apijson.Field
@@ -202,126 +289,49 @@ type requestNewResponseJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *RequestNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *CloudforceOneRequestItem) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r requestNewResponseJSON) RawJSON() string {
+func (r cloudforceOneRequestItemJSON) RawJSON() string {
 	return r.raw
 }
 
 // The CISA defined Traffic Light Protocol (TLP)
-type RequestNewResponseTlp string
+type CloudforceOneRequestItemTlp string
 
 const (
-	RequestNewResponseTlpClear       RequestNewResponseTlp = "clear"
-	RequestNewResponseTlpAmber       RequestNewResponseTlp = "amber"
-	RequestNewResponseTlpAmberStrict RequestNewResponseTlp = "amber-strict"
-	RequestNewResponseTlpGreen       RequestNewResponseTlp = "green"
-	RequestNewResponseTlpRed         RequestNewResponseTlp = "red"
+	CloudforceOneRequestItemTlpClear       CloudforceOneRequestItemTlp = "clear"
+	CloudforceOneRequestItemTlpAmber       CloudforceOneRequestItemTlp = "amber"
+	CloudforceOneRequestItemTlpAmberStrict CloudforceOneRequestItemTlp = "amber-strict"
+	CloudforceOneRequestItemTlpGreen       CloudforceOneRequestItemTlp = "green"
+	CloudforceOneRequestItemTlpRed         CloudforceOneRequestItemTlp = "red"
 )
 
 // Request Status
-type RequestNewResponseStatus string
+type CloudforceOneRequestItemStatus string
 
 const (
-	RequestNewResponseStatusOpen      RequestNewResponseStatus = "open"
-	RequestNewResponseStatusAccepted  RequestNewResponseStatus = "accepted"
-	RequestNewResponseStatusReported  RequestNewResponseStatus = "reported"
-	RequestNewResponseStatusApproved  RequestNewResponseStatus = "approved"
-	RequestNewResponseStatusCompleted RequestNewResponseStatus = "completed"
-	RequestNewResponseStatusDeclined  RequestNewResponseStatus = "declined"
+	CloudforceOneRequestItemStatusOpen      CloudforceOneRequestItemStatus = "open"
+	CloudforceOneRequestItemStatusAccepted  CloudforceOneRequestItemStatus = "accepted"
+	CloudforceOneRequestItemStatusReported  CloudforceOneRequestItemStatus = "reported"
+	CloudforceOneRequestItemStatusApproved  CloudforceOneRequestItemStatus = "approved"
+	CloudforceOneRequestItemStatusCompleted CloudforceOneRequestItemStatus = "completed"
+	CloudforceOneRequestItemStatusDeclined  CloudforceOneRequestItemStatus = "declined"
 )
 
-type RequestUpdateResponse struct {
-	// UUID
-	ID string `json:"id,required"`
-	// Request content
-	Content  string    `json:"content,required"`
-	Created  time.Time `json:"created,required" format:"date-time"`
-	Priority time.Time `json:"priority,required" format:"date-time"`
-	// Requested information from request
-	Request string `json:"request,required"`
-	// Brief description of the request
-	Summary string `json:"summary,required"`
-	// The CISA defined Traffic Light Protocol (TLP)
-	Tlp       RequestUpdateResponseTlp `json:"tlp,required"`
-	Updated   time.Time                `json:"updated,required" format:"date-time"`
-	Completed time.Time                `json:"completed" format:"date-time"`
-	// Tokens for the request messages
-	MessageTokens int64 `json:"message_tokens"`
-	// Readable Request ID
-	ReadableID string `json:"readable_id"`
-	// Request Status
-	Status RequestUpdateResponseStatus `json:"status"`
-	// Tokens for the request
-	Tokens int64                     `json:"tokens"`
-	JSON   requestUpdateResponseJSON `json:"-"`
-}
-
-// requestUpdateResponseJSON contains the JSON metadata for the struct
-// [RequestUpdateResponse]
-type requestUpdateResponseJSON struct {
-	ID            apijson.Field
-	Content       apijson.Field
-	Created       apijson.Field
-	Priority      apijson.Field
-	Request       apijson.Field
-	Summary       apijson.Field
-	Tlp           apijson.Field
-	Updated       apijson.Field
-	Completed     apijson.Field
-	MessageTokens apijson.Field
-	ReadableID    apijson.Field
-	Status        apijson.Field
-	Tokens        apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *RequestUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestUpdateResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// The CISA defined Traffic Light Protocol (TLP)
-type RequestUpdateResponseTlp string
-
-const (
-	RequestUpdateResponseTlpClear       RequestUpdateResponseTlp = "clear"
-	RequestUpdateResponseTlpAmber       RequestUpdateResponseTlp = "amber"
-	RequestUpdateResponseTlpAmberStrict RequestUpdateResponseTlp = "amber-strict"
-	RequestUpdateResponseTlpGreen       RequestUpdateResponseTlp = "green"
-	RequestUpdateResponseTlpRed         RequestUpdateResponseTlp = "red"
-)
-
-// Request Status
-type RequestUpdateResponseStatus string
-
-const (
-	RequestUpdateResponseStatusOpen      RequestUpdateResponseStatus = "open"
-	RequestUpdateResponseStatusAccepted  RequestUpdateResponseStatus = "accepted"
-	RequestUpdateResponseStatusReported  RequestUpdateResponseStatus = "reported"
-	RequestUpdateResponseStatusApproved  RequestUpdateResponseStatus = "approved"
-	RequestUpdateResponseStatusCompleted RequestUpdateResponseStatus = "completed"
-	RequestUpdateResponseStatusDeclined  RequestUpdateResponseStatus = "declined"
-)
-
-type RequestListResponse struct {
+type CloudforceOneRequestListItem struct {
 	// UUID
 	ID string `json:"id,required"`
 	// Request creation time
-	Created  time.Time                   `json:"created,required" format:"date-time"`
-	Priority RequestListResponsePriority `json:"priority,required"`
+	Created  time.Time                            `json:"created,required" format:"date-time"`
+	Priority CloudforceOneRequestListItemPriority `json:"priority,required"`
 	// Requested information from request
 	Request string `json:"request,required"`
 	// Brief description of the request
 	Summary string `json:"summary,required"`
 	// The CISA defined Traffic Light Protocol (TLP)
-	Tlp RequestListResponseTlp `json:"tlp,required"`
+	Tlp CloudforceOneRequestListItemTlp `json:"tlp,required"`
 	// Request last updated time
 	Updated time.Time `json:"updated,required" format:"date-time"`
 	// Request completion time
@@ -331,15 +341,15 @@ type RequestListResponse struct {
 	// Readable Request ID
 	ReadableID string `json:"readable_id"`
 	// Request Status
-	Status RequestListResponseStatus `json:"status"`
+	Status CloudforceOneRequestListItemStatus `json:"status"`
 	// Tokens for the request
-	Tokens int64                   `json:"tokens"`
-	JSON   requestListResponseJSON `json:"-"`
+	Tokens int64                            `json:"tokens"`
+	JSON   cloudforceOneRequestListItemJSON `json:"-"`
 }
 
-// requestListResponseJSON contains the JSON metadata for the struct
-// [RequestListResponse]
-type requestListResponseJSON struct {
+// cloudforceOneRequestListItemJSON contains the JSON metadata for the struct
+// [CloudforceOneRequestListItem]
+type cloudforceOneRequestListItemJSON struct {
 	ID            apijson.Field
 	Created       apijson.Field
 	Priority      apijson.Field
@@ -356,44 +366,46 @@ type requestListResponseJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *RequestListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *CloudforceOneRequestListItem) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r requestListResponseJSON) RawJSON() string {
+func (r cloudforceOneRequestListItemJSON) RawJSON() string {
 	return r.raw
 }
 
-type RequestListResponsePriority string
+type CloudforceOneRequestListItemPriority string
 
 const (
-	RequestListResponsePriorityRoutine RequestListResponsePriority = "routine"
-	RequestListResponsePriorityHigh    RequestListResponsePriority = "high"
-	RequestListResponsePriorityUrgent  RequestListResponsePriority = "urgent"
+	CloudforceOneRequestListItemPriorityRoutine CloudforceOneRequestListItemPriority = "routine"
+	CloudforceOneRequestListItemPriorityHigh    CloudforceOneRequestListItemPriority = "high"
+	CloudforceOneRequestListItemPriorityUrgent  CloudforceOneRequestListItemPriority = "urgent"
 )
 
 // The CISA defined Traffic Light Protocol (TLP)
-type RequestListResponseTlp string
+type CloudforceOneRequestListItemTlp string
 
 const (
-	RequestListResponseTlpClear       RequestListResponseTlp = "clear"
-	RequestListResponseTlpAmber       RequestListResponseTlp = "amber"
-	RequestListResponseTlpAmberStrict RequestListResponseTlp = "amber-strict"
-	RequestListResponseTlpGreen       RequestListResponseTlp = "green"
-	RequestListResponseTlpRed         RequestListResponseTlp = "red"
+	CloudforceOneRequestListItemTlpClear       CloudforceOneRequestListItemTlp = "clear"
+	CloudforceOneRequestListItemTlpAmber       CloudforceOneRequestListItemTlp = "amber"
+	CloudforceOneRequestListItemTlpAmberStrict CloudforceOneRequestListItemTlp = "amber-strict"
+	CloudforceOneRequestListItemTlpGreen       CloudforceOneRequestListItemTlp = "green"
+	CloudforceOneRequestListItemTlpRed         CloudforceOneRequestListItemTlp = "red"
 )
 
 // Request Status
-type RequestListResponseStatus string
+type CloudforceOneRequestListItemStatus string
 
 const (
-	RequestListResponseStatusOpen      RequestListResponseStatus = "open"
-	RequestListResponseStatusAccepted  RequestListResponseStatus = "accepted"
-	RequestListResponseStatusReported  RequestListResponseStatus = "reported"
-	RequestListResponseStatusApproved  RequestListResponseStatus = "approved"
-	RequestListResponseStatusCompleted RequestListResponseStatus = "completed"
-	RequestListResponseStatusDeclined  RequestListResponseStatus = "declined"
+	CloudforceOneRequestListItemStatusOpen      CloudforceOneRequestListItemStatus = "open"
+	CloudforceOneRequestListItemStatusAccepted  CloudforceOneRequestListItemStatus = "accepted"
+	CloudforceOneRequestListItemStatusReported  CloudforceOneRequestListItemStatus = "reported"
+	CloudforceOneRequestListItemStatusApproved  CloudforceOneRequestListItemStatus = "approved"
+	CloudforceOneRequestListItemStatusCompleted CloudforceOneRequestListItemStatus = "completed"
+	CloudforceOneRequestListItemStatusDeclined  CloudforceOneRequestListItemStatus = "declined"
 )
+
+type CloudforceOneRequestTypes []string
 
 // Union satisfied by [cloudforce_one.RequestDeleteResponseUnknown],
 // [cloudforce_one.RequestDeleteResponseArray] or [shared.UnionString].
@@ -419,170 +431,6 @@ func init() {
 type RequestDeleteResponseArray []interface{}
 
 func (r RequestDeleteResponseArray) ImplementsCloudforceOneRequestDeleteResponse() {}
-
-type RequestConstantsResponse struct {
-	Priority []RequestConstantsResponsePriority `json:"priority"`
-	Status   []RequestConstantsResponseStatus   `json:"status"`
-	Tlp      []RequestConstantsResponseTlp      `json:"tlp"`
-	JSON     requestConstantsResponseJSON       `json:"-"`
-}
-
-// requestConstantsResponseJSON contains the JSON metadata for the struct
-// [RequestConstantsResponse]
-type requestConstantsResponseJSON struct {
-	Priority    apijson.Field
-	Status      apijson.Field
-	Tlp         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *RequestConstantsResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestConstantsResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type RequestConstantsResponsePriority string
-
-const (
-	RequestConstantsResponsePriorityRoutine RequestConstantsResponsePriority = "routine"
-	RequestConstantsResponsePriorityHigh    RequestConstantsResponsePriority = "high"
-	RequestConstantsResponsePriorityUrgent  RequestConstantsResponsePriority = "urgent"
-)
-
-// Request Status
-type RequestConstantsResponseStatus string
-
-const (
-	RequestConstantsResponseStatusOpen      RequestConstantsResponseStatus = "open"
-	RequestConstantsResponseStatusAccepted  RequestConstantsResponseStatus = "accepted"
-	RequestConstantsResponseStatusReported  RequestConstantsResponseStatus = "reported"
-	RequestConstantsResponseStatusApproved  RequestConstantsResponseStatus = "approved"
-	RequestConstantsResponseStatusCompleted RequestConstantsResponseStatus = "completed"
-	RequestConstantsResponseStatusDeclined  RequestConstantsResponseStatus = "declined"
-)
-
-// The CISA defined Traffic Light Protocol (TLP)
-type RequestConstantsResponseTlp string
-
-const (
-	RequestConstantsResponseTlpClear       RequestConstantsResponseTlp = "clear"
-	RequestConstantsResponseTlpAmber       RequestConstantsResponseTlp = "amber"
-	RequestConstantsResponseTlpAmberStrict RequestConstantsResponseTlp = "amber-strict"
-	RequestConstantsResponseTlpGreen       RequestConstantsResponseTlp = "green"
-	RequestConstantsResponseTlpRed         RequestConstantsResponseTlp = "red"
-)
-
-type RequestGetResponse struct {
-	// UUID
-	ID string `json:"id,required"`
-	// Request content
-	Content  string    `json:"content,required"`
-	Created  time.Time `json:"created,required" format:"date-time"`
-	Priority time.Time `json:"priority,required" format:"date-time"`
-	// Requested information from request
-	Request string `json:"request,required"`
-	// Brief description of the request
-	Summary string `json:"summary,required"`
-	// The CISA defined Traffic Light Protocol (TLP)
-	Tlp       RequestGetResponseTlp `json:"tlp,required"`
-	Updated   time.Time             `json:"updated,required" format:"date-time"`
-	Completed time.Time             `json:"completed" format:"date-time"`
-	// Tokens for the request messages
-	MessageTokens int64 `json:"message_tokens"`
-	// Readable Request ID
-	ReadableID string `json:"readable_id"`
-	// Request Status
-	Status RequestGetResponseStatus `json:"status"`
-	// Tokens for the request
-	Tokens int64                  `json:"tokens"`
-	JSON   requestGetResponseJSON `json:"-"`
-}
-
-// requestGetResponseJSON contains the JSON metadata for the struct
-// [RequestGetResponse]
-type requestGetResponseJSON struct {
-	ID            apijson.Field
-	Content       apijson.Field
-	Created       apijson.Field
-	Priority      apijson.Field
-	Request       apijson.Field
-	Summary       apijson.Field
-	Tlp           apijson.Field
-	Updated       apijson.Field
-	Completed     apijson.Field
-	MessageTokens apijson.Field
-	ReadableID    apijson.Field
-	Status        apijson.Field
-	Tokens        apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *RequestGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// The CISA defined Traffic Light Protocol (TLP)
-type RequestGetResponseTlp string
-
-const (
-	RequestGetResponseTlpClear       RequestGetResponseTlp = "clear"
-	RequestGetResponseTlpAmber       RequestGetResponseTlp = "amber"
-	RequestGetResponseTlpAmberStrict RequestGetResponseTlp = "amber-strict"
-	RequestGetResponseTlpGreen       RequestGetResponseTlp = "green"
-	RequestGetResponseTlpRed         RequestGetResponseTlp = "red"
-)
-
-// Request Status
-type RequestGetResponseStatus string
-
-const (
-	RequestGetResponseStatusOpen      RequestGetResponseStatus = "open"
-	RequestGetResponseStatusAccepted  RequestGetResponseStatus = "accepted"
-	RequestGetResponseStatusReported  RequestGetResponseStatus = "reported"
-	RequestGetResponseStatusApproved  RequestGetResponseStatus = "approved"
-	RequestGetResponseStatusCompleted RequestGetResponseStatus = "completed"
-	RequestGetResponseStatusDeclined  RequestGetResponseStatus = "declined"
-)
-
-type RequestQuotaResponse struct {
-	// Anniversary date is when annual quota limit is refresh
-	AnniversaryDate time.Time `json:"anniversary_date" format:"date-time"`
-	// Quater anniversary date is when quota limit is refreshed each quarter
-	QuarterAnniversaryDate time.Time `json:"quarter_anniversary_date" format:"date-time"`
-	// Tokens for the quarter
-	Quota int64 `json:"quota"`
-	// Tokens remaining for the quarter
-	Remaining int64                    `json:"remaining"`
-	JSON      requestQuotaResponseJSON `json:"-"`
-}
-
-// requestQuotaResponseJSON contains the JSON metadata for the struct
-// [RequestQuotaResponse]
-type requestQuotaResponseJSON struct {
-	AnniversaryDate        apijson.Field
-	QuarterAnniversaryDate apijson.Field
-	Quota                  apijson.Field
-	Remaining              apijson.Field
-	raw                    string
-	ExtraFields            map[string]apijson.Field
-}
-
-func (r *RequestQuotaResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestQuotaResponseJSON) RawJSON() string {
-	return r.raw
-}
 
 type RequestNewParams struct {
 	// Request content
@@ -615,7 +463,7 @@ const (
 type RequestNewResponseEnvelope struct {
 	Errors   []RequestNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RequestNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   RequestNewResponse                   `json:"result,required"`
+	Result   CloudforceOneRequestItem             `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestNewResponseEnvelopeJSON    `json:"-"`
@@ -724,7 +572,7 @@ const (
 type RequestUpdateResponseEnvelope struct {
 	Errors   []RequestUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RequestUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   RequestUpdateResponse                   `json:"result,required"`
+	Result   CloudforceOneRequestItem                `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestUpdateResponseEnvelopeJSON    `json:"-"`
@@ -933,7 +781,7 @@ const (
 type RequestConstantsResponseEnvelope struct {
 	Errors   []RequestConstantsResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RequestConstantsResponseEnvelopeMessages `json:"messages,required"`
-	Result   RequestConstantsResponse                   `json:"result,required"`
+	Result   CloudforceOneRequestConstants              `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestConstantsResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestConstantsResponseEnvelopeJSON    `json:"-"`
@@ -1014,7 +862,7 @@ const (
 type RequestGetResponseEnvelope struct {
 	Errors   []RequestGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RequestGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   RequestGetResponse                   `json:"result,required"`
+	Result   CloudforceOneRequestItem             `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestGetResponseEnvelopeJSON    `json:"-"`
@@ -1095,7 +943,7 @@ const (
 type RequestQuotaResponseEnvelope struct {
 	Errors   []RequestQuotaResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RequestQuotaResponseEnvelopeMessages `json:"messages,required"`
-	Result   RequestQuotaResponse                   `json:"result,required"`
+	Result   CloudforceOneQuota                     `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestQuotaResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestQuotaResponseEnvelopeJSON    `json:"-"`
@@ -1176,7 +1024,7 @@ const (
 type RequestTypesResponseEnvelope struct {
 	Errors   []RequestTypesResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RequestTypesResponseEnvelopeMessages `json:"messages,required"`
-	Result   []string                               `json:"result,required"`
+	Result   CloudforceOneRequestTypes              `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestTypesResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestTypesResponseEnvelopeJSON    `json:"-"`

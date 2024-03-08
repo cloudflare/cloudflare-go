@@ -43,7 +43,7 @@ func NewSettingServerSideExcludeService(opts ...option.RequestOption) (r *Settin
 // Cloudflare's HTML minification and SSE functionality occur on-the-fly as the
 // resource moves through our network to the visitor's computer.
 // (https://support.cloudflare.com/hc/en-us/articles/200170036).
-func (r *SettingServerSideExcludeService) Edit(ctx context.Context, params SettingServerSideExcludeEditParams, opts ...option.RequestOption) (res *SettingServerSideExcludeEditResponse, err error) {
+func (r *SettingServerSideExcludeService) Edit(ctx context.Context, params SettingServerSideExcludeEditParams, opts ...option.RequestOption) (res *ZonesServerSideExclude, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingServerSideExcludeEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/server_side_exclude", params.ZoneID)
@@ -66,7 +66,7 @@ func (r *SettingServerSideExcludeService) Edit(ctx context.Context, params Setti
 // Cloudflare's HTML minification and SSE functionality occur on-the-fly as the
 // resource moves through our network to the visitor's computer.
 // (https://support.cloudflare.com/hc/en-us/articles/200170036).
-func (r *SettingServerSideExcludeService) Get(ctx context.Context, query SettingServerSideExcludeGetParams, opts ...option.RequestOption) (res *SettingServerSideExcludeGetResponse, err error) {
+func (r *SettingServerSideExcludeService) Get(ctx context.Context, query SettingServerSideExcludeGetParams, opts ...option.RequestOption) (res *ZonesServerSideExclude, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingServerSideExcludeGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/server_side_exclude", query.ZoneID)
@@ -89,22 +89,22 @@ func (r *SettingServerSideExcludeService) Get(ctx context.Context, query Setting
 // Cloudflare's HTML minification and SSE functionality occur on-the-fly as the
 // resource moves through our network to the visitor's computer.
 // (https://support.cloudflare.com/hc/en-us/articles/200170036).
-type SettingServerSideExcludeEditResponse struct {
+type ZonesServerSideExclude struct {
 	// ID of the zone setting.
-	ID SettingServerSideExcludeEditResponseID `json:"id,required"`
+	ID ZonesServerSideExcludeID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingServerSideExcludeEditResponseValue `json:"value,required"`
+	Value ZonesServerSideExcludeValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingServerSideExcludeEditResponseEditable `json:"editable"`
+	Editable ZonesServerSideExcludeEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingServerSideExcludeEditResponseJSON `json:"-"`
+	ModifiedOn time.Time                  `json:"modified_on,nullable" format:"date-time"`
+	JSON       zonesServerSideExcludeJSON `json:"-"`
 }
 
-// settingServerSideExcludeEditResponseJSON contains the JSON metadata for the
-// struct [SettingServerSideExcludeEditResponse]
-type settingServerSideExcludeEditResponseJSON struct {
+// zonesServerSideExcludeJSON contains the JSON metadata for the struct
+// [ZonesServerSideExclude]
+type zonesServerSideExcludeJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -113,36 +113,40 @@ type settingServerSideExcludeEditResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingServerSideExcludeEditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonesServerSideExclude) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r settingServerSideExcludeEditResponseJSON) RawJSON() string {
+func (r zonesServerSideExcludeJSON) RawJSON() string {
 	return r.raw
 }
 
+func (r ZonesServerSideExclude) implementsZonesSettingEditResponse() {}
+
+func (r ZonesServerSideExclude) implementsZonesSettingGetResponse() {}
+
 // ID of the zone setting.
-type SettingServerSideExcludeEditResponseID string
+type ZonesServerSideExcludeID string
 
 const (
-	SettingServerSideExcludeEditResponseIDServerSideExclude SettingServerSideExcludeEditResponseID = "server_side_exclude"
+	ZonesServerSideExcludeIDServerSideExclude ZonesServerSideExcludeID = "server_side_exclude"
 )
 
 // Current value of the zone setting.
-type SettingServerSideExcludeEditResponseValue string
+type ZonesServerSideExcludeValue string
 
 const (
-	SettingServerSideExcludeEditResponseValueOn  SettingServerSideExcludeEditResponseValue = "on"
-	SettingServerSideExcludeEditResponseValueOff SettingServerSideExcludeEditResponseValue = "off"
+	ZonesServerSideExcludeValueOn  ZonesServerSideExcludeValue = "on"
+	ZonesServerSideExcludeValueOff ZonesServerSideExcludeValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingServerSideExcludeEditResponseEditable bool
+type ZonesServerSideExcludeEditable bool
 
 const (
-	SettingServerSideExcludeEditResponseEditableTrue  SettingServerSideExcludeEditResponseEditable = true
-	SettingServerSideExcludeEditResponseEditableFalse SettingServerSideExcludeEditResponseEditable = false
+	ZonesServerSideExcludeEditableTrue  ZonesServerSideExcludeEditable = true
+	ZonesServerSideExcludeEditableFalse ZonesServerSideExcludeEditable = false
 )
 
 // If there is sensitive content on your website that you want visible to real
@@ -156,61 +160,18 @@ const (
 // Cloudflare's HTML minification and SSE functionality occur on-the-fly as the
 // resource moves through our network to the visitor's computer.
 // (https://support.cloudflare.com/hc/en-us/articles/200170036).
-type SettingServerSideExcludeGetResponse struct {
+type ZonesServerSideExcludeParam struct {
 	// ID of the zone setting.
-	ID SettingServerSideExcludeGetResponseID `json:"id,required"`
+	ID param.Field[ZonesServerSideExcludeID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingServerSideExcludeGetResponseValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable SettingServerSideExcludeGetResponseEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                               `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingServerSideExcludeGetResponseJSON `json:"-"`
+	Value param.Field[ZonesServerSideExcludeValue] `json:"value,required"`
 }
 
-// settingServerSideExcludeGetResponseJSON contains the JSON metadata for the
-// struct [SettingServerSideExcludeGetResponse]
-type settingServerSideExcludeGetResponseJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+func (r ZonesServerSideExcludeParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *SettingServerSideExcludeGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingServerSideExcludeGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// ID of the zone setting.
-type SettingServerSideExcludeGetResponseID string
-
-const (
-	SettingServerSideExcludeGetResponseIDServerSideExclude SettingServerSideExcludeGetResponseID = "server_side_exclude"
-)
-
-// Current value of the zone setting.
-type SettingServerSideExcludeGetResponseValue string
-
-const (
-	SettingServerSideExcludeGetResponseValueOn  SettingServerSideExcludeGetResponseValue = "on"
-	SettingServerSideExcludeGetResponseValueOff SettingServerSideExcludeGetResponseValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type SettingServerSideExcludeGetResponseEditable bool
-
-const (
-	SettingServerSideExcludeGetResponseEditableTrue  SettingServerSideExcludeGetResponseEditable = true
-	SettingServerSideExcludeGetResponseEditableFalse SettingServerSideExcludeGetResponseEditable = false
-)
+func (r ZonesServerSideExcludeParam) implementsZonesSettingEditParamsItem() {}
 
 type SettingServerSideExcludeEditParams struct {
 	// Identifier
@@ -247,7 +208,7 @@ type SettingServerSideExcludeEditResponseEnvelope struct {
 	// Cloudflare's HTML minification and SSE functionality occur on-the-fly as the
 	// resource moves through our network to the visitor's computer.
 	// (https://support.cloudflare.com/hc/en-us/articles/200170036).
-	Result SettingServerSideExcludeEditResponse             `json:"result"`
+	Result ZonesServerSideExclude                           `json:"result"`
 	JSON   settingServerSideExcludeEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -337,7 +298,7 @@ type SettingServerSideExcludeGetResponseEnvelope struct {
 	// Cloudflare's HTML minification and SSE functionality occur on-the-fly as the
 	// resource moves through our network to the visitor's computer.
 	// (https://support.cloudflare.com/hc/en-us/articles/200170036).
-	Result SettingServerSideExcludeGetResponse             `json:"result"`
+	Result ZonesServerSideExclude                          `json:"result"`
 	JSON   settingServerSideExcludeGetResponseEnvelopeJSON `json:"-"`
 }
 

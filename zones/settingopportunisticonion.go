@@ -34,7 +34,7 @@ func NewSettingOpportunisticOnionService(opts ...option.RequestOption) (r *Setti
 
 // Add an Alt-Svc header to all legitimate requests from Tor, allowing the
 // connection to use our onion services instead of exit nodes.
-func (r *SettingOpportunisticOnionService) Edit(ctx context.Context, params SettingOpportunisticOnionEditParams, opts ...option.RequestOption) (res *SettingOpportunisticOnionEditResponse, err error) {
+func (r *SettingOpportunisticOnionService) Edit(ctx context.Context, params SettingOpportunisticOnionEditParams, opts ...option.RequestOption) (res *ZonesOpportunisticOnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingOpportunisticOnionEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/opportunistic_onion", params.ZoneID)
@@ -48,7 +48,7 @@ func (r *SettingOpportunisticOnionService) Edit(ctx context.Context, params Sett
 
 // Add an Alt-Svc header to all legitimate requests from Tor, allowing the
 // connection to use our onion services instead of exit nodes.
-func (r *SettingOpportunisticOnionService) Get(ctx context.Context, query SettingOpportunisticOnionGetParams, opts ...option.RequestOption) (res *SettingOpportunisticOnionGetResponse, err error) {
+func (r *SettingOpportunisticOnionService) Get(ctx context.Context, query SettingOpportunisticOnionGetParams, opts ...option.RequestOption) (res *ZonesOpportunisticOnion, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingOpportunisticOnionGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/opportunistic_onion", query.ZoneID)
@@ -62,22 +62,22 @@ func (r *SettingOpportunisticOnionService) Get(ctx context.Context, query Settin
 
 // Add an Alt-Svc header to all legitimate requests from Tor, allowing the
 // connection to use our onion services instead of exit nodes.
-type SettingOpportunisticOnionEditResponse struct {
+type ZonesOpportunisticOnion struct {
 	// ID of the zone setting.
-	ID SettingOpportunisticOnionEditResponseID `json:"id,required"`
+	ID ZonesOpportunisticOnionID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingOpportunisticOnionEditResponseValue `json:"value,required"`
+	Value ZonesOpportunisticOnionValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingOpportunisticOnionEditResponseEditable `json:"editable"`
+	Editable ZonesOpportunisticOnionEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                 `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingOpportunisticOnionEditResponseJSON `json:"-"`
+	ModifiedOn time.Time                   `json:"modified_on,nullable" format:"date-time"`
+	JSON       zonesOpportunisticOnionJSON `json:"-"`
 }
 
-// settingOpportunisticOnionEditResponseJSON contains the JSON metadata for the
-// struct [SettingOpportunisticOnionEditResponse]
-type settingOpportunisticOnionEditResponseJSON struct {
+// zonesOpportunisticOnionJSON contains the JSON metadata for the struct
+// [ZonesOpportunisticOnion]
+type zonesOpportunisticOnionJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -86,95 +86,56 @@ type settingOpportunisticOnionEditResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingOpportunisticOnionEditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonesOpportunisticOnion) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r settingOpportunisticOnionEditResponseJSON) RawJSON() string {
+func (r zonesOpportunisticOnionJSON) RawJSON() string {
 	return r.raw
 }
 
+func (r ZonesOpportunisticOnion) implementsZonesSettingEditResponse() {}
+
+func (r ZonesOpportunisticOnion) implementsZonesSettingGetResponse() {}
+
 // ID of the zone setting.
-type SettingOpportunisticOnionEditResponseID string
+type ZonesOpportunisticOnionID string
 
 const (
-	SettingOpportunisticOnionEditResponseIDOpportunisticOnion SettingOpportunisticOnionEditResponseID = "opportunistic_onion"
+	ZonesOpportunisticOnionIDOpportunisticOnion ZonesOpportunisticOnionID = "opportunistic_onion"
 )
 
 // Current value of the zone setting.
-type SettingOpportunisticOnionEditResponseValue string
+type ZonesOpportunisticOnionValue string
 
 const (
-	SettingOpportunisticOnionEditResponseValueOn  SettingOpportunisticOnionEditResponseValue = "on"
-	SettingOpportunisticOnionEditResponseValueOff SettingOpportunisticOnionEditResponseValue = "off"
+	ZonesOpportunisticOnionValueOn  ZonesOpportunisticOnionValue = "on"
+	ZonesOpportunisticOnionValueOff ZonesOpportunisticOnionValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingOpportunisticOnionEditResponseEditable bool
+type ZonesOpportunisticOnionEditable bool
 
 const (
-	SettingOpportunisticOnionEditResponseEditableTrue  SettingOpportunisticOnionEditResponseEditable = true
-	SettingOpportunisticOnionEditResponseEditableFalse SettingOpportunisticOnionEditResponseEditable = false
+	ZonesOpportunisticOnionEditableTrue  ZonesOpportunisticOnionEditable = true
+	ZonesOpportunisticOnionEditableFalse ZonesOpportunisticOnionEditable = false
 )
 
 // Add an Alt-Svc header to all legitimate requests from Tor, allowing the
 // connection to use our onion services instead of exit nodes.
-type SettingOpportunisticOnionGetResponse struct {
+type ZonesOpportunisticOnionParam struct {
 	// ID of the zone setting.
-	ID SettingOpportunisticOnionGetResponseID `json:"id,required"`
+	ID param.Field[ZonesOpportunisticOnionID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingOpportunisticOnionGetResponseValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable SettingOpportunisticOnionGetResponseEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingOpportunisticOnionGetResponseJSON `json:"-"`
+	Value param.Field[ZonesOpportunisticOnionValue] `json:"value,required"`
 }
 
-// settingOpportunisticOnionGetResponseJSON contains the JSON metadata for the
-// struct [SettingOpportunisticOnionGetResponse]
-type settingOpportunisticOnionGetResponseJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+func (r ZonesOpportunisticOnionParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *SettingOpportunisticOnionGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingOpportunisticOnionGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// ID of the zone setting.
-type SettingOpportunisticOnionGetResponseID string
-
-const (
-	SettingOpportunisticOnionGetResponseIDOpportunisticOnion SettingOpportunisticOnionGetResponseID = "opportunistic_onion"
-)
-
-// Current value of the zone setting.
-type SettingOpportunisticOnionGetResponseValue string
-
-const (
-	SettingOpportunisticOnionGetResponseValueOn  SettingOpportunisticOnionGetResponseValue = "on"
-	SettingOpportunisticOnionGetResponseValueOff SettingOpportunisticOnionGetResponseValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type SettingOpportunisticOnionGetResponseEditable bool
-
-const (
-	SettingOpportunisticOnionGetResponseEditableTrue  SettingOpportunisticOnionGetResponseEditable = true
-	SettingOpportunisticOnionGetResponseEditableFalse SettingOpportunisticOnionGetResponseEditable = false
-)
+func (r ZonesOpportunisticOnionParam) implementsZonesSettingEditParamsItem() {}
 
 type SettingOpportunisticOnionEditParams struct {
 	// Identifier
@@ -204,7 +165,7 @@ type SettingOpportunisticOnionEditResponseEnvelope struct {
 	Success bool `json:"success,required"`
 	// Add an Alt-Svc header to all legitimate requests from Tor, allowing the
 	// connection to use our onion services instead of exit nodes.
-	Result SettingOpportunisticOnionEditResponse             `json:"result"`
+	Result ZonesOpportunisticOnion                           `json:"result"`
 	JSON   settingOpportunisticOnionEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -285,7 +246,7 @@ type SettingOpportunisticOnionGetResponseEnvelope struct {
 	Success bool `json:"success,required"`
 	// Add an Alt-Svc header to all legitimate requests from Tor, allowing the
 	// connection to use our onion services instead of exit nodes.
-	Result SettingOpportunisticOnionGetResponse             `json:"result"`
+	Result ZonesOpportunisticOnion                          `json:"result"`
 	JSON   settingOpportunisticOnionGetResponseEnvelopeJSON `json:"-"`
 }
 

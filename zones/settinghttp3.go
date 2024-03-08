@@ -33,7 +33,7 @@ func NewSettingHTTP3Service(opts ...option.RequestOption) (r *SettingHTTP3Servic
 }
 
 // Value of the HTTP3 setting.
-func (r *SettingHTTP3Service) Edit(ctx context.Context, params SettingHTTP3EditParams, opts ...option.RequestOption) (res *SettingHTTP3EditResponse, err error) {
+func (r *SettingHTTP3Service) Edit(ctx context.Context, params SettingHTTP3EditParams, opts ...option.RequestOption) (res *ZonesHTTP3, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingHTTP3EditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/http3", params.ZoneID)
@@ -46,7 +46,7 @@ func (r *SettingHTTP3Service) Edit(ctx context.Context, params SettingHTTP3EditP
 }
 
 // Value of the HTTP3 setting.
-func (r *SettingHTTP3Service) Get(ctx context.Context, query SettingHTTP3GetParams, opts ...option.RequestOption) (res *SettingHTTP3GetResponse, err error) {
+func (r *SettingHTTP3Service) Get(ctx context.Context, query SettingHTTP3GetParams, opts ...option.RequestOption) (res *ZonesHTTP3, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingHTTP3GetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/http3", query.ZoneID)
@@ -59,22 +59,21 @@ func (r *SettingHTTP3Service) Get(ctx context.Context, query SettingHTTP3GetPara
 }
 
 // HTTP3 enabled for this zone.
-type SettingHTTP3EditResponse struct {
+type ZonesHTTP3 struct {
 	// ID of the zone setting.
-	ID SettingHTTP3EditResponseID `json:"id,required"`
+	ID ZonesHTTP3ID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingHTTP3EditResponseValue `json:"value,required"`
+	Value ZonesHTTP3Value `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingHTTP3EditResponseEditable `json:"editable"`
+	Editable ZonesHTTP3Editable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                    `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingHTTP3EditResponseJSON `json:"-"`
+	ModifiedOn time.Time      `json:"modified_on,nullable" format:"date-time"`
+	JSON       zonesHTTP3JSON `json:"-"`
 }
 
-// settingHTTP3EditResponseJSON contains the JSON metadata for the struct
-// [SettingHTTP3EditResponse]
-type settingHTTP3EditResponseJSON struct {
+// zonesHTTP3JSON contains the JSON metadata for the struct [ZonesHTTP3]
+type zonesHTTP3JSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -83,94 +82,55 @@ type settingHTTP3EditResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingHTTP3EditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonesHTTP3) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r settingHTTP3EditResponseJSON) RawJSON() string {
+func (r zonesHTTP3JSON) RawJSON() string {
 	return r.raw
 }
 
+func (r ZonesHTTP3) implementsZonesSettingEditResponse() {}
+
+func (r ZonesHTTP3) implementsZonesSettingGetResponse() {}
+
 // ID of the zone setting.
-type SettingHTTP3EditResponseID string
+type ZonesHTTP3ID string
 
 const (
-	SettingHTTP3EditResponseIDHTTP3 SettingHTTP3EditResponseID = "http3"
+	ZonesHTTP3IDHTTP3 ZonesHTTP3ID = "http3"
 )
 
 // Current value of the zone setting.
-type SettingHTTP3EditResponseValue string
+type ZonesHTTP3Value string
 
 const (
-	SettingHTTP3EditResponseValueOn  SettingHTTP3EditResponseValue = "on"
-	SettingHTTP3EditResponseValueOff SettingHTTP3EditResponseValue = "off"
+	ZonesHTTP3ValueOn  ZonesHTTP3Value = "on"
+	ZonesHTTP3ValueOff ZonesHTTP3Value = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingHTTP3EditResponseEditable bool
+type ZonesHTTP3Editable bool
 
 const (
-	SettingHTTP3EditResponseEditableTrue  SettingHTTP3EditResponseEditable = true
-	SettingHTTP3EditResponseEditableFalse SettingHTTP3EditResponseEditable = false
+	ZonesHTTP3EditableTrue  ZonesHTTP3Editable = true
+	ZonesHTTP3EditableFalse ZonesHTTP3Editable = false
 )
 
 // HTTP3 enabled for this zone.
-type SettingHTTP3GetResponse struct {
+type ZonesHTTP3Param struct {
 	// ID of the zone setting.
-	ID SettingHTTP3GetResponseID `json:"id,required"`
+	ID param.Field[ZonesHTTP3ID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingHTTP3GetResponseValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable SettingHTTP3GetResponseEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                   `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingHTTP3GetResponseJSON `json:"-"`
+	Value param.Field[ZonesHTTP3Value] `json:"value,required"`
 }
 
-// settingHTTP3GetResponseJSON contains the JSON metadata for the struct
-// [SettingHTTP3GetResponse]
-type settingHTTP3GetResponseJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+func (r ZonesHTTP3Param) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *SettingHTTP3GetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingHTTP3GetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// ID of the zone setting.
-type SettingHTTP3GetResponseID string
-
-const (
-	SettingHTTP3GetResponseIDHTTP3 SettingHTTP3GetResponseID = "http3"
-)
-
-// Current value of the zone setting.
-type SettingHTTP3GetResponseValue string
-
-const (
-	SettingHTTP3GetResponseValueOn  SettingHTTP3GetResponseValue = "on"
-	SettingHTTP3GetResponseValueOff SettingHTTP3GetResponseValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type SettingHTTP3GetResponseEditable bool
-
-const (
-	SettingHTTP3GetResponseEditableTrue  SettingHTTP3GetResponseEditable = true
-	SettingHTTP3GetResponseEditableFalse SettingHTTP3GetResponseEditable = false
-)
+func (r ZonesHTTP3Param) implementsZonesSettingEditParamsItem() {}
 
 type SettingHTTP3EditParams struct {
 	// Identifier
@@ -197,7 +157,7 @@ type SettingHTTP3EditResponseEnvelope struct {
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// HTTP3 enabled for this zone.
-	Result SettingHTTP3EditResponse             `json:"result"`
+	Result ZonesHTTP3                           `json:"result"`
 	JSON   settingHTTP3EditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -277,7 +237,7 @@ type SettingHTTP3GetResponseEnvelope struct {
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// HTTP3 enabled for this zone.
-	Result SettingHTTP3GetResponse             `json:"result"`
+	Result ZonesHTTP3                          `json:"result"`
 	JSON   settingHTTP3GetResponseEnvelopeJSON `json:"-"`
 }
 

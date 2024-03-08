@@ -33,7 +33,7 @@ func NewCallService(opts ...option.RequestOption) (r *CallService) {
 
 // Creates a new Cloudflare calls app. An app is an unique enviroment where each
 // Session can access all Tracks within the app.
-func (r *CallService) New(ctx context.Context, params CallNewParams, opts ...option.RequestOption) (res *CallNewResponse, err error) {
+func (r *CallService) New(ctx context.Context, params CallNewParams, opts ...option.RequestOption) (res *CallsAppWithSecret, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CallNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/calls/apps", params.AccountID)
@@ -46,7 +46,7 @@ func (r *CallService) New(ctx context.Context, params CallNewParams, opts ...opt
 }
 
 // Edit details for a single app.
-func (r *CallService) Update(ctx context.Context, appID string, params CallUpdateParams, opts ...option.RequestOption) (res *CallUpdateResponse, err error) {
+func (r *CallService) Update(ctx context.Context, appID string, params CallUpdateParams, opts ...option.RequestOption) (res *CallsApp, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CallUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/calls/apps/%s", params.AccountID, appID)
@@ -59,7 +59,7 @@ func (r *CallService) Update(ctx context.Context, appID string, params CallUpdat
 }
 
 // Lists all apps in the Cloudflare account
-func (r *CallService) List(ctx context.Context, query CallListParams, opts ...option.RequestOption) (res *[]CallListResponse, err error) {
+func (r *CallService) List(ctx context.Context, query CallListParams, opts ...option.RequestOption) (res *[]CallsApp, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CallListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/calls/apps", query.AccountID)
@@ -72,7 +72,7 @@ func (r *CallService) List(ctx context.Context, query CallListParams, opts ...op
 }
 
 // Deletes an app from Cloudflare Calls
-func (r *CallService) Delete(ctx context.Context, appID string, body CallDeleteParams, opts ...option.RequestOption) (res *CallDeleteResponse, err error) {
+func (r *CallService) Delete(ctx context.Context, appID string, body CallDeleteParams, opts ...option.RequestOption) (res *CallsApp, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CallDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/calls/apps/%s", body.AccountID, appID)
@@ -85,7 +85,7 @@ func (r *CallService) Delete(ctx context.Context, appID string, body CallDeleteP
 }
 
 // Fetches details for a single Calls app.
-func (r *CallService) Get(ctx context.Context, appID string, query CallGetParams, opts ...option.RequestOption) (res *CallGetResponse, err error) {
+func (r *CallService) Get(ctx context.Context, appID string, query CallGetParams, opts ...option.RequestOption) (res *CallsApp, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CallGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/calls/apps/%s", query.AccountID, appID)
@@ -97,7 +97,37 @@ func (r *CallService) Get(ctx context.Context, appID string, query CallGetParams
 	return
 }
 
-type CallNewResponse struct {
+type CallsApp struct {
+	// The date and time the item was created.
+	Created time.Time `json:"created" format:"date-time"`
+	// The date and time the item was last modified.
+	Modified time.Time `json:"modified" format:"date-time"`
+	// A short description of Calls app, not shown to end users.
+	Name string `json:"name"`
+	// A Cloudflare-generated unique identifier for a item.
+	Uid  string       `json:"uid"`
+	JSON callsAppJSON `json:"-"`
+}
+
+// callsAppJSON contains the JSON metadata for the struct [CallsApp]
+type callsAppJSON struct {
+	Created     apijson.Field
+	Modified    apijson.Field
+	Name        apijson.Field
+	Uid         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CallsApp) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r callsAppJSON) RawJSON() string {
+	return r.raw
+}
+
+type CallsAppWithSecret struct {
 	// The date and time the item was created.
 	Created time.Time `json:"created" format:"date-time"`
 	// The date and time the item was last modified.
@@ -107,12 +137,13 @@ type CallNewResponse struct {
 	// Bearer token to use the Calls API.
 	Secret string `json:"secret"`
 	// A Cloudflare-generated unique identifier for a item.
-	Uid  string              `json:"uid"`
-	JSON callNewResponseJSON `json:"-"`
+	Uid  string                 `json:"uid"`
+	JSON callsAppWithSecretJSON `json:"-"`
 }
 
-// callNewResponseJSON contains the JSON metadata for the struct [CallNewResponse]
-type callNewResponseJSON struct {
+// callsAppWithSecretJSON contains the JSON metadata for the struct
+// [CallsAppWithSecret]
+type callsAppWithSecretJSON struct {
 	Created     apijson.Field
 	Modified    apijson.Field
 	Name        apijson.Field
@@ -122,134 +153,11 @@ type callNewResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *CallNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *CallsAppWithSecret) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r callNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type CallUpdateResponse struct {
-	// The date and time the item was created.
-	Created time.Time `json:"created" format:"date-time"`
-	// The date and time the item was last modified.
-	Modified time.Time `json:"modified" format:"date-time"`
-	// A short description of Calls app, not shown to end users.
-	Name string `json:"name"`
-	// A Cloudflare-generated unique identifier for a item.
-	Uid  string                 `json:"uid"`
-	JSON callUpdateResponseJSON `json:"-"`
-}
-
-// callUpdateResponseJSON contains the JSON metadata for the struct
-// [CallUpdateResponse]
-type callUpdateResponseJSON struct {
-	Created     apijson.Field
-	Modified    apijson.Field
-	Name        apijson.Field
-	Uid         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CallUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r callUpdateResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type CallListResponse struct {
-	// The date and time the item was created.
-	Created time.Time `json:"created" format:"date-time"`
-	// The date and time the item was last modified.
-	Modified time.Time `json:"modified" format:"date-time"`
-	// A short description of Calls app, not shown to end users.
-	Name string `json:"name"`
-	// A Cloudflare-generated unique identifier for a item.
-	Uid  string               `json:"uid"`
-	JSON callListResponseJSON `json:"-"`
-}
-
-// callListResponseJSON contains the JSON metadata for the struct
-// [CallListResponse]
-type callListResponseJSON struct {
-	Created     apijson.Field
-	Modified    apijson.Field
-	Name        apijson.Field
-	Uid         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CallListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r callListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type CallDeleteResponse struct {
-	// The date and time the item was created.
-	Created time.Time `json:"created" format:"date-time"`
-	// The date and time the item was last modified.
-	Modified time.Time `json:"modified" format:"date-time"`
-	// A short description of Calls app, not shown to end users.
-	Name string `json:"name"`
-	// A Cloudflare-generated unique identifier for a item.
-	Uid  string                 `json:"uid"`
-	JSON callDeleteResponseJSON `json:"-"`
-}
-
-// callDeleteResponseJSON contains the JSON metadata for the struct
-// [CallDeleteResponse]
-type callDeleteResponseJSON struct {
-	Created     apijson.Field
-	Modified    apijson.Field
-	Name        apijson.Field
-	Uid         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CallDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r callDeleteResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type CallGetResponse struct {
-	// The date and time the item was created.
-	Created time.Time `json:"created" format:"date-time"`
-	// The date and time the item was last modified.
-	Modified time.Time `json:"modified" format:"date-time"`
-	// A short description of Calls app, not shown to end users.
-	Name string `json:"name"`
-	// A Cloudflare-generated unique identifier for a item.
-	Uid  string              `json:"uid"`
-	JSON callGetResponseJSON `json:"-"`
-}
-
-// callGetResponseJSON contains the JSON metadata for the struct [CallGetResponse]
-type callGetResponseJSON struct {
-	Created     apijson.Field
-	Modified    apijson.Field
-	Name        apijson.Field
-	Uid         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CallGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r callGetResponseJSON) RawJSON() string {
+func (r callsAppWithSecretJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -267,7 +175,7 @@ func (r CallNewParams) MarshalJSON() (data []byte, err error) {
 type CallNewResponseEnvelope struct {
 	Errors   []CallNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []CallNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   CallNewResponse                   `json:"result,required"`
+	Result   CallsAppWithSecret                `json:"result,required"`
 	// Whether the API call was successful
 	Success CallNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    callNewResponseEnvelopeJSON    `json:"-"`
@@ -359,7 +267,7 @@ func (r CallUpdateParams) MarshalJSON() (data []byte, err error) {
 type CallUpdateResponseEnvelope struct {
 	Errors   []CallUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []CallUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   CallUpdateResponse                   `json:"result,required"`
+	Result   CallsApp                             `json:"result,required"`
 	// Whether the API call was successful
 	Success CallUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    callUpdateResponseEnvelopeJSON    `json:"-"`
@@ -445,7 +353,7 @@ type CallListParams struct {
 type CallListResponseEnvelope struct {
 	Errors   []CallListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []CallListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []CallListResponse                 `json:"result,required"`
+	Result   []CallsApp                         `json:"result,required"`
 	// Whether the API call was successful
 	Success CallListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    callListResponseEnvelopeJSON    `json:"-"`
@@ -531,7 +439,7 @@ type CallDeleteParams struct {
 type CallDeleteResponseEnvelope struct {
 	Errors   []CallDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []CallDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   CallDeleteResponse                   `json:"result,required"`
+	Result   CallsApp                             `json:"result,required"`
 	// Whether the API call was successful
 	Success CallDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    callDeleteResponseEnvelopeJSON    `json:"-"`
@@ -617,7 +525,7 @@ type CallGetParams struct {
 type CallGetResponseEnvelope struct {
 	Errors   []CallGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []CallGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   CallGetResponse                   `json:"result,required"`
+	Result   CallsApp                          `json:"result,required"`
 	// Whether the API call was successful
 	Success CallGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    callGetResponseEnvelopeJSON    `json:"-"`

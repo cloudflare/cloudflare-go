@@ -34,7 +34,7 @@ func NewNamespaceKeyService(opts ...option.RequestOption) (r *NamespaceKeyServic
 }
 
 // Lists a namespace's keys.
-func (r *NamespaceKeyService) List(ctx context.Context, namespaceID string, params NamespaceKeyListParams, opts ...option.RequestOption) (res *[]NamespaceKeyListResponse, err error) {
+func (r *NamespaceKeyService) List(ctx context.Context, namespaceID string, params NamespaceKeyListParams, opts ...option.RequestOption) (res *[]WorkersKVKey, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NamespaceKeyListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/keys", params.AccountID, namespaceID)
@@ -48,7 +48,7 @@ func (r *NamespaceKeyService) List(ctx context.Context, namespaceID string, para
 
 // A name for a value. A value stored under a given key may be retrieved via the
 // same key.
-type NamespaceKeyListResponse struct {
+type WorkersKVKey struct {
 	// A key's name. The name may be at most 512 bytes. All printable, non-whitespace
 	// characters are valid. Use percent-encoding to define key names as part of a URL.
 	Name string `json:"name,required"`
@@ -56,13 +56,12 @@ type NamespaceKeyListResponse struct {
 	// will expire. This property is omitted for keys that will not expire.
 	Expiration float64 `json:"expiration"`
 	// Arbitrary JSON that is associated with a key.
-	Metadata interface{}                  `json:"metadata"`
-	JSON     namespaceKeyListResponseJSON `json:"-"`
+	Metadata interface{}      `json:"metadata"`
+	JSON     workersKVKeyJSON `json:"-"`
 }
 
-// namespaceKeyListResponseJSON contains the JSON metadata for the struct
-// [NamespaceKeyListResponse]
-type namespaceKeyListResponseJSON struct {
+// workersKVKeyJSON contains the JSON metadata for the struct [WorkersKVKey]
+type workersKVKeyJSON struct {
 	Name        apijson.Field
 	Expiration  apijson.Field
 	Metadata    apijson.Field
@@ -70,11 +69,11 @@ type namespaceKeyListResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *NamespaceKeyListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkersKVKey) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r namespaceKeyListResponseJSON) RawJSON() string {
+func (r workersKVKeyJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -105,7 +104,7 @@ func (r NamespaceKeyListParams) URLQuery() (v url.Values) {
 type NamespaceKeyListResponseEnvelope struct {
 	Errors   []NamespaceKeyListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []NamespaceKeyListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []NamespaceKeyListResponse                 `json:"result,required"`
+	Result   []WorkersKVKey                             `json:"result,required"`
 	// Whether the API call was successful
 	Success    NamespaceKeyListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo NamespaceKeyListResponseEnvelopeResultInfo `json:"result_info"`

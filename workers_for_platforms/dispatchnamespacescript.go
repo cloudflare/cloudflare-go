@@ -18,6 +18,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/internal/param"
 	"github.com/cloudflare/cloudflare-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-go/workers"
 )
 
 // DispatchNamespaceScriptService contains methods and other services that help
@@ -41,7 +42,7 @@ func NewDispatchNamespaceScriptService(opts ...option.RequestOption) (r *Dispatc
 }
 
 // Upload a worker module to a Workers for Platforms namespace.
-func (r *DispatchNamespaceScriptService) Update(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptUpdateParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptUpdateResponse, err error) {
+func (r *DispatchNamespaceScriptService) Update(ctx context.Context, dispatchNamespace string, scriptName string, params DispatchNamespaceScriptUpdateParams, opts ...option.RequestOption) (res *workers.WorkersScript, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DispatchNamespaceScriptUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s", params.AccountID, dispatchNamespace, scriptName)
@@ -64,7 +65,7 @@ func (r *DispatchNamespaceScriptService) Delete(ctx context.Context, dispatchNam
 }
 
 // Fetch information about a script uploaded to a Workers for Platforms namespace.
-func (r *DispatchNamespaceScriptService) Get(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptGetParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptGetResponse, err error) {
+func (r *DispatchNamespaceScriptService) Get(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptGetParams, opts ...option.RequestOption) (res *WorkersNamespaceScript, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DispatchNamespaceScriptGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s", query.AccountID, dispatchNamespace, scriptName)
@@ -76,96 +77,21 @@ func (r *DispatchNamespaceScriptService) Get(ctx context.Context, dispatchNamesp
 	return
 }
 
-type DispatchNamespaceScriptUpdateResponse struct {
-	// The id of the script in the Workers system. Usually the script name.
-	ID string `json:"id"`
-	// When the script was created.
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Hashed script content, can be used in a If-None-Match header when updating.
-	Etag string `json:"etag"`
-	// Whether Logpush is turned on for the Worker.
-	Logpush bool `json:"logpush"`
-	// When the script was last modified.
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// Deprecated. Deployment metadata for internal usage.
-	PipelineHash string `json:"pipeline_hash"`
-	// Specifies the placement mode for the Worker (e.g. 'smart').
-	PlacementMode string `json:"placement_mode"`
-	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers []DispatchNamespaceScriptUpdateResponseTailConsumer `json:"tail_consumers"`
-	// Specifies the usage model for the Worker (e.g. 'bundled' or 'unbound').
-	UsageModel string                                    `json:"usage_model"`
-	JSON       dispatchNamespaceScriptUpdateResponseJSON `json:"-"`
-}
-
-// dispatchNamespaceScriptUpdateResponseJSON contains the JSON metadata for the
-// struct [DispatchNamespaceScriptUpdateResponse]
-type dispatchNamespaceScriptUpdateResponseJSON struct {
-	ID            apijson.Field
-	CreatedOn     apijson.Field
-	Etag          apijson.Field
-	Logpush       apijson.Field
-	ModifiedOn    apijson.Field
-	PipelineHash  apijson.Field
-	PlacementMode apijson.Field
-	TailConsumers apijson.Field
-	UsageModel    apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *DispatchNamespaceScriptUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dispatchNamespaceScriptUpdateResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// A reference to a script that will consume logs from the attached Worker.
-type DispatchNamespaceScriptUpdateResponseTailConsumer struct {
-	// Name of Worker that is to be the consumer.
-	Service string `json:"service,required"`
-	// Optional environment if the Worker utilizes one.
-	Environment string `json:"environment"`
-	// Optional dispatch namespace the script belongs to.
-	Namespace string                                                `json:"namespace"`
-	JSON      dispatchNamespaceScriptUpdateResponseTailConsumerJSON `json:"-"`
-}
-
-// dispatchNamespaceScriptUpdateResponseTailConsumerJSON contains the JSON metadata
-// for the struct [DispatchNamespaceScriptUpdateResponseTailConsumer]
-type dispatchNamespaceScriptUpdateResponseTailConsumerJSON struct {
-	Service     apijson.Field
-	Environment apijson.Field
-	Namespace   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DispatchNamespaceScriptUpdateResponseTailConsumer) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dispatchNamespaceScriptUpdateResponseTailConsumerJSON) RawJSON() string {
-	return r.raw
-}
-
 // Details about a worker uploaded to a Workers for Platforms namespace.
-type DispatchNamespaceScriptGetResponse struct {
+type WorkersNamespaceScript struct {
 	// When the script was created.
 	CreatedOn time.Time `json:"created_on" format:"date-time"`
 	// Name of the Workers for Platforms dispatch namespace.
 	DispatchNamespace string `json:"dispatch_namespace"`
 	// When the script was last modified.
-	ModifiedOn time.Time                                `json:"modified_on" format:"date-time"`
-	Script     DispatchNamespaceScriptGetResponseScript `json:"script"`
-	JSON       dispatchNamespaceScriptGetResponseJSON   `json:"-"`
+	ModifiedOn time.Time                  `json:"modified_on" format:"date-time"`
+	Script     workers.WorkersScript      `json:"script"`
+	JSON       workersNamespaceScriptJSON `json:"-"`
 }
 
-// dispatchNamespaceScriptGetResponseJSON contains the JSON metadata for the struct
-// [DispatchNamespaceScriptGetResponse]
-type dispatchNamespaceScriptGetResponseJSON struct {
+// workersNamespaceScriptJSON contains the JSON metadata for the struct
+// [WorkersNamespaceScript]
+type workersNamespaceScriptJSON struct {
 	CreatedOn         apijson.Field
 	DispatchNamespace apijson.Field
 	ModifiedOn        apijson.Field
@@ -174,86 +100,11 @@ type dispatchNamespaceScriptGetResponseJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *DispatchNamespaceScriptGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkersNamespaceScript) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dispatchNamespaceScriptGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type DispatchNamespaceScriptGetResponseScript struct {
-	// The id of the script in the Workers system. Usually the script name.
-	ID string `json:"id"`
-	// When the script was created.
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Hashed script content, can be used in a If-None-Match header when updating.
-	Etag string `json:"etag"`
-	// Whether Logpush is turned on for the Worker.
-	Logpush bool `json:"logpush"`
-	// When the script was last modified.
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// Deprecated. Deployment metadata for internal usage.
-	PipelineHash string `json:"pipeline_hash"`
-	// Specifies the placement mode for the Worker (e.g. 'smart').
-	PlacementMode string `json:"placement_mode"`
-	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers []DispatchNamespaceScriptGetResponseScriptTailConsumer `json:"tail_consumers"`
-	// Specifies the usage model for the Worker (e.g. 'bundled' or 'unbound').
-	UsageModel string                                       `json:"usage_model"`
-	JSON       dispatchNamespaceScriptGetResponseScriptJSON `json:"-"`
-}
-
-// dispatchNamespaceScriptGetResponseScriptJSON contains the JSON metadata for the
-// struct [DispatchNamespaceScriptGetResponseScript]
-type dispatchNamespaceScriptGetResponseScriptJSON struct {
-	ID            apijson.Field
-	CreatedOn     apijson.Field
-	Etag          apijson.Field
-	Logpush       apijson.Field
-	ModifiedOn    apijson.Field
-	PipelineHash  apijson.Field
-	PlacementMode apijson.Field
-	TailConsumers apijson.Field
-	UsageModel    apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *DispatchNamespaceScriptGetResponseScript) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dispatchNamespaceScriptGetResponseScriptJSON) RawJSON() string {
-	return r.raw
-}
-
-// A reference to a script that will consume logs from the attached Worker.
-type DispatchNamespaceScriptGetResponseScriptTailConsumer struct {
-	// Name of Worker that is to be the consumer.
-	Service string `json:"service,required"`
-	// Optional environment if the Worker utilizes one.
-	Environment string `json:"environment"`
-	// Optional dispatch namespace the script belongs to.
-	Namespace string                                                   `json:"namespace"`
-	JSON      dispatchNamespaceScriptGetResponseScriptTailConsumerJSON `json:"-"`
-}
-
-// dispatchNamespaceScriptGetResponseScriptTailConsumerJSON contains the JSON
-// metadata for the struct [DispatchNamespaceScriptGetResponseScriptTailConsumer]
-type dispatchNamespaceScriptGetResponseScriptTailConsumerJSON struct {
-	Service     apijson.Field
-	Environment apijson.Field
-	Namespace   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DispatchNamespaceScriptGetResponseScriptTailConsumer) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dispatchNamespaceScriptGetResponseScriptTailConsumerJSON) RawJSON() string {
+func (r workersNamespaceScriptJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -475,7 +326,7 @@ const (
 type DispatchNamespaceScriptUpdateResponseEnvelope struct {
 	Errors   []DispatchNamespaceScriptUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DispatchNamespaceScriptUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   DispatchNamespaceScriptUpdateResponse                   `json:"result,required"`
+	Result   workers.WorkersScript                                   `json:"result,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceScriptUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dispatchNamespaceScriptUpdateResponseEnvelopeJSON    `json:"-"`
@@ -580,7 +431,7 @@ type DispatchNamespaceScriptGetResponseEnvelope struct {
 	Errors   []DispatchNamespaceScriptGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DispatchNamespaceScriptGetResponseEnvelopeMessages `json:"messages,required"`
 	// Details about a worker uploaded to a Workers for Platforms namespace.
-	Result DispatchNamespaceScriptGetResponse `json:"result,required"`
+	Result WorkersNamespaceScript `json:"result,required"`
 	// Whether the API call was successful
 	Success DispatchNamespaceScriptGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dispatchNamespaceScriptGetResponseEnvelopeJSON    `json:"-"`

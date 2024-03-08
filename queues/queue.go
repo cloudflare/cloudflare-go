@@ -36,7 +36,7 @@ func NewQueueService(opts ...option.RequestOption) (r *QueueService) {
 }
 
 // Creates a new queue.
-func (r *QueueService) New(ctx context.Context, params QueueNewParams, opts ...option.RequestOption) (res *QueueNewResponse, err error) {
+func (r *QueueService) New(ctx context.Context, params QueueNewParams, opts ...option.RequestOption) (res *WorkersQueueCreated, err error) {
 	opts = append(r.Options[:], opts...)
 	var env QueueNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/queues", params.AccountID)
@@ -49,7 +49,7 @@ func (r *QueueService) New(ctx context.Context, params QueueNewParams, opts ...o
 }
 
 // Updates a queue.
-func (r *QueueService) Update(ctx context.Context, name string, params QueueUpdateParams, opts ...option.RequestOption) (res *QueueUpdateResponse, err error) {
+func (r *QueueService) Update(ctx context.Context, name string, params QueueUpdateParams, opts ...option.RequestOption) (res *WorkersQueueUpdated, err error) {
 	opts = append(r.Options[:], opts...)
 	var env QueueUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/queues/%s", params.AccountID, name)
@@ -62,7 +62,7 @@ func (r *QueueService) Update(ctx context.Context, name string, params QueueUpda
 }
 
 // Returns the queues owned by an account.
-func (r *QueueService) List(ctx context.Context, query QueueListParams, opts ...option.RequestOption) (res *[]QueueListResponse, err error) {
+func (r *QueueService) List(ctx context.Context, query QueueListParams, opts ...option.RequestOption) (res *[]WorkersQueue, err error) {
 	opts = append(r.Options[:], opts...)
 	var env QueueListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/queues", query.AccountID)
@@ -88,7 +88,7 @@ func (r *QueueService) Delete(ctx context.Context, name string, body QueueDelete
 }
 
 // Get information about a specific queue.
-func (r *QueueService) Get(ctx context.Context, name string, query QueueGetParams, opts ...option.RequestOption) (res *QueueGetResponse, err error) {
+func (r *QueueService) Get(ctx context.Context, name string, query QueueGetParams, opts ...option.RequestOption) (res *WorkersQueue, err error) {
 	opts = append(r.Options[:], opts...)
 	var env QueueGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/queues/%s", query.AccountID, name)
@@ -100,75 +100,20 @@ func (r *QueueService) Get(ctx context.Context, name string, query QueueGetParam
 	return
 }
 
-type QueueNewResponse struct {
-	CreatedOn  interface{}          `json:"created_on"`
-	ModifiedOn interface{}          `json:"modified_on"`
-	QueueID    interface{}          `json:"queue_id"`
-	QueueName  string               `json:"queue_name"`
-	JSON       queueNewResponseJSON `json:"-"`
+type WorkersQueue struct {
+	Consumers           interface{}      `json:"consumers"`
+	ConsumersTotalCount interface{}      `json:"consumers_total_count"`
+	CreatedOn           interface{}      `json:"created_on"`
+	ModifiedOn          interface{}      `json:"modified_on"`
+	Producers           interface{}      `json:"producers"`
+	ProducersTotalCount interface{}      `json:"producers_total_count"`
+	QueueID             interface{}      `json:"queue_id"`
+	QueueName           string           `json:"queue_name"`
+	JSON                workersQueueJSON `json:"-"`
 }
 
-// queueNewResponseJSON contains the JSON metadata for the struct
-// [QueueNewResponse]
-type queueNewResponseJSON struct {
-	CreatedOn   apijson.Field
-	ModifiedOn  apijson.Field
-	QueueID     apijson.Field
-	QueueName   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *QueueNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r queueNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type QueueUpdateResponse struct {
-	CreatedOn  interface{}             `json:"created_on"`
-	ModifiedOn interface{}             `json:"modified_on"`
-	QueueID    interface{}             `json:"queue_id"`
-	QueueName  string                  `json:"queue_name"`
-	JSON       queueUpdateResponseJSON `json:"-"`
-}
-
-// queueUpdateResponseJSON contains the JSON metadata for the struct
-// [QueueUpdateResponse]
-type queueUpdateResponseJSON struct {
-	CreatedOn   apijson.Field
-	ModifiedOn  apijson.Field
-	QueueID     apijson.Field
-	QueueName   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *QueueUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r queueUpdateResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type QueueListResponse struct {
-	Consumers           interface{}           `json:"consumers"`
-	ConsumersTotalCount interface{}           `json:"consumers_total_count"`
-	CreatedOn           interface{}           `json:"created_on"`
-	ModifiedOn          interface{}           `json:"modified_on"`
-	Producers           interface{}           `json:"producers"`
-	ProducersTotalCount interface{}           `json:"producers_total_count"`
-	QueueID             interface{}           `json:"queue_id"`
-	QueueName           string                `json:"queue_name"`
-	JSON                queueListResponseJSON `json:"-"`
-}
-
-// queueListResponseJSON contains the JSON metadata for the struct
-// [QueueListResponse]
-type queueListResponseJSON struct {
+// workersQueueJSON contains the JSON metadata for the struct [WorkersQueue]
+type workersQueueJSON struct {
 	Consumers           apijson.Field
 	ConsumersTotalCount apijson.Field
 	CreatedOn           apijson.Field
@@ -181,11 +126,65 @@ type queueListResponseJSON struct {
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *QueueListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkersQueue) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r queueListResponseJSON) RawJSON() string {
+func (r workersQueueJSON) RawJSON() string {
+	return r.raw
+}
+
+type WorkersQueueCreated struct {
+	CreatedOn  interface{}             `json:"created_on"`
+	ModifiedOn interface{}             `json:"modified_on"`
+	QueueID    interface{}             `json:"queue_id"`
+	QueueName  string                  `json:"queue_name"`
+	JSON       workersQueueCreatedJSON `json:"-"`
+}
+
+// workersQueueCreatedJSON contains the JSON metadata for the struct
+// [WorkersQueueCreated]
+type workersQueueCreatedJSON struct {
+	CreatedOn   apijson.Field
+	ModifiedOn  apijson.Field
+	QueueID     apijson.Field
+	QueueName   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkersQueueCreated) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workersQueueCreatedJSON) RawJSON() string {
+	return r.raw
+}
+
+type WorkersQueueUpdated struct {
+	CreatedOn  interface{}             `json:"created_on"`
+	ModifiedOn interface{}             `json:"modified_on"`
+	QueueID    interface{}             `json:"queue_id"`
+	QueueName  string                  `json:"queue_name"`
+	JSON       workersQueueUpdatedJSON `json:"-"`
+}
+
+// workersQueueUpdatedJSON contains the JSON metadata for the struct
+// [WorkersQueueUpdated]
+type workersQueueUpdatedJSON struct {
+	CreatedOn   apijson.Field
+	ModifiedOn  apijson.Field
+	QueueID     apijson.Field
+	QueueName   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *WorkersQueueUpdated) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r workersQueueUpdatedJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -214,41 +213,6 @@ type QueueDeleteResponseArray []interface{}
 
 func (r QueueDeleteResponseArray) ImplementsQueuesQueueDeleteResponse() {}
 
-type QueueGetResponse struct {
-	Consumers           interface{}          `json:"consumers"`
-	ConsumersTotalCount interface{}          `json:"consumers_total_count"`
-	CreatedOn           interface{}          `json:"created_on"`
-	ModifiedOn          interface{}          `json:"modified_on"`
-	Producers           interface{}          `json:"producers"`
-	ProducersTotalCount interface{}          `json:"producers_total_count"`
-	QueueID             interface{}          `json:"queue_id"`
-	QueueName           string               `json:"queue_name"`
-	JSON                queueGetResponseJSON `json:"-"`
-}
-
-// queueGetResponseJSON contains the JSON metadata for the struct
-// [QueueGetResponse]
-type queueGetResponseJSON struct {
-	Consumers           apijson.Field
-	ConsumersTotalCount apijson.Field
-	CreatedOn           apijson.Field
-	ModifiedOn          apijson.Field
-	Producers           apijson.Field
-	ProducersTotalCount apijson.Field
-	QueueID             apijson.Field
-	QueueName           apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *QueueGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r queueGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
 type QueueNewParams struct {
 	// Identifier
 	AccountID param.Field[string]      `path:"account_id,required"`
@@ -262,7 +226,7 @@ func (r QueueNewParams) MarshalJSON() (data []byte, err error) {
 type QueueNewResponseEnvelope struct {
 	Errors   []QueueNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []QueueNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   QueueNewResponse                   `json:"result,required,nullable"`
+	Result   WorkersQueueCreated                `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    QueueNewResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo QueueNewResponseEnvelopeResultInfo `json:"result_info"`
@@ -386,7 +350,7 @@ func (r QueueUpdateParams) MarshalJSON() (data []byte, err error) {
 type QueueUpdateResponseEnvelope struct {
 	Errors   []QueueUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []QueueUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   QueueUpdateResponse                   `json:"result,required,nullable"`
+	Result   WorkersQueueUpdated                   `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    QueueUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo QueueUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -503,9 +467,9 @@ type QueueListParams struct {
 }
 
 type QueueListResponseEnvelope struct {
-	Errors   []interface{}       `json:"errors,required,nullable"`
-	Messages []interface{}       `json:"messages,required,nullable"`
-	Result   []QueueListResponse `json:"result,required,nullable"`
+	Errors   []interface{}  `json:"errors,required,nullable"`
+	Messages []interface{}  `json:"messages,required,nullable"`
+	Result   []WorkersQueue `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    QueueListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo QueueListResponseEnvelopeResultInfo `json:"result_info"`
@@ -699,7 +663,7 @@ type QueueGetParams struct {
 type QueueGetResponseEnvelope struct {
 	Errors   []QueueGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []QueueGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   QueueGetResponse                   `json:"result,required,nullable"`
+	Result   WorkersQueue                       `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    QueueGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo QueueGetResponseEnvelopeResultInfo `json:"result_info"`

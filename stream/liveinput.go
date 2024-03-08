@@ -37,7 +37,7 @@ func NewLiveInputService(opts ...option.RequestOption) (r *LiveInputService) {
 
 // Creates a live input, and returns credentials that you or your users can use to
 // stream live video to Cloudflare Stream.
-func (r *LiveInputService) New(ctx context.Context, params LiveInputNewParams, opts ...option.RequestOption) (res *LiveInputNewResponse, err error) {
+func (r *LiveInputService) New(ctx context.Context, params LiveInputNewParams, opts ...option.RequestOption) (res *StreamLiveInput, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LiveInputNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/live_inputs", params.AccountID)
@@ -50,7 +50,7 @@ func (r *LiveInputService) New(ctx context.Context, params LiveInputNewParams, o
 }
 
 // Updates a specified live input.
-func (r *LiveInputService) Update(ctx context.Context, liveInputIdentifier string, params LiveInputUpdateParams, opts ...option.RequestOption) (res *LiveInputUpdateResponse, err error) {
+func (r *LiveInputService) Update(ctx context.Context, liveInputIdentifier string, params LiveInputUpdateParams, opts ...option.RequestOption) (res *StreamLiveInput, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LiveInputUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s", params.AccountID, liveInputIdentifier)
@@ -87,7 +87,7 @@ func (r *LiveInputService) Delete(ctx context.Context, liveInputIdentifier strin
 }
 
 // Retrieves details of an existing live input.
-func (r *LiveInputService) Get(ctx context.Context, liveInputIdentifier string, query LiveInputGetParams, opts ...option.RequestOption) (res *LiveInputGetResponse, err error) {
+func (r *LiveInputService) Get(ctx context.Context, liveInputIdentifier string, query LiveInputGetParams, opts ...option.RequestOption) (res *StreamLiveInput, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LiveInputGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/live_inputs/%s", query.AccountID, liveInputIdentifier)
@@ -100,7 +100,7 @@ func (r *LiveInputService) Get(ctx context.Context, liveInputIdentifier string, 
 }
 
 // Details about a live input.
-type LiveInputNewResponse struct {
+type StreamLiveInput struct {
 	// The date and time the live input was created.
 	Created time.Time `json:"created" format:"date-time"`
 	// Indicates the number of days after which the live inputs recordings will be
@@ -117,29 +117,28 @@ type LiveInputNewResponse struct {
 	// Records the input to a Cloudflare Stream video. Behavior depends on the mode. In
 	// most cases, the video will initially be viewable as a live video and transition
 	// to on-demand after a condition is satisfied.
-	Recording LiveInputNewResponseRecording `json:"recording"`
+	Recording StreamLiveInputRecording `json:"recording"`
 	// Details for streaming to an live input using RTMPS.
-	Rtmps LiveInputNewResponseRtmps `json:"rtmps"`
+	Rtmps StreamLiveInputRtmps `json:"rtmps"`
 	// Details for playback from an live input using RTMPS.
-	RtmpsPlayback LiveInputNewResponseRtmpsPlayback `json:"rtmpsPlayback"`
+	RtmpsPlayback StreamLiveInputRtmpsPlayback `json:"rtmpsPlayback"`
 	// Details for streaming to a live input using SRT.
-	Srt LiveInputNewResponseSrt `json:"srt"`
+	Srt StreamLiveInputSrt `json:"srt"`
 	// Details for playback from an live input using SRT.
-	SrtPlayback LiveInputNewResponseSrtPlayback `json:"srtPlayback"`
+	SrtPlayback StreamLiveInputSrtPlayback `json:"srtPlayback"`
 	// The connection status of a live input.
-	Status LiveInputNewResponseStatus `json:"status,nullable"`
+	Status StreamLiveInputStatus `json:"status,nullable"`
 	// A unique identifier for a live input.
 	Uid string `json:"uid"`
 	// Details for streaming to a live input using WebRTC.
-	WebRtc LiveInputNewResponseWebRtc `json:"webRTC"`
+	WebRtc StreamLiveInputWebRtc `json:"webRTC"`
 	// Details for playback from a live input using WebRTC.
-	WebRtcPlayback LiveInputNewResponseWebRtcPlayback `json:"webRTCPlayback"`
-	JSON           liveInputNewResponseJSON           `json:"-"`
+	WebRtcPlayback StreamLiveInputWebRtcPlayback `json:"webRTCPlayback"`
+	JSON           streamLiveInputJSON           `json:"-"`
 }
 
-// liveInputNewResponseJSON contains the JSON metadata for the struct
-// [LiveInputNewResponse]
-type liveInputNewResponseJSON struct {
+// streamLiveInputJSON contains the JSON metadata for the struct [StreamLiveInput]
+type streamLiveInputJSON struct {
 	Created                  apijson.Field
 	DeleteRecordingAfterDays apijson.Field
 	Meta                     apijson.Field
@@ -157,18 +156,18 @@ type liveInputNewResponseJSON struct {
 	ExtraFields              map[string]apijson.Field
 }
 
-func (r *LiveInputNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamLiveInput) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r liveInputNewResponseJSON) RawJSON() string {
+func (r streamLiveInputJSON) RawJSON() string {
 	return r.raw
 }
 
 // Records the input to a Cloudflare Stream video. Behavior depends on the mode. In
 // most cases, the video will initially be viewable as a live video and transition
 // to on-demand after a condition is satisfied.
-type LiveInputNewResponseRecording struct {
+type StreamLiveInputRecording struct {
 	// Lists the origins allowed to display videos created with this input. Enter
 	// allowed origin domains in an array and use `*` for wildcard subdomains. An empty
 	// array allows videos to be viewed on any origin.
@@ -176,7 +175,7 @@ type LiveInputNewResponseRecording struct {
 	// Specifies the recording behavior for the live input. Set this value to `off` to
 	// prevent a recording. Set the value to `automatic` to begin a recording and
 	// transition to on-demand after Stream Live stops receiving input.
-	Mode LiveInputNewResponseRecordingMode `json:"mode"`
+	Mode StreamLiveInputRecordingMode `json:"mode"`
 	// Indicates if a video using the live input has the `requireSignedURLs` property
 	// set. Also enforces access controls on any video recording of the livestream with
 	// the live input.
@@ -184,13 +183,13 @@ type LiveInputNewResponseRecording struct {
 	// Determines the amount of time a live input configured in `automatic` mode should
 	// wait before a recording transitions from live to on-demand. `0` is recommended
 	// for most use cases and indicates the platform default should be used.
-	TimeoutSeconds int64                             `json:"timeoutSeconds"`
-	JSON           liveInputNewResponseRecordingJSON `json:"-"`
+	TimeoutSeconds int64                        `json:"timeoutSeconds"`
+	JSON           streamLiveInputRecordingJSON `json:"-"`
 }
 
-// liveInputNewResponseRecordingJSON contains the JSON metadata for the struct
-// [LiveInputNewResponseRecording]
-type liveInputNewResponseRecordingJSON struct {
+// streamLiveInputRecordingJSON contains the JSON metadata for the struct
+// [StreamLiveInputRecording]
+type streamLiveInputRecordingJSON struct {
 	AllowedOrigins    apijson.Field
 	Mode              apijson.Field
 	RequireSignedURLs apijson.Field
@@ -199,378 +198,90 @@ type liveInputNewResponseRecordingJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *LiveInputNewResponseRecording) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamLiveInputRecording) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r liveInputNewResponseRecordingJSON) RawJSON() string {
+func (r streamLiveInputRecordingJSON) RawJSON() string {
 	return r.raw
 }
 
 // Specifies the recording behavior for the live input. Set this value to `off` to
 // prevent a recording. Set the value to `automatic` to begin a recording and
 // transition to on-demand after Stream Live stops receiving input.
-type LiveInputNewResponseRecordingMode string
+type StreamLiveInputRecordingMode string
 
 const (
-	LiveInputNewResponseRecordingModeOff       LiveInputNewResponseRecordingMode = "off"
-	LiveInputNewResponseRecordingModeAutomatic LiveInputNewResponseRecordingMode = "automatic"
+	StreamLiveInputRecordingModeOff       StreamLiveInputRecordingMode = "off"
+	StreamLiveInputRecordingModeAutomatic StreamLiveInputRecordingMode = "automatic"
 )
 
 // Details for streaming to an live input using RTMPS.
-type LiveInputNewResponseRtmps struct {
+type StreamLiveInputRtmps struct {
 	// The secret key to use when streaming via RTMPS to a live input.
 	StreamKey string `json:"streamKey"`
 	// The RTMPS URL you provide to the broadcaster, which they stream live video to.
-	URL  string                        `json:"url"`
-	JSON liveInputNewResponseRtmpsJSON `json:"-"`
+	URL  string                   `json:"url"`
+	JSON streamLiveInputRtmpsJSON `json:"-"`
 }
 
-// liveInputNewResponseRtmpsJSON contains the JSON metadata for the struct
-// [LiveInputNewResponseRtmps]
-type liveInputNewResponseRtmpsJSON struct {
+// streamLiveInputRtmpsJSON contains the JSON metadata for the struct
+// [StreamLiveInputRtmps]
+type streamLiveInputRtmpsJSON struct {
 	StreamKey   apijson.Field
 	URL         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LiveInputNewResponseRtmps) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamLiveInputRtmps) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r liveInputNewResponseRtmpsJSON) RawJSON() string {
+func (r streamLiveInputRtmpsJSON) RawJSON() string {
 	return r.raw
 }
 
 // Details for playback from an live input using RTMPS.
-type LiveInputNewResponseRtmpsPlayback struct {
+type StreamLiveInputRtmpsPlayback struct {
 	// The secret key to use for playback via RTMPS.
 	StreamKey string `json:"streamKey"`
 	// The URL used to play live video over RTMPS.
-	URL  string                                `json:"url"`
-	JSON liveInputNewResponseRtmpsPlaybackJSON `json:"-"`
-}
-
-// liveInputNewResponseRtmpsPlaybackJSON contains the JSON metadata for the struct
-// [LiveInputNewResponseRtmpsPlayback]
-type liveInputNewResponseRtmpsPlaybackJSON struct {
-	StreamKey   apijson.Field
-	URL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LiveInputNewResponseRtmpsPlayback) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r liveInputNewResponseRtmpsPlaybackJSON) RawJSON() string {
-	return r.raw
-}
-
-// Details for streaming to a live input using SRT.
-type LiveInputNewResponseSrt struct {
-	// The secret key to use when streaming via SRT to a live input.
-	Passphrase string `json:"passphrase"`
-	// The identifier of the live input to use when streaming via SRT.
-	StreamID string `json:"streamId"`
-	// The SRT URL you provide to the broadcaster, which they stream live video to.
-	URL  string                      `json:"url"`
-	JSON liveInputNewResponseSrtJSON `json:"-"`
-}
-
-// liveInputNewResponseSrtJSON contains the JSON metadata for the struct
-// [LiveInputNewResponseSrt]
-type liveInputNewResponseSrtJSON struct {
-	Passphrase  apijson.Field
-	StreamID    apijson.Field
-	URL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LiveInputNewResponseSrt) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r liveInputNewResponseSrtJSON) RawJSON() string {
-	return r.raw
-}
-
-// Details for playback from an live input using SRT.
-type LiveInputNewResponseSrtPlayback struct {
-	// The secret key to use for playback via SRT.
-	Passphrase string `json:"passphrase"`
-	// The identifier of the live input to use for playback via SRT.
-	StreamID string `json:"streamId"`
-	// The URL used to play live video over SRT.
-	URL  string                              `json:"url"`
-	JSON liveInputNewResponseSrtPlaybackJSON `json:"-"`
-}
-
-// liveInputNewResponseSrtPlaybackJSON contains the JSON metadata for the struct
-// [LiveInputNewResponseSrtPlayback]
-type liveInputNewResponseSrtPlaybackJSON struct {
-	Passphrase  apijson.Field
-	StreamID    apijson.Field
-	URL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LiveInputNewResponseSrtPlayback) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r liveInputNewResponseSrtPlaybackJSON) RawJSON() string {
-	return r.raw
-}
-
-// The connection status of a live input.
-type LiveInputNewResponseStatus string
-
-const (
-	LiveInputNewResponseStatusConnected                LiveInputNewResponseStatus = "connected"
-	LiveInputNewResponseStatusReconnected              LiveInputNewResponseStatus = "reconnected"
-	LiveInputNewResponseStatusReconnecting             LiveInputNewResponseStatus = "reconnecting"
-	LiveInputNewResponseStatusClientDisconnect         LiveInputNewResponseStatus = "client_disconnect"
-	LiveInputNewResponseStatusTTLExceeded              LiveInputNewResponseStatus = "ttl_exceeded"
-	LiveInputNewResponseStatusFailedToConnect          LiveInputNewResponseStatus = "failed_to_connect"
-	LiveInputNewResponseStatusFailedToReconnect        LiveInputNewResponseStatus = "failed_to_reconnect"
-	LiveInputNewResponseStatusNewConfigurationAccepted LiveInputNewResponseStatus = "new_configuration_accepted"
-)
-
-// Details for streaming to a live input using WebRTC.
-type LiveInputNewResponseWebRtc struct {
-	// The WebRTC URL you provide to the broadcaster, which they stream live video to.
-	URL  string                         `json:"url"`
-	JSON liveInputNewResponseWebRtcJSON `json:"-"`
-}
-
-// liveInputNewResponseWebRtcJSON contains the JSON metadata for the struct
-// [LiveInputNewResponseWebRtc]
-type liveInputNewResponseWebRtcJSON struct {
-	URL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LiveInputNewResponseWebRtc) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r liveInputNewResponseWebRtcJSON) RawJSON() string {
-	return r.raw
-}
-
-// Details for playback from a live input using WebRTC.
-type LiveInputNewResponseWebRtcPlayback struct {
-	// The URL used to play live video over WebRTC.
-	URL  string                                 `json:"url"`
-	JSON liveInputNewResponseWebRtcPlaybackJSON `json:"-"`
-}
-
-// liveInputNewResponseWebRtcPlaybackJSON contains the JSON metadata for the struct
-// [LiveInputNewResponseWebRtcPlayback]
-type liveInputNewResponseWebRtcPlaybackJSON struct {
-	URL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LiveInputNewResponseWebRtcPlayback) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r liveInputNewResponseWebRtcPlaybackJSON) RawJSON() string {
-	return r.raw
-}
-
-// Details about a live input.
-type LiveInputUpdateResponse struct {
-	// The date and time the live input was created.
-	Created time.Time `json:"created" format:"date-time"`
-	// Indicates the number of days after which the live inputs recordings will be
-	// deleted. When a stream completes and the recording is ready, the value is used
-	// to calculate a scheduled deletion date for that recording. Omit the field to
-	// indicate no change, or include with a `null` value to remove an existing
-	// scheduled deletion.
-	DeleteRecordingAfterDays float64 `json:"deleteRecordingAfterDays"`
-	// A user modifiable key-value store used to reference other systems of record for
-	// managing live inputs.
-	Meta interface{} `json:"meta"`
-	// The date and time the live input was last modified.
-	Modified time.Time `json:"modified" format:"date-time"`
-	// Records the input to a Cloudflare Stream video. Behavior depends on the mode. In
-	// most cases, the video will initially be viewable as a live video and transition
-	// to on-demand after a condition is satisfied.
-	Recording LiveInputUpdateResponseRecording `json:"recording"`
-	// Details for streaming to an live input using RTMPS.
-	Rtmps LiveInputUpdateResponseRtmps `json:"rtmps"`
-	// Details for playback from an live input using RTMPS.
-	RtmpsPlayback LiveInputUpdateResponseRtmpsPlayback `json:"rtmpsPlayback"`
-	// Details for streaming to a live input using SRT.
-	Srt LiveInputUpdateResponseSrt `json:"srt"`
-	// Details for playback from an live input using SRT.
-	SrtPlayback LiveInputUpdateResponseSrtPlayback `json:"srtPlayback"`
-	// The connection status of a live input.
-	Status LiveInputUpdateResponseStatus `json:"status,nullable"`
-	// A unique identifier for a live input.
-	Uid string `json:"uid"`
-	// Details for streaming to a live input using WebRTC.
-	WebRtc LiveInputUpdateResponseWebRtc `json:"webRTC"`
-	// Details for playback from a live input using WebRTC.
-	WebRtcPlayback LiveInputUpdateResponseWebRtcPlayback `json:"webRTCPlayback"`
-	JSON           liveInputUpdateResponseJSON           `json:"-"`
-}
-
-// liveInputUpdateResponseJSON contains the JSON metadata for the struct
-// [LiveInputUpdateResponse]
-type liveInputUpdateResponseJSON struct {
-	Created                  apijson.Field
-	DeleteRecordingAfterDays apijson.Field
-	Meta                     apijson.Field
-	Modified                 apijson.Field
-	Recording                apijson.Field
-	Rtmps                    apijson.Field
-	RtmpsPlayback            apijson.Field
-	Srt                      apijson.Field
-	SrtPlayback              apijson.Field
-	Status                   apijson.Field
-	Uid                      apijson.Field
-	WebRtc                   apijson.Field
-	WebRtcPlayback           apijson.Field
-	raw                      string
-	ExtraFields              map[string]apijson.Field
-}
-
-func (r *LiveInputUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r liveInputUpdateResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// Records the input to a Cloudflare Stream video. Behavior depends on the mode. In
-// most cases, the video will initially be viewable as a live video and transition
-// to on-demand after a condition is satisfied.
-type LiveInputUpdateResponseRecording struct {
-	// Lists the origins allowed to display videos created with this input. Enter
-	// allowed origin domains in an array and use `*` for wildcard subdomains. An empty
-	// array allows videos to be viewed on any origin.
-	AllowedOrigins []string `json:"allowedOrigins"`
-	// Specifies the recording behavior for the live input. Set this value to `off` to
-	// prevent a recording. Set the value to `automatic` to begin a recording and
-	// transition to on-demand after Stream Live stops receiving input.
-	Mode LiveInputUpdateResponseRecordingMode `json:"mode"`
-	// Indicates if a video using the live input has the `requireSignedURLs` property
-	// set. Also enforces access controls on any video recording of the livestream with
-	// the live input.
-	RequireSignedURLs bool `json:"requireSignedURLs"`
-	// Determines the amount of time a live input configured in `automatic` mode should
-	// wait before a recording transitions from live to on-demand. `0` is recommended
-	// for most use cases and indicates the platform default should be used.
-	TimeoutSeconds int64                                `json:"timeoutSeconds"`
-	JSON           liveInputUpdateResponseRecordingJSON `json:"-"`
-}
-
-// liveInputUpdateResponseRecordingJSON contains the JSON metadata for the struct
-// [LiveInputUpdateResponseRecording]
-type liveInputUpdateResponseRecordingJSON struct {
-	AllowedOrigins    apijson.Field
-	Mode              apijson.Field
-	RequireSignedURLs apijson.Field
-	TimeoutSeconds    apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *LiveInputUpdateResponseRecording) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r liveInputUpdateResponseRecordingJSON) RawJSON() string {
-	return r.raw
-}
-
-// Specifies the recording behavior for the live input. Set this value to `off` to
-// prevent a recording. Set the value to `automatic` to begin a recording and
-// transition to on-demand after Stream Live stops receiving input.
-type LiveInputUpdateResponseRecordingMode string
-
-const (
-	LiveInputUpdateResponseRecordingModeOff       LiveInputUpdateResponseRecordingMode = "off"
-	LiveInputUpdateResponseRecordingModeAutomatic LiveInputUpdateResponseRecordingMode = "automatic"
-)
-
-// Details for streaming to an live input using RTMPS.
-type LiveInputUpdateResponseRtmps struct {
-	// The secret key to use when streaming via RTMPS to a live input.
-	StreamKey string `json:"streamKey"`
-	// The RTMPS URL you provide to the broadcaster, which they stream live video to.
 	URL  string                           `json:"url"`
-	JSON liveInputUpdateResponseRtmpsJSON `json:"-"`
+	JSON streamLiveInputRtmpsPlaybackJSON `json:"-"`
 }
 
-// liveInputUpdateResponseRtmpsJSON contains the JSON metadata for the struct
-// [LiveInputUpdateResponseRtmps]
-type liveInputUpdateResponseRtmpsJSON struct {
+// streamLiveInputRtmpsPlaybackJSON contains the JSON metadata for the struct
+// [StreamLiveInputRtmpsPlayback]
+type streamLiveInputRtmpsPlaybackJSON struct {
 	StreamKey   apijson.Field
 	URL         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LiveInputUpdateResponseRtmps) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamLiveInputRtmpsPlayback) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r liveInputUpdateResponseRtmpsJSON) RawJSON() string {
-	return r.raw
-}
-
-// Details for playback from an live input using RTMPS.
-type LiveInputUpdateResponseRtmpsPlayback struct {
-	// The secret key to use for playback via RTMPS.
-	StreamKey string `json:"streamKey"`
-	// The URL used to play live video over RTMPS.
-	URL  string                                   `json:"url"`
-	JSON liveInputUpdateResponseRtmpsPlaybackJSON `json:"-"`
-}
-
-// liveInputUpdateResponseRtmpsPlaybackJSON contains the JSON metadata for the
-// struct [LiveInputUpdateResponseRtmpsPlayback]
-type liveInputUpdateResponseRtmpsPlaybackJSON struct {
-	StreamKey   apijson.Field
-	URL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LiveInputUpdateResponseRtmpsPlayback) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r liveInputUpdateResponseRtmpsPlaybackJSON) RawJSON() string {
+func (r streamLiveInputRtmpsPlaybackJSON) RawJSON() string {
 	return r.raw
 }
 
 // Details for streaming to a live input using SRT.
-type LiveInputUpdateResponseSrt struct {
+type StreamLiveInputSrt struct {
 	// The secret key to use when streaming via SRT to a live input.
 	Passphrase string `json:"passphrase"`
 	// The identifier of the live input to use when streaming via SRT.
 	StreamID string `json:"streamId"`
 	// The SRT URL you provide to the broadcaster, which they stream live video to.
-	URL  string                         `json:"url"`
-	JSON liveInputUpdateResponseSrtJSON `json:"-"`
+	URL  string                 `json:"url"`
+	JSON streamLiveInputSrtJSON `json:"-"`
 }
 
-// liveInputUpdateResponseSrtJSON contains the JSON metadata for the struct
-// [LiveInputUpdateResponseSrt]
-type liveInputUpdateResponseSrtJSON struct {
+// streamLiveInputSrtJSON contains the JSON metadata for the struct
+// [StreamLiveInputSrt]
+type streamLiveInputSrtJSON struct {
 	Passphrase  apijson.Field
 	StreamID    apijson.Field
 	URL         apijson.Field
@@ -578,28 +289,28 @@ type liveInputUpdateResponseSrtJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LiveInputUpdateResponseSrt) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamLiveInputSrt) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r liveInputUpdateResponseSrtJSON) RawJSON() string {
+func (r streamLiveInputSrtJSON) RawJSON() string {
 	return r.raw
 }
 
 // Details for playback from an live input using SRT.
-type LiveInputUpdateResponseSrtPlayback struct {
+type StreamLiveInputSrtPlayback struct {
 	// The secret key to use for playback via SRT.
 	Passphrase string `json:"passphrase"`
 	// The identifier of the live input to use for playback via SRT.
 	StreamID string `json:"streamId"`
 	// The URL used to play live video over SRT.
-	URL  string                                 `json:"url"`
-	JSON liveInputUpdateResponseSrtPlaybackJSON `json:"-"`
+	URL  string                         `json:"url"`
+	JSON streamLiveInputSrtPlaybackJSON `json:"-"`
 }
 
-// liveInputUpdateResponseSrtPlaybackJSON contains the JSON metadata for the struct
-// [LiveInputUpdateResponseSrtPlayback]
-type liveInputUpdateResponseSrtPlaybackJSON struct {
+// streamLiveInputSrtPlaybackJSON contains the JSON metadata for the struct
+// [StreamLiveInputSrtPlayback]
+type streamLiveInputSrtPlaybackJSON struct {
 	Passphrase  apijson.Field
 	StreamID    apijson.Field
 	URL         apijson.Field
@@ -607,71 +318,71 @@ type liveInputUpdateResponseSrtPlaybackJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LiveInputUpdateResponseSrtPlayback) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamLiveInputSrtPlayback) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r liveInputUpdateResponseSrtPlaybackJSON) RawJSON() string {
+func (r streamLiveInputSrtPlaybackJSON) RawJSON() string {
 	return r.raw
 }
 
 // The connection status of a live input.
-type LiveInputUpdateResponseStatus string
+type StreamLiveInputStatus string
 
 const (
-	LiveInputUpdateResponseStatusConnected                LiveInputUpdateResponseStatus = "connected"
-	LiveInputUpdateResponseStatusReconnected              LiveInputUpdateResponseStatus = "reconnected"
-	LiveInputUpdateResponseStatusReconnecting             LiveInputUpdateResponseStatus = "reconnecting"
-	LiveInputUpdateResponseStatusClientDisconnect         LiveInputUpdateResponseStatus = "client_disconnect"
-	LiveInputUpdateResponseStatusTTLExceeded              LiveInputUpdateResponseStatus = "ttl_exceeded"
-	LiveInputUpdateResponseStatusFailedToConnect          LiveInputUpdateResponseStatus = "failed_to_connect"
-	LiveInputUpdateResponseStatusFailedToReconnect        LiveInputUpdateResponseStatus = "failed_to_reconnect"
-	LiveInputUpdateResponseStatusNewConfigurationAccepted LiveInputUpdateResponseStatus = "new_configuration_accepted"
+	StreamLiveInputStatusConnected                StreamLiveInputStatus = "connected"
+	StreamLiveInputStatusReconnected              StreamLiveInputStatus = "reconnected"
+	StreamLiveInputStatusReconnecting             StreamLiveInputStatus = "reconnecting"
+	StreamLiveInputStatusClientDisconnect         StreamLiveInputStatus = "client_disconnect"
+	StreamLiveInputStatusTTLExceeded              StreamLiveInputStatus = "ttl_exceeded"
+	StreamLiveInputStatusFailedToConnect          StreamLiveInputStatus = "failed_to_connect"
+	StreamLiveInputStatusFailedToReconnect        StreamLiveInputStatus = "failed_to_reconnect"
+	StreamLiveInputStatusNewConfigurationAccepted StreamLiveInputStatus = "new_configuration_accepted"
 )
 
 // Details for streaming to a live input using WebRTC.
-type LiveInputUpdateResponseWebRtc struct {
+type StreamLiveInputWebRtc struct {
 	// The WebRTC URL you provide to the broadcaster, which they stream live video to.
-	URL  string                            `json:"url"`
-	JSON liveInputUpdateResponseWebRtcJSON `json:"-"`
+	URL  string                    `json:"url"`
+	JSON streamLiveInputWebRtcJSON `json:"-"`
 }
 
-// liveInputUpdateResponseWebRtcJSON contains the JSON metadata for the struct
-// [LiveInputUpdateResponseWebRtc]
-type liveInputUpdateResponseWebRtcJSON struct {
+// streamLiveInputWebRtcJSON contains the JSON metadata for the struct
+// [StreamLiveInputWebRtc]
+type streamLiveInputWebRtcJSON struct {
 	URL         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LiveInputUpdateResponseWebRtc) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamLiveInputWebRtc) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r liveInputUpdateResponseWebRtcJSON) RawJSON() string {
+func (r streamLiveInputWebRtcJSON) RawJSON() string {
 	return r.raw
 }
 
 // Details for playback from a live input using WebRTC.
-type LiveInputUpdateResponseWebRtcPlayback struct {
+type StreamLiveInputWebRtcPlayback struct {
 	// The URL used to play live video over WebRTC.
-	URL  string                                    `json:"url"`
-	JSON liveInputUpdateResponseWebRtcPlaybackJSON `json:"-"`
+	URL  string                            `json:"url"`
+	JSON streamLiveInputWebRtcPlaybackJSON `json:"-"`
 }
 
-// liveInputUpdateResponseWebRtcPlaybackJSON contains the JSON metadata for the
-// struct [LiveInputUpdateResponseWebRtcPlayback]
-type liveInputUpdateResponseWebRtcPlaybackJSON struct {
+// streamLiveInputWebRtcPlaybackJSON contains the JSON metadata for the struct
+// [StreamLiveInputWebRtcPlayback]
+type streamLiveInputWebRtcPlaybackJSON struct {
 	URL         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LiveInputUpdateResponseWebRtcPlayback) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamLiveInputWebRtcPlayback) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r liveInputUpdateResponseWebRtcPlaybackJSON) RawJSON() string {
+func (r streamLiveInputWebRtcPlaybackJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -741,294 +452,6 @@ func (r liveInputListResponseLiveInputJSON) RawJSON() string {
 	return r.raw
 }
 
-// Details about a live input.
-type LiveInputGetResponse struct {
-	// The date and time the live input was created.
-	Created time.Time `json:"created" format:"date-time"`
-	// Indicates the number of days after which the live inputs recordings will be
-	// deleted. When a stream completes and the recording is ready, the value is used
-	// to calculate a scheduled deletion date for that recording. Omit the field to
-	// indicate no change, or include with a `null` value to remove an existing
-	// scheduled deletion.
-	DeleteRecordingAfterDays float64 `json:"deleteRecordingAfterDays"`
-	// A user modifiable key-value store used to reference other systems of record for
-	// managing live inputs.
-	Meta interface{} `json:"meta"`
-	// The date and time the live input was last modified.
-	Modified time.Time `json:"modified" format:"date-time"`
-	// Records the input to a Cloudflare Stream video. Behavior depends on the mode. In
-	// most cases, the video will initially be viewable as a live video and transition
-	// to on-demand after a condition is satisfied.
-	Recording LiveInputGetResponseRecording `json:"recording"`
-	// Details for streaming to an live input using RTMPS.
-	Rtmps LiveInputGetResponseRtmps `json:"rtmps"`
-	// Details for playback from an live input using RTMPS.
-	RtmpsPlayback LiveInputGetResponseRtmpsPlayback `json:"rtmpsPlayback"`
-	// Details for streaming to a live input using SRT.
-	Srt LiveInputGetResponseSrt `json:"srt"`
-	// Details for playback from an live input using SRT.
-	SrtPlayback LiveInputGetResponseSrtPlayback `json:"srtPlayback"`
-	// The connection status of a live input.
-	Status LiveInputGetResponseStatus `json:"status,nullable"`
-	// A unique identifier for a live input.
-	Uid string `json:"uid"`
-	// Details for streaming to a live input using WebRTC.
-	WebRtc LiveInputGetResponseWebRtc `json:"webRTC"`
-	// Details for playback from a live input using WebRTC.
-	WebRtcPlayback LiveInputGetResponseWebRtcPlayback `json:"webRTCPlayback"`
-	JSON           liveInputGetResponseJSON           `json:"-"`
-}
-
-// liveInputGetResponseJSON contains the JSON metadata for the struct
-// [LiveInputGetResponse]
-type liveInputGetResponseJSON struct {
-	Created                  apijson.Field
-	DeleteRecordingAfterDays apijson.Field
-	Meta                     apijson.Field
-	Modified                 apijson.Field
-	Recording                apijson.Field
-	Rtmps                    apijson.Field
-	RtmpsPlayback            apijson.Field
-	Srt                      apijson.Field
-	SrtPlayback              apijson.Field
-	Status                   apijson.Field
-	Uid                      apijson.Field
-	WebRtc                   apijson.Field
-	WebRtcPlayback           apijson.Field
-	raw                      string
-	ExtraFields              map[string]apijson.Field
-}
-
-func (r *LiveInputGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r liveInputGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// Records the input to a Cloudflare Stream video. Behavior depends on the mode. In
-// most cases, the video will initially be viewable as a live video and transition
-// to on-demand after a condition is satisfied.
-type LiveInputGetResponseRecording struct {
-	// Lists the origins allowed to display videos created with this input. Enter
-	// allowed origin domains in an array and use `*` for wildcard subdomains. An empty
-	// array allows videos to be viewed on any origin.
-	AllowedOrigins []string `json:"allowedOrigins"`
-	// Specifies the recording behavior for the live input. Set this value to `off` to
-	// prevent a recording. Set the value to `automatic` to begin a recording and
-	// transition to on-demand after Stream Live stops receiving input.
-	Mode LiveInputGetResponseRecordingMode `json:"mode"`
-	// Indicates if a video using the live input has the `requireSignedURLs` property
-	// set. Also enforces access controls on any video recording of the livestream with
-	// the live input.
-	RequireSignedURLs bool `json:"requireSignedURLs"`
-	// Determines the amount of time a live input configured in `automatic` mode should
-	// wait before a recording transitions from live to on-demand. `0` is recommended
-	// for most use cases and indicates the platform default should be used.
-	TimeoutSeconds int64                             `json:"timeoutSeconds"`
-	JSON           liveInputGetResponseRecordingJSON `json:"-"`
-}
-
-// liveInputGetResponseRecordingJSON contains the JSON metadata for the struct
-// [LiveInputGetResponseRecording]
-type liveInputGetResponseRecordingJSON struct {
-	AllowedOrigins    apijson.Field
-	Mode              apijson.Field
-	RequireSignedURLs apijson.Field
-	TimeoutSeconds    apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *LiveInputGetResponseRecording) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r liveInputGetResponseRecordingJSON) RawJSON() string {
-	return r.raw
-}
-
-// Specifies the recording behavior for the live input. Set this value to `off` to
-// prevent a recording. Set the value to `automatic` to begin a recording and
-// transition to on-demand after Stream Live stops receiving input.
-type LiveInputGetResponseRecordingMode string
-
-const (
-	LiveInputGetResponseRecordingModeOff       LiveInputGetResponseRecordingMode = "off"
-	LiveInputGetResponseRecordingModeAutomatic LiveInputGetResponseRecordingMode = "automatic"
-)
-
-// Details for streaming to an live input using RTMPS.
-type LiveInputGetResponseRtmps struct {
-	// The secret key to use when streaming via RTMPS to a live input.
-	StreamKey string `json:"streamKey"`
-	// The RTMPS URL you provide to the broadcaster, which they stream live video to.
-	URL  string                        `json:"url"`
-	JSON liveInputGetResponseRtmpsJSON `json:"-"`
-}
-
-// liveInputGetResponseRtmpsJSON contains the JSON metadata for the struct
-// [LiveInputGetResponseRtmps]
-type liveInputGetResponseRtmpsJSON struct {
-	StreamKey   apijson.Field
-	URL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LiveInputGetResponseRtmps) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r liveInputGetResponseRtmpsJSON) RawJSON() string {
-	return r.raw
-}
-
-// Details for playback from an live input using RTMPS.
-type LiveInputGetResponseRtmpsPlayback struct {
-	// The secret key to use for playback via RTMPS.
-	StreamKey string `json:"streamKey"`
-	// The URL used to play live video over RTMPS.
-	URL  string                                `json:"url"`
-	JSON liveInputGetResponseRtmpsPlaybackJSON `json:"-"`
-}
-
-// liveInputGetResponseRtmpsPlaybackJSON contains the JSON metadata for the struct
-// [LiveInputGetResponseRtmpsPlayback]
-type liveInputGetResponseRtmpsPlaybackJSON struct {
-	StreamKey   apijson.Field
-	URL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LiveInputGetResponseRtmpsPlayback) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r liveInputGetResponseRtmpsPlaybackJSON) RawJSON() string {
-	return r.raw
-}
-
-// Details for streaming to a live input using SRT.
-type LiveInputGetResponseSrt struct {
-	// The secret key to use when streaming via SRT to a live input.
-	Passphrase string `json:"passphrase"`
-	// The identifier of the live input to use when streaming via SRT.
-	StreamID string `json:"streamId"`
-	// The SRT URL you provide to the broadcaster, which they stream live video to.
-	URL  string                      `json:"url"`
-	JSON liveInputGetResponseSrtJSON `json:"-"`
-}
-
-// liveInputGetResponseSrtJSON contains the JSON metadata for the struct
-// [LiveInputGetResponseSrt]
-type liveInputGetResponseSrtJSON struct {
-	Passphrase  apijson.Field
-	StreamID    apijson.Field
-	URL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LiveInputGetResponseSrt) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r liveInputGetResponseSrtJSON) RawJSON() string {
-	return r.raw
-}
-
-// Details for playback from an live input using SRT.
-type LiveInputGetResponseSrtPlayback struct {
-	// The secret key to use for playback via SRT.
-	Passphrase string `json:"passphrase"`
-	// The identifier of the live input to use for playback via SRT.
-	StreamID string `json:"streamId"`
-	// The URL used to play live video over SRT.
-	URL  string                              `json:"url"`
-	JSON liveInputGetResponseSrtPlaybackJSON `json:"-"`
-}
-
-// liveInputGetResponseSrtPlaybackJSON contains the JSON metadata for the struct
-// [LiveInputGetResponseSrtPlayback]
-type liveInputGetResponseSrtPlaybackJSON struct {
-	Passphrase  apijson.Field
-	StreamID    apijson.Field
-	URL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LiveInputGetResponseSrtPlayback) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r liveInputGetResponseSrtPlaybackJSON) RawJSON() string {
-	return r.raw
-}
-
-// The connection status of a live input.
-type LiveInputGetResponseStatus string
-
-const (
-	LiveInputGetResponseStatusConnected                LiveInputGetResponseStatus = "connected"
-	LiveInputGetResponseStatusReconnected              LiveInputGetResponseStatus = "reconnected"
-	LiveInputGetResponseStatusReconnecting             LiveInputGetResponseStatus = "reconnecting"
-	LiveInputGetResponseStatusClientDisconnect         LiveInputGetResponseStatus = "client_disconnect"
-	LiveInputGetResponseStatusTTLExceeded              LiveInputGetResponseStatus = "ttl_exceeded"
-	LiveInputGetResponseStatusFailedToConnect          LiveInputGetResponseStatus = "failed_to_connect"
-	LiveInputGetResponseStatusFailedToReconnect        LiveInputGetResponseStatus = "failed_to_reconnect"
-	LiveInputGetResponseStatusNewConfigurationAccepted LiveInputGetResponseStatus = "new_configuration_accepted"
-)
-
-// Details for streaming to a live input using WebRTC.
-type LiveInputGetResponseWebRtc struct {
-	// The WebRTC URL you provide to the broadcaster, which they stream live video to.
-	URL  string                         `json:"url"`
-	JSON liveInputGetResponseWebRtcJSON `json:"-"`
-}
-
-// liveInputGetResponseWebRtcJSON contains the JSON metadata for the struct
-// [LiveInputGetResponseWebRtc]
-type liveInputGetResponseWebRtcJSON struct {
-	URL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LiveInputGetResponseWebRtc) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r liveInputGetResponseWebRtcJSON) RawJSON() string {
-	return r.raw
-}
-
-// Details for playback from a live input using WebRTC.
-type LiveInputGetResponseWebRtcPlayback struct {
-	// The URL used to play live video over WebRTC.
-	URL  string                                 `json:"url"`
-	JSON liveInputGetResponseWebRtcPlaybackJSON `json:"-"`
-}
-
-// liveInputGetResponseWebRtcPlaybackJSON contains the JSON metadata for the struct
-// [LiveInputGetResponseWebRtcPlayback]
-type liveInputGetResponseWebRtcPlaybackJSON struct {
-	URL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *LiveInputGetResponseWebRtcPlayback) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r liveInputGetResponseWebRtcPlaybackJSON) RawJSON() string {
-	return r.raw
-}
-
 type LiveInputNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -1093,7 +516,7 @@ type LiveInputNewResponseEnvelope struct {
 	Errors   []LiveInputNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []LiveInputNewResponseEnvelopeMessages `json:"messages,required"`
 	// Details about a live input.
-	Result LiveInputNewResponse `json:"result,required"`
+	Result StreamLiveInput `json:"result,required"`
 	// Whether the API call was successful
 	Success LiveInputNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    liveInputNewResponseEnvelopeJSON    `json:"-"`
@@ -1235,7 +658,7 @@ type LiveInputUpdateResponseEnvelope struct {
 	Errors   []LiveInputUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []LiveInputUpdateResponseEnvelopeMessages `json:"messages,required"`
 	// Details about a live input.
-	Result LiveInputUpdateResponse `json:"result,required"`
+	Result StreamLiveInput `json:"result,required"`
 	// Whether the API call was successful
 	Success LiveInputUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    liveInputUpdateResponseEnvelopeJSON    `json:"-"`
@@ -1424,7 +847,7 @@ type LiveInputGetResponseEnvelope struct {
 	Errors   []LiveInputGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []LiveInputGetResponseEnvelopeMessages `json:"messages,required"`
 	// Details about a live input.
-	Result LiveInputGetResponse `json:"result,required"`
+	Result StreamLiveInput `json:"result,required"`
 	// Whether the API call was successful
 	Success LiveInputGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    liveInputGetResponseEnvelopeJSON    `json:"-"`

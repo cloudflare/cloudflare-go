@@ -35,7 +35,7 @@ func NewDEXFleetStatusDeviceService(opts ...option.RequestOption) (r *DEXFleetSt
 }
 
 // List details for devices using WARP
-func (r *DEXFleetStatusDeviceService) List(ctx context.Context, params DEXFleetStatusDeviceListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[DEXFleetStatusDeviceListResponse], err error) {
+func (r *DEXFleetStatusDeviceService) List(ctx context.Context, params DEXFleetStatusDeviceListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[DigitalExperienceMonitoringDevice], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -53,11 +53,11 @@ func (r *DEXFleetStatusDeviceService) List(ctx context.Context, params DEXFleetS
 }
 
 // List details for devices using WARP
-func (r *DEXFleetStatusDeviceService) ListAutoPaging(ctx context.Context, params DEXFleetStatusDeviceListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[DEXFleetStatusDeviceListResponse] {
+func (r *DEXFleetStatusDeviceService) ListAutoPaging(ctx context.Context, params DEXFleetStatusDeviceListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[DigitalExperienceMonitoringDevice] {
 	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-type DEXFleetStatusDeviceListResponse struct {
+type DigitalExperienceMonitoringDevice struct {
 	// Cloudflare colo
 	Colo string `json:"colo,required"`
 	// Device identifier (UUID v4)
@@ -71,13 +71,13 @@ type DEXFleetStatusDeviceListResponse struct {
 	// Device identifier (human readable)
 	DeviceName string `json:"deviceName"`
 	// User contact email address
-	PersonEmail string                               `json:"personEmail"`
-	JSON        dexFleetStatusDeviceListResponseJSON `json:"-"`
+	PersonEmail string                                `json:"personEmail"`
+	JSON        digitalExperienceMonitoringDeviceJSON `json:"-"`
 }
 
-// dexFleetStatusDeviceListResponseJSON contains the JSON metadata for the struct
-// [DEXFleetStatusDeviceListResponse]
-type dexFleetStatusDeviceListResponseJSON struct {
+// digitalExperienceMonitoringDeviceJSON contains the JSON metadata for the struct
+// [DigitalExperienceMonitoringDevice]
+type digitalExperienceMonitoringDeviceJSON struct {
 	Colo        apijson.Field
 	DeviceID    apijson.Field
 	Platform    apijson.Field
@@ -89,11 +89,11 @@ type dexFleetStatusDeviceListResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DEXFleetStatusDeviceListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DigitalExperienceMonitoringDevice) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dexFleetStatusDeviceListResponseJSON) RawJSON() string {
+func (r digitalExperienceMonitoringDeviceJSON) RawJSON() string {
 	return r.raw
 }
 

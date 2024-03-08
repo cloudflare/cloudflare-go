@@ -38,7 +38,7 @@ func NewRequestMessageService(opts ...option.RequestOption) (r *RequestMessageSe
 // Creating a request adds the request into the Cloudforce One queue for analysis.
 // In addition to the content, a short title, type, priority, and releasability
 // should be provided. If one is not provided a default will be assigned.
-func (r *RequestMessageService) New(ctx context.Context, accountIdentifier string, requestIdentifier string, body RequestMessageNewParams, opts ...option.RequestOption) (res *RequestMessageNewResponse, err error) {
+func (r *RequestMessageService) New(ctx context.Context, accountIdentifier string, requestIdentifier string, body RequestMessageNewParams, opts ...option.RequestOption) (res *CloudforceOneRequestMessageItem, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestMessageNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s/message/new", accountIdentifier, requestIdentifier)
@@ -51,7 +51,7 @@ func (r *RequestMessageService) New(ctx context.Context, accountIdentifier strin
 }
 
 // Update a Request Message
-func (r *RequestMessageService) Update(ctx context.Context, accountIdentifier string, requestIdentifier string, messageIdentifer int64, body RequestMessageUpdateParams, opts ...option.RequestOption) (res *RequestMessageUpdateResponse, err error) {
+func (r *RequestMessageService) Update(ctx context.Context, accountIdentifier string, requestIdentifier string, messageIdentifer int64, body RequestMessageUpdateParams, opts ...option.RequestOption) (res *CloudforceOneRequestMessageItem, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestMessageUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s/message/%v", accountIdentifier, requestIdentifier, messageIdentifer)
@@ -77,7 +77,7 @@ func (r *RequestMessageService) Delete(ctx context.Context, accountIdentifier st
 }
 
 // List Request Messages
-func (r *RequestMessageService) Get(ctx context.Context, accountIdentifier string, requestIdentifier string, body RequestMessageGetParams, opts ...option.RequestOption) (res *[]RequestMessageGetResponse, err error) {
+func (r *RequestMessageService) Get(ctx context.Context, accountIdentifier string, requestIdentifier string, body RequestMessageGetParams, opts ...option.RequestOption) (res *[]CloudforceOneRequestMessageItem, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RequestMessageGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/cloudforce-one/requests/%s/message", accountIdentifier, requestIdentifier)
@@ -89,7 +89,7 @@ func (r *RequestMessageService) Get(ctx context.Context, accountIdentifier strin
 	return
 }
 
-type RequestMessageNewResponse struct {
+type CloudforceOneRequestMessageItem struct {
 	// Message ID
 	ID int64 `json:"id,required"`
 	// Author of message
@@ -101,13 +101,13 @@ type RequestMessageNewResponse struct {
 	// Message last updated time
 	Updated time.Time `json:"updated,required" format:"date-time"`
 	// Message creation time
-	Created time.Time                     `json:"created" format:"date-time"`
-	JSON    requestMessageNewResponseJSON `json:"-"`
+	Created time.Time                           `json:"created" format:"date-time"`
+	JSON    cloudforceOneRequestMessageItemJSON `json:"-"`
 }
 
-// requestMessageNewResponseJSON contains the JSON metadata for the struct
-// [RequestMessageNewResponse]
-type requestMessageNewResponseJSON struct {
+// cloudforceOneRequestMessageItemJSON contains the JSON metadata for the struct
+// [CloudforceOneRequestMessageItem]
+type cloudforceOneRequestMessageItemJSON struct {
 	ID                apijson.Field
 	Author            apijson.Field
 	Content           apijson.Field
@@ -118,48 +118,11 @@ type requestMessageNewResponseJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *RequestMessageNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *CloudforceOneRequestMessageItem) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r requestMessageNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type RequestMessageUpdateResponse struct {
-	// Message ID
-	ID int64 `json:"id,required"`
-	// Author of message
-	Author string `json:"author,required"`
-	// Content of message
-	Content string `json:"content,required"`
-	// Message is a follow-on request
-	IsFollowOnRequest bool `json:"is_follow_on_request,required"`
-	// Message last updated time
-	Updated time.Time `json:"updated,required" format:"date-time"`
-	// Message creation time
-	Created time.Time                        `json:"created" format:"date-time"`
-	JSON    requestMessageUpdateResponseJSON `json:"-"`
-}
-
-// requestMessageUpdateResponseJSON contains the JSON metadata for the struct
-// [RequestMessageUpdateResponse]
-type requestMessageUpdateResponseJSON struct {
-	ID                apijson.Field
-	Author            apijson.Field
-	Content           apijson.Field
-	IsFollowOnRequest apijson.Field
-	Updated           apijson.Field
-	Created           apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *RequestMessageUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestMessageUpdateResponseJSON) RawJSON() string {
+func (r cloudforceOneRequestMessageItemJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -188,43 +151,6 @@ type RequestMessageDeleteResponseArray []interface{}
 
 func (r RequestMessageDeleteResponseArray) ImplementsCloudforceOneRequestMessageDeleteResponse() {}
 
-type RequestMessageGetResponse struct {
-	// Message ID
-	ID int64 `json:"id,required"`
-	// Author of message
-	Author string `json:"author,required"`
-	// Content of message
-	Content string `json:"content,required"`
-	// Message is a follow-on request
-	IsFollowOnRequest bool `json:"is_follow_on_request,required"`
-	// Message last updated time
-	Updated time.Time `json:"updated,required" format:"date-time"`
-	// Message creation time
-	Created time.Time                     `json:"created" format:"date-time"`
-	JSON    requestMessageGetResponseJSON `json:"-"`
-}
-
-// requestMessageGetResponseJSON contains the JSON metadata for the struct
-// [RequestMessageGetResponse]
-type requestMessageGetResponseJSON struct {
-	ID                apijson.Field
-	Author            apijson.Field
-	Content           apijson.Field
-	IsFollowOnRequest apijson.Field
-	Updated           apijson.Field
-	Created           apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *RequestMessageGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r requestMessageGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
 type RequestMessageNewParams struct {
 	// Content of message
 	Content param.Field[string] `json:"content"`
@@ -237,7 +163,7 @@ func (r RequestMessageNewParams) MarshalJSON() (data []byte, err error) {
 type RequestMessageNewResponseEnvelope struct {
 	Errors   []RequestMessageNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RequestMessageNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   RequestMessageNewResponse                   `json:"result,required"`
+	Result   CloudforceOneRequestMessageItem             `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestMessageNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestMessageNewResponseEnvelopeJSON    `json:"-"`
@@ -346,7 +272,7 @@ const (
 type RequestMessageUpdateResponseEnvelope struct {
 	Errors   []RequestMessageUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RequestMessageUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   RequestMessageUpdateResponse                   `json:"result,required"`
+	Result   CloudforceOneRequestMessageItem                `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestMessageUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestMessageUpdateResponseEnvelopeJSON    `json:"-"`
@@ -535,7 +461,7 @@ const (
 type RequestMessageGetResponseEnvelope struct {
 	Errors   []RequestMessageGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RequestMessageGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []RequestMessageGetResponse                 `json:"result,required"`
+	Result   []CloudforceOneRequestMessageItem           `json:"result,required"`
 	// Whether the API call was successful
 	Success RequestMessageGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    requestMessageGetResponseEnvelopeJSON    `json:"-"`

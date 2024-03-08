@@ -11,6 +11,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/internal/param"
 	"github.com/cloudflare/cloudflare-go/internal/requestconfig"
 	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-go/user"
 )
 
 // PreviewService contains methods and other services that help with interacting
@@ -31,7 +32,7 @@ func NewPreviewService(opts ...option.RequestOption) (r *PreviewService) {
 }
 
 // Get the result of a previous preview operation using the provided preview_id.
-func (r *PreviewService) Get(ctx context.Context, previewID interface{}, query PreviewGetParams, opts ...option.RequestOption) (res *PreviewGetResponse, err error) {
+func (r *PreviewService) Get(ctx context.Context, previewID interface{}, query PreviewGetParams, opts ...option.RequestOption) (res *user.LoadBalancingPreviewResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PreviewGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/preview/%v", query.AccountID, previewID)
@@ -43,8 +44,6 @@ func (r *PreviewService) Get(ctx context.Context, previewID interface{}, query P
 	return
 }
 
-type PreviewGetResponse map[string]PreviewGetResponse
-
 type PreviewGetParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
@@ -54,7 +53,7 @@ type PreviewGetResponseEnvelope struct {
 	Errors   []PreviewGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []PreviewGetResponseEnvelopeMessages `json:"messages,required"`
 	// Resulting health data from a preview operation.
-	Result PreviewGetResponse `json:"result,required"`
+	Result user.LoadBalancingPreviewResult `json:"result,required"`
 	// Whether the API call was successful
 	Success PreviewGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    previewGetResponseEnvelopeJSON    `json:"-"`

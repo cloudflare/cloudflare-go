@@ -32,7 +32,7 @@ func NewAssociationService(opts ...option.RequestOption) (r *AssociationService)
 }
 
 // Lists all active associations between the certificate and Cloudflare services.
-func (r *AssociationService) Get(ctx context.Context, mtlsCertificateID string, query AssociationGetParams, opts ...option.RequestOption) (res *[]AssociationGetResponse, err error) {
+func (r *AssociationService) Get(ctx context.Context, mtlsCertificateID string, query AssociationGetParams, opts ...option.RequestOption) (res *[]TLSCertificatesAndHostnamesAssociationObject, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AssociationGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/mtls_certificates/%s/associations", query.AccountID, mtlsCertificateID)
@@ -44,28 +44,28 @@ func (r *AssociationService) Get(ctx context.Context, mtlsCertificateID string, 
 	return
 }
 
-type AssociationGetResponse struct {
+type TLSCertificatesAndHostnamesAssociationObject struct {
 	// The service using the certificate.
 	Service string `json:"service"`
 	// Certificate deployment status for the given service.
-	Status string                     `json:"status"`
-	JSON   associationGetResponseJSON `json:"-"`
+	Status string                                           `json:"status"`
+	JSON   tlsCertificatesAndHostnamesAssociationObjectJSON `json:"-"`
 }
 
-// associationGetResponseJSON contains the JSON metadata for the struct
-// [AssociationGetResponse]
-type associationGetResponseJSON struct {
+// tlsCertificatesAndHostnamesAssociationObjectJSON contains the JSON metadata for
+// the struct [TLSCertificatesAndHostnamesAssociationObject]
+type tlsCertificatesAndHostnamesAssociationObjectJSON struct {
 	Service     apijson.Field
 	Status      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AssociationGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *TLSCertificatesAndHostnamesAssociationObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r associationGetResponseJSON) RawJSON() string {
+func (r tlsCertificatesAndHostnamesAssociationObjectJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -75,9 +75,9 @@ type AssociationGetParams struct {
 }
 
 type AssociationGetResponseEnvelope struct {
-	Errors   []AssociationGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AssociationGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AssociationGetResponse                 `json:"result,required,nullable"`
+	Errors   []AssociationGetResponseEnvelopeErrors         `json:"errors,required"`
+	Messages []AssociationGetResponseEnvelopeMessages       `json:"messages,required"`
+	Result   []TLSCertificatesAndHostnamesAssociationObject `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AssociationGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AssociationGetResponseEnvelopeResultInfo `json:"result_info"`

@@ -7,16 +7,12 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"reflect"
-	"time"
 
 	"github.com/cloudflare/cloudflare-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/internal/param"
 	"github.com/cloudflare/cloudflare-go/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/internal/shared"
 	"github.com/cloudflare/cloudflare-go/option"
-	"github.com/tidwall/gjson"
 )
 
 // V2Service contains methods and other services that help with interacting with
@@ -56,9 +52,9 @@ func (r *V2Service) List(ctx context.Context, params V2ListParams, opts ...optio
 type V2ListResponse struct {
 	// Continuation token to fetch next page. Passed as a query param when requesting
 	// List V2 api endpoint.
-	ContinuationToken string                `json:"continuation_token,nullable"`
-	Images            []V2ListResponseImage `json:"images"`
-	JSON              v2ListResponseJSON    `json:"-"`
+	ContinuationToken string             `json:"continuation_token,nullable"`
+	Images            []ImagesImage      `json:"images"`
+	JSON              v2ListResponseJSON `json:"-"`
 }
 
 // v2ListResponseJSON contains the JSON metadata for the struct [V2ListResponse]
@@ -75,72 +71,6 @@ func (r *V2ListResponse) UnmarshalJSON(data []byte) (err error) {
 
 func (r v2ListResponseJSON) RawJSON() string {
 	return r.raw
-}
-
-type V2ListResponseImage struct {
-	// Image unique identifier.
-	ID string `json:"id"`
-	// Image file name.
-	Filename string `json:"filename"`
-	// User modifiable key-value store. Can be used for keeping references to another
-	// system of record for managing images. Metadata must not exceed 1024 bytes.
-	Meta interface{} `json:"meta"`
-	// Indicates whether the image can be a accessed only using it's UID. If set to
-	// true, a signed token needs to be generated with a signing key to view the image.
-	RequireSignedURLs bool `json:"requireSignedURLs"`
-	// When the media item was uploaded.
-	Uploaded time.Time `json:"uploaded" format:"date-time"`
-	// Object specifying available variants for an image.
-	Variants []V2ListResponseImagesVariant `json:"variants" format:"uri"`
-	JSON     v2ListResponseImageJSON       `json:"-"`
-}
-
-// v2ListResponseImageJSON contains the JSON metadata for the struct
-// [V2ListResponseImage]
-type v2ListResponseImageJSON struct {
-	ID                apijson.Field
-	Filename          apijson.Field
-	Meta              apijson.Field
-	RequireSignedURLs apijson.Field
-	Uploaded          apijson.Field
-	Variants          apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *V2ListResponseImage) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r v2ListResponseImageJSON) RawJSON() string {
-	return r.raw
-}
-
-// URI to thumbnail variant for an image.
-//
-// Union satisfied by [shared.UnionString], [shared.UnionString] or
-// [shared.UnionString].
-type V2ListResponseImagesVariant interface {
-	ImplementsImagesV2ListResponseImagesVariant()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*V2ListResponseImagesVariant)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
 }
 
 type V2ListParams struct {

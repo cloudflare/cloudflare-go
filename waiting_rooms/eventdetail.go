@@ -33,7 +33,7 @@ func NewEventDetailService(opts ...option.RequestOption) (r *EventDetailService)
 
 // Previews an event's configuration as if it was active. Inherited fields from the
 // waiting room will be displayed with their current values.
-func (r *EventDetailService) Get(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, eventID interface{}, opts ...option.RequestOption) (res *EventDetailGetResponse, err error) {
+func (r *EventDetailService) Get(ctx context.Context, zoneIdentifier string, waitingRoomID interface{}, eventID interface{}, opts ...option.RequestOption) (res *WaitingroomEventDetailsResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env EventDetailGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/waiting_rooms/%v/events/%v/details", zoneIdentifier, waitingRoomID, eventID)
@@ -45,7 +45,7 @@ func (r *EventDetailService) Get(ctx context.Context, zoneIdentifier string, wai
 	return
 }
 
-type EventDetailGetResponse struct {
+type WaitingroomEventDetailsResult struct {
 	ID             interface{} `json:"id"`
 	CreatedOn      time.Time   `json:"created_on" format:"date-time"`
 	CustomPageHTML string      `json:"custom_page_html"`
@@ -78,14 +78,14 @@ type EventDetailGetResponse struct {
 	ShuffleAtEventStart bool `json:"shuffle_at_event_start"`
 	// Suspends or allows an event. If set to `true`, the event is ignored and traffic
 	// will be handled based on the waiting room configuration.
-	Suspended        bool                       `json:"suspended"`
-	TotalActiveUsers int64                      `json:"total_active_users"`
-	JSON             eventDetailGetResponseJSON `json:"-"`
+	Suspended        bool                              `json:"suspended"`
+	TotalActiveUsers int64                             `json:"total_active_users"`
+	JSON             waitingroomEventDetailsResultJSON `json:"-"`
 }
 
-// eventDetailGetResponseJSON contains the JSON metadata for the struct
-// [EventDetailGetResponse]
-type eventDetailGetResponseJSON struct {
+// waitingroomEventDetailsResultJSON contains the JSON metadata for the struct
+// [WaitingroomEventDetailsResult]
+type waitingroomEventDetailsResultJSON struct {
 	ID                    apijson.Field
 	CreatedOn             apijson.Field
 	CustomPageHTML        apijson.Field
@@ -106,16 +106,16 @@ type eventDetailGetResponseJSON struct {
 	ExtraFields           map[string]apijson.Field
 }
 
-func (r *EventDetailGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *WaitingroomEventDetailsResult) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r eventDetailGetResponseJSON) RawJSON() string {
+func (r waitingroomEventDetailsResultJSON) RawJSON() string {
 	return r.raw
 }
 
 type EventDetailGetResponseEnvelope struct {
-	Result EventDetailGetResponse             `json:"result,required"`
+	Result WaitingroomEventDetailsResult      `json:"result,required"`
 	JSON   eventDetailGetResponseEnvelopeJSON `json:"-"`
 }
 

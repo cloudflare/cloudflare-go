@@ -32,7 +32,7 @@ func NewDLPProfilePredefinedService(opts ...option.RequestOption) (r *DLPProfile
 }
 
 // Updates a DLP predefined profile. Only supports enabling/disabling entries.
-func (r *DLPProfilePredefinedService) Update(ctx context.Context, profileID string, params DLPProfilePredefinedUpdateParams, opts ...option.RequestOption) (res *DLPProfilePredefinedUpdateResponse, err error) {
+func (r *DLPProfilePredefinedService) Update(ctx context.Context, profileID string, params DLPProfilePredefinedUpdateParams, opts ...option.RequestOption) (res *DLPPredefinedProfile, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/dlp/profiles/predefined/%s", params.AccountID, profileID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, params, &res, opts...)
@@ -40,7 +40,7 @@ func (r *DLPProfilePredefinedService) Update(ctx context.Context, profileID stri
 }
 
 // Fetches a predefined DLP profile.
-func (r *DLPProfilePredefinedService) Get(ctx context.Context, profileID string, query DLPProfilePredefinedGetParams, opts ...option.RequestOption) (res *DLPProfilePredefinedGetResponse, err error) {
+func (r *DLPProfilePredefinedService) Get(ctx context.Context, profileID string, query DLPProfilePredefinedGetParams, opts ...option.RequestOption) (res *DLPPredefinedProfile, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DLPProfilePredefinedGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dlp/profiles/predefined/%s", query.AccountID, profileID)
@@ -52,26 +52,26 @@ func (r *DLPProfilePredefinedService) Get(ctx context.Context, profileID string,
 	return
 }
 
-type DLPProfilePredefinedUpdateResponse struct {
+type DLPPredefinedProfile struct {
 	// The ID for this profile
 	ID string `json:"id"`
 	// Related DLP policies will trigger when the match count exceeds the number set.
 	AllowedMatchCount float64 `json:"allowed_match_count"`
 	// Scan the context of predefined entries to only return matches surrounded by
 	// keywords.
-	ContextAwareness DLPProfilePredefinedUpdateResponseContextAwareness `json:"context_awareness"`
+	ContextAwareness DLPPredefinedProfileContextAwareness `json:"context_awareness"`
 	// The entries for this profile.
-	Entries []DLPProfilePredefinedUpdateResponseEntry `json:"entries"`
+	Entries []DLPPredefinedProfileEntry `json:"entries"`
 	// The name of the profile.
 	Name string `json:"name"`
 	// The type of the profile.
-	Type DLPProfilePredefinedUpdateResponseType `json:"type"`
-	JSON dlpProfilePredefinedUpdateResponseJSON `json:"-"`
+	Type DLPPredefinedProfileType `json:"type"`
+	JSON dlpPredefinedProfileJSON `json:"-"`
 }
 
-// dlpProfilePredefinedUpdateResponseJSON contains the JSON metadata for the struct
-// [DLPProfilePredefinedUpdateResponse]
-type dlpProfilePredefinedUpdateResponseJSON struct {
+// dlpPredefinedProfileJSON contains the JSON metadata for the struct
+// [DLPPredefinedProfile]
+type dlpPredefinedProfileJSON struct {
 	ID                apijson.Field
 	AllowedMatchCount apijson.Field
 	ContextAwareness  apijson.Field
@@ -82,67 +82,71 @@ type dlpProfilePredefinedUpdateResponseJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *DLPProfilePredefinedUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DLPPredefinedProfile) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dlpProfilePredefinedUpdateResponseJSON) RawJSON() string {
+func (r dlpPredefinedProfileJSON) RawJSON() string {
 	return r.raw
 }
 
+func (r DLPPredefinedProfile) implementsZeroTrustDLPProfiles() {}
+
+func (r DLPPredefinedProfile) implementsZeroTrustDLPProfileGetResponse() {}
+
 // Scan the context of predefined entries to only return matches surrounded by
 // keywords.
-type DLPProfilePredefinedUpdateResponseContextAwareness struct {
+type DLPPredefinedProfileContextAwareness struct {
 	// If true, scan the context of predefined entries to only return matches
 	// surrounded by keywords.
 	Enabled bool `json:"enabled,required"`
 	// Content types to exclude from context analysis and return all matches.
-	Skip DLPProfilePredefinedUpdateResponseContextAwarenessSkip `json:"skip,required"`
-	JSON dlpProfilePredefinedUpdateResponseContextAwarenessJSON `json:"-"`
+	Skip DLPPredefinedProfileContextAwarenessSkip `json:"skip,required"`
+	JSON dlpPredefinedProfileContextAwarenessJSON `json:"-"`
 }
 
-// dlpProfilePredefinedUpdateResponseContextAwarenessJSON contains the JSON
-// metadata for the struct [DLPProfilePredefinedUpdateResponseContextAwareness]
-type dlpProfilePredefinedUpdateResponseContextAwarenessJSON struct {
+// dlpPredefinedProfileContextAwarenessJSON contains the JSON metadata for the
+// struct [DLPPredefinedProfileContextAwareness]
+type dlpPredefinedProfileContextAwarenessJSON struct {
 	Enabled     apijson.Field
 	Skip        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DLPProfilePredefinedUpdateResponseContextAwareness) UnmarshalJSON(data []byte) (err error) {
+func (r *DLPPredefinedProfileContextAwareness) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dlpProfilePredefinedUpdateResponseContextAwarenessJSON) RawJSON() string {
+func (r dlpPredefinedProfileContextAwarenessJSON) RawJSON() string {
 	return r.raw
 }
 
 // Content types to exclude from context analysis and return all matches.
-type DLPProfilePredefinedUpdateResponseContextAwarenessSkip struct {
+type DLPPredefinedProfileContextAwarenessSkip struct {
 	// If the content type is a file, skip context analysis and return all matches.
-	Files bool                                                       `json:"files,required"`
-	JSON  dlpProfilePredefinedUpdateResponseContextAwarenessSkipJSON `json:"-"`
+	Files bool                                         `json:"files,required"`
+	JSON  dlpPredefinedProfileContextAwarenessSkipJSON `json:"-"`
 }
 
-// dlpProfilePredefinedUpdateResponseContextAwarenessSkipJSON contains the JSON
-// metadata for the struct [DLPProfilePredefinedUpdateResponseContextAwarenessSkip]
-type dlpProfilePredefinedUpdateResponseContextAwarenessSkipJSON struct {
+// dlpPredefinedProfileContextAwarenessSkipJSON contains the JSON metadata for the
+// struct [DLPPredefinedProfileContextAwarenessSkip]
+type dlpPredefinedProfileContextAwarenessSkipJSON struct {
 	Files       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DLPProfilePredefinedUpdateResponseContextAwarenessSkip) UnmarshalJSON(data []byte) (err error) {
+func (r *DLPPredefinedProfileContextAwarenessSkip) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dlpProfilePredefinedUpdateResponseContextAwarenessSkipJSON) RawJSON() string {
+func (r dlpPredefinedProfileContextAwarenessSkipJSON) RawJSON() string {
 	return r.raw
 }
 
 // A predefined entry that matches a profile
-type DLPProfilePredefinedUpdateResponseEntry struct {
+type DLPPredefinedProfileEntry struct {
 	// The ID for this entry
 	ID string `json:"id"`
 	// Whether the entry is enabled or not.
@@ -150,13 +154,13 @@ type DLPProfilePredefinedUpdateResponseEntry struct {
 	// The name of the entry.
 	Name string `json:"name"`
 	// ID of the parent profile
-	ProfileID interface{}                                 `json:"profile_id"`
-	JSON      dlpProfilePredefinedUpdateResponseEntryJSON `json:"-"`
+	ProfileID interface{}                   `json:"profile_id"`
+	JSON      dlpPredefinedProfileEntryJSON `json:"-"`
 }
 
-// dlpProfilePredefinedUpdateResponseEntryJSON contains the JSON metadata for the
-// struct [DLPProfilePredefinedUpdateResponseEntry]
-type dlpProfilePredefinedUpdateResponseEntryJSON struct {
+// dlpPredefinedProfileEntryJSON contains the JSON metadata for the struct
+// [DLPPredefinedProfileEntry]
+type dlpPredefinedProfileEntryJSON struct {
 	ID          apijson.Field
 	Enabled     apijson.Field
 	Name        apijson.Field
@@ -165,147 +169,19 @@ type dlpProfilePredefinedUpdateResponseEntryJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DLPProfilePredefinedUpdateResponseEntry) UnmarshalJSON(data []byte) (err error) {
+func (r *DLPPredefinedProfileEntry) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dlpProfilePredefinedUpdateResponseEntryJSON) RawJSON() string {
+func (r dlpPredefinedProfileEntryJSON) RawJSON() string {
 	return r.raw
 }
 
 // The type of the profile.
-type DLPProfilePredefinedUpdateResponseType string
+type DLPPredefinedProfileType string
 
 const (
-	DLPProfilePredefinedUpdateResponseTypePredefined DLPProfilePredefinedUpdateResponseType = "predefined"
-)
-
-type DLPProfilePredefinedGetResponse struct {
-	// The ID for this profile
-	ID string `json:"id"`
-	// Related DLP policies will trigger when the match count exceeds the number set.
-	AllowedMatchCount float64 `json:"allowed_match_count"`
-	// Scan the context of predefined entries to only return matches surrounded by
-	// keywords.
-	ContextAwareness DLPProfilePredefinedGetResponseContextAwareness `json:"context_awareness"`
-	// The entries for this profile.
-	Entries []DLPProfilePredefinedGetResponseEntry `json:"entries"`
-	// The name of the profile.
-	Name string `json:"name"`
-	// The type of the profile.
-	Type DLPProfilePredefinedGetResponseType `json:"type"`
-	JSON dlpProfilePredefinedGetResponseJSON `json:"-"`
-}
-
-// dlpProfilePredefinedGetResponseJSON contains the JSON metadata for the struct
-// [DLPProfilePredefinedGetResponse]
-type dlpProfilePredefinedGetResponseJSON struct {
-	ID                apijson.Field
-	AllowedMatchCount apijson.Field
-	ContextAwareness  apijson.Field
-	Entries           apijson.Field
-	Name              apijson.Field
-	Type              apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *DLPProfilePredefinedGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfilePredefinedGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// Scan the context of predefined entries to only return matches surrounded by
-// keywords.
-type DLPProfilePredefinedGetResponseContextAwareness struct {
-	// If true, scan the context of predefined entries to only return matches
-	// surrounded by keywords.
-	Enabled bool `json:"enabled,required"`
-	// Content types to exclude from context analysis and return all matches.
-	Skip DLPProfilePredefinedGetResponseContextAwarenessSkip `json:"skip,required"`
-	JSON dlpProfilePredefinedGetResponseContextAwarenessJSON `json:"-"`
-}
-
-// dlpProfilePredefinedGetResponseContextAwarenessJSON contains the JSON metadata
-// for the struct [DLPProfilePredefinedGetResponseContextAwareness]
-type dlpProfilePredefinedGetResponseContextAwarenessJSON struct {
-	Enabled     apijson.Field
-	Skip        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfilePredefinedGetResponseContextAwareness) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfilePredefinedGetResponseContextAwarenessJSON) RawJSON() string {
-	return r.raw
-}
-
-// Content types to exclude from context analysis and return all matches.
-type DLPProfilePredefinedGetResponseContextAwarenessSkip struct {
-	// If the content type is a file, skip context analysis and return all matches.
-	Files bool                                                    `json:"files,required"`
-	JSON  dlpProfilePredefinedGetResponseContextAwarenessSkipJSON `json:"-"`
-}
-
-// dlpProfilePredefinedGetResponseContextAwarenessSkipJSON contains the JSON
-// metadata for the struct [DLPProfilePredefinedGetResponseContextAwarenessSkip]
-type dlpProfilePredefinedGetResponseContextAwarenessSkipJSON struct {
-	Files       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfilePredefinedGetResponseContextAwarenessSkip) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfilePredefinedGetResponseContextAwarenessSkipJSON) RawJSON() string {
-	return r.raw
-}
-
-// A predefined entry that matches a profile
-type DLPProfilePredefinedGetResponseEntry struct {
-	// The ID for this entry
-	ID string `json:"id"`
-	// Whether the entry is enabled or not.
-	Enabled bool `json:"enabled"`
-	// The name of the entry.
-	Name string `json:"name"`
-	// ID of the parent profile
-	ProfileID interface{}                              `json:"profile_id"`
-	JSON      dlpProfilePredefinedGetResponseEntryJSON `json:"-"`
-}
-
-// dlpProfilePredefinedGetResponseEntryJSON contains the JSON metadata for the
-// struct [DLPProfilePredefinedGetResponseEntry]
-type dlpProfilePredefinedGetResponseEntryJSON struct {
-	ID          apijson.Field
-	Enabled     apijson.Field
-	Name        apijson.Field
-	ProfileID   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DLPProfilePredefinedGetResponseEntry) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r dlpProfilePredefinedGetResponseEntryJSON) RawJSON() string {
-	return r.raw
-}
-
-// The type of the profile.
-type DLPProfilePredefinedGetResponseType string
-
-const (
-	DLPProfilePredefinedGetResponseTypePredefined DLPProfilePredefinedGetResponseType = "predefined"
+	DLPPredefinedProfileTypePredefined DLPPredefinedProfileType = "predefined"
 )
 
 type DLPProfilePredefinedUpdateParams struct {
@@ -365,7 +241,7 @@ type DLPProfilePredefinedGetParams struct {
 type DLPProfilePredefinedGetResponseEnvelope struct {
 	Errors   []DLPProfilePredefinedGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DLPProfilePredefinedGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DLPProfilePredefinedGetResponse                   `json:"result,required"`
+	Result   DLPPredefinedProfile                              `json:"result,required"`
 	// Whether the API call was successful
 	Success DLPProfilePredefinedGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dlpProfilePredefinedGetResponseEnvelopeJSON    `json:"-"`

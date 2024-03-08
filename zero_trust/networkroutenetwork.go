@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"time"
 
 	"github.com/cloudflare/cloudflare-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/internal/apiquery"
@@ -36,7 +35,7 @@ func NewNetworkRouteNetworkService(opts ...option.RequestOption) (r *NetworkRout
 
 // Routes a private network through a Cloudflare Tunnel. The CIDR in
 // `ip_network_encoded` must be written in URL-encoded format.
-func (r *NetworkRouteNetworkService) New(ctx context.Context, ipNetworkEncoded string, params NetworkRouteNetworkNewParams, opts ...option.RequestOption) (res *NetworkRouteNetworkNewResponse, err error) {
+func (r *NetworkRouteNetworkService) New(ctx context.Context, ipNetworkEncoded string, params NetworkRouteNetworkNewParams, opts ...option.RequestOption) (res *TunnelRoute, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NetworkRouteNetworkNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/teamnet/routes/network/%s", params.AccountID, ipNetworkEncoded)
@@ -55,7 +54,7 @@ func (r *NetworkRouteNetworkService) New(ctx context.Context, ipNetworkEncoded s
 // is missing it will assume Cloudflare Tunnel as default. If tunnel_id is provided
 // it will delete the route from that tunnel, otherwise it will delete the route
 // based on the vnet and tun_type.
-func (r *NetworkRouteNetworkService) Delete(ctx context.Context, ipNetworkEncoded string, params NetworkRouteNetworkDeleteParams, opts ...option.RequestOption) (res *NetworkRouteNetworkDeleteResponse, err error) {
+func (r *NetworkRouteNetworkService) Delete(ctx context.Context, ipNetworkEncoded string, params NetworkRouteNetworkDeleteParams, opts ...option.RequestOption) (res *TunnelRoute, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NetworkRouteNetworkDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/teamnet/routes/network/%s", params.AccountID, ipNetworkEncoded)
@@ -69,7 +68,7 @@ func (r *NetworkRouteNetworkService) Delete(ctx context.Context, ipNetworkEncode
 
 // Updates an existing private network route in an account. The CIDR in
 // `ip_network_encoded` must be written in URL-encoded format.
-func (r *NetworkRouteNetworkService) Edit(ctx context.Context, ipNetworkEncoded string, body NetworkRouteNetworkEditParams, opts ...option.RequestOption) (res *NetworkRouteNetworkEditResponse, err error) {
+func (r *NetworkRouteNetworkService) Edit(ctx context.Context, ipNetworkEncoded string, body NetworkRouteNetworkEditParams, opts ...option.RequestOption) (res *TunnelRoute, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NetworkRouteNetworkEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/teamnet/routes/network/%s", body.AccountID, ipNetworkEncoded)
@@ -79,135 +78,6 @@ func (r *NetworkRouteNetworkService) Edit(ctx context.Context, ipNetworkEncoded 
 	}
 	res = &env.Result
 	return
-}
-
-type NetworkRouteNetworkNewResponse struct {
-	// UUID of the route.
-	ID string `json:"id"`
-	// Optional remark describing the route.
-	Comment string `json:"comment"`
-	// Timestamp of when the route was created.
-	CreatedAt interface{} `json:"created_at"`
-	// Timestamp of when the route was deleted. If `null`, the route has not been
-	// deleted.
-	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
-	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
-	Network string `json:"network"`
-	// UUID of the Cloudflare Tunnel serving the route.
-	TunnelID interface{} `json:"tunnel_id"`
-	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks
-	// are configured, the route is assigned to the default virtual network of the
-	// account.
-	VirtualNetworkID interface{}                        `json:"virtual_network_id"`
-	JSON             networkRouteNetworkNewResponseJSON `json:"-"`
-}
-
-// networkRouteNetworkNewResponseJSON contains the JSON metadata for the struct
-// [NetworkRouteNetworkNewResponse]
-type networkRouteNetworkNewResponseJSON struct {
-	ID               apijson.Field
-	Comment          apijson.Field
-	CreatedAt        apijson.Field
-	DeletedAt        apijson.Field
-	Network          apijson.Field
-	TunnelID         apijson.Field
-	VirtualNetworkID apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *NetworkRouteNetworkNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r networkRouteNetworkNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type NetworkRouteNetworkDeleteResponse struct {
-	// UUID of the route.
-	ID string `json:"id"`
-	// Optional remark describing the route.
-	Comment string `json:"comment"`
-	// Timestamp of when the route was created.
-	CreatedAt interface{} `json:"created_at"`
-	// Timestamp of when the route was deleted. If `null`, the route has not been
-	// deleted.
-	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
-	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
-	Network string `json:"network"`
-	// UUID of the Cloudflare Tunnel serving the route.
-	TunnelID interface{} `json:"tunnel_id"`
-	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks
-	// are configured, the route is assigned to the default virtual network of the
-	// account.
-	VirtualNetworkID interface{}                           `json:"virtual_network_id"`
-	JSON             networkRouteNetworkDeleteResponseJSON `json:"-"`
-}
-
-// networkRouteNetworkDeleteResponseJSON contains the JSON metadata for the struct
-// [NetworkRouteNetworkDeleteResponse]
-type networkRouteNetworkDeleteResponseJSON struct {
-	ID               apijson.Field
-	Comment          apijson.Field
-	CreatedAt        apijson.Field
-	DeletedAt        apijson.Field
-	Network          apijson.Field
-	TunnelID         apijson.Field
-	VirtualNetworkID apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *NetworkRouteNetworkDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r networkRouteNetworkDeleteResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type NetworkRouteNetworkEditResponse struct {
-	// UUID of the route.
-	ID string `json:"id"`
-	// Optional remark describing the route.
-	Comment string `json:"comment"`
-	// Timestamp of when the route was created.
-	CreatedAt interface{} `json:"created_at"`
-	// Timestamp of when the route was deleted. If `null`, the route has not been
-	// deleted.
-	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
-	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
-	Network string `json:"network"`
-	// UUID of the Cloudflare Tunnel serving the route.
-	TunnelID interface{} `json:"tunnel_id"`
-	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks
-	// are configured, the route is assigned to the default virtual network of the
-	// account.
-	VirtualNetworkID interface{}                         `json:"virtual_network_id"`
-	JSON             networkRouteNetworkEditResponseJSON `json:"-"`
-}
-
-// networkRouteNetworkEditResponseJSON contains the JSON metadata for the struct
-// [NetworkRouteNetworkEditResponse]
-type networkRouteNetworkEditResponseJSON struct {
-	ID               apijson.Field
-	Comment          apijson.Field
-	CreatedAt        apijson.Field
-	DeletedAt        apijson.Field
-	Network          apijson.Field
-	TunnelID         apijson.Field
-	VirtualNetworkID apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *NetworkRouteNetworkEditResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r networkRouteNetworkEditResponseJSON) RawJSON() string {
-	return r.raw
 }
 
 type NetworkRouteNetworkNewParams struct {
@@ -228,7 +98,7 @@ func (r NetworkRouteNetworkNewParams) MarshalJSON() (data []byte, err error) {
 type NetworkRouteNetworkNewResponseEnvelope struct {
 	Errors   []NetworkRouteNetworkNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []NetworkRouteNetworkNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   NetworkRouteNetworkNewResponse                   `json:"result,required"`
+	Result   TunnelRoute                                      `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkRouteNetworkNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkRouteNetworkNewResponseEnvelopeJSON    `json:"-"`
@@ -336,7 +206,7 @@ const (
 type NetworkRouteNetworkDeleteResponseEnvelope struct {
 	Errors   []NetworkRouteNetworkDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []NetworkRouteNetworkDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   NetworkRouteNetworkDeleteResponse                   `json:"result,required"`
+	Result   TunnelRoute                                         `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkRouteNetworkDeleteResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkRouteNetworkDeleteResponseEnvelopeJSON    `json:"-"`
@@ -422,7 +292,7 @@ type NetworkRouteNetworkEditParams struct {
 type NetworkRouteNetworkEditResponseEnvelope struct {
 	Errors   []NetworkRouteNetworkEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []NetworkRouteNetworkEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   NetworkRouteNetworkEditResponse                   `json:"result,required"`
+	Result   TunnelRoute                                       `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkRouteNetworkEditResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkRouteNetworkEditResponseEnvelopeJSON    `json:"-"`

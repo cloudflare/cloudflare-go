@@ -35,7 +35,7 @@ func NewWidgetService(opts ...option.RequestOption) (r *WidgetService) {
 }
 
 // Lists challenge widgets.
-func (r *WidgetService) New(ctx context.Context, accountIdentifier string, params WidgetNewParams, opts ...option.RequestOption) (res *WidgetNewResponse, err error) {
+func (r *WidgetService) New(ctx context.Context, accountIdentifier string, params WidgetNewParams, opts ...option.RequestOption) (res *NcChallengesAdminWidgetDetail, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WidgetNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/challenges/widgets", accountIdentifier)
@@ -48,7 +48,7 @@ func (r *WidgetService) New(ctx context.Context, accountIdentifier string, param
 }
 
 // Update the configuration of a widget.
-func (r *WidgetService) Update(ctx context.Context, accountIdentifier string, sitekey string, body WidgetUpdateParams, opts ...option.RequestOption) (res *WidgetUpdateResponse, err error) {
+func (r *WidgetService) Update(ctx context.Context, accountIdentifier string, sitekey string, body WidgetUpdateParams, opts ...option.RequestOption) (res *NcChallengesAdminWidgetDetail, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WidgetUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/challenges/widgets/%s", accountIdentifier, sitekey)
@@ -61,7 +61,7 @@ func (r *WidgetService) Update(ctx context.Context, accountIdentifier string, si
 }
 
 // Lists all turnstile widgets of an account.
-func (r *WidgetService) List(ctx context.Context, accountIdentifier string, query WidgetListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[WidgetListResponse], err error) {
+func (r *WidgetService) List(ctx context.Context, accountIdentifier string, query WidgetListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[NcChallengesAdminWidgetList], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -79,12 +79,12 @@ func (r *WidgetService) List(ctx context.Context, accountIdentifier string, quer
 }
 
 // Lists all turnstile widgets of an account.
-func (r *WidgetService) ListAutoPaging(ctx context.Context, accountIdentifier string, query WidgetListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[WidgetListResponse] {
+func (r *WidgetService) ListAutoPaging(ctx context.Context, accountIdentifier string, query WidgetListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[NcChallengesAdminWidgetList] {
 	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, accountIdentifier, query, opts...))
 }
 
 // Destroy a Turnstile Widget.
-func (r *WidgetService) Delete(ctx context.Context, accountIdentifier string, sitekey string, opts ...option.RequestOption) (res *WidgetDeleteResponse, err error) {
+func (r *WidgetService) Delete(ctx context.Context, accountIdentifier string, sitekey string, opts ...option.RequestOption) (res *NcChallengesAdminWidgetDetail, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WidgetDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/challenges/widgets/%s", accountIdentifier, sitekey)
@@ -97,7 +97,7 @@ func (r *WidgetService) Delete(ctx context.Context, accountIdentifier string, si
 }
 
 // Show a single challenge widget configuration.
-func (r *WidgetService) Get(ctx context.Context, accountIdentifier string, sitekey string, opts ...option.RequestOption) (res *WidgetGetResponse, err error) {
+func (r *WidgetService) Get(ctx context.Context, accountIdentifier string, sitekey string, opts ...option.RequestOption) (res *NcChallengesAdminWidgetDetail, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WidgetGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/challenges/widgets/%s", accountIdentifier, sitekey)
@@ -113,7 +113,7 @@ func (r *WidgetService) Get(ctx context.Context, accountIdentifier string, sitek
 // `false`, the previous secret remains valid for 2 hours.
 //
 // Note that secrets cannot be rotated again during the grace period.
-func (r *WidgetService) RotateSecret(ctx context.Context, accountIdentifier string, sitekey string, body WidgetRotateSecretParams, opts ...option.RequestOption) (res *WidgetRotateSecretResponse, err error) {
+func (r *WidgetService) RotateSecret(ctx context.Context, accountIdentifier string, sitekey string, body WidgetRotateSecretParams, opts ...option.RequestOption) (res *NcChallengesAdminWidgetDetail, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WidgetRotateSecretResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/challenges/widgets/%s/rotate_secret", accountIdentifier, sitekey)
@@ -126,18 +126,18 @@ func (r *WidgetService) RotateSecret(ctx context.Context, accountIdentifier stri
 }
 
 // A Turnstile widget's detailed configuration
-type WidgetNewResponse struct {
+type NcChallengesAdminWidgetDetail struct {
 	// If bot_fight_mode is set to `true`, Cloudflare issues computationally expensive
 	// challenges in response to malicious bots (ENT only).
 	BotFightMode bool `json:"bot_fight_mode,required"`
 	// If Turnstile is embedded on a Cloudflare site and the widget should grant
 	// challenge clearance, this setting can determine the clearance level to be set
-	ClearanceLevel WidgetNewResponseClearanceLevel `json:"clearance_level,required"`
+	ClearanceLevel NcChallengesAdminWidgetDetailClearanceLevel `json:"clearance_level,required"`
 	// When the widget was created.
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
 	Domains   []string  `json:"domains,required"`
 	// Widget Mode
-	Mode WidgetNewResponseMode `json:"mode,required"`
+	Mode NcChallengesAdminWidgetDetailMode `json:"mode,required"`
 	// When the widget was modified.
 	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
 	// Human readable widget name. Not unique. Cloudflare suggests that you set this to
@@ -147,17 +147,17 @@ type WidgetNewResponse struct {
 	// Do not show any Cloudflare branding on the widget (ENT only).
 	Offlabel bool `json:"offlabel,required"`
 	// Region where this widget can be used.
-	Region WidgetNewResponseRegion `json:"region,required"`
+	Region NcChallengesAdminWidgetDetailRegion `json:"region,required"`
 	// Secret key for this widget.
 	Secret string `json:"secret,required"`
 	// Widget item identifier tag.
-	Sitekey string                `json:"sitekey,required"`
-	JSON    widgetNewResponseJSON `json:"-"`
+	Sitekey string                            `json:"sitekey,required"`
+	JSON    ncChallengesAdminWidgetDetailJSON `json:"-"`
 }
 
-// widgetNewResponseJSON contains the JSON metadata for the struct
-// [WidgetNewResponse]
-type widgetNewResponseJSON struct {
+// ncChallengesAdminWidgetDetailJSON contains the JSON metadata for the struct
+// [NcChallengesAdminWidgetDetail]
+type ncChallengesAdminWidgetDetailJSON struct {
 	BotFightMode   apijson.Field
 	ClearanceLevel apijson.Field
 	CreatedOn      apijson.Field
@@ -173,137 +173,54 @@ type widgetNewResponseJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *WidgetNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *NcChallengesAdminWidgetDetail) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r widgetNewResponseJSON) RawJSON() string {
+func (r ncChallengesAdminWidgetDetailJSON) RawJSON() string {
 	return r.raw
 }
 
 // If Turnstile is embedded on a Cloudflare site and the widget should grant
 // challenge clearance, this setting can determine the clearance level to be set
-type WidgetNewResponseClearanceLevel string
+type NcChallengesAdminWidgetDetailClearanceLevel string
 
 const (
-	WidgetNewResponseClearanceLevelNoClearance WidgetNewResponseClearanceLevel = "no_clearance"
-	WidgetNewResponseClearanceLevelJschallenge WidgetNewResponseClearanceLevel = "jschallenge"
-	WidgetNewResponseClearanceLevelManaged     WidgetNewResponseClearanceLevel = "managed"
-	WidgetNewResponseClearanceLevelInteractive WidgetNewResponseClearanceLevel = "interactive"
+	NcChallengesAdminWidgetDetailClearanceLevelNoClearance NcChallengesAdminWidgetDetailClearanceLevel = "no_clearance"
+	NcChallengesAdminWidgetDetailClearanceLevelJschallenge NcChallengesAdminWidgetDetailClearanceLevel = "jschallenge"
+	NcChallengesAdminWidgetDetailClearanceLevelManaged     NcChallengesAdminWidgetDetailClearanceLevel = "managed"
+	NcChallengesAdminWidgetDetailClearanceLevelInteractive NcChallengesAdminWidgetDetailClearanceLevel = "interactive"
 )
 
 // Widget Mode
-type WidgetNewResponseMode string
+type NcChallengesAdminWidgetDetailMode string
 
 const (
-	WidgetNewResponseModeNonInteractive WidgetNewResponseMode = "non-interactive"
-	WidgetNewResponseModeInvisible      WidgetNewResponseMode = "invisible"
-	WidgetNewResponseModeManaged        WidgetNewResponseMode = "managed"
+	NcChallengesAdminWidgetDetailModeNonInteractive NcChallengesAdminWidgetDetailMode = "non-interactive"
+	NcChallengesAdminWidgetDetailModeInvisible      NcChallengesAdminWidgetDetailMode = "invisible"
+	NcChallengesAdminWidgetDetailModeManaged        NcChallengesAdminWidgetDetailMode = "managed"
 )
 
 // Region where this widget can be used.
-type WidgetNewResponseRegion string
+type NcChallengesAdminWidgetDetailRegion string
 
 const (
-	WidgetNewResponseRegionWorld WidgetNewResponseRegion = "world"
-)
-
-// A Turnstile widget's detailed configuration
-type WidgetUpdateResponse struct {
-	// If bot_fight_mode is set to `true`, Cloudflare issues computationally expensive
-	// challenges in response to malicious bots (ENT only).
-	BotFightMode bool `json:"bot_fight_mode,required"`
-	// If Turnstile is embedded on a Cloudflare site and the widget should grant
-	// challenge clearance, this setting can determine the clearance level to be set
-	ClearanceLevel WidgetUpdateResponseClearanceLevel `json:"clearance_level,required"`
-	// When the widget was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	Domains   []string  `json:"domains,required"`
-	// Widget Mode
-	Mode WidgetUpdateResponseMode `json:"mode,required"`
-	// When the widget was modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// Human readable widget name. Not unique. Cloudflare suggests that you set this to
-	// a meaningful string to make it easier to identify your widget, and where it is
-	// used.
-	Name string `json:"name,required"`
-	// Do not show any Cloudflare branding on the widget (ENT only).
-	Offlabel bool `json:"offlabel,required"`
-	// Region where this widget can be used.
-	Region WidgetUpdateResponseRegion `json:"region,required"`
-	// Secret key for this widget.
-	Secret string `json:"secret,required"`
-	// Widget item identifier tag.
-	Sitekey string                   `json:"sitekey,required"`
-	JSON    widgetUpdateResponseJSON `json:"-"`
-}
-
-// widgetUpdateResponseJSON contains the JSON metadata for the struct
-// [WidgetUpdateResponse]
-type widgetUpdateResponseJSON struct {
-	BotFightMode   apijson.Field
-	ClearanceLevel apijson.Field
-	CreatedOn      apijson.Field
-	Domains        apijson.Field
-	Mode           apijson.Field
-	ModifiedOn     apijson.Field
-	Name           apijson.Field
-	Offlabel       apijson.Field
-	Region         apijson.Field
-	Secret         apijson.Field
-	Sitekey        apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *WidgetUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r widgetUpdateResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// If Turnstile is embedded on a Cloudflare site and the widget should grant
-// challenge clearance, this setting can determine the clearance level to be set
-type WidgetUpdateResponseClearanceLevel string
-
-const (
-	WidgetUpdateResponseClearanceLevelNoClearance WidgetUpdateResponseClearanceLevel = "no_clearance"
-	WidgetUpdateResponseClearanceLevelJschallenge WidgetUpdateResponseClearanceLevel = "jschallenge"
-	WidgetUpdateResponseClearanceLevelManaged     WidgetUpdateResponseClearanceLevel = "managed"
-	WidgetUpdateResponseClearanceLevelInteractive WidgetUpdateResponseClearanceLevel = "interactive"
-)
-
-// Widget Mode
-type WidgetUpdateResponseMode string
-
-const (
-	WidgetUpdateResponseModeNonInteractive WidgetUpdateResponseMode = "non-interactive"
-	WidgetUpdateResponseModeInvisible      WidgetUpdateResponseMode = "invisible"
-	WidgetUpdateResponseModeManaged        WidgetUpdateResponseMode = "managed"
-)
-
-// Region where this widget can be used.
-type WidgetUpdateResponseRegion string
-
-const (
-	WidgetUpdateResponseRegionWorld WidgetUpdateResponseRegion = "world"
+	NcChallengesAdminWidgetDetailRegionWorld NcChallengesAdminWidgetDetailRegion = "world"
 )
 
 // A Turnstile Widgets configuration as it appears in listings
-type WidgetListResponse struct {
+type NcChallengesAdminWidgetList struct {
 	// If bot_fight_mode is set to `true`, Cloudflare issues computationally expensive
 	// challenges in response to malicious bots (ENT only).
 	BotFightMode bool `json:"bot_fight_mode,required"`
 	// If Turnstile is embedded on a Cloudflare site and the widget should grant
 	// challenge clearance, this setting can determine the clearance level to be set
-	ClearanceLevel WidgetListResponseClearanceLevel `json:"clearance_level,required"`
+	ClearanceLevel NcChallengesAdminWidgetListClearanceLevel `json:"clearance_level,required"`
 	// When the widget was created.
 	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
 	Domains   []string  `json:"domains,required"`
 	// Widget Mode
-	Mode WidgetListResponseMode `json:"mode,required"`
+	Mode NcChallengesAdminWidgetListMode `json:"mode,required"`
 	// When the widget was modified.
 	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
 	// Human readable widget name. Not unique. Cloudflare suggests that you set this to
@@ -313,15 +230,15 @@ type WidgetListResponse struct {
 	// Do not show any Cloudflare branding on the widget (ENT only).
 	Offlabel bool `json:"offlabel,required"`
 	// Region where this widget can be used.
-	Region WidgetListResponseRegion `json:"region,required"`
+	Region NcChallengesAdminWidgetListRegion `json:"region,required"`
 	// Widget item identifier tag.
-	Sitekey string                 `json:"sitekey,required"`
-	JSON    widgetListResponseJSON `json:"-"`
+	Sitekey string                          `json:"sitekey,required"`
+	JSON    ncChallengesAdminWidgetListJSON `json:"-"`
 }
 
-// widgetListResponseJSON contains the JSON metadata for the struct
-// [WidgetListResponse]
-type widgetListResponseJSON struct {
+// ncChallengesAdminWidgetListJSON contains the JSON metadata for the struct
+// [NcChallengesAdminWidgetList]
+type ncChallengesAdminWidgetListJSON struct {
 	BotFightMode   apijson.Field
 	ClearanceLevel apijson.Field
 	CreatedOn      apijson.Field
@@ -336,288 +253,39 @@ type widgetListResponseJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *WidgetListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *NcChallengesAdminWidgetList) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r widgetListResponseJSON) RawJSON() string {
+func (r ncChallengesAdminWidgetListJSON) RawJSON() string {
 	return r.raw
 }
 
 // If Turnstile is embedded on a Cloudflare site and the widget should grant
 // challenge clearance, this setting can determine the clearance level to be set
-type WidgetListResponseClearanceLevel string
+type NcChallengesAdminWidgetListClearanceLevel string
 
 const (
-	WidgetListResponseClearanceLevelNoClearance WidgetListResponseClearanceLevel = "no_clearance"
-	WidgetListResponseClearanceLevelJschallenge WidgetListResponseClearanceLevel = "jschallenge"
-	WidgetListResponseClearanceLevelManaged     WidgetListResponseClearanceLevel = "managed"
-	WidgetListResponseClearanceLevelInteractive WidgetListResponseClearanceLevel = "interactive"
+	NcChallengesAdminWidgetListClearanceLevelNoClearance NcChallengesAdminWidgetListClearanceLevel = "no_clearance"
+	NcChallengesAdminWidgetListClearanceLevelJschallenge NcChallengesAdminWidgetListClearanceLevel = "jschallenge"
+	NcChallengesAdminWidgetListClearanceLevelManaged     NcChallengesAdminWidgetListClearanceLevel = "managed"
+	NcChallengesAdminWidgetListClearanceLevelInteractive NcChallengesAdminWidgetListClearanceLevel = "interactive"
 )
 
 // Widget Mode
-type WidgetListResponseMode string
+type NcChallengesAdminWidgetListMode string
 
 const (
-	WidgetListResponseModeNonInteractive WidgetListResponseMode = "non-interactive"
-	WidgetListResponseModeInvisible      WidgetListResponseMode = "invisible"
-	WidgetListResponseModeManaged        WidgetListResponseMode = "managed"
+	NcChallengesAdminWidgetListModeNonInteractive NcChallengesAdminWidgetListMode = "non-interactive"
+	NcChallengesAdminWidgetListModeInvisible      NcChallengesAdminWidgetListMode = "invisible"
+	NcChallengesAdminWidgetListModeManaged        NcChallengesAdminWidgetListMode = "managed"
 )
 
 // Region where this widget can be used.
-type WidgetListResponseRegion string
+type NcChallengesAdminWidgetListRegion string
 
 const (
-	WidgetListResponseRegionWorld WidgetListResponseRegion = "world"
-)
-
-// A Turnstile widget's detailed configuration
-type WidgetDeleteResponse struct {
-	// If bot_fight_mode is set to `true`, Cloudflare issues computationally expensive
-	// challenges in response to malicious bots (ENT only).
-	BotFightMode bool `json:"bot_fight_mode,required"`
-	// If Turnstile is embedded on a Cloudflare site and the widget should grant
-	// challenge clearance, this setting can determine the clearance level to be set
-	ClearanceLevel WidgetDeleteResponseClearanceLevel `json:"clearance_level,required"`
-	// When the widget was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	Domains   []string  `json:"domains,required"`
-	// Widget Mode
-	Mode WidgetDeleteResponseMode `json:"mode,required"`
-	// When the widget was modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// Human readable widget name. Not unique. Cloudflare suggests that you set this to
-	// a meaningful string to make it easier to identify your widget, and where it is
-	// used.
-	Name string `json:"name,required"`
-	// Do not show any Cloudflare branding on the widget (ENT only).
-	Offlabel bool `json:"offlabel,required"`
-	// Region where this widget can be used.
-	Region WidgetDeleteResponseRegion `json:"region,required"`
-	// Secret key for this widget.
-	Secret string `json:"secret,required"`
-	// Widget item identifier tag.
-	Sitekey string                   `json:"sitekey,required"`
-	JSON    widgetDeleteResponseJSON `json:"-"`
-}
-
-// widgetDeleteResponseJSON contains the JSON metadata for the struct
-// [WidgetDeleteResponse]
-type widgetDeleteResponseJSON struct {
-	BotFightMode   apijson.Field
-	ClearanceLevel apijson.Field
-	CreatedOn      apijson.Field
-	Domains        apijson.Field
-	Mode           apijson.Field
-	ModifiedOn     apijson.Field
-	Name           apijson.Field
-	Offlabel       apijson.Field
-	Region         apijson.Field
-	Secret         apijson.Field
-	Sitekey        apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *WidgetDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r widgetDeleteResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// If Turnstile is embedded on a Cloudflare site and the widget should grant
-// challenge clearance, this setting can determine the clearance level to be set
-type WidgetDeleteResponseClearanceLevel string
-
-const (
-	WidgetDeleteResponseClearanceLevelNoClearance WidgetDeleteResponseClearanceLevel = "no_clearance"
-	WidgetDeleteResponseClearanceLevelJschallenge WidgetDeleteResponseClearanceLevel = "jschallenge"
-	WidgetDeleteResponseClearanceLevelManaged     WidgetDeleteResponseClearanceLevel = "managed"
-	WidgetDeleteResponseClearanceLevelInteractive WidgetDeleteResponseClearanceLevel = "interactive"
-)
-
-// Widget Mode
-type WidgetDeleteResponseMode string
-
-const (
-	WidgetDeleteResponseModeNonInteractive WidgetDeleteResponseMode = "non-interactive"
-	WidgetDeleteResponseModeInvisible      WidgetDeleteResponseMode = "invisible"
-	WidgetDeleteResponseModeManaged        WidgetDeleteResponseMode = "managed"
-)
-
-// Region where this widget can be used.
-type WidgetDeleteResponseRegion string
-
-const (
-	WidgetDeleteResponseRegionWorld WidgetDeleteResponseRegion = "world"
-)
-
-// A Turnstile widget's detailed configuration
-type WidgetGetResponse struct {
-	// If bot_fight_mode is set to `true`, Cloudflare issues computationally expensive
-	// challenges in response to malicious bots (ENT only).
-	BotFightMode bool `json:"bot_fight_mode,required"`
-	// If Turnstile is embedded on a Cloudflare site and the widget should grant
-	// challenge clearance, this setting can determine the clearance level to be set
-	ClearanceLevel WidgetGetResponseClearanceLevel `json:"clearance_level,required"`
-	// When the widget was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	Domains   []string  `json:"domains,required"`
-	// Widget Mode
-	Mode WidgetGetResponseMode `json:"mode,required"`
-	// When the widget was modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// Human readable widget name. Not unique. Cloudflare suggests that you set this to
-	// a meaningful string to make it easier to identify your widget, and where it is
-	// used.
-	Name string `json:"name,required"`
-	// Do not show any Cloudflare branding on the widget (ENT only).
-	Offlabel bool `json:"offlabel,required"`
-	// Region where this widget can be used.
-	Region WidgetGetResponseRegion `json:"region,required"`
-	// Secret key for this widget.
-	Secret string `json:"secret,required"`
-	// Widget item identifier tag.
-	Sitekey string                `json:"sitekey,required"`
-	JSON    widgetGetResponseJSON `json:"-"`
-}
-
-// widgetGetResponseJSON contains the JSON metadata for the struct
-// [WidgetGetResponse]
-type widgetGetResponseJSON struct {
-	BotFightMode   apijson.Field
-	ClearanceLevel apijson.Field
-	CreatedOn      apijson.Field
-	Domains        apijson.Field
-	Mode           apijson.Field
-	ModifiedOn     apijson.Field
-	Name           apijson.Field
-	Offlabel       apijson.Field
-	Region         apijson.Field
-	Secret         apijson.Field
-	Sitekey        apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *WidgetGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r widgetGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// If Turnstile is embedded on a Cloudflare site and the widget should grant
-// challenge clearance, this setting can determine the clearance level to be set
-type WidgetGetResponseClearanceLevel string
-
-const (
-	WidgetGetResponseClearanceLevelNoClearance WidgetGetResponseClearanceLevel = "no_clearance"
-	WidgetGetResponseClearanceLevelJschallenge WidgetGetResponseClearanceLevel = "jschallenge"
-	WidgetGetResponseClearanceLevelManaged     WidgetGetResponseClearanceLevel = "managed"
-	WidgetGetResponseClearanceLevelInteractive WidgetGetResponseClearanceLevel = "interactive"
-)
-
-// Widget Mode
-type WidgetGetResponseMode string
-
-const (
-	WidgetGetResponseModeNonInteractive WidgetGetResponseMode = "non-interactive"
-	WidgetGetResponseModeInvisible      WidgetGetResponseMode = "invisible"
-	WidgetGetResponseModeManaged        WidgetGetResponseMode = "managed"
-)
-
-// Region where this widget can be used.
-type WidgetGetResponseRegion string
-
-const (
-	WidgetGetResponseRegionWorld WidgetGetResponseRegion = "world"
-)
-
-// A Turnstile widget's detailed configuration
-type WidgetRotateSecretResponse struct {
-	// If bot_fight_mode is set to `true`, Cloudflare issues computationally expensive
-	// challenges in response to malicious bots (ENT only).
-	BotFightMode bool `json:"bot_fight_mode,required"`
-	// If Turnstile is embedded on a Cloudflare site and the widget should grant
-	// challenge clearance, this setting can determine the clearance level to be set
-	ClearanceLevel WidgetRotateSecretResponseClearanceLevel `json:"clearance_level,required"`
-	// When the widget was created.
-	CreatedOn time.Time `json:"created_on,required" format:"date-time"`
-	Domains   []string  `json:"domains,required"`
-	// Widget Mode
-	Mode WidgetRotateSecretResponseMode `json:"mode,required"`
-	// When the widget was modified.
-	ModifiedOn time.Time `json:"modified_on,required" format:"date-time"`
-	// Human readable widget name. Not unique. Cloudflare suggests that you set this to
-	// a meaningful string to make it easier to identify your widget, and where it is
-	// used.
-	Name string `json:"name,required"`
-	// Do not show any Cloudflare branding on the widget (ENT only).
-	Offlabel bool `json:"offlabel,required"`
-	// Region where this widget can be used.
-	Region WidgetRotateSecretResponseRegion `json:"region,required"`
-	// Secret key for this widget.
-	Secret string `json:"secret,required"`
-	// Widget item identifier tag.
-	Sitekey string                         `json:"sitekey,required"`
-	JSON    widgetRotateSecretResponseJSON `json:"-"`
-}
-
-// widgetRotateSecretResponseJSON contains the JSON metadata for the struct
-// [WidgetRotateSecretResponse]
-type widgetRotateSecretResponseJSON struct {
-	BotFightMode   apijson.Field
-	ClearanceLevel apijson.Field
-	CreatedOn      apijson.Field
-	Domains        apijson.Field
-	Mode           apijson.Field
-	ModifiedOn     apijson.Field
-	Name           apijson.Field
-	Offlabel       apijson.Field
-	Region         apijson.Field
-	Secret         apijson.Field
-	Sitekey        apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *WidgetRotateSecretResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r widgetRotateSecretResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// If Turnstile is embedded on a Cloudflare site and the widget should grant
-// challenge clearance, this setting can determine the clearance level to be set
-type WidgetRotateSecretResponseClearanceLevel string
-
-const (
-	WidgetRotateSecretResponseClearanceLevelNoClearance WidgetRotateSecretResponseClearanceLevel = "no_clearance"
-	WidgetRotateSecretResponseClearanceLevelJschallenge WidgetRotateSecretResponseClearanceLevel = "jschallenge"
-	WidgetRotateSecretResponseClearanceLevelManaged     WidgetRotateSecretResponseClearanceLevel = "managed"
-	WidgetRotateSecretResponseClearanceLevelInteractive WidgetRotateSecretResponseClearanceLevel = "interactive"
-)
-
-// Widget Mode
-type WidgetRotateSecretResponseMode string
-
-const (
-	WidgetRotateSecretResponseModeNonInteractive WidgetRotateSecretResponseMode = "non-interactive"
-	WidgetRotateSecretResponseModeInvisible      WidgetRotateSecretResponseMode = "invisible"
-	WidgetRotateSecretResponseModeManaged        WidgetRotateSecretResponseMode = "managed"
-)
-
-// Region where this widget can be used.
-type WidgetRotateSecretResponseRegion string
-
-const (
-	WidgetRotateSecretResponseRegionWorld WidgetRotateSecretResponseRegion = "world"
+	NcChallengesAdminWidgetListRegionWorld NcChallengesAdminWidgetListRegion = "world"
 )
 
 type WidgetNewParams struct {
@@ -712,7 +380,7 @@ type WidgetNewResponseEnvelope struct {
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// A Turnstile widget's detailed configuration
-	Result     WidgetNewResponse                   `json:"result"`
+	Result     NcChallengesAdminWidgetDetail       `json:"result"`
 	ResultInfo WidgetNewResponseEnvelopeResultInfo `json:"result_info"`
 	JSON       widgetNewResponseEnvelopeJSON       `json:"-"`
 }
@@ -862,7 +530,7 @@ type WidgetUpdateResponseEnvelope struct {
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// A Turnstile widget's detailed configuration
-	Result WidgetUpdateResponse             `json:"result"`
+	Result NcChallengesAdminWidgetDetail    `json:"result"`
 	JSON   widgetUpdateResponseEnvelopeJSON `json:"-"`
 }
 
@@ -975,7 +643,7 @@ type WidgetDeleteResponseEnvelope struct {
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// A Turnstile widget's detailed configuration
-	Result WidgetDeleteResponse             `json:"result"`
+	Result NcChallengesAdminWidgetDetail    `json:"result"`
 	JSON   widgetDeleteResponseEnvelopeJSON `json:"-"`
 }
 
@@ -1050,7 +718,7 @@ type WidgetGetResponseEnvelope struct {
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// A Turnstile widget's detailed configuration
-	Result WidgetGetResponse             `json:"result"`
+	Result NcChallengesAdminWidgetDetail `json:"result"`
 	JSON   widgetGetResponseEnvelopeJSON `json:"-"`
 }
 
@@ -1136,7 +804,7 @@ type WidgetRotateSecretResponseEnvelope struct {
 	// Whether the API call was successful
 	Success bool `json:"success,required"`
 	// A Turnstile widget's detailed configuration
-	Result WidgetRotateSecretResponse             `json:"result"`
+	Result NcChallengesAdminWidgetDetail          `json:"result"`
 	JSON   widgetRotateSecretResponseEnvelopeJSON `json:"-"`
 }
 
