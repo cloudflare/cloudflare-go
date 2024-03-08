@@ -7,10 +7,10 @@ import (
 	"net/http"
 	"reflect"
 
-	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
-	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
-	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/cloudflare/cloudflare-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/internal/shared"
+	"github.com/cloudflare/cloudflare-go/option"
 	"github.com/tidwall/gjson"
 )
 

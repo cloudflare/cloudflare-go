@@ -5,7 +5,7 @@ package cloudflare
 import (
 	"os"
 
-	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/cloudflare/cloudflare-go/option"
 )
 
 // Client creates a struct with services and top level methods that help with

@@ -11,8 +11,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-sdk-go"
-	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/cloudflare/cloudflare-go"
+	"github.com/cloudflare/cloudflare-go/option"
 )
 
 func TestSnippetContentGet(t *testing.T) {

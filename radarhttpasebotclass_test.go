@@ -9,9 +9,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-sdk-go"
-	"github.com/cloudflare/cloudflare-sdk-go/internal/testutil"
-	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/cloudflare/cloudflare-go"
+	"github.com/cloudflare/cloudflare-go/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/option"
 )
 
 func TestRadarHTTPAseBotClassGetWithOptionalParams(t *testing.T) {

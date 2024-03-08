@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
-	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/internal/requestconfig"
 )
 
 type V4PagePaginationResult[T any] struct {

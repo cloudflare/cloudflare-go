@@ -8,10 +8,10 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-sdk-go/internal/apiquery"
-	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
-	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/cloudflare/cloudflare-go/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/internal/param"
+	"github.com/cloudflare/cloudflare-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/option"
 )
 
 // ZeroTrustDEXFleetStatusOverTimeService contains methods and other services that
