@@ -3,7 +3,7 @@
 package cloudflare
 
 import (
-	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/cloudflare/cloudflare-go/option"
 )
 
 // WorkersForPlatformDispatchNamespaceScriptContentService contains methods and

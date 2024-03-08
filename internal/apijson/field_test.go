@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
+	"github.com/cloudflare/cloudflare-go/internal/param"
 )
 
 type Struct struct {

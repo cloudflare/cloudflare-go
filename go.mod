@@ -1,4 +1,4 @@
-module github.com/cloudflare/cloudflare-sdk-go
+module github.com/cloudflare/cloudflare-go
 
 go 1.19
 

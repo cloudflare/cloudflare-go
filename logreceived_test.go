@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-sdk-go"
-	"github.com/cloudflare/cloudflare-sdk-go/internal/shared"
-	"github.com/cloudflare/cloudflare-sdk-go/internal/testutil"
-	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/cloudflare/cloudflare-go"
+	"github.com/cloudflare/cloudflare-go/internal/shared"
+	"github.com/cloudflare/cloudflare-go/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/option"
 )
 
 func TestLogReceivedGetWithOptionalParams(t *testing.T) {

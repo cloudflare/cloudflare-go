@@ -8,10 +8,10 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
-	"github.com/cloudflare/cloudflare-sdk-go/internal/param"
-	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/cloudflare/cloudflare-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/internal/param"
+	"github.com/cloudflare/cloudflare-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/option"
 )
 
 // ZoneSettingPrefetchPreloadService contains methods and other services that help
