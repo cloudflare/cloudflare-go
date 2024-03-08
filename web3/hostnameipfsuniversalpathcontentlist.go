@@ -35,7 +35,7 @@ func NewHostnameIPFSUniversalPathContentListService(opts ...option.RequestOption
 }
 
 // Update IPFS Universal Path Gateway Content List
-func (r *HostnameIPFSUniversalPathContentListService) Update(ctx context.Context, zoneIdentifier string, identifier string, body HostnameIPFSUniversalPathContentListUpdateParams, opts ...option.RequestOption) (res *HostnameIPFSUniversalPathContentListUpdateResponse, err error) {
+func (r *HostnameIPFSUniversalPathContentListService) Update(ctx context.Context, zoneIdentifier string, identifier string, body HostnameIPFSUniversalPathContentListUpdateParams, opts ...option.RequestOption) (res *DwebConfigContentListDetails, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameIPFSUniversalPathContentListUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/web3/hostnames/%s/ipfs_universal_path/content_list", zoneIdentifier, identifier)
@@ -48,7 +48,7 @@ func (r *HostnameIPFSUniversalPathContentListService) Update(ctx context.Context
 }
 
 // IPFS Universal Path Gateway Content List Details
-func (r *HostnameIPFSUniversalPathContentListService) Get(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *HostnameIPFSUniversalPathContentListGetResponse, err error) {
+func (r *HostnameIPFSUniversalPathContentListService) Get(ctx context.Context, zoneIdentifier string, identifier string, opts ...option.RequestOption) (res *DwebConfigContentListDetails, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameIPFSUniversalPathContentListGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/web3/hostnames/%s/ipfs_universal_path/content_list", zoneIdentifier, identifier)
@@ -60,69 +60,40 @@ func (r *HostnameIPFSUniversalPathContentListService) Get(ctx context.Context, z
 	return
 }
 
-type HostnameIPFSUniversalPathContentListUpdateResponse struct {
+type DwebConfigContentListDetails struct {
 	// Behavior of the content list.
-	Action HostnameIPFSUniversalPathContentListUpdateResponseAction `json:"action"`
-	JSON   hostnameIPFSUniversalPathContentListUpdateResponseJSON   `json:"-"`
+	Action DwebConfigContentListDetailsAction `json:"action"`
+	JSON   dwebConfigContentListDetailsJSON   `json:"-"`
 }
 
-// hostnameIPFSUniversalPathContentListUpdateResponseJSON contains the JSON
-// metadata for the struct [HostnameIPFSUniversalPathContentListUpdateResponse]
-type hostnameIPFSUniversalPathContentListUpdateResponseJSON struct {
+// dwebConfigContentListDetailsJSON contains the JSON metadata for the struct
+// [DwebConfigContentListDetails]
+type dwebConfigContentListDetailsJSON struct {
 	Action      apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *HostnameIPFSUniversalPathContentListUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DwebConfigContentListDetails) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r hostnameIPFSUniversalPathContentListUpdateResponseJSON) RawJSON() string {
+func (r dwebConfigContentListDetailsJSON) RawJSON() string {
 	return r.raw
 }
 
 // Behavior of the content list.
-type HostnameIPFSUniversalPathContentListUpdateResponseAction string
+type DwebConfigContentListDetailsAction string
 
 const (
-	HostnameIPFSUniversalPathContentListUpdateResponseActionBlock HostnameIPFSUniversalPathContentListUpdateResponseAction = "block"
-)
-
-type HostnameIPFSUniversalPathContentListGetResponse struct {
-	// Behavior of the content list.
-	Action HostnameIPFSUniversalPathContentListGetResponseAction `json:"action"`
-	JSON   hostnameIPFSUniversalPathContentListGetResponseJSON   `json:"-"`
-}
-
-// hostnameIPFSUniversalPathContentListGetResponseJSON contains the JSON metadata
-// for the struct [HostnameIPFSUniversalPathContentListGetResponse]
-type hostnameIPFSUniversalPathContentListGetResponseJSON struct {
-	Action      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameIPFSUniversalPathContentListGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r hostnameIPFSUniversalPathContentListGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// Behavior of the content list.
-type HostnameIPFSUniversalPathContentListGetResponseAction string
-
-const (
-	HostnameIPFSUniversalPathContentListGetResponseActionBlock HostnameIPFSUniversalPathContentListGetResponseAction = "block"
+	DwebConfigContentListDetailsActionBlock DwebConfigContentListDetailsAction = "block"
 )
 
 type HostnameIPFSUniversalPathContentListUpdateParams struct {
 	// Behavior of the content list.
 	Action param.Field[HostnameIPFSUniversalPathContentListUpdateParamsAction] `json:"action,required"`
 	// Content list entries.
-	Entries param.Field[[]HostnameIPFSUniversalPathContentListUpdateParamsEntry] `json:"entries,required"`
+	Entries param.Field[[]DwebConfigContentListEntryParam] `json:"entries,required"`
 }
 
 func (r HostnameIPFSUniversalPathContentListUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -136,32 +107,10 @@ const (
 	HostnameIPFSUniversalPathContentListUpdateParamsActionBlock HostnameIPFSUniversalPathContentListUpdateParamsAction = "block"
 )
 
-// Content list entry to be blocked.
-type HostnameIPFSUniversalPathContentListUpdateParamsEntry struct {
-	// CID or content path of content to block.
-	Content param.Field[string] `json:"content"`
-	// An optional description of the content list entry.
-	Description param.Field[string] `json:"description"`
-	// Type of content list entry to block.
-	Type param.Field[HostnameIPFSUniversalPathContentListUpdateParamsEntriesType] `json:"type"`
-}
-
-func (r HostnameIPFSUniversalPathContentListUpdateParamsEntry) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// Type of content list entry to block.
-type HostnameIPFSUniversalPathContentListUpdateParamsEntriesType string
-
-const (
-	HostnameIPFSUniversalPathContentListUpdateParamsEntriesTypeCid         HostnameIPFSUniversalPathContentListUpdateParamsEntriesType = "cid"
-	HostnameIPFSUniversalPathContentListUpdateParamsEntriesTypeContentPath HostnameIPFSUniversalPathContentListUpdateParamsEntriesType = "content_path"
-)
-
 type HostnameIPFSUniversalPathContentListUpdateResponseEnvelope struct {
 	Errors   []HostnameIPFSUniversalPathContentListUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []HostnameIPFSUniversalPathContentListUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   HostnameIPFSUniversalPathContentListUpdateResponse                   `json:"result,required"`
+	Result   DwebConfigContentListDetails                                         `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameIPFSUniversalPathContentListUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameIPFSUniversalPathContentListUpdateResponseEnvelopeJSON    `json:"-"`
@@ -245,7 +194,7 @@ const (
 type HostnameIPFSUniversalPathContentListGetResponseEnvelope struct {
 	Errors   []HostnameIPFSUniversalPathContentListGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []HostnameIPFSUniversalPathContentListGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   HostnameIPFSUniversalPathContentListGetResponse                   `json:"result,required"`
+	Result   DwebConfigContentListDetails                                      `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameIPFSUniversalPathContentListGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameIPFSUniversalPathContentListGetResponseEnvelopeJSON    `json:"-"`

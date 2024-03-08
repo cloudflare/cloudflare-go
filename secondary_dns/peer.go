@@ -31,7 +31,7 @@ func NewPeerService(opts ...option.RequestOption) (r *PeerService) {
 }
 
 // Create Peer.
-func (r *PeerService) New(ctx context.Context, params PeerNewParams, opts ...option.RequestOption) (res *PeerNewResponse, err error) {
+func (r *PeerService) New(ctx context.Context, params PeerNewParams, opts ...option.RequestOption) (res *SecondaryDNSPeer, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PeerNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/secondary_dns/peers", params.AccountID)
@@ -44,7 +44,7 @@ func (r *PeerService) New(ctx context.Context, params PeerNewParams, opts ...opt
 }
 
 // Modify Peer.
-func (r *PeerService) Update(ctx context.Context, peerID interface{}, params PeerUpdateParams, opts ...option.RequestOption) (res *PeerUpdateResponse, err error) {
+func (r *PeerService) Update(ctx context.Context, peerID interface{}, params PeerUpdateParams, opts ...option.RequestOption) (res *SecondaryDNSPeer, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PeerUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/secondary_dns/peers/%v", params.AccountID, peerID)
@@ -57,7 +57,7 @@ func (r *PeerService) Update(ctx context.Context, peerID interface{}, params Pee
 }
 
 // List Peers.
-func (r *PeerService) List(ctx context.Context, query PeerListParams, opts ...option.RequestOption) (res *[]PeerListResponse, err error) {
+func (r *PeerService) List(ctx context.Context, query PeerListParams, opts ...option.RequestOption) (res *[]SecondaryDNSPeer, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PeerListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/secondary_dns/peers", query.AccountID)
@@ -83,7 +83,7 @@ func (r *PeerService) Delete(ctx context.Context, peerID interface{}, body PeerD
 }
 
 // Get Peer.
-func (r *PeerService) Get(ctx context.Context, peerID interface{}, query PeerGetParams, opts ...option.RequestOption) (res *PeerGetResponse, err error) {
+func (r *PeerService) Get(ctx context.Context, peerID interface{}, query PeerGetParams, opts ...option.RequestOption) (res *SecondaryDNSPeer, err error) {
 	opts = append(r.Options[:], opts...)
 	var env PeerGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/secondary_dns/peers/%v", query.AccountID, peerID)
@@ -95,90 +95,7 @@ func (r *PeerService) Get(ctx context.Context, peerID interface{}, query PeerGet
 	return
 }
 
-type PeerNewResponse struct {
-	ID interface{} `json:"id,required"`
-	// The name of the peer.
-	Name string `json:"name,required"`
-	// IPv4/IPv6 address of primary or secondary nameserver, depending on what zone
-	// this peer is linked to. For primary zones this IP defines the IP of the
-	// secondary nameserver Cloudflare will NOTIFY upon zone changes. For secondary
-	// zones this IP defines the IP of the primary nameserver Cloudflare will send
-	// AXFR/IXFR requests to.
-	IP string `json:"ip"`
-	// Enable IXFR transfer protocol, default is AXFR. Only applicable to secondary
-	// zones.
-	IxfrEnable bool `json:"ixfr_enable"`
-	// DNS port of primary or secondary nameserver, depending on what zone this peer is
-	// linked to.
-	Port float64 `json:"port"`
-	// TSIG authentication will be used for zone transfer if configured.
-	TSIGID string              `json:"tsig_id"`
-	JSON   peerNewResponseJSON `json:"-"`
-}
-
-// peerNewResponseJSON contains the JSON metadata for the struct [PeerNewResponse]
-type peerNewResponseJSON struct {
-	ID          apijson.Field
-	Name        apijson.Field
-	IP          apijson.Field
-	IxfrEnable  apijson.Field
-	Port        apijson.Field
-	TSIGID      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PeerNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r peerNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type PeerUpdateResponse struct {
-	ID interface{} `json:"id,required"`
-	// The name of the peer.
-	Name string `json:"name,required"`
-	// IPv4/IPv6 address of primary or secondary nameserver, depending on what zone
-	// this peer is linked to. For primary zones this IP defines the IP of the
-	// secondary nameserver Cloudflare will NOTIFY upon zone changes. For secondary
-	// zones this IP defines the IP of the primary nameserver Cloudflare will send
-	// AXFR/IXFR requests to.
-	IP string `json:"ip"`
-	// Enable IXFR transfer protocol, default is AXFR. Only applicable to secondary
-	// zones.
-	IxfrEnable bool `json:"ixfr_enable"`
-	// DNS port of primary or secondary nameserver, depending on what zone this peer is
-	// linked to.
-	Port float64 `json:"port"`
-	// TSIG authentication will be used for zone transfer if configured.
-	TSIGID string                 `json:"tsig_id"`
-	JSON   peerUpdateResponseJSON `json:"-"`
-}
-
-// peerUpdateResponseJSON contains the JSON metadata for the struct
-// [PeerUpdateResponse]
-type peerUpdateResponseJSON struct {
-	ID          apijson.Field
-	Name        apijson.Field
-	IP          apijson.Field
-	IxfrEnable  apijson.Field
-	Port        apijson.Field
-	TSIGID      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PeerUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r peerUpdateResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type PeerListResponse struct {
+type SecondaryDNSPeer struct {
 	ID interface{} `json:"id,required"`
 	// The name of the peer.
 	Name string `json:"name,required"`
@@ -196,12 +113,12 @@ type PeerListResponse struct {
 	Port float64 `json:"port"`
 	// TSIG authentication will be used for zone transfer if configured.
 	TSIGID string               `json:"tsig_id"`
-	JSON   peerListResponseJSON `json:"-"`
+	JSON   secondaryDNSPeerJSON `json:"-"`
 }
 
-// peerListResponseJSON contains the JSON metadata for the struct
-// [PeerListResponse]
-type peerListResponseJSON struct {
+// secondaryDNSPeerJSON contains the JSON metadata for the struct
+// [SecondaryDNSPeer]
+type secondaryDNSPeerJSON struct {
 	ID          apijson.Field
 	Name        apijson.Field
 	IP          apijson.Field
@@ -212,11 +129,11 @@ type peerListResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *PeerListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SecondaryDNSPeer) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r peerListResponseJSON) RawJSON() string {
+func (r secondaryDNSPeerJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -241,47 +158,6 @@ func (r peerDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type PeerGetResponse struct {
-	ID interface{} `json:"id,required"`
-	// The name of the peer.
-	Name string `json:"name,required"`
-	// IPv4/IPv6 address of primary or secondary nameserver, depending on what zone
-	// this peer is linked to. For primary zones this IP defines the IP of the
-	// secondary nameserver Cloudflare will NOTIFY upon zone changes. For secondary
-	// zones this IP defines the IP of the primary nameserver Cloudflare will send
-	// AXFR/IXFR requests to.
-	IP string `json:"ip"`
-	// Enable IXFR transfer protocol, default is AXFR. Only applicable to secondary
-	// zones.
-	IxfrEnable bool `json:"ixfr_enable"`
-	// DNS port of primary or secondary nameserver, depending on what zone this peer is
-	// linked to.
-	Port float64 `json:"port"`
-	// TSIG authentication will be used for zone transfer if configured.
-	TSIGID string              `json:"tsig_id"`
-	JSON   peerGetResponseJSON `json:"-"`
-}
-
-// peerGetResponseJSON contains the JSON metadata for the struct [PeerGetResponse]
-type peerGetResponseJSON struct {
-	ID          apijson.Field
-	Name        apijson.Field
-	IP          apijson.Field
-	IxfrEnable  apijson.Field
-	Port        apijson.Field
-	TSIGID      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *PeerGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r peerGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
 type PeerNewParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 	Body      param.Field[interface{}] `json:"body,required"`
@@ -294,7 +170,7 @@ func (r PeerNewParams) MarshalJSON() (data []byte, err error) {
 type PeerNewResponseEnvelope struct {
 	Errors   []PeerNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []PeerNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   PeerNewResponse                   `json:"result,required"`
+	Result   SecondaryDNSPeer                  `json:"result,required"`
 	// Whether the API call was successful
 	Success PeerNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    peerNewResponseEnvelopeJSON    `json:"-"`
@@ -399,7 +275,7 @@ func (r PeerUpdateParams) MarshalJSON() (data []byte, err error) {
 type PeerUpdateResponseEnvelope struct {
 	Errors   []PeerUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []PeerUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   PeerUpdateResponse                   `json:"result,required"`
+	Result   SecondaryDNSPeer                     `json:"result,required"`
 	// Whether the API call was successful
 	Success PeerUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    peerUpdateResponseEnvelopeJSON    `json:"-"`
@@ -484,7 +360,7 @@ type PeerListParams struct {
 type PeerListResponseEnvelope struct {
 	Errors   []PeerListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []PeerListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []PeerListResponse                 `json:"result,required,nullable"`
+	Result   []SecondaryDNSPeer                 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    PeerListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo PeerListResponseEnvelopeResultInfo `json:"result_info"`
@@ -687,7 +563,7 @@ type PeerGetParams struct {
 type PeerGetResponseEnvelope struct {
 	Errors   []PeerGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []PeerGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   PeerGetResponse                   `json:"result,required"`
+	Result   SecondaryDNSPeer                  `json:"result,required"`
 	// Whether the API call was successful
 	Success PeerGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    peerGetResponseEnvelopeJSON    `json:"-"`

@@ -35,7 +35,7 @@ func NewSettingPolishService(opts ...option.RequestOption) (r *SettingPolishServ
 // Automatically optimize image loading for website visitors on mobile devices.
 // Refer to our [blog post](http://blog.cloudflare.com/polish-solving-mobile-speed)
 // for more information.
-func (r *SettingPolishService) Edit(ctx context.Context, params SettingPolishEditParams, opts ...option.RequestOption) (res *SettingPolishEditResponse, err error) {
+func (r *SettingPolishService) Edit(ctx context.Context, params SettingPolishEditParams, opts ...option.RequestOption) (res *ZonesPolish, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingPolishEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/polish", params.ZoneID)
@@ -50,7 +50,7 @@ func (r *SettingPolishService) Edit(ctx context.Context, params SettingPolishEdi
 // Automatically optimize image loading for website visitors on mobile devices.
 // Refer to our [blog post](http://blog.cloudflare.com/polish-solving-mobile-speed)
 // for more information.
-func (r *SettingPolishService) Get(ctx context.Context, query SettingPolishGetParams, opts ...option.RequestOption) (res *SettingPolishGetResponse, err error) {
+func (r *SettingPolishService) Get(ctx context.Context, query SettingPolishGetParams, opts ...option.RequestOption) (res *ZonesPolish, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingPolishGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/polish", query.ZoneID)
@@ -68,22 +68,21 @@ func (r *SettingPolishService) Get(ctx context.Context, query SettingPolishGetPa
 // image loading. Larger JPEGs are converted to progressive images, loading a
 // lower-resolution image first and ending in a higher-resolution version. Not
 // recommended for hi-res photography sites.
-type SettingPolishEditResponse struct {
+type ZonesPolish struct {
 	// ID of the zone setting.
-	ID SettingPolishEditResponseID `json:"id,required"`
+	ID ZonesPolishID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingPolishEditResponseValue `json:"value,required"`
+	Value ZonesPolishValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingPolishEditResponseEditable `json:"editable"`
+	Editable ZonesPolishEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                     `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingPolishEditResponseJSON `json:"-"`
+	ModifiedOn time.Time       `json:"modified_on,nullable" format:"date-time"`
+	JSON       zonesPolishJSON `json:"-"`
 }
 
-// settingPolishEditResponseJSON contains the JSON metadata for the struct
-// [SettingPolishEditResponse]
-type settingPolishEditResponseJSON struct {
+// zonesPolishJSON contains the JSON metadata for the struct [ZonesPolish]
+type zonesPolishJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -92,37 +91,41 @@ type settingPolishEditResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingPolishEditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonesPolish) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r settingPolishEditResponseJSON) RawJSON() string {
+func (r zonesPolishJSON) RawJSON() string {
 	return r.raw
 }
 
+func (r ZonesPolish) implementsZonesSettingEditResponse() {}
+
+func (r ZonesPolish) implementsZonesSettingGetResponse() {}
+
 // ID of the zone setting.
-type SettingPolishEditResponseID string
+type ZonesPolishID string
 
 const (
-	SettingPolishEditResponseIDPolish SettingPolishEditResponseID = "polish"
+	ZonesPolishIDPolish ZonesPolishID = "polish"
 )
 
 // Current value of the zone setting.
-type SettingPolishEditResponseValue string
+type ZonesPolishValue string
 
 const (
-	SettingPolishEditResponseValueOff      SettingPolishEditResponseValue = "off"
-	SettingPolishEditResponseValueLossless SettingPolishEditResponseValue = "lossless"
-	SettingPolishEditResponseValueLossy    SettingPolishEditResponseValue = "lossy"
+	ZonesPolishValueOff      ZonesPolishValue = "off"
+	ZonesPolishValueLossless ZonesPolishValue = "lossless"
+	ZonesPolishValueLossy    ZonesPolishValue = "lossy"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingPolishEditResponseEditable bool
+type ZonesPolishEditable bool
 
 const (
-	SettingPolishEditResponseEditableTrue  SettingPolishEditResponseEditable = true
-	SettingPolishEditResponseEditableFalse SettingPolishEditResponseEditable = false
+	ZonesPolishEditableTrue  ZonesPolishEditable = true
+	ZonesPolishEditableFalse ZonesPolishEditable = false
 )
 
 // Removes metadata and compresses your images for faster page load times. Basic
@@ -131,62 +134,18 @@ const (
 // image loading. Larger JPEGs are converted to progressive images, loading a
 // lower-resolution image first and ending in a higher-resolution version. Not
 // recommended for hi-res photography sites.
-type SettingPolishGetResponse struct {
+type ZonesPolishParam struct {
 	// ID of the zone setting.
-	ID SettingPolishGetResponseID `json:"id,required"`
+	ID param.Field[ZonesPolishID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingPolishGetResponseValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable SettingPolishGetResponseEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                    `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingPolishGetResponseJSON `json:"-"`
+	Value param.Field[ZonesPolishValue] `json:"value,required"`
 }
 
-// settingPolishGetResponseJSON contains the JSON metadata for the struct
-// [SettingPolishGetResponse]
-type settingPolishGetResponseJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+func (r ZonesPolishParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *SettingPolishGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingPolishGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// ID of the zone setting.
-type SettingPolishGetResponseID string
-
-const (
-	SettingPolishGetResponseIDPolish SettingPolishGetResponseID = "polish"
-)
-
-// Current value of the zone setting.
-type SettingPolishGetResponseValue string
-
-const (
-	SettingPolishGetResponseValueOff      SettingPolishGetResponseValue = "off"
-	SettingPolishGetResponseValueLossless SettingPolishGetResponseValue = "lossless"
-	SettingPolishGetResponseValueLossy    SettingPolishGetResponseValue = "lossy"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type SettingPolishGetResponseEditable bool
-
-const (
-	SettingPolishGetResponseEditableTrue  SettingPolishGetResponseEditable = true
-	SettingPolishGetResponseEditableFalse SettingPolishGetResponseEditable = false
-)
+func (r ZonesPolishParam) implementsZonesSettingEditParamsItem() {}
 
 type SettingPolishEditParams struct {
 	// Identifier
@@ -197,54 +156,12 @@ type SettingPolishEditParams struct {
 	// image loading. Larger JPEGs are converted to progressive images, loading a
 	// lower-resolution image first and ending in a higher-resolution version. Not
 	// recommended for hi-res photography sites.
-	Value param.Field[SettingPolishEditParamsValue] `json:"value,required"`
+	Value param.Field[ZonesPolishParam] `json:"value,required"`
 }
 
 func (r SettingPolishEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
-
-// Removes metadata and compresses your images for faster page load times. Basic
-// (Lossless): Reduce the size of PNG, JPEG, and GIF files - no impact on visual
-// quality. Basic + JPEG (Lossy): Further reduce the size of JPEG files for faster
-// image loading. Larger JPEGs are converted to progressive images, loading a
-// lower-resolution image first and ending in a higher-resolution version. Not
-// recommended for hi-res photography sites.
-type SettingPolishEditParamsValue struct {
-	// ID of the zone setting.
-	ID param.Field[SettingPolishEditParamsValueID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[SettingPolishEditParamsValueValue] `json:"value,required"`
-}
-
-func (r SettingPolishEditParamsValue) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// ID of the zone setting.
-type SettingPolishEditParamsValueID string
-
-const (
-	SettingPolishEditParamsValueIDPolish SettingPolishEditParamsValueID = "polish"
-)
-
-// Current value of the zone setting.
-type SettingPolishEditParamsValueValue string
-
-const (
-	SettingPolishEditParamsValueValueOff      SettingPolishEditParamsValueValue = "off"
-	SettingPolishEditParamsValueValueLossless SettingPolishEditParamsValueValue = "lossless"
-	SettingPolishEditParamsValueValueLossy    SettingPolishEditParamsValueValue = "lossy"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type SettingPolishEditParamsValueEditable bool
-
-const (
-	SettingPolishEditParamsValueEditableTrue  SettingPolishEditParamsValueEditable = true
-	SettingPolishEditParamsValueEditableFalse SettingPolishEditParamsValueEditable = false
-)
 
 type SettingPolishEditResponseEnvelope struct {
 	Errors   []SettingPolishEditResponseEnvelopeErrors   `json:"errors,required"`
@@ -257,7 +174,7 @@ type SettingPolishEditResponseEnvelope struct {
 	// image loading. Larger JPEGs are converted to progressive images, loading a
 	// lower-resolution image first and ending in a higher-resolution version. Not
 	// recommended for hi-res photography sites.
-	Result SettingPolishEditResponse             `json:"result"`
+	Result ZonesPolish                           `json:"result"`
 	JSON   settingPolishEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -342,7 +259,7 @@ type SettingPolishGetResponseEnvelope struct {
 	// image loading. Larger JPEGs are converted to progressive images, loading a
 	// lower-resolution image first and ending in a higher-resolution version. Not
 	// recommended for hi-res photography sites.
-	Result SettingPolishGetResponse             `json:"result"`
+	Result ZonesPolish                          `json:"result"`
 	JSON   settingPolishGetResponseEnvelopeJSON `json:"-"`
 }
 

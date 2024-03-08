@@ -33,7 +33,7 @@ func NewRoutingDNSService(opts ...option.RequestOption) (r *RoutingDNSService) {
 }
 
 // Show the DNS records needed to configure your Email Routing zone.
-func (r *RoutingDNSService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *[]RoutingDNSGetResponse, err error) {
+func (r *RoutingDNSService) Get(ctx context.Context, zoneIdentifier string, opts ...option.RequestOption) (res *[]EmailDNSRecord, err error) {
 	opts = append(r.Options[:], opts...)
 	var env RoutingDNSGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/email/routing/dns", zoneIdentifier)
@@ -46,7 +46,7 @@ func (r *RoutingDNSService) Get(ctx context.Context, zoneIdentifier string, opts
 }
 
 // List of records needed to enable an Email Routing zone.
-type RoutingDNSGetResponse struct {
+type EmailDNSRecord struct {
 	// DNS record content.
 	Content string `json:"content"`
 	// DNS record name (or @ for the zone apex).
@@ -56,15 +56,14 @@ type RoutingDNSGetResponse struct {
 	Priority float64 `json:"priority"`
 	// Time to live, in seconds, of the DNS record. Must be between 60 and 86400, or 1
 	// for 'automatic'.
-	TTL RoutingDNSGetResponseTTL `json:"ttl"`
+	TTL EmailDNSRecordTTL `json:"ttl"`
 	// DNS record type.
-	Type RoutingDNSGetResponseType `json:"type"`
-	JSON routingDNSGetResponseJSON `json:"-"`
+	Type EmailDNSRecordType `json:"type"`
+	JSON emailDNSRecordJSON `json:"-"`
 }
 
-// routingDNSGetResponseJSON contains the JSON metadata for the struct
-// [RoutingDNSGetResponse]
-type routingDNSGetResponseJSON struct {
+// emailDNSRecordJSON contains the JSON metadata for the struct [EmailDNSRecord]
+type emailDNSRecordJSON struct {
 	Content     apijson.Field
 	Name        apijson.Field
 	Priority    apijson.Field
@@ -74,11 +73,11 @@ type routingDNSGetResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *RoutingDNSGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *EmailDNSRecord) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r routingDNSGetResponseJSON) RawJSON() string {
+func (r emailDNSRecordJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -86,14 +85,14 @@ func (r routingDNSGetResponseJSON) RawJSON() string {
 // for 'automatic'.
 //
 // Union satisfied by [shared.UnionFloat] or
-// [email_routing.RoutingDNSGetResponseTTLNumber].
-type RoutingDNSGetResponseTTL interface {
-	ImplementsEmailRoutingRoutingDNSGetResponseTTL()
+// [email_routing.EmailDNSRecordTTLNumber].
+type EmailDNSRecordTTL interface {
+	ImplementsEmailRoutingEmailDNSRecordTTL()
 }
 
 func init() {
 	apijson.RegisterUnion(
-		reflect.TypeOf((*RoutingDNSGetResponseTTL)(nil)).Elem(),
+		reflect.TypeOf((*EmailDNSRecordTTL)(nil)).Elem(),
 		"",
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
@@ -101,45 +100,45 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.Number,
-			Type:       reflect.TypeOf(RoutingDNSGetResponseTTLNumber(0)),
+			Type:       reflect.TypeOf(EmailDNSRecordTTLNumber(0)),
 		},
 	)
 }
 
-type RoutingDNSGetResponseTTLNumber float64
+type EmailDNSRecordTTLNumber float64
 
 const (
-	RoutingDNSGetResponseTTLNumber1 RoutingDNSGetResponseTTLNumber = 1
+	EmailDNSRecordTTLNumber1 EmailDNSRecordTTLNumber = 1
 )
 
 // DNS record type.
-type RoutingDNSGetResponseType string
+type EmailDNSRecordType string
 
 const (
-	RoutingDNSGetResponseTypeA      RoutingDNSGetResponseType = "A"
-	RoutingDNSGetResponseTypeAAAA   RoutingDNSGetResponseType = "AAAA"
-	RoutingDNSGetResponseTypeCNAME  RoutingDNSGetResponseType = "CNAME"
-	RoutingDNSGetResponseTypeHTTPS  RoutingDNSGetResponseType = "HTTPS"
-	RoutingDNSGetResponseTypeTXT    RoutingDNSGetResponseType = "TXT"
-	RoutingDNSGetResponseTypeSRV    RoutingDNSGetResponseType = "SRV"
-	RoutingDNSGetResponseTypeLOC    RoutingDNSGetResponseType = "LOC"
-	RoutingDNSGetResponseTypeMX     RoutingDNSGetResponseType = "MX"
-	RoutingDNSGetResponseTypeNS     RoutingDNSGetResponseType = "NS"
-	RoutingDNSGetResponseTypeCert   RoutingDNSGetResponseType = "CERT"
-	RoutingDNSGetResponseTypeDNSKEY RoutingDNSGetResponseType = "DNSKEY"
-	RoutingDNSGetResponseTypeDS     RoutingDNSGetResponseType = "DS"
-	RoutingDNSGetResponseTypeNAPTR  RoutingDNSGetResponseType = "NAPTR"
-	RoutingDNSGetResponseTypeSmimea RoutingDNSGetResponseType = "SMIMEA"
-	RoutingDNSGetResponseTypeSSHFP  RoutingDNSGetResponseType = "SSHFP"
-	RoutingDNSGetResponseTypeSVCB   RoutingDNSGetResponseType = "SVCB"
-	RoutingDNSGetResponseTypeTLSA   RoutingDNSGetResponseType = "TLSA"
-	RoutingDNSGetResponseTypeURI    RoutingDNSGetResponseType = "URI"
+	EmailDNSRecordTypeA      EmailDNSRecordType = "A"
+	EmailDNSRecordTypeAAAA   EmailDNSRecordType = "AAAA"
+	EmailDNSRecordTypeCNAME  EmailDNSRecordType = "CNAME"
+	EmailDNSRecordTypeHTTPS  EmailDNSRecordType = "HTTPS"
+	EmailDNSRecordTypeTXT    EmailDNSRecordType = "TXT"
+	EmailDNSRecordTypeSRV    EmailDNSRecordType = "SRV"
+	EmailDNSRecordTypeLOC    EmailDNSRecordType = "LOC"
+	EmailDNSRecordTypeMX     EmailDNSRecordType = "MX"
+	EmailDNSRecordTypeNS     EmailDNSRecordType = "NS"
+	EmailDNSRecordTypeCert   EmailDNSRecordType = "CERT"
+	EmailDNSRecordTypeDNSKEY EmailDNSRecordType = "DNSKEY"
+	EmailDNSRecordTypeDS     EmailDNSRecordType = "DS"
+	EmailDNSRecordTypeNAPTR  EmailDNSRecordType = "NAPTR"
+	EmailDNSRecordTypeSmimea EmailDNSRecordType = "SMIMEA"
+	EmailDNSRecordTypeSSHFP  EmailDNSRecordType = "SSHFP"
+	EmailDNSRecordTypeSVCB   EmailDNSRecordType = "SVCB"
+	EmailDNSRecordTypeTLSA   EmailDNSRecordType = "TLSA"
+	EmailDNSRecordTypeURI    EmailDNSRecordType = "URI"
 )
 
 type RoutingDNSGetResponseEnvelope struct {
 	Errors   []RoutingDNSGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []RoutingDNSGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []RoutingDNSGetResponse                 `json:"result,required,nullable"`
+	Result   []EmailDNSRecord                        `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    RoutingDNSGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo RoutingDNSGetResponseEnvelopeResultInfo `json:"result_info"`

@@ -31,7 +31,7 @@ func NewV1StatService(opts ...option.RequestOption) (r *V1StatService) {
 }
 
 // Fetch usage statistics details for Cloudflare Images.
-func (r *V1StatService) Get(ctx context.Context, query V1StatGetParams, opts ...option.RequestOption) (res *V1StatGetResponse, err error) {
+func (r *V1StatService) Get(ctx context.Context, query V1StatGetParams, opts ...option.RequestOption) (res *ImagesImagesStats, err error) {
 	opts = append(r.Options[:], opts...)
 	var env V1StatGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/images/v1/stats", query.AccountID)
@@ -43,49 +43,49 @@ func (r *V1StatService) Get(ctx context.Context, query V1StatGetParams, opts ...
 	return
 }
 
-type V1StatGetResponse struct {
-	Count V1StatGetResponseCount `json:"count"`
-	JSON  v1StatGetResponseJSON  `json:"-"`
+type ImagesImagesStats struct {
+	Count ImagesImagesStatsCount `json:"count"`
+	JSON  imagesImagesStatsJSON  `json:"-"`
 }
 
-// v1StatGetResponseJSON contains the JSON metadata for the struct
-// [V1StatGetResponse]
-type v1StatGetResponseJSON struct {
+// imagesImagesStatsJSON contains the JSON metadata for the struct
+// [ImagesImagesStats]
+type imagesImagesStatsJSON struct {
 	Count       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *V1StatGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ImagesImagesStats) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r v1StatGetResponseJSON) RawJSON() string {
+func (r imagesImagesStatsJSON) RawJSON() string {
 	return r.raw
 }
 
-type V1StatGetResponseCount struct {
+type ImagesImagesStatsCount struct {
 	// Cloudflare Images allowed usage.
 	Allowed float64 `json:"allowed"`
 	// Cloudflare Images current usage.
 	Current float64                    `json:"current"`
-	JSON    v1StatGetResponseCountJSON `json:"-"`
+	JSON    imagesImagesStatsCountJSON `json:"-"`
 }
 
-// v1StatGetResponseCountJSON contains the JSON metadata for the struct
-// [V1StatGetResponseCount]
-type v1StatGetResponseCountJSON struct {
+// imagesImagesStatsCountJSON contains the JSON metadata for the struct
+// [ImagesImagesStatsCount]
+type imagesImagesStatsCountJSON struct {
 	Allowed     apijson.Field
 	Current     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *V1StatGetResponseCount) UnmarshalJSON(data []byte) (err error) {
+func (r *ImagesImagesStatsCount) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r v1StatGetResponseCountJSON) RawJSON() string {
+func (r imagesImagesStatsCountJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -97,7 +97,7 @@ type V1StatGetParams struct {
 type V1StatGetResponseEnvelope struct {
 	Errors   []V1StatGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []V1StatGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   V1StatGetResponse                   `json:"result,required"`
+	Result   ImagesImagesStats                   `json:"result,required"`
 	// Whether the API call was successful
 	Success V1StatGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1StatGetResponseEnvelopeJSON    `json:"-"`

@@ -33,7 +33,7 @@ func NewDomainService(opts ...option.RequestOption) (r *DomainService) {
 }
 
 // Attaches a Worker to a zone and hostname.
-func (r *DomainService) Update(ctx context.Context, params DomainUpdateParams, opts ...option.RequestOption) (res *DomainUpdateResponse, err error) {
+func (r *DomainService) Update(ctx context.Context, params DomainUpdateParams, opts ...option.RequestOption) (res *WorkersDomain, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DomainUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/workers/domains", params.AccountID)
@@ -46,7 +46,7 @@ func (r *DomainService) Update(ctx context.Context, params DomainUpdateParams, o
 }
 
 // Lists all Worker Domains for an account.
-func (r *DomainService) List(ctx context.Context, params DomainListParams, opts ...option.RequestOption) (res *[]DomainListResponse, err error) {
+func (r *DomainService) List(ctx context.Context, params DomainListParams, opts ...option.RequestOption) (res *[]WorkersDomain, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DomainListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/workers/domains", params.AccountID)
@@ -68,7 +68,7 @@ func (r *DomainService) Delete(ctx context.Context, domainID interface{}, body D
 }
 
 // Gets a Worker domain.
-func (r *DomainService) Get(ctx context.Context, domainID interface{}, query DomainGetParams, opts ...option.RequestOption) (res *DomainGetResponse, err error) {
+func (r *DomainService) Get(ctx context.Context, domainID interface{}, query DomainGetParams, opts ...option.RequestOption) (res *WorkersDomain, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DomainGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/workers/domains/%v", query.AccountID, domainID)
@@ -80,7 +80,7 @@ func (r *DomainService) Get(ctx context.Context, domainID interface{}, query Dom
 	return
 }
 
-type DomainUpdateResponse struct {
+type WorkersDomain struct {
 	// Identifer of the Worker Domain.
 	ID interface{} `json:"id"`
 	// Worker environment associated with the zone and hostname.
@@ -92,13 +92,12 @@ type DomainUpdateResponse struct {
 	// Identifier of the zone.
 	ZoneID interface{} `json:"zone_id"`
 	// Name of the zone.
-	ZoneName string                   `json:"zone_name"`
-	JSON     domainUpdateResponseJSON `json:"-"`
+	ZoneName string            `json:"zone_name"`
+	JSON     workersDomainJSON `json:"-"`
 }
 
-// domainUpdateResponseJSON contains the JSON metadata for the struct
-// [DomainUpdateResponse]
-type domainUpdateResponseJSON struct {
+// workersDomainJSON contains the JSON metadata for the struct [WorkersDomain]
+type workersDomainJSON struct {
 	ID          apijson.Field
 	Environment apijson.Field
 	Hostname    apijson.Field
@@ -109,85 +108,11 @@ type domainUpdateResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DomainUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkersDomain) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r domainUpdateResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type DomainListResponse struct {
-	// Identifer of the Worker Domain.
-	ID interface{} `json:"id"`
-	// Worker environment associated with the zone and hostname.
-	Environment string `json:"environment"`
-	// Hostname of the Worker Domain.
-	Hostname string `json:"hostname"`
-	// Worker service associated with the zone and hostname.
-	Service string `json:"service"`
-	// Identifier of the zone.
-	ZoneID interface{} `json:"zone_id"`
-	// Name of the zone.
-	ZoneName string                 `json:"zone_name"`
-	JSON     domainListResponseJSON `json:"-"`
-}
-
-// domainListResponseJSON contains the JSON metadata for the struct
-// [DomainListResponse]
-type domainListResponseJSON struct {
-	ID          apijson.Field
-	Environment apijson.Field
-	Hostname    apijson.Field
-	Service     apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DomainListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r domainListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type DomainGetResponse struct {
-	// Identifer of the Worker Domain.
-	ID interface{} `json:"id"`
-	// Worker environment associated with the zone and hostname.
-	Environment string `json:"environment"`
-	// Hostname of the Worker Domain.
-	Hostname string `json:"hostname"`
-	// Worker service associated with the zone and hostname.
-	Service string `json:"service"`
-	// Identifier of the zone.
-	ZoneID interface{} `json:"zone_id"`
-	// Name of the zone.
-	ZoneName string                `json:"zone_name"`
-	JSON     domainGetResponseJSON `json:"-"`
-}
-
-// domainGetResponseJSON contains the JSON metadata for the struct
-// [DomainGetResponse]
-type domainGetResponseJSON struct {
-	ID          apijson.Field
-	Environment apijson.Field
-	Hostname    apijson.Field
-	Service     apijson.Field
-	ZoneID      apijson.Field
-	ZoneName    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DomainGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r domainGetResponseJSON) RawJSON() string {
+func (r workersDomainJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -210,7 +135,7 @@ func (r DomainUpdateParams) MarshalJSON() (data []byte, err error) {
 type DomainUpdateResponseEnvelope struct {
 	Errors   []DomainUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DomainUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   DomainUpdateResponse                   `json:"result,required"`
+	Result   WorkersDomain                          `json:"result,required"`
 	// Whether the API call was successful
 	Success DomainUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    domainUpdateResponseEnvelopeJSON    `json:"-"`
@@ -313,7 +238,7 @@ func (r DomainListParams) URLQuery() (v url.Values) {
 type DomainListResponseEnvelope struct {
 	Errors   []DomainListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DomainListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DomainListResponse                 `json:"result,required"`
+	Result   []WorkersDomain                      `json:"result,required"`
 	// Whether the API call was successful
 	Success DomainListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    domainListResponseEnvelopeJSON    `json:"-"`
@@ -402,7 +327,7 @@ type DomainGetParams struct {
 type DomainGetResponseEnvelope struct {
 	Errors   []DomainGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DomainGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   DomainGetResponse                   `json:"result,required"`
+	Result   WorkersDomain                       `json:"result,required"`
 	// Whether the API call was successful
 	Success DomainGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    domainGetResponseEnvelopeJSON    `json:"-"`

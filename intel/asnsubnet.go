@@ -31,7 +31,7 @@ func NewASNSubnetService(opts ...option.RequestOption) (r *ASNSubnetService) {
 }
 
 // Get ASN Subnets
-func (r *ASNSubnetService) Get(ctx context.Context, asn int64, query ASNSubnetGetParams, opts ...option.RequestOption) (res *ASNSubnetGetResponse, err error) {
+func (r *ASNSubnetService) Get(ctx context.Context, asn IntelASNParam, query ASNSubnetGetParams, opts ...option.RequestOption) (res *ASNSubnetGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/intel/asn/%v/subnets", query.AccountID, asn)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
@@ -39,7 +39,7 @@ func (r *ASNSubnetService) Get(ctx context.Context, asn int64, query ASNSubnetGe
 }
 
 type ASNSubnetGetResponse struct {
-	ASN int64 `json:"asn"`
+	ASN IntelASN `json:"asn"`
 	// Total results returned based on your search parameters.
 	Count        float64 `json:"count"`
 	IPCountTotal int64   `json:"ip_count_total"`

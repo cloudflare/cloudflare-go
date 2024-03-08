@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"time"
 
 	"github.com/cloudflare/cloudflare-go/internal/apijson"
 	"github.com/cloudflare/cloudflare-go/internal/apiquery"
@@ -35,7 +34,7 @@ func NewNetworkRouteIPService(opts ...option.RequestOption) (r *NetworkRouteIPSe
 }
 
 // Fetches routes that contain the given IP address.
-func (r *NetworkRouteIPService) Get(ctx context.Context, ip string, params NetworkRouteIPGetParams, opts ...option.RequestOption) (res *NetworkRouteIPGetResponse, err error) {
+func (r *NetworkRouteIPService) Get(ctx context.Context, ip string, params NetworkRouteIPGetParams, opts ...option.RequestOption) (res *TunnelTeamnet, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NetworkRouteIPGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/teamnet/routes/ip/%s", params.AccountID, ip)
@@ -46,69 +45,6 @@ func (r *NetworkRouteIPService) Get(ctx context.Context, ip string, params Netwo
 	res = &env.Result
 	return
 }
-
-type NetworkRouteIPGetResponse struct {
-	// UUID of the route.
-	ID string `json:"id"`
-	// Optional remark describing the route.
-	Comment string `json:"comment"`
-	// Timestamp of when the route was created.
-	CreatedAt interface{} `json:"created_at"`
-	// Timestamp of when the route was deleted. If `null`, the route has not been
-	// deleted.
-	DeletedAt time.Time `json:"deleted_at,nullable" format:"date-time"`
-	// The private IPv4 or IPv6 range connected by the route, in CIDR notation.
-	Network string `json:"network"`
-	// The type of tunnel.
-	TunType NetworkRouteIPGetResponseTunType `json:"tun_type"`
-	// UUID of the Cloudflare Tunnel serving the route.
-	TunnelID interface{} `json:"tunnel_id"`
-	// The user-friendly name of the Cloudflare Tunnel serving the route.
-	TunnelName interface{} `json:"tunnel_name"`
-	// UUID of the Tunnel Virtual Network this route belongs to. If no virtual networks
-	// are configured, the route is assigned to the default virtual network of the
-	// account.
-	VirtualNetworkID interface{} `json:"virtual_network_id"`
-	// A user-friendly name for the virtual network.
-	VirtualNetworkName string                        `json:"virtual_network_name"`
-	JSON               networkRouteIPGetResponseJSON `json:"-"`
-}
-
-// networkRouteIPGetResponseJSON contains the JSON metadata for the struct
-// [NetworkRouteIPGetResponse]
-type networkRouteIPGetResponseJSON struct {
-	ID                 apijson.Field
-	Comment            apijson.Field
-	CreatedAt          apijson.Field
-	DeletedAt          apijson.Field
-	Network            apijson.Field
-	TunType            apijson.Field
-	TunnelID           apijson.Field
-	TunnelName         apijson.Field
-	VirtualNetworkID   apijson.Field
-	VirtualNetworkName apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *NetworkRouteIPGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r networkRouteIPGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// The type of tunnel.
-type NetworkRouteIPGetResponseTunType string
-
-const (
-	NetworkRouteIPGetResponseTunTypeCfdTunnel     NetworkRouteIPGetResponseTunType = "cfd_tunnel"
-	NetworkRouteIPGetResponseTunTypeWARPConnector NetworkRouteIPGetResponseTunType = "warp_connector"
-	NetworkRouteIPGetResponseTunTypeIPSec         NetworkRouteIPGetResponseTunType = "ip_sec"
-	NetworkRouteIPGetResponseTunTypeGRE           NetworkRouteIPGetResponseTunType = "gre"
-	NetworkRouteIPGetResponseTunTypeCni           NetworkRouteIPGetResponseTunType = "cni"
-)
 
 type NetworkRouteIPGetParams struct {
 	// Cloudflare account ID
@@ -131,7 +67,7 @@ func (r NetworkRouteIPGetParams) URLQuery() (v url.Values) {
 type NetworkRouteIPGetResponseEnvelope struct {
 	Errors   []NetworkRouteIPGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []NetworkRouteIPGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   NetworkRouteIPGetResponse                   `json:"result,required"`
+	Result   TunnelTeamnet                               `json:"result,required"`
 	// Whether the API call was successful
 	Success NetworkRouteIPGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    networkRouteIPGetResponseEnvelopeJSON    `json:"-"`

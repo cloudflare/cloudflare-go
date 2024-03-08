@@ -41,7 +41,7 @@ func NewFirewallAnalyticsReportService(opts ...option.RequestOption) (r *Firewal
 // See
 // [Analytics API properties](https://developers.cloudflare.com/dns/reference/analytics-api-properties/)
 // for detailed information about the available query parameters.
-func (r *FirewallAnalyticsReportService) Get(ctx context.Context, accountIdentifier string, identifier string, query FirewallAnalyticsReportGetParams, opts ...option.RequestOption) (res *FirewallAnalyticsReportGetResponse, err error) {
+func (r *FirewallAnalyticsReportService) Get(ctx context.Context, accountIdentifier string, identifier string, query FirewallAnalyticsReportGetParams, opts ...option.RequestOption) (res *DNSDNSAnalyticsAPIReport, err error) {
 	opts = append(r.Options[:], opts...)
 	var env FirewallAnalyticsReportGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dns_firewall/%s/dns_analytics/report", accountIdentifier, identifier)
@@ -51,116 +51,6 @@ func (r *FirewallAnalyticsReportService) Get(ctx context.Context, accountIdentif
 	}
 	res = &env.Result
 	return
-}
-
-type FirewallAnalyticsReportGetResponse struct {
-	// Array with one row per combination of dimension values.
-	Data []FirewallAnalyticsReportGetResponseData `json:"data,required"`
-	// Number of seconds between current time and last processed event, in another
-	// words how many seconds of data could be missing.
-	DataLag float64 `json:"data_lag,required"`
-	// Maximum results for each metric (object mapping metric names to values).
-	// Currently always an empty object.
-	Max interface{} `json:"max,required"`
-	// Minimum results for each metric (object mapping metric names to values).
-	// Currently always an empty object.
-	Min   interface{}                             `json:"min,required"`
-	Query FirewallAnalyticsReportGetResponseQuery `json:"query,required"`
-	// Total number of rows in the result.
-	Rows float64 `json:"rows,required"`
-	// Total results for metrics across all data (object mapping metric names to
-	// values).
-	Totals interface{}                            `json:"totals,required"`
-	JSON   firewallAnalyticsReportGetResponseJSON `json:"-"`
-}
-
-// firewallAnalyticsReportGetResponseJSON contains the JSON metadata for the struct
-// [FirewallAnalyticsReportGetResponse]
-type firewallAnalyticsReportGetResponseJSON struct {
-	Data        apijson.Field
-	DataLag     apijson.Field
-	Max         apijson.Field
-	Min         apijson.Field
-	Query       apijson.Field
-	Rows        apijson.Field
-	Totals      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallAnalyticsReportGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r firewallAnalyticsReportGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type FirewallAnalyticsReportGetResponseData struct {
-	// Array of dimension values, representing the combination of dimension values
-	// corresponding to this row.
-	Dimensions []string `json:"dimensions,required"`
-	// Array with one item per requested metric. Each item is a single value.
-	Metrics []float64                                  `json:"metrics,required"`
-	JSON    firewallAnalyticsReportGetResponseDataJSON `json:"-"`
-}
-
-// firewallAnalyticsReportGetResponseDataJSON contains the JSON metadata for the
-// struct [FirewallAnalyticsReportGetResponseData]
-type firewallAnalyticsReportGetResponseDataJSON struct {
-	Dimensions  apijson.Field
-	Metrics     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallAnalyticsReportGetResponseData) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r firewallAnalyticsReportGetResponseDataJSON) RawJSON() string {
-	return r.raw
-}
-
-type FirewallAnalyticsReportGetResponseQuery struct {
-	// Array of dimension names.
-	Dimensions []string `json:"dimensions,required"`
-	// Limit number of returned metrics.
-	Limit int64 `json:"limit,required"`
-	// Array of metric names.
-	Metrics []string `json:"metrics,required"`
-	// Start date and time of requesting data period in ISO 8601 format.
-	Since time.Time `json:"since,required" format:"date-time"`
-	// End date and time of requesting data period in ISO 8601 format.
-	Until time.Time `json:"until,required" format:"date-time"`
-	// Segmentation filter in 'attribute operator value' format.
-	Filters string `json:"filters"`
-	// Array of dimensions to sort by, where each dimension may be prefixed by -
-	// (descending) or + (ascending).
-	Sort []string                                    `json:"sort"`
-	JSON firewallAnalyticsReportGetResponseQueryJSON `json:"-"`
-}
-
-// firewallAnalyticsReportGetResponseQueryJSON contains the JSON metadata for the
-// struct [FirewallAnalyticsReportGetResponseQuery]
-type firewallAnalyticsReportGetResponseQueryJSON struct {
-	Dimensions  apijson.Field
-	Limit       apijson.Field
-	Metrics     apijson.Field
-	Since       apijson.Field
-	Until       apijson.Field
-	Filters     apijson.Field
-	Sort        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *FirewallAnalyticsReportGetResponseQuery) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r firewallAnalyticsReportGetResponseQueryJSON) RawJSON() string {
-	return r.raw
 }
 
 type FirewallAnalyticsReportGetParams struct {
@@ -193,7 +83,7 @@ func (r FirewallAnalyticsReportGetParams) URLQuery() (v url.Values) {
 type FirewallAnalyticsReportGetResponseEnvelope struct {
 	Errors   []FirewallAnalyticsReportGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []FirewallAnalyticsReportGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   FirewallAnalyticsReportGetResponse                   `json:"result,required"`
+	Result   DNSDNSAnalyticsAPIReport                             `json:"result,required"`
 	// Whether the API call was successful
 	Success FirewallAnalyticsReportGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    firewallAnalyticsReportGetResponseEnvelopeJSON    `json:"-"`

@@ -35,7 +35,7 @@ func NewSettingSortQueryStringForCacheService(opts ...option.RequestOption) (r *
 // Cloudflare will treat files with the same query strings as the same file in
 // cache, regardless of the order of the query strings. This is limited to
 // Enterprise Zones.
-func (r *SettingSortQueryStringForCacheService) Edit(ctx context.Context, params SettingSortQueryStringForCacheEditParams, opts ...option.RequestOption) (res *SettingSortQueryStringForCacheEditResponse, err error) {
+func (r *SettingSortQueryStringForCacheService) Edit(ctx context.Context, params SettingSortQueryStringForCacheEditParams, opts ...option.RequestOption) (res *ZonesSortQueryStringForCache, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingSortQueryStringForCacheEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/sort_query_string_for_cache", params.ZoneID)
@@ -50,7 +50,7 @@ func (r *SettingSortQueryStringForCacheService) Edit(ctx context.Context, params
 // Cloudflare will treat files with the same query strings as the same file in
 // cache, regardless of the order of the query strings. This is limited to
 // Enterprise Zones.
-func (r *SettingSortQueryStringForCacheService) Get(ctx context.Context, query SettingSortQueryStringForCacheGetParams, opts ...option.RequestOption) (res *SettingSortQueryStringForCacheGetResponse, err error) {
+func (r *SettingSortQueryStringForCacheService) Get(ctx context.Context, query SettingSortQueryStringForCacheGetParams, opts ...option.RequestOption) (res *ZonesSortQueryStringForCache, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingSortQueryStringForCacheGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/sort_query_string_for_cache", query.ZoneID)
@@ -65,22 +65,22 @@ func (r *SettingSortQueryStringForCacheService) Get(ctx context.Context, query S
 // Cloudflare will treat files with the same query strings as the same file in
 // cache, regardless of the order of the query strings. This is limited to
 // Enterprise Zones.
-type SettingSortQueryStringForCacheEditResponse struct {
+type ZonesSortQueryStringForCache struct {
 	// ID of the zone setting.
-	ID SettingSortQueryStringForCacheEditResponseID `json:"id,required"`
+	ID ZonesSortQueryStringForCacheID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingSortQueryStringForCacheEditResponseValue `json:"value,required"`
+	Value ZonesSortQueryStringForCacheValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingSortQueryStringForCacheEditResponseEditable `json:"editable"`
+	Editable ZonesSortQueryStringForCacheEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                                      `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingSortQueryStringForCacheEditResponseJSON `json:"-"`
+	ModifiedOn time.Time                        `json:"modified_on,nullable" format:"date-time"`
+	JSON       zonesSortQueryStringForCacheJSON `json:"-"`
 }
 
-// settingSortQueryStringForCacheEditResponseJSON contains the JSON metadata for
-// the struct [SettingSortQueryStringForCacheEditResponse]
-type settingSortQueryStringForCacheEditResponseJSON struct {
+// zonesSortQueryStringForCacheJSON contains the JSON metadata for the struct
+// [ZonesSortQueryStringForCache]
+type zonesSortQueryStringForCacheJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -89,96 +89,57 @@ type settingSortQueryStringForCacheEditResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingSortQueryStringForCacheEditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonesSortQueryStringForCache) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r settingSortQueryStringForCacheEditResponseJSON) RawJSON() string {
+func (r zonesSortQueryStringForCacheJSON) RawJSON() string {
 	return r.raw
 }
 
+func (r ZonesSortQueryStringForCache) implementsZonesSettingEditResponse() {}
+
+func (r ZonesSortQueryStringForCache) implementsZonesSettingGetResponse() {}
+
 // ID of the zone setting.
-type SettingSortQueryStringForCacheEditResponseID string
+type ZonesSortQueryStringForCacheID string
 
 const (
-	SettingSortQueryStringForCacheEditResponseIDSortQueryStringForCache SettingSortQueryStringForCacheEditResponseID = "sort_query_string_for_cache"
+	ZonesSortQueryStringForCacheIDSortQueryStringForCache ZonesSortQueryStringForCacheID = "sort_query_string_for_cache"
 )
 
 // Current value of the zone setting.
-type SettingSortQueryStringForCacheEditResponseValue string
+type ZonesSortQueryStringForCacheValue string
 
 const (
-	SettingSortQueryStringForCacheEditResponseValueOn  SettingSortQueryStringForCacheEditResponseValue = "on"
-	SettingSortQueryStringForCacheEditResponseValueOff SettingSortQueryStringForCacheEditResponseValue = "off"
+	ZonesSortQueryStringForCacheValueOn  ZonesSortQueryStringForCacheValue = "on"
+	ZonesSortQueryStringForCacheValueOff ZonesSortQueryStringForCacheValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingSortQueryStringForCacheEditResponseEditable bool
+type ZonesSortQueryStringForCacheEditable bool
 
 const (
-	SettingSortQueryStringForCacheEditResponseEditableTrue  SettingSortQueryStringForCacheEditResponseEditable = true
-	SettingSortQueryStringForCacheEditResponseEditableFalse SettingSortQueryStringForCacheEditResponseEditable = false
+	ZonesSortQueryStringForCacheEditableTrue  ZonesSortQueryStringForCacheEditable = true
+	ZonesSortQueryStringForCacheEditableFalse ZonesSortQueryStringForCacheEditable = false
 )
 
 // Cloudflare will treat files with the same query strings as the same file in
 // cache, regardless of the order of the query strings. This is limited to
 // Enterprise Zones.
-type SettingSortQueryStringForCacheGetResponse struct {
+type ZonesSortQueryStringForCacheParam struct {
 	// ID of the zone setting.
-	ID SettingSortQueryStringForCacheGetResponseID `json:"id,required"`
+	ID param.Field[ZonesSortQueryStringForCacheID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingSortQueryStringForCacheGetResponseValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable SettingSortQueryStringForCacheGetResponseEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                                     `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingSortQueryStringForCacheGetResponseJSON `json:"-"`
+	Value param.Field[ZonesSortQueryStringForCacheValue] `json:"value,required"`
 }
 
-// settingSortQueryStringForCacheGetResponseJSON contains the JSON metadata for the
-// struct [SettingSortQueryStringForCacheGetResponse]
-type settingSortQueryStringForCacheGetResponseJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+func (r ZonesSortQueryStringForCacheParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *SettingSortQueryStringForCacheGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingSortQueryStringForCacheGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// ID of the zone setting.
-type SettingSortQueryStringForCacheGetResponseID string
-
-const (
-	SettingSortQueryStringForCacheGetResponseIDSortQueryStringForCache SettingSortQueryStringForCacheGetResponseID = "sort_query_string_for_cache"
-)
-
-// Current value of the zone setting.
-type SettingSortQueryStringForCacheGetResponseValue string
-
-const (
-	SettingSortQueryStringForCacheGetResponseValueOn  SettingSortQueryStringForCacheGetResponseValue = "on"
-	SettingSortQueryStringForCacheGetResponseValueOff SettingSortQueryStringForCacheGetResponseValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type SettingSortQueryStringForCacheGetResponseEditable bool
-
-const (
-	SettingSortQueryStringForCacheGetResponseEditableTrue  SettingSortQueryStringForCacheGetResponseEditable = true
-	SettingSortQueryStringForCacheGetResponseEditableFalse SettingSortQueryStringForCacheGetResponseEditable = false
-)
+func (r ZonesSortQueryStringForCacheParam) implementsZonesSettingEditParamsItem() {}
 
 type SettingSortQueryStringForCacheEditParams struct {
 	// Identifier
@@ -207,7 +168,7 @@ type SettingSortQueryStringForCacheEditResponseEnvelope struct {
 	// Cloudflare will treat files with the same query strings as the same file in
 	// cache, regardless of the order of the query strings. This is limited to
 	// Enterprise Zones.
-	Result SettingSortQueryStringForCacheEditResponse             `json:"result"`
+	Result ZonesSortQueryStringForCache                           `json:"result"`
 	JSON   settingSortQueryStringForCacheEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -291,7 +252,7 @@ type SettingSortQueryStringForCacheGetResponseEnvelope struct {
 	// Cloudflare will treat files with the same query strings as the same file in
 	// cache, regardless of the order of the query strings. This is limited to
 	// Enterprise Zones.
-	Result SettingSortQueryStringForCacheGetResponse             `json:"result"`
+	Result ZonesSortQueryStringForCache                          `json:"result"`
 	JSON   settingSortQueryStringForCacheGetResponseEnvelopeJSON `json:"-"`
 }
 

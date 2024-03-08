@@ -32,7 +32,7 @@ func NewAccessBookmarkService(opts ...option.RequestOption) (r *AccessBookmarkSe
 }
 
 // Create a new Bookmark application.
-func (r *AccessBookmarkService) New(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *AccessBookmarkNewResponse, err error) {
+func (r *AccessBookmarkService) New(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *AccessBookmarks, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessBookmarkNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/access/bookmarks/%s", identifier, uuid)
@@ -45,7 +45,7 @@ func (r *AccessBookmarkService) New(ctx context.Context, identifier interface{},
 }
 
 // Updates a configured Bookmark application.
-func (r *AccessBookmarkService) Update(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *AccessBookmarkUpdateResponse, err error) {
+func (r *AccessBookmarkService) Update(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *AccessBookmarks, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessBookmarkUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/access/bookmarks/%s", identifier, uuid)
@@ -58,7 +58,7 @@ func (r *AccessBookmarkService) Update(ctx context.Context, identifier interface
 }
 
 // Lists Bookmark applications.
-func (r *AccessBookmarkService) List(ctx context.Context, identifier interface{}, opts ...option.RequestOption) (res *[]AccessBookmarkListResponse, err error) {
+func (r *AccessBookmarkService) List(ctx context.Context, identifier interface{}, opts ...option.RequestOption) (res *[]AccessBookmarks, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessBookmarkListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/access/bookmarks", identifier)
@@ -84,7 +84,7 @@ func (r *AccessBookmarkService) Delete(ctx context.Context, identifier interface
 }
 
 // Fetches a single Bookmark application.
-func (r *AccessBookmarkService) Get(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *AccessBookmarkGetResponse, err error) {
+func (r *AccessBookmarkService) Get(ctx context.Context, identifier interface{}, uuid string, opts ...option.RequestOption) (res *AccessBookmarks, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessBookmarkGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/access/bookmarks/%s", identifier, uuid)
@@ -96,7 +96,7 @@ func (r *AccessBookmarkService) Get(ctx context.Context, identifier interface{},
 	return
 }
 
-type AccessBookmarkNewResponse struct {
+type AccessBookmarks struct {
 	// The unique identifier for the Bookmark application.
 	ID interface{} `json:"id"`
 	// Displays the application in the App Launcher.
@@ -107,14 +107,13 @@ type AccessBookmarkNewResponse struct {
 	// The image URL for the logo shown in the App Launcher dashboard.
 	LogoURL string `json:"logo_url"`
 	// The name of the Bookmark application.
-	Name      string                        `json:"name"`
-	UpdatedAt time.Time                     `json:"updated_at" format:"date-time"`
-	JSON      accessBookmarkNewResponseJSON `json:"-"`
+	Name      string              `json:"name"`
+	UpdatedAt time.Time           `json:"updated_at" format:"date-time"`
+	JSON      accessBookmarksJSON `json:"-"`
 }
 
-// accessBookmarkNewResponseJSON contains the JSON metadata for the struct
-// [AccessBookmarkNewResponse]
-type accessBookmarkNewResponseJSON struct {
+// accessBookmarksJSON contains the JSON metadata for the struct [AccessBookmarks]
+type accessBookmarksJSON struct {
 	ID                 apijson.Field
 	AppLauncherVisible apijson.Field
 	CreatedAt          apijson.Field
@@ -126,87 +125,11 @@ type accessBookmarkNewResponseJSON struct {
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *AccessBookmarkNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessBookmarks) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessBookmarkNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessBookmarkUpdateResponse struct {
-	// The unique identifier for the Bookmark application.
-	ID interface{} `json:"id"`
-	// Displays the application in the App Launcher.
-	AppLauncherVisible bool      `json:"app_launcher_visible"`
-	CreatedAt          time.Time `json:"created_at" format:"date-time"`
-	// The domain of the Bookmark application.
-	Domain string `json:"domain"`
-	// The image URL for the logo shown in the App Launcher dashboard.
-	LogoURL string `json:"logo_url"`
-	// The name of the Bookmark application.
-	Name      string                           `json:"name"`
-	UpdatedAt time.Time                        `json:"updated_at" format:"date-time"`
-	JSON      accessBookmarkUpdateResponseJSON `json:"-"`
-}
-
-// accessBookmarkUpdateResponseJSON contains the JSON metadata for the struct
-// [AccessBookmarkUpdateResponse]
-type accessBookmarkUpdateResponseJSON struct {
-	ID                 apijson.Field
-	AppLauncherVisible apijson.Field
-	CreatedAt          apijson.Field
-	Domain             apijson.Field
-	LogoURL            apijson.Field
-	Name               apijson.Field
-	UpdatedAt          apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessBookmarkUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessBookmarkUpdateResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type AccessBookmarkListResponse struct {
-	// The unique identifier for the Bookmark application.
-	ID interface{} `json:"id"`
-	// Displays the application in the App Launcher.
-	AppLauncherVisible bool      `json:"app_launcher_visible"`
-	CreatedAt          time.Time `json:"created_at" format:"date-time"`
-	// The domain of the Bookmark application.
-	Domain string `json:"domain"`
-	// The image URL for the logo shown in the App Launcher dashboard.
-	LogoURL string `json:"logo_url"`
-	// The name of the Bookmark application.
-	Name      string                         `json:"name"`
-	UpdatedAt time.Time                      `json:"updated_at" format:"date-time"`
-	JSON      accessBookmarkListResponseJSON `json:"-"`
-}
-
-// accessBookmarkListResponseJSON contains the JSON metadata for the struct
-// [AccessBookmarkListResponse]
-type accessBookmarkListResponseJSON struct {
-	ID                 apijson.Field
-	AppLauncherVisible apijson.Field
-	CreatedAt          apijson.Field
-	Domain             apijson.Field
-	LogoURL            apijson.Field
-	Name               apijson.Field
-	UpdatedAt          apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessBookmarkListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessBookmarkListResponseJSON) RawJSON() string {
+func (r accessBookmarksJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -232,48 +155,10 @@ func (r accessBookmarkDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type AccessBookmarkGetResponse struct {
-	// The unique identifier for the Bookmark application.
-	ID interface{} `json:"id"`
-	// Displays the application in the App Launcher.
-	AppLauncherVisible bool      `json:"app_launcher_visible"`
-	CreatedAt          time.Time `json:"created_at" format:"date-time"`
-	// The domain of the Bookmark application.
-	Domain string `json:"domain"`
-	// The image URL for the logo shown in the App Launcher dashboard.
-	LogoURL string `json:"logo_url"`
-	// The name of the Bookmark application.
-	Name      string                        `json:"name"`
-	UpdatedAt time.Time                     `json:"updated_at" format:"date-time"`
-	JSON      accessBookmarkGetResponseJSON `json:"-"`
-}
-
-// accessBookmarkGetResponseJSON contains the JSON metadata for the struct
-// [AccessBookmarkGetResponse]
-type accessBookmarkGetResponseJSON struct {
-	ID                 apijson.Field
-	AppLauncherVisible apijson.Field
-	CreatedAt          apijson.Field
-	Domain             apijson.Field
-	LogoURL            apijson.Field
-	Name               apijson.Field
-	UpdatedAt          apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *AccessBookmarkGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessBookmarkGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
 type AccessBookmarkNewResponseEnvelope struct {
 	Errors   []AccessBookmarkNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessBookmarkNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessBookmarkNewResponse                   `json:"result,required"`
+	Result   AccessBookmarks                             `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessBookmarkNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessBookmarkNewResponseEnvelopeJSON    `json:"-"`
@@ -354,7 +239,7 @@ const (
 type AccessBookmarkUpdateResponseEnvelope struct {
 	Errors   []AccessBookmarkUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessBookmarkUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessBookmarkUpdateResponse                   `json:"result,required"`
+	Result   AccessBookmarks                                `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessBookmarkUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessBookmarkUpdateResponseEnvelopeJSON    `json:"-"`
@@ -435,7 +320,7 @@ const (
 type AccessBookmarkListResponseEnvelope struct {
 	Errors   []AccessBookmarkListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessBookmarkListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AccessBookmarkListResponse                 `json:"result,required,nullable"`
+	Result   []AccessBookmarks                            `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AccessBookmarkListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AccessBookmarkListResponseEnvelopeResultInfo `json:"result_info"`
@@ -630,7 +515,7 @@ const (
 type AccessBookmarkGetResponseEnvelope struct {
 	Errors   []AccessBookmarkGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessBookmarkGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   AccessBookmarkGetResponse                   `json:"result,required"`
+	Result   AccessBookmarks                             `json:"result,required"`
 	// Whether the API call was successful
 	Success AccessBookmarkGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    accessBookmarkGetResponseEnvelopeJSON    `json:"-"`

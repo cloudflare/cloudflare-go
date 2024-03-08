@@ -34,7 +34,7 @@ func NewNamespaceObjectService(opts ...option.RequestOption) (r *NamespaceObject
 }
 
 // Returns the Durable Objects in a given namespace.
-func (r *NamespaceObjectService) List(ctx context.Context, id string, params NamespaceObjectListParams, opts ...option.RequestOption) (res *[]NamespaceObjectListResponse, err error) {
+func (r *NamespaceObjectService) List(ctx context.Context, id string, params NamespaceObjectListParams, opts ...option.RequestOption) (res *[]WorkersObject, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NamespaceObjectListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/durable_objects/namespaces/%s/objects", params.AccountID, id)
@@ -46,28 +46,27 @@ func (r *NamespaceObjectService) List(ctx context.Context, id string, params Nam
 	return
 }
 
-type NamespaceObjectListResponse struct {
+type WorkersObject struct {
 	// ID of the Durable Object.
 	ID string `json:"id"`
 	// Whether the Durable Object has stored data.
-	HasStoredData bool                            `json:"hasStoredData"`
-	JSON          namespaceObjectListResponseJSON `json:"-"`
+	HasStoredData bool              `json:"hasStoredData"`
+	JSON          workersObjectJSON `json:"-"`
 }
 
-// namespaceObjectListResponseJSON contains the JSON metadata for the struct
-// [NamespaceObjectListResponse]
-type namespaceObjectListResponseJSON struct {
+// workersObjectJSON contains the JSON metadata for the struct [WorkersObject]
+type workersObjectJSON struct {
 	ID            apijson.Field
 	HasStoredData apijson.Field
 	raw           string
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *NamespaceObjectListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkersObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r namespaceObjectListResponseJSON) RawJSON() string {
+func (r workersObjectJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -95,7 +94,7 @@ func (r NamespaceObjectListParams) URLQuery() (v url.Values) {
 type NamespaceObjectListResponseEnvelope struct {
 	Errors   []NamespaceObjectListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []NamespaceObjectListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []NamespaceObjectListResponse                 `json:"result,required,nullable"`
+	Result   []WorkersObject                               `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    NamespaceObjectListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo NamespaceObjectListResponseEnvelopeResultInfo `json:"result_info"`

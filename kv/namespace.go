@@ -46,7 +46,7 @@ func NewNamespaceService(opts ...option.RequestOption) (r *NamespaceService) {
 // Creates a namespace under the given title. A `400` is returned if the account
 // already owns a namespace with this title. A namespace must be explicitly deleted
 // to be replaced.
-func (r *NamespaceService) New(ctx context.Context, params NamespaceNewParams, opts ...option.RequestOption) (res *NamespaceNewResponse, err error) {
+func (r *NamespaceService) New(ctx context.Context, params NamespaceNewParams, opts ...option.RequestOption) (res *WorkersKVNamespace, err error) {
 	opts = append(r.Options[:], opts...)
 	var env NamespaceNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces", params.AccountID)
@@ -72,7 +72,7 @@ func (r *NamespaceService) Update(ctx context.Context, namespaceID string, param
 }
 
 // Returns the namespaces owned by an account.
-func (r *NamespaceService) List(ctx context.Context, params NamespaceListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[NamespaceListResponse], err error) {
+func (r *NamespaceService) List(ctx context.Context, params NamespaceListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[WorkersKVNamespace], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -90,7 +90,7 @@ func (r *NamespaceService) List(ctx context.Context, params NamespaceListParams,
 }
 
 // Returns the namespaces owned by an account.
-func (r *NamespaceService) ListAutoPaging(ctx context.Context, params NamespaceListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[NamespaceListResponse] {
+func (r *NamespaceService) ListAutoPaging(ctx context.Context, params NamespaceListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[WorkersKVNamespace] {
 	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
@@ -107,20 +107,20 @@ func (r *NamespaceService) Delete(ctx context.Context, namespaceID string, body 
 	return
 }
 
-type NamespaceNewResponse struct {
+type WorkersKVNamespace struct {
 	// Namespace identifier tag.
 	ID string `json:"id,required"`
 	// A human-readable string name for a Namespace.
 	Title string `json:"title,required"`
 	// True if keys written on the URL will be URL-decoded before storing. For example,
 	// if set to "true", a key written on the URL as "%3F" will be stored as "?".
-	SupportsURLEncoding bool                     `json:"supports_url_encoding"`
-	JSON                namespaceNewResponseJSON `json:"-"`
+	SupportsURLEncoding bool                   `json:"supports_url_encoding"`
+	JSON                workersKVNamespaceJSON `json:"-"`
 }
 
-// namespaceNewResponseJSON contains the JSON metadata for the struct
-// [NamespaceNewResponse]
-type namespaceNewResponseJSON struct {
+// workersKVNamespaceJSON contains the JSON metadata for the struct
+// [WorkersKVNamespace]
+type workersKVNamespaceJSON struct {
 	ID                  apijson.Field
 	Title               apijson.Field
 	SupportsURLEncoding apijson.Field
@@ -128,11 +128,11 @@ type namespaceNewResponseJSON struct {
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *NamespaceNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkersKVNamespace) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r namespaceNewResponseJSON) RawJSON() string {
+func (r workersKVNamespaceJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -150,35 +150,6 @@ func init() {
 			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
 	)
-}
-
-type NamespaceListResponse struct {
-	// Namespace identifier tag.
-	ID string `json:"id,required"`
-	// A human-readable string name for a Namespace.
-	Title string `json:"title,required"`
-	// True if keys written on the URL will be URL-decoded before storing. For example,
-	// if set to "true", a key written on the URL as "%3F" will be stored as "?".
-	SupportsURLEncoding bool                      `json:"supports_url_encoding"`
-	JSON                namespaceListResponseJSON `json:"-"`
-}
-
-// namespaceListResponseJSON contains the JSON metadata for the struct
-// [NamespaceListResponse]
-type namespaceListResponseJSON struct {
-	ID                  apijson.Field
-	Title               apijson.Field
-	SupportsURLEncoding apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *NamespaceListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r namespaceListResponseJSON) RawJSON() string {
-	return r.raw
 }
 
 // Union satisfied by [kv.NamespaceDeleteResponseUnknown] or [shared.UnionString].
@@ -211,7 +182,7 @@ func (r NamespaceNewParams) MarshalJSON() (data []byte, err error) {
 type NamespaceNewResponseEnvelope struct {
 	Errors   []NamespaceNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []NamespaceNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   NamespaceNewResponse                   `json:"result,required"`
+	Result   WorkersKVNamespace                     `json:"result,required"`
 	// Whether the API call was successful
 	Success NamespaceNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    namespaceNewResponseEnvelopeJSON    `json:"-"`

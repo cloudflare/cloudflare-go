@@ -32,7 +32,7 @@ func NewDevicePolicyIncludeService(opts ...option.RequestOption) (r *DevicePolic
 }
 
 // Sets the list of routes included in the WARP client's tunnel.
-func (r *DevicePolicyIncludeService) Update(ctx context.Context, params DevicePolicyIncludeUpdateParams, opts ...option.RequestOption) (res *[]DevicePolicyIncludeUpdateResponse, err error) {
+func (r *DevicePolicyIncludeService) Update(ctx context.Context, params DevicePolicyIncludeUpdateParams, opts ...option.RequestOption) (res *[]TeamsDevicesSplitTunnelInclude, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyIncludeUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/policy/include", params.AccountID)
@@ -45,7 +45,7 @@ func (r *DevicePolicyIncludeService) Update(ctx context.Context, params DevicePo
 }
 
 // Fetches the list of routes included in the WARP client's tunnel.
-func (r *DevicePolicyIncludeService) List(ctx context.Context, query DevicePolicyIncludeListParams, opts ...option.RequestOption) (res *[]DevicePolicyIncludeListResponse, err error) {
+func (r *DevicePolicyIncludeService) List(ctx context.Context, query DevicePolicyIncludeListParams, opts ...option.RequestOption) (res *[]TeamsDevicesSplitTunnelInclude, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyIncludeListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/policy/include", query.AccountID)
@@ -59,7 +59,7 @@ func (r *DevicePolicyIncludeService) List(ctx context.Context, query DevicePolic
 
 // Fetches the list of routes included in the WARP client's tunnel for a specific
 // device settings profile.
-func (r *DevicePolicyIncludeService) Get(ctx context.Context, policyID string, query DevicePolicyIncludeGetParams, opts ...option.RequestOption) (res *[]DevicePolicyIncludeGetResponse, err error) {
+func (r *DevicePolicyIncludeService) Get(ctx context.Context, policyID string, query DevicePolicyIncludeGetParams, opts ...option.RequestOption) (res *[]TeamsDevicesSplitTunnelInclude, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyIncludeGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/policy/%s/include", query.AccountID, policyID)
@@ -71,67 +71,7 @@ func (r *DevicePolicyIncludeService) Get(ctx context.Context, policyID string, q
 	return
 }
 
-type DevicePolicyIncludeUpdateResponse struct {
-	// The address in CIDR format to include in the tunnel. If address is present, host
-	// must not be present.
-	Address string `json:"address,required"`
-	// A description of the split tunnel item, displayed in the client UI.
-	Description string `json:"description,required"`
-	// The domain name to include in the tunnel. If host is present, address must not
-	// be present.
-	Host string                                `json:"host"`
-	JSON devicePolicyIncludeUpdateResponseJSON `json:"-"`
-}
-
-// devicePolicyIncludeUpdateResponseJSON contains the JSON metadata for the struct
-// [DevicePolicyIncludeUpdateResponse]
-type devicePolicyIncludeUpdateResponseJSON struct {
-	Address     apijson.Field
-	Description apijson.Field
-	Host        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyIncludeUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyIncludeUpdateResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type DevicePolicyIncludeListResponse struct {
-	// The address in CIDR format to include in the tunnel. If address is present, host
-	// must not be present.
-	Address string `json:"address,required"`
-	// A description of the split tunnel item, displayed in the client UI.
-	Description string `json:"description,required"`
-	// The domain name to include in the tunnel. If host is present, address must not
-	// be present.
-	Host string                              `json:"host"`
-	JSON devicePolicyIncludeListResponseJSON `json:"-"`
-}
-
-// devicePolicyIncludeListResponseJSON contains the JSON metadata for the struct
-// [DevicePolicyIncludeListResponse]
-type devicePolicyIncludeListResponseJSON struct {
-	Address     apijson.Field
-	Description apijson.Field
-	Host        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyIncludeListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyIncludeListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type DevicePolicyIncludeGetResponse struct {
+type TeamsDevicesSplitTunnelInclude struct {
 	// The address in CIDR format to include in the tunnel. If address is present, host
 	// must not be present.
 	Address string `json:"address,required"`
@@ -140,12 +80,12 @@ type DevicePolicyIncludeGetResponse struct {
 	// The domain name to include in the tunnel. If host is present, address must not
 	// be present.
 	Host string                             `json:"host"`
-	JSON devicePolicyIncludeGetResponseJSON `json:"-"`
+	JSON teamsDevicesSplitTunnelIncludeJSON `json:"-"`
 }
 
-// devicePolicyIncludeGetResponseJSON contains the JSON metadata for the struct
-// [DevicePolicyIncludeGetResponse]
-type devicePolicyIncludeGetResponseJSON struct {
+// teamsDevicesSplitTunnelIncludeJSON contains the JSON metadata for the struct
+// [TeamsDevicesSplitTunnelInclude]
+type teamsDevicesSplitTunnelIncludeJSON struct {
 	Address     apijson.Field
 	Description apijson.Field
 	Host        apijson.Field
@@ -153,24 +93,15 @@ type devicePolicyIncludeGetResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DevicePolicyIncludeGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *TeamsDevicesSplitTunnelInclude) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r devicePolicyIncludeGetResponseJSON) RawJSON() string {
+func (r teamsDevicesSplitTunnelIncludeJSON) RawJSON() string {
 	return r.raw
 }
 
-type DevicePolicyIncludeUpdateParams struct {
-	AccountID param.Field[interface{}]                           `path:"account_id,required"`
-	Body      param.Field[[]DevicePolicyIncludeUpdateParamsBody] `json:"body,required"`
-}
-
-func (r DevicePolicyIncludeUpdateParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r.Body)
-}
-
-type DevicePolicyIncludeUpdateParamsBody struct {
+type TeamsDevicesSplitTunnelIncludeParam struct {
 	// The address in CIDR format to include in the tunnel. If address is present, host
 	// must not be present.
 	Address param.Field[string] `json:"address,required"`
@@ -181,14 +112,23 @@ type DevicePolicyIncludeUpdateParamsBody struct {
 	Host param.Field[string] `json:"host"`
 }
 
-func (r DevicePolicyIncludeUpdateParamsBody) MarshalJSON() (data []byte, err error) {
+func (r TeamsDevicesSplitTunnelIncludeParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+type DevicePolicyIncludeUpdateParams struct {
+	AccountID param.Field[interface{}]                           `path:"account_id,required"`
+	Body      param.Field[[]TeamsDevicesSplitTunnelIncludeParam] `json:"body,required"`
+}
+
+func (r DevicePolicyIncludeUpdateParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r.Body)
 }
 
 type DevicePolicyIncludeUpdateResponseEnvelope struct {
 	Errors   []DevicePolicyIncludeUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DevicePolicyIncludeUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DevicePolicyIncludeUpdateResponse                 `json:"result,required,nullable"`
+	Result   []TeamsDevicesSplitTunnelInclude                    `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DevicePolicyIncludeUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DevicePolicyIncludeUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -306,7 +246,7 @@ type DevicePolicyIncludeListParams struct {
 type DevicePolicyIncludeListResponseEnvelope struct {
 	Errors   []DevicePolicyIncludeListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DevicePolicyIncludeListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DevicePolicyIncludeListResponse                 `json:"result,required,nullable"`
+	Result   []TeamsDevicesSplitTunnelInclude                  `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DevicePolicyIncludeListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DevicePolicyIncludeListResponseEnvelopeResultInfo `json:"result_info"`
@@ -424,7 +364,7 @@ type DevicePolicyIncludeGetParams struct {
 type DevicePolicyIncludeGetResponseEnvelope struct {
 	Errors   []DevicePolicyIncludeGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DevicePolicyIncludeGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DevicePolicyIncludeGetResponse                 `json:"result,required,nullable"`
+	Result   []TeamsDevicesSplitTunnelInclude                 `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DevicePolicyIncludeGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DevicePolicyIncludeGetResponseEnvelopeResultInfo `json:"result_info"`

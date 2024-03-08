@@ -73,7 +73,7 @@ func (r *StreamService) New(ctx context.Context, params StreamNewParams, opts ..
 
 // Lists up to 1000 videos from a single request. For a specific range, refer to
 // the optional parameters.
-func (r *StreamService) List(ctx context.Context, params StreamListParams, opts ...option.RequestOption) (res *[]StreamListResponse, err error) {
+func (r *StreamService) List(ctx context.Context, params StreamListParams, opts ...option.RequestOption) (res *[]StreamVideos, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream", params.AccountID)
@@ -95,7 +95,7 @@ func (r *StreamService) Delete(ctx context.Context, identifier string, body Stre
 }
 
 // Fetches details for a single video.
-func (r *StreamService) Get(ctx context.Context, identifier string, query StreamGetParams, opts ...option.RequestOption) (res *StreamGetResponse, err error) {
+func (r *StreamService) Get(ctx context.Context, identifier string, query StreamGetParams, opts ...option.RequestOption) (res *StreamVideos, err error) {
 	opts = append(r.Options[:], opts...)
 	var env StreamGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/%s", query.AccountID, identifier)
@@ -107,7 +107,7 @@ func (r *StreamService) Get(ctx context.Context, identifier string, query Stream
 	return
 }
 
-type StreamListResponse struct {
+type StreamVideos struct {
 	// Lists the origins allowed to display the video. Enter allowed origin domains in
 	// an array and use `*` for wildcard subdomains. Empty arrays allow the video to be
 	// viewed on any origin.
@@ -119,8 +119,8 @@ type StreamListResponse struct {
 	// The duration of the video in seconds. A value of `-1` means the duration is
 	// unknown. The duration becomes available after the upload and before the video is
 	// ready.
-	Duration float64                 `json:"duration"`
-	Input    StreamListResponseInput `json:"input"`
+	Duration float64           `json:"duration"`
+	Input    StreamVideosInput `json:"input"`
 	// The live input ID used to upload a video with Stream Live.
 	LiveInput string `json:"liveInput"`
 	// The maximum duration in seconds for a video upload. Can be set for a video that
@@ -132,8 +132,8 @@ type StreamListResponse struct {
 	// managing videos.
 	Meta interface{} `json:"meta"`
 	// The date and time the media item was last modified.
-	Modified time.Time                  `json:"modified" format:"date-time"`
-	Playback StreamListResponsePlayback `json:"playback"`
+	Modified time.Time            `json:"modified" format:"date-time"`
+	Playback StreamVideosPlayback `json:"playback"`
 	// The video's preview page URI. This field is omitted until encoding is complete.
 	Preview string `json:"preview" format:"uri"`
 	// Indicates whether the video is playable. The field is empty if the video is not
@@ -156,7 +156,7 @@ type StreamListResponse struct {
 	// `inprogress`, `pctComplete` returns a number between 0 and 100 to indicate the
 	// approximate percent of completion. If the `state` is `error`, `errorReasonCode`
 	// and `errorReasonText` provide additional details.
-	Status StreamListResponseStatus `json:"status"`
+	Status StreamVideosStatus `json:"status"`
 	// The media item's thumbnail URI. This field is omitted until encoding is
 	// complete.
 	Thumbnail string `json:"thumbnail" format:"uri"`
@@ -171,14 +171,13 @@ type StreamListResponse struct {
 	Uploaded time.Time `json:"uploaded" format:"date-time"`
 	// The date and time when the video upload URL is no longer valid for direct user
 	// uploads.
-	UploadExpiry time.Time                   `json:"uploadExpiry" format:"date-time"`
-	Watermark    StreamListResponseWatermark `json:"watermark"`
-	JSON         streamListResponseJSON      `json:"-"`
+	UploadExpiry time.Time        `json:"uploadExpiry" format:"date-time"`
+	Watermark    StreamWatermarks `json:"watermark"`
+	JSON         streamVideosJSON `json:"-"`
 }
 
-// streamListResponseJSON contains the JSON metadata for the struct
-// [StreamListResponse]
-type streamListResponseJSON struct {
+// streamVideosJSON contains the JSON metadata for the struct [StreamVideos]
+type streamVideosJSON struct {
 	AllowedOrigins        apijson.Field
 	Created               apijson.Field
 	Creator               apijson.Field
@@ -206,63 +205,63 @@ type streamListResponseJSON struct {
 	ExtraFields           map[string]apijson.Field
 }
 
-func (r *StreamListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamVideos) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r streamListResponseJSON) RawJSON() string {
+func (r streamVideosJSON) RawJSON() string {
 	return r.raw
 }
 
-type StreamListResponseInput struct {
+type StreamVideosInput struct {
 	// The video height in pixels. A value of `-1` means the height is unknown. The
 	// value becomes available after the upload and before the video is ready.
 	Height int64 `json:"height"`
 	// The video width in pixels. A value of `-1` means the width is unknown. The value
 	// becomes available after the upload and before the video is ready.
-	Width int64                       `json:"width"`
-	JSON  streamListResponseInputJSON `json:"-"`
+	Width int64                 `json:"width"`
+	JSON  streamVideosInputJSON `json:"-"`
 }
 
-// streamListResponseInputJSON contains the JSON metadata for the struct
-// [StreamListResponseInput]
-type streamListResponseInputJSON struct {
+// streamVideosInputJSON contains the JSON metadata for the struct
+// [StreamVideosInput]
+type streamVideosInputJSON struct {
 	Height      apijson.Field
 	Width       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StreamListResponseInput) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamVideosInput) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r streamListResponseInputJSON) RawJSON() string {
+func (r streamVideosInputJSON) RawJSON() string {
 	return r.raw
 }
 
-type StreamListResponsePlayback struct {
+type StreamVideosPlayback struct {
 	// DASH Media Presentation Description for the video.
 	Dash string `json:"dash"`
 	// The HLS manifest for the video.
-	Hls  string                         `json:"hls"`
-	JSON streamListResponsePlaybackJSON `json:"-"`
+	Hls  string                   `json:"hls"`
+	JSON streamVideosPlaybackJSON `json:"-"`
 }
 
-// streamListResponsePlaybackJSON contains the JSON metadata for the struct
-// [StreamListResponsePlayback]
-type streamListResponsePlaybackJSON struct {
+// streamVideosPlaybackJSON contains the JSON metadata for the struct
+// [StreamVideosPlayback]
+type streamVideosPlaybackJSON struct {
 	Dash        apijson.Field
 	Hls         apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *StreamListResponsePlayback) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamVideosPlayback) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r streamListResponsePlaybackJSON) RawJSON() string {
+func (r streamVideosPlaybackJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -271,7 +270,7 @@ func (r streamListResponsePlaybackJSON) RawJSON() string {
 // `inprogress`, `pctComplete` returns a number between 0 and 100 to indicate the
 // approximate percent of completion. If the `state` is `error`, `errorReasonCode`
 // and `errorReasonText` provide additional details.
-type StreamListResponseStatus struct {
+type StreamVideosStatus struct {
 	// Specifies why the video failed to encode. This field is empty if the video is
 	// not in an `error` state. Preferred for programmatic use.
 	ErrorReasonCode string `json:"errorReasonCode"`
@@ -282,13 +281,13 @@ type StreamListResponseStatus struct {
 	// non-negative integer.
 	PctComplete string `json:"pctComplete"`
 	// Specifies the processing status for all quality levels for a video.
-	State StreamListResponseStatusState `json:"state"`
-	JSON  streamListResponseStatusJSON  `json:"-"`
+	State StreamVideosStatusState `json:"state"`
+	JSON  streamVideosStatusJSON  `json:"-"`
 }
 
-// streamListResponseStatusJSON contains the JSON metadata for the struct
-// [StreamListResponseStatus]
-type streamListResponseStatusJSON struct {
+// streamVideosStatusJSON contains the JSON metadata for the struct
+// [StreamVideosStatus]
+type streamVideosStatusJSON struct {
 	ErrorReasonCode apijson.Field
 	ErrorReasonText apijson.Field
 	PctComplete     apijson.Field
@@ -297,359 +296,25 @@ type streamListResponseStatusJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *StreamListResponseStatus) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamVideosStatus) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r streamListResponseStatusJSON) RawJSON() string {
+func (r streamVideosStatusJSON) RawJSON() string {
 	return r.raw
 }
 
 // Specifies the processing status for all quality levels for a video.
-type StreamListResponseStatusState string
+type StreamVideosStatusState string
 
 const (
-	StreamListResponseStatusStatePendingupload StreamListResponseStatusState = "pendingupload"
-	StreamListResponseStatusStateDownloading   StreamListResponseStatusState = "downloading"
-	StreamListResponseStatusStateQueued        StreamListResponseStatusState = "queued"
-	StreamListResponseStatusStateInprogress    StreamListResponseStatusState = "inprogress"
-	StreamListResponseStatusStateReady         StreamListResponseStatusState = "ready"
-	StreamListResponseStatusStateError         StreamListResponseStatusState = "error"
+	StreamVideosStatusStatePendingupload StreamVideosStatusState = "pendingupload"
+	StreamVideosStatusStateDownloading   StreamVideosStatusState = "downloading"
+	StreamVideosStatusStateQueued        StreamVideosStatusState = "queued"
+	StreamVideosStatusStateInprogress    StreamVideosStatusState = "inprogress"
+	StreamVideosStatusStateReady         StreamVideosStatusState = "ready"
+	StreamVideosStatusStateError         StreamVideosStatusState = "error"
 )
-
-type StreamListResponseWatermark struct {
-	// The date and a time a watermark profile was created.
-	Created time.Time `json:"created" format:"date-time"`
-	// The source URL for a downloaded image. If the watermark profile was created via
-	// direct upload, this field is null.
-	DownloadedFrom string `json:"downloadedFrom"`
-	// The height of the image in pixels.
-	Height int64 `json:"height"`
-	// A short description of the watermark profile.
-	Name string `json:"name"`
-	// The translucency of the image. A value of `0.0` makes the image completely
-	// transparent, and `1.0` makes the image completely opaque. Note that if the image
-	// is already semi-transparent, setting this to `1.0` will not make the image
-	// completely opaque.
-	Opacity float64 `json:"opacity"`
-	// The whitespace between the adjacent edges (determined by position) of the video
-	// and the image. `0.0` indicates no padding, and `1.0` indicates a fully padded
-	// video width or length, as determined by the algorithm.
-	Padding float64 `json:"padding"`
-	// The location of the image. Valid positions are: `upperRight`, `upperLeft`,
-	// `lowerLeft`, `lowerRight`, and `center`. Note that `center` ignores the
-	// `padding` parameter.
-	Position string `json:"position"`
-	// The size of the image relative to the overall size of the video. This parameter
-	// will adapt to horizontal and vertical videos automatically. `0.0` indicates no
-	// scaling (use the size of the image as-is), and `1.0 `fills the entire video.
-	Scale float64 `json:"scale"`
-	// The size of the image in bytes.
-	Size float64 `json:"size"`
-	// The unique identifier for a watermark profile.
-	Uid string `json:"uid"`
-	// The width of the image in pixels.
-	Width int64                           `json:"width"`
-	JSON  streamListResponseWatermarkJSON `json:"-"`
-}
-
-// streamListResponseWatermarkJSON contains the JSON metadata for the struct
-// [StreamListResponseWatermark]
-type streamListResponseWatermarkJSON struct {
-	Created        apijson.Field
-	DownloadedFrom apijson.Field
-	Height         apijson.Field
-	Name           apijson.Field
-	Opacity        apijson.Field
-	Padding        apijson.Field
-	Position       apijson.Field
-	Scale          apijson.Field
-	Size           apijson.Field
-	Uid            apijson.Field
-	Width          apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *StreamListResponseWatermark) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r streamListResponseWatermarkJSON) RawJSON() string {
-	return r.raw
-}
-
-type StreamGetResponse struct {
-	// Lists the origins allowed to display the video. Enter allowed origin domains in
-	// an array and use `*` for wildcard subdomains. Empty arrays allow the video to be
-	// viewed on any origin.
-	AllowedOrigins []string `json:"allowedOrigins"`
-	// The date and time the media item was created.
-	Created time.Time `json:"created" format:"date-time"`
-	// A user-defined identifier for the media creator.
-	Creator string `json:"creator"`
-	// The duration of the video in seconds. A value of `-1` means the duration is
-	// unknown. The duration becomes available after the upload and before the video is
-	// ready.
-	Duration float64                `json:"duration"`
-	Input    StreamGetResponseInput `json:"input"`
-	// The live input ID used to upload a video with Stream Live.
-	LiveInput string `json:"liveInput"`
-	// The maximum duration in seconds for a video upload. Can be set for a video that
-	// is not yet uploaded to limit its duration. Uploads that exceed the specified
-	// duration will fail during processing. A value of `-1` means the value is
-	// unknown.
-	MaxDurationSeconds int64 `json:"maxDurationSeconds"`
-	// A user modifiable key-value store used to reference other systems of record for
-	// managing videos.
-	Meta interface{} `json:"meta"`
-	// The date and time the media item was last modified.
-	Modified time.Time                 `json:"modified" format:"date-time"`
-	Playback StreamGetResponsePlayback `json:"playback"`
-	// The video's preview page URI. This field is omitted until encoding is complete.
-	Preview string `json:"preview" format:"uri"`
-	// Indicates whether the video is playable. The field is empty if the video is not
-	// ready for viewing or the live stream is still in progress.
-	ReadyToStream bool `json:"readyToStream"`
-	// Indicates the time at which the video became playable. The field is empty if the
-	// video is not ready for viewing or the live stream is still in progress.
-	ReadyToStreamAt time.Time `json:"readyToStreamAt" format:"date-time"`
-	// Indicates whether the video can be a accessed using the UID. When set to `true`,
-	// a signed token must be generated with a signing key to view the video.
-	RequireSignedURLs bool `json:"requireSignedURLs"`
-	// Indicates the date and time at which the video will be deleted. Omit the field
-	// to indicate no change, or include with a `null` value to remove an existing
-	// scheduled deletion. If specified, must be at least 30 days from upload time.
-	ScheduledDeletion time.Time `json:"scheduledDeletion" format:"date-time"`
-	// The size of the media item in bytes.
-	Size float64 `json:"size"`
-	// Specifies a detailed status for a video. If the `state` is `inprogress` or
-	// `error`, the `step` field returns `encoding` or `manifest`. If the `state` is
-	// `inprogress`, `pctComplete` returns a number between 0 and 100 to indicate the
-	// approximate percent of completion. If the `state` is `error`, `errorReasonCode`
-	// and `errorReasonText` provide additional details.
-	Status StreamGetResponseStatus `json:"status"`
-	// The media item's thumbnail URI. This field is omitted until encoding is
-	// complete.
-	Thumbnail string `json:"thumbnail" format:"uri"`
-	// The timestamp for a thumbnail image calculated as a percentage value of the
-	// video's duration. To convert from a second-wise timestamp to a percentage,
-	// divide the desired timestamp by the total duration of the video. If this value
-	// is not set, the default thumbnail image is taken from 0s of the video.
-	ThumbnailTimestampPct float64 `json:"thumbnailTimestampPct"`
-	// A Cloudflare-generated unique identifier for a media item.
-	Uid string `json:"uid"`
-	// The date and time the media item was uploaded.
-	Uploaded time.Time `json:"uploaded" format:"date-time"`
-	// The date and time when the video upload URL is no longer valid for direct user
-	// uploads.
-	UploadExpiry time.Time                  `json:"uploadExpiry" format:"date-time"`
-	Watermark    StreamGetResponseWatermark `json:"watermark"`
-	JSON         streamGetResponseJSON      `json:"-"`
-}
-
-// streamGetResponseJSON contains the JSON metadata for the struct
-// [StreamGetResponse]
-type streamGetResponseJSON struct {
-	AllowedOrigins        apijson.Field
-	Created               apijson.Field
-	Creator               apijson.Field
-	Duration              apijson.Field
-	Input                 apijson.Field
-	LiveInput             apijson.Field
-	MaxDurationSeconds    apijson.Field
-	Meta                  apijson.Field
-	Modified              apijson.Field
-	Playback              apijson.Field
-	Preview               apijson.Field
-	ReadyToStream         apijson.Field
-	ReadyToStreamAt       apijson.Field
-	RequireSignedURLs     apijson.Field
-	ScheduledDeletion     apijson.Field
-	Size                  apijson.Field
-	Status                apijson.Field
-	Thumbnail             apijson.Field
-	ThumbnailTimestampPct apijson.Field
-	Uid                   apijson.Field
-	Uploaded              apijson.Field
-	UploadExpiry          apijson.Field
-	Watermark             apijson.Field
-	raw                   string
-	ExtraFields           map[string]apijson.Field
-}
-
-func (r *StreamGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r streamGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type StreamGetResponseInput struct {
-	// The video height in pixels. A value of `-1` means the height is unknown. The
-	// value becomes available after the upload and before the video is ready.
-	Height int64 `json:"height"`
-	// The video width in pixels. A value of `-1` means the width is unknown. The value
-	// becomes available after the upload and before the video is ready.
-	Width int64                      `json:"width"`
-	JSON  streamGetResponseInputJSON `json:"-"`
-}
-
-// streamGetResponseInputJSON contains the JSON metadata for the struct
-// [StreamGetResponseInput]
-type streamGetResponseInputJSON struct {
-	Height      apijson.Field
-	Width       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamGetResponseInput) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r streamGetResponseInputJSON) RawJSON() string {
-	return r.raw
-}
-
-type StreamGetResponsePlayback struct {
-	// DASH Media Presentation Description for the video.
-	Dash string `json:"dash"`
-	// The HLS manifest for the video.
-	Hls  string                        `json:"hls"`
-	JSON streamGetResponsePlaybackJSON `json:"-"`
-}
-
-// streamGetResponsePlaybackJSON contains the JSON metadata for the struct
-// [StreamGetResponsePlayback]
-type streamGetResponsePlaybackJSON struct {
-	Dash        apijson.Field
-	Hls         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *StreamGetResponsePlayback) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r streamGetResponsePlaybackJSON) RawJSON() string {
-	return r.raw
-}
-
-// Specifies a detailed status for a video. If the `state` is `inprogress` or
-// `error`, the `step` field returns `encoding` or `manifest`. If the `state` is
-// `inprogress`, `pctComplete` returns a number between 0 and 100 to indicate the
-// approximate percent of completion. If the `state` is `error`, `errorReasonCode`
-// and `errorReasonText` provide additional details.
-type StreamGetResponseStatus struct {
-	// Specifies why the video failed to encode. This field is empty if the video is
-	// not in an `error` state. Preferred for programmatic use.
-	ErrorReasonCode string `json:"errorReasonCode"`
-	// Specifies why the video failed to encode using a human readable error message in
-	// English. This field is empty if the video is not in an `error` state.
-	ErrorReasonText string `json:"errorReasonText"`
-	// Indicates the size of the entire upload in bytes. The value must be a
-	// non-negative integer.
-	PctComplete string `json:"pctComplete"`
-	// Specifies the processing status for all quality levels for a video.
-	State StreamGetResponseStatusState `json:"state"`
-	JSON  streamGetResponseStatusJSON  `json:"-"`
-}
-
-// streamGetResponseStatusJSON contains the JSON metadata for the struct
-// [StreamGetResponseStatus]
-type streamGetResponseStatusJSON struct {
-	ErrorReasonCode apijson.Field
-	ErrorReasonText apijson.Field
-	PctComplete     apijson.Field
-	State           apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *StreamGetResponseStatus) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r streamGetResponseStatusJSON) RawJSON() string {
-	return r.raw
-}
-
-// Specifies the processing status for all quality levels for a video.
-type StreamGetResponseStatusState string
-
-const (
-	StreamGetResponseStatusStatePendingupload StreamGetResponseStatusState = "pendingupload"
-	StreamGetResponseStatusStateDownloading   StreamGetResponseStatusState = "downloading"
-	StreamGetResponseStatusStateQueued        StreamGetResponseStatusState = "queued"
-	StreamGetResponseStatusStateInprogress    StreamGetResponseStatusState = "inprogress"
-	StreamGetResponseStatusStateReady         StreamGetResponseStatusState = "ready"
-	StreamGetResponseStatusStateError         StreamGetResponseStatusState = "error"
-)
-
-type StreamGetResponseWatermark struct {
-	// The date and a time a watermark profile was created.
-	Created time.Time `json:"created" format:"date-time"`
-	// The source URL for a downloaded image. If the watermark profile was created via
-	// direct upload, this field is null.
-	DownloadedFrom string `json:"downloadedFrom"`
-	// The height of the image in pixels.
-	Height int64 `json:"height"`
-	// A short description of the watermark profile.
-	Name string `json:"name"`
-	// The translucency of the image. A value of `0.0` makes the image completely
-	// transparent, and `1.0` makes the image completely opaque. Note that if the image
-	// is already semi-transparent, setting this to `1.0` will not make the image
-	// completely opaque.
-	Opacity float64 `json:"opacity"`
-	// The whitespace between the adjacent edges (determined by position) of the video
-	// and the image. `0.0` indicates no padding, and `1.0` indicates a fully padded
-	// video width or length, as determined by the algorithm.
-	Padding float64 `json:"padding"`
-	// The location of the image. Valid positions are: `upperRight`, `upperLeft`,
-	// `lowerLeft`, `lowerRight`, and `center`. Note that `center` ignores the
-	// `padding` parameter.
-	Position string `json:"position"`
-	// The size of the image relative to the overall size of the video. This parameter
-	// will adapt to horizontal and vertical videos automatically. `0.0` indicates no
-	// scaling (use the size of the image as-is), and `1.0 `fills the entire video.
-	Scale float64 `json:"scale"`
-	// The size of the image in bytes.
-	Size float64 `json:"size"`
-	// The unique identifier for a watermark profile.
-	Uid string `json:"uid"`
-	// The width of the image in pixels.
-	Width int64                          `json:"width"`
-	JSON  streamGetResponseWatermarkJSON `json:"-"`
-}
-
-// streamGetResponseWatermarkJSON contains the JSON metadata for the struct
-// [StreamGetResponseWatermark]
-type streamGetResponseWatermarkJSON struct {
-	Created        apijson.Field
-	DownloadedFrom apijson.Field
-	Height         apijson.Field
-	Name           apijson.Field
-	Opacity        apijson.Field
-	Padding        apijson.Field
-	Position       apijson.Field
-	Scale          apijson.Field
-	Size           apijson.Field
-	Uid            apijson.Field
-	Width          apijson.Field
-	raw            string
-	ExtraFields    map[string]apijson.Field
-}
-
-func (r *StreamGetResponseWatermark) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r streamGetResponseWatermarkJSON) RawJSON() string {
-	return r.raw
-}
 
 type StreamNewParams struct {
 	// The account identifier tag.
@@ -722,7 +387,7 @@ const (
 type StreamListResponseEnvelope struct {
 	Errors   []StreamListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []StreamListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []StreamListResponse                 `json:"result,required"`
+	Result   []StreamVideos                       `json:"result,required"`
 	// Whether the API call was successful
 	Success StreamListResponseEnvelopeSuccess `json:"success,required"`
 	// The total number of remaining videos based on cursor position.
@@ -819,7 +484,7 @@ type StreamGetParams struct {
 type StreamGetResponseEnvelope struct {
 	Errors   []StreamGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []StreamGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   StreamGetResponse                   `json:"result,required"`
+	Result   StreamVideos                        `json:"result,required"`
 	// Whether the API call was successful
 	Success StreamGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    streamGetResponseEnvelopeJSON    `json:"-"`

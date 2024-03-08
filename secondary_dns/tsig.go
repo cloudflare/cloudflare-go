@@ -31,7 +31,7 @@ func NewTSIGService(opts ...option.RequestOption) (r *TSIGService) {
 }
 
 // Create TSIG.
-func (r *TSIGService) New(ctx context.Context, params TSIGNewParams, opts ...option.RequestOption) (res *TSIGNewResponse, err error) {
+func (r *TSIGService) New(ctx context.Context, params TSIGNewParams, opts ...option.RequestOption) (res *SecondaryDNSTSIG, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TSIGNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/secondary_dns/tsigs", params.AccountID)
@@ -44,7 +44,7 @@ func (r *TSIGService) New(ctx context.Context, params TSIGNewParams, opts ...opt
 }
 
 // Modify TSIG.
-func (r *TSIGService) Update(ctx context.Context, tsigID interface{}, params TSIGUpdateParams, opts ...option.RequestOption) (res *TSIGUpdateResponse, err error) {
+func (r *TSIGService) Update(ctx context.Context, tsigID interface{}, params TSIGUpdateParams, opts ...option.RequestOption) (res *SecondaryDNSTSIG, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TSIGUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/secondary_dns/tsigs/%v", params.AccountID, tsigID)
@@ -57,7 +57,7 @@ func (r *TSIGService) Update(ctx context.Context, tsigID interface{}, params TSI
 }
 
 // List TSIGs.
-func (r *TSIGService) List(ctx context.Context, query TSIGListParams, opts ...option.RequestOption) (res *[]TSIGListResponse, err error) {
+func (r *TSIGService) List(ctx context.Context, query TSIGListParams, opts ...option.RequestOption) (res *[]SecondaryDNSTSIG, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TSIGListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/secondary_dns/tsigs", query.AccountID)
@@ -83,7 +83,7 @@ func (r *TSIGService) Delete(ctx context.Context, tsigID interface{}, body TSIGD
 }
 
 // Get TSIG.
-func (r *TSIGService) Get(ctx context.Context, tsigID interface{}, query TSIGGetParams, opts ...option.RequestOption) (res *TSIGGetResponse, err error) {
+func (r *TSIGService) Get(ctx context.Context, tsigID interface{}, query TSIGGetParams, opts ...option.RequestOption) (res *SecondaryDNSTSIG, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TSIGGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/secondary_dns/tsigs/%v", query.AccountID, tsigID)
@@ -95,66 +95,7 @@ func (r *TSIGService) Get(ctx context.Context, tsigID interface{}, query TSIGGet
 	return
 }
 
-type TSIGNewResponse struct {
-	ID interface{} `json:"id,required"`
-	// TSIG algorithm.
-	Algo string `json:"algo,required"`
-	// TSIG key name.
-	Name string `json:"name,required"`
-	// TSIG secret.
-	Secret string              `json:"secret,required"`
-	JSON   tsigNewResponseJSON `json:"-"`
-}
-
-// tsigNewResponseJSON contains the JSON metadata for the struct [TSIGNewResponse]
-type tsigNewResponseJSON struct {
-	ID          apijson.Field
-	Algo        apijson.Field
-	Name        apijson.Field
-	Secret      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TSIGNewResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tsigNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type TSIGUpdateResponse struct {
-	ID interface{} `json:"id,required"`
-	// TSIG algorithm.
-	Algo string `json:"algo,required"`
-	// TSIG key name.
-	Name string `json:"name,required"`
-	// TSIG secret.
-	Secret string                 `json:"secret,required"`
-	JSON   tsigUpdateResponseJSON `json:"-"`
-}
-
-// tsigUpdateResponseJSON contains the JSON metadata for the struct
-// [TSIGUpdateResponse]
-type tsigUpdateResponseJSON struct {
-	ID          apijson.Field
-	Algo        apijson.Field
-	Name        apijson.Field
-	Secret      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TSIGUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tsigUpdateResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type TSIGListResponse struct {
+type SecondaryDNSTSIG struct {
 	ID interface{} `json:"id,required"`
 	// TSIG algorithm.
 	Algo string `json:"algo,required"`
@@ -162,12 +103,12 @@ type TSIGListResponse struct {
 	Name string `json:"name,required"`
 	// TSIG secret.
 	Secret string               `json:"secret,required"`
-	JSON   tsigListResponseJSON `json:"-"`
+	JSON   secondaryDnstsigJSON `json:"-"`
 }
 
-// tsigListResponseJSON contains the JSON metadata for the struct
-// [TSIGListResponse]
-type tsigListResponseJSON struct {
+// secondaryDnstsigJSON contains the JSON metadata for the struct
+// [SecondaryDNSTSIG]
+type secondaryDnstsigJSON struct {
 	ID          apijson.Field
 	Algo        apijson.Field
 	Name        apijson.Field
@@ -176,11 +117,11 @@ type tsigListResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TSIGListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *SecondaryDNSTSIG) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r tsigListResponseJSON) RawJSON() string {
+func (r secondaryDnstsigJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -205,35 +146,6 @@ func (r tsigDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type TSIGGetResponse struct {
-	ID interface{} `json:"id,required"`
-	// TSIG algorithm.
-	Algo string `json:"algo,required"`
-	// TSIG key name.
-	Name string `json:"name,required"`
-	// TSIG secret.
-	Secret string              `json:"secret,required"`
-	JSON   tsigGetResponseJSON `json:"-"`
-}
-
-// tsigGetResponseJSON contains the JSON metadata for the struct [TSIGGetResponse]
-type tsigGetResponseJSON struct {
-	ID          apijson.Field
-	Algo        apijson.Field
-	Name        apijson.Field
-	Secret      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TSIGGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r tsigGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
 type TSIGNewParams struct {
 	AccountID param.Field[interface{}] `path:"account_id,required"`
 	// TSIG algorithm.
@@ -251,7 +163,7 @@ func (r TSIGNewParams) MarshalJSON() (data []byte, err error) {
 type TSIGNewResponseEnvelope struct {
 	Errors   []TSIGNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []TSIGNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   TSIGNewResponse                   `json:"result,required"`
+	Result   SecondaryDNSTSIG                  `json:"result,required"`
 	// Whether the API call was successful
 	Success TSIGNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tsigNewResponseEnvelopeJSON    `json:"-"`
@@ -346,7 +258,7 @@ func (r TSIGUpdateParams) MarshalJSON() (data []byte, err error) {
 type TSIGUpdateResponseEnvelope struct {
 	Errors   []TSIGUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []TSIGUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   TSIGUpdateResponse                   `json:"result,required"`
+	Result   SecondaryDNSTSIG                     `json:"result,required"`
 	// Whether the API call was successful
 	Success TSIGUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tsigUpdateResponseEnvelopeJSON    `json:"-"`
@@ -431,7 +343,7 @@ type TSIGListParams struct {
 type TSIGListResponseEnvelope struct {
 	Errors   []TSIGListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []TSIGListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []TSIGListResponse                 `json:"result,required,nullable"`
+	Result   []SecondaryDNSTSIG                 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    TSIGListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo TSIGListResponseEnvelopeResultInfo `json:"result_info"`
@@ -634,7 +546,7 @@ type TSIGGetParams struct {
 type TSIGGetResponseEnvelope struct {
 	Errors   []TSIGGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []TSIGGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   TSIGGetResponse                   `json:"result,required"`
+	Result   SecondaryDNSTSIG                  `json:"result,required"`
 	// Whether the API call was successful
 	Success TSIGGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    tsigGetResponseEnvelopeJSON    `json:"-"`

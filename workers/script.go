@@ -52,7 +52,7 @@ func NewScriptService(opts ...option.RequestOption) (r *ScriptService) {
 }
 
 // Upload a worker module.
-func (r *ScriptService) Update(ctx context.Context, scriptName string, params ScriptUpdateParams, opts ...option.RequestOption) (res *ScriptUpdateResponse, err error) {
+func (r *ScriptService) Update(ctx context.Context, scriptName string, params ScriptUpdateParams, opts ...option.RequestOption) (res *WorkersScript, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ScriptUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s", params.AccountID, scriptName)
@@ -65,7 +65,7 @@ func (r *ScriptService) Update(ctx context.Context, scriptName string, params Sc
 }
 
 // Fetch a list of uploaded workers.
-func (r *ScriptService) List(ctx context.Context, query ScriptListParams, opts ...option.RequestOption) (res *[]ScriptListResponse, err error) {
+func (r *ScriptService) List(ctx context.Context, query ScriptListParams, opts ...option.RequestOption) (res *[]WorkersScript, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ScriptListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/scripts", query.AccountID)
@@ -96,7 +96,7 @@ func (r *ScriptService) Get(ctx context.Context, scriptName string, query Script
 	return
 }
 
-type ScriptUpdateResponse struct {
+type WorkersScript struct {
 	// The id of the script in the Workers system. Usually the script name.
 	ID string `json:"id"`
 	// When the script was created.
@@ -112,15 +112,14 @@ type ScriptUpdateResponse struct {
 	// Specifies the placement mode for the Worker (e.g. 'smart').
 	PlacementMode string `json:"placement_mode"`
 	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers []ScriptUpdateResponseTailConsumer `json:"tail_consumers"`
+	TailConsumers []WorkersScriptTailConsumer `json:"tail_consumers"`
 	// Specifies the usage model for the Worker (e.g. 'bundled' or 'unbound').
-	UsageModel string                   `json:"usage_model"`
-	JSON       scriptUpdateResponseJSON `json:"-"`
+	UsageModel string            `json:"usage_model"`
+	JSON       workersScriptJSON `json:"-"`
 }
 
-// scriptUpdateResponseJSON contains the JSON metadata for the struct
-// [ScriptUpdateResponse]
-type scriptUpdateResponseJSON struct {
+// workersScriptJSON contains the JSON metadata for the struct [WorkersScript]
+type workersScriptJSON struct {
 	ID            apijson.Field
 	CreatedOn     apijson.Field
 	Etag          apijson.Field
@@ -134,28 +133,28 @@ type scriptUpdateResponseJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *ScriptUpdateResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkersScript) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptUpdateResponseJSON) RawJSON() string {
+func (r workersScriptJSON) RawJSON() string {
 	return r.raw
 }
 
 // A reference to a script that will consume logs from the attached Worker.
-type ScriptUpdateResponseTailConsumer struct {
+type WorkersScriptTailConsumer struct {
 	// Name of Worker that is to be the consumer.
 	Service string `json:"service,required"`
 	// Optional environment if the Worker utilizes one.
 	Environment string `json:"environment"`
 	// Optional dispatch namespace the script belongs to.
-	Namespace string                               `json:"namespace"`
-	JSON      scriptUpdateResponseTailConsumerJSON `json:"-"`
+	Namespace string                        `json:"namespace"`
+	JSON      workersScriptTailConsumerJSON `json:"-"`
 }
 
-// scriptUpdateResponseTailConsumerJSON contains the JSON metadata for the struct
-// [ScriptUpdateResponseTailConsumer]
-type scriptUpdateResponseTailConsumerJSON struct {
+// workersScriptTailConsumerJSON contains the JSON metadata for the struct
+// [WorkersScriptTailConsumer]
+type workersScriptTailConsumerJSON struct {
 	Service     apijson.Field
 	Environment apijson.Field
 	Namespace   apijson.Field
@@ -163,86 +162,11 @@ type scriptUpdateResponseTailConsumerJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ScriptUpdateResponseTailConsumer) UnmarshalJSON(data []byte) (err error) {
+func (r *WorkersScriptTailConsumer) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r scriptUpdateResponseTailConsumerJSON) RawJSON() string {
-	return r.raw
-}
-
-type ScriptListResponse struct {
-	// The id of the script in the Workers system. Usually the script name.
-	ID string `json:"id"`
-	// When the script was created.
-	CreatedOn time.Time `json:"created_on" format:"date-time"`
-	// Hashed script content, can be used in a If-None-Match header when updating.
-	Etag string `json:"etag"`
-	// Whether Logpush is turned on for the Worker.
-	Logpush bool `json:"logpush"`
-	// When the script was last modified.
-	ModifiedOn time.Time `json:"modified_on" format:"date-time"`
-	// Deprecated. Deployment metadata for internal usage.
-	PipelineHash string `json:"pipeline_hash"`
-	// Specifies the placement mode for the Worker (e.g. 'smart').
-	PlacementMode string `json:"placement_mode"`
-	// List of Workers that will consume logs from the attached Worker.
-	TailConsumers []ScriptListResponseTailConsumer `json:"tail_consumers"`
-	// Specifies the usage model for the Worker (e.g. 'bundled' or 'unbound').
-	UsageModel string                 `json:"usage_model"`
-	JSON       scriptListResponseJSON `json:"-"`
-}
-
-// scriptListResponseJSON contains the JSON metadata for the struct
-// [ScriptListResponse]
-type scriptListResponseJSON struct {
-	ID            apijson.Field
-	CreatedOn     apijson.Field
-	Etag          apijson.Field
-	Logpush       apijson.Field
-	ModifiedOn    apijson.Field
-	PipelineHash  apijson.Field
-	PlacementMode apijson.Field
-	TailConsumers apijson.Field
-	UsageModel    apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *ScriptListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// A reference to a script that will consume logs from the attached Worker.
-type ScriptListResponseTailConsumer struct {
-	// Name of Worker that is to be the consumer.
-	Service string `json:"service,required"`
-	// Optional environment if the Worker utilizes one.
-	Environment string `json:"environment"`
-	// Optional dispatch namespace the script belongs to.
-	Namespace string                             `json:"namespace"`
-	JSON      scriptListResponseTailConsumerJSON `json:"-"`
-}
-
-// scriptListResponseTailConsumerJSON contains the JSON metadata for the struct
-// [ScriptListResponseTailConsumer]
-type scriptListResponseTailConsumerJSON struct {
-	Service     apijson.Field
-	Environment apijson.Field
-	Namespace   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ScriptListResponseTailConsumer) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r scriptListResponseTailConsumerJSON) RawJSON() string {
+func (r workersScriptTailConsumerJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -476,7 +400,7 @@ const (
 type ScriptUpdateResponseEnvelope struct {
 	Errors   []ScriptUpdateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ScriptUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   ScriptUpdateResponse                   `json:"result,required"`
+	Result   WorkersScript                          `json:"result,required"`
 	// Whether the API call was successful
 	Success ScriptUpdateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    scriptUpdateResponseEnvelopeJSON    `json:"-"`
@@ -562,7 +486,7 @@ type ScriptListParams struct {
 type ScriptListResponseEnvelope struct {
 	Errors   []ScriptListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ScriptListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []ScriptListResponse                 `json:"result,required"`
+	Result   []WorkersScript                      `json:"result,required"`
 	// Whether the API call was successful
 	Success ScriptListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    scriptListResponseEnvelopeJSON    `json:"-"`

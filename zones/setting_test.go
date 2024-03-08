@@ -30,15 +30,15 @@ func TestSettingEdit(t *testing.T) {
 	)
 	_, err := client.Zones.Settings.Edit(context.TODO(), zones.SettingEditParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Items: cloudflare.F([]zones.SettingEditParamsItem{zones.SettingEditParamsItemsZonesAlwaysOnline(zones.SettingEditParamsItemsZonesAlwaysOnline{
-			ID:    cloudflare.F(zones.SettingEditParamsItemsZonesAlwaysOnlineIDAlwaysOnline),
-			Value: cloudflare.F(zones.SettingEditParamsItemsZonesAlwaysOnlineValueOn),
-		}), zones.SettingEditParamsItemsZonesBrowserCacheTTL(zones.SettingEditParamsItemsZonesBrowserCacheTTL{
-			ID:    cloudflare.F(zones.SettingEditParamsItemsZonesBrowserCacheTTLIDBrowserCacheTTL),
-			Value: cloudflare.F(zones.SettingEditParamsItemsZonesBrowserCacheTTLValue18000),
-		}), zones.SettingEditParamsItemsZonesIPGeolocation(zones.SettingEditParamsItemsZonesIPGeolocation{
-			ID:    cloudflare.F(zones.SettingEditParamsItemsZonesIPGeolocationIDIPGeolocation),
-			Value: cloudflare.F(zones.SettingEditParamsItemsZonesIPGeolocationValueOff),
+		Items: cloudflare.F([]zones.SettingEditParamsItem{zones.ZonesAlwaysOnlineParam(zones.ZonesAlwaysOnlineParam{
+			ID:    cloudflare.F(zones.ZonesAlwaysOnlineIDAlwaysOnline),
+			Value: cloudflare.F(zones.ZonesAlwaysOnlineValueOn),
+		}), zones.ZonesBrowserCacheTTLParam(zones.ZonesBrowserCacheTTLParam{
+			ID:    cloudflare.F(zones.ZonesBrowserCacheTTLIDBrowserCacheTTL),
+			Value: cloudflare.F(zones.ZonesBrowserCacheTTLValue18000),
+		}), zones.ZonesIPGeolocationParam(zones.ZonesIPGeolocationParam{
+			ID:    cloudflare.F(zones.ZonesIPGeolocationIDIPGeolocation),
+			Value: cloudflare.F(zones.ZonesIPGeolocationValueOff),
 		})}),
 	})
 	if err != nil {

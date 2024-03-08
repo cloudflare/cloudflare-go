@@ -47,7 +47,7 @@ func NewSettingSSLService(opts ...option.RequestOption) (r *SettingSSLService) {
 // web server. This certificate must be signed by a certificate authority, have an
 // expiration date in the future, and respond for the request domain name
 // (hostname). (https://support.cloudflare.com/hc/en-us/articles/200170416).
-func (r *SettingSSLService) Edit(ctx context.Context, params SettingSSLEditParams, opts ...option.RequestOption) (res *SettingSSLEditResponse, err error) {
+func (r *SettingSSLService) Edit(ctx context.Context, params SettingSSLEditParams, opts ...option.RequestOption) (res *ZonesSSL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingSSLEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/ssl", params.ZoneID)
@@ -75,7 +75,7 @@ func (r *SettingSSLService) Edit(ctx context.Context, params SettingSSLEditParam
 // web server. This certificate must be signed by a certificate authority, have an
 // expiration date in the future, and respond for the request domain name
 // (hostname). (https://support.cloudflare.com/hc/en-us/articles/200170416).
-func (r *SettingSSLService) Get(ctx context.Context, query SettingSSLGetParams, opts ...option.RequestOption) (res *SettingSSLGetResponse, err error) {
+func (r *SettingSSLService) Get(ctx context.Context, query SettingSSLGetParams, opts ...option.RequestOption) (res *ZonesSSL, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingSSLGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/ssl", query.ZoneID)
@@ -103,22 +103,21 @@ func (r *SettingSSLService) Get(ctx context.Context, query SettingSSLGetParams, 
 // web server. This certificate must be signed by a certificate authority, have an
 // expiration date in the future, and respond for the request domain name
 // (hostname). (https://support.cloudflare.com/hc/en-us/articles/200170416).
-type SettingSSLEditResponse struct {
+type ZonesSSL struct {
 	// ID of the zone setting.
-	ID SettingSSLEditResponseID `json:"id,required"`
+	ID ZonesSSLID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingSSLEditResponseValue `json:"value,required"`
+	Value ZonesSSLValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingSSLEditResponseEditable `json:"editable"`
+	Editable ZonesSSLEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                  `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingSSLEditResponseJSON `json:"-"`
+	ModifiedOn time.Time    `json:"modified_on,nullable" format:"date-time"`
+	JSON       zonesSSLJSON `json:"-"`
 }
 
-// settingSSLEditResponseJSON contains the JSON metadata for the struct
-// [SettingSSLEditResponse]
-type settingSSLEditResponseJSON struct {
+// zonesSSLJSON contains the JSON metadata for the struct [ZonesSSL]
+type zonesSSLJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -127,38 +126,42 @@ type settingSSLEditResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingSSLEditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonesSSL) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r settingSSLEditResponseJSON) RawJSON() string {
+func (r zonesSSLJSON) RawJSON() string {
 	return r.raw
 }
 
+func (r ZonesSSL) implementsZonesSettingEditResponse() {}
+
+func (r ZonesSSL) implementsZonesSettingGetResponse() {}
+
 // ID of the zone setting.
-type SettingSSLEditResponseID string
+type ZonesSSLID string
 
 const (
-	SettingSSLEditResponseIDSSL SettingSSLEditResponseID = "ssl"
+	ZonesSSLIDSSL ZonesSSLID = "ssl"
 )
 
 // Current value of the zone setting.
-type SettingSSLEditResponseValue string
+type ZonesSSLValue string
 
 const (
-	SettingSSLEditResponseValueOff      SettingSSLEditResponseValue = "off"
-	SettingSSLEditResponseValueFlexible SettingSSLEditResponseValue = "flexible"
-	SettingSSLEditResponseValueFull     SettingSSLEditResponseValue = "full"
-	SettingSSLEditResponseValueStrict   SettingSSLEditResponseValue = "strict"
+	ZonesSSLValueOff      ZonesSSLValue = "off"
+	ZonesSSLValueFlexible ZonesSSLValue = "flexible"
+	ZonesSSLValueFull     ZonesSSLValue = "full"
+	ZonesSSLValueStrict   ZonesSSLValue = "strict"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingSSLEditResponseEditable bool
+type ZonesSSLEditable bool
 
 const (
-	SettingSSLEditResponseEditableTrue  SettingSSLEditResponseEditable = true
-	SettingSSLEditResponseEditableFalse SettingSSLEditResponseEditable = false
+	ZonesSSLEditableTrue  ZonesSSLEditable = true
+	ZonesSSLEditableFalse ZonesSSLEditable = false
 )
 
 // SSL encrypts your visitor's connection and safeguards credit card numbers and
@@ -177,63 +180,18 @@ const (
 // web server. This certificate must be signed by a certificate authority, have an
 // expiration date in the future, and respond for the request domain name
 // (hostname). (https://support.cloudflare.com/hc/en-us/articles/200170416).
-type SettingSSLGetResponse struct {
+type ZonesSSLParam struct {
 	// ID of the zone setting.
-	ID SettingSSLGetResponseID `json:"id,required"`
+	ID param.Field[ZonesSSLID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingSSLGetResponseValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable SettingSSLGetResponseEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                 `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingSSLGetResponseJSON `json:"-"`
+	Value param.Field[ZonesSSLValue] `json:"value,required"`
 }
 
-// settingSSLGetResponseJSON contains the JSON metadata for the struct
-// [SettingSSLGetResponse]
-type settingSSLGetResponseJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+func (r ZonesSSLParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *SettingSSLGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingSSLGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// ID of the zone setting.
-type SettingSSLGetResponseID string
-
-const (
-	SettingSSLGetResponseIDSSL SettingSSLGetResponseID = "ssl"
-)
-
-// Current value of the zone setting.
-type SettingSSLGetResponseValue string
-
-const (
-	SettingSSLGetResponseValueOff      SettingSSLGetResponseValue = "off"
-	SettingSSLGetResponseValueFlexible SettingSSLGetResponseValue = "flexible"
-	SettingSSLGetResponseValueFull     SettingSSLGetResponseValue = "full"
-	SettingSSLGetResponseValueStrict   SettingSSLGetResponseValue = "strict"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type SettingSSLGetResponseEditable bool
-
-const (
-	SettingSSLGetResponseEditableTrue  SettingSSLGetResponseEditable = true
-	SettingSSLGetResponseEditableFalse SettingSSLGetResponseEditable = false
-)
+func (r ZonesSSLParam) implementsZonesSettingEditParamsItem() {}
 
 type SettingSSLEditParams struct {
 	// Identifier
@@ -277,7 +235,7 @@ type SettingSSLEditResponseEnvelope struct {
 	// web server. This certificate must be signed by a certificate authority, have an
 	// expiration date in the future, and respond for the request domain name
 	// (hostname). (https://support.cloudflare.com/hc/en-us/articles/200170416).
-	Result SettingSSLEditResponse             `json:"result"`
+	Result ZonesSSL                           `json:"result"`
 	JSON   settingSSLEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -372,7 +330,7 @@ type SettingSSLGetResponseEnvelope struct {
 	// web server. This certificate must be signed by a certificate authority, have an
 	// expiration date in the future, and respond for the request domain name
 	// (hostname). (https://support.cloudflare.com/hc/en-us/articles/200170416).
-	Result SettingSSLGetResponse             `json:"result"`
+	Result ZonesSSL                          `json:"result"`
 	JSON   settingSSLGetResponseEnvelopeJSON `json:"-"`
 }
 

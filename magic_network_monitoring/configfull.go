@@ -30,7 +30,7 @@ func NewConfigFullService(opts ...option.RequestOption) (r *ConfigFullService) {
 }
 
 // Lists default sampling, router IPs, and rules for account.
-func (r *ConfigFullService) Get(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *ConfigFullGetResponse, err error) {
+func (r *ConfigFullService) Get(ctx context.Context, accountIdentifier interface{}, opts ...option.RequestOption) (res *MagicVisibilityMNMConfig, err error) {
 	opts = append(r.Options[:], opts...)
 	var env ConfigFullGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/mnm/config/full", accountIdentifier)
@@ -42,38 +42,10 @@ func (r *ConfigFullService) Get(ctx context.Context, accountIdentifier interface
 	return
 }
 
-type ConfigFullGetResponse struct {
-	// Fallback sampling rate of flow messages being sent in packets per second. This
-	// should match the packet sampling rate configured on the router.
-	DefaultSampling float64 `json:"default_sampling,required"`
-	// The account name.
-	Name      string                    `json:"name,required"`
-	RouterIPs []string                  `json:"router_ips,required"`
-	JSON      configFullGetResponseJSON `json:"-"`
-}
-
-// configFullGetResponseJSON contains the JSON metadata for the struct
-// [ConfigFullGetResponse]
-type configFullGetResponseJSON struct {
-	DefaultSampling apijson.Field
-	Name            apijson.Field
-	RouterIPs       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *ConfigFullGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r configFullGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
 type ConfigFullGetResponseEnvelope struct {
 	Errors   []ConfigFullGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []ConfigFullGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   ConfigFullGetResponse                   `json:"result,required"`
+	Result   MagicVisibilityMNMConfig                `json:"result,required"`
 	// Whether the API call was successful
 	Success ConfigFullGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    configFullGetResponseEnvelopeJSON    `json:"-"`

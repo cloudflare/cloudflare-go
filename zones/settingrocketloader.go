@@ -42,7 +42,7 @@ func NewSettingRocketLoaderService(opts ...option.RequestOption) (r *SettingRock
 // with no configuration required. Refer to
 // [Understanding Rocket Loader](https://support.cloudflare.com/hc/articles/200168056)
 // for more information.
-func (r *SettingRocketLoaderService) Edit(ctx context.Context, params SettingRocketLoaderEditParams, opts ...option.RequestOption) (res *SettingRocketLoaderEditResponse, err error) {
+func (r *SettingRocketLoaderService) Edit(ctx context.Context, params SettingRocketLoaderEditParams, opts ...option.RequestOption) (res *ZonesRocketLoader, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingRocketLoaderEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/rocket_loader", params.ZoneID)
@@ -64,7 +64,7 @@ func (r *SettingRocketLoaderService) Edit(ctx context.Context, params SettingRoc
 // with no configuration required. Refer to
 // [Understanding Rocket Loader](https://support.cloudflare.com/hc/articles/200168056)
 // for more information.
-func (r *SettingRocketLoaderService) Get(ctx context.Context, query SettingRocketLoaderGetParams, opts ...option.RequestOption) (res *SettingRocketLoaderGetResponse, err error) {
+func (r *SettingRocketLoaderService) Get(ctx context.Context, query SettingRocketLoaderGetParams, opts ...option.RequestOption) (res *ZonesRocketLoader, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingRocketLoaderGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/rocket_loader", query.ZoneID)
@@ -86,22 +86,22 @@ func (r *SettingRocketLoaderService) Get(ctx context.Context, query SettingRocke
 // with no configuration required. Refer to
 // [Understanding Rocket Loader](https://support.cloudflare.com/hc/articles/200168056)
 // for more information.
-type SettingRocketLoaderEditResponse struct {
+type ZonesRocketLoader struct {
 	// ID of the zone setting.
-	ID SettingRocketLoaderEditResponseID `json:"id,required"`
+	ID ZonesRocketLoaderID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingRocketLoaderEditResponseValue `json:"value,required"`
+	Value ZonesRocketLoaderValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingRocketLoaderEditResponseEditable `json:"editable"`
+	Editable ZonesRocketLoaderEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                           `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingRocketLoaderEditResponseJSON `json:"-"`
+	ModifiedOn time.Time             `json:"modified_on,nullable" format:"date-time"`
+	JSON       zonesRocketLoaderJSON `json:"-"`
 }
 
-// settingRocketLoaderEditResponseJSON contains the JSON metadata for the struct
-// [SettingRocketLoaderEditResponse]
-type settingRocketLoaderEditResponseJSON struct {
+// zonesRocketLoaderJSON contains the JSON metadata for the struct
+// [ZonesRocketLoader]
+type zonesRocketLoaderJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -110,36 +110,40 @@ type settingRocketLoaderEditResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingRocketLoaderEditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonesRocketLoader) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r settingRocketLoaderEditResponseJSON) RawJSON() string {
+func (r zonesRocketLoaderJSON) RawJSON() string {
 	return r.raw
 }
 
+func (r ZonesRocketLoader) implementsZonesSettingEditResponse() {}
+
+func (r ZonesRocketLoader) implementsZonesSettingGetResponse() {}
+
 // ID of the zone setting.
-type SettingRocketLoaderEditResponseID string
+type ZonesRocketLoaderID string
 
 const (
-	SettingRocketLoaderEditResponseIDRocketLoader SettingRocketLoaderEditResponseID = "rocket_loader"
+	ZonesRocketLoaderIDRocketLoader ZonesRocketLoaderID = "rocket_loader"
 )
 
 // Current value of the zone setting.
-type SettingRocketLoaderEditResponseValue string
+type ZonesRocketLoaderValue string
 
 const (
-	SettingRocketLoaderEditResponseValueOn  SettingRocketLoaderEditResponseValue = "on"
-	SettingRocketLoaderEditResponseValueOff SettingRocketLoaderEditResponseValue = "off"
+	ZonesRocketLoaderValueOn  ZonesRocketLoaderValue = "on"
+	ZonesRocketLoaderValueOff ZonesRocketLoaderValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingRocketLoaderEditResponseEditable bool
+type ZonesRocketLoaderEditable bool
 
 const (
-	SettingRocketLoaderEditResponseEditableTrue  SettingRocketLoaderEditResponseEditable = true
-	SettingRocketLoaderEditResponseEditableFalse SettingRocketLoaderEditResponseEditable = false
+	ZonesRocketLoaderEditableTrue  ZonesRocketLoaderEditable = true
+	ZonesRocketLoaderEditableFalse ZonesRocketLoaderEditable = false
 )
 
 // Rocket Loader is a general-purpose asynchronous JavaScript optimisation that
@@ -152,61 +156,18 @@ const (
 // with no configuration required. Refer to
 // [Understanding Rocket Loader](https://support.cloudflare.com/hc/articles/200168056)
 // for more information.
-type SettingRocketLoaderGetResponse struct {
+type ZonesRocketLoaderParam struct {
 	// ID of the zone setting.
-	ID SettingRocketLoaderGetResponseID `json:"id,required"`
+	ID param.Field[ZonesRocketLoaderID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingRocketLoaderGetResponseValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable SettingRocketLoaderGetResponseEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                          `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingRocketLoaderGetResponseJSON `json:"-"`
+	Value param.Field[ZonesRocketLoaderValue] `json:"value,required"`
 }
 
-// settingRocketLoaderGetResponseJSON contains the JSON metadata for the struct
-// [SettingRocketLoaderGetResponse]
-type settingRocketLoaderGetResponseJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+func (r ZonesRocketLoaderParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *SettingRocketLoaderGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingRocketLoaderGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// ID of the zone setting.
-type SettingRocketLoaderGetResponseID string
-
-const (
-	SettingRocketLoaderGetResponseIDRocketLoader SettingRocketLoaderGetResponseID = "rocket_loader"
-)
-
-// Current value of the zone setting.
-type SettingRocketLoaderGetResponseValue string
-
-const (
-	SettingRocketLoaderGetResponseValueOn  SettingRocketLoaderGetResponseValue = "on"
-	SettingRocketLoaderGetResponseValueOff SettingRocketLoaderGetResponseValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type SettingRocketLoaderGetResponseEditable bool
-
-const (
-	SettingRocketLoaderGetResponseEditableTrue  SettingRocketLoaderGetResponseEditable = true
-	SettingRocketLoaderGetResponseEditableFalse SettingRocketLoaderGetResponseEditable = false
-)
+func (r ZonesRocketLoaderParam) implementsZonesSettingEditParamsItem() {}
 
 type SettingRocketLoaderEditParams struct {
 	// Identifier
@@ -221,57 +182,12 @@ type SettingRocketLoaderEditParams struct {
 	// with no configuration required. Refer to
 	// [Understanding Rocket Loader](https://support.cloudflare.com/hc/articles/200168056)
 	// for more information.
-	Value param.Field[SettingRocketLoaderEditParamsValue] `json:"value,required"`
+	Value param.Field[ZonesRocketLoaderParam] `json:"value,required"`
 }
 
 func (r SettingRocketLoaderEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
-
-// Rocket Loader is a general-purpose asynchronous JavaScript optimisation that
-// prioritises rendering your content while loading your site's Javascript
-// asynchronously. Turning on Rocket Loader will immediately improve a web page's
-// rendering time sometimes measured as Time to First Paint (TTFP), and also the
-// `window.onload` time (assuming there is JavaScript on the page). This can have a
-// positive impact on your Google search ranking. When turned on, Rocket Loader
-// will automatically defer the loading of all Javascript referenced in your HTML,
-// with no configuration required. Refer to
-// [Understanding Rocket Loader](https://support.cloudflare.com/hc/articles/200168056)
-// for more information.
-type SettingRocketLoaderEditParamsValue struct {
-	// ID of the zone setting.
-	ID param.Field[SettingRocketLoaderEditParamsValueID] `json:"id,required"`
-	// Current value of the zone setting.
-	Value param.Field[SettingRocketLoaderEditParamsValueValue] `json:"value,required"`
-}
-
-func (r SettingRocketLoaderEditParamsValue) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
-}
-
-// ID of the zone setting.
-type SettingRocketLoaderEditParamsValueID string
-
-const (
-	SettingRocketLoaderEditParamsValueIDRocketLoader SettingRocketLoaderEditParamsValueID = "rocket_loader"
-)
-
-// Current value of the zone setting.
-type SettingRocketLoaderEditParamsValueValue string
-
-const (
-	SettingRocketLoaderEditParamsValueValueOn  SettingRocketLoaderEditParamsValueValue = "on"
-	SettingRocketLoaderEditParamsValueValueOff SettingRocketLoaderEditParamsValueValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type SettingRocketLoaderEditParamsValueEditable bool
-
-const (
-	SettingRocketLoaderEditParamsValueEditableTrue  SettingRocketLoaderEditParamsValueEditable = true
-	SettingRocketLoaderEditParamsValueEditableFalse SettingRocketLoaderEditParamsValueEditable = false
-)
 
 type SettingRocketLoaderEditResponseEnvelope struct {
 	Errors   []SettingRocketLoaderEditResponseEnvelopeErrors   `json:"errors,required"`
@@ -288,7 +204,7 @@ type SettingRocketLoaderEditResponseEnvelope struct {
 	// with no configuration required. Refer to
 	// [Understanding Rocket Loader](https://support.cloudflare.com/hc/articles/200168056)
 	// for more information.
-	Result SettingRocketLoaderEditResponse             `json:"result"`
+	Result ZonesRocketLoader                           `json:"result"`
 	JSON   settingRocketLoaderEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -377,7 +293,7 @@ type SettingRocketLoaderGetResponseEnvelope struct {
 	// with no configuration required. Refer to
 	// [Understanding Rocket Loader](https://support.cloudflare.com/hc/articles/200168056)
 	// for more information.
-	Result SettingRocketLoaderGetResponse             `json:"result"`
+	Result ZonesRocketLoader                          `json:"result"`
 	JSON   settingRocketLoaderGetResponseEnvelopeJSON `json:"-"`
 }
 

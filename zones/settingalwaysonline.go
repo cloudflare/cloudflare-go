@@ -37,7 +37,7 @@ func NewSettingAlwaysOnlineService(opts ...option.RequestOption) (r *SettingAlwa
 // offline. Refer to
 // [Always Online](https://developers.cloudflare.com/cache/about/always-online) for
 // more information.
-func (r *SettingAlwaysOnlineService) Edit(ctx context.Context, params SettingAlwaysOnlineEditParams, opts ...option.RequestOption) (res *SettingAlwaysOnlineEditResponse, err error) {
+func (r *SettingAlwaysOnlineService) Edit(ctx context.Context, params SettingAlwaysOnlineEditParams, opts ...option.RequestOption) (res *ZonesAlwaysOnline, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingAlwaysOnlineEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/always_online", params.ZoneID)
@@ -54,7 +54,7 @@ func (r *SettingAlwaysOnlineService) Edit(ctx context.Context, params SettingAlw
 // offline. Refer to
 // [Always Online](https://developers.cloudflare.com/cache/about/always-online) for
 // more information.
-func (r *SettingAlwaysOnlineService) Get(ctx context.Context, query SettingAlwaysOnlineGetParams, opts ...option.RequestOption) (res *SettingAlwaysOnlineGetResponse, err error) {
+func (r *SettingAlwaysOnlineService) Get(ctx context.Context, query SettingAlwaysOnlineGetParams, opts ...option.RequestOption) (res *ZonesAlwaysOnline, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingAlwaysOnlineGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/always_online", query.ZoneID)
@@ -71,22 +71,22 @@ func (r *SettingAlwaysOnlineService) Get(ctx context.Context, query SettingAlway
 // offline. Refer to
 // [Always Online](https://developers.cloudflare.com/cache/about/always-online) for
 // more information.
-type SettingAlwaysOnlineEditResponse struct {
+type ZonesAlwaysOnline struct {
 	// ID of the zone setting.
-	ID SettingAlwaysOnlineEditResponseID `json:"id,required"`
+	ID ZonesAlwaysOnlineID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingAlwaysOnlineEditResponseValue `json:"value,required"`
+	Value ZonesAlwaysOnlineValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingAlwaysOnlineEditResponseEditable `json:"editable"`
+	Editable ZonesAlwaysOnlineEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                           `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingAlwaysOnlineEditResponseJSON `json:"-"`
+	ModifiedOn time.Time             `json:"modified_on,nullable" format:"date-time"`
+	JSON       zonesAlwaysOnlineJSON `json:"-"`
 }
 
-// settingAlwaysOnlineEditResponseJSON contains the JSON metadata for the struct
-// [SettingAlwaysOnlineEditResponse]
-type settingAlwaysOnlineEditResponseJSON struct {
+// zonesAlwaysOnlineJSON contains the JSON metadata for the struct
+// [ZonesAlwaysOnline]
+type zonesAlwaysOnlineJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -95,36 +95,40 @@ type settingAlwaysOnlineEditResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingAlwaysOnlineEditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonesAlwaysOnline) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r settingAlwaysOnlineEditResponseJSON) RawJSON() string {
+func (r zonesAlwaysOnlineJSON) RawJSON() string {
 	return r.raw
 }
 
+func (r ZonesAlwaysOnline) implementsZonesSettingEditResponse() {}
+
+func (r ZonesAlwaysOnline) implementsZonesSettingGetResponse() {}
+
 // ID of the zone setting.
-type SettingAlwaysOnlineEditResponseID string
+type ZonesAlwaysOnlineID string
 
 const (
-	SettingAlwaysOnlineEditResponseIDAlwaysOnline SettingAlwaysOnlineEditResponseID = "always_online"
+	ZonesAlwaysOnlineIDAlwaysOnline ZonesAlwaysOnlineID = "always_online"
 )
 
 // Current value of the zone setting.
-type SettingAlwaysOnlineEditResponseValue string
+type ZonesAlwaysOnlineValue string
 
 const (
-	SettingAlwaysOnlineEditResponseValueOn  SettingAlwaysOnlineEditResponseValue = "on"
-	SettingAlwaysOnlineEditResponseValueOff SettingAlwaysOnlineEditResponseValue = "off"
+	ZonesAlwaysOnlineValueOn  ZonesAlwaysOnlineValue = "on"
+	ZonesAlwaysOnlineValueOff ZonesAlwaysOnlineValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingAlwaysOnlineEditResponseEditable bool
+type ZonesAlwaysOnlineEditable bool
 
 const (
-	SettingAlwaysOnlineEditResponseEditableTrue  SettingAlwaysOnlineEditResponseEditable = true
-	SettingAlwaysOnlineEditResponseEditableFalse SettingAlwaysOnlineEditResponseEditable = false
+	ZonesAlwaysOnlineEditableTrue  ZonesAlwaysOnlineEditable = true
+	ZonesAlwaysOnlineEditableFalse ZonesAlwaysOnlineEditable = false
 )
 
 // When enabled, Cloudflare serves limited copies of web pages available from the
@@ -132,61 +136,18 @@ const (
 // offline. Refer to
 // [Always Online](https://developers.cloudflare.com/cache/about/always-online) for
 // more information.
-type SettingAlwaysOnlineGetResponse struct {
+type ZonesAlwaysOnlineParam struct {
 	// ID of the zone setting.
-	ID SettingAlwaysOnlineGetResponseID `json:"id,required"`
+	ID param.Field[ZonesAlwaysOnlineID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingAlwaysOnlineGetResponseValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable SettingAlwaysOnlineGetResponseEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                          `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingAlwaysOnlineGetResponseJSON `json:"-"`
+	Value param.Field[ZonesAlwaysOnlineValue] `json:"value,required"`
 }
 
-// settingAlwaysOnlineGetResponseJSON contains the JSON metadata for the struct
-// [SettingAlwaysOnlineGetResponse]
-type settingAlwaysOnlineGetResponseJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+func (r ZonesAlwaysOnlineParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *SettingAlwaysOnlineGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingAlwaysOnlineGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// ID of the zone setting.
-type SettingAlwaysOnlineGetResponseID string
-
-const (
-	SettingAlwaysOnlineGetResponseIDAlwaysOnline SettingAlwaysOnlineGetResponseID = "always_online"
-)
-
-// Current value of the zone setting.
-type SettingAlwaysOnlineGetResponseValue string
-
-const (
-	SettingAlwaysOnlineGetResponseValueOn  SettingAlwaysOnlineGetResponseValue = "on"
-	SettingAlwaysOnlineGetResponseValueOff SettingAlwaysOnlineGetResponseValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type SettingAlwaysOnlineGetResponseEditable bool
-
-const (
-	SettingAlwaysOnlineGetResponseEditableTrue  SettingAlwaysOnlineGetResponseEditable = true
-	SettingAlwaysOnlineGetResponseEditableFalse SettingAlwaysOnlineGetResponseEditable = false
-)
+func (r ZonesAlwaysOnlineParam) implementsZonesSettingEditParamsItem() {}
 
 type SettingAlwaysOnlineEditParams struct {
 	// Identifier
@@ -217,7 +178,7 @@ type SettingAlwaysOnlineEditResponseEnvelope struct {
 	// offline. Refer to
 	// [Always Online](https://developers.cloudflare.com/cache/about/always-online) for
 	// more information.
-	Result SettingAlwaysOnlineEditResponse             `json:"result"`
+	Result ZonesAlwaysOnline                           `json:"result"`
 	JSON   settingAlwaysOnlineEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -301,7 +262,7 @@ type SettingAlwaysOnlineGetResponseEnvelope struct {
 	// offline. Refer to
 	// [Always Online](https://developers.cloudflare.com/cache/about/always-online) for
 	// more information.
-	Result SettingAlwaysOnlineGetResponse             `json:"result"`
+	Result ZonesAlwaysOnline                          `json:"result"`
 	JSON   settingAlwaysOnlineGetResponseEnvelopeJSON `json:"-"`
 }
 

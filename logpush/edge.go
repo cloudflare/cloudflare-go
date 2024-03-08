@@ -31,7 +31,7 @@ func NewEdgeService(opts ...option.RequestOption) (r *EdgeService) {
 }
 
 // Creates a new Instant Logs job for a zone.
-func (r *EdgeService) New(ctx context.Context, params EdgeNewParams, opts ...option.RequestOption) (res *EdgeNewResponse, err error) {
+func (r *EdgeService) New(ctx context.Context, params EdgeNewParams, opts ...option.RequestOption) (res *LogpushInstantLogsJob, err error) {
 	opts = append(r.Options[:], opts...)
 	var env EdgeNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/logpush/edge", params.ZoneID)
@@ -44,7 +44,7 @@ func (r *EdgeService) New(ctx context.Context, params EdgeNewParams, opts ...opt
 }
 
 // Lists Instant Logs jobs for a zone.
-func (r *EdgeService) Get(ctx context.Context, query EdgeGetParams, opts ...option.RequestOption) (res *[]EdgeGetResponse, err error) {
+func (r *EdgeService) Get(ctx context.Context, query EdgeGetParams, opts ...option.RequestOption) (res *[]LogpushInstantLogsJob, err error) {
 	opts = append(r.Options[:], opts...)
 	var env EdgeGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/logpush/edge", query.ZoneID)
@@ -56,7 +56,7 @@ func (r *EdgeService) Get(ctx context.Context, query EdgeGetParams, opts ...opti
 	return
 }
 
-type EdgeNewResponse struct {
+type LogpushInstantLogsJob struct {
 	// Unique WebSocket address that will receive messages from Cloudflare’s edge.
 	DestinationConf string `json:"destination_conf" format:"uri"`
 	// Comma-separated list of fields.
@@ -67,12 +67,13 @@ type EdgeNewResponse struct {
 	// "sample": 1 is 100% of records "sample": 10 is 10% and so on.
 	Sample int64 `json:"sample"`
 	// Unique session id of the job.
-	SessionID string              `json:"session_id"`
-	JSON      edgeNewResponseJSON `json:"-"`
+	SessionID string                    `json:"session_id"`
+	JSON      logpushInstantLogsJobJSON `json:"-"`
 }
 
-// edgeNewResponseJSON contains the JSON metadata for the struct [EdgeNewResponse]
-type edgeNewResponseJSON struct {
+// logpushInstantLogsJobJSON contains the JSON metadata for the struct
+// [LogpushInstantLogsJob]
+type logpushInstantLogsJobJSON struct {
 	DestinationConf apijson.Field
 	Fields          apijson.Field
 	Filter          apijson.Field
@@ -82,45 +83,11 @@ type edgeNewResponseJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *EdgeNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *LogpushInstantLogsJob) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r edgeNewResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type EdgeGetResponse struct {
-	// Unique WebSocket address that will receive messages from Cloudflare’s edge.
-	DestinationConf string `json:"destination_conf" format:"uri"`
-	// Comma-separated list of fields.
-	Fields string `json:"fields"`
-	// Filters to drill down into specific events.
-	Filter string `json:"filter"`
-	// The sample parameter is the sample rate of the records set by the client:
-	// "sample": 1 is 100% of records "sample": 10 is 10% and so on.
-	Sample int64 `json:"sample"`
-	// Unique session id of the job.
-	SessionID string              `json:"session_id"`
-	JSON      edgeGetResponseJSON `json:"-"`
-}
-
-// edgeGetResponseJSON contains the JSON metadata for the struct [EdgeGetResponse]
-type edgeGetResponseJSON struct {
-	DestinationConf apijson.Field
-	Fields          apijson.Field
-	Filter          apijson.Field
-	Sample          apijson.Field
-	SessionID       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *EdgeGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r edgeGetResponseJSON) RawJSON() string {
+func (r logpushInstantLogsJobJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -143,7 +110,7 @@ func (r EdgeNewParams) MarshalJSON() (data []byte, err error) {
 type EdgeNewResponseEnvelope struct {
 	Errors   []EdgeNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []EdgeNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   EdgeNewResponse                   `json:"result,required,nullable"`
+	Result   LogpushInstantLogsJob             `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success EdgeNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    edgeNewResponseEnvelopeJSON    `json:"-"`
@@ -229,7 +196,7 @@ type EdgeGetParams struct {
 type EdgeGetResponseEnvelope struct {
 	Errors   []EdgeGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []EdgeGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []EdgeGetResponse                 `json:"result,required"`
+	Result   []LogpushInstantLogsJob           `json:"result,required"`
 	// Whether the API call was successful
 	Success EdgeGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    edgeGetResponseEnvelopeJSON    `json:"-"`

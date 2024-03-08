@@ -49,7 +49,7 @@ func (r *WatermarkService) New(ctx context.Context, params WatermarkNewParams, o
 }
 
 // Lists all watermark profiles for an account.
-func (r *WatermarkService) List(ctx context.Context, query WatermarkListParams, opts ...option.RequestOption) (res *[]WatermarkListResponse, err error) {
+func (r *WatermarkService) List(ctx context.Context, query WatermarkListParams, opts ...option.RequestOption) (res *[]StreamWatermarks, err error) {
 	opts = append(r.Options[:], opts...)
 	var env WatermarkListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/watermarks", query.AccountID)
@@ -87,23 +87,7 @@ func (r *WatermarkService) Get(ctx context.Context, identifier string, query Wat
 	return
 }
 
-// Union satisfied by [stream.WatermarkNewResponseUnknown] or [shared.UnionString].
-type WatermarkNewResponse interface {
-	ImplementsStreamWatermarkNewResponse()
-}
-
-func init() {
-	apijson.RegisterUnion(
-		reflect.TypeOf((*WatermarkNewResponse)(nil)).Elem(),
-		"",
-		apijson.UnionVariant{
-			TypeFilter: gjson.String,
-			Type:       reflect.TypeOf(shared.UnionString("")),
-		},
-	)
-}
-
-type WatermarkListResponse struct {
+type StreamWatermarks struct {
 	// The date and a time a watermark profile was created.
 	Created time.Time `json:"created" format:"date-time"`
 	// The source URL for a downloaded image. If the watermark profile was created via
@@ -135,13 +119,13 @@ type WatermarkListResponse struct {
 	// The unique identifier for a watermark profile.
 	Uid string `json:"uid"`
 	// The width of the image in pixels.
-	Width int64                     `json:"width"`
-	JSON  watermarkListResponseJSON `json:"-"`
+	Width int64                `json:"width"`
+	JSON  streamWatermarksJSON `json:"-"`
 }
 
-// watermarkListResponseJSON contains the JSON metadata for the struct
-// [WatermarkListResponse]
-type watermarkListResponseJSON struct {
+// streamWatermarksJSON contains the JSON metadata for the struct
+// [StreamWatermarks]
+type streamWatermarksJSON struct {
 	Created        apijson.Field
 	DownloadedFrom apijson.Field
 	Height         apijson.Field
@@ -157,12 +141,28 @@ type watermarkListResponseJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *WatermarkListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *StreamWatermarks) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r watermarkListResponseJSON) RawJSON() string {
+func (r streamWatermarksJSON) RawJSON() string {
 	return r.raw
+}
+
+// Union satisfied by [stream.WatermarkNewResponseUnknown] or [shared.UnionString].
+type WatermarkNewResponse interface {
+	ImplementsStreamWatermarkNewResponse()
+}
+
+func init() {
+	apijson.RegisterUnion(
+		reflect.TypeOf((*WatermarkNewResponse)(nil)).Elem(),
+		"",
+		apijson.UnionVariant{
+			TypeFilter: gjson.String,
+			Type:       reflect.TypeOf(shared.UnionString("")),
+		},
+	)
 }
 
 // Union satisfied by [stream.WatermarkDeleteResponseUnknown] or
@@ -317,7 +317,7 @@ type WatermarkListParams struct {
 type WatermarkListResponseEnvelope struct {
 	Errors   []WatermarkListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []WatermarkListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []WatermarkListResponse                 `json:"result,required"`
+	Result   []StreamWatermarks                      `json:"result,required"`
 	// Whether the API call was successful
 	Success WatermarkListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    watermarkListResponseEnvelopeJSON    `json:"-"`

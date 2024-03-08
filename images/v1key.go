@@ -31,7 +31,7 @@ func NewV1KeyService(opts ...option.RequestOption) (r *V1KeyService) {
 }
 
 // Lists your signing keys. These can be found on your Cloudflare Images dashboard.
-func (r *V1KeyService) List(ctx context.Context, query V1KeyListParams, opts ...option.RequestOption) (res *V1KeyListResponse, err error) {
+func (r *V1KeyService) List(ctx context.Context, query V1KeyListParams, opts ...option.RequestOption) (res *ImagesImageKeys, err error) {
 	opts = append(r.Options[:], opts...)
 	var env V1KeyListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/images/v1/keys", query.AccountID)
@@ -43,49 +43,48 @@ func (r *V1KeyService) List(ctx context.Context, query V1KeyListParams, opts ...
 	return
 }
 
-type V1KeyListResponse struct {
-	Keys []V1KeyListResponseKey `json:"keys"`
-	JSON v1KeyListResponseJSON  `json:"-"`
+type ImagesImageKeys struct {
+	Keys []ImagesImageKeysKey `json:"keys"`
+	JSON imagesImageKeysJSON  `json:"-"`
 }
 
-// v1KeyListResponseJSON contains the JSON metadata for the struct
-// [V1KeyListResponse]
-type v1KeyListResponseJSON struct {
+// imagesImageKeysJSON contains the JSON metadata for the struct [ImagesImageKeys]
+type imagesImageKeysJSON struct {
 	Keys        apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *V1KeyListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ImagesImageKeys) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r v1KeyListResponseJSON) RawJSON() string {
+func (r imagesImageKeysJSON) RawJSON() string {
 	return r.raw
 }
 
-type V1KeyListResponseKey struct {
+type ImagesImageKeysKey struct {
 	// Key name.
 	Name string `json:"name"`
 	// Key value.
-	Value string                   `json:"value"`
-	JSON  v1KeyListResponseKeyJSON `json:"-"`
+	Value string                 `json:"value"`
+	JSON  imagesImageKeysKeyJSON `json:"-"`
 }
 
-// v1KeyListResponseKeyJSON contains the JSON metadata for the struct
-// [V1KeyListResponseKey]
-type v1KeyListResponseKeyJSON struct {
+// imagesImageKeysKeyJSON contains the JSON metadata for the struct
+// [ImagesImageKeysKey]
+type imagesImageKeysKeyJSON struct {
 	Name        apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *V1KeyListResponseKey) UnmarshalJSON(data []byte) (err error) {
+func (r *ImagesImageKeysKey) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r v1KeyListResponseKeyJSON) RawJSON() string {
+func (r imagesImageKeysKeyJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -97,7 +96,7 @@ type V1KeyListParams struct {
 type V1KeyListResponseEnvelope struct {
 	Errors   []V1KeyListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []V1KeyListResponseEnvelopeMessages `json:"messages,required"`
-	Result   V1KeyListResponse                   `json:"result,required"`
+	Result   ImagesImageKeys                     `json:"result,required"`
 	// Whether the API call was successful
 	Success V1KeyListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v1KeyListResponseEnvelopeJSON    `json:"-"`

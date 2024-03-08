@@ -32,7 +32,7 @@ func NewGatewayCategoryService(opts ...option.RequestOption) (r *GatewayCategory
 }
 
 // Fetches a list of all categories.
-func (r *GatewayCategoryService) List(ctx context.Context, query GatewayCategoryListParams, opts ...option.RequestOption) (res *[]GatewayCategoryListResponse, err error) {
+func (r *GatewayCategoryService) List(ctx context.Context, query GatewayCategoryListParams, opts ...option.RequestOption) (res *[]ZeroTrustGatewayCategories, err error) {
 	opts = append(r.Options[:], opts...)
 	var env GatewayCategoryListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/gateway/categories", query.AccountID)
@@ -44,7 +44,7 @@ func (r *GatewayCategoryService) List(ctx context.Context, query GatewayCategory
 	return
 }
 
-type GatewayCategoryListResponse struct {
+type ZeroTrustGatewayCategories struct {
 	// The identifier for this category. There is only one category per ID.
 	ID int64 `json:"id"`
 	// True if the category is in beta and subject to change.
@@ -53,19 +53,19 @@ type GatewayCategoryListResponse struct {
 	// `blocked` categories are blocked unconditionally for all accounts.
 	// `removalPending` categories can be removed from policies but not added.
 	// `noBlock` categories cannot be blocked.
-	Class GatewayCategoryListResponseClass `json:"class"`
+	Class ZeroTrustGatewayCategoriesClass `json:"class"`
 	// A short summary of domains in the category.
 	Description string `json:"description"`
 	// The name of the category.
 	Name string `json:"name"`
 	// All subcategories for this category.
-	Subcategories []GatewayCategoryListResponseSubcategory `json:"subcategories"`
-	JSON          gatewayCategoryListResponseJSON          `json:"-"`
+	Subcategories []ZeroTrustGatewayCategoriesSubcategory `json:"subcategories"`
+	JSON          zeroTrustGatewayCategoriesJSON          `json:"-"`
 }
 
-// gatewayCategoryListResponseJSON contains the JSON metadata for the struct
-// [GatewayCategoryListResponse]
-type gatewayCategoryListResponseJSON struct {
+// zeroTrustGatewayCategoriesJSON contains the JSON metadata for the struct
+// [ZeroTrustGatewayCategories]
+type zeroTrustGatewayCategoriesJSON struct {
 	ID            apijson.Field
 	Beta          apijson.Field
 	Class         apijson.Field
@@ -76,11 +76,11 @@ type gatewayCategoryListResponseJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *GatewayCategoryListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustGatewayCategories) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r gatewayCategoryListResponseJSON) RawJSON() string {
+func (r zeroTrustGatewayCategoriesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -88,17 +88,17 @@ func (r gatewayCategoryListResponseJSON) RawJSON() string {
 // `blocked` categories are blocked unconditionally for all accounts.
 // `removalPending` categories can be removed from policies but not added.
 // `noBlock` categories cannot be blocked.
-type GatewayCategoryListResponseClass string
+type ZeroTrustGatewayCategoriesClass string
 
 const (
-	GatewayCategoryListResponseClassFree           GatewayCategoryListResponseClass = "free"
-	GatewayCategoryListResponseClassPremium        GatewayCategoryListResponseClass = "premium"
-	GatewayCategoryListResponseClassBlocked        GatewayCategoryListResponseClass = "blocked"
-	GatewayCategoryListResponseClassRemovalPending GatewayCategoryListResponseClass = "removalPending"
-	GatewayCategoryListResponseClassNoBlock        GatewayCategoryListResponseClass = "noBlock"
+	ZeroTrustGatewayCategoriesClassFree           ZeroTrustGatewayCategoriesClass = "free"
+	ZeroTrustGatewayCategoriesClassPremium        ZeroTrustGatewayCategoriesClass = "premium"
+	ZeroTrustGatewayCategoriesClassBlocked        ZeroTrustGatewayCategoriesClass = "blocked"
+	ZeroTrustGatewayCategoriesClassRemovalPending ZeroTrustGatewayCategoriesClass = "removalPending"
+	ZeroTrustGatewayCategoriesClassNoBlock        ZeroTrustGatewayCategoriesClass = "noBlock"
 )
 
-type GatewayCategoryListResponseSubcategory struct {
+type ZeroTrustGatewayCategoriesSubcategory struct {
 	// The identifier for this category. There is only one category per ID.
 	ID int64 `json:"id"`
 	// True if the category is in beta and subject to change.
@@ -107,17 +107,17 @@ type GatewayCategoryListResponseSubcategory struct {
 	// `blocked` categories are blocked unconditionally for all accounts.
 	// `removalPending` categories can be removed from policies but not added.
 	// `noBlock` categories cannot be blocked.
-	Class GatewayCategoryListResponseSubcategoriesClass `json:"class"`
+	Class ZeroTrustGatewayCategoriesSubcategoriesClass `json:"class"`
 	// A short summary of domains in the category.
 	Description string `json:"description"`
 	// The name of the category.
-	Name string                                     `json:"name"`
-	JSON gatewayCategoryListResponseSubcategoryJSON `json:"-"`
+	Name string                                    `json:"name"`
+	JSON zeroTrustGatewayCategoriesSubcategoryJSON `json:"-"`
 }
 
-// gatewayCategoryListResponseSubcategoryJSON contains the JSON metadata for the
-// struct [GatewayCategoryListResponseSubcategory]
-type gatewayCategoryListResponseSubcategoryJSON struct {
+// zeroTrustGatewayCategoriesSubcategoryJSON contains the JSON metadata for the
+// struct [ZeroTrustGatewayCategoriesSubcategory]
+type zeroTrustGatewayCategoriesSubcategoryJSON struct {
 	ID          apijson.Field
 	Beta        apijson.Field
 	Class       apijson.Field
@@ -127,11 +127,11 @@ type gatewayCategoryListResponseSubcategoryJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *GatewayCategoryListResponseSubcategory) UnmarshalJSON(data []byte) (err error) {
+func (r *ZeroTrustGatewayCategoriesSubcategory) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r gatewayCategoryListResponseSubcategoryJSON) RawJSON() string {
+func (r zeroTrustGatewayCategoriesSubcategoryJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -139,14 +139,14 @@ func (r gatewayCategoryListResponseSubcategoryJSON) RawJSON() string {
 // `blocked` categories are blocked unconditionally for all accounts.
 // `removalPending` categories can be removed from policies but not added.
 // `noBlock` categories cannot be blocked.
-type GatewayCategoryListResponseSubcategoriesClass string
+type ZeroTrustGatewayCategoriesSubcategoriesClass string
 
 const (
-	GatewayCategoryListResponseSubcategoriesClassFree           GatewayCategoryListResponseSubcategoriesClass = "free"
-	GatewayCategoryListResponseSubcategoriesClassPremium        GatewayCategoryListResponseSubcategoriesClass = "premium"
-	GatewayCategoryListResponseSubcategoriesClassBlocked        GatewayCategoryListResponseSubcategoriesClass = "blocked"
-	GatewayCategoryListResponseSubcategoriesClassRemovalPending GatewayCategoryListResponseSubcategoriesClass = "removalPending"
-	GatewayCategoryListResponseSubcategoriesClassNoBlock        GatewayCategoryListResponseSubcategoriesClass = "noBlock"
+	ZeroTrustGatewayCategoriesSubcategoriesClassFree           ZeroTrustGatewayCategoriesSubcategoriesClass = "free"
+	ZeroTrustGatewayCategoriesSubcategoriesClassPremium        ZeroTrustGatewayCategoriesSubcategoriesClass = "premium"
+	ZeroTrustGatewayCategoriesSubcategoriesClassBlocked        ZeroTrustGatewayCategoriesSubcategoriesClass = "blocked"
+	ZeroTrustGatewayCategoriesSubcategoriesClassRemovalPending ZeroTrustGatewayCategoriesSubcategoriesClass = "removalPending"
+	ZeroTrustGatewayCategoriesSubcategoriesClassNoBlock        ZeroTrustGatewayCategoriesSubcategoriesClass = "noBlock"
 )
 
 type GatewayCategoryListParams struct {
@@ -157,7 +157,7 @@ type GatewayCategoryListParams struct {
 type GatewayCategoryListResponseEnvelope struct {
 	Errors   []GatewayCategoryListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []GatewayCategoryListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []GatewayCategoryListResponse                 `json:"result,required,nullable"`
+	Result   []ZeroTrustGatewayCategories                  `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    GatewayCategoryListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo GatewayCategoryListResponseEnvelopeResultInfo `json:"result_info"`

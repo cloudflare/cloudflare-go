@@ -30,9 +30,9 @@ func TestSettingRocketLoaderEditWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Zones.Settings.RocketLoader.Edit(context.TODO(), zones.SettingRocketLoaderEditParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Value: cloudflare.F(zones.SettingRocketLoaderEditParamsValue{
-			ID:    cloudflare.F(zones.SettingRocketLoaderEditParamsValueIDRocketLoader),
-			Value: cloudflare.F(zones.SettingRocketLoaderEditParamsValueValueOn),
+		Value: cloudflare.F(zones.ZonesRocketLoaderParam{
+			ID:    cloudflare.F(zones.ZonesRocketLoaderIDRocketLoader),
+			Value: cloudflare.F(zones.ZonesRocketLoaderValueOn),
 		}),
 	})
 	if err != nil {

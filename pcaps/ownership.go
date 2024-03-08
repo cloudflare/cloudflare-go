@@ -31,7 +31,7 @@ func NewOwnershipService(opts ...option.RequestOption) (r *OwnershipService) {
 }
 
 // Adds an AWS or GCP bucket to use with full packet captures.
-func (r *OwnershipService) New(ctx context.Context, params OwnershipNewParams, opts ...option.RequestOption) (res *OwnershipNewResponse, err error) {
+func (r *OwnershipService) New(ctx context.Context, params OwnershipNewParams, opts ...option.RequestOption) (res *MagicVisibilityPCAPsOwnership, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OwnershipNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pcaps/ownership", params.AccountID)
@@ -53,7 +53,7 @@ func (r *OwnershipService) Delete(ctx context.Context, ownershipID string, body 
 }
 
 // List all buckets configured for use with PCAPs API.
-func (r *OwnershipService) Get(ctx context.Context, query OwnershipGetParams, opts ...option.RequestOption) (res *[]OwnershipGetResponse, err error) {
+func (r *OwnershipService) Get(ctx context.Context, query OwnershipGetParams, opts ...option.RequestOption) (res *[]MagicVisibilityPCAPsOwnership, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OwnershipGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pcaps/ownership", query.AccountID)
@@ -66,7 +66,7 @@ func (r *OwnershipService) Get(ctx context.Context, query OwnershipGetParams, op
 }
 
 // Validates buckets added to the packet captures API.
-func (r *OwnershipService) Validate(ctx context.Context, params OwnershipValidateParams, opts ...option.RequestOption) (res *OwnershipValidateResponse, err error) {
+func (r *OwnershipService) Validate(ctx context.Context, params OwnershipValidateParams, opts ...option.RequestOption) (res *MagicVisibilityPCAPsOwnership, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OwnershipValidateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pcaps/ownership/validate", params.AccountID)
@@ -78,7 +78,7 @@ func (r *OwnershipService) Validate(ctx context.Context, params OwnershipValidat
 	return
 }
 
-type OwnershipNewResponse struct {
+type MagicVisibilityPCAPsOwnership struct {
 	// The bucket ID associated with the packet captures API.
 	ID string `json:"id,required"`
 	// The full URI for the bucket. This field only applies to `full` packet captures.
@@ -86,17 +86,17 @@ type OwnershipNewResponse struct {
 	// The ownership challenge filename stored in the bucket.
 	Filename string `json:"filename,required"`
 	// The status of the ownership challenge. Can be pending, success or failed.
-	Status OwnershipNewResponseStatus `json:"status,required"`
+	Status MagicVisibilityPCAPsOwnershipStatus `json:"status,required"`
 	// The RFC 3339 timestamp when the bucket was added to packet captures API.
 	Submitted string `json:"submitted,required"`
 	// The RFC 3339 timestamp when the bucket was validated.
-	Validated string                   `json:"validated"`
-	JSON      ownershipNewResponseJSON `json:"-"`
+	Validated string                            `json:"validated"`
+	JSON      magicVisibilityPCAPsOwnershipJSON `json:"-"`
 }
 
-// ownershipNewResponseJSON contains the JSON metadata for the struct
-// [OwnershipNewResponse]
-type ownershipNewResponseJSON struct {
+// magicVisibilityPCAPsOwnershipJSON contains the JSON metadata for the struct
+// [MagicVisibilityPCAPsOwnership]
+type magicVisibilityPCAPsOwnershipJSON struct {
 	ID              apijson.Field
 	DestinationConf apijson.Field
 	Filename        apijson.Field
@@ -107,113 +107,21 @@ type ownershipNewResponseJSON struct {
 	ExtraFields     map[string]apijson.Field
 }
 
-func (r *OwnershipNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *MagicVisibilityPCAPsOwnership) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r ownershipNewResponseJSON) RawJSON() string {
+func (r magicVisibilityPCAPsOwnershipJSON) RawJSON() string {
 	return r.raw
 }
 
 // The status of the ownership challenge. Can be pending, success or failed.
-type OwnershipNewResponseStatus string
+type MagicVisibilityPCAPsOwnershipStatus string
 
 const (
-	OwnershipNewResponseStatusPending OwnershipNewResponseStatus = "pending"
-	OwnershipNewResponseStatusSuccess OwnershipNewResponseStatus = "success"
-	OwnershipNewResponseStatusFailed  OwnershipNewResponseStatus = "failed"
-)
-
-type OwnershipGetResponse struct {
-	// The bucket ID associated with the packet captures API.
-	ID string `json:"id,required"`
-	// The full URI for the bucket. This field only applies to `full` packet captures.
-	DestinationConf string `json:"destination_conf,required"`
-	// The ownership challenge filename stored in the bucket.
-	Filename string `json:"filename,required"`
-	// The status of the ownership challenge. Can be pending, success or failed.
-	Status OwnershipGetResponseStatus `json:"status,required"`
-	// The RFC 3339 timestamp when the bucket was added to packet captures API.
-	Submitted string `json:"submitted,required"`
-	// The RFC 3339 timestamp when the bucket was validated.
-	Validated string                   `json:"validated"`
-	JSON      ownershipGetResponseJSON `json:"-"`
-}
-
-// ownershipGetResponseJSON contains the JSON metadata for the struct
-// [OwnershipGetResponse]
-type ownershipGetResponseJSON struct {
-	ID              apijson.Field
-	DestinationConf apijson.Field
-	Filename        apijson.Field
-	Status          apijson.Field
-	Submitted       apijson.Field
-	Validated       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *OwnershipGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ownershipGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// The status of the ownership challenge. Can be pending, success or failed.
-type OwnershipGetResponseStatus string
-
-const (
-	OwnershipGetResponseStatusPending OwnershipGetResponseStatus = "pending"
-	OwnershipGetResponseStatusSuccess OwnershipGetResponseStatus = "success"
-	OwnershipGetResponseStatusFailed  OwnershipGetResponseStatus = "failed"
-)
-
-type OwnershipValidateResponse struct {
-	// The bucket ID associated with the packet captures API.
-	ID string `json:"id,required"`
-	// The full URI for the bucket. This field only applies to `full` packet captures.
-	DestinationConf string `json:"destination_conf,required"`
-	// The ownership challenge filename stored in the bucket.
-	Filename string `json:"filename,required"`
-	// The status of the ownership challenge. Can be pending, success or failed.
-	Status OwnershipValidateResponseStatus `json:"status,required"`
-	// The RFC 3339 timestamp when the bucket was added to packet captures API.
-	Submitted string `json:"submitted,required"`
-	// The RFC 3339 timestamp when the bucket was validated.
-	Validated string                        `json:"validated"`
-	JSON      ownershipValidateResponseJSON `json:"-"`
-}
-
-// ownershipValidateResponseJSON contains the JSON metadata for the struct
-// [OwnershipValidateResponse]
-type ownershipValidateResponseJSON struct {
-	ID              apijson.Field
-	DestinationConf apijson.Field
-	Filename        apijson.Field
-	Status          apijson.Field
-	Submitted       apijson.Field
-	Validated       apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
-}
-
-func (r *OwnershipValidateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r ownershipValidateResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// The status of the ownership challenge. Can be pending, success or failed.
-type OwnershipValidateResponseStatus string
-
-const (
-	OwnershipValidateResponseStatusPending OwnershipValidateResponseStatus = "pending"
-	OwnershipValidateResponseStatusSuccess OwnershipValidateResponseStatus = "success"
-	OwnershipValidateResponseStatusFailed  OwnershipValidateResponseStatus = "failed"
+	MagicVisibilityPCAPsOwnershipStatusPending MagicVisibilityPCAPsOwnershipStatus = "pending"
+	MagicVisibilityPCAPsOwnershipStatusSuccess MagicVisibilityPCAPsOwnershipStatus = "success"
+	MagicVisibilityPCAPsOwnershipStatusFailed  MagicVisibilityPCAPsOwnershipStatus = "failed"
 )
 
 type OwnershipNewParams struct {
@@ -230,7 +138,7 @@ func (r OwnershipNewParams) MarshalJSON() (data []byte, err error) {
 type OwnershipNewResponseEnvelope struct {
 	Errors   []OwnershipNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []OwnershipNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   OwnershipNewResponse                   `json:"result,required"`
+	Result   MagicVisibilityPCAPsOwnership          `json:"result,required"`
 	// Whether the API call was successful
 	Success OwnershipNewResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ownershipNewResponseEnvelopeJSON    `json:"-"`
@@ -321,7 +229,7 @@ type OwnershipGetParams struct {
 type OwnershipGetResponseEnvelope struct {
 	Errors   []OwnershipGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []OwnershipGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []OwnershipGetResponse                 `json:"result,required,nullable"`
+	Result   []MagicVisibilityPCAPsOwnership        `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    OwnershipGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo OwnershipGetResponseEnvelopeResultInfo `json:"result_info"`
@@ -448,7 +356,7 @@ func (r OwnershipValidateParams) MarshalJSON() (data []byte, err error) {
 type OwnershipValidateResponseEnvelope struct {
 	Errors   []OwnershipValidateResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []OwnershipValidateResponseEnvelopeMessages `json:"messages,required"`
-	Result   OwnershipValidateResponse                   `json:"result,required"`
+	Result   MagicVisibilityPCAPsOwnership               `json:"result,required"`
 	// Whether the API call was successful
 	Success OwnershipValidateResponseEnvelopeSuccess `json:"success,required"`
 	JSON    ownershipValidateResponseEnvelopeJSON    `json:"-"`

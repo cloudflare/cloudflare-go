@@ -34,7 +34,7 @@ func NewLoadBalancerAnalyticsEventService(opts ...option.RequestOption) (r *Load
 }
 
 // List origin health changes.
-func (r *LoadBalancerAnalyticsEventService) List(ctx context.Context, query LoadBalancerAnalyticsEventListParams, opts ...option.RequestOption) (res *[]LoadBalancerAnalyticsEventListResponse, err error) {
+func (r *LoadBalancerAnalyticsEventService) List(ctx context.Context, query LoadBalancerAnalyticsEventListParams, opts ...option.RequestOption) (res *[]LoadBalancingAnalytics, err error) {
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerAnalyticsEventListResponseEnvelope
 	path := "user/load_balancing_analytics/events"
@@ -46,17 +46,17 @@ func (r *LoadBalancerAnalyticsEventService) List(ctx context.Context, query Load
 	return
 }
 
-type LoadBalancerAnalyticsEventListResponse struct {
-	ID        int64                                      `json:"id"`
-	Origins   []interface{}                              `json:"origins"`
-	Pool      interface{}                                `json:"pool"`
-	Timestamp time.Time                                  `json:"timestamp" format:"date-time"`
-	JSON      loadBalancerAnalyticsEventListResponseJSON `json:"-"`
+type LoadBalancingAnalytics struct {
+	ID        int64                      `json:"id"`
+	Origins   []interface{}              `json:"origins"`
+	Pool      interface{}                `json:"pool"`
+	Timestamp time.Time                  `json:"timestamp" format:"date-time"`
+	JSON      loadBalancingAnalyticsJSON `json:"-"`
 }
 
-// loadBalancerAnalyticsEventListResponseJSON contains the JSON metadata for the
-// struct [LoadBalancerAnalyticsEventListResponse]
-type loadBalancerAnalyticsEventListResponseJSON struct {
+// loadBalancingAnalyticsJSON contains the JSON metadata for the struct
+// [LoadBalancingAnalytics]
+type loadBalancingAnalyticsJSON struct {
 	ID          apijson.Field
 	Origins     apijson.Field
 	Pool        apijson.Field
@@ -65,11 +65,11 @@ type loadBalancerAnalyticsEventListResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LoadBalancerAnalyticsEventListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *LoadBalancingAnalytics) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r loadBalancerAnalyticsEventListResponseJSON) RawJSON() string {
+func (r loadBalancingAnalyticsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -103,7 +103,7 @@ func (r LoadBalancerAnalyticsEventListParams) URLQuery() (v url.Values) {
 type LoadBalancerAnalyticsEventListResponseEnvelope struct {
 	Errors   []LoadBalancerAnalyticsEventListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []LoadBalancerAnalyticsEventListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []LoadBalancerAnalyticsEventListResponse                 `json:"result,required,nullable"`
+	Result   []LoadBalancingAnalytics                                 `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    LoadBalancerAnalyticsEventListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo LoadBalancerAnalyticsEventListResponseEnvelopeResultInfo `json:"result_info"`

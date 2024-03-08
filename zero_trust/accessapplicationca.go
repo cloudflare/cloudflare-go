@@ -57,7 +57,7 @@ func (r *AccessApplicationCAService) New(ctx context.Context, uuid string, body 
 }
 
 // Lists short-lived certificate CAs and their public keys.
-func (r *AccessApplicationCAService) List(ctx context.Context, query AccessApplicationCAListParams, opts ...option.RequestOption) (res *[]AccessApplicationCAListResponse, err error) {
+func (r *AccessApplicationCAService) List(ctx context.Context, query AccessApplicationCAListParams, opts ...option.RequestOption) (res *[]AccessCA, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessApplicationCAListResponseEnvelope
 	var accountOrZone string
@@ -122,6 +122,34 @@ func (r *AccessApplicationCAService) Get(ctx context.Context, uuid string, query
 	return
 }
 
+type AccessCA struct {
+	// The ID of the CA.
+	ID string `json:"id"`
+	// The Application Audience (AUD) tag. Identifies the application associated with
+	// the CA.
+	Aud string `json:"aud"`
+	// The public key to add to your SSH server configuration.
+	PublicKey string       `json:"public_key"`
+	JSON      accessCAJSON `json:"-"`
+}
+
+// accessCAJSON contains the JSON metadata for the struct [AccessCA]
+type accessCAJSON struct {
+	ID          apijson.Field
+	Aud         apijson.Field
+	PublicKey   apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AccessCA) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r accessCAJSON) RawJSON() string {
+	return r.raw
+}
+
 // Union satisfied by [zero_trust.AccessApplicationCANewResponseUnknown] or
 // [shared.UnionString].
 type AccessApplicationCANewResponse interface {
@@ -137,35 +165,6 @@ func init() {
 			Type:       reflect.TypeOf(shared.UnionString("")),
 		},
 	)
-}
-
-type AccessApplicationCAListResponse struct {
-	// The ID of the CA.
-	ID string `json:"id"`
-	// The Application Audience (AUD) tag. Identifies the application associated with
-	// the CA.
-	Aud string `json:"aud"`
-	// The public key to add to your SSH server configuration.
-	PublicKey string                              `json:"public_key"`
-	JSON      accessApplicationCAListResponseJSON `json:"-"`
-}
-
-// accessApplicationCAListResponseJSON contains the JSON metadata for the struct
-// [AccessApplicationCAListResponse]
-type accessApplicationCAListResponseJSON struct {
-	ID          apijson.Field
-	Aud         apijson.Field
-	PublicKey   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *AccessApplicationCAListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r accessApplicationCAListResponseJSON) RawJSON() string {
-	return r.raw
 }
 
 type AccessApplicationCADeleteResponse struct {
@@ -305,7 +304,7 @@ type AccessApplicationCAListParams struct {
 type AccessApplicationCAListResponseEnvelope struct {
 	Errors   []AccessApplicationCAListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessApplicationCAListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AccessApplicationCAListResponse                 `json:"result,required,nullable"`
+	Result   []AccessCA                                        `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AccessApplicationCAListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AccessApplicationCAListResponseEnvelopeResultInfo `json:"result_info"`

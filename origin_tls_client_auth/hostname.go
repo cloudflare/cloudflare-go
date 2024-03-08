@@ -38,7 +38,7 @@ func NewHostnameService(opts ...option.RequestOption) (r *HostnameService) {
 // even if activated at the zone level. 100 maximum associations on a single
 // certificate are allowed. Note: Use a null value for parameter _enabled_ to
 // invalidate the association.
-func (r *HostnameService) Update(ctx context.Context, params HostnameUpdateParams, opts ...option.RequestOption) (res *[]HostnameUpdateResponse, err error) {
+func (r *HostnameService) Update(ctx context.Context, params HostnameUpdateParams, opts ...option.RequestOption) (res *[]TLSCertificatesAndHostnamesHostnameCertidObject, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameUpdateResponseEnvelope
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames", params.ZoneID)
@@ -51,7 +51,7 @@ func (r *HostnameService) Update(ctx context.Context, params HostnameUpdateParam
 }
 
 // Get the Hostname Status for Client Authentication
-func (r *HostnameService) Get(ctx context.Context, hostname string, query HostnameGetParams, opts ...option.RequestOption) (res *HostnameGetResponse, err error) {
+func (r *HostnameService) Get(ctx context.Context, hostname string, query HostnameGetParams, opts ...option.RequestOption) (res *TLSCertificatesAndHostnamesHostnameCertidObject, err error) {
 	opts = append(r.Options[:], opts...)
 	var env HostnameGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/%s", query.ZoneID, hostname)
@@ -63,50 +63,11 @@ func (r *HostnameService) Get(ctx context.Context, hostname string, query Hostna
 	return
 }
 
-type HostnameUpdateResponse struct {
-	// Identifier
-	ID string `json:"id"`
-	// Identifier
-	CertID string `json:"cert_id"`
-	// The hostname certificate.
-	Certificate string `json:"certificate"`
-	// Indicates whether hostname-level authenticated origin pulls is enabled. A null
-	// value voids the association.
-	Enabled bool `json:"enabled,nullable"`
-	// The hostname on the origin for which the client certificate uploaded will be
-	// used.
-	Hostname string `json:"hostname"`
-	// The hostname certificate's private key.
-	PrivateKey string                     `json:"private_key"`
-	JSON       hostnameUpdateResponseJSON `json:"-"`
-}
-
-// hostnameUpdateResponseJSON contains the JSON metadata for the struct
-// [HostnameUpdateResponse]
-type hostnameUpdateResponseJSON struct {
-	ID          apijson.Field
-	CertID      apijson.Field
-	Certificate apijson.Field
-	Enabled     apijson.Field
-	Hostname    apijson.Field
-	PrivateKey  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *HostnameUpdateResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r hostnameUpdateResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type HostnameGetResponse struct {
+type TLSCertificatesAndHostnamesHostnameCertidObject struct {
 	// Identifier
 	CertID string `json:"cert_id"`
 	// Status of the certificate or the association.
-	CertStatus HostnameGetResponseCertStatus `json:"cert_status"`
+	CertStatus TLSCertificatesAndHostnamesHostnameCertidObjectCertStatus `json:"cert_status"`
 	// The time when the certificate was updated.
 	CertUpdatedAt time.Time `json:"cert_updated_at" format:"date-time"`
 	// The time when the certificate was uploaded.
@@ -130,15 +91,15 @@ type HostnameGetResponse struct {
 	// The type of hash used for the certificate.
 	Signature string `json:"signature"`
 	// Status of the certificate or the association.
-	Status HostnameGetResponseStatus `json:"status"`
+	Status TLSCertificatesAndHostnamesHostnameCertidObjectStatus `json:"status"`
 	// The time when the certificate was updated.
-	UpdatedAt time.Time               `json:"updated_at" format:"date-time"`
-	JSON      hostnameGetResponseJSON `json:"-"`
+	UpdatedAt time.Time                                           `json:"updated_at" format:"date-time"`
+	JSON      tlsCertificatesAndHostnamesHostnameCertidObjectJSON `json:"-"`
 }
 
-// hostnameGetResponseJSON contains the JSON metadata for the struct
-// [HostnameGetResponse]
-type hostnameGetResponseJSON struct {
+// tlsCertificatesAndHostnamesHostnameCertidObjectJSON contains the JSON metadata
+// for the struct [TLSCertificatesAndHostnamesHostnameCertidObject]
+type tlsCertificatesAndHostnamesHostnameCertidObjectJSON struct {
 	CertID         apijson.Field
 	CertStatus     apijson.Field
 	CertUpdatedAt  apijson.Field
@@ -157,38 +118,38 @@ type hostnameGetResponseJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *HostnameGetResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *TLSCertificatesAndHostnamesHostnameCertidObject) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r hostnameGetResponseJSON) RawJSON() string {
+func (r tlsCertificatesAndHostnamesHostnameCertidObjectJSON) RawJSON() string {
 	return r.raw
 }
 
 // Status of the certificate or the association.
-type HostnameGetResponseCertStatus string
+type TLSCertificatesAndHostnamesHostnameCertidObjectCertStatus string
 
 const (
-	HostnameGetResponseCertStatusInitializing       HostnameGetResponseCertStatus = "initializing"
-	HostnameGetResponseCertStatusPendingDeployment  HostnameGetResponseCertStatus = "pending_deployment"
-	HostnameGetResponseCertStatusPendingDeletion    HostnameGetResponseCertStatus = "pending_deletion"
-	HostnameGetResponseCertStatusActive             HostnameGetResponseCertStatus = "active"
-	HostnameGetResponseCertStatusDeleted            HostnameGetResponseCertStatus = "deleted"
-	HostnameGetResponseCertStatusDeploymentTimedOut HostnameGetResponseCertStatus = "deployment_timed_out"
-	HostnameGetResponseCertStatusDeletionTimedOut   HostnameGetResponseCertStatus = "deletion_timed_out"
+	TLSCertificatesAndHostnamesHostnameCertidObjectCertStatusInitializing       TLSCertificatesAndHostnamesHostnameCertidObjectCertStatus = "initializing"
+	TLSCertificatesAndHostnamesHostnameCertidObjectCertStatusPendingDeployment  TLSCertificatesAndHostnamesHostnameCertidObjectCertStatus = "pending_deployment"
+	TLSCertificatesAndHostnamesHostnameCertidObjectCertStatusPendingDeletion    TLSCertificatesAndHostnamesHostnameCertidObjectCertStatus = "pending_deletion"
+	TLSCertificatesAndHostnamesHostnameCertidObjectCertStatusActive             TLSCertificatesAndHostnamesHostnameCertidObjectCertStatus = "active"
+	TLSCertificatesAndHostnamesHostnameCertidObjectCertStatusDeleted            TLSCertificatesAndHostnamesHostnameCertidObjectCertStatus = "deleted"
+	TLSCertificatesAndHostnamesHostnameCertidObjectCertStatusDeploymentTimedOut TLSCertificatesAndHostnamesHostnameCertidObjectCertStatus = "deployment_timed_out"
+	TLSCertificatesAndHostnamesHostnameCertidObjectCertStatusDeletionTimedOut   TLSCertificatesAndHostnamesHostnameCertidObjectCertStatus = "deletion_timed_out"
 )
 
 // Status of the certificate or the association.
-type HostnameGetResponseStatus string
+type TLSCertificatesAndHostnamesHostnameCertidObjectStatus string
 
 const (
-	HostnameGetResponseStatusInitializing       HostnameGetResponseStatus = "initializing"
-	HostnameGetResponseStatusPendingDeployment  HostnameGetResponseStatus = "pending_deployment"
-	HostnameGetResponseStatusPendingDeletion    HostnameGetResponseStatus = "pending_deletion"
-	HostnameGetResponseStatusActive             HostnameGetResponseStatus = "active"
-	HostnameGetResponseStatusDeleted            HostnameGetResponseStatus = "deleted"
-	HostnameGetResponseStatusDeploymentTimedOut HostnameGetResponseStatus = "deployment_timed_out"
-	HostnameGetResponseStatusDeletionTimedOut   HostnameGetResponseStatus = "deletion_timed_out"
+	TLSCertificatesAndHostnamesHostnameCertidObjectStatusInitializing       TLSCertificatesAndHostnamesHostnameCertidObjectStatus = "initializing"
+	TLSCertificatesAndHostnamesHostnameCertidObjectStatusPendingDeployment  TLSCertificatesAndHostnamesHostnameCertidObjectStatus = "pending_deployment"
+	TLSCertificatesAndHostnamesHostnameCertidObjectStatusPendingDeletion    TLSCertificatesAndHostnamesHostnameCertidObjectStatus = "pending_deletion"
+	TLSCertificatesAndHostnamesHostnameCertidObjectStatusActive             TLSCertificatesAndHostnamesHostnameCertidObjectStatus = "active"
+	TLSCertificatesAndHostnamesHostnameCertidObjectStatusDeleted            TLSCertificatesAndHostnamesHostnameCertidObjectStatus = "deleted"
+	TLSCertificatesAndHostnamesHostnameCertidObjectStatusDeploymentTimedOut TLSCertificatesAndHostnamesHostnameCertidObjectStatus = "deployment_timed_out"
+	TLSCertificatesAndHostnamesHostnameCertidObjectStatusDeletionTimedOut   TLSCertificatesAndHostnamesHostnameCertidObjectStatus = "deletion_timed_out"
 )
 
 type HostnameUpdateParams struct {
@@ -217,9 +178,9 @@ func (r HostnameUpdateParamsConfig) MarshalJSON() (data []byte, err error) {
 }
 
 type HostnameUpdateResponseEnvelope struct {
-	Errors   []HostnameUpdateResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []HostnameUpdateResponseEnvelopeMessages `json:"messages,required"`
-	Result   []HostnameUpdateResponse                 `json:"result,required,nullable"`
+	Errors   []HostnameUpdateResponseEnvelopeErrors            `json:"errors,required"`
+	Messages []HostnameUpdateResponseEnvelopeMessages          `json:"messages,required"`
+	Result   []TLSCertificatesAndHostnamesHostnameCertidObject `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    HostnameUpdateResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo HostnameUpdateResponseEnvelopeResultInfo `json:"result_info"`
@@ -336,9 +297,9 @@ type HostnameGetParams struct {
 }
 
 type HostnameGetResponseEnvelope struct {
-	Errors   []HostnameGetResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []HostnameGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   HostnameGetResponse                   `json:"result,required"`
+	Errors   []HostnameGetResponseEnvelopeErrors             `json:"errors,required"`
+	Messages []HostnameGetResponseEnvelopeMessages           `json:"messages,required"`
+	Result   TLSCertificatesAndHostnamesHostnameCertidObject `json:"result,required"`
 	// Whether the API call was successful
 	Success HostnameGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    hostnameGetResponseEnvelopeJSON    `json:"-"`

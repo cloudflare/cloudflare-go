@@ -35,7 +35,7 @@ func NewDEXTestUniqueDeviceService(opts ...option.RequestOption) (r *DEXTestUniq
 
 // Returns unique count of devices that have run synthetic application monitoring
 // tests in the past 7 days.
-func (r *DEXTestUniqueDeviceService) List(ctx context.Context, params DEXTestUniqueDeviceListParams, opts ...option.RequestOption) (res *DEXTestUniqueDeviceListResponse, err error) {
+func (r *DEXTestUniqueDeviceService) List(ctx context.Context, params DEXTestUniqueDeviceListParams, opts ...option.RequestOption) (res *DigitalExperienceMonitoringUniqueDevices, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DEXTestUniqueDeviceListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dex/tests/unique-devices", params.AccountID)
@@ -47,25 +47,25 @@ func (r *DEXTestUniqueDeviceService) List(ctx context.Context, params DEXTestUni
 	return
 }
 
-type DEXTestUniqueDeviceListResponse struct {
+type DigitalExperienceMonitoringUniqueDevices struct {
 	// total number of unique devices
-	UniqueDevicesTotal int64                               `json:"uniqueDevicesTotal,required"`
-	JSON               dexTestUniqueDeviceListResponseJSON `json:"-"`
+	UniqueDevicesTotal int64                                        `json:"uniqueDevicesTotal,required"`
+	JSON               digitalExperienceMonitoringUniqueDevicesJSON `json:"-"`
 }
 
-// dexTestUniqueDeviceListResponseJSON contains the JSON metadata for the struct
-// [DEXTestUniqueDeviceListResponse]
-type dexTestUniqueDeviceListResponseJSON struct {
+// digitalExperienceMonitoringUniqueDevicesJSON contains the JSON metadata for the
+// struct [DigitalExperienceMonitoringUniqueDevices]
+type digitalExperienceMonitoringUniqueDevicesJSON struct {
 	UniqueDevicesTotal apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
 }
 
-func (r *DEXTestUniqueDeviceListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DigitalExperienceMonitoringUniqueDevices) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dexTestUniqueDeviceListResponseJSON) RawJSON() string {
+func (r digitalExperienceMonitoringUniqueDevicesJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -90,7 +90,7 @@ func (r DEXTestUniqueDeviceListParams) URLQuery() (v url.Values) {
 type DEXTestUniqueDeviceListResponseEnvelope struct {
 	Errors   []DEXTestUniqueDeviceListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DEXTestUniqueDeviceListResponseEnvelopeMessages `json:"messages,required"`
-	Result   DEXTestUniqueDeviceListResponse                   `json:"result,required"`
+	Result   DigitalExperienceMonitoringUniqueDevices          `json:"result,required"`
 	// Whether the API call was successful
 	Success DEXTestUniqueDeviceListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dexTestUniqueDeviceListResponseEnvelopeJSON    `json:"-"`

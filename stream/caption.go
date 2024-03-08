@@ -61,7 +61,7 @@ func (r *CaptionService) Delete(ctx context.Context, identifier string, language
 }
 
 // Lists the available captions or subtitles for a specific video.
-func (r *CaptionService) Get(ctx context.Context, identifier string, query CaptionGetParams, opts ...option.RequestOption) (res *[]CaptionGetResponse, err error) {
+func (r *CaptionService) Get(ctx context.Context, identifier string, query CaptionGetParams, opts ...option.RequestOption) (res *[]StreamCaptions, err error) {
 	opts = append(r.Options[:], opts...)
 	var env CaptionGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/%s/captions", query.AccountID, identifier)
@@ -71,6 +71,30 @@ func (r *CaptionService) Get(ctx context.Context, identifier string, query Capti
 	}
 	res = &env.Result
 	return
+}
+
+type StreamCaptions struct {
+	// The language label displayed in the native language to users.
+	Label string `json:"label"`
+	// The language tag in BCP 47 format.
+	Language string             `json:"language"`
+	JSON     streamCaptionsJSON `json:"-"`
+}
+
+// streamCaptionsJSON contains the JSON metadata for the struct [StreamCaptions]
+type streamCaptionsJSON struct {
+	Label       apijson.Field
+	Language    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *StreamCaptions) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r streamCaptionsJSON) RawJSON() string {
+	return r.raw
 }
 
 // Union satisfied by [stream.CaptionUpdateResponseUnknown] or
@@ -114,31 +138,6 @@ func init() {
 type CaptionDeleteResponseArray []interface{}
 
 func (r CaptionDeleteResponseArray) ImplementsStreamCaptionDeleteResponse() {}
-
-type CaptionGetResponse struct {
-	// The language label displayed in the native language to users.
-	Label string `json:"label"`
-	// The language tag in BCP 47 format.
-	Language string                 `json:"language"`
-	JSON     captionGetResponseJSON `json:"-"`
-}
-
-// captionGetResponseJSON contains the JSON metadata for the struct
-// [CaptionGetResponse]
-type captionGetResponseJSON struct {
-	Label       apijson.Field
-	Language    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *CaptionGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r captionGetResponseJSON) RawJSON() string {
-	return r.raw
-}
 
 type CaptionUpdateParams struct {
 	// Identifier
@@ -326,7 +325,7 @@ type CaptionGetParams struct {
 type CaptionGetResponseEnvelope struct {
 	Errors   []CaptionGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []CaptionGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []CaptionGetResponse                 `json:"result,required"`
+	Result   []StreamCaptions                     `json:"result,required"`
 	// Whether the API call was successful
 	Success CaptionGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    captionGetResponseEnvelopeJSON    `json:"-"`

@@ -50,7 +50,7 @@ func (r *VerificationService) Edit(ctx context.Context, certificatePackID string
 }
 
 // Get SSL Verification Info for a Zone.
-func (r *VerificationService) Get(ctx context.Context, params VerificationGetParams, opts ...option.RequestOption) (res *[]VerificationGetResponse, err error) {
+func (r *VerificationService) Get(ctx context.Context, params VerificationGetParams, opts ...option.RequestOption) (res *[]TLSCertificatesAndHostnamesVerification, err error) {
 	opts = append(r.Options[:], opts...)
 	var env VerificationGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/ssl/verification", params.ZoneID)
@@ -61,6 +61,136 @@ func (r *VerificationService) Get(ctx context.Context, params VerificationGetPar
 	res = &env.Result
 	return
 }
+
+type TLSCertificatesAndHostnamesVerification struct {
+	// Current status of certificate.
+	CertificateStatus TLSCertificatesAndHostnamesVerificationCertificateStatus `json:"certificate_status,required"`
+	// Certificate Authority is manually reviewing the order.
+	BrandCheck bool `json:"brand_check"`
+	// Certificate Pack UUID.
+	CertPackUUID string `json:"cert_pack_uuid"`
+	// Certificate's signature algorithm.
+	Signature TLSCertificatesAndHostnamesVerificationSignature `json:"signature"`
+	// Validation method in use for a certificate pack order.
+	ValidationMethod TLSCertificatesAndHostnamesVerificationValidationMethod `json:"validation_method"`
+	// Certificate's required verification information.
+	VerificationInfo TLSCertificatesAndHostnamesVerificationVerificationInfo `json:"verification_info"`
+	// Status of the required verification information, omitted if verification status
+	// is unknown.
+	VerificationStatus bool `json:"verification_status"`
+	// Method of verification.
+	VerificationType TLSCertificatesAndHostnamesVerificationVerificationType `json:"verification_type"`
+	JSON             tlsCertificatesAndHostnamesVerificationJSON             `json:"-"`
+}
+
+// tlsCertificatesAndHostnamesVerificationJSON contains the JSON metadata for the
+// struct [TLSCertificatesAndHostnamesVerification]
+type tlsCertificatesAndHostnamesVerificationJSON struct {
+	CertificateStatus  apijson.Field
+	BrandCheck         apijson.Field
+	CertPackUUID       apijson.Field
+	Signature          apijson.Field
+	ValidationMethod   apijson.Field
+	VerificationInfo   apijson.Field
+	VerificationStatus apijson.Field
+	VerificationType   apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *TLSCertificatesAndHostnamesVerification) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tlsCertificatesAndHostnamesVerificationJSON) RawJSON() string {
+	return r.raw
+}
+
+// Current status of certificate.
+type TLSCertificatesAndHostnamesVerificationCertificateStatus string
+
+const (
+	TLSCertificatesAndHostnamesVerificationCertificateStatusInitializing      TLSCertificatesAndHostnamesVerificationCertificateStatus = "initializing"
+	TLSCertificatesAndHostnamesVerificationCertificateStatusAuthorizing       TLSCertificatesAndHostnamesVerificationCertificateStatus = "authorizing"
+	TLSCertificatesAndHostnamesVerificationCertificateStatusActive            TLSCertificatesAndHostnamesVerificationCertificateStatus = "active"
+	TLSCertificatesAndHostnamesVerificationCertificateStatusExpired           TLSCertificatesAndHostnamesVerificationCertificateStatus = "expired"
+	TLSCertificatesAndHostnamesVerificationCertificateStatusIssuing           TLSCertificatesAndHostnamesVerificationCertificateStatus = "issuing"
+	TLSCertificatesAndHostnamesVerificationCertificateStatusTimingOut         TLSCertificatesAndHostnamesVerificationCertificateStatus = "timing_out"
+	TLSCertificatesAndHostnamesVerificationCertificateStatusPendingDeployment TLSCertificatesAndHostnamesVerificationCertificateStatus = "pending_deployment"
+)
+
+// Certificate's signature algorithm.
+type TLSCertificatesAndHostnamesVerificationSignature string
+
+const (
+	TLSCertificatesAndHostnamesVerificationSignatureEcdsaWithSha256 TLSCertificatesAndHostnamesVerificationSignature = "ECDSAWithSHA256"
+	TLSCertificatesAndHostnamesVerificationSignatureSha1WithRsa     TLSCertificatesAndHostnamesVerificationSignature = "SHA1WithRSA"
+	TLSCertificatesAndHostnamesVerificationSignatureSha256WithRsa   TLSCertificatesAndHostnamesVerificationSignature = "SHA256WithRSA"
+)
+
+// Validation method in use for a certificate pack order.
+type TLSCertificatesAndHostnamesVerificationValidationMethod string
+
+const (
+	TLSCertificatesAndHostnamesVerificationValidationMethodHTTP  TLSCertificatesAndHostnamesVerificationValidationMethod = "http"
+	TLSCertificatesAndHostnamesVerificationValidationMethodCNAME TLSCertificatesAndHostnamesVerificationValidationMethod = "cname"
+	TLSCertificatesAndHostnamesVerificationValidationMethodTXT   TLSCertificatesAndHostnamesVerificationValidationMethod = "txt"
+)
+
+// Certificate's required verification information.
+type TLSCertificatesAndHostnamesVerificationVerificationInfo struct {
+	// Name of CNAME record.
+	RecordName TLSCertificatesAndHostnamesVerificationVerificationInfoRecordName `json:"record_name"`
+	// Target of CNAME record.
+	RecordTarget TLSCertificatesAndHostnamesVerificationVerificationInfoRecordTarget `json:"record_target"`
+	JSON         tlsCertificatesAndHostnamesVerificationVerificationInfoJSON         `json:"-"`
+}
+
+// tlsCertificatesAndHostnamesVerificationVerificationInfoJSON contains the JSON
+// metadata for the struct
+// [TLSCertificatesAndHostnamesVerificationVerificationInfo]
+type tlsCertificatesAndHostnamesVerificationVerificationInfoJSON struct {
+	RecordName   apijson.Field
+	RecordTarget apijson.Field
+	raw          string
+	ExtraFields  map[string]apijson.Field
+}
+
+func (r *TLSCertificatesAndHostnamesVerificationVerificationInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r tlsCertificatesAndHostnamesVerificationVerificationInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+// Name of CNAME record.
+type TLSCertificatesAndHostnamesVerificationVerificationInfoRecordName string
+
+const (
+	TLSCertificatesAndHostnamesVerificationVerificationInfoRecordNameRecordName TLSCertificatesAndHostnamesVerificationVerificationInfoRecordName = "record_name"
+	TLSCertificatesAndHostnamesVerificationVerificationInfoRecordNameHTTPURL    TLSCertificatesAndHostnamesVerificationVerificationInfoRecordName = "http_url"
+	TLSCertificatesAndHostnamesVerificationVerificationInfoRecordNameCNAME      TLSCertificatesAndHostnamesVerificationVerificationInfoRecordName = "cname"
+	TLSCertificatesAndHostnamesVerificationVerificationInfoRecordNameTXTName    TLSCertificatesAndHostnamesVerificationVerificationInfoRecordName = "txt_name"
+)
+
+// Target of CNAME record.
+type TLSCertificatesAndHostnamesVerificationVerificationInfoRecordTarget string
+
+const (
+	TLSCertificatesAndHostnamesVerificationVerificationInfoRecordTargetRecordValue TLSCertificatesAndHostnamesVerificationVerificationInfoRecordTarget = "record_value"
+	TLSCertificatesAndHostnamesVerificationVerificationInfoRecordTargetHTTPBody    TLSCertificatesAndHostnamesVerificationVerificationInfoRecordTarget = "http_body"
+	TLSCertificatesAndHostnamesVerificationVerificationInfoRecordTargetCNAMETarget TLSCertificatesAndHostnamesVerificationVerificationInfoRecordTarget = "cname_target"
+	TLSCertificatesAndHostnamesVerificationVerificationInfoRecordTargetTXTValue    TLSCertificatesAndHostnamesVerificationVerificationInfoRecordTarget = "txt_value"
+)
+
+// Method of verification.
+type TLSCertificatesAndHostnamesVerificationVerificationType string
+
+const (
+	TLSCertificatesAndHostnamesVerificationVerificationTypeCNAME   TLSCertificatesAndHostnamesVerificationVerificationType = "cname"
+	TLSCertificatesAndHostnamesVerificationVerificationTypeMetaTag TLSCertificatesAndHostnamesVerificationVerificationType = "meta tag"
+)
 
 type VerificationEditResponse struct {
 	// Result status.
@@ -95,135 +225,6 @@ const (
 	VerificationEditResponseValidationMethodCNAME VerificationEditResponseValidationMethod = "cname"
 	VerificationEditResponseValidationMethodTXT   VerificationEditResponseValidationMethod = "txt"
 	VerificationEditResponseValidationMethodEmail VerificationEditResponseValidationMethod = "email"
-)
-
-type VerificationGetResponse struct {
-	// Current status of certificate.
-	CertificateStatus VerificationGetResponseCertificateStatus `json:"certificate_status,required"`
-	// Certificate Authority is manually reviewing the order.
-	BrandCheck bool `json:"brand_check"`
-	// Certificate Pack UUID.
-	CertPackUUID string `json:"cert_pack_uuid"`
-	// Certificate's signature algorithm.
-	Signature VerificationGetResponseSignature `json:"signature"`
-	// Validation method in use for a certificate pack order.
-	ValidationMethod VerificationGetResponseValidationMethod `json:"validation_method"`
-	// Certificate's required verification information.
-	VerificationInfo VerificationGetResponseVerificationInfo `json:"verification_info"`
-	// Status of the required verification information, omitted if verification status
-	// is unknown.
-	VerificationStatus bool `json:"verification_status"`
-	// Method of verification.
-	VerificationType VerificationGetResponseVerificationType `json:"verification_type"`
-	JSON             verificationGetResponseJSON             `json:"-"`
-}
-
-// verificationGetResponseJSON contains the JSON metadata for the struct
-// [VerificationGetResponse]
-type verificationGetResponseJSON struct {
-	CertificateStatus  apijson.Field
-	BrandCheck         apijson.Field
-	CertPackUUID       apijson.Field
-	Signature          apijson.Field
-	ValidationMethod   apijson.Field
-	VerificationInfo   apijson.Field
-	VerificationStatus apijson.Field
-	VerificationType   apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
-}
-
-func (r *VerificationGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r verificationGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// Current status of certificate.
-type VerificationGetResponseCertificateStatus string
-
-const (
-	VerificationGetResponseCertificateStatusInitializing      VerificationGetResponseCertificateStatus = "initializing"
-	VerificationGetResponseCertificateStatusAuthorizing       VerificationGetResponseCertificateStatus = "authorizing"
-	VerificationGetResponseCertificateStatusActive            VerificationGetResponseCertificateStatus = "active"
-	VerificationGetResponseCertificateStatusExpired           VerificationGetResponseCertificateStatus = "expired"
-	VerificationGetResponseCertificateStatusIssuing           VerificationGetResponseCertificateStatus = "issuing"
-	VerificationGetResponseCertificateStatusTimingOut         VerificationGetResponseCertificateStatus = "timing_out"
-	VerificationGetResponseCertificateStatusPendingDeployment VerificationGetResponseCertificateStatus = "pending_deployment"
-)
-
-// Certificate's signature algorithm.
-type VerificationGetResponseSignature string
-
-const (
-	VerificationGetResponseSignatureEcdsaWithSha256 VerificationGetResponseSignature = "ECDSAWithSHA256"
-	VerificationGetResponseSignatureSha1WithRsa     VerificationGetResponseSignature = "SHA1WithRSA"
-	VerificationGetResponseSignatureSha256WithRsa   VerificationGetResponseSignature = "SHA256WithRSA"
-)
-
-// Validation method in use for a certificate pack order.
-type VerificationGetResponseValidationMethod string
-
-const (
-	VerificationGetResponseValidationMethodHTTP  VerificationGetResponseValidationMethod = "http"
-	VerificationGetResponseValidationMethodCNAME VerificationGetResponseValidationMethod = "cname"
-	VerificationGetResponseValidationMethodTXT   VerificationGetResponseValidationMethod = "txt"
-)
-
-// Certificate's required verification information.
-type VerificationGetResponseVerificationInfo struct {
-	// Name of CNAME record.
-	RecordName VerificationGetResponseVerificationInfoRecordName `json:"record_name"`
-	// Target of CNAME record.
-	RecordTarget VerificationGetResponseVerificationInfoRecordTarget `json:"record_target"`
-	JSON         verificationGetResponseVerificationInfoJSON         `json:"-"`
-}
-
-// verificationGetResponseVerificationInfoJSON contains the JSON metadata for the
-// struct [VerificationGetResponseVerificationInfo]
-type verificationGetResponseVerificationInfoJSON struct {
-	RecordName   apijson.Field
-	RecordTarget apijson.Field
-	raw          string
-	ExtraFields  map[string]apijson.Field
-}
-
-func (r *VerificationGetResponseVerificationInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r verificationGetResponseVerificationInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-// Name of CNAME record.
-type VerificationGetResponseVerificationInfoRecordName string
-
-const (
-	VerificationGetResponseVerificationInfoRecordNameRecordName VerificationGetResponseVerificationInfoRecordName = "record_name"
-	VerificationGetResponseVerificationInfoRecordNameHTTPURL    VerificationGetResponseVerificationInfoRecordName = "http_url"
-	VerificationGetResponseVerificationInfoRecordNameCNAME      VerificationGetResponseVerificationInfoRecordName = "cname"
-	VerificationGetResponseVerificationInfoRecordNameTXTName    VerificationGetResponseVerificationInfoRecordName = "txt_name"
-)
-
-// Target of CNAME record.
-type VerificationGetResponseVerificationInfoRecordTarget string
-
-const (
-	VerificationGetResponseVerificationInfoRecordTargetRecordValue VerificationGetResponseVerificationInfoRecordTarget = "record_value"
-	VerificationGetResponseVerificationInfoRecordTargetHTTPBody    VerificationGetResponseVerificationInfoRecordTarget = "http_body"
-	VerificationGetResponseVerificationInfoRecordTargetCNAMETarget VerificationGetResponseVerificationInfoRecordTarget = "cname_target"
-	VerificationGetResponseVerificationInfoRecordTargetTXTValue    VerificationGetResponseVerificationInfoRecordTarget = "txt_value"
-)
-
-// Method of verification.
-type VerificationGetResponseVerificationType string
-
-const (
-	VerificationGetResponseVerificationTypeCNAME   VerificationGetResponseVerificationType = "cname"
-	VerificationGetResponseVerificationTypeMetaTag VerificationGetResponseVerificationType = "meta tag"
 )
 
 type VerificationEditParams struct {
@@ -351,8 +352,8 @@ const (
 )
 
 type VerificationGetResponseEnvelope struct {
-	Result []VerificationGetResponse           `json:"result"`
-	JSON   verificationGetResponseEnvelopeJSON `json:"-"`
+	Result []TLSCertificatesAndHostnamesVerification `json:"result"`
+	JSON   verificationGetResponseEnvelopeJSON       `json:"-"`
 }
 
 // verificationGetResponseEnvelopeJSON contains the JSON metadata for the struct

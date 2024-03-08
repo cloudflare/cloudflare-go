@@ -32,7 +32,7 @@ func NewAvailabilityService(opts ...option.RequestOption) (r *AvailabilityServic
 }
 
 // Retrieves quota for all plans, as well as the current zone quota.
-func (r *AvailabilityService) List(ctx context.Context, query AvailabilityListParams, opts ...option.RequestOption) (res *AvailabilityListResponse, err error) {
+func (r *AvailabilityService) List(ctx context.Context, query AvailabilityListParams, opts ...option.RequestOption) (res *ObservatoryAvailabilities, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AvailabilityListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/speed_api/availabilities", query.ZoneID)
@@ -44,16 +44,16 @@ func (r *AvailabilityService) List(ctx context.Context, query AvailabilityListPa
 	return
 }
 
-type AvailabilityListResponse struct {
-	Quota          AvailabilityListResponseQuota    `json:"quota"`
-	Regions        []AvailabilityListResponseRegion `json:"regions"`
-	RegionsPerPlan interface{}                      `json:"regionsPerPlan"`
-	JSON           availabilityListResponseJSON     `json:"-"`
+type ObservatoryAvailabilities struct {
+	Quota          ObservatoryAvailabilitiesQuota    `json:"quota"`
+	Regions        []ObservatoryAvailabilitiesRegion `json:"regions"`
+	RegionsPerPlan interface{}                       `json:"regionsPerPlan"`
+	JSON           observatoryAvailabilitiesJSON     `json:"-"`
 }
 
-// availabilityListResponseJSON contains the JSON metadata for the struct
-// [AvailabilityListResponse]
-type availabilityListResponseJSON struct {
+// observatoryAvailabilitiesJSON contains the JSON metadata for the struct
+// [ObservatoryAvailabilities]
+type observatoryAvailabilitiesJSON struct {
 	Quota          apijson.Field
 	Regions        apijson.Field
 	RegionsPerPlan apijson.Field
@@ -61,15 +61,15 @@ type availabilityListResponseJSON struct {
 	ExtraFields    map[string]apijson.Field
 }
 
-func (r *AvailabilityListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ObservatoryAvailabilities) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r availabilityListResponseJSON) RawJSON() string {
+func (r observatoryAvailabilitiesJSON) RawJSON() string {
 	return r.raw
 }
 
-type AvailabilityListResponseQuota struct {
+type ObservatoryAvailabilitiesQuota struct {
 	// Cloudflare plan.
 	Plan string `json:"plan"`
 	// The number of tests available per plan.
@@ -79,13 +79,13 @@ type AvailabilityListResponseQuota struct {
 	// The number of remaining tests available.
 	RemainingTests float64 `json:"remainingTests"`
 	// The number of schedules available per plan.
-	ScheduleQuotasPerPlan map[string]float64                `json:"scheduleQuotasPerPlan"`
-	JSON                  availabilityListResponseQuotaJSON `json:"-"`
+	ScheduleQuotasPerPlan map[string]float64                 `json:"scheduleQuotasPerPlan"`
+	JSON                  observatoryAvailabilitiesQuotaJSON `json:"-"`
 }
 
-// availabilityListResponseQuotaJSON contains the JSON metadata for the struct
-// [AvailabilityListResponseQuota]
-type availabilityListResponseQuotaJSON struct {
+// observatoryAvailabilitiesQuotaJSON contains the JSON metadata for the struct
+// [ObservatoryAvailabilitiesQuota]
+type observatoryAvailabilitiesQuotaJSON struct {
 	Plan                  apijson.Field
 	QuotasPerPlan         apijson.Field
 	RemainingSchedules    apijson.Field
@@ -95,64 +95,64 @@ type availabilityListResponseQuotaJSON struct {
 	ExtraFields           map[string]apijson.Field
 }
 
-func (r *AvailabilityListResponseQuota) UnmarshalJSON(data []byte) (err error) {
+func (r *ObservatoryAvailabilitiesQuota) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r availabilityListResponseQuotaJSON) RawJSON() string {
+func (r observatoryAvailabilitiesQuotaJSON) RawJSON() string {
 	return r.raw
 }
 
 // A test region with a label.
-type AvailabilityListResponseRegion struct {
+type ObservatoryAvailabilitiesRegion struct {
 	Label string `json:"label"`
 	// A test region.
-	Value AvailabilityListResponseRegionsValue `json:"value"`
-	JSON  availabilityListResponseRegionJSON   `json:"-"`
+	Value ObservatoryAvailabilitiesRegionsValue `json:"value"`
+	JSON  observatoryAvailabilitiesRegionJSON   `json:"-"`
 }
 
-// availabilityListResponseRegionJSON contains the JSON metadata for the struct
-// [AvailabilityListResponseRegion]
-type availabilityListResponseRegionJSON struct {
+// observatoryAvailabilitiesRegionJSON contains the JSON metadata for the struct
+// [ObservatoryAvailabilitiesRegion]
+type observatoryAvailabilitiesRegionJSON struct {
 	Label       apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AvailabilityListResponseRegion) UnmarshalJSON(data []byte) (err error) {
+func (r *ObservatoryAvailabilitiesRegion) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r availabilityListResponseRegionJSON) RawJSON() string {
+func (r observatoryAvailabilitiesRegionJSON) RawJSON() string {
 	return r.raw
 }
 
 // A test region.
-type AvailabilityListResponseRegionsValue string
+type ObservatoryAvailabilitiesRegionsValue string
 
 const (
-	AvailabilityListResponseRegionsValueAsiaEast1           AvailabilityListResponseRegionsValue = "asia-east1"
-	AvailabilityListResponseRegionsValueAsiaNortheast1      AvailabilityListResponseRegionsValue = "asia-northeast1"
-	AvailabilityListResponseRegionsValueAsiaNortheast2      AvailabilityListResponseRegionsValue = "asia-northeast2"
-	AvailabilityListResponseRegionsValueAsiaSouth1          AvailabilityListResponseRegionsValue = "asia-south1"
-	AvailabilityListResponseRegionsValueAsiaSoutheast1      AvailabilityListResponseRegionsValue = "asia-southeast1"
-	AvailabilityListResponseRegionsValueAustraliaSoutheast1 AvailabilityListResponseRegionsValue = "australia-southeast1"
-	AvailabilityListResponseRegionsValueEuropeNorth1        AvailabilityListResponseRegionsValue = "europe-north1"
-	AvailabilityListResponseRegionsValueEuropeSouthwest1    AvailabilityListResponseRegionsValue = "europe-southwest1"
-	AvailabilityListResponseRegionsValueEuropeWest1         AvailabilityListResponseRegionsValue = "europe-west1"
-	AvailabilityListResponseRegionsValueEuropeWest2         AvailabilityListResponseRegionsValue = "europe-west2"
-	AvailabilityListResponseRegionsValueEuropeWest3         AvailabilityListResponseRegionsValue = "europe-west3"
-	AvailabilityListResponseRegionsValueEuropeWest4         AvailabilityListResponseRegionsValue = "europe-west4"
-	AvailabilityListResponseRegionsValueEuropeWest8         AvailabilityListResponseRegionsValue = "europe-west8"
-	AvailabilityListResponseRegionsValueEuropeWest9         AvailabilityListResponseRegionsValue = "europe-west9"
-	AvailabilityListResponseRegionsValueMeWest1             AvailabilityListResponseRegionsValue = "me-west1"
-	AvailabilityListResponseRegionsValueSouthamericaEast1   AvailabilityListResponseRegionsValue = "southamerica-east1"
-	AvailabilityListResponseRegionsValueUsCentral1          AvailabilityListResponseRegionsValue = "us-central1"
-	AvailabilityListResponseRegionsValueUsEast1             AvailabilityListResponseRegionsValue = "us-east1"
-	AvailabilityListResponseRegionsValueUsEast4             AvailabilityListResponseRegionsValue = "us-east4"
-	AvailabilityListResponseRegionsValueUsSouth1            AvailabilityListResponseRegionsValue = "us-south1"
-	AvailabilityListResponseRegionsValueUsWest1             AvailabilityListResponseRegionsValue = "us-west1"
+	ObservatoryAvailabilitiesRegionsValueAsiaEast1           ObservatoryAvailabilitiesRegionsValue = "asia-east1"
+	ObservatoryAvailabilitiesRegionsValueAsiaNortheast1      ObservatoryAvailabilitiesRegionsValue = "asia-northeast1"
+	ObservatoryAvailabilitiesRegionsValueAsiaNortheast2      ObservatoryAvailabilitiesRegionsValue = "asia-northeast2"
+	ObservatoryAvailabilitiesRegionsValueAsiaSouth1          ObservatoryAvailabilitiesRegionsValue = "asia-south1"
+	ObservatoryAvailabilitiesRegionsValueAsiaSoutheast1      ObservatoryAvailabilitiesRegionsValue = "asia-southeast1"
+	ObservatoryAvailabilitiesRegionsValueAustraliaSoutheast1 ObservatoryAvailabilitiesRegionsValue = "australia-southeast1"
+	ObservatoryAvailabilitiesRegionsValueEuropeNorth1        ObservatoryAvailabilitiesRegionsValue = "europe-north1"
+	ObservatoryAvailabilitiesRegionsValueEuropeSouthwest1    ObservatoryAvailabilitiesRegionsValue = "europe-southwest1"
+	ObservatoryAvailabilitiesRegionsValueEuropeWest1         ObservatoryAvailabilitiesRegionsValue = "europe-west1"
+	ObservatoryAvailabilitiesRegionsValueEuropeWest2         ObservatoryAvailabilitiesRegionsValue = "europe-west2"
+	ObservatoryAvailabilitiesRegionsValueEuropeWest3         ObservatoryAvailabilitiesRegionsValue = "europe-west3"
+	ObservatoryAvailabilitiesRegionsValueEuropeWest4         ObservatoryAvailabilitiesRegionsValue = "europe-west4"
+	ObservatoryAvailabilitiesRegionsValueEuropeWest8         ObservatoryAvailabilitiesRegionsValue = "europe-west8"
+	ObservatoryAvailabilitiesRegionsValueEuropeWest9         ObservatoryAvailabilitiesRegionsValue = "europe-west9"
+	ObservatoryAvailabilitiesRegionsValueMeWest1             ObservatoryAvailabilitiesRegionsValue = "me-west1"
+	ObservatoryAvailabilitiesRegionsValueSouthamericaEast1   ObservatoryAvailabilitiesRegionsValue = "southamerica-east1"
+	ObservatoryAvailabilitiesRegionsValueUsCentral1          ObservatoryAvailabilitiesRegionsValue = "us-central1"
+	ObservatoryAvailabilitiesRegionsValueUsEast1             ObservatoryAvailabilitiesRegionsValue = "us-east1"
+	ObservatoryAvailabilitiesRegionsValueUsEast4             ObservatoryAvailabilitiesRegionsValue = "us-east4"
+	ObservatoryAvailabilitiesRegionsValueUsSouth1            ObservatoryAvailabilitiesRegionsValue = "us-south1"
+	ObservatoryAvailabilitiesRegionsValueUsWest1             ObservatoryAvailabilitiesRegionsValue = "us-west1"
 )
 
 type AvailabilityListParams struct {
@@ -161,7 +161,7 @@ type AvailabilityListParams struct {
 }
 
 type AvailabilityListResponseEnvelope struct {
-	Result AvailabilityListResponse             `json:"result"`
+	Result ObservatoryAvailabilities            `json:"result"`
 	JSON   availabilityListResponseEnvelopeJSON `json:"-"`
 }
 

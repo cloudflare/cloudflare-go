@@ -35,7 +35,7 @@ func NewDEXHTTPTestPercentileService(opts ...option.RequestOption) (r *DEXHTTPTe
 
 // Get percentiles for an http test for a given time period between 1 hour and 7
 // days.
-func (r *DEXHTTPTestPercentileService) List(ctx context.Context, testID string, params DEXHTTPTestPercentileListParams, opts ...option.RequestOption) (res *DexhttpTestPercentileListResponse, err error) {
+func (r *DEXHTTPTestPercentileService) List(ctx context.Context, testID string, params DEXHTTPTestPercentileListParams, opts ...option.RequestOption) (res *DigitalExperienceMonitoringHTTPDetailsPercentiles, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DexhttpTestPercentileListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dex/http-tests/%s/percentiles", params.AccountID, testID)
@@ -47,16 +47,16 @@ func (r *DEXHTTPTestPercentileService) List(ctx context.Context, testID string, 
 	return
 }
 
-type DexhttpTestPercentileListResponse struct {
-	DNSResponseTimeMs    DexhttpTestPercentileListResponseDNSResponseTimeMs    `json:"dnsResponseTimeMs"`
-	ResourceFetchTimeMs  DexhttpTestPercentileListResponseResourceFetchTimeMs  `json:"resourceFetchTimeMs"`
-	ServerResponseTimeMs DexhttpTestPercentileListResponseServerResponseTimeMs `json:"serverResponseTimeMs"`
-	JSON                 dexhttpTestPercentileListResponseJSON                 `json:"-"`
+type DigitalExperienceMonitoringHTTPDetailsPercentiles struct {
+	DNSResponseTimeMs    DigitalExperienceMonitoringHTTPDetailsPercentilesDNSResponseTimeMs    `json:"dnsResponseTimeMs"`
+	ResourceFetchTimeMs  DigitalExperienceMonitoringHTTPDetailsPercentilesResourceFetchTimeMs  `json:"resourceFetchTimeMs"`
+	ServerResponseTimeMs DigitalExperienceMonitoringHTTPDetailsPercentilesServerResponseTimeMs `json:"serverResponseTimeMs"`
+	JSON                 digitalExperienceMonitoringHTTPDetailsPercentilesJSON                 `json:"-"`
 }
 
-// dexhttpTestPercentileListResponseJSON contains the JSON metadata for the struct
-// [DexhttpTestPercentileListResponse]
-type dexhttpTestPercentileListResponseJSON struct {
+// digitalExperienceMonitoringHTTPDetailsPercentilesJSON contains the JSON metadata
+// for the struct [DigitalExperienceMonitoringHTTPDetailsPercentiles]
+type digitalExperienceMonitoringHTTPDetailsPercentilesJSON struct {
 	DNSResponseTimeMs    apijson.Field
 	ResourceFetchTimeMs  apijson.Field
 	ServerResponseTimeMs apijson.Field
@@ -64,15 +64,15 @@ type dexhttpTestPercentileListResponseJSON struct {
 	ExtraFields          map[string]apijson.Field
 }
 
-func (r *DexhttpTestPercentileListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *DigitalExperienceMonitoringHTTPDetailsPercentiles) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dexhttpTestPercentileListResponseJSON) RawJSON() string {
+func (r digitalExperienceMonitoringHTTPDetailsPercentilesJSON) RawJSON() string {
 	return r.raw
 }
 
-type DexhttpTestPercentileListResponseDNSResponseTimeMs struct {
+type DigitalExperienceMonitoringHTTPDetailsPercentilesDNSResponseTimeMs struct {
 	// p50 observed in the time period
 	P50 float64 `json:"p50,nullable"`
 	// p90 observed in the time period
@@ -80,13 +80,14 @@ type DexhttpTestPercentileListResponseDNSResponseTimeMs struct {
 	// p95 observed in the time period
 	P95 float64 `json:"p95,nullable"`
 	// p99 observed in the time period
-	P99  float64                                                `json:"p99,nullable"`
-	JSON dexhttpTestPercentileListResponseDNSResponseTimeMsJSON `json:"-"`
+	P99  float64                                                                `json:"p99,nullable"`
+	JSON digitalExperienceMonitoringHTTPDetailsPercentilesDNSResponseTimeMsJSON `json:"-"`
 }
 
-// dexhttpTestPercentileListResponseDNSResponseTimeMsJSON contains the JSON
-// metadata for the struct [DexhttpTestPercentileListResponseDNSResponseTimeMs]
-type dexhttpTestPercentileListResponseDNSResponseTimeMsJSON struct {
+// digitalExperienceMonitoringHTTPDetailsPercentilesDNSResponseTimeMsJSON contains
+// the JSON metadata for the struct
+// [DigitalExperienceMonitoringHTTPDetailsPercentilesDNSResponseTimeMs]
+type digitalExperienceMonitoringHTTPDetailsPercentilesDNSResponseTimeMsJSON struct {
 	P50         apijson.Field
 	P90         apijson.Field
 	P95         apijson.Field
@@ -95,15 +96,15 @@ type dexhttpTestPercentileListResponseDNSResponseTimeMsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexhttpTestPercentileListResponseDNSResponseTimeMs) UnmarshalJSON(data []byte) (err error) {
+func (r *DigitalExperienceMonitoringHTTPDetailsPercentilesDNSResponseTimeMs) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dexhttpTestPercentileListResponseDNSResponseTimeMsJSON) RawJSON() string {
+func (r digitalExperienceMonitoringHTTPDetailsPercentilesDNSResponseTimeMsJSON) RawJSON() string {
 	return r.raw
 }
 
-type DexhttpTestPercentileListResponseResourceFetchTimeMs struct {
+type DigitalExperienceMonitoringHTTPDetailsPercentilesResourceFetchTimeMs struct {
 	// p50 observed in the time period
 	P50 float64 `json:"p50,nullable"`
 	// p90 observed in the time period
@@ -111,13 +112,14 @@ type DexhttpTestPercentileListResponseResourceFetchTimeMs struct {
 	// p95 observed in the time period
 	P95 float64 `json:"p95,nullable"`
 	// p99 observed in the time period
-	P99  float64                                                  `json:"p99,nullable"`
-	JSON dexhttpTestPercentileListResponseResourceFetchTimeMsJSON `json:"-"`
+	P99  float64                                                                  `json:"p99,nullable"`
+	JSON digitalExperienceMonitoringHTTPDetailsPercentilesResourceFetchTimeMsJSON `json:"-"`
 }
 
-// dexhttpTestPercentileListResponseResourceFetchTimeMsJSON contains the JSON
-// metadata for the struct [DexhttpTestPercentileListResponseResourceFetchTimeMs]
-type dexhttpTestPercentileListResponseResourceFetchTimeMsJSON struct {
+// digitalExperienceMonitoringHTTPDetailsPercentilesResourceFetchTimeMsJSON
+// contains the JSON metadata for the struct
+// [DigitalExperienceMonitoringHTTPDetailsPercentilesResourceFetchTimeMs]
+type digitalExperienceMonitoringHTTPDetailsPercentilesResourceFetchTimeMsJSON struct {
 	P50         apijson.Field
 	P90         apijson.Field
 	P95         apijson.Field
@@ -126,15 +128,15 @@ type dexhttpTestPercentileListResponseResourceFetchTimeMsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexhttpTestPercentileListResponseResourceFetchTimeMs) UnmarshalJSON(data []byte) (err error) {
+func (r *DigitalExperienceMonitoringHTTPDetailsPercentilesResourceFetchTimeMs) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dexhttpTestPercentileListResponseResourceFetchTimeMsJSON) RawJSON() string {
+func (r digitalExperienceMonitoringHTTPDetailsPercentilesResourceFetchTimeMsJSON) RawJSON() string {
 	return r.raw
 }
 
-type DexhttpTestPercentileListResponseServerResponseTimeMs struct {
+type DigitalExperienceMonitoringHTTPDetailsPercentilesServerResponseTimeMs struct {
 	// p50 observed in the time period
 	P50 float64 `json:"p50,nullable"`
 	// p90 observed in the time period
@@ -142,13 +144,14 @@ type DexhttpTestPercentileListResponseServerResponseTimeMs struct {
 	// p95 observed in the time period
 	P95 float64 `json:"p95,nullable"`
 	// p99 observed in the time period
-	P99  float64                                                   `json:"p99,nullable"`
-	JSON dexhttpTestPercentileListResponseServerResponseTimeMsJSON `json:"-"`
+	P99  float64                                                                   `json:"p99,nullable"`
+	JSON digitalExperienceMonitoringHTTPDetailsPercentilesServerResponseTimeMsJSON `json:"-"`
 }
 
-// dexhttpTestPercentileListResponseServerResponseTimeMsJSON contains the JSON
-// metadata for the struct [DexhttpTestPercentileListResponseServerResponseTimeMs]
-type dexhttpTestPercentileListResponseServerResponseTimeMsJSON struct {
+// digitalExperienceMonitoringHTTPDetailsPercentilesServerResponseTimeMsJSON
+// contains the JSON metadata for the struct
+// [DigitalExperienceMonitoringHTTPDetailsPercentilesServerResponseTimeMs]
+type digitalExperienceMonitoringHTTPDetailsPercentilesServerResponseTimeMsJSON struct {
 	P50         apijson.Field
 	P90         apijson.Field
 	P95         apijson.Field
@@ -157,11 +160,11 @@ type dexhttpTestPercentileListResponseServerResponseTimeMsJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexhttpTestPercentileListResponseServerResponseTimeMs) UnmarshalJSON(data []byte) (err error) {
+func (r *DigitalExperienceMonitoringHTTPDetailsPercentilesServerResponseTimeMs) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dexhttpTestPercentileListResponseServerResponseTimeMsJSON) RawJSON() string {
+func (r digitalExperienceMonitoringHTTPDetailsPercentilesServerResponseTimeMsJSON) RawJSON() string {
 	return r.raw
 }
 
@@ -191,7 +194,7 @@ func (r DEXHTTPTestPercentileListParams) URLQuery() (v url.Values) {
 type DexhttpTestPercentileListResponseEnvelope struct {
 	Errors   []DexhttpTestPercentileListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DexhttpTestPercentileListResponseEnvelopeMessages `json:"messages,required"`
-	Result   DexhttpTestPercentileListResponse                   `json:"result,required"`
+	Result   DigitalExperienceMonitoringHTTPDetailsPercentiles   `json:"result,required"`
 	// Whether the API call was successful
 	Success DexhttpTestPercentileListResponseEnvelopeSuccess `json:"success,required"`
 	JSON    dexhttpTestPercentileListResponseEnvelopeJSON    `json:"-"`

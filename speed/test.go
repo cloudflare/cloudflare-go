@@ -34,7 +34,7 @@ func NewTestService(opts ...option.RequestOption) (r *TestService) {
 }
 
 // Starts a test for a specific webpage, in a specific region.
-func (r *TestService) New(ctx context.Context, url string, params TestNewParams, opts ...option.RequestOption) (res *TestNewResponse, err error) {
+func (r *TestService) New(ctx context.Context, url string, params TestNewParams, opts ...option.RequestOption) (res *ObservatoryPageTest, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TestNewResponseEnvelope
 	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/tests", params.ZoneID, url)
@@ -69,7 +69,7 @@ func (r *TestService) Delete(ctx context.Context, url string, params TestDeleteP
 }
 
 // Retrieves the result of a specific test.
-func (r *TestService) Get(ctx context.Context, url string, testID string, query TestGetParams, opts ...option.RequestOption) (res *TestGetResponse, err error) {
+func (r *TestService) Get(ctx context.Context, url string, testID string, query TestGetParams, opts ...option.RequestOption) (res *ObservatoryPageTest, err error) {
 	opts = append(r.Options[:], opts...)
 	var env TestGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/tests/%s", query.ZoneID, url, testID)
@@ -81,25 +81,26 @@ func (r *TestService) Get(ctx context.Context, url string, testID string, query 
 	return
 }
 
-type TestNewResponse struct {
+type ObservatoryPageTest struct {
 	// UUID
 	ID   string    `json:"id"`
 	Date time.Time `json:"date" format:"date-time"`
 	// The Lighthouse report.
-	DesktopReport TestNewResponseDesktopReport `json:"desktopReport"`
+	DesktopReport ObservatoryPageTestDesktopReport `json:"desktopReport"`
 	// The Lighthouse report.
-	MobileReport TestNewResponseMobileReport `json:"mobileReport"`
+	MobileReport ObservatoryPageTestMobileReport `json:"mobileReport"`
 	// A test region with a label.
-	Region TestNewResponseRegion `json:"region"`
+	Region ObservatoryPageTestRegion `json:"region"`
 	// The frequency of the test.
-	ScheduleFrequency TestNewResponseScheduleFrequency `json:"scheduleFrequency"`
+	ScheduleFrequency ObservatoryPageTestScheduleFrequency `json:"scheduleFrequency"`
 	// A URL.
-	URL  string              `json:"url"`
-	JSON testNewResponseJSON `json:"-"`
+	URL  string                  `json:"url"`
+	JSON observatoryPageTestJSON `json:"-"`
 }
 
-// testNewResponseJSON contains the JSON metadata for the struct [TestNewResponse]
-type testNewResponseJSON struct {
+// observatoryPageTestJSON contains the JSON metadata for the struct
+// [ObservatoryPageTest]
+type observatoryPageTestJSON struct {
 	ID                apijson.Field
 	Date              apijson.Field
 	DesktopReport     apijson.Field
@@ -111,21 +112,21 @@ type testNewResponseJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *TestNewResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ObservatoryPageTest) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r testNewResponseJSON) RawJSON() string {
+func (r observatoryPageTestJSON) RawJSON() string {
 	return r.raw
 }
 
 // The Lighthouse report.
-type TestNewResponseDesktopReport struct {
+type ObservatoryPageTestDesktopReport struct {
 	// Cumulative Layout Shift.
 	Cls float64 `json:"cls"`
 	// The type of device.
-	DeviceType TestNewResponseDesktopReportDeviceType `json:"deviceType"`
-	Error      TestNewResponseDesktopReportError      `json:"error"`
+	DeviceType ObservatoryPageTestDesktopReportDeviceType `json:"deviceType"`
+	Error      ObservatoryPageTestDesktopReportError      `json:"error"`
 	// First Contentful Paint.
 	Fcp float64 `json:"fcp"`
 	// The URL to the full Lighthouse JSON report.
@@ -137,19 +138,19 @@ type TestNewResponseDesktopReport struct {
 	// Speed Index.
 	Si float64 `json:"si"`
 	// The state of the Lighthouse report.
-	State TestNewResponseDesktopReportState `json:"state"`
+	State ObservatoryPageTestDesktopReportState `json:"state"`
 	// Total Blocking Time.
 	Tbt float64 `json:"tbt"`
 	// Time To First Byte.
 	Ttfb float64 `json:"ttfb"`
 	// Time To Interactive.
-	Tti  float64                          `json:"tti"`
-	JSON testNewResponseDesktopReportJSON `json:"-"`
+	Tti  float64                              `json:"tti"`
+	JSON observatoryPageTestDesktopReportJSON `json:"-"`
 }
 
-// testNewResponseDesktopReportJSON contains the JSON metadata for the struct
-// [TestNewResponseDesktopReport]
-type testNewResponseDesktopReportJSON struct {
+// observatoryPageTestDesktopReportJSON contains the JSON metadata for the struct
+// [ObservatoryPageTestDesktopReport]
+type observatoryPageTestDesktopReportJSON struct {
 	Cls              apijson.Field
 	DeviceType       apijson.Field
 	Error            apijson.Field
@@ -166,35 +167,35 @@ type testNewResponseDesktopReportJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *TestNewResponseDesktopReport) UnmarshalJSON(data []byte) (err error) {
+func (r *ObservatoryPageTestDesktopReport) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r testNewResponseDesktopReportJSON) RawJSON() string {
+func (r observatoryPageTestDesktopReportJSON) RawJSON() string {
 	return r.raw
 }
 
 // The type of device.
-type TestNewResponseDesktopReportDeviceType string
+type ObservatoryPageTestDesktopReportDeviceType string
 
 const (
-	TestNewResponseDesktopReportDeviceTypeDesktop TestNewResponseDesktopReportDeviceType = "DESKTOP"
-	TestNewResponseDesktopReportDeviceTypeMobile  TestNewResponseDesktopReportDeviceType = "MOBILE"
+	ObservatoryPageTestDesktopReportDeviceTypeDesktop ObservatoryPageTestDesktopReportDeviceType = "DESKTOP"
+	ObservatoryPageTestDesktopReportDeviceTypeMobile  ObservatoryPageTestDesktopReportDeviceType = "MOBILE"
 )
 
-type TestNewResponseDesktopReportError struct {
+type ObservatoryPageTestDesktopReportError struct {
 	// The error code of the Lighthouse result.
-	Code TestNewResponseDesktopReportErrorCode `json:"code"`
+	Code ObservatoryPageTestDesktopReportErrorCode `json:"code"`
 	// Detailed error message.
 	Detail string `json:"detail"`
 	// The final URL displayed to the user.
-	FinalDisplayedURL string                                `json:"finalDisplayedUrl"`
-	JSON              testNewResponseDesktopReportErrorJSON `json:"-"`
+	FinalDisplayedURL string                                    `json:"finalDisplayedUrl"`
+	JSON              observatoryPageTestDesktopReportErrorJSON `json:"-"`
 }
 
-// testNewResponseDesktopReportErrorJSON contains the JSON metadata for the struct
-// [TestNewResponseDesktopReportError]
-type testNewResponseDesktopReportErrorJSON struct {
+// observatoryPageTestDesktopReportErrorJSON contains the JSON metadata for the
+// struct [ObservatoryPageTestDesktopReportError]
+type observatoryPageTestDesktopReportErrorJSON struct {
 	Code              apijson.Field
 	Detail            apijson.Field
 	FinalDisplayedURL apijson.Field
@@ -202,41 +203,41 @@ type testNewResponseDesktopReportErrorJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *TestNewResponseDesktopReportError) UnmarshalJSON(data []byte) (err error) {
+func (r *ObservatoryPageTestDesktopReportError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r testNewResponseDesktopReportErrorJSON) RawJSON() string {
+func (r observatoryPageTestDesktopReportErrorJSON) RawJSON() string {
 	return r.raw
 }
 
 // The error code of the Lighthouse result.
-type TestNewResponseDesktopReportErrorCode string
+type ObservatoryPageTestDesktopReportErrorCode string
 
 const (
-	TestNewResponseDesktopReportErrorCodeNotReachable      TestNewResponseDesktopReportErrorCode = "NOT_REACHABLE"
-	TestNewResponseDesktopReportErrorCodeDNSFailure        TestNewResponseDesktopReportErrorCode = "DNS_FAILURE"
-	TestNewResponseDesktopReportErrorCodeNotHTML           TestNewResponseDesktopReportErrorCode = "NOT_HTML"
-	TestNewResponseDesktopReportErrorCodeLighthouseTimeout TestNewResponseDesktopReportErrorCode = "LIGHTHOUSE_TIMEOUT"
-	TestNewResponseDesktopReportErrorCodeUnknown           TestNewResponseDesktopReportErrorCode = "UNKNOWN"
+	ObservatoryPageTestDesktopReportErrorCodeNotReachable      ObservatoryPageTestDesktopReportErrorCode = "NOT_REACHABLE"
+	ObservatoryPageTestDesktopReportErrorCodeDNSFailure        ObservatoryPageTestDesktopReportErrorCode = "DNS_FAILURE"
+	ObservatoryPageTestDesktopReportErrorCodeNotHTML           ObservatoryPageTestDesktopReportErrorCode = "NOT_HTML"
+	ObservatoryPageTestDesktopReportErrorCodeLighthouseTimeout ObservatoryPageTestDesktopReportErrorCode = "LIGHTHOUSE_TIMEOUT"
+	ObservatoryPageTestDesktopReportErrorCodeUnknown           ObservatoryPageTestDesktopReportErrorCode = "UNKNOWN"
 )
 
 // The state of the Lighthouse report.
-type TestNewResponseDesktopReportState string
+type ObservatoryPageTestDesktopReportState string
 
 const (
-	TestNewResponseDesktopReportStateRunning  TestNewResponseDesktopReportState = "RUNNING"
-	TestNewResponseDesktopReportStateComplete TestNewResponseDesktopReportState = "COMPLETE"
-	TestNewResponseDesktopReportStateFailed   TestNewResponseDesktopReportState = "FAILED"
+	ObservatoryPageTestDesktopReportStateRunning  ObservatoryPageTestDesktopReportState = "RUNNING"
+	ObservatoryPageTestDesktopReportStateComplete ObservatoryPageTestDesktopReportState = "COMPLETE"
+	ObservatoryPageTestDesktopReportStateFailed   ObservatoryPageTestDesktopReportState = "FAILED"
 )
 
 // The Lighthouse report.
-type TestNewResponseMobileReport struct {
+type ObservatoryPageTestMobileReport struct {
 	// Cumulative Layout Shift.
 	Cls float64 `json:"cls"`
 	// The type of device.
-	DeviceType TestNewResponseMobileReportDeviceType `json:"deviceType"`
-	Error      TestNewResponseMobileReportError      `json:"error"`
+	DeviceType ObservatoryPageTestMobileReportDeviceType `json:"deviceType"`
+	Error      ObservatoryPageTestMobileReportError      `json:"error"`
 	// First Contentful Paint.
 	Fcp float64 `json:"fcp"`
 	// The URL to the full Lighthouse JSON report.
@@ -248,19 +249,19 @@ type TestNewResponseMobileReport struct {
 	// Speed Index.
 	Si float64 `json:"si"`
 	// The state of the Lighthouse report.
-	State TestNewResponseMobileReportState `json:"state"`
+	State ObservatoryPageTestMobileReportState `json:"state"`
 	// Total Blocking Time.
 	Tbt float64 `json:"tbt"`
 	// Time To First Byte.
 	Ttfb float64 `json:"ttfb"`
 	// Time To Interactive.
-	Tti  float64                         `json:"tti"`
-	JSON testNewResponseMobileReportJSON `json:"-"`
+	Tti  float64                             `json:"tti"`
+	JSON observatoryPageTestMobileReportJSON `json:"-"`
 }
 
-// testNewResponseMobileReportJSON contains the JSON metadata for the struct
-// [TestNewResponseMobileReport]
-type testNewResponseMobileReportJSON struct {
+// observatoryPageTestMobileReportJSON contains the JSON metadata for the struct
+// [ObservatoryPageTestMobileReport]
+type observatoryPageTestMobileReportJSON struct {
 	Cls              apijson.Field
 	DeviceType       apijson.Field
 	Error            apijson.Field
@@ -277,35 +278,35 @@ type testNewResponseMobileReportJSON struct {
 	ExtraFields      map[string]apijson.Field
 }
 
-func (r *TestNewResponseMobileReport) UnmarshalJSON(data []byte) (err error) {
+func (r *ObservatoryPageTestMobileReport) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r testNewResponseMobileReportJSON) RawJSON() string {
+func (r observatoryPageTestMobileReportJSON) RawJSON() string {
 	return r.raw
 }
 
 // The type of device.
-type TestNewResponseMobileReportDeviceType string
+type ObservatoryPageTestMobileReportDeviceType string
 
 const (
-	TestNewResponseMobileReportDeviceTypeDesktop TestNewResponseMobileReportDeviceType = "DESKTOP"
-	TestNewResponseMobileReportDeviceTypeMobile  TestNewResponseMobileReportDeviceType = "MOBILE"
+	ObservatoryPageTestMobileReportDeviceTypeDesktop ObservatoryPageTestMobileReportDeviceType = "DESKTOP"
+	ObservatoryPageTestMobileReportDeviceTypeMobile  ObservatoryPageTestMobileReportDeviceType = "MOBILE"
 )
 
-type TestNewResponseMobileReportError struct {
+type ObservatoryPageTestMobileReportError struct {
 	// The error code of the Lighthouse result.
-	Code TestNewResponseMobileReportErrorCode `json:"code"`
+	Code ObservatoryPageTestMobileReportErrorCode `json:"code"`
 	// Detailed error message.
 	Detail string `json:"detail"`
 	// The final URL displayed to the user.
-	FinalDisplayedURL string                               `json:"finalDisplayedUrl"`
-	JSON              testNewResponseMobileReportErrorJSON `json:"-"`
+	FinalDisplayedURL string                                   `json:"finalDisplayedUrl"`
+	JSON              observatoryPageTestMobileReportErrorJSON `json:"-"`
 }
 
-// testNewResponseMobileReportErrorJSON contains the JSON metadata for the struct
-// [TestNewResponseMobileReportError]
-type testNewResponseMobileReportErrorJSON struct {
+// observatoryPageTestMobileReportErrorJSON contains the JSON metadata for the
+// struct [ObservatoryPageTestMobileReportError]
+type observatoryPageTestMobileReportErrorJSON struct {
 	Code              apijson.Field
 	Detail            apijson.Field
 	FinalDisplayedURL apijson.Field
@@ -313,92 +314,92 @@ type testNewResponseMobileReportErrorJSON struct {
 	ExtraFields       map[string]apijson.Field
 }
 
-func (r *TestNewResponseMobileReportError) UnmarshalJSON(data []byte) (err error) {
+func (r *ObservatoryPageTestMobileReportError) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r testNewResponseMobileReportErrorJSON) RawJSON() string {
+func (r observatoryPageTestMobileReportErrorJSON) RawJSON() string {
 	return r.raw
 }
 
 // The error code of the Lighthouse result.
-type TestNewResponseMobileReportErrorCode string
+type ObservatoryPageTestMobileReportErrorCode string
 
 const (
-	TestNewResponseMobileReportErrorCodeNotReachable      TestNewResponseMobileReportErrorCode = "NOT_REACHABLE"
-	TestNewResponseMobileReportErrorCodeDNSFailure        TestNewResponseMobileReportErrorCode = "DNS_FAILURE"
-	TestNewResponseMobileReportErrorCodeNotHTML           TestNewResponseMobileReportErrorCode = "NOT_HTML"
-	TestNewResponseMobileReportErrorCodeLighthouseTimeout TestNewResponseMobileReportErrorCode = "LIGHTHOUSE_TIMEOUT"
-	TestNewResponseMobileReportErrorCodeUnknown           TestNewResponseMobileReportErrorCode = "UNKNOWN"
+	ObservatoryPageTestMobileReportErrorCodeNotReachable      ObservatoryPageTestMobileReportErrorCode = "NOT_REACHABLE"
+	ObservatoryPageTestMobileReportErrorCodeDNSFailure        ObservatoryPageTestMobileReportErrorCode = "DNS_FAILURE"
+	ObservatoryPageTestMobileReportErrorCodeNotHTML           ObservatoryPageTestMobileReportErrorCode = "NOT_HTML"
+	ObservatoryPageTestMobileReportErrorCodeLighthouseTimeout ObservatoryPageTestMobileReportErrorCode = "LIGHTHOUSE_TIMEOUT"
+	ObservatoryPageTestMobileReportErrorCodeUnknown           ObservatoryPageTestMobileReportErrorCode = "UNKNOWN"
 )
 
 // The state of the Lighthouse report.
-type TestNewResponseMobileReportState string
+type ObservatoryPageTestMobileReportState string
 
 const (
-	TestNewResponseMobileReportStateRunning  TestNewResponseMobileReportState = "RUNNING"
-	TestNewResponseMobileReportStateComplete TestNewResponseMobileReportState = "COMPLETE"
-	TestNewResponseMobileReportStateFailed   TestNewResponseMobileReportState = "FAILED"
+	ObservatoryPageTestMobileReportStateRunning  ObservatoryPageTestMobileReportState = "RUNNING"
+	ObservatoryPageTestMobileReportStateComplete ObservatoryPageTestMobileReportState = "COMPLETE"
+	ObservatoryPageTestMobileReportStateFailed   ObservatoryPageTestMobileReportState = "FAILED"
 )
 
 // A test region with a label.
-type TestNewResponseRegion struct {
+type ObservatoryPageTestRegion struct {
 	Label string `json:"label"`
 	// A test region.
-	Value TestNewResponseRegionValue `json:"value"`
-	JSON  testNewResponseRegionJSON  `json:"-"`
+	Value ObservatoryPageTestRegionValue `json:"value"`
+	JSON  observatoryPageTestRegionJSON  `json:"-"`
 }
 
-// testNewResponseRegionJSON contains the JSON metadata for the struct
-// [TestNewResponseRegion]
-type testNewResponseRegionJSON struct {
+// observatoryPageTestRegionJSON contains the JSON metadata for the struct
+// [ObservatoryPageTestRegion]
+type observatoryPageTestRegionJSON struct {
 	Label       apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *TestNewResponseRegion) UnmarshalJSON(data []byte) (err error) {
+func (r *ObservatoryPageTestRegion) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r testNewResponseRegionJSON) RawJSON() string {
+func (r observatoryPageTestRegionJSON) RawJSON() string {
 	return r.raw
 }
 
 // A test region.
-type TestNewResponseRegionValue string
+type ObservatoryPageTestRegionValue string
 
 const (
-	TestNewResponseRegionValueAsiaEast1           TestNewResponseRegionValue = "asia-east1"
-	TestNewResponseRegionValueAsiaNortheast1      TestNewResponseRegionValue = "asia-northeast1"
-	TestNewResponseRegionValueAsiaNortheast2      TestNewResponseRegionValue = "asia-northeast2"
-	TestNewResponseRegionValueAsiaSouth1          TestNewResponseRegionValue = "asia-south1"
-	TestNewResponseRegionValueAsiaSoutheast1      TestNewResponseRegionValue = "asia-southeast1"
-	TestNewResponseRegionValueAustraliaSoutheast1 TestNewResponseRegionValue = "australia-southeast1"
-	TestNewResponseRegionValueEuropeNorth1        TestNewResponseRegionValue = "europe-north1"
-	TestNewResponseRegionValueEuropeSouthwest1    TestNewResponseRegionValue = "europe-southwest1"
-	TestNewResponseRegionValueEuropeWest1         TestNewResponseRegionValue = "europe-west1"
-	TestNewResponseRegionValueEuropeWest2         TestNewResponseRegionValue = "europe-west2"
-	TestNewResponseRegionValueEuropeWest3         TestNewResponseRegionValue = "europe-west3"
-	TestNewResponseRegionValueEuropeWest4         TestNewResponseRegionValue = "europe-west4"
-	TestNewResponseRegionValueEuropeWest8         TestNewResponseRegionValue = "europe-west8"
-	TestNewResponseRegionValueEuropeWest9         TestNewResponseRegionValue = "europe-west9"
-	TestNewResponseRegionValueMeWest1             TestNewResponseRegionValue = "me-west1"
-	TestNewResponseRegionValueSouthamericaEast1   TestNewResponseRegionValue = "southamerica-east1"
-	TestNewResponseRegionValueUsCentral1          TestNewResponseRegionValue = "us-central1"
-	TestNewResponseRegionValueUsEast1             TestNewResponseRegionValue = "us-east1"
-	TestNewResponseRegionValueUsEast4             TestNewResponseRegionValue = "us-east4"
-	TestNewResponseRegionValueUsSouth1            TestNewResponseRegionValue = "us-south1"
-	TestNewResponseRegionValueUsWest1             TestNewResponseRegionValue = "us-west1"
+	ObservatoryPageTestRegionValueAsiaEast1           ObservatoryPageTestRegionValue = "asia-east1"
+	ObservatoryPageTestRegionValueAsiaNortheast1      ObservatoryPageTestRegionValue = "asia-northeast1"
+	ObservatoryPageTestRegionValueAsiaNortheast2      ObservatoryPageTestRegionValue = "asia-northeast2"
+	ObservatoryPageTestRegionValueAsiaSouth1          ObservatoryPageTestRegionValue = "asia-south1"
+	ObservatoryPageTestRegionValueAsiaSoutheast1      ObservatoryPageTestRegionValue = "asia-southeast1"
+	ObservatoryPageTestRegionValueAustraliaSoutheast1 ObservatoryPageTestRegionValue = "australia-southeast1"
+	ObservatoryPageTestRegionValueEuropeNorth1        ObservatoryPageTestRegionValue = "europe-north1"
+	ObservatoryPageTestRegionValueEuropeSouthwest1    ObservatoryPageTestRegionValue = "europe-southwest1"
+	ObservatoryPageTestRegionValueEuropeWest1         ObservatoryPageTestRegionValue = "europe-west1"
+	ObservatoryPageTestRegionValueEuropeWest2         ObservatoryPageTestRegionValue = "europe-west2"
+	ObservatoryPageTestRegionValueEuropeWest3         ObservatoryPageTestRegionValue = "europe-west3"
+	ObservatoryPageTestRegionValueEuropeWest4         ObservatoryPageTestRegionValue = "europe-west4"
+	ObservatoryPageTestRegionValueEuropeWest8         ObservatoryPageTestRegionValue = "europe-west8"
+	ObservatoryPageTestRegionValueEuropeWest9         ObservatoryPageTestRegionValue = "europe-west9"
+	ObservatoryPageTestRegionValueMeWest1             ObservatoryPageTestRegionValue = "me-west1"
+	ObservatoryPageTestRegionValueSouthamericaEast1   ObservatoryPageTestRegionValue = "southamerica-east1"
+	ObservatoryPageTestRegionValueUsCentral1          ObservatoryPageTestRegionValue = "us-central1"
+	ObservatoryPageTestRegionValueUsEast1             ObservatoryPageTestRegionValue = "us-east1"
+	ObservatoryPageTestRegionValueUsEast4             ObservatoryPageTestRegionValue = "us-east4"
+	ObservatoryPageTestRegionValueUsSouth1            ObservatoryPageTestRegionValue = "us-south1"
+	ObservatoryPageTestRegionValueUsWest1             ObservatoryPageTestRegionValue = "us-west1"
 )
 
 // The frequency of the test.
-type TestNewResponseScheduleFrequency string
+type ObservatoryPageTestScheduleFrequency string
 
 const (
-	TestNewResponseScheduleFrequencyDaily  TestNewResponseScheduleFrequency = "DAILY"
-	TestNewResponseScheduleFrequencyWeekly TestNewResponseScheduleFrequency = "WEEKLY"
+	ObservatoryPageTestScheduleFrequencyDaily  ObservatoryPageTestScheduleFrequency = "DAILY"
+	ObservatoryPageTestScheduleFrequencyWeekly ObservatoryPageTestScheduleFrequency = "WEEKLY"
 )
 
 type TestListResponse struct {
@@ -524,326 +525,6 @@ func (r testDeleteResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type TestGetResponse struct {
-	// UUID
-	ID   string    `json:"id"`
-	Date time.Time `json:"date" format:"date-time"`
-	// The Lighthouse report.
-	DesktopReport TestGetResponseDesktopReport `json:"desktopReport"`
-	// The Lighthouse report.
-	MobileReport TestGetResponseMobileReport `json:"mobileReport"`
-	// A test region with a label.
-	Region TestGetResponseRegion `json:"region"`
-	// The frequency of the test.
-	ScheduleFrequency TestGetResponseScheduleFrequency `json:"scheduleFrequency"`
-	// A URL.
-	URL  string              `json:"url"`
-	JSON testGetResponseJSON `json:"-"`
-}
-
-// testGetResponseJSON contains the JSON metadata for the struct [TestGetResponse]
-type testGetResponseJSON struct {
-	ID                apijson.Field
-	Date              apijson.Field
-	DesktopReport     apijson.Field
-	MobileReport      apijson.Field
-	Region            apijson.Field
-	ScheduleFrequency apijson.Field
-	URL               apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *TestGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r testGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// The Lighthouse report.
-type TestGetResponseDesktopReport struct {
-	// Cumulative Layout Shift.
-	Cls float64 `json:"cls"`
-	// The type of device.
-	DeviceType TestGetResponseDesktopReportDeviceType `json:"deviceType"`
-	Error      TestGetResponseDesktopReportError      `json:"error"`
-	// First Contentful Paint.
-	Fcp float64 `json:"fcp"`
-	// The URL to the full Lighthouse JSON report.
-	JsonReportURL string `json:"jsonReportUrl"`
-	// Largest Contentful Paint.
-	Lcp float64 `json:"lcp"`
-	// The Lighthouse performance score.
-	PerformanceScore float64 `json:"performanceScore"`
-	// Speed Index.
-	Si float64 `json:"si"`
-	// The state of the Lighthouse report.
-	State TestGetResponseDesktopReportState `json:"state"`
-	// Total Blocking Time.
-	Tbt float64 `json:"tbt"`
-	// Time To First Byte.
-	Ttfb float64 `json:"ttfb"`
-	// Time To Interactive.
-	Tti  float64                          `json:"tti"`
-	JSON testGetResponseDesktopReportJSON `json:"-"`
-}
-
-// testGetResponseDesktopReportJSON contains the JSON metadata for the struct
-// [TestGetResponseDesktopReport]
-type testGetResponseDesktopReportJSON struct {
-	Cls              apijson.Field
-	DeviceType       apijson.Field
-	Error            apijson.Field
-	Fcp              apijson.Field
-	JsonReportURL    apijson.Field
-	Lcp              apijson.Field
-	PerformanceScore apijson.Field
-	Si               apijson.Field
-	State            apijson.Field
-	Tbt              apijson.Field
-	Ttfb             apijson.Field
-	Tti              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *TestGetResponseDesktopReport) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r testGetResponseDesktopReportJSON) RawJSON() string {
-	return r.raw
-}
-
-// The type of device.
-type TestGetResponseDesktopReportDeviceType string
-
-const (
-	TestGetResponseDesktopReportDeviceTypeDesktop TestGetResponseDesktopReportDeviceType = "DESKTOP"
-	TestGetResponseDesktopReportDeviceTypeMobile  TestGetResponseDesktopReportDeviceType = "MOBILE"
-)
-
-type TestGetResponseDesktopReportError struct {
-	// The error code of the Lighthouse result.
-	Code TestGetResponseDesktopReportErrorCode `json:"code"`
-	// Detailed error message.
-	Detail string `json:"detail"`
-	// The final URL displayed to the user.
-	FinalDisplayedURL string                                `json:"finalDisplayedUrl"`
-	JSON              testGetResponseDesktopReportErrorJSON `json:"-"`
-}
-
-// testGetResponseDesktopReportErrorJSON contains the JSON metadata for the struct
-// [TestGetResponseDesktopReportError]
-type testGetResponseDesktopReportErrorJSON struct {
-	Code              apijson.Field
-	Detail            apijson.Field
-	FinalDisplayedURL apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *TestGetResponseDesktopReportError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r testGetResponseDesktopReportErrorJSON) RawJSON() string {
-	return r.raw
-}
-
-// The error code of the Lighthouse result.
-type TestGetResponseDesktopReportErrorCode string
-
-const (
-	TestGetResponseDesktopReportErrorCodeNotReachable      TestGetResponseDesktopReportErrorCode = "NOT_REACHABLE"
-	TestGetResponseDesktopReportErrorCodeDNSFailure        TestGetResponseDesktopReportErrorCode = "DNS_FAILURE"
-	TestGetResponseDesktopReportErrorCodeNotHTML           TestGetResponseDesktopReportErrorCode = "NOT_HTML"
-	TestGetResponseDesktopReportErrorCodeLighthouseTimeout TestGetResponseDesktopReportErrorCode = "LIGHTHOUSE_TIMEOUT"
-	TestGetResponseDesktopReportErrorCodeUnknown           TestGetResponseDesktopReportErrorCode = "UNKNOWN"
-)
-
-// The state of the Lighthouse report.
-type TestGetResponseDesktopReportState string
-
-const (
-	TestGetResponseDesktopReportStateRunning  TestGetResponseDesktopReportState = "RUNNING"
-	TestGetResponseDesktopReportStateComplete TestGetResponseDesktopReportState = "COMPLETE"
-	TestGetResponseDesktopReportStateFailed   TestGetResponseDesktopReportState = "FAILED"
-)
-
-// The Lighthouse report.
-type TestGetResponseMobileReport struct {
-	// Cumulative Layout Shift.
-	Cls float64 `json:"cls"`
-	// The type of device.
-	DeviceType TestGetResponseMobileReportDeviceType `json:"deviceType"`
-	Error      TestGetResponseMobileReportError      `json:"error"`
-	// First Contentful Paint.
-	Fcp float64 `json:"fcp"`
-	// The URL to the full Lighthouse JSON report.
-	JsonReportURL string `json:"jsonReportUrl"`
-	// Largest Contentful Paint.
-	Lcp float64 `json:"lcp"`
-	// The Lighthouse performance score.
-	PerformanceScore float64 `json:"performanceScore"`
-	// Speed Index.
-	Si float64 `json:"si"`
-	// The state of the Lighthouse report.
-	State TestGetResponseMobileReportState `json:"state"`
-	// Total Blocking Time.
-	Tbt float64 `json:"tbt"`
-	// Time To First Byte.
-	Ttfb float64 `json:"ttfb"`
-	// Time To Interactive.
-	Tti  float64                         `json:"tti"`
-	JSON testGetResponseMobileReportJSON `json:"-"`
-}
-
-// testGetResponseMobileReportJSON contains the JSON metadata for the struct
-// [TestGetResponseMobileReport]
-type testGetResponseMobileReportJSON struct {
-	Cls              apijson.Field
-	DeviceType       apijson.Field
-	Error            apijson.Field
-	Fcp              apijson.Field
-	JsonReportURL    apijson.Field
-	Lcp              apijson.Field
-	PerformanceScore apijson.Field
-	Si               apijson.Field
-	State            apijson.Field
-	Tbt              apijson.Field
-	Ttfb             apijson.Field
-	Tti              apijson.Field
-	raw              string
-	ExtraFields      map[string]apijson.Field
-}
-
-func (r *TestGetResponseMobileReport) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r testGetResponseMobileReportJSON) RawJSON() string {
-	return r.raw
-}
-
-// The type of device.
-type TestGetResponseMobileReportDeviceType string
-
-const (
-	TestGetResponseMobileReportDeviceTypeDesktop TestGetResponseMobileReportDeviceType = "DESKTOP"
-	TestGetResponseMobileReportDeviceTypeMobile  TestGetResponseMobileReportDeviceType = "MOBILE"
-)
-
-type TestGetResponseMobileReportError struct {
-	// The error code of the Lighthouse result.
-	Code TestGetResponseMobileReportErrorCode `json:"code"`
-	// Detailed error message.
-	Detail string `json:"detail"`
-	// The final URL displayed to the user.
-	FinalDisplayedURL string                               `json:"finalDisplayedUrl"`
-	JSON              testGetResponseMobileReportErrorJSON `json:"-"`
-}
-
-// testGetResponseMobileReportErrorJSON contains the JSON metadata for the struct
-// [TestGetResponseMobileReportError]
-type testGetResponseMobileReportErrorJSON struct {
-	Code              apijson.Field
-	Detail            apijson.Field
-	FinalDisplayedURL apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
-}
-
-func (r *TestGetResponseMobileReportError) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r testGetResponseMobileReportErrorJSON) RawJSON() string {
-	return r.raw
-}
-
-// The error code of the Lighthouse result.
-type TestGetResponseMobileReportErrorCode string
-
-const (
-	TestGetResponseMobileReportErrorCodeNotReachable      TestGetResponseMobileReportErrorCode = "NOT_REACHABLE"
-	TestGetResponseMobileReportErrorCodeDNSFailure        TestGetResponseMobileReportErrorCode = "DNS_FAILURE"
-	TestGetResponseMobileReportErrorCodeNotHTML           TestGetResponseMobileReportErrorCode = "NOT_HTML"
-	TestGetResponseMobileReportErrorCodeLighthouseTimeout TestGetResponseMobileReportErrorCode = "LIGHTHOUSE_TIMEOUT"
-	TestGetResponseMobileReportErrorCodeUnknown           TestGetResponseMobileReportErrorCode = "UNKNOWN"
-)
-
-// The state of the Lighthouse report.
-type TestGetResponseMobileReportState string
-
-const (
-	TestGetResponseMobileReportStateRunning  TestGetResponseMobileReportState = "RUNNING"
-	TestGetResponseMobileReportStateComplete TestGetResponseMobileReportState = "COMPLETE"
-	TestGetResponseMobileReportStateFailed   TestGetResponseMobileReportState = "FAILED"
-)
-
-// A test region with a label.
-type TestGetResponseRegion struct {
-	Label string `json:"label"`
-	// A test region.
-	Value TestGetResponseRegionValue `json:"value"`
-	JSON  testGetResponseRegionJSON  `json:"-"`
-}
-
-// testGetResponseRegionJSON contains the JSON metadata for the struct
-// [TestGetResponseRegion]
-type testGetResponseRegionJSON struct {
-	Label       apijson.Field
-	Value       apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *TestGetResponseRegion) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r testGetResponseRegionJSON) RawJSON() string {
-	return r.raw
-}
-
-// A test region.
-type TestGetResponseRegionValue string
-
-const (
-	TestGetResponseRegionValueAsiaEast1           TestGetResponseRegionValue = "asia-east1"
-	TestGetResponseRegionValueAsiaNortheast1      TestGetResponseRegionValue = "asia-northeast1"
-	TestGetResponseRegionValueAsiaNortheast2      TestGetResponseRegionValue = "asia-northeast2"
-	TestGetResponseRegionValueAsiaSouth1          TestGetResponseRegionValue = "asia-south1"
-	TestGetResponseRegionValueAsiaSoutheast1      TestGetResponseRegionValue = "asia-southeast1"
-	TestGetResponseRegionValueAustraliaSoutheast1 TestGetResponseRegionValue = "australia-southeast1"
-	TestGetResponseRegionValueEuropeNorth1        TestGetResponseRegionValue = "europe-north1"
-	TestGetResponseRegionValueEuropeSouthwest1    TestGetResponseRegionValue = "europe-southwest1"
-	TestGetResponseRegionValueEuropeWest1         TestGetResponseRegionValue = "europe-west1"
-	TestGetResponseRegionValueEuropeWest2         TestGetResponseRegionValue = "europe-west2"
-	TestGetResponseRegionValueEuropeWest3         TestGetResponseRegionValue = "europe-west3"
-	TestGetResponseRegionValueEuropeWest4         TestGetResponseRegionValue = "europe-west4"
-	TestGetResponseRegionValueEuropeWest8         TestGetResponseRegionValue = "europe-west8"
-	TestGetResponseRegionValueEuropeWest9         TestGetResponseRegionValue = "europe-west9"
-	TestGetResponseRegionValueMeWest1             TestGetResponseRegionValue = "me-west1"
-	TestGetResponseRegionValueSouthamericaEast1   TestGetResponseRegionValue = "southamerica-east1"
-	TestGetResponseRegionValueUsCentral1          TestGetResponseRegionValue = "us-central1"
-	TestGetResponseRegionValueUsEast1             TestGetResponseRegionValue = "us-east1"
-	TestGetResponseRegionValueUsEast4             TestGetResponseRegionValue = "us-east4"
-	TestGetResponseRegionValueUsSouth1            TestGetResponseRegionValue = "us-south1"
-	TestGetResponseRegionValueUsWest1             TestGetResponseRegionValue = "us-west1"
-)
-
-// The frequency of the test.
-type TestGetResponseScheduleFrequency string
-
-const (
-	TestGetResponseScheduleFrequencyDaily  TestGetResponseScheduleFrequency = "DAILY"
-	TestGetResponseScheduleFrequencyWeekly TestGetResponseScheduleFrequency = "WEEKLY"
-)
-
 type TestNewParams struct {
 	// Identifier
 	ZoneID param.Field[string] `path:"zone_id,required"`
@@ -883,7 +564,7 @@ const (
 )
 
 type TestNewResponseEnvelope struct {
-	Result TestNewResponse             `json:"result"`
+	Result ObservatoryPageTest         `json:"result"`
 	JSON   testNewResponseEnvelopeJSON `json:"-"`
 }
 
@@ -1016,7 +697,7 @@ type TestGetParams struct {
 }
 
 type TestGetResponseEnvelope struct {
-	Result TestGetResponse             `json:"result"`
+	Result ObservatoryPageTest         `json:"result"`
 	JSON   testGetResponseEnvelopeJSON `json:"-"`
 }
 

@@ -41,7 +41,7 @@ func NewDevicePolicyService(opts ...option.RequestOption) (r *DevicePolicyServic
 
 // Creates a device settings profile to be applied to certain devices matching the
 // criteria.
-func (r *DevicePolicyService) New(ctx context.Context, params DevicePolicyNewParams, opts ...option.RequestOption) (res *[]DevicePolicyNewResponse, err error) {
+func (r *DevicePolicyService) New(ctx context.Context, params DevicePolicyNewParams, opts ...option.RequestOption) (res *TeamsDevicesDeviceSettingsPolicy, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/policy", params.AccountID)
@@ -54,7 +54,7 @@ func (r *DevicePolicyService) New(ctx context.Context, params DevicePolicyNewPar
 }
 
 // Fetches a list of the device settings profiles for an account.
-func (r *DevicePolicyService) List(ctx context.Context, query DevicePolicyListParams, opts ...option.RequestOption) (res *[]DevicePolicyListResponse, err error) {
+func (r *DevicePolicyService) List(ctx context.Context, query DevicePolicyListParams, opts ...option.RequestOption) (res *[]TeamsDevicesDeviceSettingsPolicy, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/policies", query.AccountID)
@@ -68,7 +68,7 @@ func (r *DevicePolicyService) List(ctx context.Context, query DevicePolicyListPa
 
 // Deletes a device settings profile and fetches a list of the remaining profiles
 // for an account.
-func (r *DevicePolicyService) Delete(ctx context.Context, policyID string, body DevicePolicyDeleteParams, opts ...option.RequestOption) (res *[]DevicePolicyDeleteResponse, err error) {
+func (r *DevicePolicyService) Delete(ctx context.Context, policyID string, body DevicePolicyDeleteParams, opts ...option.RequestOption) (res *[]TeamsDevicesDeviceSettingsPolicy, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/policy/%s", body.AccountID, policyID)
@@ -81,7 +81,7 @@ func (r *DevicePolicyService) Delete(ctx context.Context, policyID string, body 
 }
 
 // Updates a configured device settings profile.
-func (r *DevicePolicyService) Edit(ctx context.Context, policyID string, params DevicePolicyEditParams, opts ...option.RequestOption) (res *[]DevicePolicyEditResponse, err error) {
+func (r *DevicePolicyService) Edit(ctx context.Context, policyID string, params DevicePolicyEditParams, opts ...option.RequestOption) (res *TeamsDevicesDeviceSettingsPolicy, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/policy/%s", params.AccountID, policyID)
@@ -94,7 +94,7 @@ func (r *DevicePolicyService) Edit(ctx context.Context, policyID string, params 
 }
 
 // Fetches a device settings profile by ID.
-func (r *DevicePolicyService) Get(ctx context.Context, policyID string, query DevicePolicyGetParams, opts ...option.RequestOption) (res *[]DevicePolicyGetResponse, err error) {
+func (r *DevicePolicyService) Get(ctx context.Context, policyID string, query DevicePolicyGetParams, opts ...option.RequestOption) (res *TeamsDevicesDeviceSettingsPolicy, err error) {
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/policy/%s", query.AccountID, policyID)
@@ -106,415 +106,123 @@ func (r *DevicePolicyService) Get(ctx context.Context, policyID string, query De
 	return
 }
 
+type TeamsDevicesDeviceSettingsPolicy struct {
+	// Whether to allow the user to switch WARP between modes.
+	AllowModeSwitch bool `json:"allow_mode_switch"`
+	// Whether to receive update notifications when a new version of the client is
+	// available.
+	AllowUpdates bool `json:"allow_updates"`
+	// Whether to allow devices to leave the organization.
+	AllowedToLeave bool `json:"allowed_to_leave"`
+	// The amount of time in minutes to reconnect after having been disabled.
+	AutoConnect float64 `json:"auto_connect"`
+	// Turn on the captive portal after the specified amount of time.
+	CaptivePortal float64 `json:"captive_portal"`
+	// Whether the policy is the default policy for an account.
+	Default bool `json:"default"`
+	// A description of the policy.
+	Description string `json:"description"`
+	// If the `dns_server` field of a fallback domain is not present, the client will
+	// fall back to a best guess of the default/system DNS resolvers unless this policy
+	// option is set to `true`.
+	DisableAutoFallback bool `json:"disable_auto_fallback"`
+	// Whether the policy will be applied to matching devices.
+	Enabled bool                      `json:"enabled"`
+	Exclude []TeamsDevicesSplitTunnel `json:"exclude"`
+	// Whether to add Microsoft IPs to Split Tunnel exclusions.
+	ExcludeOfficeIPs bool                             `json:"exclude_office_ips"`
+	FallbackDomains  []TeamsDevicesFallbackDomain     `json:"fallback_domains"`
+	GatewayUniqueID  string                           `json:"gateway_unique_id"`
+	Include          []TeamsDevicesSplitTunnelInclude `json:"include"`
+	// The amount of time in minutes a user is allowed access to their LAN. A value of
+	// 0 will allow LAN access until the next WARP reconnection, such as a reboot or a
+	// laptop waking from sleep. Note that this field is omitted from the response if
+	// null or unset.
+	LanAllowMinutes float64 `json:"lan_allow_minutes"`
+	// The size of the subnet for the local access network. Note that this field is
+	// omitted from the response if null or unset.
+	LanAllowSubnetSize float64 `json:"lan_allow_subnet_size"`
+	// The wirefilter expression to match devices.
+	Match string `json:"match"`
+	// The name of the device settings profile.
+	Name string `json:"name"`
+	// Device ID.
+	PolicyID string `json:"policy_id"`
+	// The precedence of the policy. Lower values indicate higher precedence. Policies
+	// will be evaluated in ascending order of this field.
+	Precedence    float64                                       `json:"precedence"`
+	ServiceModeV2 TeamsDevicesDeviceSettingsPolicyServiceModeV2 `json:"service_mode_v2"`
+	// The URL to launch when the Send Feedback button is clicked.
+	SupportURL string `json:"support_url"`
+	// Whether to allow the user to turn off the WARP switch and disconnect the client.
+	SwitchLocked bool                                 `json:"switch_locked"`
+	JSON         teamsDevicesDeviceSettingsPolicyJSON `json:"-"`
+}
+
+// teamsDevicesDeviceSettingsPolicyJSON contains the JSON metadata for the struct
+// [TeamsDevicesDeviceSettingsPolicy]
+type teamsDevicesDeviceSettingsPolicyJSON struct {
+	AllowModeSwitch     apijson.Field
+	AllowUpdates        apijson.Field
+	AllowedToLeave      apijson.Field
+	AutoConnect         apijson.Field
+	CaptivePortal       apijson.Field
+	Default             apijson.Field
+	Description         apijson.Field
+	DisableAutoFallback apijson.Field
+	Enabled             apijson.Field
+	Exclude             apijson.Field
+	ExcludeOfficeIPs    apijson.Field
+	FallbackDomains     apijson.Field
+	GatewayUniqueID     apijson.Field
+	Include             apijson.Field
+	LanAllowMinutes     apijson.Field
+	LanAllowSubnetSize  apijson.Field
+	Match               apijson.Field
+	Name                apijson.Field
+	PolicyID            apijson.Field
+	Precedence          apijson.Field
+	ServiceModeV2       apijson.Field
+	SupportURL          apijson.Field
+	SwitchLocked        apijson.Field
+	raw                 string
+	ExtraFields         map[string]apijson.Field
+}
+
+func (r *TeamsDevicesDeviceSettingsPolicy) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r teamsDevicesDeviceSettingsPolicyJSON) RawJSON() string {
+	return r.raw
+}
+
+type TeamsDevicesDeviceSettingsPolicyServiceModeV2 struct {
+	// The mode to run the WARP client under.
+	Mode string `json:"mode"`
+	// The port number when used with proxy mode.
+	Port float64                                           `json:"port"`
+	JSON teamsDevicesDeviceSettingsPolicyServiceModeV2JSON `json:"-"`
+}
+
+// teamsDevicesDeviceSettingsPolicyServiceModeV2JSON contains the JSON metadata for
+// the struct [TeamsDevicesDeviceSettingsPolicyServiceModeV2]
+type teamsDevicesDeviceSettingsPolicyServiceModeV2JSON struct {
+	Mode        apijson.Field
+	Port        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *TeamsDevicesDeviceSettingsPolicyServiceModeV2) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r teamsDevicesDeviceSettingsPolicyServiceModeV2JSON) RawJSON() string {
+	return r.raw
+}
+
 type DevicePolicyNewResponse = interface{}
-
-type DevicePolicyListResponse struct {
-	// Whether to allow the user to switch WARP between modes.
-	AllowModeSwitch bool `json:"allow_mode_switch"`
-	// Whether to receive update notifications when a new version of the client is
-	// available.
-	AllowUpdates bool `json:"allow_updates"`
-	// Whether to allow devices to leave the organization.
-	AllowedToLeave bool `json:"allowed_to_leave"`
-	// The amount of time in minutes to reconnect after having been disabled.
-	AutoConnect float64 `json:"auto_connect"`
-	// Turn on the captive portal after the specified amount of time.
-	CaptivePortal float64 `json:"captive_portal"`
-	// Whether the policy is the default policy for an account.
-	Default bool `json:"default"`
-	// A description of the policy.
-	Description string `json:"description"`
-	// If the `dns_server` field of a fallback domain is not present, the client will
-	// fall back to a best guess of the default/system DNS resolvers unless this policy
-	// option is set to `true`.
-	DisableAutoFallback bool `json:"disable_auto_fallback"`
-	// Whether the policy will be applied to matching devices.
-	Enabled bool                              `json:"enabled"`
-	Exclude []DevicePolicyListResponseExclude `json:"exclude"`
-	// Whether to add Microsoft IPs to Split Tunnel exclusions.
-	ExcludeOfficeIPs bool                                     `json:"exclude_office_ips"`
-	FallbackDomains  []DevicePolicyListResponseFallbackDomain `json:"fallback_domains"`
-	GatewayUniqueID  string                                   `json:"gateway_unique_id"`
-	Include          []DevicePolicyListResponseInclude        `json:"include"`
-	// The amount of time in minutes a user is allowed access to their LAN. A value of
-	// 0 will allow LAN access until the next WARP reconnection, such as a reboot or a
-	// laptop waking from sleep. Note that this field is omitted from the response if
-	// null or unset.
-	LanAllowMinutes float64 `json:"lan_allow_minutes"`
-	// The size of the subnet for the local access network. Note that this field is
-	// omitted from the response if null or unset.
-	LanAllowSubnetSize float64 `json:"lan_allow_subnet_size"`
-	// The wirefilter expression to match devices.
-	Match string `json:"match"`
-	// The name of the device settings profile.
-	Name string `json:"name"`
-	// Device ID.
-	PolicyID string `json:"policy_id"`
-	// The precedence of the policy. Lower values indicate higher precedence. Policies
-	// will be evaluated in ascending order of this field.
-	Precedence    float64                               `json:"precedence"`
-	ServiceModeV2 DevicePolicyListResponseServiceModeV2 `json:"service_mode_v2"`
-	// The URL to launch when the Send Feedback button is clicked.
-	SupportURL string `json:"support_url"`
-	// Whether to allow the user to turn off the WARP switch and disconnect the client.
-	SwitchLocked bool                         `json:"switch_locked"`
-	JSON         devicePolicyListResponseJSON `json:"-"`
-}
-
-// devicePolicyListResponseJSON contains the JSON metadata for the struct
-// [DevicePolicyListResponse]
-type devicePolicyListResponseJSON struct {
-	AllowModeSwitch     apijson.Field
-	AllowUpdates        apijson.Field
-	AllowedToLeave      apijson.Field
-	AutoConnect         apijson.Field
-	CaptivePortal       apijson.Field
-	Default             apijson.Field
-	Description         apijson.Field
-	DisableAutoFallback apijson.Field
-	Enabled             apijson.Field
-	Exclude             apijson.Field
-	ExcludeOfficeIPs    apijson.Field
-	FallbackDomains     apijson.Field
-	GatewayUniqueID     apijson.Field
-	Include             apijson.Field
-	LanAllowMinutes     apijson.Field
-	LanAllowSubnetSize  apijson.Field
-	Match               apijson.Field
-	Name                apijson.Field
-	PolicyID            apijson.Field
-	Precedence          apijson.Field
-	ServiceModeV2       apijson.Field
-	SupportURL          apijson.Field
-	SwitchLocked        apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *DevicePolicyListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type DevicePolicyListResponseExclude struct {
-	// The address in CIDR format to exclude from the tunnel. If `address` is present,
-	// `host` must not be present.
-	Address string `json:"address,required"`
-	// A description of the Split Tunnel item, displayed in the client UI.
-	Description string `json:"description,required"`
-	// The domain name to exclude from the tunnel. If `host` is present, `address` must
-	// not be present.
-	Host string                              `json:"host"`
-	JSON devicePolicyListResponseExcludeJSON `json:"-"`
-}
-
-// devicePolicyListResponseExcludeJSON contains the JSON metadata for the struct
-// [DevicePolicyListResponseExclude]
-type devicePolicyListResponseExcludeJSON struct {
-	Address     apijson.Field
-	Description apijson.Field
-	Host        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyListResponseExclude) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyListResponseExcludeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DevicePolicyListResponseFallbackDomain struct {
-	// The domain suffix to match when resolving locally.
-	Suffix string `json:"suffix,required"`
-	// A description of the fallback domain, displayed in the client UI.
-	Description string `json:"description"`
-	// A list of IP addresses to handle domain resolution.
-	DNSServer []interface{}                              `json:"dns_server"`
-	JSON      devicePolicyListResponseFallbackDomainJSON `json:"-"`
-}
-
-// devicePolicyListResponseFallbackDomainJSON contains the JSON metadata for the
-// struct [DevicePolicyListResponseFallbackDomain]
-type devicePolicyListResponseFallbackDomainJSON struct {
-	Suffix      apijson.Field
-	Description apijson.Field
-	DNSServer   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyListResponseFallbackDomain) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyListResponseFallbackDomainJSON) RawJSON() string {
-	return r.raw
-}
-
-type DevicePolicyListResponseInclude struct {
-	// The address in CIDR format to include in the tunnel. If address is present, host
-	// must not be present.
-	Address string `json:"address,required"`
-	// A description of the split tunnel item, displayed in the client UI.
-	Description string `json:"description,required"`
-	// The domain name to include in the tunnel. If host is present, address must not
-	// be present.
-	Host string                              `json:"host"`
-	JSON devicePolicyListResponseIncludeJSON `json:"-"`
-}
-
-// devicePolicyListResponseIncludeJSON contains the JSON metadata for the struct
-// [DevicePolicyListResponseInclude]
-type devicePolicyListResponseIncludeJSON struct {
-	Address     apijson.Field
-	Description apijson.Field
-	Host        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyListResponseInclude) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyListResponseIncludeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DevicePolicyListResponseServiceModeV2 struct {
-	// The mode to run the WARP client under.
-	Mode string `json:"mode"`
-	// The port number when used with proxy mode.
-	Port float64                                   `json:"port"`
-	JSON devicePolicyListResponseServiceModeV2JSON `json:"-"`
-}
-
-// devicePolicyListResponseServiceModeV2JSON contains the JSON metadata for the
-// struct [DevicePolicyListResponseServiceModeV2]
-type devicePolicyListResponseServiceModeV2JSON struct {
-	Mode        apijson.Field
-	Port        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyListResponseServiceModeV2) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyListResponseServiceModeV2JSON) RawJSON() string {
-	return r.raw
-}
-
-type DevicePolicyDeleteResponse struct {
-	// Whether to allow the user to switch WARP between modes.
-	AllowModeSwitch bool `json:"allow_mode_switch"`
-	// Whether to receive update notifications when a new version of the client is
-	// available.
-	AllowUpdates bool `json:"allow_updates"`
-	// Whether to allow devices to leave the organization.
-	AllowedToLeave bool `json:"allowed_to_leave"`
-	// The amount of time in minutes to reconnect after having been disabled.
-	AutoConnect float64 `json:"auto_connect"`
-	// Turn on the captive portal after the specified amount of time.
-	CaptivePortal float64 `json:"captive_portal"`
-	// Whether the policy is the default policy for an account.
-	Default bool `json:"default"`
-	// A description of the policy.
-	Description string `json:"description"`
-	// If the `dns_server` field of a fallback domain is not present, the client will
-	// fall back to a best guess of the default/system DNS resolvers unless this policy
-	// option is set to `true`.
-	DisableAutoFallback bool `json:"disable_auto_fallback"`
-	// Whether the policy will be applied to matching devices.
-	Enabled bool                                `json:"enabled"`
-	Exclude []DevicePolicyDeleteResponseExclude `json:"exclude"`
-	// Whether to add Microsoft IPs to Split Tunnel exclusions.
-	ExcludeOfficeIPs bool                                       `json:"exclude_office_ips"`
-	FallbackDomains  []DevicePolicyDeleteResponseFallbackDomain `json:"fallback_domains"`
-	GatewayUniqueID  string                                     `json:"gateway_unique_id"`
-	Include          []DevicePolicyDeleteResponseInclude        `json:"include"`
-	// The amount of time in minutes a user is allowed access to their LAN. A value of
-	// 0 will allow LAN access until the next WARP reconnection, such as a reboot or a
-	// laptop waking from sleep. Note that this field is omitted from the response if
-	// null or unset.
-	LanAllowMinutes float64 `json:"lan_allow_minutes"`
-	// The size of the subnet for the local access network. Note that this field is
-	// omitted from the response if null or unset.
-	LanAllowSubnetSize float64 `json:"lan_allow_subnet_size"`
-	// The wirefilter expression to match devices.
-	Match string `json:"match"`
-	// The name of the device settings profile.
-	Name string `json:"name"`
-	// Device ID.
-	PolicyID string `json:"policy_id"`
-	// The precedence of the policy. Lower values indicate higher precedence. Policies
-	// will be evaluated in ascending order of this field.
-	Precedence    float64                                 `json:"precedence"`
-	ServiceModeV2 DevicePolicyDeleteResponseServiceModeV2 `json:"service_mode_v2"`
-	// The URL to launch when the Send Feedback button is clicked.
-	SupportURL string `json:"support_url"`
-	// Whether to allow the user to turn off the WARP switch and disconnect the client.
-	SwitchLocked bool                           `json:"switch_locked"`
-	JSON         devicePolicyDeleteResponseJSON `json:"-"`
-}
-
-// devicePolicyDeleteResponseJSON contains the JSON metadata for the struct
-// [DevicePolicyDeleteResponse]
-type devicePolicyDeleteResponseJSON struct {
-	AllowModeSwitch     apijson.Field
-	AllowUpdates        apijson.Field
-	AllowedToLeave      apijson.Field
-	AutoConnect         apijson.Field
-	CaptivePortal       apijson.Field
-	Default             apijson.Field
-	Description         apijson.Field
-	DisableAutoFallback apijson.Field
-	Enabled             apijson.Field
-	Exclude             apijson.Field
-	ExcludeOfficeIPs    apijson.Field
-	FallbackDomains     apijson.Field
-	GatewayUniqueID     apijson.Field
-	Include             apijson.Field
-	LanAllowMinutes     apijson.Field
-	LanAllowSubnetSize  apijson.Field
-	Match               apijson.Field
-	Name                apijson.Field
-	PolicyID            apijson.Field
-	Precedence          apijson.Field
-	ServiceModeV2       apijson.Field
-	SupportURL          apijson.Field
-	SwitchLocked        apijson.Field
-	raw                 string
-	ExtraFields         map[string]apijson.Field
-}
-
-func (r *DevicePolicyDeleteResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyDeleteResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-type DevicePolicyDeleteResponseExclude struct {
-	// The address in CIDR format to exclude from the tunnel. If `address` is present,
-	// `host` must not be present.
-	Address string `json:"address,required"`
-	// A description of the Split Tunnel item, displayed in the client UI.
-	Description string `json:"description,required"`
-	// The domain name to exclude from the tunnel. If `host` is present, `address` must
-	// not be present.
-	Host string                                `json:"host"`
-	JSON devicePolicyDeleteResponseExcludeJSON `json:"-"`
-}
-
-// devicePolicyDeleteResponseExcludeJSON contains the JSON metadata for the struct
-// [DevicePolicyDeleteResponseExclude]
-type devicePolicyDeleteResponseExcludeJSON struct {
-	Address     apijson.Field
-	Description apijson.Field
-	Host        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyDeleteResponseExclude) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyDeleteResponseExcludeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DevicePolicyDeleteResponseFallbackDomain struct {
-	// The domain suffix to match when resolving locally.
-	Suffix string `json:"suffix,required"`
-	// A description of the fallback domain, displayed in the client UI.
-	Description string `json:"description"`
-	// A list of IP addresses to handle domain resolution.
-	DNSServer []interface{}                                `json:"dns_server"`
-	JSON      devicePolicyDeleteResponseFallbackDomainJSON `json:"-"`
-}
-
-// devicePolicyDeleteResponseFallbackDomainJSON contains the JSON metadata for the
-// struct [DevicePolicyDeleteResponseFallbackDomain]
-type devicePolicyDeleteResponseFallbackDomainJSON struct {
-	Suffix      apijson.Field
-	Description apijson.Field
-	DNSServer   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyDeleteResponseFallbackDomain) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyDeleteResponseFallbackDomainJSON) RawJSON() string {
-	return r.raw
-}
-
-type DevicePolicyDeleteResponseInclude struct {
-	// The address in CIDR format to include in the tunnel. If address is present, host
-	// must not be present.
-	Address string `json:"address,required"`
-	// A description of the split tunnel item, displayed in the client UI.
-	Description string `json:"description,required"`
-	// The domain name to include in the tunnel. If host is present, address must not
-	// be present.
-	Host string                                `json:"host"`
-	JSON devicePolicyDeleteResponseIncludeJSON `json:"-"`
-}
-
-// devicePolicyDeleteResponseIncludeJSON contains the JSON metadata for the struct
-// [DevicePolicyDeleteResponseInclude]
-type devicePolicyDeleteResponseIncludeJSON struct {
-	Address     apijson.Field
-	Description apijson.Field
-	Host        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyDeleteResponseInclude) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyDeleteResponseIncludeJSON) RawJSON() string {
-	return r.raw
-}
-
-type DevicePolicyDeleteResponseServiceModeV2 struct {
-	// The mode to run the WARP client under.
-	Mode string `json:"mode"`
-	// The port number when used with proxy mode.
-	Port float64                                     `json:"port"`
-	JSON devicePolicyDeleteResponseServiceModeV2JSON `json:"-"`
-}
-
-// devicePolicyDeleteResponseServiceModeV2JSON contains the JSON metadata for the
-// struct [DevicePolicyDeleteResponseServiceModeV2]
-type devicePolicyDeleteResponseServiceModeV2JSON struct {
-	Mode        apijson.Field
-	Port        apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *DevicePolicyDeleteResponseServiceModeV2) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r devicePolicyDeleteResponseServiceModeV2JSON) RawJSON() string {
-	return r.raw
-}
 
 type DevicePolicyEditResponse = interface{}
 
@@ -583,7 +291,7 @@ func (r DevicePolicyNewParamsServiceModeV2) MarshalJSON() (data []byte, err erro
 type DevicePolicyNewResponseEnvelope struct {
 	Errors   []DevicePolicyNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DevicePolicyNewResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DevicePolicyNewResponse                 `json:"result,required,nullable"`
+	Result   TeamsDevicesDeviceSettingsPolicy          `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DevicePolicyNewResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DevicePolicyNewResponseEnvelopeResultInfo `json:"result_info"`
@@ -701,7 +409,7 @@ type DevicePolicyListParams struct {
 type DevicePolicyListResponseEnvelope struct {
 	Errors   []DevicePolicyListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DevicePolicyListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DevicePolicyListResponse                 `json:"result,required,nullable"`
+	Result   []TeamsDevicesDeviceSettingsPolicy         `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DevicePolicyListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DevicePolicyListResponseEnvelopeResultInfo `json:"result_info"`
@@ -819,7 +527,7 @@ type DevicePolicyDeleteParams struct {
 type DevicePolicyDeleteResponseEnvelope struct {
 	Errors   []DevicePolicyDeleteResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DevicePolicyDeleteResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DevicePolicyDeleteResponse                 `json:"result,required,nullable"`
+	Result   []TeamsDevicesDeviceSettingsPolicy           `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DevicePolicyDeleteResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DevicePolicyDeleteResponseEnvelopeResultInfo `json:"result_info"`
@@ -985,7 +693,7 @@ func (r DevicePolicyEditParamsServiceModeV2) MarshalJSON() (data []byte, err err
 type DevicePolicyEditResponseEnvelope struct {
 	Errors   []DevicePolicyEditResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DevicePolicyEditResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DevicePolicyEditResponse                 `json:"result,required,nullable"`
+	Result   TeamsDevicesDeviceSettingsPolicy           `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DevicePolicyEditResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DevicePolicyEditResponseEnvelopeResultInfo `json:"result_info"`
@@ -1103,7 +811,7 @@ type DevicePolicyGetParams struct {
 type DevicePolicyGetResponseEnvelope struct {
 	Errors   []DevicePolicyGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []DevicePolicyGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   []DevicePolicyGetResponse                 `json:"result,required,nullable"`
+	Result   TeamsDevicesDeviceSettingsPolicy          `json:"result,required,nullable"`
 	// Whether the API call was successful.
 	Success    DevicePolicyGetResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo DevicePolicyGetResponseEnvelopeResultInfo `json:"result_info"`

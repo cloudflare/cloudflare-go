@@ -73,7 +73,7 @@ func (r *OutgoingService) Delete(ctx context.Context, body OutgoingDeleteParams,
 
 // Disable outgoing zone transfers for primary zone and clears IXFR backlog of
 // primary zone.
-func (r *OutgoingService) Disable(ctx context.Context, body OutgoingDisableParams, opts ...option.RequestOption) (res *string, err error) {
+func (r *OutgoingService) Disable(ctx context.Context, body OutgoingDisableParams, opts ...option.RequestOption) (res *SecondaryDNSDisableTransferResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OutgoingDisableResponseEnvelope
 	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing/disable", body.ZoneID)
@@ -86,7 +86,7 @@ func (r *OutgoingService) Disable(ctx context.Context, body OutgoingDisableParam
 }
 
 // Enable outgoing zone transfers for primary zone.
-func (r *OutgoingService) Enable(ctx context.Context, body OutgoingEnableParams, opts ...option.RequestOption) (res *string, err error) {
+func (r *OutgoingService) Enable(ctx context.Context, body OutgoingEnableParams, opts ...option.RequestOption) (res *SecondaryDNSEnableTransferResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OutgoingEnableResponseEnvelope
 	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing/enable", body.ZoneID)
@@ -99,7 +99,7 @@ func (r *OutgoingService) Enable(ctx context.Context, body OutgoingEnableParams,
 }
 
 // Notifies the secondary nameserver(s) and clears IXFR backlog of primary zone.
-func (r *OutgoingService) ForceNotify(ctx context.Context, body OutgoingForceNotifyParams, opts ...option.RequestOption) (res *string, err error) {
+func (r *OutgoingService) ForceNotify(ctx context.Context, body OutgoingForceNotifyParams, opts ...option.RequestOption) (res *SecondaryDNSSchemasForceResult, err error) {
 	opts = append(r.Options[:], opts...)
 	var env OutgoingForceNotifyResponseEnvelope
 	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing/force_notify", body.ZoneID)
@@ -123,6 +123,12 @@ func (r *OutgoingService) Get(ctx context.Context, query OutgoingGetParams, opts
 	res = &env.Result
 	return
 }
+
+type SecondaryDNSDisableTransferResult = string
+
+type SecondaryDNSEnableTransferResult = string
+
+type SecondaryDNSSchemasForceResult = string
 
 type OutgoingNewResponse struct {
 	ID interface{} `json:"id"`
@@ -541,7 +547,7 @@ type OutgoingDisableResponseEnvelope struct {
 	Errors   []OutgoingDisableResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []OutgoingDisableResponseEnvelopeMessages `json:"messages,required"`
 	// The zone transfer status of a primary zone
-	Result string `json:"result,required"`
+	Result SecondaryDNSDisableTransferResult `json:"result,required"`
 	// Whether the API call was successful
 	Success OutgoingDisableResponseEnvelopeSuccess `json:"success,required"`
 	JSON    outgoingDisableResponseEnvelopeJSON    `json:"-"`
@@ -627,7 +633,7 @@ type OutgoingEnableResponseEnvelope struct {
 	Errors   []OutgoingEnableResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []OutgoingEnableResponseEnvelopeMessages `json:"messages,required"`
 	// The zone transfer status of a primary zone
-	Result string `json:"result,required"`
+	Result SecondaryDNSEnableTransferResult `json:"result,required"`
 	// Whether the API call was successful
 	Success OutgoingEnableResponseEnvelopeSuccess `json:"success,required"`
 	JSON    outgoingEnableResponseEnvelopeJSON    `json:"-"`
@@ -714,7 +720,7 @@ type OutgoingForceNotifyResponseEnvelope struct {
 	Messages []OutgoingForceNotifyResponseEnvelopeMessages `json:"messages,required"`
 	// When force_notify query parameter is set to true, the response is a simple
 	// string
-	Result string `json:"result,required"`
+	Result SecondaryDNSSchemasForceResult `json:"result,required"`
 	// Whether the API call was successful
 	Success OutgoingForceNotifyResponseEnvelopeSuccess `json:"success,required"`
 	JSON    outgoingForceNotifyResponseEnvelopeJSON    `json:"-"`

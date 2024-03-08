@@ -35,7 +35,7 @@ func NewSettingAlwaysUseHTTPSService(opts ...option.RequestOption) (r *SettingAl
 // Reply to all requests for URLs that use "http" with a 301 redirect to the
 // equivalent "https" URL. If you only want to redirect for a subset of requests,
 // consider creating an "Always use HTTPS" page rule.
-func (r *SettingAlwaysUseHTTPSService) Edit(ctx context.Context, params SettingAlwaysUseHTTPSEditParams, opts ...option.RequestOption) (res *SettingAlwaysUseHTTPSEditResponse, err error) {
+func (r *SettingAlwaysUseHTTPSService) Edit(ctx context.Context, params SettingAlwaysUseHTTPSEditParams, opts ...option.RequestOption) (res *ZonesAlwaysUseHTTPS, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingAlwaysUseHTTPSEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/always_use_https", params.ZoneID)
@@ -50,7 +50,7 @@ func (r *SettingAlwaysUseHTTPSService) Edit(ctx context.Context, params SettingA
 // Reply to all requests for URLs that use "http" with a 301 redirect to the
 // equivalent "https" URL. If you only want to redirect for a subset of requests,
 // consider creating an "Always use HTTPS" page rule.
-func (r *SettingAlwaysUseHTTPSService) Get(ctx context.Context, query SettingAlwaysUseHTTPSGetParams, opts ...option.RequestOption) (res *SettingAlwaysUseHTTPSGetResponse, err error) {
+func (r *SettingAlwaysUseHTTPSService) Get(ctx context.Context, query SettingAlwaysUseHTTPSGetParams, opts ...option.RequestOption) (res *ZonesAlwaysUseHTTPS, err error) {
 	opts = append(r.Options[:], opts...)
 	var env SettingAlwaysUseHTTPSGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/always_use_https", query.ZoneID)
@@ -65,22 +65,22 @@ func (r *SettingAlwaysUseHTTPSService) Get(ctx context.Context, query SettingAlw
 // Reply to all requests for URLs that use "http" with a 301 redirect to the
 // equivalent "https" URL. If you only want to redirect for a subset of requests,
 // consider creating an "Always use HTTPS" page rule.
-type SettingAlwaysUseHTTPSEditResponse struct {
+type ZonesAlwaysUseHTTPS struct {
 	// ID of the zone setting.
-	ID SettingAlwaysUseHTTPSEditResponseID `json:"id,required"`
+	ID ZonesAlwaysUseHTTPSID `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingAlwaysUseHTTPSEditResponseValue `json:"value,required"`
+	Value ZonesAlwaysUseHTTPSValue `json:"value,required"`
 	// Whether or not this setting can be modified for this zone (based on your
 	// Cloudflare plan level).
-	Editable SettingAlwaysUseHTTPSEditResponseEditable `json:"editable"`
+	Editable ZonesAlwaysUseHTTPSEditable `json:"editable"`
 	// last time this setting was modified.
-	ModifiedOn time.Time                             `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingAlwaysUseHTTPSEditResponseJSON `json:"-"`
+	ModifiedOn time.Time               `json:"modified_on,nullable" format:"date-time"`
+	JSON       zonesAlwaysUseHTTPSJSON `json:"-"`
 }
 
-// settingAlwaysUseHTTPSEditResponseJSON contains the JSON metadata for the struct
-// [SettingAlwaysUseHTTPSEditResponse]
-type settingAlwaysUseHTTPSEditResponseJSON struct {
+// zonesAlwaysUseHTTPSJSON contains the JSON metadata for the struct
+// [ZonesAlwaysUseHTTPS]
+type zonesAlwaysUseHTTPSJSON struct {
 	ID          apijson.Field
 	Value       apijson.Field
 	Editable    apijson.Field
@@ -89,96 +89,57 @@ type settingAlwaysUseHTTPSEditResponseJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *SettingAlwaysUseHTTPSEditResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *ZonesAlwaysUseHTTPS) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r settingAlwaysUseHTTPSEditResponseJSON) RawJSON() string {
+func (r zonesAlwaysUseHTTPSJSON) RawJSON() string {
 	return r.raw
 }
 
+func (r ZonesAlwaysUseHTTPS) implementsZonesSettingEditResponse() {}
+
+func (r ZonesAlwaysUseHTTPS) implementsZonesSettingGetResponse() {}
+
 // ID of the zone setting.
-type SettingAlwaysUseHTTPSEditResponseID string
+type ZonesAlwaysUseHTTPSID string
 
 const (
-	SettingAlwaysUseHTTPSEditResponseIDAlwaysUseHTTPS SettingAlwaysUseHTTPSEditResponseID = "always_use_https"
+	ZonesAlwaysUseHTTPSIDAlwaysUseHTTPS ZonesAlwaysUseHTTPSID = "always_use_https"
 )
 
 // Current value of the zone setting.
-type SettingAlwaysUseHTTPSEditResponseValue string
+type ZonesAlwaysUseHTTPSValue string
 
 const (
-	SettingAlwaysUseHTTPSEditResponseValueOn  SettingAlwaysUseHTTPSEditResponseValue = "on"
-	SettingAlwaysUseHTTPSEditResponseValueOff SettingAlwaysUseHTTPSEditResponseValue = "off"
+	ZonesAlwaysUseHTTPSValueOn  ZonesAlwaysUseHTTPSValue = "on"
+	ZonesAlwaysUseHTTPSValueOff ZonesAlwaysUseHTTPSValue = "off"
 )
 
 // Whether or not this setting can be modified for this zone (based on your
 // Cloudflare plan level).
-type SettingAlwaysUseHTTPSEditResponseEditable bool
+type ZonesAlwaysUseHTTPSEditable bool
 
 const (
-	SettingAlwaysUseHTTPSEditResponseEditableTrue  SettingAlwaysUseHTTPSEditResponseEditable = true
-	SettingAlwaysUseHTTPSEditResponseEditableFalse SettingAlwaysUseHTTPSEditResponseEditable = false
+	ZonesAlwaysUseHTTPSEditableTrue  ZonesAlwaysUseHTTPSEditable = true
+	ZonesAlwaysUseHTTPSEditableFalse ZonesAlwaysUseHTTPSEditable = false
 )
 
 // Reply to all requests for URLs that use "http" with a 301 redirect to the
 // equivalent "https" URL. If you only want to redirect for a subset of requests,
 // consider creating an "Always use HTTPS" page rule.
-type SettingAlwaysUseHTTPSGetResponse struct {
+type ZonesAlwaysUseHTTPSParam struct {
 	// ID of the zone setting.
-	ID SettingAlwaysUseHTTPSGetResponseID `json:"id,required"`
+	ID param.Field[ZonesAlwaysUseHTTPSID] `json:"id,required"`
 	// Current value of the zone setting.
-	Value SettingAlwaysUseHTTPSGetResponseValue `json:"value,required"`
-	// Whether or not this setting can be modified for this zone (based on your
-	// Cloudflare plan level).
-	Editable SettingAlwaysUseHTTPSGetResponseEditable `json:"editable"`
-	// last time this setting was modified.
-	ModifiedOn time.Time                            `json:"modified_on,nullable" format:"date-time"`
-	JSON       settingAlwaysUseHTTPSGetResponseJSON `json:"-"`
+	Value param.Field[ZonesAlwaysUseHTTPSValue] `json:"value,required"`
 }
 
-// settingAlwaysUseHTTPSGetResponseJSON contains the JSON metadata for the struct
-// [SettingAlwaysUseHTTPSGetResponse]
-type settingAlwaysUseHTTPSGetResponseJSON struct {
-	ID          apijson.Field
-	Value       apijson.Field
-	Editable    apijson.Field
-	ModifiedOn  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+func (r ZonesAlwaysUseHTTPSParam) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }
 
-func (r *SettingAlwaysUseHTTPSGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r settingAlwaysUseHTTPSGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// ID of the zone setting.
-type SettingAlwaysUseHTTPSGetResponseID string
-
-const (
-	SettingAlwaysUseHTTPSGetResponseIDAlwaysUseHTTPS SettingAlwaysUseHTTPSGetResponseID = "always_use_https"
-)
-
-// Current value of the zone setting.
-type SettingAlwaysUseHTTPSGetResponseValue string
-
-const (
-	SettingAlwaysUseHTTPSGetResponseValueOn  SettingAlwaysUseHTTPSGetResponseValue = "on"
-	SettingAlwaysUseHTTPSGetResponseValueOff SettingAlwaysUseHTTPSGetResponseValue = "off"
-)
-
-// Whether or not this setting can be modified for this zone (based on your
-// Cloudflare plan level).
-type SettingAlwaysUseHTTPSGetResponseEditable bool
-
-const (
-	SettingAlwaysUseHTTPSGetResponseEditableTrue  SettingAlwaysUseHTTPSGetResponseEditable = true
-	SettingAlwaysUseHTTPSGetResponseEditableFalse SettingAlwaysUseHTTPSGetResponseEditable = false
-)
+func (r ZonesAlwaysUseHTTPSParam) implementsZonesSettingEditParamsItem() {}
 
 type SettingAlwaysUseHTTPSEditParams struct {
 	// Identifier
@@ -207,7 +168,7 @@ type SettingAlwaysUseHTTPSEditResponseEnvelope struct {
 	// Reply to all requests for URLs that use "http" with a 301 redirect to the
 	// equivalent "https" URL. If you only want to redirect for a subset of requests,
 	// consider creating an "Always use HTTPS" page rule.
-	Result SettingAlwaysUseHTTPSEditResponse             `json:"result"`
+	Result ZonesAlwaysUseHTTPS                           `json:"result"`
 	JSON   settingAlwaysUseHTTPSEditResponseEnvelopeJSON `json:"-"`
 }
 
@@ -289,7 +250,7 @@ type SettingAlwaysUseHTTPSGetResponseEnvelope struct {
 	// Reply to all requests for URLs that use "http" with a 301 redirect to the
 	// equivalent "https" URL. If you only want to redirect for a subset of requests,
 	// consider creating an "Always use HTTPS" page rule.
-	Result SettingAlwaysUseHTTPSGetResponse             `json:"result"`
+	Result ZonesAlwaysUseHTTPS                          `json:"result"`
 	JSON   settingAlwaysUseHTTPSGetResponseEnvelopeJSON `json:"-"`
 }
 

@@ -37,7 +37,7 @@ func NewAccessUserService(opts ...option.RequestOption) (r *AccessUserService) {
 }
 
 // Gets a list of users for an account.
-func (r *AccessUserService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *[]AccessUserListResponse, err error) {
+func (r *AccessUserService) List(ctx context.Context, identifier string, opts ...option.RequestOption) (res *[]AccessUsers, err error) {
 	opts = append(r.Options[:], opts...)
 	var env AccessUserListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/access/users", identifier)
@@ -49,7 +49,7 @@ func (r *AccessUserService) List(ctx context.Context, identifier string, opts ..
 	return
 }
 
-type AccessUserListResponse struct {
+type AccessUsers struct {
 	// UUID
 	ID string `json:"id"`
 	// True if the user has authenticated with Cloudflare Access.
@@ -68,14 +68,13 @@ type AccessUserListResponse struct {
 	// The unique API identifier for the Zero Trust seat.
 	SeatUid interface{} `json:"seat_uid"`
 	// The unique API identifier for the user.
-	Uid       interface{}                `json:"uid"`
-	UpdatedAt time.Time                  `json:"updated_at" format:"date-time"`
-	JSON      accessUserListResponseJSON `json:"-"`
+	Uid       interface{}     `json:"uid"`
+	UpdatedAt time.Time       `json:"updated_at" format:"date-time"`
+	JSON      accessUsersJSON `json:"-"`
 }
 
-// accessUserListResponseJSON contains the JSON metadata for the struct
-// [AccessUserListResponse]
-type accessUserListResponseJSON struct {
+// accessUsersJSON contains the JSON metadata for the struct [AccessUsers]
+type accessUsersJSON struct {
 	ID                  apijson.Field
 	AccessSeat          apijson.Field
 	ActiveDeviceCount   apijson.Field
@@ -91,18 +90,18 @@ type accessUserListResponseJSON struct {
 	ExtraFields         map[string]apijson.Field
 }
 
-func (r *AccessUserListResponse) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessUsers) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessUserListResponseJSON) RawJSON() string {
+func (r accessUsersJSON) RawJSON() string {
 	return r.raw
 }
 
 type AccessUserListResponseEnvelope struct {
 	Errors   []AccessUserListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessUserListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AccessUserListResponse                 `json:"result,required,nullable"`
+	Result   []AccessUsers                            `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    AccessUserListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo AccessUserListResponseEnvelopeResultInfo `json:"result_info"`
