@@ -3,7 +3,7 @@
 package cloudflare
 
 import (
-	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/cloudflare/cloudflare-go/option"
 )
 
 // Web3HostnameIPFSUniversalPathService contains methods and other services that

@@ -6,9 +6,9 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-sdk-go/internal/apijson"
-	"github.com/cloudflare/cloudflare-sdk-go/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-sdk-go/option"
+	"github.com/cloudflare/cloudflare-go/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/option"
 )
 
 // UserTokenPermissionGroupService contains methods and other services that help
