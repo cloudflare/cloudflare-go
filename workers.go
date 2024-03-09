@@ -262,6 +262,14 @@ func (api *API) DeleteWorker(ctx context.Context, rc *ResourceContainer, params 
 //
 // API reference: https://developers.cloudflare.com/api/operations/worker-script-download-worker
 func (api *API) GetWorker(ctx context.Context, rc *ResourceContainer, scriptName string) (WorkerScriptResponse, error) {
+	return api.GetWorkerWithDispatchNamespace(ctx, rc, scriptName, "")
+}
+
+// GetWorker fetch raw script content for your worker returns string containing
+// worker code js.
+//
+// API reference: https://developers.cloudflare.com/api/operations/worker-script-download-worker
+func (api *API) GetWorkerWithDispatchNamespace(ctx context.Context, rc *ResourceContainer, scriptName string, dispatchNamespace string) (WorkerScriptResponse, error) {
 	if rc.Level != AccountRouteLevel {
 		return WorkerScriptResponse{}, ErrRequiredAccountLevelResourceContainer
 	}
@@ -271,6 +279,9 @@ func (api *API) GetWorker(ctx context.Context, rc *ResourceContainer, scriptName
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s", rc.Identifier, scriptName)
+	if dispatchNamespace != "" {
+		uri = fmt.Sprintf("/accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/content", rc.Identifier, dispatchNamespace, scriptName)
+	}
 	res, err := api.makeRequestContextWithHeadersComplete(ctx, http.MethodGet, uri, nil, nil)
 	var r WorkerScriptResponse
 	if err != nil {
@@ -354,7 +365,7 @@ func (api *API) UploadWorker(ctx context.Context, rc *ResourceContainer, params 
 	}
 
 	uri := fmt.Sprintf("/accounts/%s/workers/scripts/%s", rc.Identifier, params.ScriptName)
-	if params.DispatchNamespaceName != nil {
+	if params.DispatchNamespaceName != nil && *params.DispatchNamespaceName != "" {
 		uri = fmt.Sprintf("/accounts/%s/workers/dispatch/namespaces/%s/scripts/%s", rc.Identifier, *params.DispatchNamespaceName, params.ScriptName)
 	}
 
