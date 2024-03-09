@@ -62,7 +62,7 @@ func (r *V3DestinationWebhookService) Update(ctx context.Context, webhookID stri
 }
 
 // Gets a list of all configured webhook destinations.
-func (r *V3DestinationWebhookService) List(ctx context.Context, query V3DestinationWebhookListParams, opts ...option.RequestOption) (res *[]V3DestinationWebhookListResponse, err error) {
+func (r *V3DestinationWebhookService) List(ctx context.Context, query V3DestinationWebhookListParams, opts ...option.RequestOption) (res *[]AaaWebhooks, err error) {
 	opts = append(r.Options[:], opts...)
 	var env V3DestinationWebhookListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/webhooks", query.AccountID)
@@ -88,7 +88,7 @@ func (r *V3DestinationWebhookService) Delete(ctx context.Context, webhookID stri
 }
 
 // Get details for a single webhooks destination.
-func (r *V3DestinationWebhookService) Get(ctx context.Context, webhookID string, query V3DestinationWebhookGetParams, opts ...option.RequestOption) (res *V3DestinationWebhookGetResponse, err error) {
+func (r *V3DestinationWebhookService) Get(ctx context.Context, webhookID string, query V3DestinationWebhookGetParams, opts ...option.RequestOption) (res *AaaWebhooks, err error) {
 	opts = append(r.Options[:], opts...)
 	var env V3DestinationWebhookGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/webhooks/%s", query.AccountID, webhookID)
@@ -99,6 +99,62 @@ func (r *V3DestinationWebhookService) Get(ctx context.Context, webhookID string,
 	res = &env.Result
 	return
 }
+
+type AaaWebhooks struct {
+	// The unique identifier of a webhook
+	ID string `json:"id"`
+	// Timestamp of when the webhook destination was created.
+	CreatedAt time.Time `json:"created_at" format:"date-time"`
+	// Timestamp of the last time an attempt to dispatch a notification to this webhook
+	// failed.
+	LastFailure time.Time `json:"last_failure" format:"date-time"`
+	// Timestamp of the last time Cloudflare was able to successfully dispatch a
+	// notification using this webhook.
+	LastSuccess time.Time `json:"last_success" format:"date-time"`
+	// The name of the webhook destination. This will be included in the request body
+	// when you receive a webhook notification.
+	Name string `json:"name"`
+	// Optional secret that will be passed in the `cf-webhook-auth` header when
+	// dispatching generic webhook notifications or formatted for supported
+	// destinations. Secrets are not returned in any API response body.
+	Secret string `json:"secret"`
+	// Type of webhook endpoint.
+	Type AaaWebhooksType `json:"type"`
+	// The POST endpoint to call when dispatching a notification.
+	URL  string          `json:"url"`
+	JSON aaaWebhooksJSON `json:"-"`
+}
+
+// aaaWebhooksJSON contains the JSON metadata for the struct [AaaWebhooks]
+type aaaWebhooksJSON struct {
+	ID          apijson.Field
+	CreatedAt   apijson.Field
+	LastFailure apijson.Field
+	LastSuccess apijson.Field
+	Name        apijson.Field
+	Secret      apijson.Field
+	Type        apijson.Field
+	URL         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AaaWebhooks) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aaaWebhooksJSON) RawJSON() string {
+	return r.raw
+}
+
+// Type of webhook endpoint.
+type AaaWebhooksType string
+
+const (
+	AaaWebhooksTypeSlack   AaaWebhooksType = "slack"
+	AaaWebhooksTypeGeneric AaaWebhooksType = "generic"
+	AaaWebhooksTypeGchat   AaaWebhooksType = "gchat"
+)
 
 type V3DestinationWebhookNewResponse struct {
 	// UUID
@@ -144,63 +200,6 @@ func (r v3DestinationWebhookUpdateResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-type V3DestinationWebhookListResponse struct {
-	// The unique identifier of a webhook
-	ID string `json:"id"`
-	// Timestamp of when the webhook destination was created.
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Timestamp of the last time an attempt to dispatch a notification to this webhook
-	// failed.
-	LastFailure time.Time `json:"last_failure" format:"date-time"`
-	// Timestamp of the last time Cloudflare was able to successfully dispatch a
-	// notification using this webhook.
-	LastSuccess time.Time `json:"last_success" format:"date-time"`
-	// The name of the webhook destination. This will be included in the request body
-	// when you receive a webhook notification.
-	Name string `json:"name"`
-	// Optional secret that will be passed in the `cf-webhook-auth` header when
-	// dispatching generic webhook notifications or formatted for supported
-	// destinations. Secrets are not returned in any API response body.
-	Secret string `json:"secret"`
-	// Type of webhook endpoint.
-	Type V3DestinationWebhookListResponseType `json:"type"`
-	// The POST endpoint to call when dispatching a notification.
-	URL  string                               `json:"url"`
-	JSON v3DestinationWebhookListResponseJSON `json:"-"`
-}
-
-// v3DestinationWebhookListResponseJSON contains the JSON metadata for the struct
-// [V3DestinationWebhookListResponse]
-type v3DestinationWebhookListResponseJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	LastFailure apijson.Field
-	LastSuccess apijson.Field
-	Name        apijson.Field
-	Secret      apijson.Field
-	Type        apijson.Field
-	URL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *V3DestinationWebhookListResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r v3DestinationWebhookListResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// Type of webhook endpoint.
-type V3DestinationWebhookListResponseType string
-
-const (
-	V3DestinationWebhookListResponseTypeSlack   V3DestinationWebhookListResponseType = "slack"
-	V3DestinationWebhookListResponseTypeGeneric V3DestinationWebhookListResponseType = "generic"
-	V3DestinationWebhookListResponseTypeGchat   V3DestinationWebhookListResponseType = "gchat"
-)
-
 // Union satisfied by [alerting.V3DestinationWebhookDeleteResponseUnknown],
 // [alerting.V3DestinationWebhookDeleteResponseArray] or [shared.UnionString].
 type V3DestinationWebhookDeleteResponse interface {
@@ -226,63 +225,6 @@ type V3DestinationWebhookDeleteResponseArray []interface{}
 
 func (r V3DestinationWebhookDeleteResponseArray) ImplementsAlertingV3DestinationWebhookDeleteResponse() {
 }
-
-type V3DestinationWebhookGetResponse struct {
-	// The unique identifier of a webhook
-	ID string `json:"id"`
-	// Timestamp of when the webhook destination was created.
-	CreatedAt time.Time `json:"created_at" format:"date-time"`
-	// Timestamp of the last time an attempt to dispatch a notification to this webhook
-	// failed.
-	LastFailure time.Time `json:"last_failure" format:"date-time"`
-	// Timestamp of the last time Cloudflare was able to successfully dispatch a
-	// notification using this webhook.
-	LastSuccess time.Time `json:"last_success" format:"date-time"`
-	// The name of the webhook destination. This will be included in the request body
-	// when you receive a webhook notification.
-	Name string `json:"name"`
-	// Optional secret that will be passed in the `cf-webhook-auth` header when
-	// dispatching generic webhook notifications or formatted for supported
-	// destinations. Secrets are not returned in any API response body.
-	Secret string `json:"secret"`
-	// Type of webhook endpoint.
-	Type V3DestinationWebhookGetResponseType `json:"type"`
-	// The POST endpoint to call when dispatching a notification.
-	URL  string                              `json:"url"`
-	JSON v3DestinationWebhookGetResponseJSON `json:"-"`
-}
-
-// v3DestinationWebhookGetResponseJSON contains the JSON metadata for the struct
-// [V3DestinationWebhookGetResponse]
-type v3DestinationWebhookGetResponseJSON struct {
-	ID          apijson.Field
-	CreatedAt   apijson.Field
-	LastFailure apijson.Field
-	LastSuccess apijson.Field
-	Name        apijson.Field
-	Secret      apijson.Field
-	Type        apijson.Field
-	URL         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *V3DestinationWebhookGetResponse) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r v3DestinationWebhookGetResponseJSON) RawJSON() string {
-	return r.raw
-}
-
-// Type of webhook endpoint.
-type V3DestinationWebhookGetResponseType string
-
-const (
-	V3DestinationWebhookGetResponseTypeSlack   V3DestinationWebhookGetResponseType = "slack"
-	V3DestinationWebhookGetResponseTypeGeneric V3DestinationWebhookGetResponseType = "generic"
-	V3DestinationWebhookGetResponseTypeGchat   V3DestinationWebhookGetResponseType = "gchat"
-)
 
 type V3DestinationWebhookNewParams struct {
 	// The account id
@@ -490,7 +432,7 @@ type V3DestinationWebhookListParams struct {
 type V3DestinationWebhookListResponseEnvelope struct {
 	Errors   []V3DestinationWebhookListResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []V3DestinationWebhookListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []V3DestinationWebhookListResponse                 `json:"result,required,nullable"`
+	Result   []AaaWebhooks                                      `json:"result,required,nullable"`
 	// Whether the API call was successful
 	Success    V3DestinationWebhookListResponseEnvelopeSuccess    `json:"success,required"`
 	ResultInfo V3DestinationWebhookListResponseEnvelopeResultInfo `json:"result_info"`
@@ -728,7 +670,7 @@ type V3DestinationWebhookGetParams struct {
 type V3DestinationWebhookGetResponseEnvelope struct {
 	Errors   []V3DestinationWebhookGetResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []V3DestinationWebhookGetResponseEnvelopeMessages `json:"messages,required"`
-	Result   V3DestinationWebhookGetResponse                   `json:"result,required"`
+	Result   AaaWebhooks                                       `json:"result,required"`
 	// Whether the API call was successful
 	Success V3DestinationWebhookGetResponseEnvelopeSuccess `json:"success,required"`
 	JSON    v3DestinationWebhookGetResponseEnvelopeJSON    `json:"-"`
