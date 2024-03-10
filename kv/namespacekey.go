@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -34,16 +35,26 @@ func NewNamespaceKeyService(opts ...option.RequestOption) (r *NamespaceKeyServic
 }
 
 // Lists a namespace's keys.
-func (r *NamespaceKeyService) List(ctx context.Context, namespaceID string, params NamespaceKeyListParams, opts ...option.RequestOption) (res *[]WorkersKVKey, err error) {
-	opts = append(r.Options[:], opts...)
-	var env NamespaceKeyListResponseEnvelope
+func (r *NamespaceKeyService) List(ctx context.Context, namespaceID string, params NamespaceKeyListParams, opts ...option.RequestOption) (res *shared.CursorPagination[WorkersKVKey], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/keys", params.AccountID, namespaceID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists a namespace's keys.
+func (r *NamespaceKeyService) ListAutoPaging(ctx context.Context, namespaceID string, params NamespaceKeyListParams, opts ...option.RequestOption) *shared.CursorPaginationAutoPager[WorkersKVKey] {
+	return shared.NewCursorPaginationAutoPager(r.List(ctx, namespaceID, params, opts...))
 }
 
 // A name for a value. A value stored under a given key may be retrieved via the
@@ -99,115 +110,4 @@ func (r NamespaceKeyListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
-}
-
-type NamespaceKeyListResponseEnvelope struct {
-	Errors   []NamespaceKeyListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []NamespaceKeyListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []WorkersKVKey                             `json:"result,required"`
-	// Whether the API call was successful
-	Success    NamespaceKeyListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo NamespaceKeyListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       namespaceKeyListResponseEnvelopeJSON       `json:"-"`
-}
-
-// namespaceKeyListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [NamespaceKeyListResponseEnvelope]
-type namespaceKeyListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *NamespaceKeyListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r namespaceKeyListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type NamespaceKeyListResponseEnvelopeErrors struct {
-	Code    int64                                      `json:"code,required"`
-	Message string                                     `json:"message,required"`
-	JSON    namespaceKeyListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// namespaceKeyListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [NamespaceKeyListResponseEnvelopeErrors]
-type namespaceKeyListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *NamespaceKeyListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r namespaceKeyListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type NamespaceKeyListResponseEnvelopeMessages struct {
-	Code    int64                                        `json:"code,required"`
-	Message string                                       `json:"message,required"`
-	JSON    namespaceKeyListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// namespaceKeyListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [NamespaceKeyListResponseEnvelopeMessages]
-type namespaceKeyListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *NamespaceKeyListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r namespaceKeyListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type NamespaceKeyListResponseEnvelopeSuccess bool
-
-const (
-	NamespaceKeyListResponseEnvelopeSuccessTrue NamespaceKeyListResponseEnvelopeSuccess = true
-)
-
-type NamespaceKeyListResponseEnvelopeResultInfo struct {
-	// Total results returned based on your list parameters.
-	Count float64 `json:"count"`
-	// Opaque token indicating the position from which to continue when requesting the
-	// next set of records if the amount of list results was limited by the limit
-	// parameter. A valid value for the cursor can be obtained from the cursors object
-	// in the result_info structure.
-	Cursor string                                         `json:"cursor"`
-	JSON   namespaceKeyListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// namespaceKeyListResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [NamespaceKeyListResponseEnvelopeResultInfo]
-type namespaceKeyListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Cursor      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *NamespaceKeyListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r namespaceKeyListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }
