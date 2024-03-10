@@ -35,7 +35,7 @@ func NewNamespaceObjectService(opts ...option.RequestOption) (r *NamespaceObject
 }
 
 // Returns the Durable Objects in a given namespace.
-func (r *NamespaceObjectService) List(ctx context.Context, id string, params NamespaceObjectListParams, opts ...option.RequestOption) (res *shared.CursorPagination[WorkersObject], err error) {
+func (r *NamespaceObjectService) List(ctx context.Context, id string, params NamespaceObjectListParams, opts ...option.RequestOption) (res *shared.CursorLimitPagination[WorkersObject], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -53,8 +53,8 @@ func (r *NamespaceObjectService) List(ctx context.Context, id string, params Nam
 }
 
 // Returns the Durable Objects in a given namespace.
-func (r *NamespaceObjectService) ListAutoPaging(ctx context.Context, id string, params NamespaceObjectListParams, opts ...option.RequestOption) *shared.CursorPaginationAutoPager[WorkersObject] {
-	return shared.NewCursorPaginationAutoPager(r.List(ctx, id, params, opts...))
+func (r *NamespaceObjectService) ListAutoPaging(ctx context.Context, id string, params NamespaceObjectListParams, opts ...option.RequestOption) *shared.CursorLimitPaginationAutoPager[WorkersObject] {
+	return shared.NewCursorLimitPaginationAutoPager(r.List(ctx, id, params, opts...))
 }
 
 type WorkersObject struct {
