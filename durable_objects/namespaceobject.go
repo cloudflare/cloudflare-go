@@ -12,6 +12,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
 	"github.com/cloudflare/cloudflare-go/v2/internal/param"
 	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
 	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
@@ -34,16 +35,26 @@ func NewNamespaceObjectService(opts ...option.RequestOption) (r *NamespaceObject
 }
 
 // Returns the Durable Objects in a given namespace.
-func (r *NamespaceObjectService) List(ctx context.Context, id string, params NamespaceObjectListParams, opts ...option.RequestOption) (res *[]WorkersObject, err error) {
-	opts = append(r.Options[:], opts...)
-	var env NamespaceObjectListResponseEnvelope
+func (r *NamespaceObjectService) List(ctx context.Context, id string, params NamespaceObjectListParams, opts ...option.RequestOption) (res *shared.CursorPagination[WorkersObject], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/workers/durable_objects/namespaces/%s/objects", params.AccountID, id)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Returns the Durable Objects in a given namespace.
+func (r *NamespaceObjectService) ListAutoPaging(ctx context.Context, id string, params NamespaceObjectListParams, opts ...option.RequestOption) *shared.CursorPaginationAutoPager[WorkersObject] {
+	return shared.NewCursorPaginationAutoPager(r.List(ctx, id, params, opts...))
 }
 
 type WorkersObject struct {
@@ -89,123 +100,4 @@ func (r NamespaceObjectListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
-}
-
-type NamespaceObjectListResponseEnvelope struct {
-	Errors   []NamespaceObjectListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []NamespaceObjectListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []WorkersObject                               `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    NamespaceObjectListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo NamespaceObjectListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       namespaceObjectListResponseEnvelopeJSON       `json:"-"`
-}
-
-// namespaceObjectListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [NamespaceObjectListResponseEnvelope]
-type namespaceObjectListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *NamespaceObjectListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r namespaceObjectListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type NamespaceObjectListResponseEnvelopeErrors struct {
-	Code    int64                                         `json:"code,required"`
-	Message string                                        `json:"message,required"`
-	JSON    namespaceObjectListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// namespaceObjectListResponseEnvelopeErrorsJSON contains the JSON metadata for the
-// struct [NamespaceObjectListResponseEnvelopeErrors]
-type namespaceObjectListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *NamespaceObjectListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r namespaceObjectListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type NamespaceObjectListResponseEnvelopeMessages struct {
-	Code    int64                                           `json:"code,required"`
-	Message string                                          `json:"message,required"`
-	JSON    namespaceObjectListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// namespaceObjectListResponseEnvelopeMessagesJSON contains the JSON metadata for
-// the struct [NamespaceObjectListResponseEnvelopeMessages]
-type namespaceObjectListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *NamespaceObjectListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r namespaceObjectListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type NamespaceObjectListResponseEnvelopeSuccess bool
-
-const (
-	NamespaceObjectListResponseEnvelopeSuccessTrue NamespaceObjectListResponseEnvelopeSuccess = true
-)
-
-type NamespaceObjectListResponseEnvelopeResultInfo struct {
-	// Total results returned based on your list parameters.
-	Count float64 `json:"count"`
-	// Opaque token indicating the position from which to continue when requesting the
-	// next set of records. A valid value for the cursor can be obtained from the
-	// cursors object in the result_info structure.
-	Cursor string `json:"cursor"`
-	// Current page within paginated list of results
-	Page float64 `json:"page"`
-	// Number of results per page of results
-	PerPage float64 `json:"per_page"`
-	// Total results available without any search parameters
-	TotalCount float64                                           `json:"total_count"`
-	JSON       namespaceObjectListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// namespaceObjectListResponseEnvelopeResultInfoJSON contains the JSON metadata for
-// the struct [NamespaceObjectListResponseEnvelopeResultInfo]
-type namespaceObjectListResponseEnvelopeResultInfoJSON struct {
-	Count       apijson.Field
-	Cursor      apijson.Field
-	Page        apijson.Field
-	PerPage     apijson.Field
-	TotalCount  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *NamespaceObjectListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r namespaceObjectListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
 }

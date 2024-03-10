@@ -302,7 +302,7 @@ func (r cursorPaginationResultInfoJSON) RawJSON() string {
 }
 
 type CursorPagination[T any] struct {
-	Result     interface{}                `json:"result"`
+	Result     []T                        `json:"result"`
 	ResultInfo CursorPaginationResultInfo `json:"result_info"`
 	JSON       cursorPaginationJSON       `json:"-"`
 	cfg        *requestconfig.RequestConfig
@@ -368,17 +368,17 @@ func NewCursorPaginationAutoPager[T any](page *CursorPagination[T], err error) *
 }
 
 func (r *CursorPaginationAutoPager[T]) Next() bool {
-	if r.page == nil || len(r.page.Data) == 0 {
+	if r.page == nil || len(r.page.Result) == 0 {
 		return false
 	}
-	if r.idx >= len(r.page.Data) {
+	if r.idx >= len(r.page.Result) {
 		r.idx = 0
 		r.page, r.err = r.page.GetNextPage()
-		if r.err != nil || r.page == nil || len(r.page.Data) == 0 {
+		if r.err != nil || r.page == nil || len(r.page.Result) == 0 {
 			return false
 		}
 	}
-	r.cur = r.page.Data[r.idx]
+	r.cur = r.page.Result[r.idx]
 	r.run += 1
 	r.idx += 1
 	return true
