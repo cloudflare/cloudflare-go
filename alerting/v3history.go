@@ -37,7 +37,7 @@ func NewV3HistoryService(opts ...option.RequestOption) (r *V3HistoryService) {
 // Gets a list of history records for notifications sent to an account. The records
 // are displayed for last `x` number of days based on the zone plan (free = 30, pro
 // = 30, biz = 30, ent = 90).
-func (r *V3HistoryService) List(ctx context.Context, params V3HistoryListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[AaaHistory], err error) {
+func (r *V3HistoryService) List(ctx context.Context, params V3HistoryListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[V3HistoryListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -57,11 +57,11 @@ func (r *V3HistoryService) List(ctx context.Context, params V3HistoryListParams,
 // Gets a list of history records for notifications sent to an account. The records
 // are displayed for last `x` number of days based on the zone plan (free = 30, pro
 // = 30, biz = 30, ent = 90).
-func (r *V3HistoryService) ListAutoPaging(ctx context.Context, params V3HistoryListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[AaaHistory] {
+func (r *V3HistoryService) ListAutoPaging(ctx context.Context, params V3HistoryListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[V3HistoryListResponse] {
 	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
-type AaaHistory struct {
+type V3HistoryListResponse struct {
 	// UUID
 	ID string `json:"id"`
 	// Message body included in the notification sent.
@@ -74,18 +74,19 @@ type AaaHistory struct {
 	Mechanism string `json:"mechanism"`
 	// The type of mechanism to which the notification has been dispatched. This can be
 	// email/pagerduty/webhook based on the mechanism configured.
-	MechanismType AaaHistoryMechanismType `json:"mechanism_type"`
+	MechanismType V3HistoryListResponseMechanismType `json:"mechanism_type"`
 	// Name of the policy.
 	Name string `json:"name"`
 	// The unique identifier of a notification policy
 	PolicyID string `json:"policy_id"`
 	// Timestamp of when the notification was dispatched in ISO 8601 format.
-	Sent time.Time      `json:"sent" format:"date-time"`
-	JSON aaaHistoryJSON `json:"-"`
+	Sent time.Time                 `json:"sent" format:"date-time"`
+	JSON v3HistoryListResponseJSON `json:"-"`
 }
 
-// aaaHistoryJSON contains the JSON metadata for the struct [AaaHistory]
-type aaaHistoryJSON struct {
+// v3HistoryListResponseJSON contains the JSON metadata for the struct
+// [V3HistoryListResponse]
+type v3HistoryListResponseJSON struct {
 	ID            apijson.Field
 	AlertBody     apijson.Field
 	AlertType     apijson.Field
@@ -99,22 +100,22 @@ type aaaHistoryJSON struct {
 	ExtraFields   map[string]apijson.Field
 }
 
-func (r *AaaHistory) UnmarshalJSON(data []byte) (err error) {
+func (r *V3HistoryListResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r aaaHistoryJSON) RawJSON() string {
+func (r v3HistoryListResponseJSON) RawJSON() string {
 	return r.raw
 }
 
 // The type of mechanism to which the notification has been dispatched. This can be
 // email/pagerduty/webhook based on the mechanism configured.
-type AaaHistoryMechanismType string
+type V3HistoryListResponseMechanismType string
 
 const (
-	AaaHistoryMechanismTypeEmail     AaaHistoryMechanismType = "email"
-	AaaHistoryMechanismTypePagerduty AaaHistoryMechanismType = "pagerduty"
-	AaaHistoryMechanismTypeWebhook   AaaHistoryMechanismType = "webhook"
+	V3HistoryListResponseMechanismTypeEmail     V3HistoryListResponseMechanismType = "email"
+	V3HistoryListResponseMechanismTypePagerduty V3HistoryListResponseMechanismType = "pagerduty"
+	V3HistoryListResponseMechanismTypeWebhook   V3HistoryListResponseMechanismType = "webhook"
 )
 
 type V3HistoryListParams struct {

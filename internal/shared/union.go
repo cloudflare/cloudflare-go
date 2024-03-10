@@ -111,7 +111,6 @@ func (UnionString) ImplementsAddressingAddressMapZoneUpdateResponse()           
 func (UnionString) ImplementsAddressingAddressMapZoneDeleteResponse()                               {}
 func (UnionString) ImplementsAddressingPrefixDeleteResponse()                                       {}
 func (UnionString) ImplementsAddressingPrefixBGPBindingDeleteResponse()                             {}
-func (UnionString) ImplementsAuditLogsAuditLogListResponse()                                        {}
 func (UnionString) ImplementsBillingProfileGetResponse()                                            {}
 func (UnionString) ImplementsImagesImagesImageVariant()                                             {}
 func (UnionString) ImplementsImagesV1DeleteResponse()                                               {}
@@ -144,8 +143,9 @@ func (UnionString) ImplementsAlertingV3ListResponse()                           
 func (UnionString) ImplementsAlertingV3DestinationEligibleGetResponse()                             {}
 func (UnionString) ImplementsAlertingV3DestinationPagerdutyDeleteResponse()                         {}
 func (UnionString) ImplementsAlertingV3DestinationWebhookDeleteResponse()                           {}
-func (UnionString) ImplementsAlertingAaaPoliciesMechanismsID()                                      {}
+func (UnionString) ImplementsAlertingV3PolicyListResponseMechanismsID()                             {}
 func (UnionString) ImplementsAlertingV3PolicyDeleteResponse()                                       {}
+func (UnionString) ImplementsAlertingV3PolicyGetResponseMechanismsID()                              {}
 func (UnionString) ImplementsAlertingV3PolicyNewParamsMechanismsID()                                {}
 func (UnionString) ImplementsAlertingV3PolicyUpdateParamsMechanismsID()                             {}
 func (UnionString) ImplementsD1DatabaseDeleteResponse()                                             {}
