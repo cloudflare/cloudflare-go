@@ -35,7 +35,7 @@ func NewNamespaceKeyService(opts ...option.RequestOption) (r *NamespaceKeyServic
 }
 
 // Lists a namespace's keys.
-func (r *NamespaceKeyService) List(ctx context.Context, namespaceID string, params NamespaceKeyListParams, opts ...option.RequestOption) (res *shared.CursorPagination[WorkersKVKey], err error) {
+func (r *NamespaceKeyService) List(ctx context.Context, namespaceID string, params NamespaceKeyListParams, opts ...option.RequestOption) (res *shared.CursorLimitPagination[WorkersKVKey], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
@@ -53,8 +53,8 @@ func (r *NamespaceKeyService) List(ctx context.Context, namespaceID string, para
 }
 
 // Lists a namespace's keys.
-func (r *NamespaceKeyService) ListAutoPaging(ctx context.Context, namespaceID string, params NamespaceKeyListParams, opts ...option.RequestOption) *shared.CursorPaginationAutoPager[WorkersKVKey] {
-	return shared.NewCursorPaginationAutoPager(r.List(ctx, namespaceID, params, opts...))
+func (r *NamespaceKeyService) ListAutoPaging(ctx context.Context, namespaceID string, params NamespaceKeyListParams, opts ...option.RequestOption) *shared.CursorLimitPaginationAutoPager[WorkersKVKey] {
+	return shared.NewCursorLimitPaginationAutoPager(r.List(ctx, namespaceID, params, opts...))
 }
 
 // A name for a value. A value stored under a given key may be retrieved via the
