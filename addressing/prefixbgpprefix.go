@@ -82,7 +82,7 @@ type AddressingIpamBGPPrefixes struct {
 	ASN           int64                                  `json:"asn,nullable"`
 	BGPSignalOpts AddressingIpamBGPPrefixesBGPSignalOpts `json:"bgp_signal_opts"`
 	// IP Prefix in Classless Inter-Domain Routing format.
-	Cidr       string                            `json:"cidr"`
+	CIDR       string                            `json:"cidr"`
 	CreatedAt  time.Time                         `json:"created_at" format:"date-time"`
 	ModifiedAt time.Time                         `json:"modified_at" format:"date-time"`
 	OnDemand   AddressingIpamBGPPrefixesOnDemand `json:"on_demand"`
@@ -95,7 +95,7 @@ type addressingIpamBGPPrefixesJSON struct {
 	ID            apijson.Field
 	ASN           apijson.Field
 	BGPSignalOpts apijson.Field
-	Cidr          apijson.Field
+	CIDR          apijson.Field
 	CreatedAt     apijson.Field
 	ModifiedAt    apijson.Field
 	OnDemand      apijson.Field

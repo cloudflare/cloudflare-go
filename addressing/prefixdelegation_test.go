@@ -33,7 +33,7 @@ func TestPrefixDelegationNew(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		addressing.PrefixDelegationNewParams{
 			AccountID:          cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Cidr:               cloudflare.F("192.0.2.0/24"),
+			CIDR:               cloudflare.F("192.0.2.0/24"),
 			DelegatedAccountID: cloudflare.F("b1946ac92492d2347c6235b4d2611184"),
 		},
 	)
