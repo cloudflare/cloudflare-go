@@ -25,7 +25,7 @@ type GatewayService struct {
 	Configurations   *GatewayConfigurationService
 	Lists            *GatewayListService
 	Locations        *GatewayLocationService
-	Loggings         *GatewayLoggingService
+	Logging          *GatewayLoggingService
 	ProxyEndpoints   *GatewayProxyEndpointService
 	Rules            *GatewayRuleService
 }
@@ -42,7 +42,7 @@ func NewGatewayService(opts ...option.RequestOption) (r *GatewayService) {
 	r.Configurations = NewGatewayConfigurationService(opts...)
 	r.Lists = NewGatewayListService(opts...)
 	r.Locations = NewGatewayLocationService(opts...)
-	r.Loggings = NewGatewayLoggingService(opts...)
+	r.Logging = NewGatewayLoggingService(opts...)
 	r.ProxyEndpoints = NewGatewayProxyEndpointService(opts...)
 	r.Rules = NewGatewayRuleService(opts...)
 	return
