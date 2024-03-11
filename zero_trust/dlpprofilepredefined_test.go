@@ -28,7 +28,7 @@ func TestDLPProfilePredefinedUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.DLP.Profiles.Predefineds.Update(
+	_, err := client.ZeroTrust.DLP.Profiles.Predefined.Update(
 		context.TODO(),
 		"384e129d-25bd-403c-8019-bc19eb7a8a5f",
 		zero_trust.DLPProfilePredefinedUpdateParams{
@@ -72,7 +72,7 @@ func TestDLPProfilePredefinedGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.DLP.Profiles.Predefineds.Get(
+	_, err := client.ZeroTrust.DLP.Profiles.Predefined.Get(
 		context.TODO(),
 		"384e129d-25bd-403c-8019-bc19eb7a8a5f",
 		zero_trust.DLPProfilePredefinedGetParams{

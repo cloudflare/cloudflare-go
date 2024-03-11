@@ -20,7 +20,7 @@ import (
 type CacheService struct {
 	Options             []option.RequestOption
 	CacheReserve        *CacheReserveService
-	SmartTieredCached   *SmartTieredCachedService
+	SmartTieredCache    *SmartTieredCacheService
 	Variants            *VariantService
 	RegionalTieredCache *RegionalTieredCacheService
 }
@@ -32,7 +32,7 @@ func NewCacheService(opts ...option.RequestOption) (r *CacheService) {
 	r = &CacheService{}
 	r.Options = opts
 	r.CacheReserve = NewCacheReserveService(opts...)
-	r.SmartTieredCached = NewSmartTieredCachedService(opts...)
+	r.SmartTieredCache = NewSmartTieredCacheService(opts...)
 	r.Variants = NewVariantService(opts...)
 	r.RegionalTieredCache = NewRegionalTieredCacheService(opts...)
 	return

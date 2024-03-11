@@ -26,7 +26,7 @@ type DeviceService struct {
 	DEXTests      *DeviceDEXTestService
 	Networks      *DeviceNetworkService
 	Policies      *DevicePolicyService
-	Postures      *DevicePostureService
+	Posture       *DevicePostureService
 	Revokes       *DeviceRevokeService
 	Settings      *DeviceSettingService
 	Unrevokes     *DeviceUnrevokeService
@@ -42,7 +42,7 @@ func NewDeviceService(opts ...option.RequestOption) (r *DeviceService) {
 	r.DEXTests = NewDeviceDEXTestService(opts...)
 	r.Networks = NewDeviceNetworkService(opts...)
 	r.Policies = NewDevicePolicyService(opts...)
-	r.Postures = NewDevicePostureService(opts...)
+	r.Posture = NewDevicePostureService(opts...)
 	r.Revokes = NewDeviceRevokeService(opts...)
 	r.Settings = NewDeviceSettingService(opts...)
 	r.Unrevokes = NewDeviceUnrevokeService(opts...)
