@@ -1686,21 +1686,15 @@ Methods:
 
 Response Types:
 
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/email_routing">email_routing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/email_routing#RoutingDisableResponse">RoutingDisableResponse</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/email_routing">email_routing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/email_routing#RoutingEnableResponse">RoutingEnableResponse</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/email_routing">email_routing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/email_routing#RoutingGetResponse">RoutingGetResponse</a>
 
 Methods:
 
+- <code title="post /zones/{zone_identifier}/email/routing/disable">client.EmailRouting.Routing.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/email_routing#RoutingService.Disable">Disable</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/email_routing">email_routing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/email_routing#RoutingDisableResponse">RoutingDisableResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="post /zones/{zone_identifier}/email/routing/enable">client.EmailRouting.Routing.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/email_routing#RoutingService.Enable">Enable</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/email_routing">email_routing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/email_routing#RoutingEnableResponse">RoutingEnableResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /zones/{zone_identifier}/email/routing">client.EmailRouting.Routing.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/email_routing#RoutingService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/email_routing">email_routing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/email_routing#RoutingGetResponse">RoutingGetResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
-### Disables
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/email_routing">email_routing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/email_routing#RoutingDisableNewResponse">RoutingDisableNewResponse</a>
-
-Methods:
-
-- <code title="post /zones/{zone_identifier}/email/routing/disable">client.EmailRouting.Routing.Disables.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/email_routing#RoutingDisableService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/email_routing">email_routing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/email_routing#RoutingDisableNewResponse">RoutingDisableNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### DNS
 
@@ -1711,16 +1705,6 @@ Response Types:
 Methods:
 
 - <code title="get /zones/{zone_identifier}/email/routing/dns">client.EmailRouting.Routing.DNS.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/email_routing#RoutingDNSService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>) ([]<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/email_routing">email_routing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/email_routing#EmailDNSRecord">EmailDNSRecord</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
-### Enables
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/email_routing">email_routing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/email_routing#RoutingEnableNewResponse">RoutingEnableNewResponse</a>
-
-Methods:
-
-- <code title="post /zones/{zone_identifier}/email/routing/enable">client.EmailRouting.Routing.Enables.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/email_routing#RoutingEnableService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, zoneIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/email_routing">email_routing</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/email_routing#RoutingEnableNewResponse">RoutingEnableNewResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### Rules
 
@@ -2776,7 +2760,7 @@ Response Types:
 Methods:
 
 - <code title="put /zones/{zone_id}/page_shield">client.PageShield.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield#PageShieldService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield">page_shield</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield#PageShieldUpdateParams">PageShieldUpdateParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield">page_shield</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield#PageShieldUpdateZoneSettings">PageShieldUpdateZoneSettings</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /zones/{zone_id}/page_shield">client.PageShield.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield#PageShieldService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield">page_shield</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield#PageShieldListParams">PageShieldListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield">page_shield</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield#PageShieldGetZoneSettings">PageShieldGetZoneSettings</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /zones/{zone_id}/page_shield">client.PageShield.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield#PageShieldService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield">page_shield</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield#PageShieldGetParams">PageShieldGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield">page_shield</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/page_shield#PageShieldGetZoneSettings">PageShieldGetZoneSettings</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Policies
 
