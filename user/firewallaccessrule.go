@@ -161,7 +161,7 @@ const (
 //
 // Union satisfied by [user.LegacyJhsRuleConfigurationLegacyJhsIPConfiguration],
 // [user.LegacyJhsRuleConfigurationLegacyJhsIPV6Configuration],
-// [user.LegacyJhsRuleConfigurationLegacyJhsCidrConfiguration],
+// [user.LegacyJhsRuleConfigurationLegacyJhsCIDRConfiguration],
 // [user.LegacyJhsRuleConfigurationLegacyJhsASNConfiguration] or
 // [user.LegacyJhsRuleConfigurationLegacyJhsCountryConfiguration].
 type LegacyJhsRuleConfiguration interface {
@@ -182,7 +182,7 @@ func init() {
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(LegacyJhsRuleConfigurationLegacyJhsCidrConfiguration{}),
+			Type:       reflect.TypeOf(LegacyJhsRuleConfigurationLegacyJhsCIDRConfiguration{}),
 		},
 		apijson.UnionVariant{
 			TypeFilter: gjson.JSON,
@@ -270,42 +270,42 @@ const (
 	LegacyJhsRuleConfigurationLegacyJhsIPV6ConfigurationTargetIp6 LegacyJhsRuleConfigurationLegacyJhsIPV6ConfigurationTarget = "ip6"
 )
 
-type LegacyJhsRuleConfigurationLegacyJhsCidrConfiguration struct {
+type LegacyJhsRuleConfigurationLegacyJhsCIDRConfiguration struct {
 	// The configuration target. You must set the target to `ip_range` when specifying
 	// an IP address range in the rule.
-	Target LegacyJhsRuleConfigurationLegacyJhsCidrConfigurationTarget `json:"target"`
+	Target LegacyJhsRuleConfigurationLegacyJhsCIDRConfigurationTarget `json:"target"`
 	// The IP address range to match. You can only use prefix lengths `/16` and `/24`
 	// for IPv4 ranges, and prefix lengths `/32`, `/48`, and `/64` for IPv6 ranges.
 	Value string                                                   `json:"value"`
-	JSON  legacyJhsRuleConfigurationLegacyJhsCidrConfigurationJSON `json:"-"`
+	JSON  legacyJhsRuleConfigurationLegacyJhsCIDRConfigurationJSON `json:"-"`
 }
 
-// legacyJhsRuleConfigurationLegacyJhsCidrConfigurationJSON contains the JSON
-// metadata for the struct [LegacyJhsRuleConfigurationLegacyJhsCidrConfiguration]
-type legacyJhsRuleConfigurationLegacyJhsCidrConfigurationJSON struct {
+// legacyJhsRuleConfigurationLegacyJhsCIDRConfigurationJSON contains the JSON
+// metadata for the struct [LegacyJhsRuleConfigurationLegacyJhsCIDRConfiguration]
+type legacyJhsRuleConfigurationLegacyJhsCIDRConfigurationJSON struct {
 	Target      apijson.Field
 	Value       apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *LegacyJhsRuleConfigurationLegacyJhsCidrConfiguration) UnmarshalJSON(data []byte) (err error) {
+func (r *LegacyJhsRuleConfigurationLegacyJhsCIDRConfiguration) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r legacyJhsRuleConfigurationLegacyJhsCidrConfigurationJSON) RawJSON() string {
+func (r legacyJhsRuleConfigurationLegacyJhsCIDRConfigurationJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r LegacyJhsRuleConfigurationLegacyJhsCidrConfiguration) implementsUserLegacyJhsRuleConfiguration() {
+func (r LegacyJhsRuleConfigurationLegacyJhsCIDRConfiguration) implementsUserLegacyJhsRuleConfiguration() {
 }
 
 // The configuration target. You must set the target to `ip_range` when specifying
 // an IP address range in the rule.
-type LegacyJhsRuleConfigurationLegacyJhsCidrConfigurationTarget string
+type LegacyJhsRuleConfigurationLegacyJhsCIDRConfigurationTarget string
 
 const (
-	LegacyJhsRuleConfigurationLegacyJhsCidrConfigurationTargetIPRange LegacyJhsRuleConfigurationLegacyJhsCidrConfigurationTarget = "ip_range"
+	LegacyJhsRuleConfigurationLegacyJhsCIDRConfigurationTargetIPRange LegacyJhsRuleConfigurationLegacyJhsCIDRConfigurationTarget = "ip_range"
 )
 
 type LegacyJhsRuleConfigurationLegacyJhsASNConfiguration struct {
@@ -435,7 +435,7 @@ func (r FirewallAccessRuleNewParams) MarshalJSON() (data []byte, err error) {
 // Satisfied by
 // [user.FirewallAccessRuleNewParamsConfigurationLegacyJhsIPConfiguration],
 // [user.FirewallAccessRuleNewParamsConfigurationLegacyJhsIPV6Configuration],
-// [user.FirewallAccessRuleNewParamsConfigurationLegacyJhsCidrConfiguration],
+// [user.FirewallAccessRuleNewParamsConfigurationLegacyJhsCIDRConfiguration],
 // [user.FirewallAccessRuleNewParamsConfigurationLegacyJhsASNConfiguration],
 // [user.FirewallAccessRuleNewParamsConfigurationLegacyJhsCountryConfiguration].
 type FirewallAccessRuleNewParamsConfiguration interface {
@@ -489,28 +489,28 @@ const (
 	FirewallAccessRuleNewParamsConfigurationLegacyJhsIPV6ConfigurationTargetIp6 FirewallAccessRuleNewParamsConfigurationLegacyJhsIPV6ConfigurationTarget = "ip6"
 )
 
-type FirewallAccessRuleNewParamsConfigurationLegacyJhsCidrConfiguration struct {
+type FirewallAccessRuleNewParamsConfigurationLegacyJhsCIDRConfiguration struct {
 	// The configuration target. You must set the target to `ip_range` when specifying
 	// an IP address range in the rule.
-	Target param.Field[FirewallAccessRuleNewParamsConfigurationLegacyJhsCidrConfigurationTarget] `json:"target"`
+	Target param.Field[FirewallAccessRuleNewParamsConfigurationLegacyJhsCIDRConfigurationTarget] `json:"target"`
 	// The IP address range to match. You can only use prefix lengths `/16` and `/24`
 	// for IPv4 ranges, and prefix lengths `/32`, `/48`, and `/64` for IPv6 ranges.
 	Value param.Field[string] `json:"value"`
 }
 
-func (r FirewallAccessRuleNewParamsConfigurationLegacyJhsCidrConfiguration) MarshalJSON() (data []byte, err error) {
+func (r FirewallAccessRuleNewParamsConfigurationLegacyJhsCIDRConfiguration) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r FirewallAccessRuleNewParamsConfigurationLegacyJhsCidrConfiguration) implementsUserFirewallAccessRuleNewParamsConfiguration() {
+func (r FirewallAccessRuleNewParamsConfigurationLegacyJhsCIDRConfiguration) implementsUserFirewallAccessRuleNewParamsConfiguration() {
 }
 
 // The configuration target. You must set the target to `ip_range` when specifying
 // an IP address range in the rule.
-type FirewallAccessRuleNewParamsConfigurationLegacyJhsCidrConfigurationTarget string
+type FirewallAccessRuleNewParamsConfigurationLegacyJhsCIDRConfigurationTarget string
 
 const (
-	FirewallAccessRuleNewParamsConfigurationLegacyJhsCidrConfigurationTargetIPRange FirewallAccessRuleNewParamsConfigurationLegacyJhsCidrConfigurationTarget = "ip_range"
+	FirewallAccessRuleNewParamsConfigurationLegacyJhsCIDRConfigurationTargetIPRange FirewallAccessRuleNewParamsConfigurationLegacyJhsCIDRConfigurationTarget = "ip_range"
 )
 
 type FirewallAccessRuleNewParamsConfigurationLegacyJhsASNConfiguration struct {

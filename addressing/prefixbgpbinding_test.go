@@ -33,7 +33,7 @@ func TestPrefixBGPBindingNewWithOptionalParams(t *testing.T) {
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		addressing.PrefixBGPBindingNewParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Cidr:      cloudflare.F("192.0.2.0/24"),
+			CIDR:      cloudflare.F("192.0.2.0/24"),
 			ServiceID: cloudflare.F("2db684ee7ca04e159946fd05b99e1bcd"),
 		},
 	)

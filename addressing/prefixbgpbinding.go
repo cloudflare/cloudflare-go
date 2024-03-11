@@ -98,7 +98,7 @@ type AddressingServiceBinding struct {
 	// Identifier
 	ID string `json:"id"`
 	// IP Prefix in Classless Inter-Domain Routing format.
-	Cidr string `json:"cidr"`
+	CIDR string `json:"cidr"`
 	// Status of a Service Binding's deployment to the Cloudflare network
 	Provisioning AddressingServiceBindingProvisioning `json:"provisioning"`
 	// Identifier
@@ -112,7 +112,7 @@ type AddressingServiceBinding struct {
 // [AddressingServiceBinding]
 type addressingServiceBindingJSON struct {
 	ID           apijson.Field
-	Cidr         apijson.Field
+	CIDR         apijson.Field
 	Provisioning apijson.Field
 	ServiceID    apijson.Field
 	ServiceName  apijson.Field
@@ -190,7 +190,7 @@ type PrefixBGPBindingNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
-	Cidr param.Field[string] `json:"cidr"`
+	CIDR param.Field[string] `json:"cidr"`
 	// Identifier
 	ServiceID param.Field[string] `json:"service_id"`
 }

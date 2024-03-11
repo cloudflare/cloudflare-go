@@ -53,17 +53,17 @@ type IPs struct {
 	// A digest of the IP data. Useful for determining if the data has changed.
 	Etag string `json:"etag"`
 	// List of Cloudflare IPv4 CIDR addresses.
-	IPV4Cidrs []string `json:"ipv4_cidrs"`
+	IPV4CIDRs []string `json:"ipv4_cidrs"`
 	// List of Cloudflare IPv6 CIDR addresses.
-	IPV6Cidrs []string `json:"ipv6_cidrs"`
+	IPV6CIDRs []string `json:"ipv6_cidrs"`
 	JSON      ipsJSON  `json:"-"`
 }
 
 // ipsJSON contains the JSON metadata for the struct [IPs]
 type ipsJSON struct {
 	Etag        apijson.Field
-	IPV4Cidrs   apijson.Field
-	IPV6Cidrs   apijson.Field
+	IPV4CIDRs   apijson.Field
+	IPV6CIDRs   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -82,20 +82,20 @@ type JdcloudIPs struct {
 	// A digest of the IP data. Useful for determining if the data has changed.
 	Etag string `json:"etag"`
 	// List of Cloudflare IPv4 CIDR addresses.
-	IPV4Cidrs []string `json:"ipv4_cidrs"`
+	IPV4CIDRs []string `json:"ipv4_cidrs"`
 	// List of Cloudflare IPv6 CIDR addresses.
-	IPV6Cidrs []string `json:"ipv6_cidrs"`
+	IPV6CIDRs []string `json:"ipv6_cidrs"`
 	// List IPv4 and IPv6 CIDRs, only populated if `?networks=jdcloud` is used.
-	JdcloudCidrs []string       `json:"jdcloud_cidrs"`
+	JdcloudCIDRs []string       `json:"jdcloud_cidrs"`
 	JSON         jdcloudIPsJSON `json:"-"`
 }
 
 // jdcloudIPsJSON contains the JSON metadata for the struct [JdcloudIPs]
 type jdcloudIPsJSON struct {
 	Etag         apijson.Field
-	IPV4Cidrs    apijson.Field
-	IPV6Cidrs    apijson.Field
-	JdcloudCidrs apijson.Field
+	IPV4CIDRs    apijson.Field
+	IPV6CIDRs    apijson.Field
+	JdcloudCIDRs apijson.Field
 	raw          string
 	ExtraFields  map[string]apijson.Field
 }
