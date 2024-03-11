@@ -19,7 +19,6 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/cache"
 	"github.com/cloudflare/cloudflare-go/v2/calls"
 	"github.com/cloudflare/cloudflare-go/v2/certificate_authorities"
-	"github.com/cloudflare/cloudflare-go/v2/certificates"
 	"github.com/cloudflare/cloudflare-go/v2/challenges"
 	"github.com/cloudflare/cloudflare-go/v2/client_certificates"
 	"github.com/cloudflare/cloudflare-go/v2/cloudforce_one"
@@ -52,6 +51,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/memberships"
 	"github.com/cloudflare/cloudflare-go/v2/mtls_certificates"
 	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/origin_ca_certificates"
 	"github.com/cloudflare/cloudflare-go/v2/origin_post_quantum_encryption"
 	"github.com/cloudflare/cloudflare-go/v2/origin_tls_client_auth"
 	"github.com/cloudflare/cloudflare-go/v2/page_shield"
@@ -94,7 +94,7 @@ import (
 type Client struct {
 	Options                     []option.RequestOption
 	Accounts                    *accounts.AccountService
-	Certificates                *certificates.CertificateService
+	OriginCACertificates        *origin_ca_certificates.OriginCACertificateService
 	IPs                         *ips.IPService
 	Memberships                 *memberships.MembershipService
 	User                        *user.UserService
@@ -199,7 +199,7 @@ func NewClient(opts ...option.RequestOption) (r *Client) {
 	r = &Client{Options: opts}
 
 	r.Accounts = accounts.NewAccountService(opts...)
-	r.Certificates = certificates.NewCertificateService(opts...)
+	r.OriginCACertificates = origin_ca_certificates.NewOriginCACertificateService(opts...)
 	r.IPs = ips.NewIPService(opts...)
 	r.Memberships = memberships.NewMembershipService(opts...)
 	r.User = user.NewUserService(opts...)

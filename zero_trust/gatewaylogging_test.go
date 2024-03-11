@@ -28,7 +28,7 @@ func TestGatewayLoggingUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Gateway.Loggings.Update(context.TODO(), zero_trust.GatewayLoggingUpdateParams{
+	_, err := client.ZeroTrust.Gateway.Logging.Update(context.TODO(), zero_trust.GatewayLoggingUpdateParams{
 		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
 		RedactPii: cloudflare.F(true),
 		SettingsByRuleType: cloudflare.F(zero_trust.GatewayLoggingUpdateParamsSettingsByRuleType{
@@ -60,7 +60,7 @@ func TestGatewayLoggingGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Gateway.Loggings.Get(context.TODO(), zero_trust.GatewayLoggingGetParams{
+	_, err := client.ZeroTrust.Gateway.Logging.Get(context.TODO(), zero_trust.GatewayLoggingGetParams{
 		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
 	})
 	if err != nil {

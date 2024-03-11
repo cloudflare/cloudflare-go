@@ -7,8 +7,8 @@ type UnionString string
 func (UnionString) ImplementsAccountsAccountUpdateResponse()                                        {}
 func (UnionString) ImplementsAccountsAccountGetResponse()                                           {}
 func (UnionString) ImplementsAccountsRoleGetResponse()                                              {}
-func (UnionString) ImplementsCertificatesCertificateNewResponse()                                   {}
-func (UnionString) ImplementsCertificatesCertificateGetResponse()                                   {}
+func (UnionString) ImplementsOriginCACertificatesOriginCACertificateNewResponse()                   {}
+func (UnionString) ImplementsOriginCACertificatesOriginCACertificateGetResponse()                   {}
 func (UnionString) ImplementsMembershipsMembershipUpdateResponse()                                  {}
 func (UnionString) ImplementsMembershipsMembershipGetResponse()                                     {}
 func (UnionString) ImplementsUserUserEditResponse()                                                 {}
