@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package zero_trust_test
+package magic_transit_test
 
 import (
 	"context"
@@ -10,11 +10,11 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v2"
 	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v2/magic_transit"
 	"github.com/cloudflare/cloudflare-go/v2/option"
-	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
 )
 
-func TestDevicePostureIntegrationNewWithOptionalParams(t *testing.T) {
+func TestSiteNewWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -28,72 +28,21 @@ func TestDevicePostureIntegrationNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Devices.Posture.Integrations.New(context.TODO(), zero_trust.DevicePostureIntegrationNewParams{
-		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
-		Config: cloudflare.F[zero_trust.DevicePostureIntegrationNewParamsConfig](zero_trust.DevicePostureIntegrationNewParamsConfigTeamsDevicesWorkspaceOneConfigRequest(zero_trust.DevicePostureIntegrationNewParamsConfigTeamsDevicesWorkspaceOneConfigRequest{
-			APIURL:       cloudflare.F("https://as123.awmdm.com/API"),
-			AuthURL:      cloudflare.F("https://na.uemauth.vmwservices.com/connect/token"),
-			ClientID:     cloudflare.F("example client id"),
-			ClientSecret: cloudflare.F("example client secret"),
-		})),
-		Interval: cloudflare.F("10m"),
-		Name:     cloudflare.F("My Workspace One Integration"),
-		Type:     cloudflare.F(zero_trust.DevicePostureIntegrationNewParamsTypeWorkspaceOne),
-	})
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestDevicePostureIntegrationList(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-	)
-	_, err := client.ZeroTrust.Devices.Posture.Integrations.List(context.TODO(), zero_trust.DevicePostureIntegrationListParams{
-		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
-	})
-	if err != nil {
-		var apierr *cloudflare.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestDevicePostureIntegrationDelete(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := cloudflare.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
-		option.WithAPIEmail("user@example.com"),
-	)
-	_, err := client.ZeroTrust.Devices.Posture.Integrations.Delete(
+	_, err := client.MagicTransit.Sites.New(
 		context.TODO(),
-		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-		zero_trust.DevicePostureIntegrationDeleteParams{
-			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		magic_transit.SiteNewParams{
+			Site: cloudflare.F(magic_transit.SiteNewParamsSite{
+				ConnectorID: cloudflare.F("ac60d3d0435248289d446cedd870bcf4"),
+				Description: cloudflare.F("string"),
+				HaMode:      cloudflare.F(true),
+				Location: cloudflare.F(magic_transit.SiteNewParamsSiteLocation{
+					Lat: cloudflare.F("string"),
+					Lon: cloudflare.F("string"),
+				}),
+				Name:                 cloudflare.F("site_1"),
+				SecondaryConnectorID: cloudflare.F("8d67040d3835dbcf46ce29da440dc482"),
+			}),
 		},
 	)
 	if err != nil {
@@ -105,7 +54,7 @@ func TestDevicePostureIntegrationDelete(t *testing.T) {
 	}
 }
 
-func TestDevicePostureIntegrationEditWithOptionalParams(t *testing.T) {
+func TestSiteUpdateWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -119,20 +68,21 @@ func TestDevicePostureIntegrationEditWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Devices.Posture.Integrations.Edit(
+	_, err := client.MagicTransit.Sites.Update(
 		context.TODO(),
-		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-		zero_trust.DevicePostureIntegrationEditParams{
-			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
-			Config: cloudflare.F[zero_trust.DevicePostureIntegrationEditParamsConfig](zero_trust.DevicePostureIntegrationEditParamsConfigTeamsDevicesWorkspaceOneConfigRequest(zero_trust.DevicePostureIntegrationEditParamsConfigTeamsDevicesWorkspaceOneConfigRequest{
-				APIURL:       cloudflare.F("https://as123.awmdm.com/API"),
-				AuthURL:      cloudflare.F("https://na.uemauth.vmwservices.com/connect/token"),
-				ClientID:     cloudflare.F("example client id"),
-				ClientSecret: cloudflare.F("example client secret"),
-			})),
-			Interval: cloudflare.F("10m"),
-			Name:     cloudflare.F("My Workspace One Integration"),
-			Type:     cloudflare.F(zero_trust.DevicePostureIntegrationEditParamsTypeWorkspaceOne),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		magic_transit.SiteUpdateParams{
+			Site: cloudflare.F(magic_transit.SiteUpdateParamsSite{
+				ConnectorID: cloudflare.F("ac60d3d0435248289d446cedd870bcf4"),
+				Description: cloudflare.F("string"),
+				Location: cloudflare.F(magic_transit.SiteUpdateParamsSiteLocation{
+					Lat: cloudflare.F("string"),
+					Lon: cloudflare.F("string"),
+				}),
+				Name:                 cloudflare.F("site_1"),
+				SecondaryConnectorID: cloudflare.F("8d67040d3835dbcf46ce29da440dc482"),
+			}),
 		},
 	)
 	if err != nil {
@@ -144,7 +94,7 @@ func TestDevicePostureIntegrationEditWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestDevicePostureIntegrationGet(t *testing.T) {
+func TestSiteList(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -158,12 +108,66 @@ func TestDevicePostureIntegrationGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Devices.Posture.Integrations.Get(
+	_, err := client.MagicTransit.Sites.List(
 		context.TODO(),
-		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-		zero_trust.DevicePostureIntegrationGetParams{
-			AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
-		},
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		magic_transit.SiteListParams{},
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestSiteDelete(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.MagicTransit.Sites.Delete(
+		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		"023e105f4ecef8ad9ca31a8372d0c353",
+	)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestSiteGet(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := cloudflare.NewClient(
+		option.WithBaseURL(baseURL),
+		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
+		option.WithAPIEmail("user@example.com"),
+	)
+	_, err := client.MagicTransit.Sites.Get(
+		context.TODO(),
+		"023e105f4ecef8ad9ca31a8372d0c353",
+		"023e105f4ecef8ad9ca31a8372d0c353",
 	)
 	if err != nil {
 		var apierr *cloudflare.Error
