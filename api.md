@@ -2172,7 +2172,7 @@ Methods:
 
 # SecondaryDNS
 
-## ForceAxfrs
+## ForceAXFR
 
 Response Types:
 
@@ -2180,7 +2180,7 @@ Response Types:
 
 Methods:
 
-- <code title="post /zones/{zone_id}/secondary_dns/force_axfr">client.SecondaryDNS.ForceAxfrs.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/secondary_dns#ForceAxfrService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/secondary_dns">secondary_dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/secondary_dns#ForceAxfrNewParams">ForceAxfrNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/secondary_dns">secondary_dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/secondary_dns#SecondaryDNSForceResult">SecondaryDNSForceResult</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="post /zones/{zone_id}/secondary_dns/force_axfr">client.SecondaryDNS.ForceAXFR.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/secondary_dns#ForceAXFRService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/secondary_dns">secondary_dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/secondary_dns#ForceAXFRNewParams">ForceAXFRNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/secondary_dns">secondary_dns</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/secondary_dns#SecondaryDNSForceResult">SecondaryDNSForceResult</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ## Incoming
 
