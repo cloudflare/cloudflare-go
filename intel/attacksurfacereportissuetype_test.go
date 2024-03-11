@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package email_routing_test
+package intel_test
 
 import (
 	"context"
@@ -8,12 +8,13 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go"
-	"github.com/cloudflare/cloudflare-go/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-go/v2"
+	"github.com/cloudflare/cloudflare-go/v2/intel"
+	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
-func TestRoutingEnableNew(t *testing.T) {
+func TestAttackSurfaceReportIssueTypeGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -27,7 +28,9 @@ func TestRoutingEnableNew(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.EmailRouting.Routing.Enables.New(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.Intel.AttackSurfaceReport.IssueTypes.Get(context.TODO(), intel.AttackSurfaceReportIssueTypeGetParams{
+		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+	})
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

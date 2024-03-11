@@ -8,11 +8,11 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go"
-	"github.com/cloudflare/cloudflare-go/cache"
-	"github.com/cloudflare/cloudflare-go/internal/shared"
-	"github.com/cloudflare/cloudflare-go/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-go/v2"
+	"github.com/cloudflare/cloudflare-go/v2/cache"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
+	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 func TestCachePurgeWithOptionalParams(t *testing.T) {

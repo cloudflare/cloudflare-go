@@ -7,10 +7,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/internal/param"
-	"github.com/cloudflare/cloudflare-go/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/param"
+	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // GatewayService contains methods and other services that help with interacting
@@ -25,7 +25,7 @@ type GatewayService struct {
 	Configurations   *GatewayConfigurationService
 	Lists            *GatewayListService
 	Locations        *GatewayLocationService
-	Loggings         *GatewayLoggingService
+	Logging          *GatewayLoggingService
 	ProxyEndpoints   *GatewayProxyEndpointService
 	Rules            *GatewayRuleService
 }
@@ -42,7 +42,7 @@ func NewGatewayService(opts ...option.RequestOption) (r *GatewayService) {
 	r.Configurations = NewGatewayConfigurationService(opts...)
 	r.Lists = NewGatewayListService(opts...)
 	r.Locations = NewGatewayLocationService(opts...)
-	r.Loggings = NewGatewayLoggingService(opts...)
+	r.Logging = NewGatewayLoggingService(opts...)
 	r.ProxyEndpoints = NewGatewayProxyEndpointService(opts...)
 	r.Rules = NewGatewayRuleService(opts...)
 	return

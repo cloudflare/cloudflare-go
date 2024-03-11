@@ -3,7 +3,7 @@
 package zero_trust
 
 import (
-	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // ZeroTrustService contains methods and other services that help with interacting

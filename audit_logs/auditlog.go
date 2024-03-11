@@ -9,12 +9,12 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/internal/param"
-	"github.com/cloudflare/cloudflare-go/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/internal/shared"
-	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/param"
+	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // AuditLogService contains methods and other services that help with interacting
@@ -36,12 +36,12 @@ func NewAuditLogService(opts ...option.RequestOption) (r *AuditLogService) {
 
 // Gets a list of audit logs for an account. Can be filtered by who made the
 // change, on which zone, and the timeframe of the change.
-func (r *AuditLogService) List(ctx context.Context, accountIdentifier string, query AuditLogListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[AuditLogListResponse], err error) {
+func (r *AuditLogService) List(ctx context.Context, params AuditLogListParams, opts ...option.RequestOption) (res *shared.V4PagePaginationArray[AuditLogListResponse], err error) {
 	var raw *http.Response
 	opts = append(r.Options, opts...)
 	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
-	path := fmt.Sprintf("accounts/%s/audit_logs", accountIdentifier)
-	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, query, &res, opts...)
+	path := fmt.Sprintf("accounts/%s/audit_logs", params.AccountID)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -55,8 +55,8 @@ func (r *AuditLogService) List(ctx context.Context, accountIdentifier string, qu
 
 // Gets a list of audit logs for an account. Can be filtered by who made the
 // change, on which zone, and the timeframe of the change.
-func (r *AuditLogService) ListAutoPaging(ctx context.Context, accountIdentifier string, query AuditLogListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[AuditLogListResponse] {
-	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, accountIdentifier, query, opts...))
+func (r *AuditLogService) ListAutoPaging(ctx context.Context, params AuditLogListParams, opts ...option.RequestOption) *shared.V4PagePaginationArrayAutoPager[AuditLogListResponse] {
+	return shared.NewV4PagePaginationArrayAutoPager(r.List(ctx, params, opts...))
 }
 
 type AuditLogListResponse struct {
@@ -219,6 +219,8 @@ func (r auditLogListResponseResourceJSON) RawJSON() string {
 }
 
 type AuditLogListParams struct {
+	// Identifier
+	AccountID param.Field[string] `path:"account_id,required"`
 	// Finds a specific log by its ID.
 	ID     param.Field[string]                   `query:"id"`
 	Action param.Field[AuditLogListParamsAction] `query:"action"`

@@ -8,8 +8,9 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/cloudflare/cloudflare-go/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 type V4PagePaginationResult[T any] struct {
@@ -272,5 +273,245 @@ func (r *V4PagePaginationArrayAutoPager[T]) Err() error {
 }
 
 func (r *V4PagePaginationArrayAutoPager[T]) Index() int {
+	return r.run
+}
+
+type CursorPaginationResultInfo struct {
+	Count   int64                          `json:"count"`
+	Cursor  string                         `json:"cursor"`
+	PerPage int64                          `json:"per_page"`
+	JSON    cursorPaginationResultInfoJSON `json:"-"`
+}
+
+// cursorPaginationResultInfoJSON contains the JSON metadata for the struct
+// [CursorPaginationResultInfo]
+type cursorPaginationResultInfoJSON struct {
+	Count       apijson.Field
+	Cursor      apijson.Field
+	PerPage     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CursorPaginationResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cursorPaginationResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type CursorPagination[T any] struct {
+	Result     []T                        `json:"result"`
+	ResultInfo CursorPaginationResultInfo `json:"result_info"`
+	JSON       cursorPaginationJSON       `json:"-"`
+	cfg        *requestconfig.RequestConfig
+	res        *http.Response
+}
+
+// cursorPaginationJSON contains the JSON metadata for the struct
+// [CursorPagination[T]]
+type cursorPaginationJSON struct {
+	Result      apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CursorPagination[T]) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cursorPaginationJSON) RawJSON() string {
+	return r.raw
+}
+
+// NextPage returns the next page as defined by this pagination style. When there
+// is no next page, this function will return a 'nil' for the page value, but will
+// not return an error
+func (r *CursorPagination[T]) GetNextPage() (res *CursorPagination[T], err error) {
+	next := r.ResultInfo.Cursor
+	if len(next) == 0 {
+		return nil, nil
+	}
+	cfg := r.cfg.Clone(r.cfg.Context)
+	cfg.Apply(option.WithQuery("cursor", next))
+	var raw *http.Response
+	cfg.ResponseInto = &raw
+	cfg.ResponseBodyInto = &res
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+func (r *CursorPagination[T]) SetPageConfig(cfg *requestconfig.RequestConfig, res *http.Response) {
+	r.cfg = cfg
+	r.res = res
+}
+
+type CursorPaginationAutoPager[T any] struct {
+	page *CursorPagination[T]
+	cur  T
+	idx  int
+	run  int
+	err  error
+}
+
+func NewCursorPaginationAutoPager[T any](page *CursorPagination[T], err error) *CursorPaginationAutoPager[T] {
+	return &CursorPaginationAutoPager[T]{
+		page: page,
+		err:  err,
+	}
+}
+
+func (r *CursorPaginationAutoPager[T]) Next() bool {
+	if r.page == nil || len(r.page.Result) == 0 {
+		return false
+	}
+	if r.idx >= len(r.page.Result) {
+		r.idx = 0
+		r.page, r.err = r.page.GetNextPage()
+		if r.err != nil || r.page == nil || len(r.page.Result) == 0 {
+			return false
+		}
+	}
+	r.cur = r.page.Result[r.idx]
+	r.run += 1
+	r.idx += 1
+	return true
+}
+
+func (r *CursorPaginationAutoPager[T]) Current() T {
+	return r.cur
+}
+
+func (r *CursorPaginationAutoPager[T]) Err() error {
+	return r.err
+}
+
+func (r *CursorPaginationAutoPager[T]) Index() int {
+	return r.run
+}
+
+type CursorLimitPaginationResultInfo struct {
+	Count   int64                               `json:"count"`
+	Cursor  string                              `json:"cursor"`
+	PerPage int64                               `json:"per_page"`
+	JSON    cursorLimitPaginationResultInfoJSON `json:"-"`
+}
+
+// cursorLimitPaginationResultInfoJSON contains the JSON metadata for the struct
+// [CursorLimitPaginationResultInfo]
+type cursorLimitPaginationResultInfoJSON struct {
+	Count       apijson.Field
+	Cursor      apijson.Field
+	PerPage     apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CursorLimitPaginationResultInfo) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cursorLimitPaginationResultInfoJSON) RawJSON() string {
+	return r.raw
+}
+
+type CursorLimitPagination[T any] struct {
+	Result     []T                             `json:"result"`
+	ResultInfo CursorLimitPaginationResultInfo `json:"result_info"`
+	JSON       cursorLimitPaginationJSON       `json:"-"`
+	cfg        *requestconfig.RequestConfig
+	res        *http.Response
+}
+
+// cursorLimitPaginationJSON contains the JSON metadata for the struct
+// [CursorLimitPagination[T]]
+type cursorLimitPaginationJSON struct {
+	Result      apijson.Field
+	ResultInfo  apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *CursorLimitPagination[T]) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r cursorLimitPaginationJSON) RawJSON() string {
+	return r.raw
+}
+
+// NextPage returns the next page as defined by this pagination style. When there
+// is no next page, this function will return a 'nil' for the page value, but will
+// not return an error
+func (r *CursorLimitPagination[T]) GetNextPage() (res *CursorLimitPagination[T], err error) {
+	next := r.ResultInfo.Cursor
+	if len(next) == 0 {
+		return nil, nil
+	}
+	cfg := r.cfg.Clone(r.cfg.Context)
+	cfg.Apply(option.WithQuery("cursor", next))
+	var raw *http.Response
+	cfg.ResponseInto = &raw
+	cfg.ResponseBodyInto = &res
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+func (r *CursorLimitPagination[T]) SetPageConfig(cfg *requestconfig.RequestConfig, res *http.Response) {
+	r.cfg = cfg
+	r.res = res
+}
+
+type CursorLimitPaginationAutoPager[T any] struct {
+	page *CursorLimitPagination[T]
+	cur  T
+	idx  int
+	run  int
+	err  error
+}
+
+func NewCursorLimitPaginationAutoPager[T any](page *CursorLimitPagination[T], err error) *CursorLimitPaginationAutoPager[T] {
+	return &CursorLimitPaginationAutoPager[T]{
+		page: page,
+		err:  err,
+	}
+}
+
+func (r *CursorLimitPaginationAutoPager[T]) Next() bool {
+	if r.page == nil || len(r.page.Result) == 0 {
+		return false
+	}
+	if r.idx >= len(r.page.Result) {
+		r.idx = 0
+		r.page, r.err = r.page.GetNextPage()
+		if r.err != nil || r.page == nil || len(r.page.Result) == 0 {
+			return false
+		}
+	}
+	r.cur = r.page.Result[r.idx]
+	r.run += 1
+	r.idx += 1
+	return true
+}
+
+func (r *CursorLimitPaginationAutoPager[T]) Current() T {
+	return r.cur
+}
+
+func (r *CursorLimitPaginationAutoPager[T]) Err() error {
+	return r.err
+}
+
+func (r *CursorLimitPaginationAutoPager[T]) Index() int {
 	return r.run
 }

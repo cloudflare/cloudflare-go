@@ -9,10 +9,10 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/internal/param"
-	"github.com/cloudflare/cloudflare-go/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/param"
+	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/tidwall/gjson"
 )
 
@@ -21,9 +21,9 @@ import (
 // variables from the environment automatically. You should not instantiate this
 // service directly, and instead use the [NewDLPProfileService] method instead.
 type DLPProfileService struct {
-	Options     []option.RequestOption
-	Customs     *DLPProfileCustomService
-	Predefineds *DLPProfilePredefinedService
+	Options    []option.RequestOption
+	Custom     *DLPProfileCustomService
+	Predefined *DLPProfilePredefinedService
 }
 
 // NewDLPProfileService generates a new service that applies the given options to
@@ -32,8 +32,8 @@ type DLPProfileService struct {
 func NewDLPProfileService(opts ...option.RequestOption) (r *DLPProfileService) {
 	r = &DLPProfileService{}
 	r.Options = opts
-	r.Customs = NewDLPProfileCustomService(opts...)
-	r.Predefineds = NewDLPProfilePredefinedService(opts...)
+	r.Custom = NewDLPProfileCustomService(opts...)
+	r.Predefined = NewDLPProfilePredefinedService(opts...)
 	return
 }
 

@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go"
-	"github.com/cloudflare/cloudflare-go/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/option"
-	"github.com/cloudflare/cloudflare-go/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v2"
+	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
 )
 
 func TestDevicePostureIntegrationNewWithOptionalParams(t *testing.T) {
@@ -28,7 +28,7 @@ func TestDevicePostureIntegrationNewWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Devices.Postures.Integrations.New(context.TODO(), zero_trust.DevicePostureIntegrationNewParams{
+	_, err := client.ZeroTrust.Devices.Posture.Integrations.New(context.TODO(), zero_trust.DevicePostureIntegrationNewParams{
 		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
 		Config: cloudflare.F[zero_trust.DevicePostureIntegrationNewParamsConfig](zero_trust.DevicePostureIntegrationNewParamsConfigTeamsDevicesWorkspaceOneConfigRequest(zero_trust.DevicePostureIntegrationNewParamsConfigTeamsDevicesWorkspaceOneConfigRequest{
 			APIURL:       cloudflare.F("https://as123.awmdm.com/API"),
@@ -63,7 +63,7 @@ func TestDevicePostureIntegrationList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Devices.Postures.Integrations.List(context.TODO(), zero_trust.DevicePostureIntegrationListParams{
+	_, err := client.ZeroTrust.Devices.Posture.Integrations.List(context.TODO(), zero_trust.DevicePostureIntegrationListParams{
 		AccountID: cloudflare.F[any]("699d98642c564d2e855e9661899b7252"),
 	})
 	if err != nil {
@@ -89,7 +89,7 @@ func TestDevicePostureIntegrationDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Devices.Postures.Integrations.Delete(
+	_, err := client.ZeroTrust.Devices.Posture.Integrations.Delete(
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.DevicePostureIntegrationDeleteParams{
@@ -119,7 +119,7 @@ func TestDevicePostureIntegrationEditWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Devices.Postures.Integrations.Edit(
+	_, err := client.ZeroTrust.Devices.Posture.Integrations.Edit(
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.DevicePostureIntegrationEditParams{
@@ -158,7 +158,7 @@ func TestDevicePostureIntegrationGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Devices.Postures.Integrations.Get(
+	_, err := client.ZeroTrust.Devices.Posture.Integrations.Get(
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
 		zero_trust.DevicePostureIntegrationGetParams{

@@ -7,10 +7,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/internal/param"
-	"github.com/cloudflare/cloudflare-go/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/param"
+	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // CacheService contains methods and other services that help with interacting with
@@ -20,7 +20,7 @@ import (
 type CacheService struct {
 	Options             []option.RequestOption
 	CacheReserve        *CacheReserveService
-	SmartTieredCached   *SmartTieredCachedService
+	SmartTieredCache    *SmartTieredCacheService
 	Variants            *VariantService
 	RegionalTieredCache *RegionalTieredCacheService
 }
@@ -32,7 +32,7 @@ func NewCacheService(opts ...option.RequestOption) (r *CacheService) {
 	r = &CacheService{}
 	r.Options = opts
 	r.CacheReserve = NewCacheReserveService(opts...)
-	r.SmartTieredCached = NewSmartTieredCachedService(opts...)
+	r.SmartTieredCache = NewSmartTieredCacheService(opts...)
 	r.Variants = NewVariantService(opts...)
 	r.RegionalTieredCache = NewRegionalTieredCacheService(opts...)
 	return

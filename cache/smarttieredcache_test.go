@@ -8,13 +8,13 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go"
-	"github.com/cloudflare/cloudflare-go/cache"
-	"github.com/cloudflare/cloudflare-go/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-go/v2"
+	"github.com/cloudflare/cloudflare-go/v2/cache"
+	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
-func TestSmartTieredCachedDelete(t *testing.T) {
+func TestSmartTieredCacheDelete(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -28,7 +28,7 @@ func TestSmartTieredCachedDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Cache.SmartTieredCached.Delete(context.TODO(), cache.SmartTieredCachedDeleteParams{
+	_, err := client.Cache.SmartTieredCache.Delete(context.TODO(), cache.SmartTieredCacheDeleteParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {
@@ -40,7 +40,7 @@ func TestSmartTieredCachedDelete(t *testing.T) {
 	}
 }
 
-func TestSmartTieredCachedEdit(t *testing.T) {
+func TestSmartTieredCacheEdit(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -54,9 +54,9 @@ func TestSmartTieredCachedEdit(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Cache.SmartTieredCached.Edit(context.TODO(), cache.SmartTieredCachedEditParams{
+	_, err := client.Cache.SmartTieredCache.Edit(context.TODO(), cache.SmartTieredCacheEditParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-		Value:  cloudflare.F(cache.SmartTieredCachedEditParamsValueOn),
+		Value:  cloudflare.F(cache.SmartTieredCacheEditParamsValueOn),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -67,7 +67,7 @@ func TestSmartTieredCachedEdit(t *testing.T) {
 	}
 }
 
-func TestSmartTieredCachedGet(t *testing.T) {
+func TestSmartTieredCacheGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -81,7 +81,7 @@ func TestSmartTieredCachedGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.Cache.SmartTieredCached.Get(context.TODO(), cache.SmartTieredCachedGetParams{
+	_, err := client.Cache.SmartTieredCache.Get(context.TODO(), cache.SmartTieredCacheGetParams{
 		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 	})
 	if err != nil {

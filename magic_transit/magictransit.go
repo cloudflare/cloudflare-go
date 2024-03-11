@@ -3,7 +3,7 @@
 package magic_transit
 
 import (
-	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // MagicTransitService contains methods and other services that help with
@@ -17,6 +17,7 @@ type MagicTransitService struct {
 	GRETunnels      *GRETunnelService
 	IPSECTunnels    *IPSECTunnelService
 	Routes          *RouteService
+	Sites           *SiteService
 }
 
 // NewMagicTransitService generates a new service that applies the given options to
@@ -29,5 +30,6 @@ func NewMagicTransitService(opts ...option.RequestOption) (r *MagicTransitServic
 	r.GRETunnels = NewGRETunnelService(opts...)
 	r.IPSECTunnels = NewIPSECTunnelService(opts...)
 	r.Routes = NewRouteService(opts...)
+	r.Sites = NewSiteService(opts...)
 	return
 }

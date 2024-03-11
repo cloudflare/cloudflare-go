@@ -1,6 +1,6 @@
 # Cloudflare Go API Library
 
-<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go"><img src="https://pkg.go.dev/badge/github.com/cloudflare/cloudflare-go.svg" alt="Go Reference"></a>
+<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2"><img src="https://pkg.go.dev/badge/github.com/cloudflare/cloudflare-go/v2.svg" alt="Go Reference"></a>
 
 The Cloudflare Go library provides convenient access to [the Cloudflare REST
 API](https://developers.cloudflare.com/api) from applications written in Go. The full API of this library can be found in [api.md](api.md).
@@ -11,7 +11,7 @@ API](https://developers.cloudflare.com/api) from applications written in Go. The
 
 ```go
 import (
-	"github.com/cloudflare/cloudflare-go" // imported as cloudflare
+	"github.com/cloudflare/cloudflare-go/v2" // imported as cloudflare
 )
 ```
 
@@ -22,7 +22,7 @@ Or to pin the version:
 <!-- x-release-please-start-version -->
 
 ```sh
-go get -u 'github.com/cloudflare/cloudflare-go@v2.0.0-beta.1'
+go get -u 'github.com/cloudflare/cloudflare-go/v2@v2.0.0-beta.2'
 ```
 
 <!-- x-release-please-end -->
@@ -42,9 +42,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/cloudflare/cloudflare-go"
-	"github.com/cloudflare/cloudflare-go/option"
-	"github.com/cloudflare/cloudflare-go/zones"
+	"github.com/cloudflare/cloudflare-go/v2"
+	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/zones"
 )
 
 func main() {
@@ -159,7 +159,7 @@ client.Zones.New(context.TODO(), ...,
 )
 ```
 
-See the [full list of request options](https://pkg.go.dev/github.com/cloudflare/cloudflare-go/option).
+See the [full list of request options](https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/option).
 
 ### Pagination
 
@@ -168,14 +168,31 @@ This library provides some conveniences for working with paginated list endpoint
 You can use `.ListAutoPaging()` methods to iterate through items across all pages:
 
 ```go
-// TODO
+iter := client.Accounts.ListAutoPaging(context.TODO(), accounts.AccountListParams{})
+// Automatically fetches more pages as needed.
+for iter.Next() {
+	accountListResponse := iter.Current()
+	fmt.Printf("%+v\n", accountListResponse)
+}
+if err := iter.Err(); err != nil {
+	panic(err.Error())
+}
 ```
 
 Or you can use simple `.List()` methods to fetch a single page and receive a standard response object
 with additional helper methods like `.GetNextPage()`, e.g.:
 
 ```go
-// TODO
+page, err := client.Accounts.List(context.TODO(), accounts.AccountListParams{})
+for page != nil {
+	for _, account := range page.Result {
+		fmt.Printf("%+v\n", account)
+	}
+	page, err = page.GetNextPage()
+}
+if err != nil {
+	panic(err.Error())
+}
 ```
 
 ### Errors

@@ -8,13 +8,13 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go"
-	"github.com/cloudflare/cloudflare-go/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/option"
-	"github.com/cloudflare/cloudflare-go/secondary_dns"
+	"github.com/cloudflare/cloudflare-go/v2"
+	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/secondary_dns"
 )
 
-func TestForceAxfrNew(t *testing.T) {
+func TestForceAXFRNew(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -28,7 +28,7 @@ func TestForceAxfrNew(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.SecondaryDNS.ForceAxfrs.New(context.TODO(), secondary_dns.ForceAxfrNewParams{
+	_, err := client.SecondaryDNS.ForceAXFR.New(context.TODO(), secondary_dns.ForceAXFRNewParams{
 		ZoneID: cloudflare.F[any]("269d8f4853475ca241c4e730be286b20"),
 	})
 	if err != nil {

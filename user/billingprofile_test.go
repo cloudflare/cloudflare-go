@@ -8,9 +8,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go"
-	"github.com/cloudflare/cloudflare-go/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-go/v2"
+	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 func TestBillingProfileGet(t *testing.T) {
@@ -27,7 +27,7 @@ func TestBillingProfileGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.User.Billing.Profiles.Get(context.TODO())
+	_, err := client.User.Billing.Profile.Get(context.TODO())
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {

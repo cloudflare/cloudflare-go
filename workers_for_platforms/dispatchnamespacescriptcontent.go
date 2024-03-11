@@ -3,7 +3,7 @@
 package workers_for_platforms
 
 import (
-	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // DispatchNamespaceScriptContentService contains methods and other services that

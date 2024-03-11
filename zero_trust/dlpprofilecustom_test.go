@@ -8,10 +8,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cloudflare/cloudflare-go"
-	"github.com/cloudflare/cloudflare-go/internal/testutil"
-	"github.com/cloudflare/cloudflare-go/option"
-	"github.com/cloudflare/cloudflare-go/zero_trust"
+	"github.com/cloudflare/cloudflare-go/v2"
+	"github.com/cloudflare/cloudflare-go/v2/internal/testutil"
+	"github.com/cloudflare/cloudflare-go/v2/option"
+	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
 )
 
 func TestDLPProfileCustomNew(t *testing.T) {
@@ -28,7 +28,7 @@ func TestDLPProfileCustomNew(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.DLP.Profiles.Customs.New(context.TODO(), zero_trust.DLPProfileCustomNewParams{
+	_, err := client.ZeroTrust.DLP.Profiles.Custom.New(context.TODO(), zero_trust.DLPProfileCustomNewParams{
 		AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
 		Profiles: cloudflare.F([]zero_trust.DLPProfileCustomNewParamsProfile{{
 			AllowedMatchCount: cloudflare.F(5.000000),
@@ -151,7 +151,7 @@ func TestDLPProfileCustomUpdateWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.DLP.Profiles.Customs.Update(
+	_, err := client.ZeroTrust.DLP.Profiles.Custom.Update(
 		context.TODO(),
 		"384e129d-25bd-403c-8019-bc19eb7a8a5f",
 		zero_trust.DLPProfileCustomUpdateParams{
@@ -222,7 +222,7 @@ func TestDLPProfileCustomDelete(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.DLP.Profiles.Customs.Delete(
+	_, err := client.ZeroTrust.DLP.Profiles.Custom.Delete(
 		context.TODO(),
 		"384e129d-25bd-403c-8019-bc19eb7a8a5f",
 		zero_trust.DLPProfileCustomDeleteParams{
@@ -252,7 +252,7 @@ func TestDLPProfileCustomGet(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.DLP.Profiles.Customs.Get(
+	_, err := client.ZeroTrust.DLP.Profiles.Custom.Get(
 		context.TODO(),
 		"384e129d-25bd-403c-8019-bc19eb7a8a5f",
 		zero_trust.DLPProfileCustomGetParams{

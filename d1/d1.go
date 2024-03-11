@@ -3,7 +3,7 @@
 package d1
 
 import (
-	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // D1Service contains methods and other services that help with interacting with

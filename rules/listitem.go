@@ -9,12 +9,12 @@ import (
 	"net/url"
 	"reflect"
 
-	"github.com/cloudflare/cloudflare-go/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/internal/param"
-	"github.com/cloudflare/cloudflare-go/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/internal/shared"
-	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/param"
+	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/tidwall/gjson"
 )
 
@@ -71,16 +71,26 @@ func (r *ListItemService) Update(ctx context.Context, listID string, params List
 }
 
 // Fetches all the items in the list.
-func (r *ListItemService) List(ctx context.Context, listID string, params ListItemListParams, opts ...option.RequestOption) (res *[]ListItemListResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	var env ListItemListResponseEnvelope
+func (r *ListItemService) List(ctx context.Context, listID string, params ListItemListParams, opts ...option.RequestOption) (res *shared.CursorPagination[ListItemListResponse], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/rules/lists/%s/items", params.AccountID, listID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Fetches all the items in the list.
+func (r *ListItemService) ListAutoPaging(ctx context.Context, listID string, params ListItemListParams, opts ...option.RequestOption) *shared.CursorPaginationAutoPager[ListItemListResponse] {
+	return shared.NewCursorPaginationAutoPager(r.List(ctx, listID, params, opts...))
 }
 
 // Removes one or more items from a list.
@@ -595,133 +605,6 @@ func (r ListItemListParams) URLQuery() (v url.Values) {
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
-}
-
-type ListItemListResponseEnvelope struct {
-	Errors   []ListItemListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ListItemListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []ListItemListResponse                 `json:"result,required,nullable"`
-	// Whether the API call was successful
-	Success    ListItemListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo ListItemListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       listItemListResponseEnvelopeJSON       `json:"-"`
-}
-
-// listItemListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [ListItemListResponseEnvelope]
-type listItemListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ListItemListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r listItemListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type ListItemListResponseEnvelopeErrors struct {
-	Code    int64                                  `json:"code,required"`
-	Message string                                 `json:"message,required"`
-	JSON    listItemListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// listItemListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ListItemListResponseEnvelopeErrors]
-type listItemListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ListItemListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r listItemListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-type ListItemListResponseEnvelopeMessages struct {
-	Code    int64                                    `json:"code,required"`
-	Message string                                   `json:"message,required"`
-	JSON    listItemListResponseEnvelopeMessagesJSON `json:"-"`
-}
-
-// listItemListResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ListItemListResponseEnvelopeMessages]
-type listItemListResponseEnvelopeMessagesJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ListItemListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r listItemListResponseEnvelopeMessagesJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type ListItemListResponseEnvelopeSuccess bool
-
-const (
-	ListItemListResponseEnvelopeSuccessTrue ListItemListResponseEnvelopeSuccess = true
-)
-
-type ListItemListResponseEnvelopeResultInfo struct {
-	Cursors ListItemListResponseEnvelopeResultInfoCursors `json:"cursors"`
-	JSON    listItemListResponseEnvelopeResultInfoJSON    `json:"-"`
-}
-
-// listItemListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [ListItemListResponseEnvelopeResultInfo]
-type listItemListResponseEnvelopeResultInfoJSON struct {
-	Cursors     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ListItemListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r listItemListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
-}
-
-type ListItemListResponseEnvelopeResultInfoCursors struct {
-	After  string                                            `json:"after"`
-	Before string                                            `json:"before"`
-	JSON   listItemListResponseEnvelopeResultInfoCursorsJSON `json:"-"`
-}
-
-// listItemListResponseEnvelopeResultInfoCursorsJSON contains the JSON metadata for
-// the struct [ListItemListResponseEnvelopeResultInfoCursors]
-type listItemListResponseEnvelopeResultInfoCursorsJSON struct {
-	After       apijson.Field
-	Before      apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *ListItemListResponseEnvelopeResultInfoCursors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r listItemListResponseEnvelopeResultInfoCursorsJSON) RawJSON() string {
-	return r.raw
 }
 
 type ListItemDeleteParams struct {

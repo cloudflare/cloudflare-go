@@ -8,11 +8,12 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/cloudflare/cloudflare-go/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/internal/apiquery"
-	"github.com/cloudflare/cloudflare-go/internal/param"
-	"github.com/cloudflare/cloudflare-go/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/apiquery"
+	"github.com/cloudflare/cloudflare-go/v2/internal/param"
+	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // BucketService contains methods and other services that help with interacting
@@ -46,16 +47,26 @@ func (r *BucketService) New(ctx context.Context, params BucketNewParams, opts ..
 }
 
 // Lists all R2 buckets on your account
-func (r *BucketService) List(ctx context.Context, params BucketListParams, opts ...option.RequestOption) (res *[]R2Bucket, err error) {
-	opts = append(r.Options[:], opts...)
-	var env BucketListResponseEnvelope
+func (r *BucketService) List(ctx context.Context, params BucketListParams, opts ...option.RequestOption) (res *shared.CursorPagination[R2Bucket], err error) {
+	var raw *http.Response
+	opts = append(r.Options, opts...)
+	opts = append([]option.RequestOption{option.WithResponseInto(&raw)}, opts...)
 	path := fmt.Sprintf("accounts/%s/r2/buckets", params.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
+	cfg, err := requestconfig.NewRequestConfig(ctx, http.MethodGet, path, params, &res, opts...)
 	if err != nil {
-		return
+		return nil, err
 	}
-	res = &env.Result
-	return
+	err = cfg.Execute()
+	if err != nil {
+		return nil, err
+	}
+	res.SetPageConfig(cfg, raw)
+	return res, nil
+}
+
+// Lists all R2 buckets on your account
+func (r *BucketService) ListAutoPaging(ctx context.Context, params BucketListParams, opts ...option.RequestOption) *shared.CursorPaginationAutoPager[R2Bucket] {
+	return shared.NewCursorPaginationAutoPager(r.List(ctx, params, opts...))
 }
 
 // Deletes an existing R2 bucket.
@@ -249,91 +260,6 @@ type BucketListParamsOrder string
 const (
 	BucketListParamsOrderName BucketListParamsOrder = "name"
 )
-
-type BucketListResponseEnvelope struct {
-	Errors   []BucketListResponseEnvelopeErrors `json:"errors,required"`
-	Messages []string                           `json:"messages,required"`
-	Result   []R2Bucket                         `json:"result,required"`
-	// Whether the API call was successful
-	Success    BucketListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo BucketListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       bucketListResponseEnvelopeJSON       `json:"-"`
-}
-
-// bucketListResponseEnvelopeJSON contains the JSON metadata for the struct
-// [BucketListResponseEnvelope]
-type bucketListResponseEnvelopeJSON struct {
-	Errors      apijson.Field
-	Messages    apijson.Field
-	Result      apijson.Field
-	Success     apijson.Field
-	ResultInfo  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BucketListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bucketListResponseEnvelopeJSON) RawJSON() string {
-	return r.raw
-}
-
-type BucketListResponseEnvelopeErrors struct {
-	Code    int64                                `json:"code,required"`
-	Message string                               `json:"message,required"`
-	JSON    bucketListResponseEnvelopeErrorsJSON `json:"-"`
-}
-
-// bucketListResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [BucketListResponseEnvelopeErrors]
-type bucketListResponseEnvelopeErrorsJSON struct {
-	Code        apijson.Field
-	Message     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BucketListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bucketListResponseEnvelopeErrorsJSON) RawJSON() string {
-	return r.raw
-}
-
-// Whether the API call was successful
-type BucketListResponseEnvelopeSuccess bool
-
-const (
-	BucketListResponseEnvelopeSuccessTrue BucketListResponseEnvelopeSuccess = true
-)
-
-type BucketListResponseEnvelopeResultInfo struct {
-	// A continuation token that should be used to fetch the next page of results
-	Cursor string `json:"cursor"`
-	// Maximum number of results on this page
-	PerPage float64                                  `json:"per_page"`
-	JSON    bucketListResponseEnvelopeResultInfoJSON `json:"-"`
-}
-
-// bucketListResponseEnvelopeResultInfoJSON contains the JSON metadata for the
-// struct [BucketListResponseEnvelopeResultInfo]
-type bucketListResponseEnvelopeResultInfoJSON struct {
-	Cursor      apijson.Field
-	PerPage     apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *BucketListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r bucketListResponseEnvelopeResultInfoJSON) RawJSON() string {
-	return r.raw
-}
 
 type BucketDeleteParams struct {
 	// Account ID

@@ -9,11 +9,11 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/cloudflare/cloudflare-go/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/internal/param"
-	"github.com/cloudflare/cloudflare-go/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/internal/shared"
-	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/param"
+	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/internal/shared"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 	"github.com/tidwall/gjson"
 )
 
@@ -26,7 +26,7 @@ type DeviceService struct {
 	DEXTests      *DeviceDEXTestService
 	Networks      *DeviceNetworkService
 	Policies      *DevicePolicyService
-	Postures      *DevicePostureService
+	Posture       *DevicePostureService
 	Revokes       *DeviceRevokeService
 	Settings      *DeviceSettingService
 	Unrevokes     *DeviceUnrevokeService
@@ -42,7 +42,7 @@ func NewDeviceService(opts ...option.RequestOption) (r *DeviceService) {
 	r.DEXTests = NewDeviceDEXTestService(opts...)
 	r.Networks = NewDeviceNetworkService(opts...)
 	r.Policies = NewDevicePolicyService(opts...)
-	r.Postures = NewDevicePostureService(opts...)
+	r.Posture = NewDevicePostureService(opts...)
 	r.Revokes = NewDeviceRevokeService(opts...)
 	r.Settings = NewDeviceSettingService(opts...)
 	r.Unrevokes = NewDeviceUnrevokeService(opts...)

@@ -3,7 +3,7 @@
 package secondary_dns
 
 import (
-	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
 // SecondaryDNSService contains methods and other services that help with
@@ -12,13 +12,13 @@ import (
 // this service directly, and instead use the [NewSecondaryDNSService] method
 // instead.
 type SecondaryDNSService struct {
-	Options    []option.RequestOption
-	ForceAxfrs *ForceAxfrService
-	Incoming   *IncomingService
-	Outgoing   *OutgoingService
-	ACLs       *ACLService
-	Peers      *PeerService
-	TSIGs      *TSIGService
+	Options   []option.RequestOption
+	ForceAXFR *ForceAXFRService
+	Incoming  *IncomingService
+	Outgoing  *OutgoingService
+	ACLs      *ACLService
+	Peers     *PeerService
+	TSIGs     *TSIGService
 }
 
 // NewSecondaryDNSService generates a new service that applies the given options to
@@ -27,7 +27,7 @@ type SecondaryDNSService struct {
 func NewSecondaryDNSService(opts ...option.RequestOption) (r *SecondaryDNSService) {
 	r = &SecondaryDNSService{}
 	r.Options = opts
-	r.ForceAxfrs = NewForceAxfrService(opts...)
+	r.ForceAXFR = NewForceAXFRService(opts...)
 	r.Incoming = NewIncomingService(opts...)
 	r.Outgoing = NewOutgoingService(opts...)
 	r.ACLs = NewACLService(opts...)

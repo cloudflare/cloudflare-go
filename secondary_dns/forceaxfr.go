@@ -7,33 +7,33 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cloudflare/cloudflare-go/internal/apijson"
-	"github.com/cloudflare/cloudflare-go/internal/param"
-	"github.com/cloudflare/cloudflare-go/internal/requestconfig"
-	"github.com/cloudflare/cloudflare-go/option"
+	"github.com/cloudflare/cloudflare-go/v2/internal/apijson"
+	"github.com/cloudflare/cloudflare-go/v2/internal/param"
+	"github.com/cloudflare/cloudflare-go/v2/internal/requestconfig"
+	"github.com/cloudflare/cloudflare-go/v2/option"
 )
 
-// ForceAxfrService contains methods and other services that help with interacting
+// ForceAXFRService contains methods and other services that help with interacting
 // with the cloudflare API. Note, unlike clients, this service does not read
 // variables from the environment automatically. You should not instantiate this
-// service directly, and instead use the [NewForceAxfrService] method instead.
-type ForceAxfrService struct {
+// service directly, and instead use the [NewForceAXFRService] method instead.
+type ForceAXFRService struct {
 	Options []option.RequestOption
 }
 
-// NewForceAxfrService generates a new service that applies the given options to
+// NewForceAXFRService generates a new service that applies the given options to
 // each request. These options are applied after the parent client's options (if
 // there is one), and before any request-specific options.
-func NewForceAxfrService(opts ...option.RequestOption) (r *ForceAxfrService) {
-	r = &ForceAxfrService{}
+func NewForceAXFRService(opts ...option.RequestOption) (r *ForceAXFRService) {
+	r = &ForceAXFRService{}
 	r.Options = opts
 	return
 }
 
 // Sends AXFR zone transfer request to primary nameserver(s).
-func (r *ForceAxfrService) New(ctx context.Context, body ForceAxfrNewParams, opts ...option.RequestOption) (res *SecondaryDNSForceResult, err error) {
+func (r *ForceAXFRService) New(ctx context.Context, body ForceAXFRNewParams, opts ...option.RequestOption) (res *SecondaryDNSForceResult, err error) {
 	opts = append(r.Options[:], opts...)
-	var env ForceAxfrNewResponseEnvelope
+	var env ForceAXFRNewResponseEnvelope
 	path := fmt.Sprintf("zones/%v/secondary_dns/force_axfr", body.ZoneID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
 	if err != nil {
@@ -45,23 +45,23 @@ func (r *ForceAxfrService) New(ctx context.Context, body ForceAxfrNewParams, opt
 
 type SecondaryDNSForceResult = string
 
-type ForceAxfrNewParams struct {
+type ForceAXFRNewParams struct {
 	ZoneID param.Field[interface{}] `path:"zone_id,required"`
 }
 
-type ForceAxfrNewResponseEnvelope struct {
-	Errors   []ForceAxfrNewResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []ForceAxfrNewResponseEnvelopeMessages `json:"messages,required"`
+type ForceAXFRNewResponseEnvelope struct {
+	Errors   []ForceAXFRNewResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []ForceAXFRNewResponseEnvelopeMessages `json:"messages,required"`
 	// When force_axfr query parameter is set to true, the response is a simple string
 	Result SecondaryDNSForceResult `json:"result,required"`
 	// Whether the API call was successful
-	Success ForceAxfrNewResponseEnvelopeSuccess `json:"success,required"`
-	JSON    forceAxfrNewResponseEnvelopeJSON    `json:"-"`
+	Success ForceAXFRNewResponseEnvelopeSuccess `json:"success,required"`
+	JSON    forceAXFRNewResponseEnvelopeJSON    `json:"-"`
 }
 
-// forceAxfrNewResponseEnvelopeJSON contains the JSON metadata for the struct
-// [ForceAxfrNewResponseEnvelope]
-type forceAxfrNewResponseEnvelopeJSON struct {
+// forceAXFRNewResponseEnvelopeJSON contains the JSON metadata for the struct
+// [ForceAXFRNewResponseEnvelope]
+type forceAXFRNewResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -70,63 +70,63 @@ type forceAxfrNewResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ForceAxfrNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *ForceAXFRNewResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r forceAxfrNewResponseEnvelopeJSON) RawJSON() string {
+func (r forceAXFRNewResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type ForceAxfrNewResponseEnvelopeErrors struct {
+type ForceAXFRNewResponseEnvelopeErrors struct {
 	Code    int64                                  `json:"code,required"`
 	Message string                                 `json:"message,required"`
-	JSON    forceAxfrNewResponseEnvelopeErrorsJSON `json:"-"`
+	JSON    forceAXFRNewResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// forceAxfrNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
-// [ForceAxfrNewResponseEnvelopeErrors]
-type forceAxfrNewResponseEnvelopeErrorsJSON struct {
+// forceAXFRNewResponseEnvelopeErrorsJSON contains the JSON metadata for the struct
+// [ForceAXFRNewResponseEnvelopeErrors]
+type forceAXFRNewResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ForceAxfrNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *ForceAXFRNewResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r forceAxfrNewResponseEnvelopeErrorsJSON) RawJSON() string {
+func (r forceAXFRNewResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
-type ForceAxfrNewResponseEnvelopeMessages struct {
+type ForceAXFRNewResponseEnvelopeMessages struct {
 	Code    int64                                    `json:"code,required"`
 	Message string                                   `json:"message,required"`
-	JSON    forceAxfrNewResponseEnvelopeMessagesJSON `json:"-"`
+	JSON    forceAXFRNewResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// forceAxfrNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
-// struct [ForceAxfrNewResponseEnvelopeMessages]
-type forceAxfrNewResponseEnvelopeMessagesJSON struct {
+// forceAXFRNewResponseEnvelopeMessagesJSON contains the JSON metadata for the
+// struct [ForceAXFRNewResponseEnvelopeMessages]
+type forceAXFRNewResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *ForceAxfrNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *ForceAXFRNewResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r forceAxfrNewResponseEnvelopeMessagesJSON) RawJSON() string {
+func (r forceAXFRNewResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type ForceAxfrNewResponseEnvelopeSuccess bool
+type ForceAXFRNewResponseEnvelopeSuccess bool
 
 const (
-	ForceAxfrNewResponseEnvelopeSuccessTrue ForceAxfrNewResponseEnvelopeSuccess = true
+	ForceAXFRNewResponseEnvelopeSuccessTrue ForceAXFRNewResponseEnvelopeSuccess = true
 )
