@@ -25,5 +25,5 @@ func (f Field[T]) String() string {
 	if s, ok := any(f.Value).(fmt.Stringer); ok {
 		return s.String()
 	}
-	return fmt.Sprintf("%#v", f.Value)
+	return fmt.Sprintf("%v", f.Value)
 }
