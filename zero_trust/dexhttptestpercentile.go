@@ -35,9 +35,9 @@ func NewDEXHTTPTestPercentileService(opts ...option.RequestOption) (r *DEXHTTPTe
 
 // Get percentiles for an http test for a given time period between 1 hour and 7
 // days.
-func (r *DEXHTTPTestPercentileService) List(ctx context.Context, testID string, params DEXHTTPTestPercentileListParams, opts ...option.RequestOption) (res *DigitalExperienceMonitoringHTTPDetailsPercentiles, err error) {
+func (r *DEXHTTPTestPercentileService) Get(ctx context.Context, testID string, params DEXHTTPTestPercentileGetParams, opts ...option.RequestOption) (res *DigitalExperienceMonitoringHTTPDetailsPercentiles, err error) {
 	opts = append(r.Options[:], opts...)
-	var env DexhttpTestPercentileListResponseEnvelope
+	var env DexhttpTestPercentileGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dex/http-tests/%s/percentiles", params.AccountID, testID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &env, opts...)
 	if err != nil {
@@ -168,7 +168,7 @@ func (r digitalExperienceMonitoringHTTPDetailsPercentilesServerResponseTimeMsJSO
 	return r.raw
 }
 
-type DEXHTTPTestPercentileListParams struct {
+type DEXHTTPTestPercentileGetParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 	// End time for aggregate metrics in ISO format
 	TimeEnd param.Field[string] `query:"timeEnd,required"`
@@ -182,27 +182,27 @@ type DEXHTTPTestPercentileListParams struct {
 	DeviceID param.Field[[]string] `query:"deviceId"`
 }
 
-// URLQuery serializes [DEXHTTPTestPercentileListParams]'s query parameters as
+// URLQuery serializes [DEXHTTPTestPercentileGetParams]'s query parameters as
 // `url.Values`.
-func (r DEXHTTPTestPercentileListParams) URLQuery() (v url.Values) {
+func (r DEXHTTPTestPercentileGetParams) URLQuery() (v url.Values) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
 
-type DexhttpTestPercentileListResponseEnvelope struct {
-	Errors   []DexhttpTestPercentileListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DexhttpTestPercentileListResponseEnvelopeMessages `json:"messages,required"`
-	Result   DigitalExperienceMonitoringHTTPDetailsPercentiles   `json:"result,required"`
+type DexhttpTestPercentileGetResponseEnvelope struct {
+	Errors   []DexhttpTestPercentileGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DexhttpTestPercentileGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   DigitalExperienceMonitoringHTTPDetailsPercentiles  `json:"result,required"`
 	// Whether the API call was successful
-	Success DexhttpTestPercentileListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    dexhttpTestPercentileListResponseEnvelopeJSON    `json:"-"`
+	Success DexhttpTestPercentileGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    dexhttpTestPercentileGetResponseEnvelopeJSON    `json:"-"`
 }
 
-// dexhttpTestPercentileListResponseEnvelopeJSON contains the JSON metadata for the
-// struct [DexhttpTestPercentileListResponseEnvelope]
-type dexhttpTestPercentileListResponseEnvelopeJSON struct {
+// dexhttpTestPercentileGetResponseEnvelopeJSON contains the JSON metadata for the
+// struct [DexhttpTestPercentileGetResponseEnvelope]
+type dexhttpTestPercentileGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -211,63 +211,63 @@ type dexhttpTestPercentileListResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexhttpTestPercentileListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *DexhttpTestPercentileGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dexhttpTestPercentileListResponseEnvelopeJSON) RawJSON() string {
+func (r dexhttpTestPercentileGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type DexhttpTestPercentileListResponseEnvelopeErrors struct {
-	Code    int64                                               `json:"code,required"`
-	Message string                                              `json:"message,required"`
-	JSON    dexhttpTestPercentileListResponseEnvelopeErrorsJSON `json:"-"`
+type DexhttpTestPercentileGetResponseEnvelopeErrors struct {
+	Code    int64                                              `json:"code,required"`
+	Message string                                             `json:"message,required"`
+	JSON    dexhttpTestPercentileGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// dexhttpTestPercentileListResponseEnvelopeErrorsJSON contains the JSON metadata
-// for the struct [DexhttpTestPercentileListResponseEnvelopeErrors]
-type dexhttpTestPercentileListResponseEnvelopeErrorsJSON struct {
+// dexhttpTestPercentileGetResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [DexhttpTestPercentileGetResponseEnvelopeErrors]
+type dexhttpTestPercentileGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexhttpTestPercentileListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *DexhttpTestPercentileGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dexhttpTestPercentileListResponseEnvelopeErrorsJSON) RawJSON() string {
+func (r dexhttpTestPercentileGetResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
-type DexhttpTestPercentileListResponseEnvelopeMessages struct {
-	Code    int64                                                 `json:"code,required"`
-	Message string                                                `json:"message,required"`
-	JSON    dexhttpTestPercentileListResponseEnvelopeMessagesJSON `json:"-"`
+type DexhttpTestPercentileGetResponseEnvelopeMessages struct {
+	Code    int64                                                `json:"code,required"`
+	Message string                                               `json:"message,required"`
+	JSON    dexhttpTestPercentileGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// dexhttpTestPercentileListResponseEnvelopeMessagesJSON contains the JSON metadata
-// for the struct [DexhttpTestPercentileListResponseEnvelopeMessages]
-type dexhttpTestPercentileListResponseEnvelopeMessagesJSON struct {
+// dexhttpTestPercentileGetResponseEnvelopeMessagesJSON contains the JSON metadata
+// for the struct [DexhttpTestPercentileGetResponseEnvelopeMessages]
+type dexhttpTestPercentileGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DexhttpTestPercentileListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *DexhttpTestPercentileGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dexhttpTestPercentileListResponseEnvelopeMessagesJSON) RawJSON() string {
+func (r dexhttpTestPercentileGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type DexhttpTestPercentileListResponseEnvelopeSuccess bool
+type DexhttpTestPercentileGetResponseEnvelopeSuccess bool
 
 const (
-	DexhttpTestPercentileListResponseEnvelopeSuccessTrue DexhttpTestPercentileListResponseEnvelopeSuccess = true
+	DexhttpTestPercentileGetResponseEnvelopeSuccessTrue DexhttpTestPercentileGetResponseEnvelopeSuccess = true
 )

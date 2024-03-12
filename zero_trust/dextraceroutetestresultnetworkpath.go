@@ -34,9 +34,9 @@ func NewDEXTracerouteTestResultNetworkPathService(opts ...option.RequestOption) 
 
 // Get a breakdown of hops and performance metrics for a specific traceroute test
 // run
-func (r *DEXTracerouteTestResultNetworkPathService) List(ctx context.Context, testResultID string, query DEXTracerouteTestResultNetworkPathListParams, opts ...option.RequestOption) (res *DigitalExperienceMonitoringTracerouteTestResultNetworkPath, err error) {
+func (r *DEXTracerouteTestResultNetworkPathService) Get(ctx context.Context, testResultID string, query DEXTracerouteTestResultNetworkPathGetParams, opts ...option.RequestOption) (res *DigitalExperienceMonitoringTracerouteTestResultNetworkPath, err error) {
 	opts = append(r.Options[:], opts...)
-	var env DEXTracerouteTestResultNetworkPathListResponseEnvelope
+	var env DEXTracerouteTestResultNetworkPathGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dex/traceroute-test-results/%s/network-path", query.AccountID, testResultID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
 	if err != nil {
@@ -157,22 +157,22 @@ const (
 	DigitalExperienceMonitoringTracerouteTestResultNetworkPathHopsMileClientToIsp       DigitalExperienceMonitoringTracerouteTestResultNetworkPathHopsMile = "client-to-isp"
 )
 
-type DEXTracerouteTestResultNetworkPathListParams struct {
+type DEXTracerouteTestResultNetworkPathGetParams struct {
 	AccountID param.Field[string] `path:"account_id,required"`
 }
 
-type DEXTracerouteTestResultNetworkPathListResponseEnvelope struct {
-	Errors   []DEXTracerouteTestResultNetworkPathListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []DEXTracerouteTestResultNetworkPathListResponseEnvelopeMessages `json:"messages,required"`
-	Result   DigitalExperienceMonitoringTracerouteTestResultNetworkPath       `json:"result,required"`
+type DEXTracerouteTestResultNetworkPathGetResponseEnvelope struct {
+	Errors   []DEXTracerouteTestResultNetworkPathGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []DEXTracerouteTestResultNetworkPathGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   DigitalExperienceMonitoringTracerouteTestResultNetworkPath      `json:"result,required"`
 	// Whether the API call was successful
-	Success DEXTracerouteTestResultNetworkPathListResponseEnvelopeSuccess `json:"success,required"`
-	JSON    dexTracerouteTestResultNetworkPathListResponseEnvelopeJSON    `json:"-"`
+	Success DEXTracerouteTestResultNetworkPathGetResponseEnvelopeSuccess `json:"success,required"`
+	JSON    dexTracerouteTestResultNetworkPathGetResponseEnvelopeJSON    `json:"-"`
 }
 
-// dexTracerouteTestResultNetworkPathListResponseEnvelopeJSON contains the JSON
-// metadata for the struct [DEXTracerouteTestResultNetworkPathListResponseEnvelope]
-type dexTracerouteTestResultNetworkPathListResponseEnvelopeJSON struct {
+// dexTracerouteTestResultNetworkPathGetResponseEnvelopeJSON contains the JSON
+// metadata for the struct [DEXTracerouteTestResultNetworkPathGetResponseEnvelope]
+type dexTracerouteTestResultNetworkPathGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -181,65 +181,65 @@ type dexTracerouteTestResultNetworkPathListResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DEXTracerouteTestResultNetworkPathListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTracerouteTestResultNetworkPathGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dexTracerouteTestResultNetworkPathListResponseEnvelopeJSON) RawJSON() string {
+func (r dexTracerouteTestResultNetworkPathGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type DEXTracerouteTestResultNetworkPathListResponseEnvelopeErrors struct {
-	Code    int64                                                            `json:"code,required"`
-	Message string                                                           `json:"message,required"`
-	JSON    dexTracerouteTestResultNetworkPathListResponseEnvelopeErrorsJSON `json:"-"`
+type DEXTracerouteTestResultNetworkPathGetResponseEnvelopeErrors struct {
+	Code    int64                                                           `json:"code,required"`
+	Message string                                                          `json:"message,required"`
+	JSON    dexTracerouteTestResultNetworkPathGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// dexTracerouteTestResultNetworkPathListResponseEnvelopeErrorsJSON contains the
+// dexTracerouteTestResultNetworkPathGetResponseEnvelopeErrorsJSON contains the
 // JSON metadata for the struct
-// [DEXTracerouteTestResultNetworkPathListResponseEnvelopeErrors]
-type dexTracerouteTestResultNetworkPathListResponseEnvelopeErrorsJSON struct {
+// [DEXTracerouteTestResultNetworkPathGetResponseEnvelopeErrors]
+type dexTracerouteTestResultNetworkPathGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DEXTracerouteTestResultNetworkPathListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTracerouteTestResultNetworkPathGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dexTracerouteTestResultNetworkPathListResponseEnvelopeErrorsJSON) RawJSON() string {
+func (r dexTracerouteTestResultNetworkPathGetResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
-type DEXTracerouteTestResultNetworkPathListResponseEnvelopeMessages struct {
-	Code    int64                                                              `json:"code,required"`
-	Message string                                                             `json:"message,required"`
-	JSON    dexTracerouteTestResultNetworkPathListResponseEnvelopeMessagesJSON `json:"-"`
+type DEXTracerouteTestResultNetworkPathGetResponseEnvelopeMessages struct {
+	Code    int64                                                             `json:"code,required"`
+	Message string                                                            `json:"message,required"`
+	JSON    dexTracerouteTestResultNetworkPathGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// dexTracerouteTestResultNetworkPathListResponseEnvelopeMessagesJSON contains the
+// dexTracerouteTestResultNetworkPathGetResponseEnvelopeMessagesJSON contains the
 // JSON metadata for the struct
-// [DEXTracerouteTestResultNetworkPathListResponseEnvelopeMessages]
-type dexTracerouteTestResultNetworkPathListResponseEnvelopeMessagesJSON struct {
+// [DEXTracerouteTestResultNetworkPathGetResponseEnvelopeMessages]
+type dexTracerouteTestResultNetworkPathGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *DEXTracerouteTestResultNetworkPathListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *DEXTracerouteTestResultNetworkPathGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r dexTracerouteTestResultNetworkPathListResponseEnvelopeMessagesJSON) RawJSON() string {
+func (r dexTracerouteTestResultNetworkPathGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type DEXTracerouteTestResultNetworkPathListResponseEnvelopeSuccess bool
+type DEXTracerouteTestResultNetworkPathGetResponseEnvelopeSuccess bool
 
 const (
-	DEXTracerouteTestResultNetworkPathListResponseEnvelopeSuccessTrue DEXTracerouteTestResultNetworkPathListResponseEnvelopeSuccess = true
+	DEXTracerouteTestResultNetworkPathGetResponseEnvelopeSuccessTrue DEXTracerouteTestResultNetworkPathGetResponseEnvelopeSuccess = true
 )
