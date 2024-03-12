@@ -119,7 +119,7 @@ type AddressingIpamPrefixes struct {
 	// Autonomous System Number (ASN) the prefix will be advertised under.
 	ASN int64 `json:"asn,nullable"`
 	// IP Prefix in Classless Inter-Domain Routing format.
-	Cidr      string    `json:"cidr"`
+	CIDR      string    `json:"cidr"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Description of the prefix.
 	Description string `json:"description"`
@@ -144,7 +144,7 @@ type addressingIpamPrefixesJSON struct {
 	AdvertisedModifiedAt apijson.Field
 	Approved             apijson.Field
 	ASN                  apijson.Field
-	Cidr                 apijson.Field
+	CIDR                 apijson.Field
 	CreatedAt            apijson.Field
 	Description          apijson.Field
 	LOADocumentID        apijson.Field
@@ -194,7 +194,7 @@ type PrefixNewParams struct {
 	// Autonomous System Number (ASN) the prefix will be advertised under.
 	ASN param.Field[int64] `json:"asn,required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
-	Cidr param.Field[string] `json:"cidr,required"`
+	CIDR param.Field[string] `json:"cidr,required"`
 	// Identifier for the uploaded LOA document.
 	LOADocumentID param.Field[string] `json:"loa_document_id,required"`
 }

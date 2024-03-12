@@ -51,6 +51,9 @@ func TestProjectNewWithOptionalParams(t *testing.T) {
 						Dataset: cloudflare.F("api_analytics"),
 					}),
 				}),
+				Browsers: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewBrowsers{
+					Browser: cloudflare.F[any](map[string]interface{}{}),
+				}),
 				CompatibilityDate:  cloudflare.F("2022-01-01"),
 				CompatibilityFlags: cloudflare.F([]interface{}{"url_standard"}),
 				D1Databases: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewD1Databases{
@@ -69,9 +72,19 @@ func TestProjectNewWithOptionalParams(t *testing.T) {
 						Value: cloudflare.F("hello world"),
 					}),
 				}),
+				HyperdriveBindings: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewHyperdriveBindings{
+					Hyperdrive: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewHyperdriveBindingsHyperdrive{
+						ID: cloudflare.F("a76a99bc342644deb02c38d66082262a"),
+					}),
+				}),
 				KVNamespaces: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewKVNamespaces{
 					KVBinding: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewKVNamespacesKVBinding{
 						NamespaceID: cloudflare.F("5eb63bbbe01eeed093cb22bb8f5acdc3"),
+					}),
+				}),
+				MTLSCertificates: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewMTLSCertificates{
+					MTLS: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewMTLSCertificatesMTLS{
+						CertificateID: cloudflare.F("d7cdd17c-916f-4cb7-aabe-585eb382ec4e"),
 					}),
 				}),
 				Placement: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewPlacement{
@@ -87,10 +100,15 @@ func TestProjectNewWithOptionalParams(t *testing.T) {
 						Name: cloudflare.F("some-bucket"),
 					}),
 				}),
-				ServiceBindings: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewServiceBindings{
-					ServiceBinding: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewServiceBindingsServiceBinding{
+				Services: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewServices{
+					ServiceBinding: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewServicesServiceBinding{
 						Environment: cloudflare.F("production"),
 						Service:     cloudflare.F("example-worker"),
+					}),
+				}),
+				VectorizeBindings: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewVectorizeBindings{
+					Vectorize: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsPreviewVectorizeBindingsVectorize{
+						IndexName: cloudflare.F("my_index"),
 					}),
 				}),
 			}),
@@ -104,6 +122,9 @@ func TestProjectNewWithOptionalParams(t *testing.T) {
 					AnalyticsEngineBinding: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionAnalyticsEngineDatasetsAnalyticsEngineBinding{
 						Dataset: cloudflare.F("api_analytics"),
 					}),
+				}),
+				Browsers: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionBrowsers{
+					Browser: cloudflare.F[any](map[string]interface{}{}),
 				}),
 				CompatibilityDate:  cloudflare.F("2022-01-01"),
 				CompatibilityFlags: cloudflare.F([]interface{}{"url_standard"}),
@@ -123,9 +144,19 @@ func TestProjectNewWithOptionalParams(t *testing.T) {
 						Value: cloudflare.F("hello world"),
 					}),
 				}),
+				HyperdriveBindings: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionHyperdriveBindings{
+					Hyperdrive: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionHyperdriveBindingsHyperdrive{
+						ID: cloudflare.F("a76a99bc342644deb02c38d66082262a"),
+					}),
+				}),
 				KVNamespaces: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionKVNamespaces{
 					KVBinding: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionKVNamespacesKVBinding{
 						NamespaceID: cloudflare.F("5eb63bbbe01eeed093cb22bb8f5acdc3"),
+					}),
+				}),
+				MTLSCertificates: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionMTLSCertificates{
+					MTLS: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionMTLSCertificatesMTLS{
+						CertificateID: cloudflare.F("d7cdd17c-916f-4cb7-aabe-585eb382ec4e"),
 					}),
 				}),
 				Placement: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionPlacement{
@@ -141,10 +172,15 @@ func TestProjectNewWithOptionalParams(t *testing.T) {
 						Name: cloudflare.F("some-bucket"),
 					}),
 				}),
-				ServiceBindings: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionServiceBindings{
-					ServiceBinding: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionServiceBindingsServiceBinding{
+				Services: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionServices{
+					ServiceBinding: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionServicesServiceBinding{
 						Environment: cloudflare.F("production"),
 						Service:     cloudflare.F("example-worker"),
+					}),
+				}),
+				VectorizeBindings: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionVectorizeBindings{
+					Vectorize: cloudflare.F(pages.ProjectNewParamsDeploymentConfigsProductionVectorizeBindingsVectorize{
+						IndexName: cloudflare.F("my_index"),
 					}),
 				}),
 			}),

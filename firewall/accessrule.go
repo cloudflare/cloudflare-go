@@ -264,7 +264,7 @@ func (r AccessRuleNewParams) MarshalJSON() (data []byte, err error) {
 // Satisfied by
 // [firewall.AccessRuleNewParamsConfigurationLegacyJhsIPConfiguration],
 // [firewall.AccessRuleNewParamsConfigurationLegacyJhsIPV6Configuration],
-// [firewall.AccessRuleNewParamsConfigurationLegacyJhsCidrConfiguration],
+// [firewall.AccessRuleNewParamsConfigurationLegacyJhsCIDRConfiguration],
 // [firewall.AccessRuleNewParamsConfigurationLegacyJhsASNConfiguration],
 // [firewall.AccessRuleNewParamsConfigurationLegacyJhsCountryConfiguration].
 type AccessRuleNewParamsConfiguration interface {
@@ -318,28 +318,28 @@ const (
 	AccessRuleNewParamsConfigurationLegacyJhsIPV6ConfigurationTargetIp6 AccessRuleNewParamsConfigurationLegacyJhsIPV6ConfigurationTarget = "ip6"
 )
 
-type AccessRuleNewParamsConfigurationLegacyJhsCidrConfiguration struct {
+type AccessRuleNewParamsConfigurationLegacyJhsCIDRConfiguration struct {
 	// The configuration target. You must set the target to `ip_range` when specifying
 	// an IP address range in the rule.
-	Target param.Field[AccessRuleNewParamsConfigurationLegacyJhsCidrConfigurationTarget] `json:"target"`
+	Target param.Field[AccessRuleNewParamsConfigurationLegacyJhsCIDRConfigurationTarget] `json:"target"`
 	// The IP address range to match. You can only use prefix lengths `/16` and `/24`
 	// for IPv4 ranges, and prefix lengths `/32`, `/48`, and `/64` for IPv6 ranges.
 	Value param.Field[string] `json:"value"`
 }
 
-func (r AccessRuleNewParamsConfigurationLegacyJhsCidrConfiguration) MarshalJSON() (data []byte, err error) {
+func (r AccessRuleNewParamsConfigurationLegacyJhsCIDRConfiguration) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessRuleNewParamsConfigurationLegacyJhsCidrConfiguration) implementsFirewallAccessRuleNewParamsConfiguration() {
+func (r AccessRuleNewParamsConfigurationLegacyJhsCIDRConfiguration) implementsFirewallAccessRuleNewParamsConfiguration() {
 }
 
 // The configuration target. You must set the target to `ip_range` when specifying
 // an IP address range in the rule.
-type AccessRuleNewParamsConfigurationLegacyJhsCidrConfigurationTarget string
+type AccessRuleNewParamsConfigurationLegacyJhsCIDRConfigurationTarget string
 
 const (
-	AccessRuleNewParamsConfigurationLegacyJhsCidrConfigurationTargetIPRange AccessRuleNewParamsConfigurationLegacyJhsCidrConfigurationTarget = "ip_range"
+	AccessRuleNewParamsConfigurationLegacyJhsCIDRConfigurationTargetIPRange AccessRuleNewParamsConfigurationLegacyJhsCIDRConfigurationTarget = "ip_range"
 )
 
 type AccessRuleNewParamsConfigurationLegacyJhsASNConfiguration struct {
@@ -721,7 +721,7 @@ func (r AccessRuleEditParams) MarshalJSON() (data []byte, err error) {
 // Satisfied by
 // [firewall.AccessRuleEditParamsConfigurationLegacyJhsIPConfiguration],
 // [firewall.AccessRuleEditParamsConfigurationLegacyJhsIPV6Configuration],
-// [firewall.AccessRuleEditParamsConfigurationLegacyJhsCidrConfiguration],
+// [firewall.AccessRuleEditParamsConfigurationLegacyJhsCIDRConfiguration],
 // [firewall.AccessRuleEditParamsConfigurationLegacyJhsASNConfiguration],
 // [firewall.AccessRuleEditParamsConfigurationLegacyJhsCountryConfiguration].
 type AccessRuleEditParamsConfiguration interface {
@@ -775,28 +775,28 @@ const (
 	AccessRuleEditParamsConfigurationLegacyJhsIPV6ConfigurationTargetIp6 AccessRuleEditParamsConfigurationLegacyJhsIPV6ConfigurationTarget = "ip6"
 )
 
-type AccessRuleEditParamsConfigurationLegacyJhsCidrConfiguration struct {
+type AccessRuleEditParamsConfigurationLegacyJhsCIDRConfiguration struct {
 	// The configuration target. You must set the target to `ip_range` when specifying
 	// an IP address range in the rule.
-	Target param.Field[AccessRuleEditParamsConfigurationLegacyJhsCidrConfigurationTarget] `json:"target"`
+	Target param.Field[AccessRuleEditParamsConfigurationLegacyJhsCIDRConfigurationTarget] `json:"target"`
 	// The IP address range to match. You can only use prefix lengths `/16` and `/24`
 	// for IPv4 ranges, and prefix lengths `/32`, `/48`, and `/64` for IPv6 ranges.
 	Value param.Field[string] `json:"value"`
 }
 
-func (r AccessRuleEditParamsConfigurationLegacyJhsCidrConfiguration) MarshalJSON() (data []byte, err error) {
+func (r AccessRuleEditParamsConfigurationLegacyJhsCIDRConfiguration) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-func (r AccessRuleEditParamsConfigurationLegacyJhsCidrConfiguration) implementsFirewallAccessRuleEditParamsConfiguration() {
+func (r AccessRuleEditParamsConfigurationLegacyJhsCIDRConfiguration) implementsFirewallAccessRuleEditParamsConfiguration() {
 }
 
 // The configuration target. You must set the target to `ip_range` when specifying
 // an IP address range in the rule.
-type AccessRuleEditParamsConfigurationLegacyJhsCidrConfigurationTarget string
+type AccessRuleEditParamsConfigurationLegacyJhsCIDRConfigurationTarget string
 
 const (
-	AccessRuleEditParamsConfigurationLegacyJhsCidrConfigurationTargetIPRange AccessRuleEditParamsConfigurationLegacyJhsCidrConfigurationTarget = "ip_range"
+	AccessRuleEditParamsConfigurationLegacyJhsCIDRConfigurationTargetIPRange AccessRuleEditParamsConfigurationLegacyJhsCIDRConfigurationTarget = "ip_range"
 )
 
 type AccessRuleEditParamsConfigurationLegacyJhsASNConfiguration struct {

@@ -75,7 +75,7 @@ type AddressingIpamDelegations struct {
 	// Delegation identifier tag.
 	ID string `json:"id"`
 	// IP Prefix in Classless Inter-Domain Routing format.
-	Cidr      string    `json:"cidr"`
+	CIDR      string    `json:"cidr"`
 	CreatedAt time.Time `json:"created_at" format:"date-time"`
 	// Account identifier for the account to which prefix is being delegated.
 	DelegatedAccountID string    `json:"delegated_account_id"`
@@ -89,7 +89,7 @@ type AddressingIpamDelegations struct {
 // [AddressingIpamDelegations]
 type addressingIpamDelegationsJSON struct {
 	ID                 apijson.Field
-	Cidr               apijson.Field
+	CIDR               apijson.Field
 	CreatedAt          apijson.Field
 	DelegatedAccountID apijson.Field
 	ModifiedAt         apijson.Field
@@ -132,7 +132,7 @@ type PrefixDelegationNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
 	// IP Prefix in Classless Inter-Domain Routing format.
-	Cidr param.Field[string] `json:"cidr,required"`
+	CIDR param.Field[string] `json:"cidr,required"`
 	// Account identifier for the account to which prefix is being delegated.
 	DelegatedAccountID param.Field[string] `json:"delegated_account_id,required"`
 }
