@@ -36,7 +36,7 @@ func (r *OutgoingStatusService) Get(ctx context.Context, query OutgoingStatusGet
 	opts = append(r.Options[:], opts...)
 	var env OutgoingStatusGetResponseEnvelope
 	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing/status", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

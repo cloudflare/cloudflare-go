@@ -44,7 +44,7 @@ func (r *DLPProfilePredefinedService) Get(ctx context.Context, profileID string,
 	opts = append(r.Options[:], opts...)
 	var env DLPProfilePredefinedGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dlp/profiles/predefined/%s", query.AccountID, profileID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

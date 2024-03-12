@@ -98,7 +98,7 @@ func (r *AccessApplicationService) List(ctx context.Context, query AccessApplica
 		accountOrZoneID = query.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/access/apps", accountOrZone, accountOrZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -120,7 +120,7 @@ func (r *AccessApplicationService) Delete(ctx context.Context, appID AccessAppli
 		accountOrZoneID = body.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/access/apps/%v", accountOrZone, accountOrZoneID, appID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -142,7 +142,7 @@ func (r *AccessApplicationService) Get(ctx context.Context, appID AccessApplicat
 		accountOrZoneID = query.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/access/apps/%v", accountOrZone, accountOrZoneID, appID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -164,7 +164,7 @@ func (r *AccessApplicationService) RevokeTokens(ctx context.Context, appID Acces
 		accountOrZoneID = body.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/access/apps/%v/revoke_tokens", accountOrZone, accountOrZoneID, appID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

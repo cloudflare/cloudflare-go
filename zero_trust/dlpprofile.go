@@ -42,7 +42,7 @@ func (r *DLPProfileService) List(ctx context.Context, query DLPProfileListParams
 	opts = append(r.Options[:], opts...)
 	var env DLPProfileListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dlp/profiles", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -55,7 +55,7 @@ func (r *DLPProfileService) Get(ctx context.Context, profileID string, query DLP
 	opts = append(r.Options[:], opts...)
 	var env DLPProfileGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dlp/profiles/%s", query.AccountID, profileID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

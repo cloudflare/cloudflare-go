@@ -56,7 +56,7 @@ func (r *PrefixService) List(ctx context.Context, query PrefixListParams, opts .
 	opts = append(r.Options[:], opts...)
 	var env PrefixListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -69,7 +69,7 @@ func (r *PrefixService) Delete(ctx context.Context, prefixID string, body Prefix
 	opts = append(r.Options[:], opts...)
 	var env PrefixDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s", body.AccountID, prefixID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -95,7 +95,7 @@ func (r *PrefixService) Get(ctx context.Context, prefixID string, query PrefixGe
 	opts = append(r.Options[:], opts...)
 	var env PrefixGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s", query.AccountID, prefixID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

@@ -49,7 +49,7 @@ func (r *GatewayLoggingService) Get(ctx context.Context, query GatewayLoggingGet
 	opts = append(r.Options[:], opts...)
 	var env GatewayLoggingGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/gateway/logging", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

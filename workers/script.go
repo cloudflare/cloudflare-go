@@ -69,7 +69,7 @@ func (r *ScriptService) List(ctx context.Context, query ScriptListParams, opts .
 	opts = append(r.Options[:], opts...)
 	var env ScriptListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/scripts", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -92,7 +92,7 @@ func (r *ScriptService) Get(ctx context.Context, scriptName string, query Script
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "undefined")}, opts...)
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s", query.AccountID, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 

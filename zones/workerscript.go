@@ -52,7 +52,7 @@ func (r *WorkerScriptService) Delete(ctx context.Context, body WorkerScriptDelet
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
 	path := fmt.Sprintf("zones/%s/workers/script", body.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, nil, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return
 }
 
@@ -62,7 +62,7 @@ func (r *WorkerScriptService) Get(ctx context.Context, query WorkerScriptGetPara
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "undefined")}, opts...)
 	path := fmt.Sprintf("zones/%s/workers/script", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 

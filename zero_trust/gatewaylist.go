@@ -68,7 +68,7 @@ func (r *GatewayListService) List(ctx context.Context, query GatewayListListPara
 	opts = append(r.Options[:], opts...)
 	var env GatewayListListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/gateway/lists", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -81,7 +81,7 @@ func (r *GatewayListService) Delete(ctx context.Context, listID string, body Gat
 	opts = append(r.Options[:], opts...)
 	var env GatewayListDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/gateway/lists/%s", body.AccountID, listID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -107,7 +107,7 @@ func (r *GatewayListService) Get(ctx context.Context, listID string, query Gatew
 	opts = append(r.Options[:], opts...)
 	var env GatewayListGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/gateway/lists/%s", query.AccountID, listID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

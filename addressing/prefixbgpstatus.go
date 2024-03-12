@@ -50,7 +50,7 @@ func (r *PrefixBGPStatusService) Get(ctx context.Context, prefixID string, query
 	opts = append(r.Options[:], opts...)
 	var env PrefixBGPStatusGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bgp/status", query.AccountID, prefixID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

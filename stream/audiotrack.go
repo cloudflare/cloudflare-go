@@ -39,7 +39,7 @@ func (r *AudioTrackService) Delete(ctx context.Context, identifier string, audio
 	opts = append(r.Options[:], opts...)
 	var env AudioTrackDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/%s/audio/%s", body.AccountID, identifier, audioIdentifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -81,7 +81,7 @@ func (r *AudioTrackService) Get(ctx context.Context, identifier string, query Au
 	opts = append(r.Options[:], opts...)
 	var env AudioTrackGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/%s/audio", query.AccountID, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

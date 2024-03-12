@@ -113,7 +113,7 @@ func (r *AccessRuleService) Delete(ctx context.Context, identifier interface{}, 
 		accountOrZoneID = body.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/firewall/access_rules/rules/%v", accountOrZone, accountOrZoneID, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -159,7 +159,7 @@ func (r *AccessRuleService) Get(ctx context.Context, identifier interface{}, que
 		accountOrZoneID = query.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/firewall/access_rules/rules/%v", accountOrZone, accountOrZoneID, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

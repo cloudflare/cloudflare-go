@@ -99,7 +99,7 @@ func (r *NamespaceService) Delete(ctx context.Context, namespaceID string, body 
 	opts = append(r.Options[:], opts...)
 	var env NamespaceDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s", body.AccountID, namespaceID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

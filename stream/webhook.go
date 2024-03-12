@@ -51,7 +51,7 @@ func (r *WebhookService) Delete(ctx context.Context, body WebhookDeleteParams, o
 	opts = append(r.Options[:], opts...)
 	var env WebhookDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/webhook", body.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -64,7 +64,7 @@ func (r *WebhookService) Get(ctx context.Context, query WebhookGetParams, opts .
 	opts = append(r.Options[:], opts...)
 	var env WebhookGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/webhook", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

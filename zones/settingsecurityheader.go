@@ -50,7 +50,7 @@ func (r *SettingSecurityHeaderService) Get(ctx context.Context, query SettingSec
 	opts = append(r.Options[:], opts...)
 	var env SettingSecurityHeaderGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/security_header", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

@@ -53,7 +53,7 @@ func (r *SettingWebsocketService) Get(ctx context.Context, query SettingWebsocke
 	opts = append(r.Options[:], opts...)
 	var env SettingWebsocketGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/websockets", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

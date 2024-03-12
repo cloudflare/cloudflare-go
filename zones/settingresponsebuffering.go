@@ -56,7 +56,7 @@ func (r *SettingResponseBufferingService) Get(ctx context.Context, query Setting
 	opts = append(r.Options[:], opts...)
 	var env SettingResponseBufferingGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/response_buffering", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

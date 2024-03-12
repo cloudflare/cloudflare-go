@@ -53,7 +53,7 @@ func (r *WatermarkService) List(ctx context.Context, query WatermarkListParams, 
 	opts = append(r.Options[:], opts...)
 	var env WatermarkListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/watermarks", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -66,7 +66,7 @@ func (r *WatermarkService) Delete(ctx context.Context, identifier string, body W
 	opts = append(r.Options[:], opts...)
 	var env WatermarkDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/watermarks/%s", body.AccountID, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -79,7 +79,7 @@ func (r *WatermarkService) Get(ctx context.Context, identifier string, query Wat
 	opts = append(r.Options[:], opts...)
 	var env WatermarkGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/watermarks/%s", query.AccountID, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

@@ -35,7 +35,7 @@ func (r *PageService) List(ctx context.Context, query PageListParams, opts ...op
 	opts = append(r.Options[:], opts...)
 	var env PageListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/speed_api/pages", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

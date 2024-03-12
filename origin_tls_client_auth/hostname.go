@@ -55,7 +55,7 @@ func (r *HostnameService) Get(ctx context.Context, hostname string, query Hostna
 	opts = append(r.Options[:], opts...)
 	var env HostnameGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/%s", query.ZoneID, hostname)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

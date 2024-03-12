@@ -81,7 +81,7 @@ func (r *PoolService) Delete(ctx context.Context, poolID string, body PoolDelete
 	opts = append(r.Options[:], opts...)
 	var env PoolDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s", body.AccountID, poolID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -107,7 +107,7 @@ func (r *PoolService) Get(ctx context.Context, poolID string, query PoolGetParam
 	opts = append(r.Options[:], opts...)
 	var env PoolGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s", query.AccountID, poolID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

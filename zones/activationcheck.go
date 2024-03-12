@@ -37,7 +37,7 @@ func (r *ActivationCheckService) Trigger(ctx context.Context, body ActivationChe
 	opts = append(r.Options[:], opts...)
 	var env ActivationCheckTriggerResponseEnvelope
 	path := fmt.Sprintf("zones/%s/activation_check", body.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

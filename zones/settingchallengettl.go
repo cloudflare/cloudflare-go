@@ -58,7 +58,7 @@ func (r *SettingChallengeTTLService) Get(ctx context.Context, query SettingChall
 	opts = append(r.Options[:], opts...)
 	var env SettingChallengeTTLGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/challenge_ttl", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

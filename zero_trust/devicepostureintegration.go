@@ -52,7 +52,7 @@ func (r *DevicePostureIntegrationService) List(ctx context.Context, query Device
 	opts = append(r.Options[:], opts...)
 	var env DevicePostureIntegrationListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/posture/integration", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -65,7 +65,7 @@ func (r *DevicePostureIntegrationService) Delete(ctx context.Context, integratio
 	opts = append(r.Options[:], opts...)
 	var env DevicePostureIntegrationDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/posture/integration/%s", body.AccountID, integrationID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -91,7 +91,7 @@ func (r *DevicePostureIntegrationService) Get(ctx context.Context, integrationID
 	opts = append(r.Options[:], opts...)
 	var env DevicePostureIntegrationGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/posture/integration/%s", query.AccountID, integrationID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

@@ -63,7 +63,7 @@ func (r *OutgoingService) Delete(ctx context.Context, body OutgoingDeleteParams,
 	opts = append(r.Options[:], opts...)
 	var env OutgoingDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing", body.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -77,7 +77,7 @@ func (r *OutgoingService) Disable(ctx context.Context, body OutgoingDisableParam
 	opts = append(r.Options[:], opts...)
 	var env OutgoingDisableResponseEnvelope
 	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing/disable", body.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -90,7 +90,7 @@ func (r *OutgoingService) Enable(ctx context.Context, body OutgoingEnableParams,
 	opts = append(r.Options[:], opts...)
 	var env OutgoingEnableResponseEnvelope
 	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing/enable", body.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -103,7 +103,7 @@ func (r *OutgoingService) ForceNotify(ctx context.Context, body OutgoingForceNot
 	opts = append(r.Options[:], opts...)
 	var env OutgoingForceNotifyResponseEnvelope
 	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing/force_notify", body.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -116,7 +116,7 @@ func (r *OutgoingService) Get(ctx context.Context, query OutgoingGetParams, opts
 	opts = append(r.Options[:], opts...)
 	var env OutgoingGetResponseEnvelope
 	path := fmt.Sprintf("zones/%v/secondary_dns/outgoing", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

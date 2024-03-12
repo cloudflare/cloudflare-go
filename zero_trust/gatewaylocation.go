@@ -66,7 +66,7 @@ func (r *GatewayLocationService) List(ctx context.Context, query GatewayLocation
 	opts = append(r.Options[:], opts...)
 	var env GatewayLocationListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/gateway/locations", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -79,7 +79,7 @@ func (r *GatewayLocationService) Delete(ctx context.Context, locationID interfac
 	opts = append(r.Options[:], opts...)
 	var env GatewayLocationDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/gateway/locations/%v", body.AccountID, locationID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -92,7 +92,7 @@ func (r *GatewayLocationService) Get(ctx context.Context, locationID interface{}
 	opts = append(r.Options[:], opts...)
 	var env GatewayLocationGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/gateway/locations/%v", query.AccountID, locationID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

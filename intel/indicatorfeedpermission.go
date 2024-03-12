@@ -49,7 +49,7 @@ func (r *IndicatorFeedPermissionService) List(ctx context.Context, query Indicat
 	opts = append(r.Options[:], opts...)
 	var env IndicatorFeedPermissionListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/permissions/view", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

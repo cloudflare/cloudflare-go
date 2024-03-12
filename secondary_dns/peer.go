@@ -61,7 +61,7 @@ func (r *PeerService) List(ctx context.Context, query PeerListParams, opts ...op
 	opts = append(r.Options[:], opts...)
 	var env PeerListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/secondary_dns/peers", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -74,7 +74,7 @@ func (r *PeerService) Delete(ctx context.Context, peerID interface{}, body PeerD
 	opts = append(r.Options[:], opts...)
 	var env PeerDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/secondary_dns/peers/%v", body.AccountID, peerID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -87,7 +87,7 @@ func (r *PeerService) Get(ctx context.Context, peerID interface{}, query PeerGet
 	opts = append(r.Options[:], opts...)
 	var env PeerGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/secondary_dns/peers/%v", query.AccountID, peerID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

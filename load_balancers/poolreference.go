@@ -36,7 +36,7 @@ func (r *PoolReferenceService) Get(ctx context.Context, poolID string, query Poo
 	opts = append(r.Options[:], opts...)
 	var env PoolReferenceGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s/references", query.AccountID, poolID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

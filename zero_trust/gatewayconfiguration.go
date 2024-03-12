@@ -67,7 +67,7 @@ func (r *GatewayConfigurationService) Get(ctx context.Context, query GatewayConf
 	opts = append(r.Options[:], opts...)
 	var env GatewayConfigurationGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/gateway/configuration", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

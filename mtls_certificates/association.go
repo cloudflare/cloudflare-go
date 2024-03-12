@@ -36,7 +36,7 @@ func (r *AssociationService) Get(ctx context.Context, mtlsCertificateID string, 
 	opts = append(r.Options[:], opts...)
 	var env AssociationGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/mtls_certificates/%s/associations", query.AccountID, mtlsCertificateID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

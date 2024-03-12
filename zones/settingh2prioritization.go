@@ -50,7 +50,7 @@ func (r *SettingH2PrioritizationService) Get(ctx context.Context, query SettingH
 	opts = append(r.Options[:], opts...)
 	var env SettingH2PrioritizationGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/h2_prioritization", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

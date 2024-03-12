@@ -61,7 +61,7 @@ func (r *TSIGService) List(ctx context.Context, query TSIGListParams, opts ...op
 	opts = append(r.Options[:], opts...)
 	var env TSIGListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/secondary_dns/tsigs", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -74,7 +74,7 @@ func (r *TSIGService) Delete(ctx context.Context, tsigID interface{}, body TSIGD
 	opts = append(r.Options[:], opts...)
 	var env TSIGDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/secondary_dns/tsigs/%v", body.AccountID, tsigID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -87,7 +87,7 @@ func (r *TSIGService) Get(ctx context.Context, tsigID interface{}, query TSIGGet
 	opts = append(r.Options[:], opts...)
 	var env TSIGGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/secondary_dns/tsigs/%v", query.AccountID, tsigID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

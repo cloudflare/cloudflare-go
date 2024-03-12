@@ -36,7 +36,7 @@ func (r *DeploymentByScriptDetailService) Get(ctx context.Context, scriptID stri
 	opts = append(r.Options[:], opts...)
 	var env DeploymentByScriptDetailGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/deployments/by-script/%s/detail/%s", query.AccountID, scriptID, deploymentID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

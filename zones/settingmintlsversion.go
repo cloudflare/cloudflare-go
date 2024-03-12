@@ -50,7 +50,7 @@ func (r *SettingMinTLSVersionService) Get(ctx context.Context, query SettingMinT
 	opts = append(r.Options[:], opts...)
 	var env SettingMinTLSVersionGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/min_tls_version", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

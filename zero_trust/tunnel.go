@@ -113,7 +113,7 @@ func (r *TunnelService) Get(ctx context.Context, tunnelID string, query TunnelGe
 	opts = append(r.Options[:], opts...)
 	var env TunnelGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/tunnels/%s", query.AccountID, tunnelID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

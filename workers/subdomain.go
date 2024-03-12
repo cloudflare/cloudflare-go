@@ -48,7 +48,7 @@ func (r *SubdomainService) Get(ctx context.Context, query SubdomainGetParams, op
 	opts = append(r.Options[:], opts...)
 	var env SubdomainGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/subdomain", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

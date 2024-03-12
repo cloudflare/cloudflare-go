@@ -38,7 +38,7 @@ func (r *NamespaceMetadataService) Get(ctx context.Context, namespaceID string, 
 	opts = append(r.Options[:], opts...)
 	var env NamespaceMetadataGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/storage/kv/namespaces/%s/metadata/%s", query.AccountID, namespaceID, keyName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

@@ -35,7 +35,7 @@ func NewEmbedService(opts ...option.RequestOption) (r *EmbedService) {
 func (r *EmbedService) Get(ctx context.Context, identifier string, query EmbedGetParams, opts ...option.RequestOption) (res *EmbedGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/stream/%s/embed", query.AccountID, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 

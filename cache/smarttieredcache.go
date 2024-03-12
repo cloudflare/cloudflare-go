@@ -39,7 +39,7 @@ func (r *SmartTieredCacheService) Delete(ctx context.Context, body SmartTieredCa
 	opts = append(r.Options[:], opts...)
 	var env SmartTieredCacheDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/cache/tiered_cache_smart_topology_enable", body.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -65,7 +65,7 @@ func (r *SmartTieredCacheService) Get(ctx context.Context, query SmartTieredCach
 	opts = append(r.Options[:], opts...)
 	var env SmartTieredCacheGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/cache/tiered_cache_smart_topology_enable", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

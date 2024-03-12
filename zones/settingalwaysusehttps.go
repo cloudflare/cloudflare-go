@@ -54,7 +54,7 @@ func (r *SettingAlwaysUseHTTPSService) Get(ctx context.Context, query SettingAlw
 	opts = append(r.Options[:], opts...)
 	var env SettingAlwaysUseHTTPSGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/always_use_https", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

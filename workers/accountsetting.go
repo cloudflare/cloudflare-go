@@ -49,7 +49,7 @@ func (r *AccountSettingService) Get(ctx context.Context, query AccountSettingGet
 	opts = append(r.Options[:], opts...)
 	var env AccountSettingGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/account-settings", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

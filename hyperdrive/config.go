@@ -64,7 +64,7 @@ func (r *ConfigService) List(ctx context.Context, query ConfigListParams, opts .
 	opts = append(r.Options[:], opts...)
 	var env ConfigListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/hyperdrive/configs", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -77,7 +77,7 @@ func (r *ConfigService) Delete(ctx context.Context, hyperdriveID string, body Co
 	opts = append(r.Options[:], opts...)
 	var env ConfigDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/hyperdrive/configs/%s", body.AccountID, hyperdriveID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -104,7 +104,7 @@ func (r *ConfigService) Get(ctx context.Context, hyperdriveID string, query Conf
 	opts = append(r.Options[:], opts...)
 	var env ConfigGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/hyperdrive/configs/%s", query.AccountID, hyperdriveID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

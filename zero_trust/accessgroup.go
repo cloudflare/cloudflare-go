@@ -92,7 +92,7 @@ func (r *AccessGroupService) List(ctx context.Context, query AccessGroupListPara
 		accountOrZoneID = query.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/access/groups", accountOrZone, accountOrZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -114,7 +114,7 @@ func (r *AccessGroupService) Delete(ctx context.Context, uuid string, body Acces
 		accountOrZoneID = body.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/access/groups/%s", accountOrZone, accountOrZoneID, uuid)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -136,7 +136,7 @@ func (r *AccessGroupService) Get(ctx context.Context, uuid string, query AccessG
 		accountOrZoneID = query.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/access/groups/%s", accountOrZone, accountOrZoneID, uuid)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

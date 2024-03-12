@@ -52,7 +52,7 @@ func (r *PoolHealthService) Get(ctx context.Context, poolID string, query PoolHe
 	opts = append(r.Options[:], opts...)
 	var env PoolHealthGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/pools/%s/health", query.AccountID, poolID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

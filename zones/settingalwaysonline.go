@@ -58,7 +58,7 @@ func (r *SettingAlwaysOnlineService) Get(ctx context.Context, query SettingAlway
 	opts = append(r.Options[:], opts...)
 	var env SettingAlwaysOnlineGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/always_online", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

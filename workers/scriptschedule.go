@@ -49,7 +49,7 @@ func (r *ScriptScheduleService) Get(ctx context.Context, scriptName string, quer
 	opts = append(r.Options[:], opts...)
 	var env ScriptScheduleGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/schedules", query.AccountID, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

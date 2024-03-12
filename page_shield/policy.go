@@ -51,7 +51,7 @@ func (r *PolicyService) List(ctx context.Context, query PolicyListParams, opts .
 	opts = append(r.Options[:], opts...)
 	var env PolicyListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/page_shield/policies", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -64,7 +64,7 @@ func (r *PolicyService) Delete(ctx context.Context, policyID string, body Policy
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
 	path := fmt.Sprintf("zones/%s/page_shield/policies/%s", body.ZoneID, policyID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, nil, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return
 }
 
@@ -72,7 +72,7 @@ func (r *PolicyService) Delete(ctx context.Context, policyID string, body Policy
 func (r *PolicyService) Get(ctx context.Context, policyID string, query PolicyGetParams, opts ...option.RequestOption) (res *PageShieldPageshieldPolicy, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/page_shield/policies/%s", query.ZoneID, policyID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 

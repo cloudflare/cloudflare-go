@@ -87,7 +87,7 @@ func (r *MemberService) Delete(ctx context.Context, memberID string, body Member
 	opts = append(r.Options[:], opts...)
 	var env MemberDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/members/%s", body.AccountID, memberID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -100,7 +100,7 @@ func (r *MemberService) Get(ctx context.Context, memberID string, query MemberGe
 	opts = append(r.Options[:], opts...)
 	var env MemberGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/members/%s", query.AccountID, memberID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

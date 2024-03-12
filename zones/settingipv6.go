@@ -52,7 +52,7 @@ func (r *SettingIPV6Service) Get(ctx context.Context, query SettingIPV6GetParams
 	opts = append(r.Options[:], opts...)
 	var env SettingIPV6GetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/ipv6", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

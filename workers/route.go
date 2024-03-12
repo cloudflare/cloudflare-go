@@ -64,7 +64,7 @@ func (r *RouteService) List(ctx context.Context, query RouteListParams, opts ...
 	opts = append(r.Options[:], opts...)
 	var env RouteListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/workers/routes", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -77,7 +77,7 @@ func (r *RouteService) Delete(ctx context.Context, routeID string, body RouteDel
 	opts = append(r.Options[:], opts...)
 	var env RouteDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/workers/routes/%s", body.ZoneID, routeID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -90,7 +90,7 @@ func (r *RouteService) Get(ctx context.Context, routeID string, query RouteGetPa
 	opts = append(r.Options[:], opts...)
 	var env RouteGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/workers/routes/%s", query.ZoneID, routeID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

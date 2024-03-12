@@ -64,7 +64,7 @@ func (r *ConsumerService) Delete(ctx context.Context, name string, consumerName 
 	opts = append(r.Options[:], opts...)
 	var env ConsumerDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/queues/%s/consumers/%s", body.AccountID, name, consumerName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -77,7 +77,7 @@ func (r *ConsumerService) Get(ctx context.Context, name string, query ConsumerGe
 	opts = append(r.Options[:], opts...)
 	var env ConsumerGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/queues/%s/consumers", query.AccountID, name)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

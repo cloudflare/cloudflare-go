@@ -104,7 +104,7 @@ func (r *WARPConnectorService) Get(ctx context.Context, tunnelID string, query W
 	opts = append(r.Options[:], opts...)
 	var env WARPConnectorGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/warp_connector/%s", query.AccountID, tunnelID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -118,7 +118,7 @@ func (r *WARPConnectorService) Token(ctx context.Context, tunnelID string, query
 	opts = append(r.Options[:], opts...)
 	var env WARPConnectorTokenResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/warp_connector/%s/token", query.AccountID, tunnelID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

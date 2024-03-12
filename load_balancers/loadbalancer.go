@@ -73,7 +73,7 @@ func (r *LoadBalancerService) List(ctx context.Context, query LoadBalancerListPa
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/load_balancers", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -86,7 +86,7 @@ func (r *LoadBalancerService) Delete(ctx context.Context, loadBalancerID string,
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/load_balancers/%s", body.ZoneID, loadBalancerID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -112,7 +112,7 @@ func (r *LoadBalancerService) Get(ctx context.Context, loadBalancerID string, qu
 	opts = append(r.Options[:], opts...)
 	var env LoadBalancerGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/load_balancers/%s", query.ZoneID, loadBalancerID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

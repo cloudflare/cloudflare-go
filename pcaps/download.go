@@ -34,7 +34,7 @@ func (r *DownloadService) Get(ctx context.Context, pcapID string, query Download
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "application/vnd.tcpdump.pcap")}, opts...)
 	path := fmt.Sprintf("accounts/%s/pcaps/%s/download", query.AccountID, pcapID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 

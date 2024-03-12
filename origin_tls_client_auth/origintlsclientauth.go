@@ -60,7 +60,7 @@ func (r *OriginTLSClientAuthService) List(ctx context.Context, query OriginTLSCl
 	opts = append(r.Options[:], opts...)
 	var env OriginTLSClientAuthListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -73,7 +73,7 @@ func (r *OriginTLSClientAuthService) Delete(ctx context.Context, certificateID s
 	opts = append(r.Options[:], opts...)
 	var env OriginTLSClientAuthDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/%s", body.ZoneID, certificateID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -86,7 +86,7 @@ func (r *OriginTLSClientAuthService) Get(ctx context.Context, certificateID stri
 	opts = append(r.Options[:], opts...)
 	var env OriginTLSClientAuthGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/%s", query.ZoneID, certificateID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

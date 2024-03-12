@@ -54,7 +54,7 @@ func (r *SettingFontSettingService) Get(ctx context.Context, query SettingFontSe
 	opts = append(r.Options[:], opts...)
 	var env SettingFontSettingGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/fonts", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

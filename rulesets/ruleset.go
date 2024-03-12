@@ -97,7 +97,7 @@ func (r *RulesetService) List(ctx context.Context, query RulesetListParams, opts
 		accountOrZoneID = query.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/rulesets", accountOrZone, accountOrZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -119,7 +119,7 @@ func (r *RulesetService) Delete(ctx context.Context, rulesetID string, body Rule
 		accountOrZoneID = body.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/rulesets/%s", accountOrZone, accountOrZoneID, rulesetID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, nil, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return
 }
 
@@ -137,7 +137,7 @@ func (r *RulesetService) Get(ctx context.Context, rulesetID string, query Rulese
 		accountOrZoneID = query.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/rulesets/%s", accountOrZone, accountOrZoneID, rulesetID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

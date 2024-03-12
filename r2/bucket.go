@@ -74,7 +74,7 @@ func (r *BucketService) Delete(ctx context.Context, bucketName string, body Buck
 	opts = append(r.Options[:], opts...)
 	var env BucketDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/r2/buckets/%s", body.AccountID, bucketName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -87,7 +87,7 @@ func (r *BucketService) Get(ctx context.Context, bucketName string, query Bucket
 	opts = append(r.Options[:], opts...)
 	var env BucketGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/r2/buckets/%s", query.AccountID, bucketName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

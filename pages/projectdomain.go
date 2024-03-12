@@ -52,7 +52,7 @@ func (r *ProjectDomainService) List(ctx context.Context, projectName string, que
 	opts = append(r.Options[:], opts...)
 	var env ProjectDomainListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains", query.AccountID, projectName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -64,7 +64,7 @@ func (r *ProjectDomainService) List(ctx context.Context, projectName string, que
 func (r *ProjectDomainService) Delete(ctx context.Context, projectName string, domainName string, body ProjectDomainDeleteParams, opts ...option.RequestOption) (res *ProjectDomainDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains/%s", body.AccountID, projectName, domainName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
 }
 
@@ -73,7 +73,7 @@ func (r *ProjectDomainService) Edit(ctx context.Context, projectName string, dom
 	opts = append(r.Options[:], opts...)
 	var env ProjectDomainEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains/%s", body.AccountID, projectName, domainName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -86,7 +86,7 @@ func (r *ProjectDomainService) Get(ctx context.Context, projectName string, doma
 	opts = append(r.Options[:], opts...)
 	var env ProjectDomainGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/domains/%s", query.AccountID, projectName, domainName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

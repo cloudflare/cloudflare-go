@@ -50,7 +50,7 @@ func (r *SettingAutomaticHTTPSRewriteService) Get(ctx context.Context, query Set
 	opts = append(r.Options[:], opts...)
 	var env SettingAutomaticHTTPSRewriteGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/automatic_https_rewrites", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

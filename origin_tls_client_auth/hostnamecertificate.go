@@ -51,7 +51,7 @@ func (r *HostnameCertificateService) List(ctx context.Context, query HostnameCer
 	opts = append(r.Options[:], opts...)
 	var env HostnameCertificateListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/certificates", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -64,7 +64,7 @@ func (r *HostnameCertificateService) Delete(ctx context.Context, certificateID s
 	opts = append(r.Options[:], opts...)
 	var env HostnameCertificateDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/certificates/%s", body.ZoneID, certificateID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -77,7 +77,7 @@ func (r *HostnameCertificateService) Get(ctx context.Context, certificateID stri
 	opts = append(r.Options[:], opts...)
 	var env HostnameCertificateGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/hostnames/certificates/%s", query.ZoneID, certificateID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

@@ -55,7 +55,7 @@ func (r *DeviceService) List(ctx context.Context, query DeviceListParams, opts .
 	opts = append(r.Options[:], opts...)
 	var env DeviceListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -68,7 +68,7 @@ func (r *DeviceService) Get(ctx context.Context, deviceID string, query DeviceGe
 	opts = append(r.Options[:], opts...)
 	var env DeviceGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/%s", query.AccountID, deviceID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

@@ -48,7 +48,7 @@ func (r *SippyService) Delete(ctx context.Context, bucketName string, body Sippy
 	opts = append(r.Options[:], opts...)
 	var env SippyDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/sippy", body.AccountID, bucketName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -61,7 +61,7 @@ func (r *SippyService) Get(ctx context.Context, bucketName string, query SippyGe
 	opts = append(r.Options[:], opts...)
 	var env SippyGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/r2/buckets/%s/sippy", query.AccountID, bucketName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

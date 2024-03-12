@@ -65,7 +65,7 @@ func (r *IndicatorFeedService) List(ctx context.Context, query IndicatorFeedList
 	opts = append(r.Options[:], opts...)
 	var env IndicatorFeedListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -78,7 +78,7 @@ func (r *IndicatorFeedService) Data(ctx context.Context, feedID int64, query Ind
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "text/csv")}, opts...)
 	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/%v/data", query.AccountID, feedID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
@@ -87,7 +87,7 @@ func (r *IndicatorFeedService) Get(ctx context.Context, feedID int64, query Indi
 	opts = append(r.Options[:], opts...)
 	var env IndicatorFeedGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/indicator-feeds/%v", query.AccountID, feedID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

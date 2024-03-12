@@ -52,7 +52,7 @@ func (r *SmartRoutingService) Get(ctx context.Context, query SmartRoutingGetPara
 	opts = append(r.Options[:], opts...)
 	var env SmartRoutingGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/argo/smart_routing", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

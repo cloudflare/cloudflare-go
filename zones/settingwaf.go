@@ -67,7 +67,7 @@ func (r *SettingWAFService) Get(ctx context.Context, query SettingWAFGetParams, 
 	opts = append(r.Options[:], opts...)
 	var env SettingWAFGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/waf", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

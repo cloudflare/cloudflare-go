@@ -52,7 +52,7 @@ func (r *DevicePolicyFallbackDomainService) List(ctx context.Context, query Devi
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyFallbackDomainListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/policy/fallback_domains", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -67,7 +67,7 @@ func (r *DevicePolicyFallbackDomainService) Get(ctx context.Context, policyID st
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyFallbackDomainGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/policy/%s/fallback_domains", query.AccountID, policyID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
