@@ -90,7 +90,7 @@ func (r *WAFPackageGroupService) Get(ctx context.Context, packageID string, grou
 	opts = append(r.Options[:], opts...)
 	var env WAFPackageGroupGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/waf/packages/%s/groups/%s", query.ZoneID, packageID, groupID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

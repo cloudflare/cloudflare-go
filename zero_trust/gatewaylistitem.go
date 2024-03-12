@@ -37,7 +37,7 @@ func (r *GatewayListItemService) List(ctx context.Context, listID string, query 
 	opts = append(r.Options[:], opts...)
 	var env GatewayListItemListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/gateway/lists/%s/items", query.AccountID, listID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

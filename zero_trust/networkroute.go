@@ -80,7 +80,7 @@ func (r *NetworkRouteService) Delete(ctx context.Context, routeID string, body N
 	opts = append(r.Options[:], opts...)
 	var env NetworkRouteDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/teamnet/routes/%s", body.AccountID, routeID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

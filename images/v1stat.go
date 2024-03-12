@@ -35,7 +35,7 @@ func (r *V1StatService) Get(ctx context.Context, query V1StatGetParams, opts ...
 	opts = append(r.Options[:], opts...)
 	var env V1StatGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/images/v1/stats", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

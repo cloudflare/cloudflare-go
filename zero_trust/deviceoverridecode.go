@@ -37,7 +37,7 @@ func (r *DeviceOverrideCodeService) List(ctx context.Context, deviceID string, q
 	opts = append(r.Options[:], opts...)
 	var env DeviceOverrideCodeListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/%s/override_codes", query.AccountID, deviceID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

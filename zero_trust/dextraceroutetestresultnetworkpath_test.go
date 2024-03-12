@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
 )
 
-func TestDEXTracerouteTestResultNetworkPathList(t *testing.T) {
+func TestDEXTracerouteTestResultNetworkPathGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -28,10 +28,10 @@ func TestDEXTracerouteTestResultNetworkPathList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.DEX.TracerouteTestResults.NetworkPath.List(
+	_, err := client.ZeroTrust.DEX.TracerouteTestResults.NetworkPath.Get(
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-		zero_trust.DEXTracerouteTestResultNetworkPathListParams{
+		zero_trust.DEXTracerouteTestResultNetworkPathGetParams{
 			AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
 		},
 	)

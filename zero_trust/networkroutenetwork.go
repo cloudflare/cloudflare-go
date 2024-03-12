@@ -72,7 +72,7 @@ func (r *NetworkRouteNetworkService) Edit(ctx context.Context, ipNetworkEncoded 
 	opts = append(r.Options[:], opts...)
 	var env NetworkRouteNetworkEditResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/teamnet/routes/network/%s", body.AccountID, ipNetworkEncoded)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

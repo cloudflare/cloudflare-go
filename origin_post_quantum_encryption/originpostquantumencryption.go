@@ -62,7 +62,7 @@ func (r *OriginPostQuantumEncryptionService) Get(ctx context.Context, query Orig
 	opts = append(r.Options[:], opts...)
 	var env OriginPostQuantumEncryptionGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/cache/origin_post_quantum_encryption", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

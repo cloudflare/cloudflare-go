@@ -51,7 +51,7 @@ func (r *ServiceEnvironmentSettingService) Get(ctx context.Context, serviceName 
 	opts = append(r.Options[:], opts...)
 	var env ServiceEnvironmentSettingGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/services/%s/environments/%s/settings", query.AccountID, serviceName, environmentName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

@@ -102,7 +102,7 @@ func (r *RecordService) Delete(ctx context.Context, dnsRecordID string, body Rec
 	opts = append(r.Options[:], opts...)
 	var env RecordDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/dns_records/%s", body.ZoneID, dnsRecordID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -139,7 +139,7 @@ func (r *RecordService) Export(ctx context.Context, query RecordExportParams, op
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "text/plain")}, opts...)
 	path := fmt.Sprintf("zones/%s/dns_records/export", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
@@ -148,7 +148,7 @@ func (r *RecordService) Get(ctx context.Context, dnsRecordID string, query Recor
 	opts = append(r.Options[:], opts...)
 	var env RecordGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/dns_records/%s", query.ZoneID, dnsRecordID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -182,7 +182,7 @@ func (r *RecordService) Scan(ctx context.Context, body RecordScanParams, opts ..
 	opts = append(r.Options[:], opts...)
 	var env RecordScanResponseEnvelope
 	path := fmt.Sprintf("zones/%s/dns_records/scan", body.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

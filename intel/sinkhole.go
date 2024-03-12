@@ -36,7 +36,7 @@ func (r *SinkholeService) List(ctx context.Context, query SinkholeListParams, op
 	opts = append(r.Options[:], opts...)
 	var env SinkholeListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/sinkholes", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

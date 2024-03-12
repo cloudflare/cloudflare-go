@@ -81,7 +81,7 @@ func (r *AccountService) Get(ctx context.Context, query AccountGetParams, opts .
 	opts = append(r.Options[:], opts...)
 	var env AccountGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

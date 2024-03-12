@@ -50,7 +50,7 @@ func (r *ScriptUsageModelService) Get(ctx context.Context, scriptName string, qu
 	opts = append(r.Options[:], opts...)
 	var env ScriptUsageModelGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/usage-model", query.AccountID, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

@@ -85,7 +85,7 @@ func (r *CustomCertificateService) Delete(ctx context.Context, customCertificate
 	opts = append(r.Options[:], opts...)
 	var env CustomCertificateDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/custom_certificates/%s", body.ZoneID, customCertificateID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -113,7 +113,7 @@ func (r *CustomCertificateService) Get(ctx context.Context, customCertificateID 
 	opts = append(r.Options[:], opts...)
 	var env CustomCertificateGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/custom_certificates/%s", query.ZoneID, customCertificateID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

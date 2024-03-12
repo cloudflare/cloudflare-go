@@ -54,7 +54,7 @@ func (r *SettingPolishService) Get(ctx context.Context, query SettingPolishGetPa
 	opts = append(r.Options[:], opts...)
 	var env SettingPolishGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/polish", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

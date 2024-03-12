@@ -44,7 +44,7 @@ func (r *V3Service) List(ctx context.Context, query V3ListParams, opts ...option
 	opts = append(r.Options[:], opts...)
 	var env V3ListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/alerting/v3/available_alerts", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

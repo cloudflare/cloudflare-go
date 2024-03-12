@@ -52,7 +52,7 @@ func (r *SettingOpportunisticOnionService) Get(ctx context.Context, query Settin
 	opts = append(r.Options[:], opts...)
 	var env SettingOpportunisticOnionGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/opportunistic_onion", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

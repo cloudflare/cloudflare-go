@@ -50,7 +50,7 @@ func (r *SettingPseudoIPV4Service) Get(ctx context.Context, query SettingPseudoI
 	opts = append(r.Options[:], opts...)
 	var env SettingPseudoIPV4GetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/pseudo_ipv4", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

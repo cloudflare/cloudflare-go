@@ -52,7 +52,7 @@ func (r *SettingPrefetchPreloadService) Get(ctx context.Context, query SettingPr
 	opts = append(r.Options[:], opts...)
 	var env SettingPrefetchPreloadGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/prefetch_preload", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

@@ -52,7 +52,7 @@ func (r *SettingTLSClientAuthService) Get(ctx context.Context, query SettingTLSC
 	opts = append(r.Options[:], opts...)
 	var env SettingTLSClientAuthGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/tls_client_auth", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

@@ -52,7 +52,7 @@ func (r *ControlCmbConfigService) Delete(ctx context.Context, body ControlCmbCon
 	opts = append(r.Options[:], opts...)
 	var env ControlCmbConfigDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/logs/control/cmb/config", body.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -65,7 +65,7 @@ func (r *ControlCmbConfigService) Get(ctx context.Context, query ControlCmbConfi
 	opts = append(r.Options[:], opts...)
 	var env ControlCmbConfigGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/logs/control/cmb/config", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

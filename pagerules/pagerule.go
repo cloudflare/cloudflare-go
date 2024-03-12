@@ -83,7 +83,7 @@ func (r *PageruleService) Delete(ctx context.Context, pageruleID string, body Pa
 	opts = append(r.Options[:], opts...)
 	var env PageruleDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/pagerules/%s", body.ZoneID, pageruleID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -109,7 +109,7 @@ func (r *PageruleService) Get(ctx context.Context, pageruleID string, query Page
 	opts = append(r.Options[:], opts...)
 	var env PageruleGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/pagerules/%s", query.ZoneID, pageruleID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

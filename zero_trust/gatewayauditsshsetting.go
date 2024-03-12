@@ -50,7 +50,7 @@ func (r *GatewayAuditSSHSettingService) Get(ctx context.Context, query GatewayAu
 	opts = append(r.Options[:], opts...)
 	var env GatewayAuditSSHSettingGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/gateway/audit_ssh_settings", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

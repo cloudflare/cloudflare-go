@@ -45,7 +45,7 @@ func (r *DatasetJobService) Get(ctx context.Context, datasetID string, query Dat
 		accountOrZoneID = query.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/logpush/datasets/%s/jobs", accountOrZone, accountOrZoneID, datasetID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

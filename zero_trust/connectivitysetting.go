@@ -49,7 +49,7 @@ func (r *ConnectivitySettingService) Get(ctx context.Context, query Connectivity
 	opts = append(r.Options[:], opts...)
 	var env ConnectivitySettingGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/zerotrust/connectivity_settings", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

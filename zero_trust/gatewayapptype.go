@@ -39,7 +39,7 @@ func (r *GatewayAppTypeService) List(ctx context.Context, query GatewayAppTypeLi
 	opts = append(r.Options[:], opts...)
 	var env GatewayAppTypeListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/gateway/app_types", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

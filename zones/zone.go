@@ -87,7 +87,7 @@ func (r *ZoneService) Delete(ctx context.Context, body ZoneDeleteParams, opts ..
 	opts = append(r.Options[:], opts...)
 	var env ZoneDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s", body.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -113,7 +113,7 @@ func (r *ZoneService) Get(ctx context.Context, query ZoneGetParams, opts ...opti
 	opts = append(r.Options[:], opts...)
 	var env ZoneGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

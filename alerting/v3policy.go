@@ -65,7 +65,7 @@ func (r *V3PolicyService) List(ctx context.Context, query V3PolicyListParams, op
 	opts = append(r.Options[:], opts...)
 	var env V3PolicyListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/alerting/v3/policies", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -78,7 +78,7 @@ func (r *V3PolicyService) Delete(ctx context.Context, policyID string, body V3Po
 	opts = append(r.Options[:], opts...)
 	var env V3PolicyDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/alerting/v3/policies/%s", body.AccountID, policyID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -91,7 +91,7 @@ func (r *V3PolicyService) Get(ctx context.Context, policyID string, query V3Poli
 	opts = append(r.Options[:], opts...)
 	var env V3PolicyGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/alerting/v3/policies/%s", query.AccountID, policyID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

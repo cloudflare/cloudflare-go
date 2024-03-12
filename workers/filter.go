@@ -61,7 +61,7 @@ func (r *FilterService) List(ctx context.Context, query FilterListParams, opts .
 	opts = append(r.Options[:], opts...)
 	var env FilterListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/workers/filters", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -74,7 +74,7 @@ func (r *FilterService) Delete(ctx context.Context, filterID string, body Filter
 	opts = append(r.Options[:], opts...)
 	var env FilterDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/workers/filters/%s", body.ZoneID, filterID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

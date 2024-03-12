@@ -51,7 +51,7 @@ func (r *SettingService) Get(ctx context.Context, query SettingGetParams, opts .
 	opts = append(r.Options[:], opts...)
 	var env SettingGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/origin_tls_client_auth/settings", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

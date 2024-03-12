@@ -34,7 +34,7 @@ func NewASNSubnetService(opts ...option.RequestOption) (r *ASNSubnetService) {
 func (r *ASNSubnetService) Get(ctx context.Context, asn IntelASNParam, query ASNSubnetGetParams, opts ...option.RequestOption) (res *ASNSubnetGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/intel/asn/%v/subnets", query.AccountID, asn)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 

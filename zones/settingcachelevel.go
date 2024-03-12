@@ -58,7 +58,7 @@ func (r *SettingCacheLevelService) Get(ctx context.Context, query SettingCacheLe
 	opts = append(r.Options[:], opts...)
 	var env SettingCacheLevelGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/cache_level", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

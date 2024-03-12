@@ -66,7 +66,7 @@ func (r *QueueService) List(ctx context.Context, query QueueListParams, opts ...
 	opts = append(r.Options[:], opts...)
 	var env QueueListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/queues", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -79,7 +79,7 @@ func (r *QueueService) Delete(ctx context.Context, name string, body QueueDelete
 	opts = append(r.Options[:], opts...)
 	var env QueueDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/queues/%s", body.AccountID, name)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -92,7 +92,7 @@ func (r *QueueService) Get(ctx context.Context, name string, query QueueGetParam
 	opts = append(r.Options[:], opts...)
 	var env QueueGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/queues/%s", query.AccountID, name)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

@@ -38,7 +38,7 @@ func (r *DownloadService) New(ctx context.Context, identifier string, body Downl
 	opts = append(r.Options[:], opts...)
 	var env DownloadNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/%s/downloads", body.AccountID, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -51,7 +51,7 @@ func (r *DownloadService) Delete(ctx context.Context, identifier string, body Do
 	opts = append(r.Options[:], opts...)
 	var env DownloadDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/%s/downloads", body.AccountID, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -64,7 +64,7 @@ func (r *DownloadService) Get(ctx context.Context, identifier string, query Down
 	opts = append(r.Options[:], opts...)
 	var env DownloadGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/%s/downloads", query.AccountID, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

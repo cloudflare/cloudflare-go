@@ -51,7 +51,7 @@ func (r *V1VariantService) List(ctx context.Context, query V1VariantListParams, 
 	opts = append(r.Options[:], opts...)
 	var env V1VariantListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/images/v1/variants", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -64,7 +64,7 @@ func (r *V1VariantService) Delete(ctx context.Context, variantID interface{}, bo
 	opts = append(r.Options[:], opts...)
 	var env V1VariantDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/images/v1/variants/%v", body.AccountID, variantID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -90,7 +90,7 @@ func (r *V1VariantService) Get(ctx context.Context, variantID interface{}, query
 	opts = append(r.Options[:], opts...)
 	var env V1VariantGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/images/v1/variants/%v", query.AccountID, variantID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

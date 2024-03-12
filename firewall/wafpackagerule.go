@@ -89,7 +89,7 @@ func (r *WAFPackageRuleService) Get(ctx context.Context, packageID string, ruleI
 	opts = append(r.Options[:], opts...)
 	var env WAFPackageRuleGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/firewall/waf/packages/%s/rules/%s", query.ZoneID, packageID, ruleID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

@@ -39,7 +39,7 @@ func (r *V3DestinationEligibleService) Get(ctx context.Context, query V3Destinat
 	opts = append(r.Options[:], opts...)
 	var env V3DestinationEligibleGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/eligible", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

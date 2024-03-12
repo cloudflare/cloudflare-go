@@ -53,7 +53,7 @@ func (r *GatewayProxyEndpointService) List(ctx context.Context, query GatewayPro
 	opts = append(r.Options[:], opts...)
 	var env GatewayProxyEndpointListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/gateway/proxy_endpoints", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -66,7 +66,7 @@ func (r *GatewayProxyEndpointService) Delete(ctx context.Context, proxyEndpointI
 	opts = append(r.Options[:], opts...)
 	var env GatewayProxyEndpointDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/gateway/proxy_endpoints/%v", body.AccountID, proxyEndpointID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -92,7 +92,7 @@ func (r *GatewayProxyEndpointService) Get(ctx context.Context, proxyEndpointID i
 	opts = append(r.Options[:], opts...)
 	var env GatewayProxyEndpointGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/gateway/proxy_endpoints/%v", query.AccountID, proxyEndpointID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

@@ -35,7 +35,7 @@ func (r *IPListService) Get(ctx context.Context, query IPListGetParams, opts ...
 	opts = append(r.Options[:], opts...)
 	var env IPListGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/ip-list", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

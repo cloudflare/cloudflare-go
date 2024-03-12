@@ -66,7 +66,7 @@ func (r *GatewayRuleService) List(ctx context.Context, query GatewayRuleListPara
 	opts = append(r.Options[:], opts...)
 	var env GatewayRuleListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/gateway/rules", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -79,7 +79,7 @@ func (r *GatewayRuleService) Delete(ctx context.Context, ruleID string, body Gat
 	opts = append(r.Options[:], opts...)
 	var env GatewayRuleDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/gateway/rules/%s", body.AccountID, ruleID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -92,7 +92,7 @@ func (r *GatewayRuleService) Get(ctx context.Context, ruleID string, query Gatew
 	opts = append(r.Options[:], opts...)
 	var env GatewayRuleGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/gateway/rules/%s", query.AccountID, ruleID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

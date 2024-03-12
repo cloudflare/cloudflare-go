@@ -66,7 +66,7 @@ func (r *MonitorService) List(ctx context.Context, query MonitorListParams, opts
 	opts = append(r.Options[:], opts...)
 	var env MonitorListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitors", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -79,7 +79,7 @@ func (r *MonitorService) Delete(ctx context.Context, monitorID string, body Moni
 	opts = append(r.Options[:], opts...)
 	var env MonitorDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s", body.AccountID, monitorID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -105,7 +105,7 @@ func (r *MonitorService) Get(ctx context.Context, monitorID string, query Monito
 	opts = append(r.Options[:], opts...)
 	var env MonitorGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s", query.AccountID, monitorID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

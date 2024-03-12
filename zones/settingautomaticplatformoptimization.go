@@ -54,7 +54,7 @@ func (r *SettingAutomaticPlatformOptimizationService) Get(ctx context.Context, q
 	opts = append(r.Options[:], opts...)
 	var env SettingAutomaticPlatformOptimizationGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/automatic_platform_optimization", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

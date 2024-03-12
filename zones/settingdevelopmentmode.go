@@ -60,7 +60,7 @@ func (r *SettingDevelopmentModeService) Get(ctx context.Context, query SettingDe
 	opts = append(r.Options[:], opts...)
 	var env SettingDevelopmentModeGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/development_mode", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

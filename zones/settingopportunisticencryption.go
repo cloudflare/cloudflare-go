@@ -50,7 +50,7 @@ func (r *SettingOpportunisticEncryptionService) Get(ctx context.Context, query S
 	opts = append(r.Options[:], opts...)
 	var env SettingOpportunisticEncryptionGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/opportunistic_encryption", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

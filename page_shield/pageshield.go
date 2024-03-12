@@ -54,7 +54,7 @@ func (r *PageShieldService) Get(ctx context.Context, query PageShieldGetParams, 
 	opts = append(r.Options[:], opts...)
 	var env PageShieldGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/page_shield", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

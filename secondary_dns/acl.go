@@ -61,7 +61,7 @@ func (r *ACLService) List(ctx context.Context, query ACLListParams, opts ...opti
 	opts = append(r.Options[:], opts...)
 	var env ACLListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/secondary_dns/acls", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -74,7 +74,7 @@ func (r *ACLService) Delete(ctx context.Context, aclID interface{}, body ACLDele
 	opts = append(r.Options[:], opts...)
 	var env ACLDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/secondary_dns/acls/%v", body.AccountID, aclID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -87,7 +87,7 @@ func (r *ACLService) Get(ctx context.Context, aclID interface{}, query ACLGetPar
 	opts = append(r.Options[:], opts...)
 	var env ACLGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/secondary_dns/acls/%v", query.AccountID, aclID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

@@ -4669,6 +4669,15 @@ Methods:
 
 ### FleetStatus
 
+Response Types:
+
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#DEXFleetStatusLiveResponse">DEXFleetStatusLiveResponse</a>
+
+Methods:
+
+- <code title="get /accounts/{account_id}/dex/fleet-status/live">client.ZeroTrust.DEX.FleetStatus.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#DEXFleetStatusService.Live">Live</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#DEXFleetStatusLiveParams">DEXFleetStatusLiveParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#DEXFleetStatusLiveResponse">DEXFleetStatusLiveResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/dex/fleet-status/over-time">client.ZeroTrust.DEX.FleetStatus.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#DEXFleetStatusService.OverTime">OverTime</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#DEXFleetStatusOverTimeParams">DEXFleetStatusOverTimeParams</a>) <a href="https://pkg.go.dev/builtin#error">error</a></code>
+
 #### Devices
 
 Response Types:
@@ -4678,22 +4687,6 @@ Response Types:
 Methods:
 
 - <code title="get /accounts/{account_id}/dex/fleet-status/devices">client.ZeroTrust.DEX.FleetStatus.Devices.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#DEXFleetStatusDeviceService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#DEXFleetStatusDeviceListParams">DEXFleetStatusDeviceListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared#V4PagePaginationArray">V4PagePaginationArray</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#DigitalExperienceMonitoringDevice">DigitalExperienceMonitoringDevice</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
-#### Live
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#DEXFleetStatusLiveListResponse">DEXFleetStatusLiveListResponse</a>
-
-Methods:
-
-- <code title="get /accounts/{account_id}/dex/fleet-status/live">client.ZeroTrust.DEX.FleetStatus.Live.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#DEXFleetStatusLiveService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#DEXFleetStatusLiveListParams">DEXFleetStatusLiveListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#DEXFleetStatusLiveListResponse">DEXFleetStatusLiveListResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
-#### OverTime
-
-Methods:
-
-- <code title="get /accounts/{account_id}/dex/fleet-status/over-time">client.ZeroTrust.DEX.FleetStatus.OverTime.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#DEXFleetStatusOverTimeService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#DEXFleetStatusOverTimeListParams">DEXFleetStatusOverTimeListParams</a>) <a href="https://pkg.go.dev/builtin#error">error</a></code>
 
 ### HTTPTests
 
@@ -4713,7 +4706,7 @@ Response Types:
 
 Methods:
 
-- <code title="get /accounts/{account_id}/dex/http-tests/{test_id}/percentiles">client.ZeroTrust.DEX.HTTPTests.Percentiles.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#DEXHTTPTestPercentileService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, testID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#DEXHTTPTestPercentileListParams">DEXHTTPTestPercentileListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#DigitalExperienceMonitoringHTTPDetailsPercentiles">DigitalExperienceMonitoringHTTPDetailsPercentiles</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/dex/http-tests/{test_id}/percentiles">client.ZeroTrust.DEX.HTTPTests.Percentiles.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#DEXHTTPTestPercentileService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, testID <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#DEXHTTPTestPercentileGetParams">DEXHTTPTestPercentileGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#DigitalExperienceMonitoringHTTPDetailsPercentiles">DigitalExperienceMonitoringHTTPDetailsPercentiles</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### Tests
 
@@ -4746,7 +4739,7 @@ Response Types:
 
 Methods:
 
-- <code title="get /accounts/{account_id}/dex/traceroute-test-results/{test_result_id}/network-path">client.ZeroTrust.DEX.TracerouteTestResults.NetworkPath.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#DEXTracerouteTestResultNetworkPathService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, testResultID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#DEXTracerouteTestResultNetworkPathListParams">DEXTracerouteTestResultNetworkPathListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#DigitalExperienceMonitoringTracerouteTestResultNetworkPath">DigitalExperienceMonitoringTracerouteTestResultNetworkPath</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /accounts/{account_id}/dex/traceroute-test-results/{test_result_id}/network-path">client.ZeroTrust.DEX.TracerouteTestResults.NetworkPath.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#DEXTracerouteTestResultNetworkPathService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, testResultID <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#DEXTracerouteTestResultNetworkPathGetParams">DEXTracerouteTestResultNetworkPathGetParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust">zero_trust</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/zero_trust#DigitalExperienceMonitoringTracerouteTestResultNetworkPath">DigitalExperienceMonitoringTracerouteTestResultNetworkPath</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 ### TracerouteTests
 
@@ -5117,20 +5110,6 @@ Methods:
 # Challenges
 
 ## Widgets
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/challenges">challenges</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/challenges#NcChallengesAdminWidgetDetail">NcChallengesAdminWidgetDetail</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/challenges">challenges</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/challenges#NcChallengesAdminWidgetList">NcChallengesAdminWidgetList</a>
-
-Methods:
-
-- <code title="post /accounts/{account_identifier}/challenges/widgets">client.Challenges.Widgets.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/challenges#WidgetService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, params <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/challenges">challenges</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/challenges#WidgetNewParams">WidgetNewParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/challenges">challenges</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/challenges#NcChallengesAdminWidgetDetail">NcChallengesAdminWidgetDetail</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="put /accounts/{account_identifier}/challenges/widgets/{sitekey}">client.Challenges.Widgets.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/challenges#WidgetService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, sitekey <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/challenges">challenges</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/challenges#WidgetUpdateParams">WidgetUpdateParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/challenges">challenges</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/challenges#NcChallengesAdminWidgetDetail">NcChallengesAdminWidgetDetail</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /accounts/{account_identifier}/challenges/widgets">client.Challenges.Widgets.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/challenges#WidgetService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, query <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/challenges">challenges</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/challenges#WidgetListParams">WidgetListParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared">shared</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/internal/shared#V4PagePaginationArray">V4PagePaginationArray</a>[<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/challenges">challenges</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/challenges#NcChallengesAdminWidgetList">NcChallengesAdminWidgetList</a>], <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="delete /accounts/{account_identifier}/challenges/widgets/{sitekey}">client.Challenges.Widgets.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/challenges#WidgetService.Delete">Delete</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, sitekey <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/challenges">challenges</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/challenges#NcChallengesAdminWidgetDetail">NcChallengesAdminWidgetDetail</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /accounts/{account_identifier}/challenges/widgets/{sitekey}">client.Challenges.Widgets.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/challenges#WidgetService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, sitekey <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/challenges">challenges</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/challenges#NcChallengesAdminWidgetDetail">NcChallengesAdminWidgetDetail</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="post /accounts/{account_identifier}/challenges/widgets/{sitekey}/rotate_secret">client.Challenges.Widgets.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/challenges#WidgetService.RotateSecret">RotateSecret</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountIdentifier <a href="https://pkg.go.dev/builtin#string">string</a>, sitekey <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/challenges">challenges</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/challenges#WidgetRotateSecretParams">WidgetRotateSecretParams</a>) (<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/challenges">challenges</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/challenges#NcChallengesAdminWidgetDetail">NcChallengesAdminWidgetDetail</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 # Hyperdrive
 

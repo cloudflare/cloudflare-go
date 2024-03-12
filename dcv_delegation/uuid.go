@@ -36,7 +36,7 @@ func (r *UUIDService) Get(ctx context.Context, query UUIDGetParams, opts ...opti
 	opts = append(r.Options[:], opts...)
 	var env UUIDGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/dcv_delegation/uuid", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

@@ -35,7 +35,7 @@ func NewManagedHeaderService(opts ...option.RequestOption) (r *ManagedHeaderServ
 func (r *ManagedHeaderService) List(ctx context.Context, query ManagedHeaderListParams, opts ...option.RequestOption) (res *ManagedHeaderListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("zones/%s/managed_headers", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 

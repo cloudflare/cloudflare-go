@@ -56,7 +56,7 @@ func (r *ProjectService) List(ctx context.Context, query ProjectListParams, opts
 	opts = append(r.Options[:], opts...)
 	var env ProjectListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pages/projects", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -68,7 +68,7 @@ func (r *ProjectService) List(ctx context.Context, query ProjectListParams, opts
 func (r *ProjectService) Delete(ctx context.Context, projectName string, body ProjectDeleteParams, opts ...option.RequestOption) (res *ProjectDeleteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s", body.AccountID, projectName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &res, opts...)
 	return
 }
 
@@ -91,7 +91,7 @@ func (r *ProjectService) Get(ctx context.Context, projectName string, query Proj
 	opts = append(r.Options[:], opts...)
 	var env ProjectGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s", query.AccountID, projectName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -103,7 +103,7 @@ func (r *ProjectService) Get(ctx context.Context, projectName string, query Proj
 func (r *ProjectService) PurgeBuildCache(ctx context.Context, projectName string, body ProjectPurgeBuildCacheParams, opts ...option.RequestOption) (res *ProjectPurgeBuildCacheResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/purge_build_cache", body.AccountID, projectName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
 	return
 }
 

@@ -38,7 +38,7 @@ func (r *ScriptBindingService) Get(ctx context.Context, query ScriptBindingGetPa
 	opts = append(r.Options[:], opts...)
 	var env ScriptBindingGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/workers/script/bindings", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

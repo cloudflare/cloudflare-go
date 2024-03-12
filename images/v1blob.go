@@ -35,7 +35,7 @@ func (r *V1BlobService) Get(ctx context.Context, imageID string, query V1BlobGet
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "image/*")}, opts...)
 	path := fmt.Sprintf("accounts/%s/images/v1/%s/blob", query.AccountID, imageID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 

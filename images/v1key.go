@@ -35,7 +35,7 @@ func (r *V1KeyService) Update(ctx context.Context, signingKeyName interface{}, b
 	opts = append(r.Options[:], opts...)
 	var env V1KeyUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/images/v1/keys/%v", body.AccountID, signingKeyName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -48,7 +48,7 @@ func (r *V1KeyService) List(ctx context.Context, query V1KeyListParams, opts ...
 	opts = append(r.Options[:], opts...)
 	var env V1KeyListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/images/v1/keys", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -62,7 +62,7 @@ func (r *V1KeyService) Delete(ctx context.Context, signingKeyName interface{}, b
 	opts = append(r.Options[:], opts...)
 	var env V1KeyDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/images/v1/keys/%v", body.AccountID, signingKeyName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

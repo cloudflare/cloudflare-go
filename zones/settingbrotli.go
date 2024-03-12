@@ -52,7 +52,7 @@ func (r *SettingBrotliService) Get(ctx context.Context, query SettingBrotliGetPa
 	opts = append(r.Options[:], opts...)
 	var env SettingBrotliGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/brotli", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

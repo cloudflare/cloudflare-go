@@ -53,7 +53,7 @@ func (r *RegionService) Get(ctx context.Context, regionID RegionGetParamsRegionI
 	opts = append(r.Options[:], opts...)
 	var env RegionGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/regions/%v", query.AccountID, regionID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

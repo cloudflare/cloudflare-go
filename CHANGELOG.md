@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.0.0-beta.4 (2024-03-12)
+
+Full Changelog: [v2.0.0-beta.3...v2.0.0-beta.4](https://github.com/cloudflare/cloudflare-go/compare/v2.0.0-beta.3...v2.0.0-beta.4)
+
+### Features
+
+* chore: create issue and pull-request templates ([de5037e](https://github.com/cloudflare/cloudflare-go/commit/de5037e4e27aa68265ea2eb2574932d1a3dbe06e))
+* OpenAPI spec update via Stainless API ([#1545](https://github.com/cloudflare/cloudflare-go/issues/1545)) ([755286e](https://github.com/cloudflare/cloudflare-go/commit/755286e7f5275ddd7ab4b79f895fc551b21911fd))
+* OpenAPI spec update via Stainless API ([#1546](https://github.com/cloudflare/cloudflare-go/issues/1546)) ([c2bbbba](https://github.com/cloudflare/cloudflare-go/commit/c2bbbbaa31cf8ab8779688f3d067b4cd1ef4b710))
+* OpenAPI spec update via Stainless API ([#1547](https://github.com/cloudflare/cloudflare-go/issues/1547)) ([2991edd](https://github.com/cloudflare/cloudflare-go/commit/2991eddb2bafc4e87e9066861c2685e42147b487))
+* OpenAPI spec update via Stainless API ([#1550](https://github.com/cloudflare/cloudflare-go/issues/1550)) ([4ba8991](https://github.com/cloudflare/cloudflare-go/commit/4ba89916744666388d9fc5b6fe67f447f9e1dd77))
+* OpenAPI spec update via Stainless API ([#1551](https://github.com/cloudflare/cloudflare-go/issues/1551)) ([8a14e82](https://github.com/cloudflare/cloudflare-go/commit/8a14e82483d3465bcf20d6e96ed230dd024a53af))
+* update via SDK Studio ([#1543](https://github.com/cloudflare/cloudflare-go/issues/1543)) ([2d66983](https://github.com/cloudflare/cloudflare-go/commit/2d669834707fa2130e04ea07dfc403f0370c528e))
+
 ## 2.0.0-beta.3 (2024-03-12)
 
 Full Changelog: [v2.0.0-beta.2...v2.0.0-beta.3](https://github.com/cloudflare/cloudflare-go/compare/v2.0.0-beta.2...v2.0.0-beta.3)

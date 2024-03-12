@@ -62,7 +62,7 @@ func (r *DeviceDEXTestService) List(ctx context.Context, query DeviceDEXTestList
 	opts = append(r.Options[:], opts...)
 	var env DeviceDEXTestListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/dex_tests", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -76,7 +76,7 @@ func (r *DeviceDEXTestService) Delete(ctx context.Context, dexTestID string, bod
 	opts = append(r.Options[:], opts...)
 	var env DeviceDEXTestDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/dex_tests/%s", body.AccountID, dexTestID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -89,7 +89,7 @@ func (r *DeviceDEXTestService) Get(ctx context.Context, dexTestID string, query 
 	opts = append(r.Options[:], opts...)
 	var env DeviceDEXTestGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/dex_tests/%s", query.AccountID, dexTestID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

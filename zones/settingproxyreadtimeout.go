@@ -50,7 +50,7 @@ func (r *SettingProxyReadTimeoutService) Get(ctx context.Context, query SettingP
 	opts = append(r.Options[:], opts...)
 	var env SettingProxyReadTimeoutGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/proxy_read_timeout", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

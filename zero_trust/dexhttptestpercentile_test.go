@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/zero_trust"
 )
 
-func TestDEXHTTPTestPercentileListWithOptionalParams(t *testing.T) {
+func TestDEXHTTPTestPercentileGetWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -28,10 +28,10 @@ func TestDEXHTTPTestPercentileListWithOptionalParams(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.DEX.HTTPTests.Percentiles.List(
+	_, err := client.ZeroTrust.DEX.HTTPTests.Percentiles.Get(
 		context.TODO(),
 		"f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
-		zero_trust.DEXHTTPTestPercentileListParams{
+		zero_trust.DEXHTTPTestPercentileGetParams{
 			AccountID: cloudflare.F("01a7362d577a6c3019a474fd6f485823"),
 			TimeEnd:   cloudflare.F("2023-09-20T17:00:00Z"),
 			TimeStart: cloudflare.F("2023-09-20T17:00:00Z"),

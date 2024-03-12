@@ -50,7 +50,7 @@ func (r *PrefixDelegationService) List(ctx context.Context, prefixID string, que
 	opts = append(r.Options[:], opts...)
 	var env PrefixDelegationListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/delegations", query.AccountID, prefixID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -63,7 +63,7 @@ func (r *PrefixDelegationService) Delete(ctx context.Context, prefixID string, d
 	opts = append(r.Options[:], opts...)
 	var env PrefixDelegationDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/delegations/%s", body.AccountID, prefixID, delegationID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

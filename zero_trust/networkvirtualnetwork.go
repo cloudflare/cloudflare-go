@@ -67,7 +67,7 @@ func (r *NetworkVirtualNetworkService) Delete(ctx context.Context, virtualNetwor
 	opts = append(r.Options[:], opts...)
 	var env NetworkVirtualNetworkDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/teamnet/virtual_networks/%s", body.AccountID, virtualNetworkID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

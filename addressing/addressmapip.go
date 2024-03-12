@@ -39,7 +39,7 @@ func (r *AddressMapIPService) Update(ctx context.Context, addressMapID string, i
 	opts = append(r.Options[:], opts...)
 	var env AddressMapIPUpdateResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/ips/%s", body.AccountID, addressMapID, ipAddress)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -52,7 +52,7 @@ func (r *AddressMapIPService) Delete(ctx context.Context, addressMapID string, i
 	opts = append(r.Options[:], opts...)
 	var env AddressMapIPDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s/ips/%s", body.AccountID, addressMapID, ipAddress)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

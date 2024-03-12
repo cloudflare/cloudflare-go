@@ -36,7 +36,7 @@ func (r *MonitorReferenceService) Get(ctx context.Context, monitorID string, que
 	opts = append(r.Options[:], opts...)
 	var env MonitorReferenceGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/load_balancers/monitors/%s/references", query.AccountID, monitorID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

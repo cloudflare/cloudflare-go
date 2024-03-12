@@ -52,7 +52,7 @@ func (r *SettingTrueClientIPHeaderService) Get(ctx context.Context, query Settin
 	opts = append(r.Options[:], opts...)
 	var env SettingTrueClientIPHeaderGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/true_client_ip_header", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

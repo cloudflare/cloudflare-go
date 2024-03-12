@@ -46,7 +46,7 @@ func (r *DatasetFieldService) Get(ctx context.Context, datasetID string, query D
 		accountOrZoneID = query.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/logpush/datasets/%s/fields", accountOrZone, accountOrZoneID, datasetID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

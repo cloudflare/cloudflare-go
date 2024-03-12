@@ -52,7 +52,7 @@ func (r *DispatchNamespaceService) List(ctx context.Context, query DispatchNames
 	opts = append(r.Options[:], opts...)
 	var env DispatchNamespaceListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -65,7 +65,7 @@ func (r *DispatchNamespaceService) Delete(ctx context.Context, dispatchNamespace
 	opts = append(r.Options[:], opts...)
 	var env DispatchNamespaceDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s", body.AccountID, dispatchNamespace)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -78,7 +78,7 @@ func (r *DispatchNamespaceService) Get(ctx context.Context, dispatchNamespace st
 	opts = append(r.Options[:], opts...)
 	var env DispatchNamespaceGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s", query.AccountID, dispatchNamespace)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

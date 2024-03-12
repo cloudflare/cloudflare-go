@@ -50,7 +50,7 @@ func (r *SettingHTTP2Service) Get(ctx context.Context, query SettingHTTP2GetPara
 	opts = append(r.Options[:], opts...)
 	var env SettingHTTP2GetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/http2", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

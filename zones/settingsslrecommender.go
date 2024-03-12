@@ -53,7 +53,7 @@ func (r *SettingSSLRecommenderService) Get(ctx context.Context, query SettingSSL
 	opts = append(r.Options[:], opts...)
 	var env SettingSSLRecommenderGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/ssl_recommender", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
