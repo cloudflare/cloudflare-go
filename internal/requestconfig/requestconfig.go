@@ -92,8 +92,11 @@ func NewRequestConfig(ctx context.Context, method string, u string, body interfa
 		hasSerializationFunc = true
 	}
 	if body, ok := body.(apiquery.Queryer); ok {
-		u = u + "?" + body.URLQuery().Encode()
 		hasSerializationFunc = true
+		params := body.URLQuery().Encode()
+		if params != "" {
+			u = u + "?" + params
+		}
 	}
 
 	// Fallback to json serialization if none of the serialization functions that we expect
