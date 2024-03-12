@@ -114,6 +114,9 @@ func (r urlScannerScanResponseTaskJSON) RawJSON() string {
 type URLScannerScanParams struct {
 	// Return only scans created by account.
 	AccountScans param.Field[bool] `query:"account_scans"`
+	// Filter scans by Autonomous System Number (ASN) of _any_ request made by the
+	// webpage.
+	ASN param.Field[string] `query:"asn"`
 	// Filter scans requested before date (inclusive).
 	DateEnd param.Field[time.Time] `query:"date_end" format:"date-time"`
 	// Filter scans requested after date (inclusive).
@@ -122,10 +125,14 @@ type URLScannerScanParams struct {
 	Hostname param.Field[string] `query:"hostname"`
 	// Filter scans by IP address (IPv4 or IPv6) of _any_ request made by the webpage.
 	IP param.Field[string] `query:"ip"`
+	// Filter scans by malicious verdict.
+	IsMalicious param.Field[bool] `query:"is_malicious"`
 	// Limit the number of objects in the response.
 	Limit param.Field[int64] `query:"limit"`
 	// Pagination cursor to get the next set of results.
 	NextCursor param.Field[string] `query:"next_cursor"`
+	// Filter scans by main page Autonomous System Number (ASN).
+	PageASN param.Field[string] `query:"page_asn"`
 	// Filter scans by main page hostname .
 	PageHostname param.Field[string] `query:"page_hostname"`
 	// Filter scans by main page IP address (IPv4 or IPv6).
