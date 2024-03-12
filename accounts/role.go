@@ -38,7 +38,7 @@ func (r *RoleService) List(ctx context.Context, query RoleListParams, opts ...op
 	opts = append(r.Options[:], opts...)
 	var env RoleListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/roles", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -51,7 +51,7 @@ func (r *RoleService) Get(ctx context.Context, roleID interface{}, query RoleGet
 	opts = append(r.Options[:], opts...)
 	var env RoleGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/roles/%v", query.AccountID, roleID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

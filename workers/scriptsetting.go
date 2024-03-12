@@ -51,7 +51,7 @@ func (r *ScriptSettingService) Get(ctx context.Context, scriptName string, query
 	opts = append(r.Options[:], opts...)
 	var env ScriptSettingGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/settings", query.AccountID, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

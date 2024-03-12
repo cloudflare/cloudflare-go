@@ -36,7 +36,7 @@ func (r *GatewayCategoryService) List(ctx context.Context, query GatewayCategory
 	opts = append(r.Options[:], opts...)
 	var env GatewayCategoryListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/gateway/categories", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

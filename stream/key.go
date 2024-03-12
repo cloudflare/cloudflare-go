@@ -41,7 +41,7 @@ func (r *KeyService) New(ctx context.Context, body KeyNewParams, opts ...option.
 	opts = append(r.Options[:], opts...)
 	var env KeyNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/keys", body.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -54,7 +54,7 @@ func (r *KeyService) Delete(ctx context.Context, identifier string, body KeyDele
 	opts = append(r.Options[:], opts...)
 	var env KeyDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/keys/%s", body.AccountID, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -67,7 +67,7 @@ func (r *KeyService) Get(ctx context.Context, query KeyGetParams, opts ...option
 	opts = append(r.Options[:], opts...)
 	var env KeyGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/keys", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

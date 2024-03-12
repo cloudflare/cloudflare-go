@@ -56,7 +56,7 @@ func (r *SettingImageResizingService) Get(ctx context.Context, query SettingImag
 	opts = append(r.Options[:], opts...)
 	var env SettingImageResizingGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/image_resizing", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

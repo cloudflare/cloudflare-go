@@ -60,7 +60,7 @@ func (r *PrefixBGPBindingService) List(ctx context.Context, prefixID string, que
 	opts = append(r.Options[:], opts...)
 	var env PrefixBGPBindingListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bindings", query.AccountID, prefixID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -73,7 +73,7 @@ func (r *PrefixBGPBindingService) Delete(ctx context.Context, prefixID string, b
 	opts = append(r.Options[:], opts...)
 	var env PrefixBGPBindingDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bindings/%s", body.AccountID, prefixID, bindingID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -86,7 +86,7 @@ func (r *PrefixBGPBindingService) Get(ctx context.Context, prefixID string, bind
 	opts = append(r.Options[:], opts...)
 	var env PrefixBGPBindingGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/prefixes/%s/bindings/%s", query.AccountID, prefixID, bindingID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

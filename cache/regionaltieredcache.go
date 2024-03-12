@@ -54,7 +54,7 @@ func (r *RegionalTieredCacheService) Get(ctx context.Context, query RegionalTier
 	opts = append(r.Options[:], opts...)
 	var env RegionalTieredCacheGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/cache/regional_tiered_cache", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

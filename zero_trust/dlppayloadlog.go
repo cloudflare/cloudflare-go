@@ -49,7 +49,7 @@ func (r *DLPPayloadLogService) Get(ctx context.Context, query DLPPayloadLogGetPa
 	opts = append(r.Options[:], opts...)
 	var env DLPPayloadLogGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dlp/payload_log", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

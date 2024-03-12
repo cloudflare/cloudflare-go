@@ -52,7 +52,7 @@ func (r *CustomNameserverService) Delete(ctx context.Context, customNSID string,
 	opts = append(r.Options[:], opts...)
 	var env CustomNameserverDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/custom_ns/%s", body.AccountID, customNSID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -65,7 +65,7 @@ func (r *CustomNameserverService) Availabilty(ctx context.Context, query CustomN
 	opts = append(r.Options[:], opts...)
 	var env CustomNameserverAvailabiltyResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/custom_ns/availability", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -78,7 +78,7 @@ func (r *CustomNameserverService) Get(ctx context.Context, query CustomNameserve
 	opts = append(r.Options[:], opts...)
 	var env CustomNameserverGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/custom_ns", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -91,7 +91,7 @@ func (r *CustomNameserverService) Verify(ctx context.Context, body CustomNameser
 	opts = append(r.Options[:], opts...)
 	var env CustomNameserverVerifyResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/custom_ns/verify", body.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

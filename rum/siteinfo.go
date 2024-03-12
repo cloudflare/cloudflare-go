@@ -88,7 +88,7 @@ func (r *SiteInfoService) Delete(ctx context.Context, siteID string, body SiteIn
 	opts = append(r.Options[:], opts...)
 	var env SiteInfoDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/rum/site_info/%s", body.AccountID, siteID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -101,7 +101,7 @@ func (r *SiteInfoService) Get(ctx context.Context, siteID string, query SiteInfo
 	opts = append(r.Options[:], opts...)
 	var env SiteInfoGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/rum/site_info/%s", query.AccountID, siteID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

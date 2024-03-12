@@ -37,7 +37,7 @@ func (r *NamespaceService) List(ctx context.Context, query NamespaceListParams, 
 	opts = append(r.Options[:], opts...)
 	var env NamespaceListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/durable_objects/namespaces", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

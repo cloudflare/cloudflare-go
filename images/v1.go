@@ -90,7 +90,7 @@ func (r *V1Service) Delete(ctx context.Context, imageID string, body V1DeletePar
 	opts = append(r.Options[:], opts...)
 	var env V1DeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/images/v1/%s", body.AccountID, imageID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -117,7 +117,7 @@ func (r *V1Service) Get(ctx context.Context, imageID string, query V1GetParams, 
 	opts = append(r.Options[:], opts...)
 	var env V1GetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/images/v1/%s", query.AccountID, imageID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

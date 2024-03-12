@@ -38,7 +38,7 @@ func (r *DEXTracerouteTestResultNetworkPathService) Get(ctx context.Context, tes
 	opts = append(r.Options[:], opts...)
 	var env DEXTracerouteTestResultNetworkPathGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dex/traceroute-test-results/%s/network-path", query.AccountID, testResultID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

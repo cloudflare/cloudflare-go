@@ -48,7 +48,7 @@ func (r *TotalTLSService) Get(ctx context.Context, query TotalTLSGetParams, opts
 	opts = append(r.Options[:], opts...)
 	var env TotalTLSGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/acm/total_tls", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

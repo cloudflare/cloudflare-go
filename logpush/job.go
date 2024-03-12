@@ -91,7 +91,7 @@ func (r *JobService) List(ctx context.Context, query JobListParams, opts ...opti
 		accountOrZoneID = query.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/logpush/jobs", accountOrZone, accountOrZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -113,7 +113,7 @@ func (r *JobService) Delete(ctx context.Context, jobID int64, body JobDeletePara
 		accountOrZoneID = body.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/logpush/jobs/%v", accountOrZone, accountOrZoneID, jobID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -135,7 +135,7 @@ func (r *JobService) Get(ctx context.Context, jobID int64, query JobGetParams, o
 		accountOrZoneID = query.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/logpush/jobs/%v", accountOrZone, accountOrZoneID, jobID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

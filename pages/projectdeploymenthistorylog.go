@@ -39,7 +39,7 @@ func (r *ProjectDeploymentHistoryLogService) Get(ctx context.Context, projectNam
 	opts = append(r.Options[:], opts...)
 	var env ProjectDeploymentHistoryLogGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pages/projects/%s/deployments/%s/history/logs", query.AccountID, projectName, deploymentID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

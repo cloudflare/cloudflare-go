@@ -58,7 +58,7 @@ func (r *AddressMapService) List(ctx context.Context, query AddressMapListParams
 	opts = append(r.Options[:], opts...)
 	var env AddressMapListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -72,7 +72,7 @@ func (r *AddressMapService) Delete(ctx context.Context, addressMapID string, bod
 	opts = append(r.Options[:], opts...)
 	var env AddressMapDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s", body.AccountID, addressMapID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -98,7 +98,7 @@ func (r *AddressMapService) Get(ctx context.Context, addressMapID string, query 
 	opts = append(r.Options[:], opts...)
 	var env AddressMapGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/address_maps/%s", query.AccountID, addressMapID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

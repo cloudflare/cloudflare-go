@@ -36,7 +36,7 @@ func (r *VersionByTagService) Get(ctx context.Context, rulesetID string, ruleset
 	opts = append(r.Options[:], opts...)
 	var env VersionByTagGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/rulesets/%s/versions/%s/by_tag/%s", query.AccountID, rulesetID, rulesetVersion, ruleTag)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

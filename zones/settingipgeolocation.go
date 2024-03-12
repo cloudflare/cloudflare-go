@@ -54,7 +54,7 @@ func (r *SettingIPGeolocationService) Get(ctx context.Context, query SettingIPGe
 	opts = append(r.Options[:], opts...)
 	var env SettingIPGeolocationGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/ip_geolocation", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

@@ -56,7 +56,7 @@ func (r *OriginCACertificateService) List(ctx context.Context, query OriginCACer
 	opts = append(r.Options[:], opts...)
 	var env OriginCACertificateListResponseEnvelope
 	path := "certificates"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

@@ -61,7 +61,7 @@ func (r *IncomingService) Delete(ctx context.Context, body IncomingDeleteParams,
 	opts = append(r.Options[:], opts...)
 	var env IncomingDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%v/secondary_dns/incoming", body.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -74,7 +74,7 @@ func (r *IncomingService) Get(ctx context.Context, query IncomingGetParams, opts
 	opts = append(r.Options[:], opts...)
 	var env IncomingGetResponseEnvelope
 	path := fmt.Sprintf("zones/%v/secondary_dns/incoming", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

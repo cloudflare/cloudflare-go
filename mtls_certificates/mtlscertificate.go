@@ -52,7 +52,7 @@ func (r *MTLSCertificateService) List(ctx context.Context, query MTLSCertificate
 	opts = append(r.Options[:], opts...)
 	var env MTLSCertificateListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/mtls_certificates", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -66,7 +66,7 @@ func (r *MTLSCertificateService) Delete(ctx context.Context, mtlsCertificateID s
 	opts = append(r.Options[:], opts...)
 	var env MTLSCertificateDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/mtls_certificates/%s", body.AccountID, mtlsCertificateID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -79,7 +79,7 @@ func (r *MTLSCertificateService) Get(ctx context.Context, mtlsCertificateID stri
 	opts = append(r.Options[:], opts...)
 	var env MTLSCertificateGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/mtls_certificates/%s", query.AccountID, mtlsCertificateID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

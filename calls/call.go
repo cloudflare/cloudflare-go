@@ -63,7 +63,7 @@ func (r *CallService) List(ctx context.Context, query CallListParams, opts ...op
 	opts = append(r.Options[:], opts...)
 	var env CallListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/calls/apps", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -76,7 +76,7 @@ func (r *CallService) Delete(ctx context.Context, appID string, body CallDeleteP
 	opts = append(r.Options[:], opts...)
 	var env CallDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/calls/apps/%s", body.AccountID, appID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -89,7 +89,7 @@ func (r *CallService) Get(ctx context.Context, appID string, query CallGetParams
 	opts = append(r.Options[:], opts...)
 	var env CallGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/calls/apps/%s", query.AccountID, appID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

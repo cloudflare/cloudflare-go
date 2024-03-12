@@ -64,7 +64,7 @@ func (r *DLPDatasetService) List(ctx context.Context, query DLPDatasetListParams
 	opts = append(r.Options[:], opts...)
 	var env DLPDatasetListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dlp/datasets", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -79,7 +79,7 @@ func (r *DLPDatasetService) Delete(ctx context.Context, datasetID string, body D
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
 	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s", body.AccountID, datasetID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, nil, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return
 }
 
@@ -88,7 +88,7 @@ func (r *DLPDatasetService) Get(ctx context.Context, datasetID string, query DLP
 	opts = append(r.Options[:], opts...)
 	var env DLPDatasetGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dlp/datasets/%s", query.AccountID, datasetID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

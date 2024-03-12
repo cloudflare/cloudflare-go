@@ -69,7 +69,7 @@ func (r *DispatchNamespaceScriptService) Get(ctx context.Context, dispatchNamesp
 	opts = append(r.Options[:], opts...)
 	var env DispatchNamespaceScriptGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s", query.AccountID, dispatchNamespace, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

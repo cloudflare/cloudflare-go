@@ -39,7 +39,7 @@ func (r *DNSSECService) Delete(ctx context.Context, body DNSSECDeleteParams, opt
 	opts = append(r.Options[:], opts...)
 	var env DNSSECDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/dnssec", body.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -65,7 +65,7 @@ func (r *DNSSECService) Get(ctx context.Context, query DNSSECGetParams, opts ...
 	opts = append(r.Options[:], opts...)
 	var env DNSSECGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/dnssec", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

@@ -52,7 +52,7 @@ func (r *SettingTLSService) Delete(ctx context.Context, settingID SettingTLSDele
 	opts = append(r.Options[:], opts...)
 	var env SettingTLSDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/hostnames/settings/%v/%s", body.ZoneID, settingID, hostname)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -65,7 +65,7 @@ func (r *SettingTLSService) Get(ctx context.Context, settingID SettingTLSGetPara
 	opts = append(r.Options[:], opts...)
 	var env SettingTLSGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/hostnames/settings/%v", query.ZoneID, settingID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

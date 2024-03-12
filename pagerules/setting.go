@@ -36,7 +36,7 @@ func (r *SettingService) List(ctx context.Context, query SettingListParams, opts
 	opts = append(r.Options[:], opts...)
 	var env SettingListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/pagerules/settings", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

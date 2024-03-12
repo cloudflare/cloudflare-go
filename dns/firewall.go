@@ -79,7 +79,7 @@ func (r *FirewallService) Delete(ctx context.Context, dnsFirewallID string, body
 	opts = append(r.Options[:], opts...)
 	var env FirewallDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dns_firewall/%s", body.AccountID, dnsFirewallID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -105,7 +105,7 @@ func (r *FirewallService) Get(ctx context.Context, dnsFirewallID string, query F
 	opts = append(r.Options[:], opts...)
 	var env FirewallGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/dns_firewall/%s", query.AccountID, dnsFirewallID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

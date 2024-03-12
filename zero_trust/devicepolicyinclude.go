@@ -49,7 +49,7 @@ func (r *DevicePolicyIncludeService) List(ctx context.Context, query DevicePolic
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyIncludeListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/policy/include", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -63,7 +63,7 @@ func (r *DevicePolicyIncludeService) Get(ctx context.Context, policyID string, q
 	opts = append(r.Options[:], opts...)
 	var env DevicePolicyIncludeGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/policy/%s/include", query.AccountID, policyID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

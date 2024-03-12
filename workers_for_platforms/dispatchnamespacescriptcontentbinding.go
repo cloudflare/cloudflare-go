@@ -39,7 +39,7 @@ func NewDispatchNamespaceScriptContentBindingService(opts ...option.RequestOptio
 func (r *DispatchNamespaceScriptContentBindingService) Get(ctx context.Context, dispatchNamespace string, scriptName string, query DispatchNamespaceScriptContentBindingGetParams, opts ...option.RequestOption) (res *DispatchNamespaceScriptContentBindingGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/bindings", query.AccountID, dispatchNamespace, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 

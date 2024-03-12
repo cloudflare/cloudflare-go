@@ -60,7 +60,7 @@ func (r *SettingOriginMaxHTTPVersionService) Get(ctx context.Context, query Sett
 	opts = append(r.Options[:], opts...)
 	var env SettingOriginMaxHTTPVersionGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/origin_max_http_version", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

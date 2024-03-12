@@ -40,7 +40,7 @@ func (r *CacheReserveService) Clear(ctx context.Context, body CacheReserveClearP
 	opts = append(r.Options[:], opts...)
 	var env CacheReserveClearResponseEnvelope
 	path := fmt.Sprintf("zones/%s/cache/cache_reserve_clear", body.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -76,7 +76,7 @@ func (r *CacheReserveService) Get(ctx context.Context, query CacheReserveGetPara
 	opts = append(r.Options[:], opts...)
 	var env CacheReserveGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/cache/cache_reserve", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -92,7 +92,7 @@ func (r *CacheReserveService) Status(ctx context.Context, query CacheReserveStat
 	opts = append(r.Options[:], opts...)
 	var env CacheReserveStatusResponseEnvelope
 	path := fmt.Sprintf("zones/%s/cache/cache_reserve_clear", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

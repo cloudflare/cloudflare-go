@@ -65,7 +65,7 @@ func (r *ListService) List(ctx context.Context, query ListListParams, opts ...op
 	opts = append(r.Options[:], opts...)
 	var env ListListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/rules/lists", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -78,7 +78,7 @@ func (r *ListService) Delete(ctx context.Context, listID string, body ListDelete
 	opts = append(r.Options[:], opts...)
 	var env ListDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/rules/lists/%s", body.AccountID, listID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -91,7 +91,7 @@ func (r *ListService) Get(ctx context.Context, listID string, query ListGetParam
 	opts = append(r.Options[:], opts...)
 	var env ListGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/rules/lists/%s", query.AccountID, listID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

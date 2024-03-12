@@ -67,7 +67,7 @@ func (r *RuleService) Delete(ctx context.Context, rulesetID string, ruleID strin
 		accountOrZoneID = body.ZoneID
 	}
 	path := fmt.Sprintf("%s/%s/rulesets/%s/rules/%s", accountOrZone, accountOrZoneID, rulesetID, ruleID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

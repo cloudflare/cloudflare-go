@@ -73,7 +73,7 @@ func (r *TestService) Get(ctx context.Context, url string, testID string, query 
 	opts = append(r.Options[:], opts...)
 	var env TestGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/speed_api/pages/%s/tests/%s", query.ZoneID, url, testID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

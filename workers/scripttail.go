@@ -38,7 +38,7 @@ func (r *ScriptTailService) New(ctx context.Context, scriptName string, body Scr
 	opts = append(r.Options[:], opts...)
 	var env ScriptTailNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/tails", body.AccountID, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -51,7 +51,7 @@ func (r *ScriptTailService) Delete(ctx context.Context, scriptName string, id st
 	opts = append(r.Options[:], opts...)
 	var env ScriptTailDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/tails/%s", body.AccountID, scriptName, id)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -64,7 +64,7 @@ func (r *ScriptTailService) Get(ctx context.Context, scriptName string, query Sc
 	opts = append(r.Options[:], opts...)
 	var env ScriptTailGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/scripts/%s/tails", query.AccountID, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

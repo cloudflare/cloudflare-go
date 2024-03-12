@@ -38,7 +38,7 @@ func (r *ServiceService) List(ctx context.Context, query ServiceListParams, opts
 	opts = append(r.Options[:], opts...)
 	var env ServiceListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/addressing/services", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

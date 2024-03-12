@@ -39,7 +39,7 @@ func (r *V3DestinationPagerdutyService) New(ctx context.Context, body V3Destinat
 	opts = append(r.Options[:], opts...)
 	var env V3DestinationPagerdutyNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/pagerduty/connect", body.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -52,7 +52,7 @@ func (r *V3DestinationPagerdutyService) Delete(ctx context.Context, body V3Desti
 	opts = append(r.Options[:], opts...)
 	var env V3DestinationPagerdutyDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/pagerduty", body.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -65,7 +65,7 @@ func (r *V3DestinationPagerdutyService) Get(ctx context.Context, query V3Destina
 	opts = append(r.Options[:], opts...)
 	var env V3DestinationPagerdutyGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/pagerduty", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -78,7 +78,7 @@ func (r *V3DestinationPagerdutyService) Link(ctx context.Context, tokenID string
 	opts = append(r.Options[:], opts...)
 	var env V3DestinationPagerdutyLinkResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/alerting/v3/destinations/pagerduty/connect/%s", query.AccountID, tokenID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

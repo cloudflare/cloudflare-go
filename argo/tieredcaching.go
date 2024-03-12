@@ -52,7 +52,7 @@ func (r *TieredCachingService) Get(ctx context.Context, query TieredCachingGetPa
 	opts = append(r.Options[:], opts...)
 	var env TieredCachingGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/argo/tiered_caching", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

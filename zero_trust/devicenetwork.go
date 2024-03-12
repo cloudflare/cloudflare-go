@@ -62,7 +62,7 @@ func (r *DeviceNetworkService) List(ctx context.Context, query DeviceNetworkList
 	opts = append(r.Options[:], opts...)
 	var env DeviceNetworkListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/networks", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -76,7 +76,7 @@ func (r *DeviceNetworkService) Delete(ctx context.Context, networkID string, bod
 	opts = append(r.Options[:], opts...)
 	var env DeviceNetworkDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/networks/%s", body.AccountID, networkID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -89,7 +89,7 @@ func (r *DeviceNetworkService) Get(ctx context.Context, networkID string, query 
 	opts = append(r.Options[:], opts...)
 	var env DeviceNetworkGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/devices/networks/%s", query.AccountID, networkID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

@@ -49,7 +49,7 @@ func (r *UniversalSettingService) Get(ctx context.Context, query UniversalSettin
 	opts = append(r.Options[:], opts...)
 	var env UniversalSettingGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/ssl/universal/settings", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

@@ -54,7 +54,7 @@ func (r *PCAPService) List(ctx context.Context, query PCAPListParams, opts ...op
 	opts = append(r.Options[:], opts...)
 	var env PCAPListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pcaps", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -67,7 +67,7 @@ func (r *PCAPService) Get(ctx context.Context, pcapID string, query PCAPGetParam
 	opts = append(r.Options[:], opts...)
 	var env PCAPGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pcaps/%s", query.AccountID, pcapID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

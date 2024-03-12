@@ -37,7 +37,7 @@ func (r *ASNService) Get(ctx context.Context, asn IntelASNParam, query ASNGetPar
 	opts = append(r.Options[:], opts...)
 	var env ASNGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/intel/asn/%v", query.AccountID, asn)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

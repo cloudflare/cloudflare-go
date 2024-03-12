@@ -52,7 +52,7 @@ func (r *SettingEmailObfuscationService) Get(ctx context.Context, query SettingE
 	opts = append(r.Options[:], opts...)
 	var env SettingEmailObfuscationGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/email_obfuscation", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

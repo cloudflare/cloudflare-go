@@ -52,7 +52,7 @@ func (r *DomainService) List(ctx context.Context, query DomainListParams, opts .
 	opts = append(r.Options[:], opts...)
 	var env DomainListResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/registrar/domains", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -65,7 +65,7 @@ func (r *DomainService) Get(ctx context.Context, domainName string, query Domain
 	opts = append(r.Options[:], opts...)
 	var env DomainGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/registrar/domains/%s", query.AccountID, domainName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

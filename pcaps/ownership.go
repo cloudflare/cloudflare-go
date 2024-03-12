@@ -48,7 +48,7 @@ func (r *OwnershipService) Delete(ctx context.Context, ownershipID string, body 
 	opts = append(r.Options[:], opts...)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
 	path := fmt.Sprintf("accounts/%s/pcaps/ownership/%s", body.AccountID, ownershipID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, nil, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return
 }
 
@@ -57,7 +57,7 @@ func (r *OwnershipService) Get(ctx context.Context, query OwnershipGetParams, op
 	opts = append(r.Options[:], opts...)
 	var env OwnershipGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/pcaps/ownership", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

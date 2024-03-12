@@ -53,7 +53,7 @@ func (r *GatewayService) New(ctx context.Context, body GatewayNewParams, opts ..
 	opts = append(r.Options[:], opts...)
 	var env GatewayNewResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/gateway", body.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -66,7 +66,7 @@ func (r *GatewayService) List(ctx context.Context, query GatewayListParams, opts
 	opts = append(r.Options[:], opts...)
 	var env GatewayListResponseEnvelope
 	path := fmt.Sprintf("accounts/%v/gateway", query.AccountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

@@ -34,7 +34,7 @@ func NewLOADocumentDownloadService(opts ...option.RequestOption) (r *LOADocument
 func (r *LOADocumentDownloadService) Get(ctx context.Context, loaDocumentID string, query LOADocumentDownloadGetParams, opts ...option.RequestOption) (res *LOADocumentDownloadGetResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := fmt.Sprintf("accounts/%s/addressing/loa_documents/%s/download", query.AccountID, loaDocumentID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 

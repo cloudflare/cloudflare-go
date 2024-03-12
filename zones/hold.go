@@ -66,7 +66,7 @@ func (r *HoldService) Get(ctx context.Context, query HoldGetParams, opts ...opti
 	opts = append(r.Options[:], opts...)
 	var env HoldGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/hold", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

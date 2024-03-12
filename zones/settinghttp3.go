@@ -50,7 +50,7 @@ func (r *SettingHTTP3Service) Get(ctx context.Context, query SettingHTTP3GetPara
 	opts = append(r.Options[:], opts...)
 	var env SettingHTTP3GetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/settings/http3", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

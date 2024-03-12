@@ -60,7 +60,7 @@ func (r *BotManagementService) Get(ctx context.Context, query BotManagementGetPa
 	opts = append(r.Options[:], opts...)
 	var env BotManagementGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/bot_management", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

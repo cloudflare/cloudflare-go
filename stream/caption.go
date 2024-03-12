@@ -52,7 +52,7 @@ func (r *CaptionService) Delete(ctx context.Context, identifier string, language
 	opts = append(r.Options[:], opts...)
 	var env CaptionDeleteResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/%s/captions/%s", body.AccountID, identifier, language)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -65,7 +65,7 @@ func (r *CaptionService) Get(ctx context.Context, identifier string, query Capti
 	opts = append(r.Options[:], opts...)
 	var env CaptionGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/stream/%s/captions", query.AccountID, identifier)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

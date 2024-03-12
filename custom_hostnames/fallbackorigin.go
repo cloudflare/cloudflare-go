@@ -52,7 +52,7 @@ func (r *FallbackOriginService) Delete(ctx context.Context, body FallbackOriginD
 	opts = append(r.Options[:], opts...)
 	var env FallbackOriginDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/custom_hostnames/fallback_origin", body.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -65,7 +65,7 @@ func (r *FallbackOriginService) Get(ctx context.Context, query FallbackOriginGet
 	opts = append(r.Options[:], opts...)
 	var env FallbackOriginGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/custom_hostnames/fallback_origin", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

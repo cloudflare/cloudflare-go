@@ -58,7 +58,7 @@ func (r *CertificatePackService) Delete(ctx context.Context, certificatePackID s
 	opts = append(r.Options[:], opts...)
 	var env CertificatePackDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", body.ZoneID, certificatePackID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -73,7 +73,7 @@ func (r *CertificatePackService) Edit(ctx context.Context, certificatePackID str
 	opts = append(r.Options[:], opts...)
 	var env CertificatePackEditResponseEnvelope
 	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", body.ZoneID, certificatePackID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -86,7 +86,7 @@ func (r *CertificatePackService) Get(ctx context.Context, certificatePackID stri
 	opts = append(r.Options[:], opts...)
 	var env CertificatePackGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/ssl/certificate_packs/%s", query.ZoneID, certificatePackID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

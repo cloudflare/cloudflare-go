@@ -40,7 +40,7 @@ func (r *VariantService) Delete(ctx context.Context, body VariantDeleteParams, o
 	opts = append(r.Options[:], opts...)
 	var env VariantDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/cache/variants", body.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -74,7 +74,7 @@ func (r *VariantService) Get(ctx context.Context, query VariantGetParams, opts .
 	opts = append(r.Options[:], opts...)
 	var env VariantGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/cache/variants", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

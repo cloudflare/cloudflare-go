@@ -50,7 +50,7 @@ func (r *KeylessCertificateService) List(ctx context.Context, query KeylessCerti
 	opts = append(r.Options[:], opts...)
 	var env KeylessCertificateListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/keyless_certificates", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -63,7 +63,7 @@ func (r *KeylessCertificateService) Delete(ctx context.Context, keylessCertifica
 	opts = append(r.Options[:], opts...)
 	var env KeylessCertificateDeleteResponseEnvelope
 	path := fmt.Sprintf("zones/%s/keyless_certificates/%s", body.ZoneID, keylessCertificateID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, body, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
@@ -90,7 +90,7 @@ func (r *KeylessCertificateService) Get(ctx context.Context, keylessCertificateI
 	opts = append(r.Options[:], opts...)
 	var env KeylessCertificateGetResponseEnvelope
 	path := fmt.Sprintf("zones/%s/keyless_certificates/%s", query.ZoneID, keylessCertificateID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

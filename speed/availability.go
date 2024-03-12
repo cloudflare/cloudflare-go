@@ -36,7 +36,7 @@ func (r *AvailabilityService) List(ctx context.Context, query AvailabilityListPa
 	opts = append(r.Options[:], opts...)
 	var env AvailabilityListResponseEnvelope
 	path := fmt.Sprintf("zones/%s/speed_api/availabilities", query.ZoneID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}

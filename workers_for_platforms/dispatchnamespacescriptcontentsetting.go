@@ -52,7 +52,7 @@ func (r *DispatchNamespaceScriptContentSettingService) Get(ctx context.Context, 
 	opts = append(r.Options[:], opts...)
 	var env DispatchNamespaceScriptContentSettingGetResponseEnvelope
 	path := fmt.Sprintf("accounts/%s/workers/dispatch/namespaces/%s/scripts/%s/settings", query.AccountID, dispatchNamespace, scriptName)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &env, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &env, opts...)
 	if err != nil {
 		return
 	}
