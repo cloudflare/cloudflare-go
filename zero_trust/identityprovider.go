@@ -281,6 +281,15 @@ type AccessIdentityProvidersAccessAzureAdConfig struct {
 	DirectoryID string `json:"directory_id"`
 	// The claim name for email in the id_token response.
 	EmailClaimName string `json:"email_claim_name"`
+	// Indicates the type of user interaction that is required. prompt=login forces the
+	// user to enter their credentials on that request, negating single-sign on.
+	// prompt=none is the opposite. It ensures that the user isn't presented with any
+	// interactive prompt. If the request can't be completed silently by using
+	// single-sign on, the Microsoft identity platform returns an interaction_required
+	// error. prompt=select_account interrupts single sign-on providing account
+	// selection experience listing all the accounts either in session or any
+	// remembered account or an option to choose to use a different account altogether.
+	Prompt AccessIdentityProvidersAccessAzureAdConfigPrompt `json:"prompt"`
 	// Should Cloudflare try to load groups from your account
 	SupportGroups bool                                           `json:"support_groups"`
 	JSON          accessIdentityProvidersAccessAzureAdConfigJSON `json:"-"`
@@ -295,6 +304,7 @@ type accessIdentityProvidersAccessAzureAdConfigJSON struct {
 	ConditionalAccessEnabled apijson.Field
 	DirectoryID              apijson.Field
 	EmailClaimName           apijson.Field
+	Prompt                   apijson.Field
 	SupportGroups            apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
@@ -307,6 +317,22 @@ func (r *AccessIdentityProvidersAccessAzureAdConfig) UnmarshalJSON(data []byte) 
 func (r accessIdentityProvidersAccessAzureAdConfigJSON) RawJSON() string {
 	return r.raw
 }
+
+// Indicates the type of user interaction that is required. prompt=login forces the
+// user to enter their credentials on that request, negating single-sign on.
+// prompt=none is the opposite. It ensures that the user isn't presented with any
+// interactive prompt. If the request can't be completed silently by using
+// single-sign on, the Microsoft identity platform returns an interaction_required
+// error. prompt=select_account interrupts single sign-on providing account
+// selection experience listing all the accounts either in session or any
+// remembered account or an option to choose to use a different account altogether.
+type AccessIdentityProvidersAccessAzureAdConfigPrompt string
+
+const (
+	AccessIdentityProvidersAccessAzureAdConfigPromptLogin         AccessIdentityProvidersAccessAzureAdConfigPrompt = "login"
+	AccessIdentityProvidersAccessAzureAdConfigPromptSelectAccount AccessIdentityProvidersAccessAzureAdConfigPrompt = "select_account"
+	AccessIdentityProvidersAccessAzureAdConfigPromptNone          AccessIdentityProvidersAccessAzureAdConfigPrompt = "none"
+)
 
 // The type of identity provider. To determine the value for a specific provider,
 // refer to our
@@ -2339,6 +2365,15 @@ type IdentityProviderListResponseAccessAzureAdConfig struct {
 	DirectoryID string `json:"directory_id"`
 	// The claim name for email in the id_token response.
 	EmailClaimName string `json:"email_claim_name"`
+	// Indicates the type of user interaction that is required. prompt=login forces the
+	// user to enter their credentials on that request, negating single-sign on.
+	// prompt=none is the opposite. It ensures that the user isn't presented with any
+	// interactive prompt. If the request can't be completed silently by using
+	// single-sign on, the Microsoft identity platform returns an interaction_required
+	// error. prompt=select_account interrupts single sign-on providing account
+	// selection experience listing all the accounts either in session or any
+	// remembered account or an option to choose to use a different account altogether.
+	Prompt IdentityProviderListResponseAccessAzureAdConfigPrompt `json:"prompt"`
 	// Should Cloudflare try to load groups from your account
 	SupportGroups bool                                                `json:"support_groups"`
 	JSON          identityProviderListResponseAccessAzureAdConfigJSON `json:"-"`
@@ -2353,6 +2388,7 @@ type identityProviderListResponseAccessAzureAdConfigJSON struct {
 	ConditionalAccessEnabled apijson.Field
 	DirectoryID              apijson.Field
 	EmailClaimName           apijson.Field
+	Prompt                   apijson.Field
 	SupportGroups            apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
@@ -2365,6 +2401,22 @@ func (r *IdentityProviderListResponseAccessAzureAdConfig) UnmarshalJSON(data []b
 func (r identityProviderListResponseAccessAzureAdConfigJSON) RawJSON() string {
 	return r.raw
 }
+
+// Indicates the type of user interaction that is required. prompt=login forces the
+// user to enter their credentials on that request, negating single-sign on.
+// prompt=none is the opposite. It ensures that the user isn't presented with any
+// interactive prompt. If the request can't be completed silently by using
+// single-sign on, the Microsoft identity platform returns an interaction_required
+// error. prompt=select_account interrupts single sign-on providing account
+// selection experience listing all the accounts either in session or any
+// remembered account or an option to choose to use a different account altogether.
+type IdentityProviderListResponseAccessAzureAdConfigPrompt string
+
+const (
+	IdentityProviderListResponseAccessAzureAdConfigPromptLogin         IdentityProviderListResponseAccessAzureAdConfigPrompt = "login"
+	IdentityProviderListResponseAccessAzureAdConfigPromptSelectAccount IdentityProviderListResponseAccessAzureAdConfigPrompt = "select_account"
+	IdentityProviderListResponseAccessAzureAdConfigPromptNone          IdentityProviderListResponseAccessAzureAdConfigPrompt = "none"
+)
 
 // The type of identity provider. To determine the value for a specific provider,
 // refer to our
@@ -4248,6 +4300,15 @@ type IdentityProviderNewParamsConfig struct {
 	OneloginAccount param.Field[string] `json:"onelogin_account"`
 	// Your PingOne environment identifier
 	PingEnvID param.Field[string] `json:"ping_env_id"`
+	// Indicates the type of user interaction that is required. prompt=login forces the
+	// user to enter their credentials on that request, negating single-sign on.
+	// prompt=none is the opposite. It ensures that the user isn't presented with any
+	// interactive prompt. If the request can't be completed silently by using
+	// single-sign on, the Microsoft identity platform returns an interaction_required
+	// error. prompt=select_account interrupts single sign-on providing account
+	// selection experience listing all the accounts either in session or any
+	// remembered account or an option to choose to use a different account altogether.
+	Prompt param.Field[IdentityProviderNewParamsConfigPrompt] `json:"prompt"`
 	// OAuth scopes
 	Scopes param.Field[[]string] `json:"scopes"`
 	// Sign the SAML authentication request with Access credentials. To verify the
@@ -4275,6 +4336,22 @@ type IdentityProviderNewParamsConfigHeaderAttribute struct {
 func (r IdentityProviderNewParamsConfigHeaderAttribute) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// Indicates the type of user interaction that is required. prompt=login forces the
+// user to enter their credentials on that request, negating single-sign on.
+// prompt=none is the opposite. It ensures that the user isn't presented with any
+// interactive prompt. If the request can't be completed silently by using
+// single-sign on, the Microsoft identity platform returns an interaction_required
+// error. prompt=select_account interrupts single sign-on providing account
+// selection experience listing all the accounts either in session or any
+// remembered account or an option to choose to use a different account altogether.
+type IdentityProviderNewParamsConfigPrompt string
+
+const (
+	IdentityProviderNewParamsConfigPromptLogin         IdentityProviderNewParamsConfigPrompt = "login"
+	IdentityProviderNewParamsConfigPromptSelectAccount IdentityProviderNewParamsConfigPrompt = "select_account"
+	IdentityProviderNewParamsConfigPromptNone          IdentityProviderNewParamsConfigPrompt = "none"
+)
 
 // The type of identity provider. To determine the value for a specific provider,
 // refer to our
@@ -4465,6 +4542,15 @@ type IdentityProviderUpdateParamsConfig struct {
 	OneloginAccount param.Field[string] `json:"onelogin_account"`
 	// Your PingOne environment identifier
 	PingEnvID param.Field[string] `json:"ping_env_id"`
+	// Indicates the type of user interaction that is required. prompt=login forces the
+	// user to enter their credentials on that request, negating single-sign on.
+	// prompt=none is the opposite. It ensures that the user isn't presented with any
+	// interactive prompt. If the request can't be completed silently by using
+	// single-sign on, the Microsoft identity platform returns an interaction_required
+	// error. prompt=select_account interrupts single sign-on providing account
+	// selection experience listing all the accounts either in session or any
+	// remembered account or an option to choose to use a different account altogether.
+	Prompt param.Field[IdentityProviderUpdateParamsConfigPrompt] `json:"prompt"`
 	// OAuth scopes
 	Scopes param.Field[[]string] `json:"scopes"`
 	// Sign the SAML authentication request with Access credentials. To verify the
@@ -4492,6 +4578,22 @@ type IdentityProviderUpdateParamsConfigHeaderAttribute struct {
 func (r IdentityProviderUpdateParamsConfigHeaderAttribute) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
+
+// Indicates the type of user interaction that is required. prompt=login forces the
+// user to enter their credentials on that request, negating single-sign on.
+// prompt=none is the opposite. It ensures that the user isn't presented with any
+// interactive prompt. If the request can't be completed silently by using
+// single-sign on, the Microsoft identity platform returns an interaction_required
+// error. prompt=select_account interrupts single sign-on providing account
+// selection experience listing all the accounts either in session or any
+// remembered account or an option to choose to use a different account altogether.
+type IdentityProviderUpdateParamsConfigPrompt string
+
+const (
+	IdentityProviderUpdateParamsConfigPromptLogin         IdentityProviderUpdateParamsConfigPrompt = "login"
+	IdentityProviderUpdateParamsConfigPromptSelectAccount IdentityProviderUpdateParamsConfigPrompt = "select_account"
+	IdentityProviderUpdateParamsConfigPromptNone          IdentityProviderUpdateParamsConfigPrompt = "none"
+)
 
 // The type of identity provider. To determine the value for a specific provider,
 // refer to our
