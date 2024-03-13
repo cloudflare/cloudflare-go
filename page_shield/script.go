@@ -56,7 +56,6 @@ func (r *ScriptService) Get(ctx context.Context, scriptID string, query ScriptGe
 type PageShieldScript struct {
 	ID                      interface{}          `json:"id"`
 	AddedAt                 interface{}          `json:"added_at"`
-	DataflowScore           interface{}          `json:"dataflow_score"`
 	DomainReportedMalicious interface{}          `json:"domain_reported_malicious"`
 	FetchedAt               interface{}          `json:"fetched_at"`
 	FirstPageURL            interface{}          `json:"first_page_url"`
@@ -65,7 +64,6 @@ type PageShieldScript struct {
 	Host                    interface{}          `json:"host"`
 	JsIntegrityScore        interface{}          `json:"js_integrity_score"`
 	LastSeenAt              interface{}          `json:"last_seen_at"`
-	ObfuscationScore        interface{}          `json:"obfuscation_score"`
 	PageURLs                interface{}          `json:"page_urls"`
 	URL                     interface{}          `json:"url"`
 	URLContainsCdnCgiPath   interface{}          `json:"url_contains_cdn_cgi_path"`
@@ -77,7 +75,6 @@ type PageShieldScript struct {
 type pageShieldScriptJSON struct {
 	ID                      apijson.Field
 	AddedAt                 apijson.Field
-	DataflowScore           apijson.Field
 	DomainReportedMalicious apijson.Field
 	FetchedAt               apijson.Field
 	FirstPageURL            apijson.Field
@@ -86,7 +83,6 @@ type pageShieldScriptJSON struct {
 	Host                    apijson.Field
 	JsIntegrityScore        apijson.Field
 	LastSeenAt              apijson.Field
-	ObfuscationScore        apijson.Field
 	PageURLs                apijson.Field
 	URL                     apijson.Field
 	URLContainsCdnCgiPath   apijson.Field
@@ -105,7 +101,6 @@ func (r pageShieldScriptJSON) RawJSON() string {
 type ScriptGetResponse struct {
 	ID                      interface{}                `json:"id"`
 	AddedAt                 interface{}                `json:"added_at"`
-	DataflowScore           interface{}                `json:"dataflow_score"`
 	DomainReportedMalicious interface{}                `json:"domain_reported_malicious"`
 	FetchedAt               interface{}                `json:"fetched_at"`
 	FirstPageURL            interface{}                `json:"first_page_url"`
@@ -114,7 +109,6 @@ type ScriptGetResponse struct {
 	Host                    interface{}                `json:"host"`
 	JsIntegrityScore        interface{}                `json:"js_integrity_score"`
 	LastSeenAt              interface{}                `json:"last_seen_at"`
-	ObfuscationScore        interface{}                `json:"obfuscation_score"`
 	PageURLs                interface{}                `json:"page_urls"`
 	URL                     interface{}                `json:"url"`
 	URLContainsCdnCgiPath   interface{}                `json:"url_contains_cdn_cgi_path"`
@@ -127,7 +121,6 @@ type ScriptGetResponse struct {
 type scriptGetResponseJSON struct {
 	ID                      apijson.Field
 	AddedAt                 apijson.Field
-	DataflowScore           apijson.Field
 	DomainReportedMalicious apijson.Field
 	FetchedAt               apijson.Field
 	FirstPageURL            apijson.Field
@@ -136,7 +129,6 @@ type scriptGetResponseJSON struct {
 	Host                    apijson.Field
 	JsIntegrityScore        apijson.Field
 	LastSeenAt              apijson.Field
-	ObfuscationScore        apijson.Field
 	PageURLs                apijson.Field
 	URL                     apijson.Field
 	URLContainsCdnCgiPath   apijson.Field
@@ -155,27 +147,21 @@ func (r scriptGetResponseJSON) RawJSON() string {
 
 // The version of the analyzed script.
 type ScriptGetResponseVersion struct {
-	// The dataflow score of the JavaScript content.
-	DataflowScore int64 `json:"dataflow_score,nullable"`
 	// The timestamp of when the script was last fetched.
 	FetchedAt string `json:"fetched_at,nullable"`
 	// The computed hash of the analyzed script.
 	Hash string `json:"hash,nullable"`
 	// The integrity score of the JavaScript content.
-	JsIntegrityScore int64 `json:"js_integrity_score,nullable"`
-	// The obfuscation score of the JavaScript content.
-	ObfuscationScore int64                        `json:"obfuscation_score,nullable"`
+	JsIntegrityScore int64                        `json:"js_integrity_score,nullable"`
 	JSON             scriptGetResponseVersionJSON `json:"-"`
 }
 
 // scriptGetResponseVersionJSON contains the JSON metadata for the struct
 // [ScriptGetResponseVersion]
 type scriptGetResponseVersionJSON struct {
-	DataflowScore    apijson.Field
 	FetchedAt        apijson.Field
 	Hash             apijson.Field
 	JsIntegrityScore apijson.Field
-	ObfuscationScore apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
