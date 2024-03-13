@@ -159,9 +159,8 @@ func (UnionString) ImplementsAlertingV3ListResponse()                           
 func (UnionString) ImplementsAlertingV3DestinationEligibleGetResponse()                             {}
 func (UnionString) ImplementsAlertingV3DestinationPagerdutyDeleteResponse()                         {}
 func (UnionString) ImplementsAlertingV3DestinationWebhookDeleteResponse()                           {}
-func (UnionString) ImplementsAlertingV3PolicyListResponseMechanismsID()                             {}
+func (UnionString) ImplementsAlertingAaaPoliciesMechanismsID()                                      {}
 func (UnionString) ImplementsAlertingV3PolicyDeleteResponse()                                       {}
-func (UnionString) ImplementsAlertingV3PolicyGetResponseMechanismsID()                              {}
 func (UnionString) ImplementsAlertingV3PolicyNewParamsMechanismsID()                                {}
 func (UnionString) ImplementsAlertingV3PolicyUpdateParamsMechanismsID()                             {}
 func (UnionString) ImplementsD1DatabaseDeleteResponse()                                             {}

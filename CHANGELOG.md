@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.0.0-beta.5 (2024-03-13)
+
+Full Changelog: [v2.0.0-beta.4...v2.0.0-beta.5](https://github.com/cloudflare/cloudflare-go/compare/v2.0.0-beta.4...v2.0.0-beta.5)
+
+### Features
+
+* OpenAPI spec update via Stainless API ([#1554](https://github.com/cloudflare/cloudflare-go/issues/1554)) ([9acf8f3](https://github.com/cloudflare/cloudflare-go/commit/9acf8f358779d9d9fa25a773f75a6ef12dba0197))
+* OpenAPI spec update via Stainless API ([#1555](https://github.com/cloudflare/cloudflare-go/issues/1555)) ([4252901](https://github.com/cloudflare/cloudflare-go/commit/425290104d3ef1ef6de626cfe53aa399d0852b4f))
+* OpenAPI spec update via Stainless API ([#1556](https://github.com/cloudflare/cloudflare-go/issues/1556)) ([749c6c8](https://github.com/cloudflare/cloudflare-go/commit/749c6c8cb5700c66ef1660256724dbfa5758f154))
+* OpenAPI spec update via Stainless API ([#1557](https://github.com/cloudflare/cloudflare-go/issues/1557)) ([d44a29e](https://github.com/cloudflare/cloudflare-go/commit/d44a29e34f1d1e31b25d55e1b40c85df268b666a))
+* update via SDK Studio ([#1552](https://github.com/cloudflare/cloudflare-go/issues/1552)) ([1281506](https://github.com/cloudflare/cloudflare-go/commit/1281506bd9f2e6a7ac476dd9aec6932bc721d5d5))
+
 ## 2.0.0-beta.4 (2024-03-12)
 
 Full Changelog: [v2.0.0-beta.3...v2.0.0-beta.4](https://github.com/cloudflare/cloudflare-go/compare/v2.0.0-beta.3...v2.0.0-beta.4)
