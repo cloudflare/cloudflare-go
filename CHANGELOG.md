@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.0-beta.6 (2024-03-14)
+
+Full Changelog: [v2.0.0-beta.5...v2.0.0-beta.6](https://github.com/cloudflare/cloudflare-go/compare/v2.0.0-beta.5...v2.0.0-beta.6)
+
+### Features
+
+* update via SDK Studio ([#1560](https://github.com/cloudflare/cloudflare-go/issues/1560)) ([f416888](https://github.com/cloudflare/cloudflare-go/commit/f416888fac2444dc741a8273e5589cc768247f6c))
+
 ## 2.0.0-beta.5 (2024-03-13)
 
 Full Changelog: [v2.0.0-beta.4...v2.0.0-beta.5](https://github.com/cloudflare/cloudflare-go/compare/v2.0.0-beta.4...v2.0.0-beta.5)

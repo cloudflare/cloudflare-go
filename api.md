@@ -63,7 +63,7 @@ Methods:
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ips">ips</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ips#IPs">IPs</a>
-- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ips">ips</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ips#JdcloudIPs">JdcloudIPs</a>
+- <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ips">ips</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ips#JDCloudIPs">JDCloudIPs</a>
 - <a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ips">ips</a>.<a href="https://pkg.go.dev/github.com/cloudflare/cloudflare-go/v2/ips#IPListResponse">IPListResponse</a>
 
 Methods:
