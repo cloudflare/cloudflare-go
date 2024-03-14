@@ -114,14 +114,15 @@ type SaasApplication struct {
 	AuthType  string     `json:"auth_type,omitempty"`
 
 	// SAML saas app
-	ConsumerServiceUrl     string                `json:"consumer_service_url,omitempty"`
-	SPEntityID             string                `json:"sp_entity_id,omitempty"`
-	IDPEntityID            string                `json:"idp_entity_id,omitempty"`
-	NameIDFormat           string                `json:"name_id_format,omitempty"`
-	SSOEndpoint            string                `json:"sso_endpoint,omitempty"`
-	DefaultRelayState      string                `json:"default_relay_state,omitempty"`
-	CustomAttributes       []SAMLAttributeConfig `json:"custom_attributes,omitempty"`
-	NameIDTransformJsonata string                `json:"name_id_transform_jsonata,omitempty"`
+	ConsumerServiceUrl            string                `json:"consumer_service_url,omitempty"`
+	SPEntityID                    string                `json:"sp_entity_id,omitempty"`
+	IDPEntityID                   string                `json:"idp_entity_id,omitempty"`
+	NameIDFormat                  string                `json:"name_id_format,omitempty"`
+	SSOEndpoint                   string                `json:"sso_endpoint,omitempty"`
+	DefaultRelayState             string                `json:"default_relay_state,omitempty"`
+	CustomAttributes              []SAMLAttributeConfig `json:"custom_attributes,omitempty"`
+	NameIDTransformJsonata        string                `json:"name_id_transform_jsonata,omitempty"`
+	SamlAttributeTransformJsonata string                `json:"saml_attribute_transform_jsonata"`
 
 	// OIDC saas app
 	ClientID         string   `json:"client_id,omitempty"`

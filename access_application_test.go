@@ -679,7 +679,8 @@ func TestCreateSAMLSaasAccessApplications(t *testing.T) {
 							}
 						}
 					],
-					"name_id_transform_jsonata": "$substringBefore(email, '@') & '+sandbox@' & $substringAfter(email, '@')"
+					"name_id_transform_jsonata": "$substringBefore(email, '@') & '+sandbox@' & $substringAfter(email, '@')",
+					"saml_attribute_transform_jsonata": "$ ~>| groups | {'group_name': name} |"
 				}
 			}
 		}
@@ -732,7 +733,8 @@ func TestCreateSAMLSaasAccessApplications(t *testing.T) {
 					},
 				},
 			},
-			NameIDTransformJsonata: "$substringBefore(email, '@') & '+sandbox@' & $substringAfter(email, '@')",
+			NameIDTransformJsonata:        "$substringBefore(email, '@') & '+sandbox@' & $substringAfter(email, '@')",
+			SamlAttributeTransformJsonata: "$ ~>| groups | {'group_name': name} |",
 		},
 		CreatedAt:                &createdAt,
 		UpdatedAt:                &updatedAt,
