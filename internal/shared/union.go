@@ -177,7 +177,7 @@ func (UnionString) ImplementsZeroTrustAccessApplicationCANewResponse()          
 func (UnionString) ImplementsZeroTrustAccessApplicationCAGetResponse()                              {}
 func (UnionString) ImplementsZeroTrustAccessApplicationUserPolicyCheckListParamsAppID()             {}
 func (UnionString) ImplementsZeroTrustAccessKeyUpdateResponse()                                     {}
-func (UnionString) ImplementsZeroTrustAccessKeyListResponse()                                       {}
+func (UnionString) ImplementsZeroTrustAccessKeyGetResponse()                                        {}
 func (UnionString) ImplementsZeroTrustAccessKeyRotateResponse()                                     {}
 func (UnionString) ImplementsZeroTrustTunnelConfigurationUpdateResponse()                           {}
 func (UnionString) ImplementsZeroTrustTunnelConfigurationGetResponse()                              {}

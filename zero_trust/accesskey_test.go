@@ -44,7 +44,7 @@ func TestAccessKeyUpdate(t *testing.T) {
 	}
 }
 
-func TestAccessKeyList(t *testing.T) {
+func TestAccessKeyGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -58,7 +58,7 @@ func TestAccessKeyList(t *testing.T) {
 		option.WithAPIKey("144c9defac04969c7bfad8efaa8ea194"),
 		option.WithAPIEmail("user@example.com"),
 	)
-	_, err := client.ZeroTrust.Access.Keys.List(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
+	_, err := client.ZeroTrust.Access.Keys.Get(context.TODO(), "023e105f4ecef8ad9ca31a8372d0c353")
 	if err != nil {
 		var apierr *cloudflare.Error
 		if errors.As(err, &apierr) {
