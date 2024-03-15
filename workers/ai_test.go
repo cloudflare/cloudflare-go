@@ -14,7 +14,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v2/workers"
 )
 
-func TestAIRun(t *testing.T) {
+func TestAIRunWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -33,7 +33,9 @@ func TestAIRun(t *testing.T) {
 		"string",
 		workers.AIRunParams{
 			AccountID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
-			Body:      cloudflare.F[any](map[string]interface{}{}),
+			Body: cloudflare.F[workers.AIRunParamsBody](workers.AIRunParamsBodyTextClassification(workers.AIRunParamsBodyTextClassification{
+				Text: cloudflare.F("string"),
+			})),
 		},
 	)
 	if err != nil {
