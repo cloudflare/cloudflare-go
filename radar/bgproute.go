@@ -45,7 +45,7 @@ func (r *BGPRouteService) Moas(ctx context.Context, query BGPRouteMoasParams, op
 	return
 }
 
-// Lookup prefix-to-origin mapping on global routing tables.
+// Lookup prefix-to-ASN mapping on global routing tables.
 func (r *BGPRouteService) Pfx2as(ctx context.Context, query BGPRoutePfx2asParams, opts ...option.RequestOption) (res *BGPRoutePfx2asResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	var env BGPRoutePfx2asResponseEnvelope
@@ -529,9 +529,12 @@ func (r bgpRouteMoasResponseEnvelopeJSON) RawJSON() string {
 type BGPRoutePfx2asParams struct {
 	// Format results are returned in.
 	Format param.Field[BGPRoutePfx2asParamsFormat] `query:"format"`
+	// Return only results with the longest prefix match for the given prefix. For
+	// example, specify a /32 prefix to lookup the origin ASN for an IPv4 address.
+	LongestPrefixMatch param.Field[bool] `query:"longestPrefixMatch"`
 	// Lookup prefixes originated by the given ASN
 	Origin param.Field[int64] `query:"origin"`
-	// Lookup origins of the given prefix
+	// Lookup origin ASNs of the given prefix
 	Prefix param.Field[string] `query:"prefix"`
 	// Return only results with matching rpki status: valid, invalid or unknown
 	RpkiStatus param.Field[BGPRoutePfx2asParamsRpkiStatus] `query:"rpkiStatus"`
