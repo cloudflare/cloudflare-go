@@ -54,9 +54,9 @@ func (r *AccessCertificateSettingService) Update(ctx context.Context, params Acc
 }
 
 // List all mTLS hostname settings for this account or zone.
-func (r *AccessCertificateSettingService) List(ctx context.Context, query AccessCertificateSettingListParams, opts ...option.RequestOption) (res *[]AccessSettings, err error) {
+func (r *AccessCertificateSettingService) Get(ctx context.Context, query AccessCertificateSettingGetParams, opts ...option.RequestOption) (res *[]AccessSettings, err error) {
 	opts = append(r.Options[:], opts...)
-	var env AccessCertificateSettingListResponseEnvelope
+	var env AccessCertificateSettingGetResponseEnvelope
 	var accountOrZone string
 	var accountOrZoneID param.Field[string]
 	if query.AccountID.Present {
@@ -248,26 +248,26 @@ func (r accessCertificateSettingUpdateResponseEnvelopeResultInfoJSON) RawJSON() 
 	return r.raw
 }
 
-type AccessCertificateSettingListParams struct {
+type AccessCertificateSettingGetParams struct {
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
 	ZoneID param.Field[string] `path:"zone_id"`
 }
 
-type AccessCertificateSettingListResponseEnvelope struct {
-	Errors   []AccessCertificateSettingListResponseEnvelopeErrors   `json:"errors,required"`
-	Messages []AccessCertificateSettingListResponseEnvelopeMessages `json:"messages,required"`
-	Result   []AccessSettings                                       `json:"result,required,nullable"`
+type AccessCertificateSettingGetResponseEnvelope struct {
+	Errors   []AccessCertificateSettingGetResponseEnvelopeErrors   `json:"errors,required"`
+	Messages []AccessCertificateSettingGetResponseEnvelopeMessages `json:"messages,required"`
+	Result   []AccessSettings                                      `json:"result,required,nullable"`
 	// Whether the API call was successful
-	Success    AccessCertificateSettingListResponseEnvelopeSuccess    `json:"success,required"`
-	ResultInfo AccessCertificateSettingListResponseEnvelopeResultInfo `json:"result_info"`
-	JSON       accessCertificateSettingListResponseEnvelopeJSON       `json:"-"`
+	Success    AccessCertificateSettingGetResponseEnvelopeSuccess    `json:"success,required"`
+	ResultInfo AccessCertificateSettingGetResponseEnvelopeResultInfo `json:"result_info"`
+	JSON       accessCertificateSettingGetResponseEnvelopeJSON       `json:"-"`
 }
 
-// accessCertificateSettingListResponseEnvelopeJSON contains the JSON metadata for
-// the struct [AccessCertificateSettingListResponseEnvelope]
-type accessCertificateSettingListResponseEnvelopeJSON struct {
+// accessCertificateSettingGetResponseEnvelopeJSON contains the JSON metadata for
+// the struct [AccessCertificateSettingGetResponseEnvelope]
+type accessCertificateSettingGetResponseEnvelopeJSON struct {
 	Errors      apijson.Field
 	Messages    apijson.Field
 	Result      apijson.Field
@@ -277,68 +277,68 @@ type accessCertificateSettingListResponseEnvelopeJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessCertificateSettingListResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessCertificateSettingGetResponseEnvelope) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessCertificateSettingListResponseEnvelopeJSON) RawJSON() string {
+func (r accessCertificateSettingGetResponseEnvelopeJSON) RawJSON() string {
 	return r.raw
 }
 
-type AccessCertificateSettingListResponseEnvelopeErrors struct {
-	Code    int64                                                  `json:"code,required"`
-	Message string                                                 `json:"message,required"`
-	JSON    accessCertificateSettingListResponseEnvelopeErrorsJSON `json:"-"`
+type AccessCertificateSettingGetResponseEnvelopeErrors struct {
+	Code    int64                                                 `json:"code,required"`
+	Message string                                                `json:"message,required"`
+	JSON    accessCertificateSettingGetResponseEnvelopeErrorsJSON `json:"-"`
 }
 
-// accessCertificateSettingListResponseEnvelopeErrorsJSON contains the JSON
-// metadata for the struct [AccessCertificateSettingListResponseEnvelopeErrors]
-type accessCertificateSettingListResponseEnvelopeErrorsJSON struct {
+// accessCertificateSettingGetResponseEnvelopeErrorsJSON contains the JSON metadata
+// for the struct [AccessCertificateSettingGetResponseEnvelopeErrors]
+type accessCertificateSettingGetResponseEnvelopeErrorsJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessCertificateSettingListResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessCertificateSettingGetResponseEnvelopeErrors) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessCertificateSettingListResponseEnvelopeErrorsJSON) RawJSON() string {
+func (r accessCertificateSettingGetResponseEnvelopeErrorsJSON) RawJSON() string {
 	return r.raw
 }
 
-type AccessCertificateSettingListResponseEnvelopeMessages struct {
-	Code    int64                                                    `json:"code,required"`
-	Message string                                                   `json:"message,required"`
-	JSON    accessCertificateSettingListResponseEnvelopeMessagesJSON `json:"-"`
+type AccessCertificateSettingGetResponseEnvelopeMessages struct {
+	Code    int64                                                   `json:"code,required"`
+	Message string                                                  `json:"message,required"`
+	JSON    accessCertificateSettingGetResponseEnvelopeMessagesJSON `json:"-"`
 }
 
-// accessCertificateSettingListResponseEnvelopeMessagesJSON contains the JSON
-// metadata for the struct [AccessCertificateSettingListResponseEnvelopeMessages]
-type accessCertificateSettingListResponseEnvelopeMessagesJSON struct {
+// accessCertificateSettingGetResponseEnvelopeMessagesJSON contains the JSON
+// metadata for the struct [AccessCertificateSettingGetResponseEnvelopeMessages]
+type accessCertificateSettingGetResponseEnvelopeMessagesJSON struct {
 	Code        apijson.Field
 	Message     apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessCertificateSettingListResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessCertificateSettingGetResponseEnvelopeMessages) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessCertificateSettingListResponseEnvelopeMessagesJSON) RawJSON() string {
+func (r accessCertificateSettingGetResponseEnvelopeMessagesJSON) RawJSON() string {
 	return r.raw
 }
 
 // Whether the API call was successful
-type AccessCertificateSettingListResponseEnvelopeSuccess bool
+type AccessCertificateSettingGetResponseEnvelopeSuccess bool
 
 const (
-	AccessCertificateSettingListResponseEnvelopeSuccessTrue AccessCertificateSettingListResponseEnvelopeSuccess = true
+	AccessCertificateSettingGetResponseEnvelopeSuccessTrue AccessCertificateSettingGetResponseEnvelopeSuccess = true
 )
 
-type AccessCertificateSettingListResponseEnvelopeResultInfo struct {
+type AccessCertificateSettingGetResponseEnvelopeResultInfo struct {
 	// Total number of results for the requested service
 	Count float64 `json:"count"`
 	// Current page within paginated list of results
@@ -346,13 +346,13 @@ type AccessCertificateSettingListResponseEnvelopeResultInfo struct {
 	// Number of results per page of results
 	PerPage float64 `json:"per_page"`
 	// Total results available without any search parameters
-	TotalCount float64                                                    `json:"total_count"`
-	JSON       accessCertificateSettingListResponseEnvelopeResultInfoJSON `json:"-"`
+	TotalCount float64                                                   `json:"total_count"`
+	JSON       accessCertificateSettingGetResponseEnvelopeResultInfoJSON `json:"-"`
 }
 
-// accessCertificateSettingListResponseEnvelopeResultInfoJSON contains the JSON
-// metadata for the struct [AccessCertificateSettingListResponseEnvelopeResultInfo]
-type accessCertificateSettingListResponseEnvelopeResultInfoJSON struct {
+// accessCertificateSettingGetResponseEnvelopeResultInfoJSON contains the JSON
+// metadata for the struct [AccessCertificateSettingGetResponseEnvelopeResultInfo]
+type accessCertificateSettingGetResponseEnvelopeResultInfoJSON struct {
 	Count       apijson.Field
 	Page        apijson.Field
 	PerPage     apijson.Field
@@ -361,10 +361,10 @@ type accessCertificateSettingListResponseEnvelopeResultInfoJSON struct {
 	ExtraFields map[string]apijson.Field
 }
 
-func (r *AccessCertificateSettingListResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
+func (r *AccessCertificateSettingGetResponseEnvelopeResultInfo) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r accessCertificateSettingListResponseEnvelopeResultInfoJSON) RawJSON() string {
+func (r accessCertificateSettingGetResponseEnvelopeResultInfoJSON) RawJSON() string {
 	return r.raw
 }
