@@ -34,8 +34,9 @@ func TestRecordNewWithOptionalParams(t *testing.T) {
 		Name:    cloudflare.F("example.com"),
 		Type:    cloudflare.F(dns.RecordNewParamsTypeURI),
 		Comment: cloudflare.F("Domain verification record"),
+		Content: cloudflare.F[any](map[string]interface{}{}),
 		Data: cloudflare.F(dns.RecordNewParamsData{
-			Flags:         cloudflare.F("string"),
+			Flags:         cloudflare.F[any](map[string]interface{}{}),
 			Tag:           cloudflare.F("issue"),
 			Value:         cloudflare.F("alpn=\"h3,h2\" ipv4hint=\"127.0.0.1\" ipv6hint=\"::1\""),
 			Algorithm:     cloudflare.F(2.000000),
@@ -115,8 +116,9 @@ func TestRecordUpdateWithOptionalParams(t *testing.T) {
 			Name:    cloudflare.F("example.com"),
 			Type:    cloudflare.F(dns.RecordUpdateParamsTypeURI),
 			Comment: cloudflare.F("Domain verification record"),
+			Content: cloudflare.F[any](map[string]interface{}{}),
 			Data: cloudflare.F(dns.RecordUpdateParamsData{
-				Flags:         cloudflare.F("string"),
+				Flags:         cloudflare.F[any](map[string]interface{}{}),
 				Tag:           cloudflare.F("issue"),
 				Value:         cloudflare.F("alpn=\"h3,h2\" ipv4hint=\"127.0.0.1\" ipv6hint=\"::1\""),
 				Algorithm:     cloudflare.F(2.000000),
@@ -280,8 +282,9 @@ func TestRecordEditWithOptionalParams(t *testing.T) {
 			Name:    cloudflare.F("example.com"),
 			Type:    cloudflare.F(dns.RecordEditParamsTypeURI),
 			Comment: cloudflare.F("Domain verification record"),
+			Content: cloudflare.F[any](map[string]interface{}{}),
 			Data: cloudflare.F(dns.RecordEditParamsData{
-				Flags:         cloudflare.F("string"),
+				Flags:         cloudflare.F[any](map[string]interface{}{}),
 				Tag:           cloudflare.F("issue"),
 				Value:         cloudflare.F("alpn=\"h3,h2\" ipv4hint=\"127.0.0.1\" ipv6hint=\"::1\""),
 				Algorithm:     cloudflare.F(2.000000),

@@ -121,6 +121,8 @@ type URLScannerScanParams struct {
 	DateEnd param.Field[time.Time] `query:"date_end" format:"date-time"`
 	// Filter scans requested after date (inclusive).
 	DateStart param.Field[time.Time] `query:"date_start" format:"date-time"`
+	// Filter scans by hash of any html/js/css request made by the webpage.
+	Hash param.Field[string] `query:"hash"`
 	// Filter scans by hostname of _any_ request made by the webpage.
 	Hostname param.Field[string] `query:"hostname"`
 	// Filter scans by IP address (IPv4 or IPv6) of _any_ request made by the webpage.

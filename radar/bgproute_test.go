@@ -59,10 +59,11 @@ func TestBGPRoutePfx2asWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.Radar.BGP.Routes.Pfx2as(context.TODO(), radar.BGPRoutePfx2asParams{
-		Format:     cloudflare.F(radar.BGPRoutePfx2asParamsFormatJson),
-		Origin:     cloudflare.F(int64(0)),
-		Prefix:     cloudflare.F("1.1.1.0/24"),
-		RpkiStatus: cloudflare.F(radar.BGPRoutePfx2asParamsRpkiStatusInvalid),
+		Format:             cloudflare.F(radar.BGPRoutePfx2asParamsFormatJson),
+		LongestPrefixMatch: cloudflare.F(true),
+		Origin:             cloudflare.F(int64(0)),
+		Prefix:             cloudflare.F("1.1.1.0/24"),
+		RPKIStatus:         cloudflare.F(radar.BGPRoutePfx2asParamsRPKIStatusInvalid),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

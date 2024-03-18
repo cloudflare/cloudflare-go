@@ -80,7 +80,7 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 		SessionDuration:         cloudflare.F("24h"),
 		SkipInterstitial:        cloudflare.F(true),
 		Tags:                    cloudflare.F([]string{"engineers", "engineers", "engineers"}),
-		Type:                    cloudflare.F("bookmark"),
+		Type:                    cloudflare.F(zero_trust.AccessApplicationNewParamsTypeBookmark),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -159,7 +159,7 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 			SessionDuration:         cloudflare.F("24h"),
 			SkipInterstitial:        cloudflare.F(true),
 			Tags:                    cloudflare.F([]string{"engineers", "engineers", "engineers"}),
-			Type:                    cloudflare.F("bookmark"),
+			Type:                    cloudflare.F(zero_trust.AccessApplicationUpdateParamsTypeBookmark),
 		},
 	)
 	if err != nil {

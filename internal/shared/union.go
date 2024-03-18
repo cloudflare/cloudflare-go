@@ -84,6 +84,9 @@ func (UnionString) ImplementsPagerulesPageruleGetResponse()                     
 func (UnionString) ImplementsRateLimitsRateLimitNewResponse()                                       {}
 func (UnionString) ImplementsRateLimitsRateLimitEditResponse()                                      {}
 func (UnionString) ImplementsRateLimitsRateLimitGetResponse()                                       {}
+func (UnionString) ImplementsWorkersAIRunResponse()                                                 {}
+func (UnionString) ImplementsWorkersAIRunParamsBody()                                               {}
+func (UnionString) ImplementsWorkersAIRunParamsBodyTextEmbeddingsText()                             {}
 func (UnionString) ImplementsWorkersScriptTailDeleteResponse()                                      {}
 func (UnionString) ImplementsWorkersRouteNewResponse()                                              {}
 func (UnionString) ImplementsWorkersRouteDeleteResponse()                                           {}

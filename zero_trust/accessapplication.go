@@ -1375,7 +1375,7 @@ type AccessApplicationNewParams struct {
 	// applications in the App Launcher dashboard.
 	Tags param.Field[[]string] `json:"tags"`
 	// The application type.
-	Type param.Field[string] `json:"type"`
+	Type param.Field[AccessApplicationNewParamsType] `json:"type"`
 }
 
 func (r AccessApplicationNewParams) MarshalJSON() (data []byte, err error) {
@@ -1563,6 +1563,21 @@ const (
 	AccessApplicationNewParamsSaasAppAccessOidcSaasAppScopeProfile AccessApplicationNewParamsSaasAppAccessOidcSaasAppScope = "profile"
 )
 
+// The application type.
+type AccessApplicationNewParamsType string
+
+const (
+	AccessApplicationNewParamsTypeSelfHosted  AccessApplicationNewParamsType = "self_hosted"
+	AccessApplicationNewParamsTypeSaas        AccessApplicationNewParamsType = "saas"
+	AccessApplicationNewParamsTypeSSH         AccessApplicationNewParamsType = "ssh"
+	AccessApplicationNewParamsTypeVnc         AccessApplicationNewParamsType = "vnc"
+	AccessApplicationNewParamsTypeAppLauncher AccessApplicationNewParamsType = "app_launcher"
+	AccessApplicationNewParamsTypeWARP        AccessApplicationNewParamsType = "warp"
+	AccessApplicationNewParamsTypeBiso        AccessApplicationNewParamsType = "biso"
+	AccessApplicationNewParamsTypeBookmark    AccessApplicationNewParamsType = "bookmark"
+	AccessApplicationNewParamsTypeDashSSO     AccessApplicationNewParamsType = "dash_sso"
+)
+
 type AccessApplicationNewResponseEnvelope struct {
 	Errors   []AccessApplicationNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessApplicationNewResponseEnvelopeMessages `json:"messages,required"`
@@ -1706,7 +1721,7 @@ type AccessApplicationUpdateParams struct {
 	// applications in the App Launcher dashboard.
 	Tags param.Field[[]string] `json:"tags"`
 	// The application type.
-	Type param.Field[string] `json:"type"`
+	Type param.Field[AccessApplicationUpdateParamsType] `json:"type"`
 }
 
 func (r AccessApplicationUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -1899,6 +1914,21 @@ const (
 	AccessApplicationUpdateParamsSaasAppAccessOidcSaasAppScopeGroups  AccessApplicationUpdateParamsSaasAppAccessOidcSaasAppScope = "groups"
 	AccessApplicationUpdateParamsSaasAppAccessOidcSaasAppScopeEmail   AccessApplicationUpdateParamsSaasAppAccessOidcSaasAppScope = "email"
 	AccessApplicationUpdateParamsSaasAppAccessOidcSaasAppScopeProfile AccessApplicationUpdateParamsSaasAppAccessOidcSaasAppScope = "profile"
+)
+
+// The application type.
+type AccessApplicationUpdateParamsType string
+
+const (
+	AccessApplicationUpdateParamsTypeSelfHosted  AccessApplicationUpdateParamsType = "self_hosted"
+	AccessApplicationUpdateParamsTypeSaas        AccessApplicationUpdateParamsType = "saas"
+	AccessApplicationUpdateParamsTypeSSH         AccessApplicationUpdateParamsType = "ssh"
+	AccessApplicationUpdateParamsTypeVnc         AccessApplicationUpdateParamsType = "vnc"
+	AccessApplicationUpdateParamsTypeAppLauncher AccessApplicationUpdateParamsType = "app_launcher"
+	AccessApplicationUpdateParamsTypeWARP        AccessApplicationUpdateParamsType = "warp"
+	AccessApplicationUpdateParamsTypeBiso        AccessApplicationUpdateParamsType = "biso"
+	AccessApplicationUpdateParamsTypeBookmark    AccessApplicationUpdateParamsType = "bookmark"
+	AccessApplicationUpdateParamsTypeDashSSO     AccessApplicationUpdateParamsType = "dash_sso"
 )
 
 type AccessApplicationUpdateResponseEnvelope struct {

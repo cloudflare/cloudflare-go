@@ -16618,7 +16618,9 @@ type RecordNewParams struct {
 	Type param.Field[RecordNewParamsType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
-	Comment param.Field[string]              `json:"comment"`
+	Comment param.Field[string] `json:"comment"`
+	// Formatted URI content. See 'data' to set URI properties.
+	Content param.Field[interface{}]         `json:"content"`
 	Data    param.Field[RecordNewParamsData] `json:"data"`
 	Meta    param.Field[RecordNewParamsMeta] `json:"meta"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
@@ -16643,7 +16645,26 @@ func (r RecordNewParams) MarshalJSON() (data []byte, err error) {
 type RecordNewParamsType string
 
 const (
-	RecordNewParamsTypeURI RecordNewParamsType = "URI"
+	RecordNewParamsTypeURI    RecordNewParamsType = "URI"
+	RecordNewParamsTypeTXT    RecordNewParamsType = "TXT"
+	RecordNewParamsTypeTLSA   RecordNewParamsType = "TLSA"
+	RecordNewParamsTypeSVCB   RecordNewParamsType = "SVCB"
+	RecordNewParamsTypeSSHFP  RecordNewParamsType = "SSHFP"
+	RecordNewParamsTypeSRV    RecordNewParamsType = "SRV"
+	RecordNewParamsTypeSmimea RecordNewParamsType = "SMIMEA"
+	RecordNewParamsTypePTR    RecordNewParamsType = "PTR"
+	RecordNewParamsTypeNS     RecordNewParamsType = "NS"
+	RecordNewParamsTypeNAPTR  RecordNewParamsType = "NAPTR"
+	RecordNewParamsTypeMX     RecordNewParamsType = "MX"
+	RecordNewParamsTypeLOC    RecordNewParamsType = "LOC"
+	RecordNewParamsTypeHTTPS  RecordNewParamsType = "HTTPS"
+	RecordNewParamsTypeDS     RecordNewParamsType = "DS"
+	RecordNewParamsTypeDNSKEY RecordNewParamsType = "DNSKEY"
+	RecordNewParamsTypeCNAME  RecordNewParamsType = "CNAME"
+	RecordNewParamsTypeCert   RecordNewParamsType = "CERT"
+	RecordNewParamsTypeCAA    RecordNewParamsType = "CAA"
+	RecordNewParamsTypeAAAA   RecordNewParamsType = "AAAA"
+	RecordNewParamsTypeA      RecordNewParamsType = "A"
 )
 
 type RecordNewParamsData struct {
@@ -16662,7 +16683,7 @@ type RecordNewParamsData struct {
 	// fingerprint.
 	Fingerprint param.Field[string] `json:"fingerprint"`
 	// Flags.
-	Flags param.Field[string] `json:"flags"`
+	Flags param.Field[interface{}] `json:"flags"`
 	// Key Tag.
 	KeyTag param.Field[float64] `json:"key_tag"`
 	// Degrees of latitude.
@@ -16870,7 +16891,9 @@ type RecordUpdateParams struct {
 	Type param.Field[RecordUpdateParamsType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
-	Comment param.Field[string]                 `json:"comment"`
+	Comment param.Field[string] `json:"comment"`
+	// Formatted URI content. See 'data' to set URI properties.
+	Content param.Field[interface{}]            `json:"content"`
 	Data    param.Field[RecordUpdateParamsData] `json:"data"`
 	Meta    param.Field[RecordUpdateParamsMeta] `json:"meta"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
@@ -16895,7 +16918,26 @@ func (r RecordUpdateParams) MarshalJSON() (data []byte, err error) {
 type RecordUpdateParamsType string
 
 const (
-	RecordUpdateParamsTypeURI RecordUpdateParamsType = "URI"
+	RecordUpdateParamsTypeURI    RecordUpdateParamsType = "URI"
+	RecordUpdateParamsTypeTXT    RecordUpdateParamsType = "TXT"
+	RecordUpdateParamsTypeTLSA   RecordUpdateParamsType = "TLSA"
+	RecordUpdateParamsTypeSVCB   RecordUpdateParamsType = "SVCB"
+	RecordUpdateParamsTypeSSHFP  RecordUpdateParamsType = "SSHFP"
+	RecordUpdateParamsTypeSRV    RecordUpdateParamsType = "SRV"
+	RecordUpdateParamsTypeSmimea RecordUpdateParamsType = "SMIMEA"
+	RecordUpdateParamsTypePTR    RecordUpdateParamsType = "PTR"
+	RecordUpdateParamsTypeNS     RecordUpdateParamsType = "NS"
+	RecordUpdateParamsTypeNAPTR  RecordUpdateParamsType = "NAPTR"
+	RecordUpdateParamsTypeMX     RecordUpdateParamsType = "MX"
+	RecordUpdateParamsTypeLOC    RecordUpdateParamsType = "LOC"
+	RecordUpdateParamsTypeHTTPS  RecordUpdateParamsType = "HTTPS"
+	RecordUpdateParamsTypeDS     RecordUpdateParamsType = "DS"
+	RecordUpdateParamsTypeDNSKEY RecordUpdateParamsType = "DNSKEY"
+	RecordUpdateParamsTypeCNAME  RecordUpdateParamsType = "CNAME"
+	RecordUpdateParamsTypeCert   RecordUpdateParamsType = "CERT"
+	RecordUpdateParamsTypeCAA    RecordUpdateParamsType = "CAA"
+	RecordUpdateParamsTypeAAAA   RecordUpdateParamsType = "AAAA"
+	RecordUpdateParamsTypeA      RecordUpdateParamsType = "A"
 )
 
 type RecordUpdateParamsData struct {
@@ -16914,7 +16956,7 @@ type RecordUpdateParamsData struct {
 	// fingerprint.
 	Fingerprint param.Field[string] `json:"fingerprint"`
 	// Flags.
-	Flags param.Field[string] `json:"flags"`
+	Flags param.Field[interface{}] `json:"flags"`
 	// Key Tag.
 	KeyTag param.Field[float64] `json:"key_tag"`
 	// Degrees of latitude.
@@ -17320,7 +17362,9 @@ type RecordEditParams struct {
 	Type param.Field[RecordEditParamsType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
-	Comment param.Field[string]               `json:"comment"`
+	Comment param.Field[string] `json:"comment"`
+	// Formatted URI content. See 'data' to set URI properties.
+	Content param.Field[interface{}]          `json:"content"`
 	Data    param.Field[RecordEditParamsData] `json:"data"`
 	Meta    param.Field[RecordEditParamsMeta] `json:"meta"`
 	// Required for MX, SRV and URI records; unused by other record types. Records with
@@ -17345,7 +17389,26 @@ func (r RecordEditParams) MarshalJSON() (data []byte, err error) {
 type RecordEditParamsType string
 
 const (
-	RecordEditParamsTypeURI RecordEditParamsType = "URI"
+	RecordEditParamsTypeURI    RecordEditParamsType = "URI"
+	RecordEditParamsTypeTXT    RecordEditParamsType = "TXT"
+	RecordEditParamsTypeTLSA   RecordEditParamsType = "TLSA"
+	RecordEditParamsTypeSVCB   RecordEditParamsType = "SVCB"
+	RecordEditParamsTypeSSHFP  RecordEditParamsType = "SSHFP"
+	RecordEditParamsTypeSRV    RecordEditParamsType = "SRV"
+	RecordEditParamsTypeSmimea RecordEditParamsType = "SMIMEA"
+	RecordEditParamsTypePTR    RecordEditParamsType = "PTR"
+	RecordEditParamsTypeNS     RecordEditParamsType = "NS"
+	RecordEditParamsTypeNAPTR  RecordEditParamsType = "NAPTR"
+	RecordEditParamsTypeMX     RecordEditParamsType = "MX"
+	RecordEditParamsTypeLOC    RecordEditParamsType = "LOC"
+	RecordEditParamsTypeHTTPS  RecordEditParamsType = "HTTPS"
+	RecordEditParamsTypeDS     RecordEditParamsType = "DS"
+	RecordEditParamsTypeDNSKEY RecordEditParamsType = "DNSKEY"
+	RecordEditParamsTypeCNAME  RecordEditParamsType = "CNAME"
+	RecordEditParamsTypeCert   RecordEditParamsType = "CERT"
+	RecordEditParamsTypeCAA    RecordEditParamsType = "CAA"
+	RecordEditParamsTypeAAAA   RecordEditParamsType = "AAAA"
+	RecordEditParamsTypeA      RecordEditParamsType = "A"
 )
 
 type RecordEditParamsData struct {
@@ -17364,7 +17427,7 @@ type RecordEditParamsData struct {
 	// fingerprint.
 	Fingerprint param.Field[string] `json:"fingerprint"`
 	// Flags.
-	Flags param.Field[string] `json:"flags"`
+	Flags param.Field[interface{}] `json:"flags"`
 	// Key Tag.
 	KeyTag param.Field[float64] `json:"key_tag"`
 	// Degrees of latitude.
