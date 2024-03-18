@@ -21,11 +21,6 @@
 - name: "kind: flakey"
   description: Categorizes issue or PR as related to a flaky test.
   color: e11d21
-- name: "kind: question"
-  description: |
-    Categorizes issue or PR as related to a question about the provider or
-    the use of the provider.
-  color: cc317c
 - name: "kind: regression"
   description: Categorizes issue or PR as related to a regression from a prior release.
   color: e11d21
