@@ -843,6 +843,14 @@ const (
 type PCAPNewParams struct {
 	// Identifier
 	AccountID param.Field[string] `path:"account_id,required"`
+	// The name of the data center used for the packet capture. This can be a specific
+	// colo (ord02) or a multi-colo name (ORD). This field only applies to `full`
+	// packet captures.
+	ColoName param.Field[string] `json:"colo_name,required"`
+	// The full URI for the bucket. This field only applies to `full` packet captures.
+	DestinationConf param.Field[string] `json:"destination_conf,required"`
+	// The limit of packets contained in a packet capture.
+	PacketLimit param.Field[float64] `json:"packet_limit,required"`
 	// The system used to collect packet captures.
 	System param.Field[PCAPNewParamsSystem] `json:"system,required"`
 	// The packet capture duration in seconds.
@@ -852,16 +860,8 @@ type PCAPNewParams struct {
 	Type param.Field[PCAPNewParamsType] `json:"type,required"`
 	// The maximum number of bytes to capture. This field only applies to `full` packet
 	// captures.
-	ByteLimit param.Field[float64] `json:"byte_limit"`
-	// The name of the data center used for the packet capture. This can be a specific
-	// colo (ord02) or a multi-colo name (ORD). This field only applies to `full`
-	// packet captures.
-	ColoName param.Field[string] `json:"colo_name"`
-	// The full URI for the bucket. This field only applies to `full` packet captures.
-	DestinationConf param.Field[string]                `json:"destination_conf"`
-	FilterV1        param.Field[PCAPNewParamsFilterV1] `json:"filter_v1"`
-	// The limit of packets contained in a packet capture.
-	PacketLimit param.Field[float64] `json:"packet_limit"`
+	ByteLimit param.Field[float64]               `json:"byte_limit"`
+	FilterV1  param.Field[PCAPNewParamsFilterV1] `json:"filter_v1"`
 }
 
 func (r PCAPNewParams) MarshalJSON() (data []byte, err error) {
