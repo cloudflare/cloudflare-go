@@ -37,6 +37,7 @@ func TestURLScannerScanWithOptionalParams(t *testing.T) {
 			ASN:          cloudflare.F("13335"),
 			DateEnd:      cloudflare.F(time.Now()),
 			DateStart:    cloudflare.F(time.Now()),
+			Hash:         cloudflare.F("string"),
 			Hostname:     cloudflare.F("example.com"),
 			IP:           cloudflare.F("1.1.1.1"),
 			IsMalicious:  cloudflare.F(true),
