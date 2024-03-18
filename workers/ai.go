@@ -333,11 +333,11 @@ func (r AIRunParams) MarshalMultipart() (data []byte, contentType string, err er
 // [workers.AIRunParamsBodySentenceSimilarity],
 // [workers.AIRunParamsBodyTextEmbeddings], [shared.UnionString],
 // [workers.AIRunParamsBodyObject], [shared.UnionString],
-// [workers.AIRunParamsBodyObject], [shared.UnionString],
+// [workers.AIRunParamsBodyWorkersAIImageClassification], [shared.UnionString],
+// [workers.AIRunParamsBodyWorkersAIBodyDetection],
 // [workers.AIRunParamsBodyObject], [workers.AIRunParamsBodyObject],
-// [workers.AIRunParamsBodyObject], [workers.AIRunParamsBodyTranslation],
-// [workers.AIRunParamsBodySummarization], [shared.UnionString],
-// [workers.AIRunParamsBodyObject].
+// [workers.AIRunParamsBodyTranslation], [workers.AIRunParamsBodySummarization],
+// [shared.UnionString], [workers.AIRunParamsBodyObject].
 type AIRunParamsBody interface {
 	ImplementsWorkersAIRunParamsBody()
 }
@@ -408,6 +408,26 @@ func (r AIRunParamsBodyObject) MarshalJSON() (data []byte, err error) {
 }
 
 func (r AIRunParamsBodyObject) ImplementsWorkersAIRunParamsBody() {}
+
+type AIRunParamsBodyWorkersAIImageClassification struct {
+	Image param.Field[[]float64] `json:"image"`
+}
+
+func (r AIRunParamsBodyWorkersAIImageClassification) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AIRunParamsBodyWorkersAIImageClassification) ImplementsWorkersAIRunParamsBody() {}
+
+type AIRunParamsBodyWorkersAIBodyDetection struct {
+	Image param.Field[[]float64] `json:"image"`
+}
+
+func (r AIRunParamsBodyWorkersAIBodyDetection) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+func (r AIRunParamsBodyWorkersAIBodyDetection) ImplementsWorkersAIRunParamsBody() {}
 
 type AIRunParamsBodyTranslation struct {
 	TargetLang param.Field[string] `json:"target_lang,required"`

@@ -45,9 +45,9 @@ func TestAppNewWithOptionalParams(t *testing.T) {
 			OriginPort:       cloudflare.F[spectrum.AppNewParamsOriginPort](shared.UnionInt(int64(22))),
 			Protocol:         cloudflare.F("tcp/22"),
 			ArgoSmartRouting: cloudflare.F(true),
-			EdgeIPs: cloudflare.F[spectrum.AppNewParamsEdgeIPs](spectrum.AppNewParamsEdgeIPsSpectrumEdgeIPEyeballIPsVariable(spectrum.AppNewParamsEdgeIPsSpectrumEdgeIPEyeballIPsVariable{
-				Connectivity: cloudflare.F(spectrum.AppNewParamsEdgeIPsSpectrumEdgeIPEyeballIPsVariableConnectivityAll),
-				Type:         cloudflare.F(spectrum.AppNewParamsEdgeIPsSpectrumEdgeIPEyeballIPsVariableTypeDynamic),
+			EdgeIPs: cloudflare.F[spectrum.AppNewParamsEdgeIPs](spectrum.AppNewParamsEdgeIPsSpectrumEdgeIPEyeballIPs(spectrum.AppNewParamsEdgeIPsSpectrumEdgeIPEyeballIPs{
+				Connectivity: cloudflare.F(spectrum.AppNewParamsEdgeIPsSpectrumEdgeIPEyeballIPsConnectivityAll),
+				Type:         cloudflare.F(spectrum.AppNewParamsEdgeIPsSpectrumEdgeIPEyeballIPsTypeDynamic),
 			})),
 			IPFirewall:    cloudflare.F(true),
 			ProxyProtocol: cloudflare.F(spectrum.AppNewParamsProxyProtocolOff),
@@ -95,9 +95,9 @@ func TestAppUpdateWithOptionalParams(t *testing.T) {
 			OriginPort:       cloudflare.F[spectrum.AppUpdateParamsOriginPort](shared.UnionInt(int64(22))),
 			Protocol:         cloudflare.F("tcp/22"),
 			ArgoSmartRouting: cloudflare.F(true),
-			EdgeIPs: cloudflare.F[spectrum.AppUpdateParamsEdgeIPs](spectrum.AppUpdateParamsEdgeIPsSpectrumEdgeIPEyeballIPsVariable(spectrum.AppUpdateParamsEdgeIPsSpectrumEdgeIPEyeballIPsVariable{
-				Connectivity: cloudflare.F(spectrum.AppUpdateParamsEdgeIPsSpectrumEdgeIPEyeballIPsVariableConnectivityAll),
-				Type:         cloudflare.F(spectrum.AppUpdateParamsEdgeIPsSpectrumEdgeIPEyeballIPsVariableTypeDynamic),
+			EdgeIPs: cloudflare.F[spectrum.AppUpdateParamsEdgeIPs](spectrum.AppUpdateParamsEdgeIPsSpectrumEdgeIPEyeballIPs(spectrum.AppUpdateParamsEdgeIPsSpectrumEdgeIPEyeballIPs{
+				Connectivity: cloudflare.F(spectrum.AppUpdateParamsEdgeIPsSpectrumEdgeIPEyeballIPsConnectivityAll),
+				Type:         cloudflare.F(spectrum.AppUpdateParamsEdgeIPsSpectrumEdgeIPEyeballIPsTypeDynamic),
 			})),
 			IPFirewall:    cloudflare.F(true),
 			ProxyProtocol: cloudflare.F(spectrum.AppUpdateParamsProxyProtocolOff),
