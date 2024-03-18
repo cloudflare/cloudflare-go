@@ -30,6 +30,8 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.ZeroTrust.Access.Applications.New(context.TODO(), zero_trust.AccessApplicationNewParams{
+		Domain:                   cloudflare.F[any]("https://mybookmark.com"),
+		Type:                     cloudflare.F(zero_trust.AccessApplicationNewParamsTypeBookmark),
 		AccountID:                cloudflare.F("string"),
 		ZoneID:                   cloudflare.F("string"),
 		AllowAuthenticateViaWARP: cloudflare.F(true),
@@ -50,7 +52,6 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 		CustomDenyURL:            cloudflare.F("string"),
 		CustomNonIdentityDenyURL: cloudflare.F("string"),
 		CustomPages:              cloudflare.F([]string{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
-		Domain:                   cloudflare.F[any]("https://mybookmark.com"),
 		EnableBindingCookie:      cloudflare.F(true),
 		HTTPOnlyCookieAttribute:  cloudflare.F(true),
 		LogoURL:                  cloudflare.F("https://www.cloudflare.com/img/logo-web-badges/cf-logo-on-white-bg.svg"),
@@ -80,7 +81,6 @@ func TestAccessApplicationNewWithOptionalParams(t *testing.T) {
 		SessionDuration:         cloudflare.F("24h"),
 		SkipInterstitial:        cloudflare.F(true),
 		Tags:                    cloudflare.F([]string{"engineers", "engineers", "engineers"}),
-		Type:                    cloudflare.F("bookmark"),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -109,6 +109,8 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		shared.UnionString("023e105f4ecef8ad9ca31a8372d0c353"),
 		zero_trust.AccessApplicationUpdateParams{
+			Domain:                   cloudflare.F[any]("https://mybookmark.com"),
+			Type:                     cloudflare.F(zero_trust.AccessApplicationUpdateParamsTypeBookmark),
 			AccountID:                cloudflare.F("string"),
 			ZoneID:                   cloudflare.F("string"),
 			AllowAuthenticateViaWARP: cloudflare.F(true),
@@ -129,7 +131,6 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 			CustomDenyURL:            cloudflare.F("string"),
 			CustomNonIdentityDenyURL: cloudflare.F("string"),
 			CustomPages:              cloudflare.F([]string{"699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252", "699d98642c564d2e855e9661899b7252"}),
-			Domain:                   cloudflare.F[any]("https://mybookmark.com"),
 			EnableBindingCookie:      cloudflare.F(true),
 			HTTPOnlyCookieAttribute:  cloudflare.F(true),
 			LogoURL:                  cloudflare.F("https://www.cloudflare.com/img/logo-web-badges/cf-logo-on-white-bg.svg"),
@@ -159,7 +160,6 @@ func TestAccessApplicationUpdateWithOptionalParams(t *testing.T) {
 			SessionDuration:         cloudflare.F("24h"),
 			SkipInterstitial:        cloudflare.F(true),
 			Tags:                    cloudflare.F([]string{"engineers", "engineers", "engineers"}),
-			Type:                    cloudflare.F("bookmark"),
 		},
 	)
 	if err != nil {
