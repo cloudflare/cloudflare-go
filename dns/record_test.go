@@ -30,7 +30,11 @@ func TestRecordNewWithOptionalParams(t *testing.T) {
 		option.WithAPIEmail("user@example.com"),
 	)
 	_, err := client.DNS.Records.New(context.TODO(), dns.RecordNewParams{
-		ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+		Name:    cloudflare.F("example.com"),
+		Type:    cloudflare.F(dns.RecordNewParamsTypeURI),
+		Comment: cloudflare.F("Domain verification record"),
+		Content: cloudflare.F[any](map[string]interface{}{}),
 		Data: cloudflare.F(dns.RecordNewParamsData{
 			Flags:         cloudflare.F[any](map[string]interface{}{}),
 			Tag:           cloudflare.F("issue"),
@@ -72,17 +76,14 @@ func TestRecordNewWithOptionalParams(t *testing.T) {
 			Fingerprint:   cloudflare.F("string"),
 			Content:       cloudflare.F("http://example.com/example.html"),
 		}),
-		Name:     cloudflare.F("example.com"),
-		Priority: cloudflare.F(10.000000),
-		Type:     cloudflare.F(dns.RecordNewParamsTypeURI),
-		Comment:  cloudflare.F("Domain verification record"),
 		Meta: cloudflare.F(dns.RecordNewParamsMeta{
 			AutoAdded: cloudflare.F(true),
 			Source:    cloudflare.F("primary"),
 		}),
-		Proxied: cloudflare.F(false),
-		Tags:    cloudflare.F([]string{"owner:dns-team", "owner:dns-team", "owner:dns-team"}),
-		TTL:     cloudflare.F[dns.RecordNewParamsTTL](shared.UnionFloat(3600.000000)),
+		Priority: cloudflare.F(10.000000),
+		Proxied:  cloudflare.F(false),
+		Tags:     cloudflare.F([]string{"owner:dns-team", "owner:dns-team", "owner:dns-team"}),
+		TTL:      cloudflare.F[dns.RecordNewParamsTTL](shared.UnionFloat(3600.000000)),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error
@@ -111,7 +112,11 @@ func TestRecordUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		dns.RecordUpdateParams{
-			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Name:    cloudflare.F("example.com"),
+			Type:    cloudflare.F(dns.RecordUpdateParamsTypeURI),
+			Comment: cloudflare.F("Domain verification record"),
+			Content: cloudflare.F[any](map[string]interface{}{}),
 			Data: cloudflare.F(dns.RecordUpdateParamsData{
 				Flags:         cloudflare.F[any](map[string]interface{}{}),
 				Tag:           cloudflare.F("issue"),
@@ -153,17 +158,14 @@ func TestRecordUpdateWithOptionalParams(t *testing.T) {
 				Fingerprint:   cloudflare.F("string"),
 				Content:       cloudflare.F("http://example.com/example.html"),
 			}),
-			Name:     cloudflare.F("example.com"),
-			Priority: cloudflare.F(10.000000),
-			Type:     cloudflare.F(dns.RecordUpdateParamsTypeURI),
-			Comment:  cloudflare.F("Domain verification record"),
 			Meta: cloudflare.F(dns.RecordUpdateParamsMeta{
 				AutoAdded: cloudflare.F(true),
 				Source:    cloudflare.F("primary"),
 			}),
-			Proxied: cloudflare.F(false),
-			Tags:    cloudflare.F([]string{"owner:dns-team", "owner:dns-team", "owner:dns-team"}),
-			TTL:     cloudflare.F[dns.RecordUpdateParamsTTL](shared.UnionFloat(3600.000000)),
+			Priority: cloudflare.F(10.000000),
+			Proxied:  cloudflare.F(false),
+			Tags:     cloudflare.F([]string{"owner:dns-team", "owner:dns-team", "owner:dns-team"}),
+			TTL:      cloudflare.F[dns.RecordUpdateParamsTTL](shared.UnionFloat(3600.000000)),
 		},
 	)
 	if err != nil {
@@ -276,7 +278,11 @@ func TestRecordEditWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"023e105f4ecef8ad9ca31a8372d0c353",
 		dns.RecordEditParams{
-			ZoneID: cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			ZoneID:  cloudflare.F("023e105f4ecef8ad9ca31a8372d0c353"),
+			Name:    cloudflare.F("example.com"),
+			Type:    cloudflare.F(dns.RecordEditParamsTypeURI),
+			Comment: cloudflare.F("Domain verification record"),
+			Content: cloudflare.F[any](map[string]interface{}{}),
 			Data: cloudflare.F(dns.RecordEditParamsData{
 				Flags:         cloudflare.F[any](map[string]interface{}{}),
 				Tag:           cloudflare.F("issue"),
@@ -318,17 +324,14 @@ func TestRecordEditWithOptionalParams(t *testing.T) {
 				Fingerprint:   cloudflare.F("string"),
 				Content:       cloudflare.F("http://example.com/example.html"),
 			}),
-			Name:     cloudflare.F("example.com"),
-			Priority: cloudflare.F(10.000000),
-			Type:     cloudflare.F(dns.RecordEditParamsTypeURI),
-			Comment:  cloudflare.F("Domain verification record"),
 			Meta: cloudflare.F(dns.RecordEditParamsMeta{
 				AutoAdded: cloudflare.F(true),
 				Source:    cloudflare.F("primary"),
 			}),
-			Proxied: cloudflare.F(false),
-			Tags:    cloudflare.F([]string{"owner:dns-team", "owner:dns-team", "owner:dns-team"}),
-			TTL:     cloudflare.F[dns.RecordEditParamsTTL](shared.UnionFloat(3600.000000)),
+			Priority: cloudflare.F(10.000000),
+			Proxied:  cloudflare.F(false),
+			Tags:     cloudflare.F([]string{"owner:dns-team", "owner:dns-team", "owner:dns-team"}),
+			TTL:      cloudflare.F[dns.RecordEditParamsTTL](shared.UnionFloat(3600.000000)),
 		},
 	)
 	if err != nil {
