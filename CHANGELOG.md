@@ -1,5 +1,20 @@
 # Changelog
 
+## 2.0.0-beta.8 (2024-03-18)
+
+Full Changelog: [v2.0.0-beta.7...v2.0.0-beta.8](https://github.com/cloudflare/cloudflare-go/compare/v2.0.0-beta.7...v2.0.0-beta.8)
+
+### Features
+
+* **api:** OpenAPI spec update via Stainless API ([#1565](https://github.com/cloudflare/cloudflare-go/issues/1565)) ([2d557ac](https://github.com/cloudflare/cloudflare-go/commit/2d557ac1005d509f3a81b6a10762fd1eef3aed61))
+* **api:** OpenAPI spec update via Stainless API ([#1567](https://github.com/cloudflare/cloudflare-go/issues/1567)) ([2aa66a9](https://github.com/cloudflare/cloudflare-go/commit/2aa66a9b8d8f6f0e2453727a6554fbe3952ae531))
+* **api:** OpenAPI spec update via Stainless API ([#1570](https://github.com/cloudflare/cloudflare-go/issues/1570)) ([d89b76e](https://github.com/cloudflare/cloudflare-go/commit/d89b76e98a579fd67bf61f0ed8efc3bdd3238750))
+* **api:** OpenAPI spec update via Stainless API ([#1571](https://github.com/cloudflare/cloudflare-go/issues/1571)) ([97583f0](https://github.com/cloudflare/cloudflare-go/commit/97583f04c1e7f099513b04c86bfd3b31d39d24b5))
+* **api:** OpenAPI spec update via Stainless API ([#1572](https://github.com/cloudflare/cloudflare-go/issues/1572)) ([d10cd88](https://github.com/cloudflare/cloudflare-go/commit/d10cd8891704a5c501ef488181f684fbeee92a67))
+* **api:** OpenAPI spec update via Stainless API ([#1574](https://github.com/cloudflare/cloudflare-go/issues/1574)) ([b7478f6](https://github.com/cloudflare/cloudflare-go/commit/b7478f651d9bf42a8c5de6b3576b876bb1408dc7))
+* **api:** OpenAPI spec update via Stainless API ([#1575](https://github.com/cloudflare/cloudflare-go/issues/1575)) ([3697304](https://github.com/cloudflare/cloudflare-go/commit/36973040f62ecee566dae7487095081e212b09a3))
+* **api:** update via SDK Studio ([#1569](https://github.com/cloudflare/cloudflare-go/issues/1569)) ([3c4a6ea](https://github.com/cloudflare/cloudflare-go/commit/3c4a6ea05d2a8483b569fe42a48cb731c0357ce3))
+
 ## 2.0.0-beta.7 (2024-03-15)
 
 Full Changelog: [v2.0.0-beta.6...v2.0.0-beta.7](https://github.com/cloudflare/cloudflare-go/compare/v2.0.0-beta.6...v2.0.0-beta.7)
