@@ -256,6 +256,7 @@ type SippyUpdateParamsSourceProvider string
 
 const (
 	SippyUpdateParamsSourceProviderGcs SippyUpdateParamsSourceProvider = "gcs"
+	SippyUpdateParamsSourceProviderAws SippyUpdateParamsSourceProvider = "aws"
 )
 
 type SippyUpdateResponseEnvelope struct {

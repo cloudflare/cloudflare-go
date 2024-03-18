@@ -16611,19 +16611,19 @@ func (r recordScanResponseJSON) RawJSON() string {
 
 type RecordNewParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string]              `path:"zone_id,required"`
+	Data   param.Field[RecordNewParamsData] `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
+	// Required for MX, SRV and URI records; unused by other record types. Records with
+	// lower priorities are preferred.
+	Priority param.Field[float64] `json:"priority,required"`
 	// Record type.
 	Type param.Field[RecordNewParamsType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string]              `json:"comment"`
-	Data    param.Field[RecordNewParamsData] `json:"data"`
 	Meta    param.Field[RecordNewParamsMeta] `json:"meta"`
-	// Required for MX, SRV and URI records; unused by other record types. Records with
-	// lower priorities are preferred.
-	Priority param.Field[float64] `json:"priority"`
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
@@ -16638,13 +16638,6 @@ type RecordNewParams struct {
 func (r RecordNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
-
-// Record type.
-type RecordNewParamsType string
-
-const (
-	RecordNewParamsTypeURI RecordNewParamsType = "URI"
-)
 
 type RecordNewParamsData struct {
 	// algorithm.
@@ -16662,7 +16655,7 @@ type RecordNewParamsData struct {
 	// fingerprint.
 	Fingerprint param.Field[string] `json:"fingerprint"`
 	// Flags.
-	Flags param.Field[string] `json:"flags"`
+	Flags param.Field[interface{}] `json:"flags"`
 	// Key Tag.
 	KeyTag param.Field[float64] `json:"key_tag"`
 	// Degrees of latitude.
@@ -16751,6 +16744,32 @@ type RecordNewParamsDataLongDirection string
 const (
 	RecordNewParamsDataLongDirectionE RecordNewParamsDataLongDirection = "E"
 	RecordNewParamsDataLongDirectionW RecordNewParamsDataLongDirection = "W"
+)
+
+// Record type.
+type RecordNewParamsType string
+
+const (
+	RecordNewParamsTypeURI    RecordNewParamsType = "URI"
+	RecordNewParamsTypeTXT    RecordNewParamsType = "TXT"
+	RecordNewParamsTypeTLSA   RecordNewParamsType = "TLSA"
+	RecordNewParamsTypeSVCB   RecordNewParamsType = "SVCB"
+	RecordNewParamsTypeSSHFP  RecordNewParamsType = "SSHFP"
+	RecordNewParamsTypeSRV    RecordNewParamsType = "SRV"
+	RecordNewParamsTypeSmimea RecordNewParamsType = "SMIMEA"
+	RecordNewParamsTypePTR    RecordNewParamsType = "PTR"
+	RecordNewParamsTypeNS     RecordNewParamsType = "NS"
+	RecordNewParamsTypeNAPTR  RecordNewParamsType = "NAPTR"
+	RecordNewParamsTypeMX     RecordNewParamsType = "MX"
+	RecordNewParamsTypeLOC    RecordNewParamsType = "LOC"
+	RecordNewParamsTypeHTTPS  RecordNewParamsType = "HTTPS"
+	RecordNewParamsTypeDS     RecordNewParamsType = "DS"
+	RecordNewParamsTypeDNSKEY RecordNewParamsType = "DNSKEY"
+	RecordNewParamsTypeCNAME  RecordNewParamsType = "CNAME"
+	RecordNewParamsTypeCert   RecordNewParamsType = "CERT"
+	RecordNewParamsTypeCAA    RecordNewParamsType = "CAA"
+	RecordNewParamsTypeAAAA   RecordNewParamsType = "AAAA"
+	RecordNewParamsTypeA      RecordNewParamsType = "A"
 )
 
 type RecordNewParamsMeta struct {
@@ -16863,19 +16882,19 @@ const (
 
 type RecordUpdateParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string]                 `path:"zone_id,required"`
+	Data   param.Field[RecordUpdateParamsData] `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
+	// Required for MX, SRV and URI records; unused by other record types. Records with
+	// lower priorities are preferred.
+	Priority param.Field[float64] `json:"priority,required"`
 	// Record type.
 	Type param.Field[RecordUpdateParamsType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string]                 `json:"comment"`
-	Data    param.Field[RecordUpdateParamsData] `json:"data"`
 	Meta    param.Field[RecordUpdateParamsMeta] `json:"meta"`
-	// Required for MX, SRV and URI records; unused by other record types. Records with
-	// lower priorities are preferred.
-	Priority param.Field[float64] `json:"priority"`
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
@@ -16890,13 +16909,6 @@ type RecordUpdateParams struct {
 func (r RecordUpdateParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
-
-// Record type.
-type RecordUpdateParamsType string
-
-const (
-	RecordUpdateParamsTypeURI RecordUpdateParamsType = "URI"
-)
 
 type RecordUpdateParamsData struct {
 	// algorithm.
@@ -16914,7 +16926,7 @@ type RecordUpdateParamsData struct {
 	// fingerprint.
 	Fingerprint param.Field[string] `json:"fingerprint"`
 	// Flags.
-	Flags param.Field[string] `json:"flags"`
+	Flags param.Field[interface{}] `json:"flags"`
 	// Key Tag.
 	KeyTag param.Field[float64] `json:"key_tag"`
 	// Degrees of latitude.
@@ -17003,6 +17015,32 @@ type RecordUpdateParamsDataLongDirection string
 const (
 	RecordUpdateParamsDataLongDirectionE RecordUpdateParamsDataLongDirection = "E"
 	RecordUpdateParamsDataLongDirectionW RecordUpdateParamsDataLongDirection = "W"
+)
+
+// Record type.
+type RecordUpdateParamsType string
+
+const (
+	RecordUpdateParamsTypeURI    RecordUpdateParamsType = "URI"
+	RecordUpdateParamsTypeTXT    RecordUpdateParamsType = "TXT"
+	RecordUpdateParamsTypeTLSA   RecordUpdateParamsType = "TLSA"
+	RecordUpdateParamsTypeSVCB   RecordUpdateParamsType = "SVCB"
+	RecordUpdateParamsTypeSSHFP  RecordUpdateParamsType = "SSHFP"
+	RecordUpdateParamsTypeSRV    RecordUpdateParamsType = "SRV"
+	RecordUpdateParamsTypeSmimea RecordUpdateParamsType = "SMIMEA"
+	RecordUpdateParamsTypePTR    RecordUpdateParamsType = "PTR"
+	RecordUpdateParamsTypeNS     RecordUpdateParamsType = "NS"
+	RecordUpdateParamsTypeNAPTR  RecordUpdateParamsType = "NAPTR"
+	RecordUpdateParamsTypeMX     RecordUpdateParamsType = "MX"
+	RecordUpdateParamsTypeLOC    RecordUpdateParamsType = "LOC"
+	RecordUpdateParamsTypeHTTPS  RecordUpdateParamsType = "HTTPS"
+	RecordUpdateParamsTypeDS     RecordUpdateParamsType = "DS"
+	RecordUpdateParamsTypeDNSKEY RecordUpdateParamsType = "DNSKEY"
+	RecordUpdateParamsTypeCNAME  RecordUpdateParamsType = "CNAME"
+	RecordUpdateParamsTypeCert   RecordUpdateParamsType = "CERT"
+	RecordUpdateParamsTypeCAA    RecordUpdateParamsType = "CAA"
+	RecordUpdateParamsTypeAAAA   RecordUpdateParamsType = "AAAA"
+	RecordUpdateParamsTypeA      RecordUpdateParamsType = "A"
 )
 
 type RecordUpdateParamsMeta struct {
@@ -17313,19 +17351,19 @@ func (r recordDeleteResponseEnvelopeJSON) RawJSON() string {
 
 type RecordEditParams struct {
 	// Identifier
-	ZoneID param.Field[string] `path:"zone_id,required"`
+	ZoneID param.Field[string]               `path:"zone_id,required"`
+	Data   param.Field[RecordEditParamsData] `json:"data,required"`
 	// DNS record name (or @ for the zone apex) in Punycode.
 	Name param.Field[string] `json:"name,required"`
+	// Required for MX, SRV and URI records; unused by other record types. Records with
+	// lower priorities are preferred.
+	Priority param.Field[float64] `json:"priority,required"`
 	// Record type.
 	Type param.Field[RecordEditParamsType] `json:"type,required"`
 	// Comments or notes about the DNS record. This field has no effect on DNS
 	// responses.
 	Comment param.Field[string]               `json:"comment"`
-	Data    param.Field[RecordEditParamsData] `json:"data"`
 	Meta    param.Field[RecordEditParamsMeta] `json:"meta"`
-	// Required for MX, SRV and URI records; unused by other record types. Records with
-	// lower priorities are preferred.
-	Priority param.Field[float64] `json:"priority"`
 	// Whether the record is receiving the performance and security benefits of
 	// Cloudflare.
 	Proxied param.Field[bool] `json:"proxied"`
@@ -17340,13 +17378,6 @@ type RecordEditParams struct {
 func (r RecordEditParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
-
-// Record type.
-type RecordEditParamsType string
-
-const (
-	RecordEditParamsTypeURI RecordEditParamsType = "URI"
-)
 
 type RecordEditParamsData struct {
 	// algorithm.
@@ -17364,7 +17395,7 @@ type RecordEditParamsData struct {
 	// fingerprint.
 	Fingerprint param.Field[string] `json:"fingerprint"`
 	// Flags.
-	Flags param.Field[string] `json:"flags"`
+	Flags param.Field[interface{}] `json:"flags"`
 	// Key Tag.
 	KeyTag param.Field[float64] `json:"key_tag"`
 	// Degrees of latitude.
@@ -17453,6 +17484,32 @@ type RecordEditParamsDataLongDirection string
 const (
 	RecordEditParamsDataLongDirectionE RecordEditParamsDataLongDirection = "E"
 	RecordEditParamsDataLongDirectionW RecordEditParamsDataLongDirection = "W"
+)
+
+// Record type.
+type RecordEditParamsType string
+
+const (
+	RecordEditParamsTypeURI    RecordEditParamsType = "URI"
+	RecordEditParamsTypeTXT    RecordEditParamsType = "TXT"
+	RecordEditParamsTypeTLSA   RecordEditParamsType = "TLSA"
+	RecordEditParamsTypeSVCB   RecordEditParamsType = "SVCB"
+	RecordEditParamsTypeSSHFP  RecordEditParamsType = "SSHFP"
+	RecordEditParamsTypeSRV    RecordEditParamsType = "SRV"
+	RecordEditParamsTypeSmimea RecordEditParamsType = "SMIMEA"
+	RecordEditParamsTypePTR    RecordEditParamsType = "PTR"
+	RecordEditParamsTypeNS     RecordEditParamsType = "NS"
+	RecordEditParamsTypeNAPTR  RecordEditParamsType = "NAPTR"
+	RecordEditParamsTypeMX     RecordEditParamsType = "MX"
+	RecordEditParamsTypeLOC    RecordEditParamsType = "LOC"
+	RecordEditParamsTypeHTTPS  RecordEditParamsType = "HTTPS"
+	RecordEditParamsTypeDS     RecordEditParamsType = "DS"
+	RecordEditParamsTypeDNSKEY RecordEditParamsType = "DNSKEY"
+	RecordEditParamsTypeCNAME  RecordEditParamsType = "CNAME"
+	RecordEditParamsTypeCert   RecordEditParamsType = "CERT"
+	RecordEditParamsTypeCAA    RecordEditParamsType = "CAA"
+	RecordEditParamsTypeAAAA   RecordEditParamsType = "AAAA"
+	RecordEditParamsTypeA      RecordEditParamsType = "A"
 )
 
 type RecordEditParamsMeta struct {
