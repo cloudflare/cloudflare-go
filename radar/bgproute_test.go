@@ -63,7 +63,7 @@ func TestBGPRoutePfx2asWithOptionalParams(t *testing.T) {
 		LongestPrefixMatch: cloudflare.F(true),
 		Origin:             cloudflare.F(int64(0)),
 		Prefix:             cloudflare.F("1.1.1.0/24"),
-		RpkiStatus:         cloudflare.F(radar.BGPRoutePfx2asParamsRpkiStatusInvalid),
+		RPKIStatus:         cloudflare.F(radar.BGPRoutePfx2asParamsRPKIStatusInvalid),
 	})
 	if err != nil {
 		var apierr *cloudflare.Error

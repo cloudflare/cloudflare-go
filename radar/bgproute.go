@@ -159,7 +159,7 @@ func (r bgpRouteMoasResponseMoaJSON) RawJSON() string {
 type BGPRouteMoasResponseMoasOrigin struct {
 	Origin         int64                              `json:"origin,required"`
 	PeerCount      int64                              `json:"peer_count,required"`
-	RpkiValidation string                             `json:"rpki_validation,required"`
+	RPKIValidation string                             `json:"rpki_validation,required"`
 	JSON           bgpRouteMoasResponseMoasOriginJSON `json:"-"`
 }
 
@@ -168,7 +168,7 @@ type BGPRouteMoasResponseMoasOrigin struct {
 type bgpRouteMoasResponseMoasOriginJSON struct {
 	Origin         apijson.Field
 	PeerCount      apijson.Field
-	RpkiValidation apijson.Field
+	RPKIValidation apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -233,7 +233,7 @@ type BGPRoutePfx2asResponsePrefixOrigin struct {
 	Origin         int64                                  `json:"origin,required"`
 	PeerCount      int64                                  `json:"peer_count,required"`
 	Prefix         string                                 `json:"prefix,required"`
-	RpkiValidation string                                 `json:"rpki_validation,required"`
+	RPKIValidation string                                 `json:"rpki_validation,required"`
 	JSON           bgpRoutePfx2asResponsePrefixOriginJSON `json:"-"`
 }
 
@@ -243,7 +243,7 @@ type bgpRoutePfx2asResponsePrefixOriginJSON struct {
 	Origin         apijson.Field
 	PeerCount      apijson.Field
 	Prefix         apijson.Field
-	RpkiValidation apijson.Field
+	RPKIValidation apijson.Field
 	raw            string
 	ExtraFields    map[string]apijson.Field
 }
@@ -537,7 +537,7 @@ type BGPRoutePfx2asParams struct {
 	// Lookup origin ASNs of the given prefix
 	Prefix param.Field[string] `query:"prefix"`
 	// Return only results with matching rpki status: valid, invalid or unknown
-	RpkiStatus param.Field[BGPRoutePfx2asParamsRpkiStatus] `query:"rpkiStatus"`
+	RPKIStatus param.Field[BGPRoutePfx2asParamsRPKIStatus] `query:"rpkiStatus"`
 }
 
 // URLQuery serializes [BGPRoutePfx2asParams]'s query parameters as `url.Values`.
@@ -557,12 +557,12 @@ const (
 )
 
 // Return only results with matching rpki status: valid, invalid or unknown
-type BGPRoutePfx2asParamsRpkiStatus string
+type BGPRoutePfx2asParamsRPKIStatus string
 
 const (
-	BGPRoutePfx2asParamsRpkiStatusValid   BGPRoutePfx2asParamsRpkiStatus = "VALID"
-	BGPRoutePfx2asParamsRpkiStatusInvalid BGPRoutePfx2asParamsRpkiStatus = "INVALID"
-	BGPRoutePfx2asParamsRpkiStatusUnknown BGPRoutePfx2asParamsRpkiStatus = "UNKNOWN"
+	BGPRoutePfx2asParamsRPKIStatusValid   BGPRoutePfx2asParamsRPKIStatus = "VALID"
+	BGPRoutePfx2asParamsRPKIStatusInvalid BGPRoutePfx2asParamsRPKIStatus = "INVALID"
+	BGPRoutePfx2asParamsRPKIStatusUnknown BGPRoutePfx2asParamsRPKIStatus = "UNKNOWN"
 )
 
 type BGPRoutePfx2asResponseEnvelope struct {
