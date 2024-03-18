@@ -1314,10 +1314,6 @@ func (r accessApplicationDeleteResponseJSON) RawJSON() string {
 type AccessApplicationRevokeTokensResponse = interface{}
 
 type AccessApplicationNewParams struct {
-	// The URL or domain of the bookmark.
-	Domain param.Field[interface{}] `json:"domain,required"`
-	// The application type.
-	Type param.Field[AccessApplicationNewParamsType] `json:"type,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -1346,6 +1342,8 @@ type AccessApplicationNewParams struct {
 	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages param.Field[[]string] `json:"custom_pages"`
+	// The URL or domain of the bookmark.
+	Domain param.Field[interface{}] `json:"domain"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -1376,26 +1374,13 @@ type AccessApplicationNewParams struct {
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags param.Field[[]string] `json:"tags"`
+	// The application type.
+	Type param.Field[AccessApplicationNewParamsType] `json:"type"`
 }
 
 func (r AccessApplicationNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
-
-// The application type.
-type AccessApplicationNewParamsType string
-
-const (
-	AccessApplicationNewParamsTypeSelfHosted  AccessApplicationNewParamsType = "self_hosted"
-	AccessApplicationNewParamsTypeSaas        AccessApplicationNewParamsType = "saas"
-	AccessApplicationNewParamsTypeSSH         AccessApplicationNewParamsType = "ssh"
-	AccessApplicationNewParamsTypeVnc         AccessApplicationNewParamsType = "vnc"
-	AccessApplicationNewParamsTypeAppLauncher AccessApplicationNewParamsType = "app_launcher"
-	AccessApplicationNewParamsTypeWARP        AccessApplicationNewParamsType = "warp"
-	AccessApplicationNewParamsTypeBiso        AccessApplicationNewParamsType = "biso"
-	AccessApplicationNewParamsTypeBookmark    AccessApplicationNewParamsType = "bookmark"
-	AccessApplicationNewParamsTypeDashSSO     AccessApplicationNewParamsType = "dash_sso"
-)
 
 type AccessApplicationNewParamsCorsHeaders struct {
 	// Allows all HTTP request headers.
@@ -1578,6 +1563,21 @@ const (
 	AccessApplicationNewParamsSaasAppAccessOidcSaasAppScopeProfile AccessApplicationNewParamsSaasAppAccessOidcSaasAppScope = "profile"
 )
 
+// The application type.
+type AccessApplicationNewParamsType string
+
+const (
+	AccessApplicationNewParamsTypeSelfHosted  AccessApplicationNewParamsType = "self_hosted"
+	AccessApplicationNewParamsTypeSaas        AccessApplicationNewParamsType = "saas"
+	AccessApplicationNewParamsTypeSSH         AccessApplicationNewParamsType = "ssh"
+	AccessApplicationNewParamsTypeVnc         AccessApplicationNewParamsType = "vnc"
+	AccessApplicationNewParamsTypeAppLauncher AccessApplicationNewParamsType = "app_launcher"
+	AccessApplicationNewParamsTypeWARP        AccessApplicationNewParamsType = "warp"
+	AccessApplicationNewParamsTypeBiso        AccessApplicationNewParamsType = "biso"
+	AccessApplicationNewParamsTypeBookmark    AccessApplicationNewParamsType = "bookmark"
+	AccessApplicationNewParamsTypeDashSSO     AccessApplicationNewParamsType = "dash_sso"
+)
+
 type AccessApplicationNewResponseEnvelope struct {
 	Errors   []AccessApplicationNewResponseEnvelopeErrors   `json:"errors,required"`
 	Messages []AccessApplicationNewResponseEnvelopeMessages `json:"messages,required"`
@@ -1660,10 +1660,6 @@ const (
 )
 
 type AccessApplicationUpdateParams struct {
-	// The URL or domain of the bookmark.
-	Domain param.Field[interface{}] `json:"domain,required"`
-	// The application type.
-	Type param.Field[AccessApplicationUpdateParamsType] `json:"type,required"`
 	// The Account ID to use for this endpoint. Mutually exclusive with the Zone ID.
 	AccountID param.Field[string] `path:"account_id"`
 	// The Zone ID to use for this endpoint. Mutually exclusive with the Account ID.
@@ -1692,6 +1688,8 @@ type AccessApplicationUpdateParams struct {
 	CustomNonIdentityDenyURL param.Field[string] `json:"custom_non_identity_deny_url"`
 	// The custom pages that will be displayed when applicable for this application
 	CustomPages param.Field[[]string] `json:"custom_pages"`
+	// The URL or domain of the bookmark.
+	Domain param.Field[interface{}] `json:"domain"`
 	// Enables the binding cookie, which increases security against compromised
 	// authorization tokens and CSRF attacks.
 	EnableBindingCookie param.Field[bool] `json:"enable_binding_cookie"`
@@ -1722,6 +1720,8 @@ type AccessApplicationUpdateParams struct {
 	// The tags you want assigned to an application. Tags are used to filter
 	// applications in the App Launcher dashboard.
 	Tags param.Field[[]string] `json:"tags"`
+	// The application type.
+	Type param.Field[AccessApplicationUpdateParamsType] `json:"type"`
 }
 
 func (r AccessApplicationUpdateParams) MarshalJSON() (data []byte, err error) {
@@ -1734,21 +1734,6 @@ func (r AccessApplicationUpdateParams) MarshalJSON() (data []byte, err error) {
 type AccessApplicationUpdateParamsAppID interface {
 	ImplementsZeroTrustAccessApplicationUpdateParamsAppID()
 }
-
-// The application type.
-type AccessApplicationUpdateParamsType string
-
-const (
-	AccessApplicationUpdateParamsTypeSelfHosted  AccessApplicationUpdateParamsType = "self_hosted"
-	AccessApplicationUpdateParamsTypeSaas        AccessApplicationUpdateParamsType = "saas"
-	AccessApplicationUpdateParamsTypeSSH         AccessApplicationUpdateParamsType = "ssh"
-	AccessApplicationUpdateParamsTypeVnc         AccessApplicationUpdateParamsType = "vnc"
-	AccessApplicationUpdateParamsTypeAppLauncher AccessApplicationUpdateParamsType = "app_launcher"
-	AccessApplicationUpdateParamsTypeWARP        AccessApplicationUpdateParamsType = "warp"
-	AccessApplicationUpdateParamsTypeBiso        AccessApplicationUpdateParamsType = "biso"
-	AccessApplicationUpdateParamsTypeBookmark    AccessApplicationUpdateParamsType = "bookmark"
-	AccessApplicationUpdateParamsTypeDashSSO     AccessApplicationUpdateParamsType = "dash_sso"
-)
 
 type AccessApplicationUpdateParamsCorsHeaders struct {
 	// Allows all HTTP request headers.
@@ -1929,6 +1914,21 @@ const (
 	AccessApplicationUpdateParamsSaasAppAccessOidcSaasAppScopeGroups  AccessApplicationUpdateParamsSaasAppAccessOidcSaasAppScope = "groups"
 	AccessApplicationUpdateParamsSaasAppAccessOidcSaasAppScopeEmail   AccessApplicationUpdateParamsSaasAppAccessOidcSaasAppScope = "email"
 	AccessApplicationUpdateParamsSaasAppAccessOidcSaasAppScopeProfile AccessApplicationUpdateParamsSaasAppAccessOidcSaasAppScope = "profile"
+)
+
+// The application type.
+type AccessApplicationUpdateParamsType string
+
+const (
+	AccessApplicationUpdateParamsTypeSelfHosted  AccessApplicationUpdateParamsType = "self_hosted"
+	AccessApplicationUpdateParamsTypeSaas        AccessApplicationUpdateParamsType = "saas"
+	AccessApplicationUpdateParamsTypeSSH         AccessApplicationUpdateParamsType = "ssh"
+	AccessApplicationUpdateParamsTypeVnc         AccessApplicationUpdateParamsType = "vnc"
+	AccessApplicationUpdateParamsTypeAppLauncher AccessApplicationUpdateParamsType = "app_launcher"
+	AccessApplicationUpdateParamsTypeWARP        AccessApplicationUpdateParamsType = "warp"
+	AccessApplicationUpdateParamsTypeBiso        AccessApplicationUpdateParamsType = "biso"
+	AccessApplicationUpdateParamsTypeBookmark    AccessApplicationUpdateParamsType = "bookmark"
+	AccessApplicationUpdateParamsTypeDashSSO     AccessApplicationUpdateParamsType = "dash_sso"
 )
 
 type AccessApplicationUpdateResponseEnvelope struct {
